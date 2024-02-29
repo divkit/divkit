@@ -1,0 +1,49 @@
+{
+  "description": "All properties with expressions are parsed correctly",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "auto_ellipsize": "@{true}",
+          "font_weight": "@{font_weight}",
+          "font_size": "@{font_size}",
+          "text": "@{'Hello!'}",
+          "text_color": "@{text_color}",
+          "actions": [
+            {
+              "log_id": "test_action",
+              "params": "@{action_params}"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "auto_ellipsize": "@{true}",
+            "font_weight": "@{font_weight}",
+            "font_size": "@{font_size}",
+            "text": "@{'Hello!'}",
+            "text_color": "@{text_color}",
+            "actions": [
+              {
+                "log_id": "test_action",
+                "params": "@{action_params}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

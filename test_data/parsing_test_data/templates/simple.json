@@ -1,0 +1,44 @@
+{
+  "description": "Simple template",
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "paddings": {
+        "top": 20,
+        "bottom": 10
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "title",
+          "text": "Hello!"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello!",
+            "font_size": 20,
+            "paddings": {
+              "top": 20,
+              "bottom": 10
+            }
+          }
+        }
+      ]
+    }
+  }
+}

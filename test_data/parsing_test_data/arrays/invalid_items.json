@@ -1,0 +1,39 @@
+{
+  "description": "Invalid item in array (transition_triggers) is ignored",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Hello!",
+          "transition_triggers": [
+            "invalid",
+            "data_change",
+            "state_change"
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello!",
+            "transition_triggers": [
+              "data_change",
+              "state_change"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
