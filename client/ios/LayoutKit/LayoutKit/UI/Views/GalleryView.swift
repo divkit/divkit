@@ -323,9 +323,7 @@ extension GalleryView: ScrollDelegate {
   }
 
   public func onDidEndScrollingAnimation(_ scrollView: ScrollView) {
-    if model.infiniteScroll {
-      onDidEndScroll(scrollView)
-    }
+    onDidEndScroll(scrollView)
   }
 
   private func getOffset(_ scrollView: ScrollView) -> CGFloat {
