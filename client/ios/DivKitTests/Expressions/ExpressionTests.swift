@@ -102,7 +102,7 @@ extension ExpressionTestCase {
   fileprivate func resolveValue(
     errorTracker: ExpressionErrorTracker? = nil
   ) -> String? {
-    let expression: Expression<String>? = try? ExpressionLink<String>(
+    let expression: Expression<String>? = ExpressionLink<String>(
       rawValue: expression,
       errorTracker: errorTracker
     ).map { .link($0) } ?? .value(expression)
@@ -115,7 +115,7 @@ extension ExpressionTestCase {
   }
 
   fileprivate func resolveNumeric<T: Equatable>() -> T? {
-    let expression: Expression<T>? = try? ExpressionLink<T>(rawValue: expression)
+    let expression: Expression<T>? = ExpressionLink<T>(rawValue: expression)
       .map { .link($0) }
     let resolver = ExpressionResolver(
       variables: variables,
@@ -125,7 +125,7 @@ extension ExpressionTestCase {
   }
 
   fileprivate func resolveArray() -> [AnyHashable]? {
-    let expression: Expression<[Any]>? = try? ExpressionLink<[Any]>(rawValue: expression)
+    let expression: Expression<[Any]>? = ExpressionLink<[Any]>(rawValue: expression)
       .map { .link($0) }
     let resolver = ExpressionResolver(
       variables: variables,
@@ -136,8 +136,7 @@ extension ExpressionTestCase {
 
   fileprivate func resolveDict() -> [String: AnyHashable]? {
     let expression: Expression<[String: Any]>? =
-      try? ExpressionLink<[String: Any]>(rawValue: expression)
-        .map { .link($0) }
+      ExpressionLink<[String: Any]>(rawValue: expression).map { .link($0) }
     let resolver = ExpressionResolver(
       variables: variables,
       persistentValuesStorage: DivPersistentValuesStorage()

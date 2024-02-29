@@ -9,31 +9,48 @@ func expressionTransform<T, U>(
   transform: (U) -> T?,
   validator: AnyValueValidator<T>? = nil
 ) -> Expression<T>? {
-  do {
-    if let rawValue = value as? String,
-       !rawValue.isEmpty,
-       let resolver = try ExpressionLink<T>(
-         rawValue: rawValue,
-         validator: validator,
-         errorTracker: { DivKitLogger.error($0.description) }
-       ) {
-      return .link(resolver)
-    }
-  } catch {
-    return nil
-  }
-
   guard let value else {
     return nil
   }
 
-  guard let value = value as? U else {
+  if let rawValue = value as? String, !rawValue.isEmpty {
+    if let link = ExpressionLink<T>(
+     rawValue: rawValue,
+     validator: validator,
+     errorTracker: { DivKitLogger.error($0.description) }
+    ) {
+      return .link(link)
+    }
+  }
+
+  guard let castedValue: U = cast(value) else {
     DivKitLogger.error("Failed to cast value: \(value)")
     return nil
   }
 
-  if let transformedValue = transform(value), validator?.isValid(transformedValue) != false {
+  if let transformedValue = transform(castedValue), validator?.isValid(transformedValue) != false {
     return .value(transformedValue)
+  }
+
+  return nil
+}
+
+@inlinable
+func cast<T>(_ value: Any) -> T? {
+  if let castedValue = value as? T {
+    return castedValue
+  }
+
+  if T.self == Int.self, let doubleValue = value as? Double {
+    return Int(doubleValue) as? T
+  }
+
+  if T.self == String.self {
+    if let intValue = value as? Int {
+      return String(intValue) as? T
+    } else if let doubleValue = value as? Double {
+      return String(doubleValue) as? T
+    }
   }
 
   return nil

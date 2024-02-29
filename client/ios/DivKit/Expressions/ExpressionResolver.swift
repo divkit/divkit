@@ -64,7 +64,7 @@ public final class ExpressionResolver {
   }
 
   public func resolveNumeric<T>(_ expression: String) -> T? {
-    if let link = try? ExpressionLink<T>(rawValue: expression) {
+    if let link = ExpressionLink<T>(rawValue: expression) {
       return resolveNumeric(.link(link))
     }
     return nil
@@ -223,7 +223,7 @@ public final class ExpressionResolver {
         stringValue += value
       case let .nestedCalcExpression(link):
         if let expression = evaluateString(link: link) {
-          let link = try? ExpressionLink<String>(
+          let link = ExpressionLink<String>(
             rawValue: "@{\(expression)}",
             errorTracker: errorTracker,
             resolveNested: false
@@ -275,7 +275,7 @@ public final class ExpressionResolver {
     _ expression: String,
     initializer: (String) -> T?
   ) -> T? {
-    if let link = try? ExpressionLink<T>(rawValue: expression) {
+    if let link = ExpressionLink<T>(rawValue: expression) {
       return resolveString(.link(link), initializer: initializer)
     }
     return initializer(expression)

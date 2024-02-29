@@ -21,7 +21,7 @@ public struct ExpressionLink<T> {
     validator: AnyValueValidator<T>? = nil,
     errorTracker: ExpressionErrorTracker? = nil,
     resolveNested: Bool = true
-  ) throws {
+  ) {
     guard !rawValue.isEmpty else {
       errorTracker?(ExpressionError("Empty expression", expression: nil))
       return nil
@@ -38,7 +38,7 @@ public struct ExpressionLink<T> {
         guard let (start, end) = currentValue.makeLinkIndices() else {
           let error = ExpressionError("Error tokenizing '\(rawValue)'.", expression: rawValue)
           errorTracker?(error)
-          throw error
+          return nil
         }
         if !currentString.isEmpty {
           items.append(.string(currentString))
@@ -48,7 +48,7 @@ public struct ExpressionLink<T> {
           items.append(.string(""))
         } else {
           let value = String(currentValue[start...end])
-          if resolveNested, let link = try ExpressionLink<String>(
+          if resolveNested, let link = ExpressionLink<String>(
             rawValue: value,
             errorTracker: errorTracker
           ) {

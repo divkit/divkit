@@ -1,0 +1,31 @@
+{
+  "description": "Number value in integer property (div-text.font_size)",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Hello!",
+          "font_size": 23.4
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello!",
+            "font_size": 23
+          }
+        }
+      ]
+    }
+  }
+}

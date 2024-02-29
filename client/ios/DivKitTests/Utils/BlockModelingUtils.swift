@@ -125,5 +125,5 @@ func url(_ string: String) -> URL {
 }
 
 func expression<T>(_ expression: String) -> Expression<T> {
-  .link(try! ExpressionLink<T>(rawValue: expression)!)
+  .link(ExpressionLink<T>(rawValue: expression)!)
 }

@@ -1,0 +1,29 @@
+{
+  "description": "Number value in string property (div-text.text)",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": 123.45
+        }
+      }
+    ]
+  },
+  "expected": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "123.45"
+          }
+        }
+      ]
+    }
+  }
+}
