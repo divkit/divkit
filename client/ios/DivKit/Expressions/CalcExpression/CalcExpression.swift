@@ -235,6 +235,10 @@ extension CalcExpression {
     switch symbol {
     case .infix("[]"), .function("[]", _), .infix("()"):
       { _ in throw Error.unexpectedToken(String(symbol.name.prefix(1))) }
+    case let .function(name, _):
+      { _ in
+        throw Error.message("Failed to evaluate [\(name)()]. Unknown function name: \(name).")
+      }
     default:
       { _ in throw Error.undefinedSymbol(symbol) }
     }
