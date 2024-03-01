@@ -24,7 +24,7 @@
 </script>
 
 <script lang="ts">
-    import { getContext, onDestroy, tick } from 'svelte';
+    import { afterUpdate, getContext, onDestroy, tick } from 'svelte';
 
     import css from './Outer.module.css';
 
@@ -763,10 +763,6 @@
         }
     }
 
-    $: if (componentContext) {
-        updateDevtool();
-    }
-
     $: mods = {
         ...widthMods,
         ...heightMods,
@@ -943,6 +939,8 @@
         hasCustomFocus = false;
         componentContext.execAnyActions(blurActions);
     }
+
+    afterUpdate(updateDevtool);
 
     onDestroy(() => {
         prevChilds.forEach(id => {
