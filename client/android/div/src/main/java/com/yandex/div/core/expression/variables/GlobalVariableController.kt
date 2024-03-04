@@ -114,8 +114,10 @@ class GlobalVariableController {
         // Declaration notifications must happen apart from updates and declarations
         // to evade errors during updates of properties which use multiple variables.
         // Property update may fail cause only part of variables just got declared.
-        declarationObservers.forEach { observer ->
-            newDeclaredVariables.forEach { variable -> observer.invoke(variable)}
+        if (newDeclaredVariables.isNotEmpty()) {
+            declarationObservers.forEach { observer ->
+                newDeclaredVariables.forEach { variable -> observer.invoke(variable) }
+            }
         }
     }
 
