@@ -670,7 +670,7 @@
             style:--divkit-tabs-active-background-color={tabActiveBackground}
             style:--divkit-tabs-inactive-background-color={tabInactiveBackground}
             style:--divkit-tabs-border-radius={tabBorderRadius}
-            style:--divkit-tabs-items-spacing={tabItemSpacing ? pxToEmWithUnits(tabItemSpacing) : ''}
+            style:--divkit-tabs-items-spacing={tabItemSpacing ? pxToEmWithUnits(tabItemSpacing * 10 / tabFontSize) : ''}
             on:keydown={onTabKeydown}
         >
             {#each $childStore as item}
@@ -697,9 +697,7 @@
                         'aria-selected': isSelected ? 'true' : 'false'
                     }}
                     customAction={componentContext.fakeElement ? null : (event => selectItem(event, index))}
-                >
-                    {item.title}
-                </Actionable>
+                >{item.title}</Actionable>
             {/each}
         </div>
         {#if $jsonSeparator}

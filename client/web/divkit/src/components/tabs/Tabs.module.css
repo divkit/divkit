@@ -27,6 +27,7 @@
     border-radius: var(--divkit-tabs-border-radius, 100em);
     cursor: pointer;
     user-select: none;
+    white-space: pre;
     color: var(--divkit-tabs-inactive-text-color, rgba(0, 0, 0, .5));
     background: var(--divkit-tabs-inactive-background-color, none);
     text-decoration: none;
