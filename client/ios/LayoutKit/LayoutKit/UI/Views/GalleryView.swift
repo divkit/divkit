@@ -234,6 +234,7 @@ public final class GalleryView: BlockView {
 
     if let model, layout?.isEqual(to: model, boundsSize: bounds.size) != true {
       updateLayout(to: model)
+      setState(stateWithScrollRange, notifyingObservers: true)
     }
     if case let .pending(state) = deferredStateSetting {
       collectionView.performWithDetachedDelegate {
@@ -305,7 +306,8 @@ extension GalleryView: ScrollDelegate {
     let newState = GalleryViewState(
       contentPosition: contentPosition,
       itemsCount: model.items.count,
-      isScrolling: true
+      isScrolling: true,
+      scrollRange: state.scrollRange
     )
     setState(newState, notifyingObservers: true)
     updatesDelegate?.onContentOffsetChanged(offset, in: model)
@@ -336,7 +338,8 @@ extension GalleryView: ScrollDelegate {
     let newState = GalleryViewState(
       contentPosition: state.contentPosition,
       itemsCount: model.items.count,
-      isScrolling: false
+      isScrolling: false,
+      scrollRange: state.scrollRange
     )
     setState(newState, notifyingObservers: true)
     visibilityDelegate?.onGalleryVisibilityChanged()
@@ -421,3 +424,16 @@ extension GenericCollectionViewLayout {
 }
 
 extension GalleryView: VisibleBoundsTrackingContainer {}
+
+extension GalleryView {
+  var stateWithScrollRange: GalleryViewState {
+    GalleryViewState(
+      contentPosition: state.contentPosition,
+      itemsCount: state.itemsCount,
+      isScrolling: state.isScrolling,
+      scrollRange: model.direction.isHorizontal ?
+        layout.contentSize.width - bounds.width :
+        layout.contentSize.height - bounds.height
+    )
+  }
+}

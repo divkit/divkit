@@ -173,6 +173,7 @@ private func makeGalleryViewState(
   return GalleryViewState(
     contentPosition: position,
     itemsCount: model.items.count,
-    isScrolling: oldState?.isScrolling ?? false
+    isScrolling: oldState?.isScrolling ?? false,
+    scrollRange: oldState?.scrollRange
   )
 }

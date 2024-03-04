@@ -45,7 +45,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
     _ fileName: String,
     testName: String = #function,
     customCaseName: String? = nil,
-    blocksState: BlocksState = [:],
+    blocksState: [IdAndCardId: ElementState] = [:],
     extensions: [DivExtensionHandler] = []
   ) {
     guard
@@ -61,8 +61,8 @@ open class DivKitSnapshotTestCase: XCTestCase {
       imageHolderFactory: TestImageHolderFactory(),
       layoutDirection: getLayoutDirection(from: jsonDict)
     )
-    for (path, state) in blocksState {
-      divKitComponents.blockStateStorage.setState(path: path, state: state)
+    for (id, state) in blocksState {
+      divKitComponents.blockStateStorage.setState(id: id.id, cardId: id.cardId, state: state)
     }
 
     let caseName = customCaseName

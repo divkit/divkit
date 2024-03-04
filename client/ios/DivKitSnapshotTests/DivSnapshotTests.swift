@@ -21,10 +21,10 @@ private let testDirectory = "snapshot_test_data"
 
 private let indicatorSubdirectory = "div-indicator"
 
-private let pagerPath = UIElementPath(testCardId) + "pager_id"
+private let pagerId = IdAndCardId(path: UIElementPath(testCardId) + "pager_id")
 
 private let defaultPagerViewState = [
-  pagerPath: PagerViewState(numberOfPages: 11, currentPage: 1),
+  pagerId: PagerViewState(numberOfPages: 11, currentPage: 1),
 ]
 
 final class DivSnapshotTests: XCTestCase {

@@ -1,0 +1,215 @@
+{
+    "description": "Scroll actions",
+    "platforms": [
+      "ios"
+    ],
+    "div_data": {
+      "templates": {
+        "div_base": {
+          "type": "gallery",
+          "id": "gallery1",
+          "orientation": "vertical",
+          "restrict_parent_scroll": 1,
+          "margins": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "height": {
+            "type": "match_parent"
+          }
+        },
+        "test_container": {
+          "type": "container",
+          "orientation": "overlap",
+          "border": {
+            "stroke": {
+              "color": "#000000"
+            }
+          }
+        },
+        "item": {
+          "type": "text",
+          "text": "      ",
+          "font_size": 14,
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "alignment_horizontal": "center",
+          "text_color": "#1ABC9C",
+          "paddings": {
+            "top": 4,
+            "bottom": 4,
+            "left": 8,
+            "right": 8
+          },
+          "margins": {
+            "left": 8,
+            "right": 8
+          },
+          "width": {
+            "type": "fixed",
+            "value": 120
+          },
+          "height": {
+            "type": "fixed",
+            "value": 120
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#34495E"
+            }
+          ],
+          "border": {
+            "corner_radius": 6
+          }
+        }
+      },
+      "card": {
+        "log_id": "tests",
+        "states": [
+          {
+            "state_id": 1,
+            "div": {
+              "type": "test_container",
+              "height": {
+                "type": "fixed",
+                "value": 300
+              },
+              "items": [
+                {
+                  "type": "div_base",
+                  "items": [
+                    {
+                      "type": "item",
+                      "item_log_id": "item/01",
+                      "background": [
+                        {
+                          "color": "#49a5a5",
+                          "type": "solid"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "item",
+                      "item_log_id": "item/02",
+                      "background": [
+                        {
+                          "color": "#49a141",
+                          "type": "solid"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "item",
+                      "item_log_id": "item/03",
+                      "background": [
+                        {
+                          "color": "#4975a5",
+                          "type": "solid"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "item",
+                      "item_log_id": "item/04",
+                      "background": [
+                        {
+                          "color": "#11e5a5",
+                          "type": "solid"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "steps": [
+      {
+        "expected_screenshot": "step0.png"
+      },
+      {
+        "div_actions": [
+          {
+            "url": "div-action://scroll_forward?id=gallery1&step=30",
+            "log_id": "scroll_forward"
+          }
+        ]
+      },
+      {
+        "div_actions": [  
+          {
+            "url": "div-action://scroll_forward?id=gallery1&step=300&overflow=clamp",
+            "log_id": "scroll_forward_clamp"
+          }
+        ]
+      },
+      {
+        "div_actions": [
+          {
+            "url": "div-action://scroll_forward?id=gallery1&step=30&overflow=ring",
+            "log_id": "scroll_forward_ring"
+          }
+        ],
+        "expected_screenshot": "step1.png"
+      },
+      {
+        "div_actions": [
+          {
+            "url": "div-action://scroll_backward?id=gallery1&step=60&overflow=ring",
+            "log_id": "scroll_backward_ring"
+          }
+        ]
+      },
+      {
+        "div_actions": [
+          {
+            "url": "div-action://scroll_backward?id=gallery1&step=300&overflow=clamp",
+            "log_id": "scroll_backward_clamp"
+          }
+        ],
+        "expected_screenshot": "step0.png"
+      },
+      {
+        "div_actions": [
+          {
+            "url": "div-action://scroll_to_position?id=gallery1&step=30",
+            "log_id": "scroll_to_position"
+          }
+        ],
+        "expected_screenshot": "step1.png"
+      },
+      {
+        "div_actions": [
+          {
+            "url": "div-action://scroll_to_position?id=gallery1&step=300",
+            "log_id": "scroll_to_position_clamp"
+          }
+        ],
+        "expected_screenshot": "step2.png"
+      },
+      {
+        "div_actions": [
+          {
+            "url": "div-action://scroll_to_start?id=gallery1",
+            "log_id": "scroll_to_start"
+          }
+        ],
+        "expected_screenshot": "step0.png"
+      },
+      {
+        "div_actions": [
+          {
+            "url": "div-action://scroll_to_end?id=gallery1",
+            "log_id": "scroll_to_end"
+          }
+        ],
+        "expected_screenshot": "step2.png"
+      }
+    ]
+  }

@@ -113,6 +113,8 @@ public final class DivActionURLHandler {
     case let .setPreviousItem(id, overflow):
       setPreviousItem(id: id, cardId: cardId, overflow: overflow)
       updateCard(.state(cardId))
+    case let .scroll(id, mode):
+      setContentOffset(id: id, cardId: cardId, mode: mode)
     case let .video(id: id, action: action):
       blockStateStorage.setState(
         id: id,
@@ -143,6 +145,54 @@ public final class DivActionURLHandler {
     }
   }
 
+  private func setContentOffset(id: String, cardId: DivCardID, mode: ScrollMode) {
+    let state: GalleryViewState? = blockStateStorage.getState(id, cardId: cardId)
+    if let state, let newOffset = getNewOffset(state: state, mode: mode) {
+      blockStateStorage.setState(
+        id: id,
+        cardId: cardId,
+        state: GalleryViewState(
+          contentPosition: .offset(newOffset),
+          itemsCount: state.itemsCount,
+          isScrolling: state.isScrolling,
+          scrollRange: state.scrollRange
+        )
+      )
+      updateCard(.state(cardId))
+    }
+  }
+
+  private func getNewOffset(state: GalleryViewState, mode: ScrollMode) -> CGFloat? {
+    guard let scrollRange = state.scrollRange, scrollRange > 0 else {
+      return nil
+    }
+    switch mode {
+    case let .forward(step, overflow):
+      return getOffset(offset: state.currentOffset + step, scrollRange: scrollRange, overflow: overflow)
+    case let .backward(step, overflow):
+      return getOffset(offset: state.currentOffset - step, scrollRange: scrollRange, overflow: overflow)
+    case let .position(step):
+      return getOffset(offset: step, scrollRange: scrollRange, overflow: .clamp)
+    case .start:
+      return 0
+    case .end:
+      return scrollRange
+    }
+  }
+
+  private func getOffset(
+    offset: CGFloat,
+    scrollRange: CGFloat,
+    overflow: OverflowMode
+  ) -> CGFloat {
+    switch overflow {
+    case .ring:
+      return (offset + scrollRange).truncatingRemainder(dividingBy: scrollRange)
+    case .clamp:
+      return offset.clamp(0...scrollRange)
+    }
+  }
+
   private func setCurrentItem(id: String, cardId: DivCardID, index: Int) {
     switch blockStateStorage.getStateUntyped(id, cardId: cardId) {
     case let galleryState as GalleryViewState:
@@ -150,7 +200,7 @@ public final class DivActionURLHandler {
         id: id,
         cardId: cardId,
         index: index,
-        itemsCount: galleryState.itemsCount
+        state: galleryState
       )
     case let pagerState as PagerViewState:
       setPagerCurrentItem(
@@ -178,7 +228,7 @@ public final class DivActionURLHandler {
         id: id,
         cardId: cardId,
         index: index,
-        itemsCount: galleryState.itemsCount
+        state: galleryState
       )
     case let pagerState as PagerViewState:
       let nextIndex = getNextIndex(
@@ -237,7 +287,7 @@ public final class DivActionURLHandler {
         id: id,
         cardId: cardId,
         index: index,
-        itemsCount: galleryState.itemsCount
+        state: galleryState
       )
     case let pagerState as PagerViewState:
       let prevIndex = getPreviousIndex(
@@ -288,9 +338,9 @@ public final class DivActionURLHandler {
     id: String,
     cardId: DivCardID,
     index: Int,
-    itemsCount: Int
+    state: GalleryViewState
   ) {
-    let clampedIndex = clamp(index, min: 0, max: max(0, itemsCount - 1))
+    let clampedIndex = clamp(index, min: 0, max: max(0, state.itemsCount - 1))
     guard clampedIndex == index else {
       return
     }
@@ -298,8 +348,10 @@ public final class DivActionURLHandler {
       id: id,
       cardId: cardId,
       state: GalleryViewState(
-        contentPageIndex: CGFloat(clampedIndex),
-        itemsCount: itemsCount
+        contentPosition: .paging(index: CGFloat(clampedIndex)),
+        itemsCount: state.itemsCount,
+        isScrolling: state.isScrolling,
+        scrollRange: state.scrollRange
       )
     )
   }
@@ -343,6 +395,18 @@ extension GalleryViewState {
       firstVisibleItemsIndex
     case let .paging(index):
       Int(index)
+    }
+  }
+
+  fileprivate var currentOffset: CGFloat {
+    switch contentPosition {
+    case let .offset(value, _):
+      return value
+    case let .paging(index):
+      guard let scrollRange, itemsCount > 0 else {
+        return 0
+      }
+      return scrollRange / CGFloat(itemsCount - 1) * index
     }
   }
 }

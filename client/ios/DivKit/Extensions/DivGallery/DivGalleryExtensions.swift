@@ -48,6 +48,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
   ) -> GalleryViewState {
     let path = context.parentPath
     let index: CGFloat
+    let scrollRange: CGFloat?
     if let state: GalleryViewState = context.blockStateStorage.getState(path) {
       switch state.contentPosition {
       case .offset:
@@ -55,6 +56,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
       case let .paging(savedIndex):
         index = savedIndex
       }
+      scrollRange = state.scrollRange
     } else {
       index = CGFloat(resolveDefaultItem(context.expressionResolver))
       if index == 0 {
@@ -62,11 +64,14 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
         context.blockStateStorage.setState(path: path, state: newState)
         return newState
       }
+      scrollRange = nil
     }
 
     let newState = GalleryViewState(
-      contentPageIndex: index.clamp(0.0...CGFloat(itemsCount - 1)),
-      itemsCount: itemsCount
+      contentPosition: .paging(index: index.clamp(0.0...CGFloat(itemsCount - 1))),
+      itemsCount: itemsCount,
+      isScrolling: false,
+      scrollRange: scrollRange
     )
     context.blockStateStorage.setState(path: path, state: newState)
     return newState

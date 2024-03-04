@@ -89,6 +89,126 @@ final class DivActionURLHandlerTests: XCTestCase {
     )
   }
 
+  func test_setScrollForwardAction() {
+    setItemTestCases(
+      beforeStates: SetItemAction.firstElementStateWithOffset,
+      afterState: SetItemAction.secondElementStateWithOffset,
+      mode: .forward(10, .clamp)
+    )
+  }
+
+  func test_setScrollForwardActionWithClampOverflow() {
+    setItemTestCases(
+      beforeStates: SetItemAction.firstElementStateWithOffset,
+      afterState: SetItemAction.endStateWithOffset,
+      mode: .forward(30, .clamp)
+    )
+  }
+
+  func test_setScrollForwardActionWithRingOverflow() {
+    setItemTestCases(
+      beforeStates: SetItemAction.firstElementStateWithOffset,
+      afterState: SetItemAction.secondElementStateWithOffset,
+      mode: .forward(30, .ring)
+    )
+  }
+
+  func test_setScrollForwardActionWithEmptyState() {
+    setItemTestCases(
+      beforeStates: SetItemAction.emptyStatesWithOffset,
+      afterState: SetItemAction.emptyStatesWithOffset,
+      mode: .forward(30, .ring)
+    )
+  }
+
+  func test_setScrollBackwardAction() {
+    setItemTestCases(
+      beforeStates: SetItemAction.secondElementStateWithOffset,
+      afterState: SetItemAction.firstElementStateWithOffset,
+      mode: .backward(10, .clamp)
+    )
+  }
+
+  func test_setScrollBackwardActionWithClampOverflow() {
+    setItemTestCases(
+      beforeStates: SetItemAction.secondElementStateWithOffset,
+      afterState: SetItemAction.firstElementStateWithOffset,
+      mode: .backward(40, .clamp)
+    )
+  }
+
+  func test_setScrollBackwardActionWithRingOverflow() {
+    setItemTestCases(
+      beforeStates: SetItemAction.secondElementStateWithOffset,
+      afterState: SetItemAction.firstElementStateWithOffset,
+      mode: .backward(30, .ring)
+    )
+  }
+
+  func test_setScrollBackwardActionWithEmptyState() {
+    setItemTestCases(
+      beforeStates: SetItemAction.emptyStatesWithOffset,
+      afterState: SetItemAction.emptyStatesWithOffset,
+      mode: .backward(30, .ring)
+    )
+  }
+
+  func test_setScrollToPositionAction() {
+    setItemTestCases(
+      beforeStates: SetItemAction.firstElementStateWithOffset,
+      afterState: SetItemAction.secondElementStateWithOffset,
+      mode: .position(10)
+    )
+  }
+
+  func test_setScrollToPositionActionWithOverflow() {
+    setItemTestCases(
+      beforeStates: SetItemAction.secondElementStateWithOffset,
+      afterState: SetItemAction.endStateWithOffset,
+      mode: .position(30)
+    )
+  }
+
+  func test_setScrollToPositionActionWithEmptyState() {
+    setItemTestCases(
+      beforeStates: SetItemAction.emptyStatesWithOffset,
+      afterState: SetItemAction.emptyStatesWithOffset,
+      mode: .position(10)
+    )
+  }
+
+  func test_setScrollToStartAction() {
+    setItemTestCases(
+      beforeStates: SetItemAction.secondElementStateWithOffset,
+      afterState: SetItemAction.firstElementStateWithOffset,
+      mode: .start
+    )
+  }
+
+  func test_setScrollToStartActionWithEmptyState() {
+    setItemTestCases(
+      beforeStates: SetItemAction.emptyStatesWithOffset,
+      afterState: SetItemAction.emptyStatesWithOffset,
+      mode: .start
+    )
+  }
+
+  func test_setScrollToEndAction() {
+    setItemTestCases(
+      beforeStates: SetItemAction.secondElementStateWithOffset,
+      afterState: SetItemAction.endStateWithOffset,
+      mode: .end
+    )
+  }
+
+  func test_setScrollToEndActionWithEmptyState() {
+    setItemTestCases(
+      beforeStates: SetItemAction.emptyStatesWithOffset,
+      afterState: SetItemAction.emptyStatesWithOffset,
+      mode: .end
+    )
+  }
+
   private func setItemTestCases(
     beforeStates: [ElementState],
     afterState: [ElementState],
@@ -129,6 +249,11 @@ private enum SetItemAction {
     case next(Overflow)
     case previous(Overflow)
     case current(Int)
+    case forward(CGFloat, Overflow)
+    case backward(CGFloat, Overflow)
+    case position(CGFloat)
+    case start
+    case end
   }
 
   static let firstElementState: [ElementState] = [
@@ -155,6 +280,23 @@ private enum SetItemAction {
     TabViewState(selectedPageIndex: 0, countOfPages: 0),
   ]
 
+  static let firstElementStateWithOffset: [ElementState] = [
+    GalleryViewState(contentPosition: .offset(0), itemsCount: 3, isScrolling: false, scrollRange: 20)
+  ]
+
+  static let secondElementStateWithOffset: [ElementState] = [
+    GalleryViewState(contentPosition: .offset(10), itemsCount: 3, isScrolling: false, scrollRange: 20)
+  ]
+
+  static let endStateWithOffset: [ElementState] = [
+    GalleryViewState(contentPosition: .offset(20), itemsCount: 3, isScrolling: false, scrollRange: 20)
+  ]
+
+  static let emptyStatesWithOffset: [ElementState] = [
+    GalleryViewState(contentPosition: .offset(0), itemsCount: 0, isScrolling: false, scrollRange: 0),
+    GalleryViewState(contentPosition: .offset(0), itemsCount: 0, isScrolling: false, scrollRange: nil),
+  ]
+
   static func makeURL(mode: Mode) -> URL {
     switch mode {
     case let .next(overflow):
@@ -163,6 +305,16 @@ private enum SetItemAction {
       url("div-action://set_previous_item?id=\(elementID)&overflow=\(overflow)")
     case let .current(item):
       url("div-action://set_current_item?id=\(elementID)&item=\(item)")
+    case let .forward(step, overflow):
+      url("div-action://scroll_forward?id=\(elementID)&step=\(Int(step))&overflow=\(overflow)")
+    case let .backward(step, overflow):
+      url("div-action://scroll_backward?id=\(elementID)&step=\(Int(step))&overflow=\(overflow)")
+    case let .position(step):
+      url("div-action://scroll_to_position?id=\(elementID)&step=\(Int(step))")
+    case .start:
+      url("div-action://scroll_to_start?id=\(elementID)")
+    case .end:
+      url("div-action://scroll_to_end?id=\(elementID)")
     }
   }
 }

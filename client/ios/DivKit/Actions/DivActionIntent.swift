@@ -12,6 +12,7 @@ enum DivActionIntent {
   case setCurrentItem(id: String, index: Int)
   case setNextItem(id: String, overflow: OverflowMode)
   case setPreviousItem(id: String, overflow: OverflowMode)
+  case scroll(id: String, mode: ScrollMode)
   case timer(id: String, action: DivTimerAction)
   case video(id: String, action: DivVideoAction)
   case setStoredValue(storedValue: DivStoredValue)
@@ -64,6 +65,31 @@ enum DivActionIntent {
         return nil
       }
       self = .setPreviousItem(id: id, overflow: url.overflow)
+    case "scroll_forward":
+      guard let id = url.id, let step = url.step else {
+        return nil
+      }
+      self = .scroll(id: id, mode: .forward(step: step, overflow: url.overflow))
+    case "scroll_backward":
+      guard let id = url.id, let step = url.step else {
+        return nil
+      }
+      self = .scroll(id: id, mode: .backward(step: step, overflow: url.overflow))
+    case "scroll_to_position":
+      guard let id = url.id, let step = url.step else {
+        return nil
+      }
+      self = .scroll(id: id, mode: .position(step: step))
+    case "scroll_to_start":
+      guard let id = url.id else {
+        return nil
+      }
+      self = .scroll(id: id, mode: .start)
+    case "scroll_to_end":
+      guard let id = url.id else {
+        return nil
+      }
+      self = .scroll(id: id, mode: .end)
     case "timer":
       guard let id = url.id, let action = url.timerAction else {
         return nil
@@ -170,6 +196,10 @@ extension URL {
       DivKitLogger.failure("Unknown overflow: '\(overflow)'.")
       return .clamp
     }
+  }
+  
+  fileprivate var step: CGFloat? {
+    queryParamValue(forName: "step").flatMap(Int.init).flatMap(CGFloat.init)
   }
 
   fileprivate var storedValue: DivStoredValue? {

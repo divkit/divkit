@@ -32,7 +32,7 @@ extension DivIndicatorTests {
   ) {
     for state in testPagerViewStates {
       let blocksState = [
-        pagerPath: state,
+        pagerId: state,
       ]
 
       var testName = functionName
@@ -43,7 +43,7 @@ extension DivIndicatorTests {
   }
 }
 
-private let pagerPath = UIElementPath(testCardId) + "pager_id"
+private let pagerId = IdAndCardId(path: UIElementPath(testCardId) + "pager_id")
 
 private let testPagerViewStates = [
   PagerViewState(numberOfPages: 11, floatCurrentPage: 0),
