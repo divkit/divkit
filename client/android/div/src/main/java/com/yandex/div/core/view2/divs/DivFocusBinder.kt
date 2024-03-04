@@ -5,6 +5,7 @@ import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.widgets.BitmapEffectHelper
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.util.allIsNullOrEmpty
@@ -15,7 +16,10 @@ import javax.inject.Inject
 
 @DivScope
 @Mockable
-internal class DivFocusBinder @Inject constructor(private val actionBinder: DivActionBinder) {
+internal class DivFocusBinder @Inject constructor(
+    private val actionBinder: DivActionBinder,
+    private val bitmapEffectHelper: BitmapEffectHelper,
+) {
 
     fun bindDivBorder(
         view: View,
@@ -54,7 +58,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
 
     private fun View.applyBorder(border: DivBorder?, resolver: ExpressionResolver) {
         if (this is DivBorderSupports) {
-            setBorder(border, this, resolver)
+            setBorder(border, this, bitmapEffectHelper, resolver)
             return
         }
 

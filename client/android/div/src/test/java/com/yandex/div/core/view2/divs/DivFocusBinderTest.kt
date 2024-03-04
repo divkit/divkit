@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.view.View
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.widgets.BitmapEffectHelper
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -58,8 +59,9 @@ class DivFocusBinderTest {
     private val defaultBorder = DivBorder(hasShadow = Expression.constant(true))
     private val focusActions = listOf(mock<DivAction>())
     private val blurActions = listOf(mock<DivAction>())
+    private val effectHelper = BitmapEffectHelper(mock())
 
-    private val underTest = DivFocusBinder(actionBinder)
+    private val underTest = DivFocusBinder(actionBinder, effectHelper)
 
     @Test
     fun `apply blurred border on bind when focused border is null`() {
@@ -221,7 +223,7 @@ class DivFocusBinderTest {
 
         onFocusChange(true)
 
-        verify(view, never()).setBorder(any(), eq(view), any())
+        verify(view, never()).setBorder(any(), eq(view), any(), any())
     }
 
     @Test
@@ -233,7 +235,7 @@ class DivFocusBinderTest {
 
         onFocusChange(false)
 
-        verify(view, never()).setBorder(any(), eq(view), any())
+        verify(view, never()).setBorder(any(), eq(view), any(), any())
     }
 
     @Test
@@ -384,7 +386,7 @@ class DivFocusBinderTest {
     private fun verifyBorderSet(
         border: DivBorder = defaultBorder,
         mode: VerificationMode = times(1)
-    ) = verify(view, mode).setBorder(border, view, resolver)
+    ) = verify(view, mode).setBorder(border, view, effectHelper, resolver)
 
     private fun verifyNoElevation() = verifyElevation(0f)
 

@@ -39,6 +39,7 @@ internal class DivBorderDrawer(
     private val metrics: DisplayMetrics,
     private val view: View,
     private var expressionResolver: ExpressionResolver,
+    private val bitmapEffectHelper: BitmapEffectHelper,
     divBorder: DivBorder
 ) : ExpressionSubscriber {
     var border = divBorder
@@ -299,7 +300,7 @@ internal class DivBorderDrawer(
             paint.color = color
             paint.alpha = (shadowAlpha * 255).toInt()
 
-            cachedShadow = ShadowCache.getShadow(view.context, radii, radius)
+            cachedShadow = ShadowCache.getShadow(radii, radius, bitmapEffectHelper)
         }
     }
 

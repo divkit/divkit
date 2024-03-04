@@ -1,31 +1,17 @@
 package com.yandex.div.core.view2
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.NinePatch
 import android.graphics.Paint
 import android.graphics.drawable.shapes.RoundRectShape
-import android.renderscript.Allocation
-import android.renderscript.Element
-import android.renderscript.RenderScript
-import android.renderscript.ScriptIntrinsicBlur
-import androidx.core.graphics.scale
-import androidx.core.graphics.withScale
+import android.os.Build
 import androidx.core.graphics.withTranslation
+import com.yandex.div.core.view2.divs.widgets.BitmapEffectHelper
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 internal object ShadowCache {
-    /**
-    * The minimum value, that ScriptIntrinsicBlur can use
-    **/
-    private const val MIN_BLUR = 1f
-    /**
-     * The maximum value, that ScriptIntrinsicBlur can use
-     **/
-    private const val MAX_BLUR = 25f
-
     private const val EDGE_OFFSET = 1
     /**
      * Region transparency:
@@ -39,13 +25,13 @@ internal object ShadowCache {
 
     private val shadowMap = mutableMapOf<ShadowCacheKey, NinePatch>()
 
-    fun getShadow(context: Context, radii: FloatArray, blur: Float): NinePatch {
+    fun getShadow(radii: FloatArray, blur: Float, effectHelper: BitmapEffectHelper): NinePatch {
         return shadowMap.getOrPut(ShadowCacheKey(radii, blur)) {
-            createNewShadow(context, radii, blur)
+            createNewShadow(radii, blur, effectHelper).toNinePatch()
         }
     }
 
-    /**
+    /*
      * Simplified shadow creation stages:
      * 1. Draw shadow rect on first bitmap.
      *    Even if you need 500x200 shadow with corner radius 16 and blur 8, you should draw
@@ -60,50 +46,26 @@ internal object ShadowCache {
      *
      * Shadow uses only alpha channel, so you must set shadow color with paint on draw
      */
-    private fun createNewShadow(context: Context, radii: FloatArray, blur: Float): NinePatch {
-        val rectWidth = blur + maxOf(radii[1] + radii[2], radii[5] + radii[6])
-        val rectHeight = blur + maxOf(radii[0] + radii[7], radii[3] + radii[4])
-
-        val coercedBlur = blur.coerceIn(MIN_BLUR, MAX_BLUR)
-
-        /**
-         * Because ScriptIntrinsicBlur can't apply blur more then 25, we just downscale bitmap,
-         * blur it and upscale to previous size
-         */
-        val scale = (if (blur <= MAX_BLUR) 1f else MAX_BLUR / blur)
-
-        val bitmapWidth = ((rectWidth + (blur * 2)) * scale).toInt()
-        val bitmapHeight = ((rectHeight + (blur * 2)) * scale).toInt()
-
+    private fun createNewShadow(radii: FloatArray, blur: Float, effectHelper: BitmapEffectHelper): Bitmap {
+        var rectWidth = maxOf(radii[1] + radii[2], radii[5] + radii[6])
+        var rectHeight = maxOf(radii[0] + radii[7], radii[3] + radii[4])
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            rectHeight += blur
+            rectWidth += blur
+        }
         val inBitmap = Bitmap.createBitmap(
-            bitmapWidth,
-            bitmapHeight,
+            rectWidth.toInt() + 2 * blur.toInt(),
+            rectHeight.toInt() + 2 * blur.toInt(),
             Bitmap.Config.ALPHA_8
         )
 
-        val outBitmap = Bitmap.createBitmap(
-            bitmapWidth,
-            bitmapHeight,
-            Bitmap.Config.ALPHA_8
-        )
+        inBitmap.drawNewShadow(rectWidth, rectHeight, radii, blur)
 
-        inBitmap.drawNewShadow(rectWidth, rectHeight, radii, coercedBlur, scale)
+        if (blur == 0f) return inBitmap
 
-        inBitmap.blur(context, outBitmap, coercedBlur)
-
+        val outBitmap = effectHelper.blurBitmap(inBitmap, blur, isShadow = true)
         inBitmap.recycle()
-
-        return (if (scale < 1f) {
-            val scaledBitmap = outBitmap.scale(
-                (outBitmap.width / scale).toInt(),
-                (outBitmap.height / scale).toInt(),
-                true
-            )
-
-            outBitmap.recycle()
-
-            scaledBitmap
-        } else outBitmap).toNinePatch()
+        return outBitmap
     }
 
     private fun Bitmap.drawNewShadow(
@@ -111,7 +73,6 @@ internal object ShadowCache {
         rectHeight: Float,
         radii: FloatArray,
         blur: Float,
-        scale: Float
     ) {
         val roundRectShape = RoundRectShape(radii, null, null)
 
@@ -119,32 +80,10 @@ internal object ShadowCache {
 
         Canvas().apply {
             setBitmap(this@drawNewShadow)
-
             withTranslation(blur, blur) {
-                withScale(scale, scale) {
-                    roundRectShape.draw(this, paint)
-                }
+                roundRectShape.draw(this, paint)
             }
         }
-    }
-
-    private fun Bitmap.blur(context: Context, out: Bitmap, blur: Float) {
-        val renderScript = RenderScript.create(context)
-        val scriptIntrinsicBlur = ScriptIntrinsicBlur
-            .create(renderScript, Element.A_8(renderScript))
-
-        val inAllocation = Allocation.createFromBitmap(renderScript, this)
-        val outAllocation = Allocation.createFromBitmap(renderScript, out)
-
-        scriptIntrinsicBlur.apply {
-            setRadius(blur)
-            setInput(inAllocation)
-            forEach(outAllocation)
-        }
-
-        outAllocation.copyTo(out)
-        outAllocation.destroy()
-        inAllocation.destroy()
     }
 
     private fun Bitmap.toNinePatch() =
