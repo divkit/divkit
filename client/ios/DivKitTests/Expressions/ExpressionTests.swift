@@ -29,7 +29,7 @@ private func runTest(_ testCase: ExpressionTestCase) {
   case let .string(expectedValue):
     XCTAssertEqual(testCase.resolveValue(), expectedValue)
   case let .double(expectedValue):
-    XCTAssertEqual(testCase.resolveNumeric(), expectedValue)
+    XCTAssertEqual(testCase.resolveNumeric()!, expectedValue, accuracy: 1e-10)
   case let .integer(expectedValue):
     XCTAssertEqual(testCase.resolveNumeric(), expectedValue)
   case let .bool(expectedValue):

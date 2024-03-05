@@ -26,8 +26,8 @@ enum CastFunctions: String, CaseIterable {
       OverloadedFunction(
         functions: [
           FunctionUnary(impl: _boolToString),
-          FunctionUnary(impl: _doubleToString),
           FunctionUnary(impl: _intToString),
+          FunctionUnary(impl: _doubleToString),
           FunctionUnary(impl: _colorToString),
           FunctionUnary(impl: _urlToString),
         ],

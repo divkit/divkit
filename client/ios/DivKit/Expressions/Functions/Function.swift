@@ -19,8 +19,7 @@ extension SimpleFunction {
   }
 
   func symbolEvaluator(_ args: [Any]) throws -> Any {
-    try signature.checkArguments(args: args)
-    return try invoke(args: args)
+    try invoke(args: args)
   }
 
   func verify(signature: FunctionSignature) throws {
@@ -68,10 +67,7 @@ struct FunctionUnary<T1, R>: SimpleFunction {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    guard let v1 = args[0] as? T1 else {
-      throw FunctionSignature.Error.arityMismatch.message
-    }
-    return try impl(v1)
+    try impl(castArg(args[0]))
   }
 }
 
@@ -95,10 +91,10 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    guard let v1 = args[0] as? T1, let v2 = args[1] as? T2 else {
-      throw FunctionSignature.Error.arityMismatch.message
-    }
-    return try impl(v1, v2)
+    try impl(
+      castArg(args[0]),
+      castArg(args[1])
+    )
   }
 }
 
@@ -123,10 +119,11 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    guard let v1 = args[0] as? T1, let v2 = args[1] as? T2, let v3 = args[2] as? T3 else {
-      throw FunctionSignature.Error.arityMismatch.message
-    }
-    return try impl(v1, v2, v3)
+    try impl(
+      castArg(args[0]),
+      castArg(args[1]),
+      castArg(args[2])
+    )
   }
 }
 
@@ -152,11 +149,12 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    guard let v1 = args[0] as? T1, let v2 = args[1] as? T2, let v3 = args[2] as? T3,
-          let v4 = args[3] as? T4 else {
-      throw FunctionSignature.Error.arityMismatch.message
-    }
-    return try impl(v1, v2, v3, v4)
+    try impl(
+      castArg(args[0]),
+      castArg(args[1]),
+      castArg(args[2]),
+      castArg(args[3])
+    )
   }
 }
 
@@ -179,10 +177,7 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    guard let v1 = args as? [T1] else {
-      throw FunctionSignature.Error.arityMismatch.message
-    }
-    return try impl(v1)
+    try impl(args.map { try castArg($0) })
   }
 }
 
@@ -206,11 +201,10 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    guard let v1 = args[0] as? T1 else {
-      throw FunctionSignature.Error.arityMismatch.message
-    }
-    let v2 = args.dropFirst().map { $0 as! T2 }
-    return try impl(v1, v2)
+    return try impl(
+      castArg(args[0]),
+      args.dropFirst().map { try castArg($0) }
+    )
   }
 }
 
@@ -235,11 +229,11 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    guard let v1 = args[0] as? T1, let v2 = args[1] as? T2 else {
-      throw FunctionSignature.Error.arityMismatch.message
-    }
-    let v3 = args.dropFirst(2).map { $0 as! T3 }
-    return try impl(v1, v2, v3)
+    try impl(
+      castArg(args[0]),
+      castArg(args[1]),
+      args.dropFirst(2).map { try castArg($0) }
+    )
   }
 }
 
@@ -253,7 +247,7 @@ struct OverloadedFunction: Function {
 
   init(functions: [SimpleFunction], makeError: (([Argument]) -> Error)? = nil) {
     self.functions = functions
-    self.makeError = makeError ?? { FunctionSignature.Error.typeMismatch(args: $0).message }
+    self.makeError = makeError ?? { _ in FunctionSignature.Error.notFound.message }
   }
 
   func verify(signature: FunctionSignature) throws {
@@ -266,20 +260,35 @@ struct OverloadedFunction: Function {
     let arguments = try args.map {
       try FunctionSignature.ArgumentSignature(type: .from(type: type(of: $0)))
     }
-    guard let function = try functions
-      .first(where: { try
-          zip($0.signature.allArguments(arguments.count), arguments)
-          .allSatisfy { $0.type == $1.type || $0.type == .any }
-
-      })
-    else {
-      throw makeError(zip(args, arguments).map { Argument(type: $1.type, value: $0) })
+    var function = try getFunction(args: arguments) {
+      $0.type == $1.type
     }
-    return try function.invoke(args: args)
+    if function == nil {
+      function = try getFunction(args: arguments) {
+        $0.type.isCastableFrom($1.type)
+      }
+    }
+    if let function {
+      return try function.invoke(args: args)
+    }
+    throw makeError(zip(args, arguments).map { Argument(type: $1.type, value: $0) })
   }
 
   func symbolEvaluator(_ args: [Any]) throws -> Any {
     try invoke(args: args)
+  }
+
+  private func getFunction(
+    args: [FunctionSignature.ArgumentSignature],
+    predicate: (FunctionSignature.ArgumentSignature, FunctionSignature.ArgumentSignature) -> Bool
+  ) throws -> SimpleFunction? {
+    let sutableFunctions = try functions.filter {
+      try zip($0.signature.allArguments(args.count), args).allSatisfy(predicate)
+    }
+    if sutableFunctions.count > 1 {
+      throw CalcExpression.Error.message("Multiple matching overloads")
+    }
+    return sutableFunctions.first
   }
 }
 
@@ -327,10 +336,6 @@ struct FunctionSignature: Decodable {
     case array
     case any
 
-    func check(arg: Any) -> Bool {
-      type(of: arg) == swiftType
-    }
-
     var swiftType: Any.Type {
       switch self {
       case .string:
@@ -365,6 +370,20 @@ struct FunctionSignature: Decodable {
       }
     }
 
+    func isCastableFrom(_ type: ArgumentType) -> Bool {
+      if self == type {
+        return true
+      }
+      switch self {
+      case .any:
+        return true
+      case .number:
+        return type == .integer
+      default:
+        return false
+      }
+    }
+
     static func from(type: Any.Type) throws -> ArgumentType {
       guard let type = allCases.first(where: { $0.swiftType == type }) else {
         throw Error.type.message
@@ -374,9 +393,7 @@ struct FunctionSignature: Decodable {
   }
 
   enum Error {
-    case cast(ArgumentType)
     case arityMismatch
-    case typeMismatch(args: [Argument])
     case argumentTypeMismatch(Int, ArgumentType, ArgumentType)
     case resultTypeMismatch(ArgumentType, ArgumentType)
     case notFound
@@ -388,12 +405,8 @@ struct FunctionSignature: Decodable {
 
     private var description: String {
       switch self {
-      case let .cast(type):
-        "Argument couldn't be casted to \(type.rawValue.capitalized)"
       case .arityMismatch:
         "Function arity mismatch"
-      case let .typeMismatch(args):
-        "Type mismatch \(args.map(\.formattedValue).joined(separator: " "))"
       case let .argumentTypeMismatch(i, expected, found):
         "Argument \(i + 1) type mismatch, expected: \(expected), found: \(found)"
       case let .resultTypeMismatch(expected, found):
@@ -402,17 +415,6 @@ struct FunctionSignature: Decodable {
         "Function with signature is not found"
       case .type:
         "Type is not supported"
-      }
-    }
-  }
-
-  fileprivate func checkArguments(args: [Any]) throws {
-    guard arity.matches(.exactly(args.count)) else {
-      throw FunctionSignature.Error.arityMismatch.message
-    }
-    try zip(allArguments(args.count), args).forEach { signatureArg, arg in
-      if !signatureArg.type.check(arg: arg) {
-        throw FunctionSignature.Error.cast(signatureArg.type).message
       }
     }
   }
@@ -429,7 +431,7 @@ struct FunctionSignature: Decodable {
 
   fileprivate func verify(_ signature: FunctionSignature) throws {
     guard arity.matches(signature.arity) else {
-      throw FunctionSignature.Error.arityMismatch.message
+      throw Error.arityMismatch.message
     }
     try zip(arguments, signature.arguments).enumerated().forEach { i, a in
       if a.0 != a.1 {
@@ -437,7 +439,19 @@ struct FunctionSignature: Decodable {
       }
     }
     if resultType != signature.resultType {
-      throw FunctionSignature.Error.resultTypeMismatch(resultType, signature.resultType).message
+      throw Error.resultTypeMismatch(resultType, signature.resultType).message
     }
   }
+}
+
+private func castArg<T>(_ value: Any) throws -> T {
+  if let castedValue = value as? T {
+    return castedValue
+  }
+
+  if T.self == Double.self, let intValue = value as? Int {
+    return Double(intValue) as! T
+  }
+
+  throw AnyCalcExpression.Error.message("Argument couldn't be casted to \(T.self)")
 }

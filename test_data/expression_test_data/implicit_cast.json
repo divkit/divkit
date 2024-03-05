@@ -1,0 +1,236 @@
+{
+  "cases": [
+    {
+      "name": "7 == 7.0 => true",
+      "expression": "@{7 == 7.0}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "a == b => true",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "7 < 7.2 => true",
+      "expression": "@{7 < 7.2}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "a > b => false",
+      "expression": "@{a > b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "a >= b => true",
+      "expression": "@{a >= b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "value": 7.0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "7 + 8.9 => 15.9",
+      "expression": "@{7 + 8.9}",
+      "expected": {
+        "type": "number",
+        "value": 15.9
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "a - b => -1.8",
+      "expression": "@{a - b}",
+      "expected": {
+        "type": "number",
+        "value": -1.8
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 1.2,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "name": "b",
+          "value": 3
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "a * b => 3.6",
+      "expression": "@{a * b}",
+      "expected": {
+        "type": "number",
+        "value": 3.6
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 1.2,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "name": "b",
+          "value": 3
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "a / b => 0.4",
+      "expression": "@{a / b}",
+      "expected": {
+        "type": "number",
+        "value": 0.4
+      },
+      "variables": [
+        {
+          "type": "number",
+          "value": 1.2,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "name": "b",
+          "value": 3
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "a % b => 1.4",
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "number",
+        "value": 1.4
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 3,
+          "name": "a"
+        },
+        {
+          "type": "number",
+          "name": "b",
+          "value": 1.6
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "max(0, 1, 2, 3.5) => 3",
+      "expression": "@{max(0, 1, 2, 3.5)}",
+      "expected": {
+        "type": "number",
+        "value": 3.5
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "argb(1.0, red, 0.0, blue) => #FF8000FF",
+      "expression": "@{argb(1.0, red, 0.0, blue)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF8000FF"
+      },
+      "variables": [
+        {
+          "type": "number",
+          "name": "red",
+          "value": 0.5
+        },
+        {
+          "type": "integer",
+          "name": "blue",
+          "value": 1
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    }
+  ]
+}

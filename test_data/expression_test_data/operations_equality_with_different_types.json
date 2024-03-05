@@ -10,7 +10,6 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -24,7 +23,6 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -38,7 +36,6 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -52,7 +49,6 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -296,7 +292,6 @@
             ],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -316,7 +311,6 @@
             ],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -336,7 +330,6 @@
             ],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -356,7 +349,6 @@
             ],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -1581,7 +1573,6 @@
             ],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -1606,7 +1597,6 @@
             ],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -1631,7 +1621,6 @@
             ],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
@@ -1656,7 +1645,6 @@
             ],
             "platforms": [
                 "android",
-                "ios",
                 "web"
             ]
         },
