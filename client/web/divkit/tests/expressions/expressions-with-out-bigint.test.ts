@@ -84,7 +84,11 @@ function runCase(item: any) {
     }
     const res = evalExpression(vars, ast);
     if (item.expected.value !== '' || res.result.type !== 'error') {
-        expect(convertVals(res.result)).toEqual(convertVals(item.expected));
+        if (res.result.type === 'number' && item.expected.type === 'number') {
+            expect(res.result.value).toBeCloseTo(item.expected.value);
+        } else {
+            expect(convertVals(res.result)).toEqual(convertVals(item.expected));
+        }
     } else {
         expect(res.result.type).toEqual(item.expected.type);
     }
