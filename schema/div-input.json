@@ -109,7 +109,7 @@
         "keyboard_type": {
           "type": "string",
           "enum": [
-            "single_line_text", "multi_line_text", "phone", "number", "email", "uri"
+            "single_line_text", "multi_line_text", "phone", "number", "email", "uri", "password"
           ],
           "default_value": "multi_line_text",
           "$description": "translations.json#/div_input_keyboard_type"

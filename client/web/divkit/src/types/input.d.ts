@@ -3,7 +3,7 @@ import type { FontWeight } from './text';
 import type { BooleanInt } from '../../typings/common';
 import { AlignmentHorizontal, AlignmentVertical } from './alignment';
 
-export type KeyboardType = 'single_line_text' | 'multi_line_text' | 'phone' | 'number' | 'email' | 'uri';
+export type KeyboardType = 'single_line_text' | 'multi_line_text' | 'phone' | 'number' | 'email' | 'uri' | 'password';
 
 export interface MaskBase {
     raw_text_variable: string;

@@ -230,6 +230,8 @@ internal class DivInputBinder @Inject constructor(
             DivInput.KeyboardType.NUMBER -> InputType.TYPE_CLASS_NUMBER or
                     InputType.TYPE_NUMBER_FLAG_DECIMAL
             DivInput.KeyboardType.PHONE -> InputType.TYPE_CLASS_PHONE
+            DivInput.KeyboardType.PASSWORD -> InputType.TYPE_CLASS_TEXT or
+                    InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
     }
 

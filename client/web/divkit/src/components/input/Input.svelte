@@ -7,7 +7,8 @@
         phone: 'tel',
         single_line_text: 'text',
         multi_line_text: 'text',
-        uri: 'url'
+        uri: 'url',
+        password: 'password'
     };
 </script>
 

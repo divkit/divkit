@@ -2541,6 +2541,25 @@
         "Tap to cards. Their description is displayed in the first card."
       ],
       "file": "container/item_builder.json"
+    },
+    {
+      "title": "Input password",
+      "platforms": [
+        "web",
+        "android"
+      ],
+      "tags": [
+        "input"
+      ],
+      "steps": [
+        "Type something inside password",
+        "Tap the \"toggle\" button"
+      ],
+      "expected_results": [
+        "Password inside input shown as dots, text field below input is showing original text",
+        "Text inside password input became readable"
+      ],
+      "file": "input_password.json"
     }
   ]
 }
