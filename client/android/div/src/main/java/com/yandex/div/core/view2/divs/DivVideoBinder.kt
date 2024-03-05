@@ -58,7 +58,17 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        val playerView = currentPlayerView ?: divView.div2Component.divVideoFactory.makePlayerView(view.context)
+        val scale = div.scale.evaluate(resolver)
+        val playerView = if (currentPlayerView != null &&
+            currentPlayerView.isCompatibleWithNewParams(scale)
+        ) {
+            currentPlayerView
+        } else {
+            divView.div2Component.divVideoFactory.makePlayerView(
+                view.context,
+                mapOf("scale" to scale)
+            )
+        }
 
         val preview = div.createPreview(resolver)
         val previewImageView: ImageView = currentPreviewView ?: ImageView(view.context).apply {

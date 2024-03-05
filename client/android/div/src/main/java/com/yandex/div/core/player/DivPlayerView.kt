@@ -4,9 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import com.yandex.div.R
+import com.yandex.div2.DivVideoScale
 
 abstract class DivPlayerView(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.divImageStyle
-) : FrameLayout(context, attrs, defStyleAttr), DivVideoAttachable
+) : FrameLayout(context, attrs, defStyleAttr), DivVideoAttachable {
+
+    open fun isCompatibleWithNewParams(scale: DivVideoScale): Boolean = true
+}
