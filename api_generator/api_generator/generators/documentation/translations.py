@@ -26,10 +26,6 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "en": "Can have one of the following types:",
         "ru": "Может иметь один из следующих типов:"
     },
-    "div_generator_string_enumeration": {
-        "en": "Can have one of the following values:",
-        "ru": "Может иметь одно из следующих значений:"
-    },
     "div_generator_factory_method_name": {
         "en": "Can be created using the method [{}].",
         "ru": "Можно создать при помощи метода [{}]."
@@ -89,6 +85,10 @@ __full_translations: Dict[str, Dict[str, str]] = {
     "div_generator_schemes": {
         "en": "Allowed schemes: {}.",
         "ru": "Разрешенные схемы: {}."
+    },
+    "div_generator_string_enumeration": {
+        "en": "Can have one of the following values:",
+        "ru": "Может иметь одно из следующих значений:"
     },
     "div_generator_type_deprecated": {
         "en": "Type is deprecated.",
