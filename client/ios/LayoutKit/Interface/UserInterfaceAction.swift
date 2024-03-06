@@ -26,7 +26,7 @@ public struct UserInterfaceAction: Equatable, Codable {
       cardId: String,
       source: DivActionSource,
       url: URL?,
-      prototypeVariables: [String: AnyHashable]
+      prototypeVariables: [String: AnyHashable] = [:]
     ) {
       self.action = action
       self.cardId = cardId
