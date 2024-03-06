@@ -28,10 +28,10 @@ Use `divkit-demo-app` configuration to build and launch our demo app.
 
 Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru).
 
-[Twitter](https://twitter.com/DivKitFramework)
-
 ---
+
 ## DivKit Android. Quick start.
+
 ### Build MVP and draw first DivView.
 To get started with drawing your first view, follow these three simple steps:
 - **Initialize the Configuration**: Begin by creating an instance of `DivConfiguration`. The only required parameter is `DivImageLoader`. You have the option to implement your own custom implementation of this interface or use one of our implementations: `PicassoDivImageLoader` or `GlideImageLoader`. For an example of how to create a `DivConfiguration` in our demo app, you can refer to [this link](https://github.com/divkit/divkit/blob/05a420e0861517e68a3fc68c853fb640af092df2/client/android/divkit-demo-app/src/main/java/com/yandex/divkit/demo/div/Div2Activity.kt#L98).
@@ -55,16 +55,19 @@ You are free to use our examples of div layouts: [sample cards](https://github.c
     div2View.setData(divData, DivDataTag("your_unique_tag_here"))
 ```
 Congrats, you just drawn your fist Div2View! To understand why DivDataTag is so important check section about Div2Logger.
+
 ### Everything you need to know about DivConfiguration.
 
 #### Handling actions in your layout. *DivConfiguration.Builder#actionHandler*.
 To learn more about actions, please refer to [this section](https://divkit.tech/en/doc/overview/concepts/interaction.html?lang=en) in our documentation. DivKit will automatically handle all actions defined in our schema. However, you might want to trigger custom code from your layout. To achieve this, you can implement your own `DivActionHandler` interface.
 
 As an example, you can refer to our implementations of [implementation in the SamplesActivity](https://github.com/divkit/divkit/blob/368ffde173d928c1f825f093efe87ba04b800b65/client/android/divkit-demo-app/src/main/java/com/yandex/divkit/demo/div/Div2Activity.kt#L169) from our demo app. Don't forget to call `super.handleAction` if action wasn't handled by your custom handler!
+
 #### Logging actions. *DivConfiguration.Builder#div2Logger*.
 Interface `Div2Logger` is pretty simple. When you define your implementation, DivKit will log each action for you. Additionally, it's essential to note that you can set the `DivDataTag` to distinguish between different `Div2View` in your logs. You can also specify the `"id"` field when describing views within your layout.
 
 As an example you can reffer to our implementation of [DemoDiv2Logger](https://github.com/divkit/divkit/blob/R-28.4/client/android/divkit-demo-app/src/main/java/com/yandex/divkit/demo/div/DemoDiv2Logger.kt).
+
 #### Using custom views inside DivKit layout. *DivConfiguration.Builder#divCustomContainerViewAdapter*
 You can define any custom view you want, set some custom-name and then use in inside your layout.
 
@@ -131,4 +134,3 @@ From a coding perspective, in `DivConfiguration.Builder#overrideContextMenuHandl
 By default, longtap_actions events do not propagate (they work on the main container, but are not captured by child elements) if the nested element has its own actions. This behavior aligns with the standard logic of Android and iOS platforms.
 
 However, if you have a specific need for longtap_actions to propagate to all child elements you can change this by using the `DivConfiguration.Builder#enableLongtapActionsPassingToChild` method.
-

@@ -13,8 +13,6 @@ Also, we’ve made a [sandbox](https://divkit.tech/playground) for you to experi
 
 Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru)
 
-[Twitter](https://twitter.com/DivKitFramework)
-
 ### Our clients
 
 <img alt="Yandex Browser" src="readme_pictures/ya_browser.png" width="60" height="60"> <img alt="Yandex Search" src="readme_pictures/search.png" width="60" height="60"> <img alt="Yandex Music" src="readme_pictures/music.png" width="60" height="60"> <img alt="Alice Voice Assistant" src="readme_pictures/alice.png" width="60" height="60"> <img alt="Yandex Market" src="readme_pictures/market.png" width="60" height="60"> <img alt="Zen" src="readme_pictures/dzen.png" width="60" height="60"> <img alt="Smart Camera" src="readme_pictures/smart_cam.png" width="60" height="60"> <img alt="Yandex Realty" src="readme_pictures/realty.png" width="60" height="60"> <img alt="Edadeal" src="readme_pictures/edadeal.png" width="60" height="60"> <img alt="Mobile Ads SDK" src="readme_pictures/ads-sdk.png" width="60" height="60"> <img alt="Yandex bank" src="readme_pictures/bank.png" width="60" height="60">   
