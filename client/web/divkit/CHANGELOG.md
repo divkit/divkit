@@ -1,3 +1,9 @@
+## 29.9.0 (March 11, 2024)
+
+* Fixed space symbols collapse inside `tabs` title.
+* `keyboard_type` = `password` has been supported for `input`.
+
+
 ## 29.8.0 (February 26, 2024)
 
 * The `visibility_duration` and `disappear_duration` properties in `actions` now supports the value 0.

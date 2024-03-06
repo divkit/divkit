@@ -1,3 +1,25 @@
+## 29.9.0
+
+# Android Client:
+* Reduced number of memory allocations at observing of client-side variables.
+* Fixed periodic crash in `pager` on view rebind.
+* `keyboard_type` = `password` has been supported for `input`.
+* Fixed video overlap with scale `fill`.
+* Removed redundant memory usage when calling the `putOrUpdate` method on a `DivVariableController` with already known variables.
+* `Complex rebind` enabled by default.
+
+# iOS Client:
+* Implemented new actions to scroll gallery `scroll_to_start`, `scroll_to_end`, `scroll_backward`, `scroll_forward`, `scroll_to_position`.
+* Added implicit cast from integer to number.
+* Fixed actions using item_builder.
+* Fixed numeric values parsing.
+* Fixed skipping pages when scrolling pager by timer.
+
+# Web Client:
+* Fixed space symbols collapse inside `tabs` title.
+* `keyboard_type` = `password` has been supported for `input`.
+
+
 ## 29.8.0
 
 # Android Client:
