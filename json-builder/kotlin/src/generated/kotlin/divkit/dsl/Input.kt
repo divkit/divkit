@@ -335,7 +335,7 @@ class Input internal constructor(
     /**
      * Keyboard type.
      * 
-     * Possible values: [single_line_text], [multi_line_text], [phone], [number], [email], [uri].
+     * Possible values: [single_line_text], [multi_line_text], [phone], [number], [email], [uri], [password].
      */
     @Generated
     sealed interface KeyboardType

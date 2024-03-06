@@ -333,6 +333,10 @@ object UriEnumValue : EnumValue("uri"),
     Input.KeyboardType
 
 @Generated
+object PasswordEnumValue : EnumValue("password"),
+    Input.KeyboardType
+
+@Generated
 object SingleEnumValue : EnumValue("single"),
     LineStyle
 
@@ -697,6 +701,10 @@ val DivScope.email: EmailEnumValue
 @Generated
 val DivScope.uri: UriEnumValue
     get() = UriEnumValue
+
+@Generated
+val DivScope.password: PasswordEnumValue
+    get() = PasswordEnumValue
 
 @Generated
 val DivScope.single: SingleEnumValue
