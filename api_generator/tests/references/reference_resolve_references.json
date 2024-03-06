@@ -157,6 +157,11 @@
     {
       "entity_with_array.json": {
         "type": "object",
+        "platforms": [
+          "android",
+          "ios",
+          "web"
+        ],
         "codegen": {
           "kotlin": {
             "properties_to_patch": [
@@ -173,6 +178,12 @@
           },
           "array": {
             "type": "array",
+            "platforms": [
+              "android",
+              "ios",
+              "web",
+              "flutter"
+            ],
             "items": {
               "$resolved_refs": [
                 "entity.json"

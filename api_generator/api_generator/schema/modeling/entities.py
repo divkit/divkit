@@ -13,7 +13,7 @@ from .utils import (
     alias,
     alias_for,
 
-    fixing_reserved_typename
+    fixing_reserved_typename, platforms
 )
 from ...utils import capitalize_camel_case
 
@@ -285,6 +285,7 @@ class Entity(Declarable):
                                                           mode=mode,
                                                           config=config)
 
+        self.platforms: Optional[List[Platform]] = platforms(dictionary)
         self._properties: List[Property] = sorted(properties, key=lambda p: p.name)
 
         definitions: Optional[Dict[str, Dict[str, any]]] = dictionary.get('definitions')

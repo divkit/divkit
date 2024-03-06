@@ -129,6 +129,10 @@ __full_translations: Dict[str, Dict[str, str]] = {
     "div_generator_web": {
         "en": "web",
         "ru": "веб"
+    },
+    "div_generator_flutter": {
+        "en": "Flutter",
+        "ru": "Flutter"
     }
 }
 

@@ -10,6 +10,7 @@ class Platform(str, Enum):
     ANDROID = 'android'
     IOS = 'ios'
     WEB = 'web'
+    FLUTTER = 'flutter'
 
 
 class GeneratedLanguage(str, Enum):

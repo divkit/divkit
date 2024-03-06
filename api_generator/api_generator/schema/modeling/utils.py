@@ -31,4 +31,5 @@ def platforms(dictionary: Dict[str, any]) -> Optional[List[Platform]]:
     platforms_list: List[str] = dictionary.get('platforms')
     if platforms_list is None:
         return None
+
     return list(map(lambda raw: Platform[raw.upper()], platforms_list))

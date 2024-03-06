@@ -5,8 +5,7 @@ from typing import List, Optional
 from .documentation_entities import (
     update_declarable_base,
     DocumentationDeclarable,
-    DocumentationEntity,
-    DocumentationProperty
+    DocumentationEntity
 )
 from .translations import translations
 from .utils import bold, code, paragraph
@@ -17,7 +16,6 @@ from ...schema.modeling.entities import (
     Entity,
     EntityEnumeration,
     StringEnumeration,
-    Property,
     DescriptionLanguage
 )
 from ...schema.modeling.text import Text
@@ -104,10 +102,7 @@ class DocumentationGenerator(Generator):
         params_header = self.__translations['div_generator_parameters']
         description_header = self.__translations['div_generator_description']
 
-        properties_table_content = Text(list(map(
-            lambda p: f'| {code(p.dict_field)} | {self.__table_description(p)} |',
-            sorted(entity.properties_doc, key=lambda x: x.optional)
-        )))
+        properties_table_content = self.__props_description(entity)
 
         inner_types_tables = '\n\n'.join(map(
             lambda inner_entity: self.__fields_table(entity=inner_entity, table_name=inner_entity.name),
@@ -124,36 +119,41 @@ class DocumentationGenerator(Generator):
             f'{properties_table_content}{inner_types_tables}'
         ])
 
-    def __table_description(self, prop: DocumentationProperty) -> str:
-        property_type = prop.property_type_doc
-        optionality = '' if prop.optional else self.__translations['div_generator_required_parameter']
-        deprecation = self.__translations['div_generator_parameter_deprecated'] if prop.is_deprecated else ''
-        default_value = '' if prop.default_value is None else \
-            self.__translations['div_generator_default_value'].format(prop.default_value)
+    def __props_description(self, entity: DocumentationEntity) -> Text:
+        result = Text()
+        for prop in sorted(entity.properties_doc, key=lambda x: x.optional):
+            property_type = prop.property_type_doc
+            optionality = '' if prop.optional else self.__translations['div_generator_required_parameter']
+            deprecation = self.__translations['div_generator_parameter_deprecated'] if prop.is_deprecated else ''
+            default_value = '' if prop.default_value is None else \
+                self.__translations['div_generator_default_value'].format(prop.default_value)
 
-        return ''.join(map(
-            lambda s: paragraph(s),
-            map(
-                lambda t: t.replace('\n', '</p><p>'),
-                filter(None, [
-                    bold(property_type.description),
-                    optionality,
-                    deprecation,
-                    prop.description_doc(self.__lang),
-                    property_type.constraints(self.__translations),
-                    default_value,
-                    self.__platforms(prop),
-                    property_type.details(self.__translations)
-                ])
-            )
-        ))
+            table_description = ''.join(map(
+                lambda s: paragraph(s),
+                map(
+                    lambda t: t.replace('\n', '</p><p>'),
+                    filter(None, [
+                        bold(property_type.description),
+                        optionality,
+                        deprecation,
+                        prop.description_doc(self.__lang),
+                        property_type.constraints(self.__translations),
+                        default_value,
+                        self.__platforms(entity.platforms if prop.platforms is None else prop.platforms),
+                        property_type.details(self.__translations)
+                    ])
+                )
+            ))
+            result += f'| {code(prop.dict_field)} | {table_description} |'
 
-    def __platforms(self, prop: Property) -> str:
-        if prop.platforms is None:
+        return result
+
+    def __platforms(self, platforms: Optional[List[Platform]]) -> str:
+        if platforms is None:
             return ''
-        if len(prop.platforms) == 0:
+        if len(platforms) == 0:
             return self.__translations['div_generator_in_progress']
-        platform_names = ', '.join(map(lambda p: self.__platform_name(p), prop.platforms))
+        platform_names = ', '.join(map(lambda p: self.__platform_name(p), platforms))
         return self.__translations['div_generator_platforms'].format(platform_names)
 
     def __platform_name(self, platform: Platform) -> str:
@@ -163,6 +163,8 @@ class DocumentationGenerator(Generator):
             return self.__translations['div_generator_ios']
         if platform == Platform.WEB:
             return self.__translations['div_generator_web']
+        if platform == Platform.FLUTTER:
+            return self.__translations['div_generator_flutter']
         raise NotImplementedError
 
     def _entity_enumeration_declaration(self, entity_enumeration: EntityEnumeration) -> Text:
