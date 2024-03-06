@@ -107,7 +107,7 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
                     packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityRebindExtras(
-                        assetName = "div2-perf/benchmark-with-templates.json",
+                        assetName = "div2-perf/rebind-original-layout.json",
                         rebindAssetName = rebindAsset
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))

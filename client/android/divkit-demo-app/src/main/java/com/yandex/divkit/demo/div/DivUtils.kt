@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
+import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.data.DivParsingEnvironment
@@ -79,8 +80,11 @@ fun divConfiguration(
 
 fun divContext(
     activity: Activity,
-    configBuilder: DivConfiguration.Builder.() -> DivConfiguration.Builder = { this }
+    forceDisableLogs: Boolean = false,
+    configBuilder: DivConfiguration.Builder.() -> DivConfiguration.Builder = { this },
 ): Div2Context {
+    if (forceDisableLogs) DivKit.enableLogging(false)
+
     val configuration = divConfiguration(activity)
         .configBuilder()
         .build()

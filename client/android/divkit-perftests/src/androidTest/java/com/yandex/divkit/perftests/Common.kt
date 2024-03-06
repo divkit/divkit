@@ -14,6 +14,7 @@ private const val EXTRA_ASSET_NAMES = "asset_names"
 private const val EXTRA_STATE_PATHS = "state_paths"
 private const val EXTRA_REBIND_ASSET_NAME = "rebind_asset_name"
 private const val EXTRA_PROHIBITED_HISTOGRAMS = "prohibited_histograms"
+private const val EXTRA_FORCE_DISABLE_LOGS = "force_disable_logs"
 
 fun divBenchmarkActivityExtras(assetName: String): Bundle {
     return bundleOf(
@@ -24,7 +25,8 @@ fun divBenchmarkActivityExtras(assetName: String): Bundle {
 fun divBenchmarkActivityRebindExtras(assetName: String, rebindAssetName: String): Bundle {
     return bundleOf(
         EXTRA_ASSET_NAME to assetName,
-        EXTRA_REBIND_ASSET_NAME to rebindAssetName
+        EXTRA_REBIND_ASSET_NAME to rebindAssetName,
+        EXTRA_FORCE_DISABLE_LOGS to true
     )
 }
 

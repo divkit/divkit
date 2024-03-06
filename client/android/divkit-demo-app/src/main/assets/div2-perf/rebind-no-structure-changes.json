@@ -116,35 +116,6 @@
         }
       ]
     },
-    "tab_pager": {
-      "type": "tabs",
-      "has_separator": "@{true}",
-      "separator_color": "@{dark_sky}",
-      "separator_paddings": {
-        "left": 0,
-        "top": 0,
-        "right": 0,
-        "bottom": 0
-      },
-      "tab_title_style": {
-        "paddings": {
-          "left": 12,
-          "top": 8,
-          "right": 12,
-          "bottom": 8
-        },
-        "active_text_color": "@{dark_sky}",
-        "inactive_text_color": "#ECF0F1",
-        "active_background_color": "@{mint_green}",
-        "inactive_background_color": "#00000000"
-      },
-      "title_paddings": {
-        "left": "@{padding.left}",
-        "top": 8,
-        "right": "@{padding.right}",
-        "bottom": 16
-      }
-    },
     "page": {
       "type": "gallery",
       "paddings": {
@@ -542,7 +513,8 @@
           "type": "card_header"
         },
         {
-          "type": "tab_pager",
+          "type": "container",
+          "orientation": "vertical",
           "$items": "pages"
         },
         {
@@ -651,3364 +623,421 @@
           },
           "pages": [
             {
-              "title": "Page 1",
-              "div": {
-                "type": "page",
-                "items": [
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item with new title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
+              "type": "page",
+              "items": [
+                {
+                  "type": "list",
+                  "items": [
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{sky_blue}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item with new title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_1",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{mint_green}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_2",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "#@{golden_dragon}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_3",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{vivid_orange}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_4",
+                        "url": "@{empty_action}"
                       }
-                    ]
+                    }
+                  ]
+                },
+                {
+                  "type": "post",
+                  "post_title": "POST TITLE",
+                  "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
+                  "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
+                  "post_quote_action": {
+                    "log_id": "benchmark/post_quote",
+                    "url": "@{empty_action}"
                   },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                  "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                  "post_tag_spans": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "text_color": "@{mint_green}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  }
-                ]
-              }
-            },
-            {
-              "title": "Page 2",
-              "div": {
-                "type": "page",
-                "items": [
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 7,
+                      "end": 13,
+                      "text_color": "@{medium_sea_green}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 14,
+                      "end": 20,
+                      "text_color": "#@{golden_dragon}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 21,
+                      "end": 25,
+                      "text_color": "@{vivid_orange}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "start": 26,
+                      "end": 31,
+                      "text_color": "@{cinnabar}"
+                    }
+                  ]
+                },
+                {
+                  "type": "form",
+                  "form_title": "FORM TITLE",
+                  "top_input_title_1": "Long top input title 1",
+                  "top_input_title_2": "Long top input title 2",
+                  "top_input_variable": "top_input_var",
+                  "middle_input_title": "Middle input title",
+                  "middle_input_variable": "middle_input_var",
+                  "bottom_input_title_1": "Bottom",
+                  "bottom_input_title_2": "input_title",
+                  "bottom_input_variable": "bottom_input_var"
+                },
+                {
+                  "type": "list",
+                  "items": [
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{sky_blue}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_1",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{mint_green}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_2",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  }
-                ]
-              }
-            },
-            {
-              "title": "Page 3",
-              "div": {
-                "type": "page",
-                "items": [
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "#@{golden_dragon}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_3",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{vivid_orange}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_4",
+                        "url": "@{empty_action}"
                       }
-                    ]
+                    }
+                  ]
+                },
+                {
+                  "type": "post",
+                  "post_title": "POST TITLE",
+                  "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
+                  "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
+                  "post_quote_action": {
+                    "log_id": "benchmark/post_quote",
+                    "url": "@{empty_action}"
                   },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                  "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                  "post_tag_spans": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "text_color": "@{mint_green}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 7,
+                      "end": 13,
+                      "text_color": "@{medium_sea_green}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  }
-                ]
-              }
-            },
-            {
-              "title": "Page 4",
-              "div": {
-                "type": "page",
-                "items": [
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 14,
+                      "end": 20,
+                      "text_color": "#@{golden_dragon}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 21,
+                      "end": 25,
+                      "text_color": "@{vivid_orange}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "start": 26,
+                      "end": 31,
+                      "text_color": "@{cinnabar}"
+                    }
+                  ]
+                },
+                {
+                  "type": "form",
+                  "form_title": "FORM TITLE",
+                  "top_input_title_1": "Long top input title 1",
+                  "top_input_title_2": "Long top input title 2",
+                  "top_input_variable": "top_input_var",
+                  "middle_input_title": "Middle input title",
+                  "middle_input_variable": "middle_input_var",
+                  "bottom_input_title_1": "Bottom",
+                  "bottom_input_title_2": "input_title",
+                  "bottom_input_variable": "bottom_input_var"
+                },
+                {
+                  "type": "list",
+                  "items": [
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{sky_blue}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_1",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{mint_green}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_2",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "#@{golden_dragon}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_3",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  }
-                ]
-              }
-            },
-            {
-              "title": "Page 5",
-              "div": {
-                "type": "page",
-                "items": [
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{vivid_orange}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_4",
+                        "url": "@{empty_action}"
                       }
-                    ]
+                    }
+                  ]
+                },
+                {
+                  "type": "post",
+                  "post_title": "POST TITLE",
+                  "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
+                  "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
+                  "post_quote_action": {
+                    "log_id": "benchmark/post_quote",
+                    "url": "@{empty_action}"
                   },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                  "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                  "post_tag_spans": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "text_color": "@{mint_green}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 7,
+                      "end": 13,
+                      "text_color": "@{medium_sea_green}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 14,
+                      "end": 20,
+                      "text_color": "#@{golden_dragon}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  }
-                ]
-              }
-            },
-            {
-              "title": "Page 6",
-              "div": {
-                "type": "page",
-                "items": [
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 21,
+                      "end": 25,
+                      "text_color": "@{vivid_orange}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "start": 26,
+                      "end": 31,
+                      "text_color": "@{cinnabar}"
+                    }
+                  ]
+                },
+                {
+                  "type": "form",
+                  "form_title": "FORM TITLE",
+                  "top_input_title_1": "Long top input title 1",
+                  "top_input_title_2": "Long top input title 2",
+                  "top_input_variable": "top_input_var",
+                  "middle_input_title": "Middle input title",
+                  "middle_input_variable": "middle_input_var",
+                  "bottom_input_title_1": "Bottom",
+                  "bottom_input_title_2": "input_title",
+                  "bottom_input_variable": "bottom_input_var"
+                },
+                {
+                  "type": "list",
+                  "items": [
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{sky_blue}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_1",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{mint_green}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_2",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "#@{golden_dragon}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_3",
+                        "url": "@{empty_action}"
                       }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
+                    {
+                      "type": "list_item",
+                      "indicator_color": "@{vivid_orange}",
+                      "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                      "title": "Item title",
+                      "subtitle": "Item subtitle",
+                      "counter": "1K",
+                      "action": {
+                        "log_id": "benchmark/list_item_4",
+                        "url": "@{empty_action}"
                       }
-                    ]
+                    }
+                  ]
+                },
+                {
+                  "type": "post",
+                  "post_title": "POST TITLE",
+                  "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
+                  "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
+                  "post_quote_action": {
+                    "log_id": "benchmark/post_quote",
+                    "url": "@{empty_action}"
                   },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  }
-                ]
-              }
-            },
-            {
-              "title": "Page 7",
-              "div": {
-                "type": "page",
-                "items": [
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                  "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                  "post_tag_spans": [
+                    {
+                      "start": 0,
+                      "end": 6,
+                      "text_color": "@{mint_green}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 7,
+                      "end": 13,
+                      "text_color": "@{medium_sea_green}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 14,
+                      "end": 20,
+                      "text_color": "#@{golden_dragon}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
+                    {
+                      "start": 21,
+                      "end": 25,
+                      "text_color": "@{vivid_orange}"
                     },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  }
-                ]
-              }
-            },
-            {
-              "title": "Page 8",
-              "div": {
-                "type": "page",
-                "items": [
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
-                    },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
-                    },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
-                    },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  },
-                  {
-                    "type": "list",
-                    "items": [
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{sky_blue}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_1",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{mint_green}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_2",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "#@{golden_dragon}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_3",
-                          "url": "@{empty_action}"
-                        }
-                      },
-                      {
-                        "type": "list_item",
-                        "indicator_color": "@{vivid_orange}",
-                        "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                        "title": "Item title",
-                        "subtitle": "Item subtitle",
-                        "counter": "1K",
-                        "action": {
-                          "log_id": "benchmark/list_item_4",
-                          "url": "@{empty_action}"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote": "Variables concatenation. empty_action: '@{empty_action}' \n true: '@{true}' \n left: '@{padding.left}' \n right: '@{padding.right}' \n sky_blue: '@{sky_blue}' \n mint_green: '@{mint_green}' \n dark_sky: '@{dark_sky}' \n golden_dragon: '@{golden_dragon}' \n medium_sea_green: '@{medium_sea_green}' \n vivid_orange: '@{vivid_orange}' \n cinnabar: '@{cinnabar}' \n cinnabar: '@{cinnabar}'",
-                    "post_quote_action": {
-                      "log_id": "benchmark/post_quote",
-                      "url": "@{empty_action}"
-                    },
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "form",
-                    "form_title": "FORM TITLE",
-                    "top_input_title_1": "Long top input title 1",
-                    "top_input_title_2": "Long top input title 2",
-                    "top_input_variable": "top_input_var",
-                    "middle_input_title": "Middle input title",
-                    "middle_input_variable": "middle_input_var",
-                    "bottom_input_title_1": "Bottom",
-                    "bottom_input_title_2": "input_title",
-                    "bottom_input_variable": "bottom_input_var"
-                  }
-                ]
-              }
+                    {
+                      "start": 26,
+                      "end": 31,
+                      "text_color": "@{cinnabar}"
+                    }
+                  ]
+                },
+                {
+                  "type": "form",
+                  "form_title": "FORM TITLE",
+                  "top_input_title_1": "Long top input title 1",
+                  "top_input_title_2": "Long top input title 2",
+                  "top_input_variable": "top_input_var",
+                  "middle_input_title": "Middle input title",
+                  "middle_input_variable": "middle_input_var",
+                  "bottom_input_title_1": "Bottom",
+                  "bottom_input_title_2": "input_title",
+                  "bottom_input_variable": "bottom_input_var"
+                }
+              ]
             }
           ]
         }

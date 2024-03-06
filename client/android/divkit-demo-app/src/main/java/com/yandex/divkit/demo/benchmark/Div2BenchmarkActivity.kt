@@ -16,9 +16,10 @@ class Div2BenchmarkActivity : AppCompatActivity() {
 
         val assetName = intent.getStringExtra(EXTRA_ASSET_NAME)
         val rebindAssetName = intent.getStringExtra(EXTRA_REBIND_ASSET_NAME)
+        val disableLogs = intent.getBooleanExtra(EXTRA_FORCE_DISABLE_LOGS, false)
 
         val viewController = Div2BenchmarkViewController(rootLayout)
-        val divContext = divContext(activity = this)
+        val divContext = divContext(activity = this, forceDisableLogs = disableLogs)
         benchmark = Div2Benchmark(divContext, viewController)
 
         if (assetName == null) {
