@@ -61,6 +61,12 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                 }
             }
 
+            is Double -> {
+                checkEquality(testCase) { message, expected, actual ->
+                    Assert.assertEquals(message, expected as Double, actual as Double, 1.0e-10)
+                }
+            }
+
             else -> {
                 checkEquality(testCase) { message, expected, actual ->
                     Assert.assertEquals(message, expected, actual)

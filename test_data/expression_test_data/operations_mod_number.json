@@ -15,11 +15,11 @@
       ]
     },
     {
-      "name": "3.0 % 2.0 => 1.0",
-      "expression": "@{3.0 % 2.0}",
+      "name": "3.2 % 2.5 => 0.7",
+      "expression": "@{3.2 % 2.5}",
       "expected": {
         "type": "number",
-        "value": 1.0
+        "value": 0.7
       },
       "variables": [],
       "platforms": [
