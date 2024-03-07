@@ -30,7 +30,7 @@
       "expected_results": [
         "related element is selected"
       ],
-      "file": "actions/copy-to-clipboard.json"
+      "file": "actions/focus-element.json"
     },
     {
       "title": "Focus action",
