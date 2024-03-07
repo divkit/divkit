@@ -68,8 +68,6 @@ final class DivBlockProvider {
     _ source: DivViewSource,
     debugParams: DebugParams
   ) {
-    block = noDataBlock
-
     cardId = source.cardId
     self.debugParams = debugParams
     switch source.kind {
@@ -107,6 +105,8 @@ final class DivBlockProvider {
   }
 
   private func update(divData: DivData?) {
+    guard divData !== self.divData else { return }
+    block = noDataBlock
     guard let divData else {
       self.divData = nil
       return
