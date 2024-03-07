@@ -217,16 +217,21 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     }
 
     private fun showVariablesDialog() {
-        val editText = EditText(this)
+        val editText = layoutInflater.inflate(R.layout.apply_patch_edit_text, null) as EditText
         editText.setText("asset:///div2/expressions/theme_palette_light.json")
         preferences.getString(DIV2_VARIABLES_KEY_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
         val adb = SafeAlertDialogBuilder(this)
             .setView(editText)
             .setPositiveButton("Load variables") { _, _ ->
-                val url = editText.text.toString()
-                preferences.edit().putString(DIV2_VARIABLES_KEY_URL, url).apply()
+                val data = editText.text.toString()
+                preferences.edit().putString(DIV2_VARIABLES_KEY_URL, data).apply()
                 lifecycleScope.launch {
-                    val json = withContext(Dispatchers.IO) { loadJson(Uri.parse(url)) }
+                    val json = if (data.trimStart().startsWith('{')) {
+                        JSONObject(data)
+                    } else {
+                        val url = Uri.parse(data)
+                        withContext(Dispatchers.IO) { loadJson(url) }
+                    }
                     globalVariableController.updateVariables(json, errorLogger)
                 }
             }

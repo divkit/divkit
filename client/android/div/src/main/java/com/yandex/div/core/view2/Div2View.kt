@@ -131,6 +131,7 @@ class Div2View private constructor(
 
     @VisibleForTesting
     internal var stateId = DivData.INVALID_STATE_ID
+    private var currentStatePath: DivStatePath? = null
     private var config = DivViewConfig.DEFAULT
 
     private var rebindTask: RebindTask? = null
@@ -534,6 +535,8 @@ class Div2View private constructor(
 
     override fun switchToState(path: DivStatePath, temporary: Boolean) = synchronized(monitor) {
         if (stateId == path.topLevelStateId) {
+            if (currentStatePath == path) return
+            currentStatePath = path
             val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
             bulkActionsHandler.switchState(state, path, temporary)
         } else if (path.topLevelStateId != DivData.INVALID_STATE_ID) {
