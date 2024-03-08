@@ -75,8 +75,15 @@ final class CorePlayerImpl: CorePlayer {
     player.pause()
   }
 
-  func seek(to position: CMTime) {
-    player.seek(to: position, toleranceBefore: .zero, toleranceAfter: .zero)
+  func seek(to position: CMTime, completion: @escaping Action) {
+    player.seek(
+      to: position,
+      toleranceBefore: .zero,
+      toleranceAfter: .zero,
+      completionHandler: { _ in
+        completion()
+      }
+    )
   }
 
   func set(isMuted: Bool) {

@@ -54,8 +54,10 @@ final class DefaultPlayer: Player {
       player
         .playbackDidFinish
         .addObserver { [weak self] _ in
-          self?.player.seek(to: .zero)
-          self?.player.play()
+          self?.player.seek(
+            to: .zero,
+            completion: { self?.player.play() }
+          )
         }
         .dispose(in: playbackConfigObservers)
     }

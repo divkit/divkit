@@ -17,7 +17,7 @@ protocol CorePlayer: VideoEngineProvider {
 
   func play()
   func pause()
-  func seek(to position: CMTime)
+  func seek(to position: CMTime, completion: @escaping Action)
 
   func set(isMuted: Bool)
 }
@@ -25,5 +25,9 @@ protocol CorePlayer: VideoEngineProvider {
 extension CorePlayer {
   var staticScope: Self.Type {
     Self.self
+  }
+  
+  func seek(to position: CMTime) {
+    seek(to: position, completion: {})
   }
 }
