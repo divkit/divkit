@@ -12,5 +12,5 @@ dependencies {
     implementation project(path: ':logging')
     implementation project(path: ':utils')
 
-    implementation "androidx.collection:collection:$versions.androidx.collection"
+    implementation libs.androidx.collection
 }

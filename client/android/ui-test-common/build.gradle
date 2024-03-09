@@ -5,24 +5,29 @@ android {
 }
 
 dependencies {
-    api "androidx.core:core:$versions.androidx.core"
-    api "androidx.core:core-ktx:$versions.androidx.core_ktx"
-    api "androidx.appcompat:appcompat:$versions.androidx.appcompat"
-    api "androidx.test:core:$versions.androidx.test"
-    api "androidx.test:runner:$versions.androidx.test"
-    api "androidx.test:rules:$versions.androidx.test"
-    api ("androidx.test.espresso:espresso-contrib:$versions.androidx.espresso") {
+    api libs.androidx.core
+    api libs.androidx.coreKtx
+    api libs.androidx.appcompat
+    api libs.androidx.test.core
+    api libs.androidx.test.runner
+    api libs.androidx.test.rules
+    api (libs.androidx.espresso.contrib) {
         exclude group: 'org.checkerframework', module: 'checker-qual'
     }
-    api "androidx.test.espresso:espresso-core:$versions.androidx.espresso"
-    api "androidx.test.espresso:espresso-intents:$versions.androidx.espresso"
+    api libs.androidx.espresso.core
+    api libs.androidx.espresso.intents
 
-    api "ru.tinkoff.allure:allure-common:$versions.tinkoffAllure"
-    api "ru.tinkoff.allure:allure-model:$versions.tinkoffAllure"
-    api "ru.tinkoff.allure:allure-android:$versions.tinkoffAllure@aar"
+    api libs.allure.common
+    api libs.allure.model
+    api (libs.allure.android)  {
+        artifact {
+            type = "aar"
+            transitive = false
+        }
+    }
 
     implementation project(path: ':div-core')
-    implementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
-    implementation "org.easytesting:fest-reflect:$versions.festReflect"
-    implementation "com.google.code.gson:gson:$versions.gson"  // used by allure
+    implementation libs.androidx.test.uiautomator
+    implementation libs.fest.reflect
+    implementation libs.gson  // used by allure
 }

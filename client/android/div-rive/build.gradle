@@ -11,15 +11,15 @@ dependencies {
     implementation project(path: ':div')
     implementation project(path: ':div-json')
 
-    implementation('app.rive:rive-android:4.2.1') {
+    implementation(libs.rive) {
         exclude group: "androidx.fragment", module: "fragment"
     }
-    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
+    implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"
     }
-    compileOnly "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    compileOnly libs.okhttp
 
-    testImplementation "org.jetbrains.kotlin:kotlin-test:$versions.kotlin"
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
-    testImplementation 'org.json:json:20220924'
+    testImplementation libs.kotlin.test
+    testImplementation libs.kotlin.testJunit
+    testImplementation libs.json
 }

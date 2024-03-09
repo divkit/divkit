@@ -6,22 +6,12 @@ android {
     namespace "com.yandex.divkit.picasso"
 }
 
-configurations.configureEach {
-    resolutionStrategy {
-        eachDependency { details ->
-            if (details.requested.group == 'androidx.lifecycle') {
-                details.useVersion versions.androidx.lifecycle
-            }
-        }
-    }
-}
-
 dependencies {
     implementation project(path: ':div')
     implementation project(path: ':div-core')
 
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$versions.androidx.lifecycle"
-    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
-    implementation "com.squareup.picasso:picasso:$versions.picasso"
+    implementation libs.androidx.lifecycle.runtime
+    implementation libs.okhttp
+    implementation libs.kotlin.corountines.core
+    implementation libs.picasso
 }

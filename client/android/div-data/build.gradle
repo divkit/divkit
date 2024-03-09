@@ -35,7 +35,7 @@ dependencies {
     implementation project(path: ':div-evaluable')
     implementation project(path: ':div-json')
     implementation project(path: ':utils')
-    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+    testImplementation libs.kotlin.reflect
 }
 
 task generateDivModel(type: Exec) {

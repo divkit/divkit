@@ -27,14 +27,13 @@ android {
 dependencies {
     implementation project(path: ':div-json')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
-    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
+    implementation libs.androidx.coreKtx
 
-    testImplementation "junit:junit:$versions.junit"
+    testImplementation libs.junit
 
-    androidTestImplementation "androidx.test:runner:$versions.androidx.test"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.androidx.espresso"
-    androidTestImplementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
+    androidTestImplementation libs.androidx.test.runner
+    androidTestImplementation libs.androidx.espresso.core
+    androidTestImplementation libs.androidx.test.uiautomator
 }
 
 task assemblePerfTests() {

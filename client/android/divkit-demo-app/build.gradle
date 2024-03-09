@@ -66,16 +66,6 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        eachDependency { details ->
-            if (details.requested.group == 'androidx.lifecycle') {
-                details.useVersion versions.androidx.lifecycle
-            }
-        }
-    }
-}
-
 dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div')
@@ -98,36 +88,34 @@ dependencies {
     implementation project(path: ':glide')
     implementation project(path: ':coil')
 
-    implementation "androidx.browser:browser:$versions.androidx.browser"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint"
-    implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation "androidx.work:work-runtime-ktx:$versions.androidx.work"
-    implementation "androidx.work:work-runtime:$versions.androidx.work"
+    implementation libs.androidx.browser
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.preference
+    implementation libs.androidx.work
 
-    implementation "javax.inject:javax.inject:$versions.javax"
+    implementation libs.javax
 
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+    implementation libs.kotlin.reflect
 
-    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    implementation libs.okhttp
 
-    implementation("com.yandex.android:mobmetricalib:$versions.metrica") {
+    implementation(libs.appmetrica.lib) {
         exclude group: 'com.yandex.android', module: 'mobmetricalib-identifiers'
     }
 
-    implementation "com.facebook.stetho:stetho:$versions.stetho"
-    implementation "com.facebook.stetho:stetho-okhttp3:$versions.stetho"
+    implementation libs.stetho.core
+    implementation libs.stetho.okhttp3
 
-    implementation "com.neovisionaries:nv-websocket-client:2.14"
-    implementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
+    implementation libs.nvWebsocket
+    implementation libs.androidx.test.uiautomator
 
     // QR code stuff
-    implementation 'com.journeyapps:zxing-android-embedded:4.3.0@aar'
-    implementation 'com.google.zxing:core:3.4.1'
+    implementation libs.zxing.embedded
+    implementation libs.zxing.core
 
-    androidTestImplementation "org.hamcrest:hamcrest-library:$versions.hamcrestCore"
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
-    androidTestImplementation "androidx.lifecycle:lifecycle-viewmodel:$versions.androidx.lifecycle"
-    androidTestImplementation "androidx.viewpager2:viewpager2:$versions.androidx.viewpager2"
+    androidTestImplementation libs.hamcrest.library
+    androidTestImplementation libs.androidx.lifecycle.viewmodel
+    androidTestImplementation libs.androidx.viewpager2
 }
 
 screenshotTests {

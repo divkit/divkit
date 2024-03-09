@@ -19,8 +19,8 @@ dependencies {
     implementation project(path: ':div-core')
     implementation project(path: ':utils')
 
-    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
+    implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"
     }
-    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
+    implementation libs.androidx.coreKtx
 }

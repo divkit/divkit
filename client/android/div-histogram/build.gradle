@@ -12,7 +12,7 @@ dependencies {
     implementation project(path: ':logging')
     implementation project(path: ':utils')
 
-    implementation "com.yandex.yatagan:api-compiled:$versions.yatagan"
+    implementation libs.yatagan.api.compiled
 
-    implementation "androidx.core:core-ktx:$versions.androidx.core"
+    implementation libs.androidx.coreKtx
 }

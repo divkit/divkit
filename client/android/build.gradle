@@ -2,7 +2,6 @@ import com.yandex.div.gradle.FileExtensions
 import com.yandex.div.gradle.PublicationType
 
 apply from: "$projectDir/version.gradle"
-apply from: "$projectDir/dependencies.gradle"
 
 def publicationType = project.findProperty("publicationType")
 def regularVersion = project.findProperty("regularVersion")
@@ -21,8 +20,6 @@ ext {
 }
 
 buildscript {
-    apply from: "$projectDir/dependencies.gradle"
-
     FileExtensions.ifExists("${project.projectDir}/bootstrap.internal.gradle") {
         apply from: it
     }
@@ -34,15 +31,15 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:$versions.gradlePlugin"
-        classpath "com.yandex.android:appmetrica-build-plugin:$versions.metricaCrashPlugin"
-        classpath "com.yandex.test:screenshot-test-plugin:1.0.0"
-        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.dokka"
-        classpath "org.jetbrains.kotlin:kotlin-allopen:$versions.kotlin"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:$versions.kotlin"
-        classpath "org.jetbrains.kotlinx:binary-compatibility-validator:0.11.1"
+        classpath libs.agp.gradle
+        classpath libs.appmetrica.plugin
+        classpath libs.screenshotTestPlugin
+        classpath libs.nexusPublishPlugin
+        classpath libs.dokka
+        classpath libs.kotlin.allopen
+        classpath libs.kotlin.gradle.plugin
+        classpath libs.kotlin.serialization.plugin
+        classpath libs.kotlin.binaryCompatibilityValidator
     }
 }
 

@@ -35,24 +35,24 @@ dependencies {
     api project(path: ':div-states')
     api project(path: ':div-storage')
 
-    implementation "com.yandex.yatagan:api-compiled:$versions.yatagan"
-    kapt "com.yandex.yatagan:processor-jap:$versions.yatagan"
+    implementation libs.yatagan.api.compiled
+    kapt libs.yatagan.processor.jap
 
-    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
+    implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"
     }
-    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
-    implementation "androidx.core:core:$versions.androidx.core"
-    implementation "androidx.recyclerview:recyclerview:$versions.androidx.recycler"
-    implementation "androidx.transition:transition:$versions.androidx.appcompat"
-    implementation "androidx.viewpager:viewpager:$versions.androidx.viewpager"
-    implementation("androidx.viewpager2:viewpager2:$versions.androidx.viewpager2") {
+    implementation libs.androidx.coreKtx
+    implementation libs.androidx.core
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.transition
+    implementation libs.androidx.viewpager
+    implementation(libs.androidx.viewpager2) {
         exclude group: "androidx.fragment", module: "fragment"
     }
 
-    implementation "androidx.datastore:datastore:$versions.dataStore"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinSerialization"
+    implementation libs.androidx.datastore
+    implementation libs.kotlin.serialization.json
 
-    testImplementation "androidx.test:core-ktx:$versions.androidx.test"
-    testImplementation "org.json:json:$versions.json"
+    testImplementation libs.androidx.test.coreKtx
+    testImplementation libs.json
 }

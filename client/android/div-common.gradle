@@ -37,10 +37,6 @@ task sourceJar(type: Jar) {
     archiveClassifier = "sources"
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
-}
-
 def tanker(String action, String keySet) {
     rootProject.exec {
         commandLine rootProject.file('buildSrc/src/scripts/tanker/tanker.py').absolutePath

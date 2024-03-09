@@ -25,20 +25,20 @@ dependencies {
     implementation project(path: ':utils')
 
 
-    api "com.yandex.yatagan:api-compiled:$versions.yatagan"
-    kapt "com.yandex.yatagan:processor-jap:$versions.yatagan"
+    api libs.yatagan.api.compiled
+    kapt libs.yatagan.processor.jap
 
-    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
-    implementation "androidx.core:core:$versions.androidx.core"
-    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
-    implementation "androidx.activity:activity-ktx:1.3.1"
-    implementation "androidx.fragment:fragment-ktx:1.3.6"
-    implementation "androidx.recyclerview:recyclerview:$versions.androidx.recycler"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.androidx.lifecycle"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$versions.androidx.lifecycle"
-    implementation "com.google.android.material:material:$versions.androidx.material"
-    implementation "com.google.code.gson:gson:$versions.gson"
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.core
+    implementation libs.androidx.coreKtx
+    implementation libs.androidx.activity
+    implementation libs.androidx.fragment
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.lifecycle.viewmodel
+    implementation libs.androidx.lifecycle.common.java8
+    implementation libs.androidx.material
+    implementation libs.gson
 
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+    testImplementation libs.kotlin.corountines.test
 }

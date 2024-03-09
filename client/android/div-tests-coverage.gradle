@@ -1,7 +1,7 @@
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = versions.jacoco
+    toolVersion = libs.versions.jacoco.get()
 }
 
 def testVariant = project.property('testVariant')

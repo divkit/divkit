@@ -30,17 +30,17 @@ android {
 
 dependencies {
     testImplementation project(path: ':unit-test-common')
-    testImplementation "androidx.test:core:$versions.androidx.test"
-    testImplementation("junit:junit:$versions.junit") {
+    testImplementation libs.androidx.test.core
+    testImplementation(libs.junit) {
         exclude group: "org.hamcrest", module: "hamcrest-core"
     }
-    testImplementation "org.hamcrest:hamcrest-junit:$versions.hamcrestJUnit"
-    testImplementation "org.mockito:mockito-core:$versions.mockito"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:$versions.mockitoKotlin"
-    testImplementation "org.robolectric:robolectric:$versions.robolectric"
-    testImplementation "org.easytesting:fest-reflect:$versions.festReflect"
-    testImplementation("com.squareup:fest-android:$versions.festAndroid") {
+    testImplementation libs.hamcrest.junit
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
+    testImplementation libs.robolectric
+    testImplementation libs.fest.reflect
+    testImplementation(libs.fest.android) {
         exclude module: "support-v4"
     }
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+    testImplementation libs.kotlin.corountines.test
 }

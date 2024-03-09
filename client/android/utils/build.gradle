@@ -9,12 +9,12 @@ android {
 dependencies {
     implementation project(path: ':assertion')
 
-    implementation "javax.inject:javax.inject:$versions.javax"
-    implementation "androidx.annotation:annotation:$versions.androidx.annotation"
-    implementation "androidx.collection:collection:$versions.androidx.collection"
-    implementation "androidx.core:core:$versions.androidx.core"
-    implementation "androidx.viewpager:viewpager:$versions.androidx.viewpager"
-    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat")  {
+    implementation libs.javax
+    implementation libs.androidx.annotations
+    implementation libs.androidx.collection
+    implementation libs.androidx.core
+    implementation libs.androidx.viewpager
+    implementation(libs.androidx.appcompat)  {
         exclude group: "androidx.fragment", module: "fragment"
     }
 }

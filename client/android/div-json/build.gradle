@@ -13,5 +13,5 @@ dependencies {
     implementation project(path: ':logging')
     implementation project(path: ':utils')
 
-    api "androidx.core:core:$versions.androidx.core"
+    api libs.androidx.core
 }

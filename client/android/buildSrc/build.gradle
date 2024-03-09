@@ -1,27 +1,22 @@
 apply plugin: 'groovy'
 apply plugin: 'kotlin'
 
-apply from: "${project.projectDir}/../dependencies.gradle"
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
     implementation gradleApi()
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+    implementation libs.kotlin.reflect
 }
 
 buildscript {
-    apply from: "${project.projectDir}/../dependencies.gradle"
-
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        classpath libs.kotlin.gradle.plugin
     }
 }
 

@@ -15,12 +15,12 @@ dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':logging')
 
-    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
-    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
+    implementation libs.androidx.coreKtx
+    implementation(libs.androidx.appcompat) {
         exclude group: "androidx.fragment", module: "fragment"
     }
-    implementation "javax.inject:javax.inject:$versions.javax"
+    implementation libs.javax
 
-    testImplementation "androidx.test:core:$versions.androidx.test"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    testImplementation libs.androidx.test.core
+    testImplementation libs.kotlin.corountines.core
 }

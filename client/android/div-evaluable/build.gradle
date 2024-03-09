@@ -62,17 +62,16 @@ allOpen {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
-    implementation "javax.inject:javax.inject:$versions.javax"
-    compileOnly "org.json:json:$versions.json"
+    implementation libs.javax
+    compileOnly libs.json
 
-    generatorImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
-    generatorImplementation "javax.inject:javax.inject:$versions.javax"
-    generatorCompileOnly "org.json:json:$versions.json"
-    generatorImplementation "com.squareup:kotlinpoet:$versions.kotlinpoet"
+    generatorImplementation libs.kotlin.stdlib
+    generatorImplementation libs.javax
+    generatorCompileOnly libs.json
+    generatorImplementation libs.kotlinpoet
 
-    testImplementation "org.json:json:$versions.json"
-    testImplementation "junit:junit:$versions.junit"
-    testImplementation "org.mockito:mockito-core:$versions.mockito"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:$versions.mockitoKotlin"
+    testImplementation libs.json
+    testImplementation libs.junit
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
 }

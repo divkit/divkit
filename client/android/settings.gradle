@@ -1,3 +1,14 @@
+dependencyResolutionManagement {
+    versionCatalogs {
+        def internalVersions = file("gradle/internal.versions.toml")
+        if (internalVersions.exists()) {
+            create("internalLibs") {
+                from(files(internalVersions))
+            }
+        }
+    }
+}
+
 rootProject.name = 'divkit-android'
 
 includeBuild('screenshot-test-plugin')
