@@ -994,7 +994,6 @@ class Div2View private constructor(
     private fun complexRebind(newData: DivData, oldData: DivData) {
         val stateToBind = newData.stateToBind ?: return
         histogramReporter.onRebindingStarted()
-        viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
         divData = newData
 
         val task = this.rebindTask ?: RebindTask(
