@@ -48,7 +48,6 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
         "bind_on_attach_enabled"
     ),
     COMPLEX_REBIND_ENABLED(
-        "complex_rebind_enabled",
-        defaultValue = true
+        "complex_rebind_enabled"
     )
 }
