@@ -220,6 +220,57 @@
               "orientation": "horizontal",
               "content_alignment_horizontal": "center",
               "type": "container"
+            },
+            {
+              "items": [
+                {
+                  "actions": [
+                    {
+                      "log_id": "scroll_to_start",
+                      "url": "div-action://scroll_to_start?id=my_tabs"
+                    }
+                  ],
+                  "text": "<<",
+                  "text_alignment_horizontal": "center",
+                  "type": "button"
+                },
+                {
+                  "actions": [
+                    {
+                      "log_id": "prev_by_2",
+                      "url": "div-action://set_previous_item?id=my_tabs&step=2"
+                    }
+                  ],
+                  "text": "<",
+                  "text_alignment_horizontal": "center",
+                  "type": "button"
+                },
+                {
+                  "actions": [
+                    {
+                      "log_id": "next_by_2",
+                      "url": "div-action://set_next_item?id=my_tabs&step=2"
+                    }
+                  ],
+                  "text": ">",
+                  "text_alignment_horizontal": "center",
+                  "type": "button"
+                },
+                {
+                  "actions": [
+                    {
+                      "log_id": "scroll_to_end",
+                      "url": "div-action://scroll_to_end?id=my_tabs"
+                    }
+                  ],
+                  "text": ">>",
+                  "text_alignment_horizontal": "center",
+                  "type": "button"
+                }
+              ],
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "center",
+              "type": "container"
             }
           ],
           "orientation": "vertical",

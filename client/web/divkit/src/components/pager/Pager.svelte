@@ -26,6 +26,7 @@
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
+    import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
 
     export let componentContext: ComponentContext<DivPagerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -233,21 +234,21 @@
         currentItem = index;
     }
 
-    function setPreviousItem(overflow: Overflow) {
-        let previousItem = currentItem - 1;
+    function setPreviousItem(step: number, overflow: Overflow) {
+        let previousItem = currentItem - step;
 
         if (previousItem < 0) {
-            previousItem = overflow === 'ring' ? items.length - 1 : currentItem;
+            previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, items.length) : 0;
         }
 
         scrollToPagerItem(previousItem);
     }
 
-    function setNextItem(overflow: Overflow) {
-        let nextItem = currentItem + 1;
+    function setNextItem(step: number, overflow: Overflow) {
+        let nextItem = currentItem + step;
 
         if (nextItem > items.length - 1) {
-            nextItem = overflow === 'ring' ? 0 : currentItem;
+            nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, items.length) : items.length - 1;
         }
 
         scrollToPagerItem(nextItem);
@@ -270,7 +271,13 @@
                     scrollToPagerItem(item);
                 },
                 setPreviousItem,
-                setNextItem
+                setNextItem,
+                scrollToStart() {
+                    scrollToPagerItem(0);
+                },
+                scrollToEnd() {
+                    scrollToPagerItem(items.length - 1);
+                }
             });
         }
     }
@@ -328,7 +335,7 @@
         {#if hasScrollLeft && shouldCheckArrows}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => ($direction === 'ltr' ? setPreviousItem : setNextItem)('clamp')}>
+            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => ($direction === 'ltr' ? setPreviousItem : setNextItem)(1, 'clamp')}>
                 {#if !leftClass}
                     <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['pager__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
@@ -339,7 +346,7 @@
         {#if hasScrollRight && shouldCheckArrows}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => ($direction === 'ltr' ? setNextItem : setPreviousItem)('clamp')}>
+            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => ($direction === 'ltr' ? setNextItem : setPreviousItem)(1, 'clamp')}>
                 {#if !rightClass}
                     <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['pager__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>

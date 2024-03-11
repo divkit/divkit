@@ -37,6 +37,7 @@
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
+  import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -611,24 +612,30 @@
 
                     setSelected(item);
                 },
-                setPreviousItem(overflow: Overflow) {
-                    let previousItem = selected - 1;
+                setPreviousItem(step: number, overflow: Overflow) {
+                    let previousItem = selected - step;
 
                     if (previousItem < 0) {
-                        previousItem = overflow === 'ring' ? items.length - 1 : selected;
+                        previousItem = overflow === 'ring' ? nonNegativeModulo(previousItem, items.length) : 0;
                     }
 
                     setSelected(previousItem);
                 },
-                setNextItem(overflow: Overflow) {
-                    let nextItem = selected + 1;
+                setNextItem(step: number, overflow: Overflow) {
+                    let nextItem = selected + step;
 
                     if (nextItem > items.length - 1) {
-                        nextItem = overflow === 'ring' ? 0 : selected;
+                        nextItem = overflow === 'ring' ? nonNegativeModulo(nextItem, items.length) : items.length - 1;
                     }
 
                     setSelected(nextItem);
-                }
+                },
+                scrollToStart() {
+                    setSelected(0);
+                },
+                scrollToEnd() {
+                    setSelected(items.length - 1);
+                },
             });
         }
     }

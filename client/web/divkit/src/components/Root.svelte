@@ -454,55 +454,75 @@
         }
     }
 
-    function setCurrentItem(id: string | null, item: string | null): void {
-        if (!id || !item) {
-            throw new Error('Missing data for "set-current-item" action');
+    function switchElementAction(
+        type: 'set_current_item' | 'set_previous_item' | 'set_next_item' | 'scroll_to_start' |
+            'scroll_to_end' | 'scroll_backward' | 'scroll_forward' | 'scroll_to_position',
+        id: string | null,
+        {
+            item,
+            step,
+            overflow
+        }: {
+            item?: string | null;
+            step?: string | null;
+            overflow?: string | null;
         }
-
-        if (Number.isNaN(Number(item))) {
-            throw new Error('Incorrect item for "set-current-item" action');
-        }
-
-        const instance = getInstance<SwitchElements>(id);
-
-        if (instance) {
-            instance.setCurrentItem(Number(item));
-        }
-    }
-
-    function setPreviousItem(id: string | null, overflow: string | null): void {
+    ): void {
         if (!id) {
-            throw new Error('Missing id for "set-previous-item" action');
+            throw new Error(`Missing id for "${type}" action`);
+        }
+
+        const itemVal = Number(item);
+        if (type === 'set_current_item' && Number.isNaN(itemVal)) {
+            throw new Error(`Incorrect item for "${type}" action`);
+        }
+
+        let stepVal = Number(step);
+        if (!step && (type === 'set_previous_item' || type === 'set_next_item')) {
+            stepVal = 1;
+        }
+        if (
+            !step && (type === 'scroll_backward' || type === 'scroll_forward' || type === 'scroll_to_position') ||
+            Number.isNaN(stepVal)
+        ) {
+            throw new Error(`Incorrect step value for "${type}" action`);
         }
 
         if (overflow && overflow !== 'clamp' && overflow !== 'ring') {
-            throw new Error('Incorrect overflow value for "set-previous-item" action');
+            throw new Error(`Incorrect overflow value for "${type}" action`);
         }
-
         overflow = overflow || 'clamp';
 
         const instance = getInstance<SwitchElements>(id);
-
-        if (instance) {
-            instance.setPreviousItem(overflow as Overflow);
-        }
-    }
-
-    function setNextItem(id: string | null, overflow: string | null): void {
-        if (!id) {
-            throw new Error('Missing id for "set-next-item" action');
+        if (!instance) {
+            return;
         }
 
-        if (overflow && overflow !== 'clamp' && overflow !== 'ring') {
-            throw new Error('Incorrect overflow value for "set-next-item" action');
-        }
-
-        overflow = overflow || 'clamp';
-
-        const instance = getInstance<SwitchElements>(id);
-
-        if (instance) {
-            instance.setNextItem(overflow as Overflow);
+        switch (type) {
+            case 'set_current_item':
+                instance.setCurrentItem(itemVal);
+                return;
+            case 'set_previous_item':
+                instance.setPreviousItem(stepVal, overflow as Overflow);
+                return;
+            case 'set_next_item':
+                instance.setNextItem(stepVal, overflow as Overflow);
+                return;
+            case 'scroll_to_start':
+                instance.scrollToStart?.();
+                return;
+            case 'scroll_to_end':
+                instance.scrollToEnd?.();
+                return;
+            case 'scroll_backward':
+                instance.scrollBackward?.(stepVal, overflow as Overflow);
+                return;
+            case 'scroll_forward':
+                instance.scrollForward?.(stepVal, overflow as Overflow);
+                return;
+            case 'scroll_to_position':
+                instance.scrollToPosition?.(stepVal);
+                return;
         }
     }
 
@@ -718,13 +738,18 @@
                         setState(params.get('state_id'));
                         break;
                     case 'set_current_item':
-                        setCurrentItem(params.get('id'), params.get('item'));
-                        break;
                     case 'set_previous_item':
-                        setPreviousItem(params.get('id'), params.get('overflow'));
-                        break;
                     case 'set_next_item':
-                        setNextItem(params.get('id'), params.get('overflow'));
+                    case 'scroll_to_start':
+                    case 'scroll_to_end':
+                    case 'scroll_backward':
+                    case 'scroll_forward':
+                    case 'scroll_to_position':
+                        switchElementAction(parts[1], params.get('id'), {
+                            item: params.get('item'),
+                            step: params.get('step'),
+                            overflow: params.get('overflow')
+                        });
                         break;
                     case 'set_variable':
                         const name = params.get('name');

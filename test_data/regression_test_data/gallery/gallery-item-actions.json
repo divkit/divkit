@@ -399,7 +399,7 @@
                   "text": "<",
                   "actions": [
                     {
-                      "log_id": "gallery1/scroll_backward by 150dp",
+                      "log_id": "gallery1/scroll_backward by 50dp",
                       "url": "div-action://scroll_backward?id=gallery1&step=50"
                     },
                     {
