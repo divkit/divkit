@@ -48,6 +48,7 @@
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
     import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
 
     export let componentContext: ComponentContext<DivInputData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -212,6 +213,8 @@
     }
 
     $: isMultiline = keyboardType === 'multi_line_text'/* && isPositiveNumber($jsonVisibleMaxLines) && $jsonVisibleMaxLines > 1*/;
+
+    $: selectAllOnFocus = correctBooleanInt($jsonSelectAll, false, componentContext.logError);
 
     $: {
         if (isPositiveNumber($jsonVisibleMaxLines)) {
@@ -450,8 +453,8 @@
                     bind:innerText={contentEditableValue}
                     on:input={onInput}
                     on:paste={onPaste}
-                    on:mousedown={$jsonSelectAll ? onMousedown : undefined}
-                    on:click={$jsonSelectAll ? onClick : undefined}
+                    on:mousedown={selectAllOnFocus ? onMousedown : undefined}
+                    on:click={selectAllOnFocus ? onClick : undefined}
                     on:focus={focusHandler}
                     on:blur={blurHandler}
                 >
@@ -470,8 +473,8 @@
                 {placeholder}
                 {value}
                 on:input={onInput}
-                on:mousedown={$jsonSelectAll ? onMousedown : undefined}
-                on:click={$jsonSelectAll ? onClick : undefined}
+                on:mousedown={selectAllOnFocus ? onMousedown : undefined}
+                on:click={selectAllOnFocus ? onClick : undefined}
                 on:focus={focusHandler}
                 on:blur={blurHandler}
             >

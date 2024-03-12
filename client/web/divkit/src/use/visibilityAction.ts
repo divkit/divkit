@@ -5,6 +5,7 @@ import type { MaybeMissing } from '../expressions/json';
 import type { ComponentContext } from '../types/componentContext';
 import { getUrlSchema, isBuiltinSchema } from '../utils/url';
 import { correctNonNegativeNumber } from '../utils/correctNonNegativeNumber';
+import { correctBooleanInt } from '../utils/correctBooleanInt';
 
 interface CalcedAction {
     index: number | undefined;
@@ -30,10 +31,6 @@ function checkPercentage(isVisibility: boolean, val: number | undefined, default
     return defaultVal;
 }
 
-function filterActions(it: CalcedAction): it is IndexedCalcedAction {
-    return it.is_enabled !== 0 && it.is_enabled !== false && it.index !== undefined;
-}
-
 export function visibilityAction(node: HTMLElement, {
     visibilityActions,
     disappearActions,
@@ -43,7 +40,7 @@ export function visibilityAction(node: HTMLElement, {
     visibilityActions?: MaybeMissing<VisibilityAction>[];
     disappearActions?: MaybeMissing<DisappearAction>[];
     rootCtx: RootCtxValue;
-    componentContext: ComponentContext;
+    componentContext: ComponentContext
 }) {
     const visibilityStatus: {
         type: 'visibility' | 'disappear';
@@ -110,8 +107,12 @@ export function visibilityAction(node: HTMLElement, {
 
     const totalStore = derived(calcedList, values => values);
 
+    const filterActions = (it: CalcedAction): it is IndexedCalcedAction => {
+        return correctBooleanInt(it.is_enabled, true, componentContext.logError);
+    };
+
     const unsubscribe = totalStore.subscribe(values => {
-        const filtered = values.filter(filterActions);
+        const filtered = values.filter<IndexedCalcedAction>(filterActions);
 
         const map: Record<number, IndexedCalcedAction> = {};
         filtered.forEach(it => {

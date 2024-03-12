@@ -32,6 +32,7 @@
     import { correctTintMode } from '../../utils/correctTintMode';
     import { getCssFilter } from '../../utils/filters';
     import { prepareBase64 } from '../../utils/prepareBase64';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
 
     export let componentContext: ComponentContext<DivImageData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -145,6 +146,8 @@
 
     $: alt = $jsonA11y?.description || '';
 
+    $: preload = correctBooleanInt($jsonPreloadRequired, false, componentContext.logError);
+
     $: {
         const newRatio = $jsonAspect?.ratio;
         if (newRatio && isPositiveNumber(newRatio)) {
@@ -249,7 +252,7 @@
                         bind:this={img}
                         class={css.image__image}
                         src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                        loading={$jsonPreloadRequired ? 'eager' : 'lazy'}
+                        loading={preload ? 'eager' : 'lazy'}
                         decoding="async"
                         style={makeStyle(style)}
                         {alt}
@@ -263,7 +266,7 @@
                     bind:this={img}
                     class={css.image__image}
                     src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                    loading={$jsonPreloadRequired ? 'eager' : 'lazy'}
+                    loading={preload ? 'eager' : 'lazy'}
                     decoding="async"
                     style={makeStyle(style)}
                     {alt}

@@ -84,11 +84,11 @@
         }
     }
 
-    $: loop = correctBooleanInt($jsonRepeatable, loop);
+    $: loop = correctBooleanInt($jsonRepeatable, loop, componentContext.logError);
 
-    $: autoplay = correctBooleanInt($jsonAutostart, autoplay);
+    $: autoplay = correctBooleanInt($jsonAutostart, autoplay, componentContext.logError);
 
-    $: muted = correctBooleanInt($jsonMuted, muted);
+    $: muted = correctBooleanInt($jsonMuted, muted, componentContext.logError);
 
     $: poster = typeof $jsonPreview === 'string' ? prepareBase64($jsonPreview) : poster;
 

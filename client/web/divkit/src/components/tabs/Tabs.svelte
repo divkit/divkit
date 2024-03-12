@@ -37,7 +37,8 @@
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
-  import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -324,7 +325,7 @@
     }
 
     $: {
-        if ($jsonSeparator) {
+        if (correctBooleanInt($jsonSeparator, false, componentContext.logError)) {
             if ($jsonSeparatorColor) {
                 separatorBackground = correctColor($jsonSeparatorColor, 1, separatorBackground);
             }
@@ -338,13 +339,13 @@
         margin: separatorMargins
     };
 
-    $: isSwipeEnabled = typeof $jsonSwipeEnabled === 'undefined' ?
-        true :
-        Boolean($jsonSwipeEnabled);
+    $: isSwipeEnabled = correctBooleanInt($jsonSwipeEnabled, true, componentContext.logError);
 
     $: {
         titlePadding = correctEdgeInsertsObject($jsonTitlePaddings ? $jsonTitlePaddings : undefined, titlePadding);
     }
+
+    $: restrictScroll = correctBooleanInt($jsonRestrictParentScroll, false, componentContext.logError);
 
     function updateItems(items: MaybeMissing<TabItem>[]): void {
         if (hasError) {
@@ -661,7 +662,7 @@
         <!-- svelte-ignore a11y-interactive-supports-focus -->
         <div
             bind:this={tabsElem}
-            class="{css.tabs__list} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
+            class="{css.tabs__list} {restrictScroll ? rootCss['root_restrict-scroll'] : ''}"
             role="tablist"
             style:--divkit-tabs-title-padding={titlePadding ? edgeInsertsToCss(titlePadding, $direction) : ''}
             style:--divkit-tabs-font-size={pxToEm(tabFontSize)}
@@ -692,7 +693,8 @@
                     })}
                     actions={
                         item.title_click_action && !componentContext.fakeElement ?
-                            [item.title_click_action].filter(filterEnabledActions) :
+                            [item.title_click_action]
+                                .filter(action => filterEnabledActions(action, componentContext.logError)) :
                             []
                     }
                     attrs={{
@@ -714,7 +716,7 @@
             ></div>
         {/if}
         <div
-            class="{css.tabs__panels} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
+            class="{css.tabs__panels} {restrictScroll ? rootCss['root_restrict-scroll'] : ''}"
             bind:this={panelsWrapper}
         >
             <div

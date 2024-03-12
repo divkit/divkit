@@ -141,7 +141,7 @@
             newMaxLines = lines;
             newLineClamp = lines;
             newMultiline = true;
-        } else if ($jsonAutoEllipsize && $jsonMaxLines !== 1) {
+        } else if (correctBooleanInt($jsonAutoEllipsize, false, componentContext.logError) && $jsonMaxLines !== 1) {
             newMultiline = true;
         }
 
@@ -205,7 +205,7 @@
     }
 
     $: {
-        selectable = correctBooleanInt($jsonSelectable, selectable);
+        selectable = correctBooleanInt($jsonSelectable, selectable, componentContext.logError);
     }
 
     function updateRenderList(
@@ -326,7 +326,7 @@
                 newRenderList.push({
                     text: content.substring(prevIndex, index),
                     textStyles,
-                    actions: item.type === 'rangeEnd' && item.range?.actions?.filter(filterEnabledActions) || undefined
+                    actions: item.type === 'rangeEnd' && item.range?.actions?.filter(action => filterEnabledActions(action, componentContext.logError)) || undefined
                 });
             }
 
@@ -362,7 +362,7 @@
                         height: imageHeight,
                         wrapperStyle,
                         svgFilterId,
-                        preloadRequired: Boolean(item.image.preload_required)
+                        preloadRequired: correctBooleanInt(item.image.preload_required, false, componentContext.logError)
                     }
                 });
             }

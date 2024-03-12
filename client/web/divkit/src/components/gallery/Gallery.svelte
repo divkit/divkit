@@ -31,6 +31,7 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
 
     export let componentContext: ComponentContext<DivGalleryData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -227,6 +228,8 @@
         'grid-gap': gridGap,
         [gridTemplate]: joinTemplateSizes(templateSizes)
     };
+
+    $: restrictScroll = correctBooleanInt($jsonRestrictParentScroll, false, componentContext.logError);
 
     $: mods = {
         orientation,
@@ -502,7 +505,7 @@
     {replaceItems}
 >
     <div
-        class="{css.gallery__scroller} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
+        class="{css.gallery__scroller} {restrictScroll ? rootCss['root_restrict-scroll'] : ''}"
         bind:this={scroller}
         on:scroll={shouldCheckArrows ? updateArrowsVisibility : null}
         style={makeStyle(scrollerStyle)}
