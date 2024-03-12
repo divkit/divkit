@@ -10,10 +10,11 @@ import type {
     UnaryExpression, Variable
 } from './ast';
 import type { WrappedError } from '../utils/wrapError';
-import { findBestMatchedFunc, Func, funcByArgs } from './funcs/funcs';
+import { convertArgs, findBestMatchedFunc, Func, funcByArgs } from './funcs/funcs';
 import {
     checkIntegerOverflow,
     evalError,
+    integerToNumber,
     roundInteger,
     typeToString,
     valToInternal,
@@ -390,8 +391,19 @@ function evalBinaryFactor<T extends EvalValue>(
 
 function evalBinaryExpression(ctx: EvalContext, expr: BinaryExpression): EvalValue {
     const operator = expr.operator;
-    const left = evalAny(ctx, expr.left);
-    const right = evalAny(ctx, expr.right);
+    let left = evalAny(ctx, expr.left);
+    let right = evalAny(ctx, expr.right);
+
+    if (
+        left.type === 'number' && right.type === 'integer' ||
+        left.type === 'integer' && right.type === 'number'
+    ) {
+        if (left.type === 'integer') {
+            left = integerToNumber(left);
+        } else if (right.type === 'integer') {
+            right = integerToNumber(right);
+        }
+    }
 
     if (left.type !== right.type) {
         evalError(
@@ -422,7 +434,7 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
 
     let func: Func | undefined;
 
-    const args = expr.arguments.map(arg => evalAny(ctx, arg));
+    let args = expr.arguments.map(arg => evalAny(ctx, arg));
     const funcKey = funcName + ':' + args.map(arg => arg.type).join('#');
 
     if (!funcByArgs.has(funcKey)) {
@@ -441,7 +453,11 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
                 evalError(prefix, `Unknown function name: ${funcName}.`);
             }
         }
-        func = findRes;
+        func = findRes.func;
+
+        if (findRes.conversions) {
+            args = convertArgs(func, args);
+        }
     } else {
         func = funcByArgs.get(funcKey);
     }

@@ -1,4 +1,4 @@
-import type { EvalContext, EvalValue, EvalValueBase } from './eval';
+import type { EvalContext, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
 import type { Node, Variable } from './ast';
 import type { EvalTypes } from './eval';
 import type { VariablesMap } from './eval';
@@ -6,6 +6,7 @@ import { walk } from './walk';
 import { parseColor, ParsedColor } from '../utils/correctColor';
 import { padLeft } from '../utils/padLeft';
 import { hasBigInt, MAX_INT, MIN_INT, toBigInt } from './bigint';
+import { NUMBER } from './const';
 
 export function valToInternal(val: EvalValue): EvalValue {
     if (val.type === 'url' || val.type === 'color') {
@@ -162,4 +163,11 @@ export function stringifyColor(color: ParsedColor): string {
 
 export function transformColorValue(color: string): string {
     return stringifyColor(safeConvertColor(color));
+}
+
+export function integerToNumber(integerValue: IntegerValue): NumberValue {
+    return {
+        type: NUMBER,
+        value: Number(integerValue.value)
+    };
 }

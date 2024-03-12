@@ -1,5 +1,7 @@
+import { INTEGER, NUMBER } from '../const';
 import type { EvalTypes, EvalValue } from '../eval';
 import type { EvalContext } from '../eval';
+import { integerToNumber } from '../utils';
 
 export type FuncArg = EvalTypes | {
     type: EvalTypes;
@@ -107,9 +109,11 @@ export function registerFunc(
 
 function matchFuncArgs(func: Func, args: EvalValue[]): {
     type: 'match';
+    conversions: number;
 } | FuncMatchError {
     let minArgs = func.args.length;
     let maxArgs = func.args.length;
+    let conversions = 0;
     const lastArg = func.args[func.args.length - 1];
 
     if (typeof lastArg === 'object' && lastArg.isVararg) {
@@ -139,6 +143,11 @@ function matchFuncArgs(func: Func, args: EvalValue[]): {
             };
         }
 
+        if (funcArg.type === NUMBER && args[i].type === INTEGER) {
+            ++conversions;
+            continue;
+        }
+
         if (funcArg.type !== args[i].type) {
             return {
                 type: 'mismatch',
@@ -149,11 +158,15 @@ function matchFuncArgs(func: Func, args: EvalValue[]): {
     }
 
     return {
-        type: 'match'
+        type: 'match',
+        conversions
     };
 }
 
-export function findBestMatchedFunc(funcName: string, args: EvalValue[]): Func | FuncMatchError {
+export function findBestMatchedFunc(funcName: string, args: EvalValue[]): {
+    func: Func;
+    conversions: number;
+} | FuncMatchError {
     const list = funcs.get(funcName);
     if (!list) {
         return {
@@ -162,19 +175,49 @@ export function findBestMatchedFunc(funcName: string, args: EvalValue[]): Func |
     }
 
     let firstError: FuncMatchError | null = null;
+    let bestFunc: {
+        func: Func;
+        conversions: number;
+    } | null = null;
     for (let i = 0; i < list.length; ++i) {
         const match = matchFuncArgs(list[i], args);
         if (match.type === 'match') {
-            return list[i];
+            if (!bestFunc || bestFunc.conversions > match.conversions) {
+                bestFunc = {
+                    func: list[i],
+                    conversions: match.conversions
+                };
+            }
+            continue;
         }
         if (!firstError) {
             firstError = match;
         }
     }
 
-    if (!firstError) {
+    if (!bestFunc) {
+        if (firstError) {
+            return firstError;
+        }
         throw new Error('Missing function');
     }
 
-    return firstError;
+    return bestFunc;
+}
+
+export function convertArgs(func: Func, args: EvalValue[]): EvalValue[] {
+    return args.map((arg, i) => {
+        let funcArg = i >= func.args.length ? func.args[func.args.length - 1] : func.args[i];
+        if (typeof funcArg !== 'object') {
+            funcArg = {
+                type: funcArg
+            };
+        }
+
+        if (funcArg.type === NUMBER && arg.type === INTEGER) {
+            return integerToNumber(arg);
+        }
+
+        return arg;
+    });
 }

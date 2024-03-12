@@ -9,8 +9,7 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -22,8 +21,7 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -35,8 +33,7 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -48,8 +45,7 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -403,8 +399,7 @@
                 }
             ],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -422,8 +417,7 @@
                 }
             ],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -441,8 +435,7 @@
                 }
             ],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -460,8 +453,7 @@
                 }
             ],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -1364,8 +1356,7 @@
                 }
             ],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -1388,8 +1379,7 @@
                 }
             ],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -1412,8 +1402,7 @@
                 }
             ],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -1436,8 +1425,7 @@
                 }
             ],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {

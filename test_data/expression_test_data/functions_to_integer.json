@@ -233,8 +233,7 @@
       },
       "variables": [],
       "platforms": [
-        "android",
-        "web"
+        "android"
       ]
     },
     {
