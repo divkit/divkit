@@ -1,0 +1,104 @@
+{
+  "description": "Tabs should be bigger than parent container",
+  "platforms": [
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "clip_to_bounds": false,
+          "border": {
+            "stroke": {
+              "color": "#000"
+            }
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "items": [
+            {
+              "type": "tabs",
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 10,
+                "top": 10,
+                "right": 10,
+                "bottom": 10
+              },
+              "border": {
+                "stroke": {
+                  "color": "#BBFF0000"
+                }
+              },
+              "items": [
+                {
+                  "title": "test1",
+                  "div": {
+                    "type": "text",
+                    "width": {
+                      "type": "fixed",
+                      "value": 60
+                    },
+                    "height": {
+                      "type": "wrap_content"
+                    },
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "border": {
+                      "corner_radius": 6
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#dddddd"
+                      }
+                    ],
+                    "text": "For millions of years mankind lived just like animals"
+                  }
+                },
+                {
+                  "title": "test2",
+                  "div": {
+                    "type": "text",
+                    "width": {
+                      "type": "fixed",
+                      "value": 200
+                    },
+                    "height": {
+                      "type": "wrap_content",
+                      "constrained": true
+                    },
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "border": {
+                      "corner_radius": 6
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#ffffff"
+                      }
+                    ],
+                    "text": "Ул. Льва Толстого, 16"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {}
+}

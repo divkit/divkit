@@ -188,7 +188,9 @@
     }
 
     $: {
-        let newLayoutParams: LayoutParams = {};
+        let newLayoutParams: LayoutParams = {
+            parentContainerOrientation: 'horizontal'
+        };
 
         if ($jsonWidth?.type === 'wrap_content') {
             newLayoutParams.parentHorizontalWrapContent = true;
@@ -588,6 +590,7 @@
         }
 
         if (newSelected === selected) {
+            isAnimated = true;
             // Scroll back to current tab
             currentTransform = -newSelected * panelsWrapperWidth;
             updateTransform(-newSelected * 100);
@@ -718,6 +721,10 @@
         <div
             class="{css.tabs__panels} {restrictScroll ? rootCss['root_restrict-scroll'] : ''}"
             bind:this={panelsWrapper}
+            on:touchstart={isSwipeEnabled ? onTouchStart : undefined}
+            on:touchmove={isSwipeEnabled ? onTouchMove : undefined}
+            on:touchend={isSwipeEnabled ? onTouchEnd : undefined}
+            on:touchcancel={isSwipeEnabled ? onTouchEnd : undefined}
         >
             <div
                 class={genClassName('tabs__swiper', css, {
@@ -725,10 +732,6 @@
                     animated: isAnimated
                 })}
                 bind:this={swiperElem}
-                on:touchstart={isSwipeEnabled ? onTouchStart : undefined}
-                on:touchmove={isSwipeEnabled ? onTouchMove : undefined}
-                on:touchend={isSwipeEnabled ? onTouchEnd : undefined}
-                on:touchcancel={isSwipeEnabled ? onTouchEnd : undefined}
             >
                 {#each $childStore as item}
                     {@const index = item.index}

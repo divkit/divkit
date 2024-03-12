@@ -1,8 +1,11 @@
 .tabs {
+    display: flex;
+    flex-direction: column;
 }
 
 .tabs__list {
     display: flex;
+    flex: 0 0 auto;
     padding: var(--divkit-tabs-title-padding, 0 1.2em .8em);
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -50,6 +53,8 @@
 }
 
 .tabs__panels {
+    display: flex;
+    flex: 1 1 auto;
     transition: height .3s ease-out;
     touch-action: pan-y;
     overflow: hidden;
@@ -57,6 +62,8 @@
 
 .tabs__swiper {
     position: relative;
+    display: flex;
+    flex: 0 1 auto;
     width: 100%;
     will-change: transform;
     transition-property: transform;
@@ -79,7 +86,9 @@
 }
 
 .tabs__panel_visible {
-    display: block;
+    display: flex;
+    flex: 0 1 auto;
+    width: 100%;
 }
 
 .tabs__separator {
