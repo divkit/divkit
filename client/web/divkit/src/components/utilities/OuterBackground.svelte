@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { getContext } from 'svelte';
-
     import css from './OuterBackground.module.css';
 
     import type { Style } from '../../types/general';
@@ -10,15 +8,12 @@
     import type { ComponentContext } from '../../types/componentContext';
     import { getBackground } from '../../utils/background';
     import { makeStyle } from '../../utils/makeStyle';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { getCssFilter } from '../../utils/filters';
 
     export let direction: Direction;
     export let componentContext: ComponentContext;
     export let background: MaybeMissing<Background[]> = [];
     export let radius = '';
-
-    const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     $: styles = background.map(bg => {
         const stl: Style = {};

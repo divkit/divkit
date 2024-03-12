@@ -275,11 +275,20 @@
                 newHasBorder = true;
                 strokeWidth = correctNonNegativeNumber(border.stroke.width, strokeWidth);
                 strokeColor = correctColor(border.stroke.color, 1, strokeColor);
-                newBorderElemStyle.border = `${pxToEm(strokeWidth)} solid ${strokeColor}`;
+                newBorderElemStyle['--divkit-border'] = `${pxToEm(strokeWidth + 1)} solid ${strokeColor}`;
             }
             if (border.corners_radius) {
                 cornersRadius = correctBorderRadiusObject(border.corners_radius, cornersRadius);
-                newBorderElemStyle['border-radius'] = newBorderStyle['border-radius'] = borderRadius(cornersRadius);
+                newBorderStyle['border-radius'] = borderRadius(cornersRadius);
+                ([
+                    'top-left',
+                    'top-right',
+                    'bottom-right',
+                    'bottom-left'
+                ] as const).forEach(corner => {
+                    cornersRadius[corner] = (cornersRadius[corner] || 0) + 1;
+                });
+                newBorderElemStyle['--divkit-border-radius'] = borderRadius(cornersRadius);
             } else if (border.corner_radius) {
                 cornerRadius = correctNonNegativeNumber(border.corner_radius, cornerRadius);
                 cornersRadius = {
@@ -288,7 +297,8 @@
                     'bottom-right': cornerRadius,
                     'bottom-left': cornerRadius
                 };
-                newBorderElemStyle['border-radius'] = newBorderStyle['border-radius'] = pxToEm(cornerRadius);
+                newBorderStyle['border-radius'] = pxToEm(cornerRadius);
+                newBorderElemStyle['--divkit-border-radius'] = pxToEm(cornerRadius + 1);
             }
 
             // Clip browser rendering artifacts by border-radius + border-width/2

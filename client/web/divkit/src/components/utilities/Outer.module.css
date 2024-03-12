@@ -146,6 +146,26 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+@supports (overflow: clip) {
+    .outer__border {
+        overflow: clip;
+    }
+}
+
+.outer__border::before {
+    content: '';
+    position: absolute;
+    top: -0.1em;
+    left: -0.1em;
+    box-sizing: border-box;
+    width: calc(100% + 0.2em);
+    height: calc(100% + 0.2em);
+    border: var(--divkit-border);
+    border-radius: var(--divkit-border-radius, 0);
 }
 
 .outer_visibility_invisible {
