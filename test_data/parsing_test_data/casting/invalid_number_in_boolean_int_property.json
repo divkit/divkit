@@ -1,0 +1,31 @@
+{
+  "description": "Invalid number value in boolean_int property (div-text.auto_ellipsize)",
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Hello!",
+          "auto_ellipsize": 1.5
+        }
+      }
+    ]
+  },
+  "expected": {
+    "error_count": 1,
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "Hello!"
+          }
+        }
+      ]
+    }
+  }
+}
