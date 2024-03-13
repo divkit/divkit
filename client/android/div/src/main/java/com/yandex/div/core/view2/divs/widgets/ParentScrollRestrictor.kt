@@ -36,7 +36,7 @@ internal class ParentScrollRestrictor(
                 if (scrollDirection == DIRECTION_NONE) {
                     scrollDirection = findScrollDirection(event)
                 }
-                if (scrollDirection != DIRECTION_NONE && scrollDirection and restrictedDirection == 0) {
+                if (scrollDirection == restrictedDirection) {
                     parent.requestDisallowInterceptTouchEvent(false)
                 }
             }
