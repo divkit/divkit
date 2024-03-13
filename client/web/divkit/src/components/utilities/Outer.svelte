@@ -71,7 +71,6 @@
     import { isDeepEqual } from '../../utils/isDeepEqual';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
-    import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -263,7 +262,7 @@
         let newBackgroundRadius = '';
 
         if (border) {
-            if (correctBooleanInt(border.has_shadow, false, componentContext.logError)) {
+            if (border.has_shadow) {
                 const shadow = border.shadow;
                 if (shadow) {
                     newBorderStyle['box-shadow'] = shadowToCssBoxShadow(shadow);
@@ -359,8 +358,7 @@
         ) {
             widthType = 'content';
             if (
-                type === 'wrap_content' &&
-                    correctBooleanInt($jsonWidth?.constrained, false, componentContext.logError) ||
+                type === 'wrap_content' && $jsonWidth?.constrained ||
                 (type === 'match_parent' || !type) && layoutParams.parentHorizontalWrapContent
             ) {
                 newWidthMods['width-constrained'] = true;
@@ -469,8 +467,7 @@
         } else {
             heightType = 'content';
             if (
-                type === 'wrap_content' &&
-                    correctBooleanInt($jsonHeight?.constrained, false, componentContext.logError) ||
+                type === 'wrap_content' && $jsonHeight?.constrained ||
                 type === 'match_parent' && layoutParams.parentVerticalWrapContent
             ) {
                 newHeightMods['height-constrained'] = true;
@@ -628,14 +625,12 @@
             componentContext.logError(wrapError(new Error(`Cannot use action on component "${customActions}"`)));
         }
 
-        const filterFn = (action: MaybeMissing<Action>) => filterEnabledActions(action, componentContext.logError);
-
         // todo check parent actions with customActions
-        actions = newActions.filter(filterFn);
-        doubleTapActions = newDoubleTapActions.filter(filterFn);
-        longTapActions = newLongTapActions.filter(filterFn);
-        focusActions = newFocusActions.filter(filterFn);
-        blurActions = newBlurActions.filter(filterFn);
+        actions = newActions.filter(filterEnabledActions);
+        doubleTapActions = newDoubleTapActions.filter(filterEnabledActions);
+        longTapActions = newLongTapActions.filter(filterEnabledActions);
+        focusActions = newFocusActions.filter(filterEnabledActions);
+        blurActions = newBlurActions.filter(filterEnabledActions);
     }
 
     $: {

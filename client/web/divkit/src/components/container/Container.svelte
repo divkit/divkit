@@ -54,7 +54,6 @@
     import { ContentAlignmentHorizontalMapped, correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
-    import { correctBooleanInt } from '../../utils/correctBooleanInt';
 
     export let componentContext: ComponentContext<DivContainerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -138,7 +137,7 @@
                     }
 
                     const selectorVal = componentContext.getJsonWithVars(prototype.selector, additionalVars);
-                    if (correctBooleanInt(selectorVal, true, componentContext.logError)) {
+                    if (selectorVal) {
                         div = prototype.div;
                         break;
                     }
@@ -210,12 +209,9 @@
 
             if (style) {
                 separator = {
-                    show_at_start:
-                        correctBooleanInt($jsonSeparator.show_at_start, false, componentContext.logError),
-                    show_at_end:
-                        correctBooleanInt($jsonSeparator.show_at_end, false, componentContext.logError),
-                    show_between:
-                        correctBooleanInt($jsonSeparator.show_between, true, componentContext.logError),
+                    show_at_start: Boolean($jsonSeparator.show_at_start ?? false),
+                    show_at_end: Boolean($jsonSeparator.show_at_end ?? false),
+                    show_between: Boolean($jsonSeparator.show_between ?? true),
                     style,
                     margins: prepareMargins($jsonSeparator.margins)
                 };
@@ -237,12 +233,9 @@
 
             if (style) {
                 lineSeparator = {
-                    show_at_start:
-                        correctBooleanInt($jsonLineSeparator.show_at_start, false, componentContext.logError),
-                    show_at_end:
-                        correctBooleanInt($jsonLineSeparator.show_at_end, false, componentContext.logError),
-                    show_between:
-                        correctBooleanInt($jsonLineSeparator.show_between, true, componentContext.logError),
+                    show_at_start: Boolean($jsonLineSeparator.show_at_start ?? false),
+                    show_at_end: Boolean($jsonLineSeparator.show_at_end ?? false),
+                    show_between: Boolean($jsonLineSeparator.show_between ?? true),
                     style,
                     margins: prepareMargins($jsonLineSeparator.margins)
                 };
@@ -315,7 +308,7 @@
         valign: contentVAlign,
         halign: contentHAlign,
         wrap,
-        overflow: correctBooleanInt($jsonClipToBounds, true, componentContext.logError) ? undefined : 'visible'
+        overflow: ($jsonClipToBounds === false || $jsonClipToBounds === 0) ? 'visible' : undefined
     };
 
     $: style = {

@@ -3,7 +3,6 @@ import type { MaskData } from './mask/baseInputMask';
 import { FixedLengthInputMask } from './mask/fixedLengthInputMask';
 import { MaybeMissing } from '../expressions/json';
 import { FixedLengthInputMask as FixedLengthInputMaskType } from '../types/input';
-import { correctBooleanInt } from './correctBooleanInt';
 
 export function updateFixedMask(
     mask: MaybeMissing<FixedLengthInputMaskType>,
@@ -16,7 +15,7 @@ export function updateFixedMask(
     ) {
         const maskData: MaskData = {
             pattern: mask.pattern,
-            alwaysVisible: correctBooleanInt(mask.always_visible, false, logError),
+            alwaysVisible: Boolean(mask.always_visible),
             decoding: mask.pattern_elements.map(it => ({
                 key: it.key as string,
                 filter: it.regex && typeof it.regex === 'string' ? it.regex : undefined,
