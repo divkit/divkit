@@ -164,24 +164,11 @@ final class CalcExpression: CustomStringConvertible {
   init(
     _ expression: ParsedCalcExpression,
     impureSymbols: (Symbol) throws -> SymbolEvaluator?,
-    pureSymbols: (Symbol) throws -> SymbolEvaluator? = { _ in nil }
+    pureSymbols: (Symbol) throws -> SymbolEvaluator
   ) throws {
     root = try expression.root.optimized(
-      withImpureSymbols: impureSymbols,
-      pureSymbols: {
-        if let fn = try pureSymbols($0) {
-          return fn
-        }
-        if case let .function(name, _) = $0 {
-          for i in 0...10 {
-            let symbol = Symbol.function(name, arity: .exactly(i))
-            if try (impureSymbols(symbol) ?? pureSymbols(symbol)) != nil {
-              return { _ in throw Error.arityMismatch(symbol) }
-            }
-          }
-        }
-        return CalcExpression.errorEvaluator(for: $0)
-      }
+      impureSymbols: impureSymbols,
+      pureSymbols: pureSymbols
     )
   }
 
@@ -372,7 +359,8 @@ extension CalcExpression {
 
   fileprivate static func isIdentifier(_ c: UnicodeScalar) -> Bool {
     switch c.value {
-    case 0x30...0x39, // 0-9
+    case 0x2E, // .
+         0x30...0x39, // 0-9
          0x03_00...0x03_6F,
          0x1D_C0...0x1D_FF,
          0x20_D0...0x20_FF,
@@ -467,7 +455,7 @@ private enum Subexpression: CustomStringConvertible {
       }
       func needsSeparation(_ lhs: String, _ rhs: String) -> Bool {
         let lhs = lhs.unicodeScalars.last!, rhs = rhs.unicodeScalars.first!
-        return lhs == "." || (CalcExpression.isOperator(lhs) || lhs == "-")
+        return (CalcExpression.isOperator(lhs) || lhs == "-")
           == (CalcExpression.isOperator(rhs) || rhs == "-")
       }
       switch symbol {
@@ -541,15 +529,14 @@ private enum Subexpression: CustomStringConvertible {
   }
 
   func optimized(
-    withImpureSymbols impureSymbols: (CalcExpression.Symbol) throws -> CalcExpression
-      .SymbolEvaluator?,
+    impureSymbols: (CalcExpression.Symbol) throws -> CalcExpression.SymbolEvaluator?,
     pureSymbols: (CalcExpression.Symbol) throws -> CalcExpression.SymbolEvaluator
   ) throws -> Subexpression {
     guard case .symbol(let symbol, var args, _) = self else {
       return self
     }
     args = try args.map {
-      try $0.optimized(withImpureSymbols: impureSymbols, pureSymbols: pureSymbols)
+      try $0.optimized(impureSymbols: impureSymbols, pureSymbols: pureSymbols)
     }
     if let fn = try impureSymbols(symbol) {
       return .symbol(symbol, args, fn)
@@ -821,7 +808,7 @@ extension UnicodeScalarView {
   }
 
   fileprivate mutating func parseOperator() -> Subexpression? {
-    if var op = scanCharacters({ $0 == "." }) ?? scanCharacters({ $0 == "-" }) {
+    if var op = scanCharacters({ $0 == "-" }) {
       if let tail = scanCharacters(CalcExpression.isOperator) {
         op += tail
       }
@@ -835,41 +822,17 @@ extension UnicodeScalarView {
   }
 
   fileprivate mutating func parseIdentifier() -> Subexpression? {
-    func scanIdentifier() -> String? {
-      var start = self
-      var identifier = ""
-      if scanCharacter(".") {
-        identifier = "."
-      } else if let head = scanCharacter(CalcExpression.isIdentifierHead) {
-        identifier = head
-        start = self
-        if scanCharacter(".") {
-          identifier.append(".")
-        }
-      } else {
-        return nil
-      }
-      while let tail = scanCharacters(CalcExpression.isIdentifier) {
-        identifier += tail
-        start = self
-        if scanCharacter(".") {
-          identifier.append(".")
-        }
-      }
-      if identifier.hasSuffix(".") {
-        self = start
-        if identifier == "." {
-          return nil
-        }
-        identifier = String(identifier.unicodeScalars.dropLast())
-      } else if scanCharacter("'") {
-        identifier.append("'")
-      }
-      return identifier
-    }
-
-    guard let identifier = scanIdentifier() else {
+    var identifier = ""
+    if let head = scanCharacter(CalcExpression.isIdentifierHead) {
+      identifier = head
+    } else {
       return nil
+    }
+    while let tail = scanCharacters(CalcExpression.isIdentifier) {
+      identifier += tail
+    }
+    if scanCharacter("'") {
+      identifier.append("'")
     }
     return .symbol(.variable(identifier), [], nil)
   }

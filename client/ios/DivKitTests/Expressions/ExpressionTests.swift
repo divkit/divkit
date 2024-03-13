@@ -47,7 +47,7 @@ private func runTest(_ testCase: ExpressionTestCase) {
     _ = testCase.resolveValue(errorTracker: { errorMessage = $0.message })
     if expectedMessage.isEmpty {
       // Can throw any message
-      XCTAssertFalse(errorMessage.isEmpty)
+      XCTAssertFalse(errorMessage.isEmpty, "Expected error")
     } else {
       XCTAssertEqual(errorMessage, expectedMessage)
     }

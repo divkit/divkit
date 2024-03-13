@@ -61,6 +61,10 @@ struct AnyCalcExpression {
       expression,
       impureSymbols: { symbol in
         switch symbol {
+        case .variable("true"):
+          { _ in true }
+        case .variable("false"):
+          { _ in false }
         case .function, .infix, .prefix:
           functions[symbol]?.symbolEvaluator
         default:
@@ -71,8 +75,6 @@ struct AnyCalcExpression {
         switch symbol {
         case let .variable(name):
           variables(name).map { value in { _ in value } }
-        case .function, .infix, .prefix:
-          functions[symbol]?.symbolEvaluator
         default:
           nil
         }
@@ -97,39 +99,26 @@ struct AnyCalcExpression {
       }
       return String(name.dropFirst().dropLast())
     }
-    func funcEvaluator(for _: Symbol, _ value: Any) -> CalcExpression.SymbolEvaluator? {
-      // TODO: should funcEvaluator call the `.infix("()")` implementation?
-      switch value {
-      case let fn as SymbolEvaluator:
-        { args in
-          try box.store(fn(args.map(box.load)))
+
+    func defaultEvaluator(_ symbol: Symbol) throws -> CalcExpression.SymbolEvaluator? {
+      switch symbol {
+      case let .variable(name):
+        guard let string = unwrapString(name) else {
+          return { _ in throw Error.missingVariable(symbol) }
         }
-      case let fn as CalcExpression.SymbolEvaluator:
-        { args in
-          try fn(args)
+        let stringRef = try box.store(string)
+        return { _ in stringRef }
+      case .infix("!:"):
+        return { args in
+          switch args[0] {
+          case .error:
+            args[1]
+          default:
+            args[0]
+          }
         }
       default:
-        nil
-      }
-    }
-
-    // Evaluators
-    func defaultEvaluator(for symbol: Symbol) throws -> CalcExpression.SymbolEvaluator? {
-      if let fn = AnyCalcExpression.standardSymbols[symbol] {
-        return fn
-      } else {
-        switch symbol {
-        case .function("[]", _):
-          return { try box.store($0.map(box.load)) }
-        case let .variable(name):
-          guard let string = unwrapString(name) else {
-            return { _ in throw Error.missingVariable(symbol) }
-          }
-          let stringRef = try box.store(string)
-          return { _ in stringRef }
-        default:
-          return nil
-        }
+        return nil
       }
     }
 
@@ -140,9 +129,10 @@ struct AnyCalcExpression {
       impureSymbols: { symbol in
         if let fn = impureSymbols(symbol) {
           return { try box.store(fn($0.map(box.load))) }
-        } else if let fn = pureSymbols(symbol) {
+        }
+        if let fn = pureSymbols(symbol) {
           switch symbol {
-          case .variable, .function(_, arity: 0):
+          case .variable:
             do {
               let value = try box.store(fn([]))
               _pureSymbols[symbol] = { _ in value }
@@ -152,67 +142,21 @@ struct AnyCalcExpression {
           default:
             _pureSymbols[symbol] = { try box.store(fn($0.map(box.load))) }
           }
-        } else if case .infix("()") = symbol {
-          // TODO: check for pure `.infix("()")` implementation, and use as
-          // fallback if the lhs isn't a SymbolEvaluator?
-          return { args in
-            switch try box.load(args[0]) {
-            case let fn as SymbolEvaluator:
-              return try box.store(fn(args.dropFirst().map(box.load)))
-            case let fn as CalcExpression.SymbolEvaluator:
-              return try fn(Array(args.dropFirst()))
-            default:
-              throw try Error.typeMismatch(symbol, args.map(box.load))
-            }
-          }
-        } else if case let .function(name, _) = symbol {
-          if let fn = try defaultEvaluator(for: symbol) {
-            _pureSymbols[symbol] = fn
-          } else if let fn = impureSymbols(.variable(name)) {
-            return { args in
-              let value = try fn([])
-              if let fn = funcEvaluator(for: symbol, value) {
-                return try fn(args)
-              }
-              throw try Error.typeMismatch(
-                .infix("()"), [value] + [args.map(box.load)]
-              )
-            }
-          } else if let fn = pureSymbols(.variable(name)) {
-            do {
-              if let fn = try funcEvaluator(for: symbol, fn([])) {
-                return fn
-              }
-            } catch {
-              return { _ in throw error }
-            }
-          }
         }
         return nil
       },
       pureSymbols: { symbol in
-        guard let fn = try (_pureSymbols[symbol] ?? defaultEvaluator(for: symbol)) else {
+        guard let fn = try (_pureSymbols[symbol] ?? defaultEvaluator(symbol)) else {
           if case let .function(name, actualArity) = symbol {
-            // TODO: check for pure `.infix("()")` implementation?
             for i in 0...10 {
               let symbol = Symbol.function(name, arity: .exactly(i))
               if impureSymbols(symbol) ?? pureSymbols(symbol) != nil {
                 if actualArity == .exactly(0) {
-                  return { _ in throw
-                    Error
-                    .shortMessage("Non empty argument list is required for function '\(name)'.")
+                  return { _ in
+                    throw Error.shortMessage("Non empty argument list is required for function '\(name)'.")
                   }
                 }
                 return { _ in throw Error.arityMismatch(symbol) }
-              }
-            }
-            if let fn = pureSymbols(.variable(name)) {
-              return { args in
-                let value = try fn([])
-                throw try Error.typeMismatch(
-                  .infix("()"),
-                  [value] + [args.map(box.load)]
-                )
               }
             }
           }
@@ -252,17 +196,8 @@ struct AnyCalcExpression {
       case is _String.Type, is NSString?.Type, is String?.Type, is Substring?.Type:
         // TODO: should we stringify any type like this?
         return (AnyCalcExpression.cast(AnyCalcExpression.stringify(anyValue)!) as T?)!
-      case is Bool.Type, is Bool?.Type:
-        // TODO: should we boolify numeric types like this?
-        if let value = AnyCalcExpression.cast(anyValue) as Double? {
-          return (value != 0) as! T
-        }
       default:
-        // TODO: should we numberify Bool values like this?
-        if let boolValue = anyValue as? Bool,
-           let value: T = AnyCalcExpression.cast(boolValue ? 1 : 0) {
-          return value
-        }
+        break
       }
       throw Error.resultTypeMismatch(T.self, anyValue)
     }
@@ -277,8 +212,7 @@ extension AnyCalcExpression.Error {
   fileprivate static func typeMismatch(
     _ symbol: AnyCalcExpression.Symbol,
     _ args: [Any]
-  ) -> AnyCalcExpression
-    .Error {
+  ) -> AnyCalcExpression.Error {
     let types = args.map {
       AnyCalcExpression.stringifyOrNil(AnyCalcExpression.isNil($0) ? $0 : type(of: $0))
     }
@@ -344,8 +278,10 @@ extension AnyCalcExpression.Error {
   }
 
   /// Standard error message for invalid range
-  fileprivate static func invalidRange<T: Comparable>(_ lhs: T, _ rhs: T) -> AnyCalcExpression
-    .Error {
+  fileprivate static func invalidRange<T: Comparable>(
+    _ lhs: T,
+    _ rhs: T
+  ) -> AnyCalcExpression.Error {
     if lhs > rhs {
       return .message("Cannot form range with lower bound > upper bound")
     }
@@ -354,8 +290,7 @@ extension AnyCalcExpression.Error {
 
   /// Standard error message for mismatched return type
   @usableFromInline
-  static func resultTypeMismatch(_ type: Any.Type, _ value: Any) -> AnyCalcExpression
-    .Error {
+  static func resultTypeMismatch(_ type: Any.Type, _ value: Any) -> AnyCalcExpression.Error {
     let valueType = AnyCalcExpression
       .stringifyOrNil(AnyCalcExpression.unwrap(value).map { Swift.type(of: $0) } as Any)
     return .message(
@@ -556,21 +491,6 @@ extension AnyCalcExpression {
       }
     }
   }
-
-  // Standard symbols
-  fileprivate static let standardSymbols: [Symbol: CalcExpression.SymbolEvaluator] = [
-    // Boolean symbols
-    .variable("true"): { _ in .boolean(true) },
-    .variable("false"): { _ in .boolean(false) },
-    .infix("!:"): { args in
-      switch args[0] {
-      case .error:
-        args[1]
-      default:
-        args[0]
-      }
-    },
-  ]
 }
 
 // Used for casting numeric values

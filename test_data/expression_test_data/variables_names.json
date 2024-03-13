@@ -216,6 +216,7 @@
             ],
             "platforms": [
                 "android",
+                "ios",
                 "web"
             ]
         },
@@ -235,6 +236,7 @@
             ],
             "platforms": [
                 "android",
+                "ios",
                 "web"
             ]
         },
@@ -254,6 +256,7 @@
             ],
             "platforms": [
                 "android",
+                "ios",
                 "web"
             ]
         },
@@ -293,6 +296,7 @@
             ],
             "platforms": [
                 "android",
+                "ios",
                 "web"
             ]
         },
@@ -332,6 +336,7 @@
             ],
             "platforms": [
                 "android",
+                "ios",
                 "web"
             ]
         },
@@ -351,6 +356,27 @@
             ],
             "platforms": [
                 "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name same as function name",
+            "expression": "@{maxInteger}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "name": "maxInteger",
+                    "type": "string",
+                    "value": "ok"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
                 "web"
             ]
         }
