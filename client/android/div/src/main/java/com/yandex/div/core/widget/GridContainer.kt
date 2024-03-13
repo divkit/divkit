@@ -143,15 +143,18 @@ internal open class GridContainer @JvmOverloads constructor(
         val cells = grid.cells
         val columns = grid.columns
 
-        forEachIndexed(significantOnly = true) { child, index ->
+        var index = 0
+        forEach(significantOnly = true) { child ->
             val params = child.lp
             if (params.width != LayoutParams.MATCH_PARENT) {
-                return@forEachIndexed
+                index++
+                return@forEach
             }
 
             val cell = cells[index]
-            val celldWidth = cell.width(columns) - params.horizontalMargins
-            measureMatchParentChild(child, widthSpec, heightSpec, params.width, params.height, celldWidth, 0)
+            val cellWidth = cell.width(columns) - params.horizontalMargins
+            measureMatchParentChild(child, widthSpec, heightSpec, params.width, params.height, cellWidth, 0)
+            index++
         }
     }
 
@@ -160,16 +163,19 @@ internal open class GridContainer @JvmOverloads constructor(
         val columns = grid.columns
         val rows = grid.rows
 
-        forEachIndexed(significantOnly = true) { child, index ->
+        var index = 0
+        forEach(significantOnly = true) { child ->
             val params = child.lp
             if (params.height != LayoutParams.MATCH_PARENT) {
-                return@forEachIndexed
+                index++
+                return@forEach
             }
 
             val cell = cells[index]
-            val celldWidth = cell.width(columns) - params.horizontalMargins
+            val cellWidth = cell.width(columns) - params.horizontalMargins
             val cellHeight = cell.height(rows) - params.verticalMargins
-            measureMatchParentChild(child, widthSpec, heightSpec, params.width, params.height, celldWidth, cellHeight)
+            measureMatchParentChild(child, widthSpec, heightSpec, params.width, params.height, cellWidth, cellHeight)
+            index++
         }
     }
 
@@ -207,7 +213,8 @@ internal open class GridContainer @JvmOverloads constructor(
         val offsetLeft = calculateGridHorizontalPosition()
         val offsetTop = calculateGridVerticalPosition()
 
-        forEachIndexed(significantOnly = true) { child, index ->
+        var index = 0
+        forEach(significantOnly = true) { child ->
             val params = child.lp
             val cell = cells[index]
 
@@ -223,6 +230,7 @@ internal open class GridContainer @JvmOverloads constructor(
             childTop += offsetTop
 
             child.layout(childLeft, childTop, childLeft + child.measuredWidth, childTop + child.measuredHeight)
+            index++
         }
 
         val duration = SystemClock.elapsedRealtime() - start
