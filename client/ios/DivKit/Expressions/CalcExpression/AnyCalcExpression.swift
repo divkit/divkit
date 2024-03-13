@@ -59,22 +59,16 @@ struct AnyCalcExpression {
   ) throws {
     try self.init(
       expression,
-      impureSymbols: { symbol in
+      symbols: { symbol in
         switch symbol {
         case .variable("true"):
           { _ in true }
         case .variable("false"):
           { _ in false }
-        case .function, .infix, .prefix:
-          functions[symbol]?.symbolEvaluator
-        default:
-          nil
-        }
-      },
-      pureSymbols: { symbol in
-        switch symbol {
         case let .variable(name):
           variables(name).map { value in { _ in value } }
+        case .function, .infix, .prefix:
+          functions[symbol]?.symbolEvaluator
         default:
           nil
         }
@@ -89,8 +83,7 @@ struct AnyCalcExpression {
   /// function
   private init(
     _ expression: ParsedCalcExpression,
-    impureSymbols: (Symbol) -> SymbolEvaluator?,
-    pureSymbols: (Symbol) -> SymbolEvaluator?
+    symbols: (Symbol) -> SymbolEvaluator?
   ) throws {
     let box = NanBox()
     func unwrapString(_ name: String) -> String? {
@@ -103,6 +96,7 @@ struct AnyCalcExpression {
     func defaultEvaluator(_ symbol: Symbol) throws -> CalcExpression.SymbolEvaluator? {
       switch symbol {
       case let .variable(name):
+        // actually it is not a variable, it is a string literal
         guard let string = unwrapString(name) else {
           return { _ in throw Error.missingVariable(symbol) }
         }
@@ -122,47 +116,29 @@ struct AnyCalcExpression {
       }
     }
 
-    // Build CalcExpression
-    var _pureSymbols = [Symbol: CalcExpression.SymbolEvaluator]()
     let expression = try CalcExpression(
       expression,
-      impureSymbols: { symbol in
-        if let fn = impureSymbols(symbol) {
-          return { try box.store(fn($0.map(box.load))) }
+      symbols: { symbol in
+        if let evaluator = symbols(symbol) {
+          return { try box.store(evaluator($0.map(box.load))) }
         }
-        if let fn = pureSymbols(symbol) {
-          switch symbol {
-          case .variable:
-            do {
-              let value = try box.store(fn([]))
-              _pureSymbols[symbol] = { _ in value }
-            } catch {
-              return { _ in throw error }
-            }
-          default:
-            _pureSymbols[symbol] = { try box.store(fn($0.map(box.load))) }
-          }
+        if let evaluator = try defaultEvaluator(symbol) {
+          return evaluator
         }
-        return nil
-      },
-      pureSymbols: { symbol in
-        guard let fn = try (_pureSymbols[symbol] ?? defaultEvaluator(symbol)) else {
-          if case let .function(name, actualArity) = symbol {
-            for i in 0...10 {
-              let symbol = Symbol.function(name, arity: .exactly(i))
-              if impureSymbols(symbol) ?? pureSymbols(symbol) != nil {
-                if actualArity == .exactly(0) {
-                  return { _ in
-                    throw Error.shortMessage("Non empty argument list is required for function '\(name)'.")
-                  }
+        if case let .function(name, actualArity) = symbol {
+          for i in 0...10 {
+            let symbol = Symbol.function(name, arity: .exactly(i))
+            if symbols(symbol) != nil {
+              if actualArity == .exactly(0) {
+                return { _ in
+                  throw Error.shortMessage("Non empty argument list is required for function '\(name)'.")
                 }
-                return { _ in throw Error.arityMismatch(symbol) }
               }
+              return { _ in throw Error.arityMismatch(symbol) }
             }
           }
-          return CalcExpression.errorEvaluator(for: symbol)
         }
-        return fn
+        return CalcExpression.errorEvaluator(for: symbol)
       }
     )
 
@@ -208,87 +184,6 @@ struct AnyCalcExpression {
 // MARK: Internal API
 
 extension AnyCalcExpression.Error {
-  /// Standard error message for mismatched argument types
-  fileprivate static func typeMismatch(
-    _ symbol: AnyCalcExpression.Symbol,
-    _ args: [Any]
-  ) -> AnyCalcExpression.Error {
-    let types = args.map {
-      AnyCalcExpression.stringifyOrNil(AnyCalcExpression.isNil($0) ? $0 : type(of: $0))
-    }
-    switch symbol {
-    case .infix("[]") where types.count == 2:
-      if AnyCalcExpression.isSubscriptable(args[0]) {
-        return .message(
-          "Attempted to subscript \(types[0]) with incompatible index type \(types[1])"
-        )
-      } else {
-        return .message("Attempted to subscript \(types[0]) value")
-      }
-    case .array where types.count == 2:
-      if AnyCalcExpression.isSubscriptable(args[0]) {
-        fallthrough
-      } else {
-        return .message("Attempted to subscript \(types[0]) value \(symbol.escapedName)")
-      }
-    case .array where !types.isEmpty:
-      return .message(
-        "Attempted to subscript \(symbol.escapedName) with incompatible index type \(types.last!)"
-      )
-    case .infix("()") where !types.isEmpty:
-      switch type(of: args[0]) {
-      case is CalcExpression.SymbolEvaluator.Type, is AnyCalcExpression.SymbolEvaluator.Type:
-        return .message(
-          "Attempted to call function with incompatible arguments (\(types.dropFirst().joined(separator: ", ")))"
-        )
-      case _ where types[0].contains("->"):
-        return .message("Attempted to call non SymbolEvaluator function type \(types[0])")
-      default:
-        return .message("Attempted to call non function type \(types[0])")
-      }
-    case .infix("==") where types.count == 2 && types[0] == types[1]:
-      return .message("Arguments for \(symbol) must conform to the Hashable protocol")
-    case _ where types.count == 1:
-      return .message("Argument of type \(types[0]) is not compatible with \(symbol)")
-    default:
-      return .message(
-        "Arguments of type (\(types.joined(separator: ", "))) are not compatible with \(symbol)"
-      )
-    }
-  }
-
-  /// Standard error message for subscripting outside of a string's bounds
-  fileprivate static func stringBounds(_ string: String, _ index: Int) -> AnyCalcExpression.Error {
-    let escapedString = CalcExpression.Symbol.variable("'\(string)'").escapedName
-    return .message("Character index \(index) out of bounds for string \(escapedString)")
-  }
-
-  fileprivate static func stringBounds(
-    _ string: Substring,
-    _ index: String.Index
-  ) -> AnyCalcExpression.Error {
-    var _string = string
-    while index > _string.endIndex {
-      // Double the length until it fits
-      // TODO: is there a better solution for this?
-      _string += _string
-    }
-    let offset = _string.distance(from: _string.startIndex, to: index)
-    return stringBounds(String(string), offset)
-  }
-
-  /// Standard error message for invalid range
-  fileprivate static func invalidRange<T: Comparable>(
-    _ lhs: T,
-    _ rhs: T
-  ) -> AnyCalcExpression.Error {
-    if lhs > rhs {
-      return .message("Cannot form range with lower bound > upper bound")
-    }
-    return .message("Cannot form half-open range with lower bound == upper bound")
-  }
-
-  /// Standard error message for mismatched return type
   @usableFromInline
   static func resultTypeMismatch(_ type: Any.Type, _ value: Any) -> AnyCalcExpression.Error {
     let valueType = AnyCalcExpression
@@ -391,11 +286,6 @@ extension AnyCalcExpression {
       return isNil(value)
     }
     return value is NSNull
-  }
-
-  // Test if a value supports subscripting
-  fileprivate static func isSubscriptable(_ value: Any) -> Bool {
-    value is _String
   }
 }
 

@@ -163,13 +163,9 @@ final class CalcExpression: CustomStringConvertible {
   /// return `{ _ in throw CalcExpression.Error.undefinedSymbol(symbol) }` from your lookup function
   init(
     _ expression: ParsedCalcExpression,
-    impureSymbols: (Symbol) throws -> SymbolEvaluator?,
-    pureSymbols: (Symbol) throws -> SymbolEvaluator
+    symbols: (Symbol) throws -> SymbolEvaluator
   ) throws {
-    root = try expression.root.optimized(
-      impureSymbols: impureSymbols,
-      pureSymbols: pureSymbols
-    )
+    root = try expression.root.optimized(symbols: symbols)
   }
 
   /// Parse an expression.
@@ -529,30 +525,15 @@ private enum Subexpression: CustomStringConvertible {
   }
 
   func optimized(
-    impureSymbols: (CalcExpression.Symbol) throws -> CalcExpression.SymbolEvaluator?,
-    pureSymbols: (CalcExpression.Symbol) throws -> CalcExpression.SymbolEvaluator
+    symbols: (CalcExpression.Symbol) throws -> CalcExpression.SymbolEvaluator
   ) throws -> Subexpression {
     guard case .symbol(let symbol, var args, _) = self else {
       return self
     }
     args = try args.map {
-      try $0.optimized(impureSymbols: impureSymbols, pureSymbols: pureSymbols)
+      try $0.optimized(symbols: symbols)
     }
-    if let fn = try impureSymbols(symbol) {
-      return .symbol(symbol, args, fn)
-    }
-    let fn = try pureSymbols(symbol)
-    var argValues = [CalcExpression.Value]()
-    for arg in args {
-      guard case let .literal(value) = arg else {
-        return .symbol(symbol, args, fn)
-      }
-      argValues.append(value)
-    }
-    guard let result = try? fn(argValues) else {
-      return .symbol(symbol, args, fn)
-    }
-    return .literal(result)
+    return try .symbol(symbol, args, symbols(symbol))
   }
 }
 
