@@ -1,3 +1,20 @@
+## 29.10.0
+
+# Android Client:
+* Migrated to Gradle version catalog.
+* Add div data generator plugin.
+* Fixed SO at state variable change.
+
+# Web Client:
+* Fixed several issues with the `tabs` component with the `match_parent` and `wrap_content` heights with the `constrained` flag.
+* Fixed an animation issue after swipe in `tabs` component.
+* Fixed a small issue with rendering corners with a frame and radius.
+* Supported `scroll_to_start`, `scroll_to_end`, `scroll_backward`, `scroll_forward`, `scroll_to_position` in `gallery`. Updated `set_previous_item` and `set_next_item` to support `step` argument.
+* Supported `scroll_to_start`, `scroll_to_end` in `tabs` and `pager`. Updated `set_previous_item` and `set_next_item` to support `step` argument.
+* Fixed an issue with the `gallery` scroll actions and RTL layout direction.
+* Implicit conversion of `integer` -> `number` in expressions is supported.
+
+
 ## 29.9.0
 
 # Android Client:
