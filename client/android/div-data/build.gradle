@@ -1,11 +1,11 @@
-import com.yandex.div.gradle.UtilsKt
+plugins {
+    id 'com.android.library'
+    alias(libs.plugins.apiGenerator)
+}
 
 apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
-
-def generatedSrcDir = new File(buildDir, "generated/source/api")
-def generatedSrcSharedDataDir = new File(buildDir, "generated/source/data")
 
 allOpen {
     annotation("com.yandex.div.core.annotations.Mockable")
@@ -13,20 +13,6 @@ allOpen {
 
 android {
     namespace 'com.yandex.div.data'
-
-    sourceSets {
-        main {
-            java.srcDirs += generatedSrcDir
-            java.srcDirs += generatedSrcSharedDataDir
-        }
-    }
-
-    libraryVariants.all { variant ->
-        variant.preBuildProvider.configure {
-            dependsOn "generateDivModel"
-            dependsOn "generateDivSharedData"
-        }
-    }
 }
 
 dependencies {
@@ -38,32 +24,15 @@ dependencies {
     testImplementation libs.kotlin.reflect
 }
 
-task generateDivModel(type: Exec) {
-    def configPath = new File(projectDir, 'div2-generator-config.json').absolutePath
-    def schemaPath = new File(projectDir, "../../../schema").absolutePath
-    def modelPath = new File(generatedSrcDir, "com/yandex/div2")
-
-    workingDir "../../../api_generator"
-
-    commandLine UtilsKt.pythonExecutableName, "-m", "api_generator", "-c", configPath, "-s", schemaPath, "-o", modelPath
-
-    inputs.file configPath
-    inputs.dir schemaPath
-    outputs.dir modelPath
-}
-
-task generateDivSharedData(type: Exec) {
-    def sharedDataConfigPath = new File(projectDir, 'div2-shared-data-generator-config.json').absolutePath
-    def sharedDataPath = new File(projectDir, "../../../shared_data").absolutePath
-    def modelPath = new File(generatedSrcSharedDataDir, "com/yandex/div2").absolutePath
-
-    workingDir "../../../api_generator"
-
-    commandLine UtilsKt.pythonExecutableName, "-m", "api_generator", "-c", sharedDataConfigPath, "-s", sharedDataPath, "-o", modelPath
-
-    inputs.file sharedDataConfigPath
-    inputs.dir sharedDataPath
-    outputs.dir modelPath
+schemas {
+    divModel {
+        schemas = file("../../../schema")
+        config = file("div2-generator-config.json")
+    }
+    sharedData {
+        schemas = file("../../../shared_data")
+        config = file("div2-shared-data-generator-config.json")
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

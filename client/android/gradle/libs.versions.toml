@@ -162,8 +162,6 @@ rive = { module = "app.rive:rive-android", version = "4.2.1" }
 
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
-screenshotTestPlugin = { module = "com.yandex.test:screenshot-test-plugin", version = "1.0.0" }
-
 stetho-core = { module = "com.facebook.stetho:stetho", version.ref = "stetho" }
 stetho-okhttp3 = { module = "com.facebook.stetho:stetho-okhttp3", version.ref = "stetho" }
 
@@ -174,3 +172,8 @@ yatagan-processor-jap = { module = "com.yandex.yatagan:processor-jap", version.r
 
 zxing-core = { module = "com.google.zxing:core", version = "3.4.1" }
 zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = "4.3.0" }
+
+[plugins]
+apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
+screenshotTestPlugin = { id = "com.yandex.test.screenshot-test-plugin", version = "unspecified" }
+

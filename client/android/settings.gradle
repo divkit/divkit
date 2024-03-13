@@ -1,3 +1,13 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    includeBuild('api-generator-plugin')
+    includeBuild('screenshot-test-plugin')
+}
+
 dependencyResolutionManagement {
     versionCatalogs {
         def internalVersions = file("gradle/internal.versions.toml")
@@ -10,8 +20,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = 'divkit-android'
-
-includeBuild('screenshot-test-plugin')
 
 include ':api-generator-test'
 include ':assertion'

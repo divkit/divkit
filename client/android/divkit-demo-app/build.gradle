@@ -1,12 +1,15 @@
 import com.yandex.div.gradle.FileExtensions
 import groovy.json.JsonOutput
 
+plugins {
+    id 'com.android.application'
+    id 'kotlin-parcelize'
+    alias(libs.plugins.screenshotTestPlugin)
+}
+
 apply from: "${project.projectDir}/../div-application.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "ui-tests.gradle"
-
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'com.yandex.test.screenshot-test-plugin'
 
 repositories {
     maven { url 'https://repo.gradle.org/gradle/libs-releases' }

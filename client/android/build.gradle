@@ -33,7 +33,6 @@ buildscript {
     dependencies {
         classpath libs.agp.gradle
         classpath libs.appmetrica.plugin
-        classpath libs.screenshotTestPlugin
         classpath libs.nexusPublishPlugin
         classpath libs.dokka
         classpath libs.kotlin.allopen
