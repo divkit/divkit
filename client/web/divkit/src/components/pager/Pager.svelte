@@ -27,7 +27,6 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
-    import { correctBooleanInt } from '../../utils/correctBooleanInt';
 
     export let componentContext: ComponentContext<DivPagerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -140,8 +139,6 @@
             sizeVal = `${Number(pageWidth)}%`;
         }
     }
-
-    $: restrictScroll = correctBooleanInt($jsonRestrictParentScroll, false, componentContext.logError);
 
     $: style = {
         'grid-gap': itemSpacing,
@@ -321,7 +318,7 @@
         {replaceItems}
     >
         <div
-            class="{css.pager__items} {restrictScroll ? rootCss['root_restrict-scroll'] : ''}"
+            class="{css.pager__items} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
             style={makeStyle(style)}
             bind:this={pagerItemsWrapper}
             on:scroll={onScrollDebounced}

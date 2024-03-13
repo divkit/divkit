@@ -77,7 +77,6 @@
     import { arrayInsert, arrayRemove } from '../actions/array';
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
-    import { correctBooleanInt } from '../utils/correctBooleanInt';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -719,7 +718,7 @@
         const actionUrl = action.url ? String(action.url) : '';
         const actionTyped = action.typed;
 
-        if (!filterEnabledActions(action, logError)) {
+        if (!filterEnabledActions(action)) {
             return;
         }
 
@@ -903,7 +902,7 @@
             return;
         }
 
-        const filtered = actions.filter(action => filterEnabledActions(action, logError));
+        const filtered = actions.filter(filterEnabledActions);
 
         for (let i = 0; i < filtered.length; ++i) {
             let action = filtered[i];
@@ -1530,7 +1529,7 @@
 
                             if (
                                 // if condition is truthy
-                                correctBooleanInt(conditionResult.value, false, logError) &&
+                                conditionResult.value &&
                                 // and trigger mode matches
                                 (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                             ) {
