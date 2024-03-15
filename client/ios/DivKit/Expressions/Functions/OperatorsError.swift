@@ -17,7 +17,7 @@ enum OperatorsError {
     }
   }
 
-  var message: AnyCalcExpression.Error {
-    AnyCalcExpression.Error.message(description)
+  var message: CalcExpression.Error {
+    CalcExpression.Error.message(description)
   }
 }

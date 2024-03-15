@@ -105,7 +105,7 @@ enum IntervalFunctions: String, CaseIterable {
     whole: Int? = nil
   ) throws -> Int {
     guard milliseconds >= 0 else {
-      throw AnyCalcExpression.Error.incorrectMilliseconds("\(funcName)(\(milliseconds))")
+      throw CalcExpression.Error.incorrectMilliseconds("\(funcName)(\(milliseconds))")
     }
     var val = milliseconds / divider
     if let whole {
@@ -115,8 +115,8 @@ enum IntervalFunctions: String, CaseIterable {
   }
 }
 
-extension AnyCalcExpression.Error {
-  fileprivate static func incorrectMilliseconds(_ expression: String) -> AnyCalcExpression.Error {
+extension CalcExpression.Error {
+  fileprivate static func incorrectMilliseconds(_ expression: String) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [\(expression)]. Expecting non-negative number of milliseconds."
     )

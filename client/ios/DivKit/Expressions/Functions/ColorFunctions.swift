@@ -9,8 +9,8 @@ enum ColorFunctions: CaseIterable {
     case get(Channel, String)
     case set(Channel, String, Double)
 
-    var message: AnyCalcExpression.Error {
-      AnyCalcExpression.Error.message(description)
+    var message: CalcExpression.Error {
+      CalcExpression.Error.message(description)
     }
 
     private var description: String {

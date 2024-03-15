@@ -29,7 +29,7 @@ final class FunctionTests: XCTestCase {
   func test_invoke_FunctionBinary_WithInvalidArguments() throws {
     XCTAssertThrowsError(
       _ = try binaryFunction.invoke(args: [1.2, true]),
-      AnyCalcExpression.Error.message("Argument couldn't be casted to Double")
+      CalcExpression.Error.message("Argument couldn't be casted to Double")
     )
   }
 

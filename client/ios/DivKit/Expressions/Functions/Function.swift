@@ -297,7 +297,7 @@ struct Argument {
   let value: Any
 
   var formattedValue: String {
-    let value = AnyCalcExpression.stringify(value) ?? ""
+    let value = AnyCalcExpression.stringify(value)
     switch type {
     case .string:
       return "'\(value)'"
@@ -399,8 +399,8 @@ struct FunctionSignature: Decodable {
     case notFound
     case type
 
-    var message: AnyCalcExpression.Error {
-      AnyCalcExpression.Error.message(description)
+    var message: CalcExpression.Error {
+      CalcExpression.Error.message(description)
     }
 
     private var description: String {
@@ -453,5 +453,5 @@ private func castArg<T>(_ value: Any) throws -> T {
     return Double(intValue) as! T
   }
 
-  throw AnyCalcExpression.Error.message("Argument couldn't be casted to \(T.self)")
+  throw CalcExpression.Error.message("Argument couldn't be casted to \(T.self)")
 }

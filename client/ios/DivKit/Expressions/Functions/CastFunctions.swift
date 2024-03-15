@@ -19,7 +19,7 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _intToBoolean),
         ],
         makeError: {
-          AnyCalcExpression.Error.toBooleanUnsupportedType($0.first?.value)
+          CalcExpression.Error.toBooleanUnsupportedType($0.first?.value)
         }
       )
     case .toString:
@@ -32,7 +32,7 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _urlToString),
         ],
         makeError: {
-          AnyCalcExpression.Error.toString($0.first?.value)
+          CalcExpression.Error.toString($0.first?.value)
         }
       )
     case .toNumber:
@@ -42,7 +42,7 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _stringToNumber),
         ],
         makeError: {
-          AnyCalcExpression.Error.toNumberUnsupportedType($0.first?.value)
+          CalcExpression.Error.toNumberUnsupportedType($0.first?.value)
         }
       )
     case .toInteger:
@@ -53,7 +53,7 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _stringToInteger),
         ],
         makeError: {
-          AnyCalcExpression.Error.toInteger($0.first?.value)
+          CalcExpression.Error.toInteger($0.first?.value)
         }
       )
     case .toColor:
@@ -71,7 +71,7 @@ private func _stringToBoolean(value: String) throws -> Bool {
   case "false":
     return false
   default:
-    throw AnyCalcExpression.Error.toBooleanIncorrectValue(value)
+    throw CalcExpression.Error.toBooleanIncorrectValue(value)
   }
 }
 
@@ -82,7 +82,7 @@ private func _intToBoolean(value: Int) throws -> Bool {
   case 0:
     return false
   default:
-    throw AnyCalcExpression.Error.toBooleanIncorrectValue(value)
+    throw CalcExpression.Error.toBooleanIncorrectValue(value)
   }
 }
 
@@ -92,7 +92,7 @@ private func _boolToString(value: Bool) throws -> String {
 
 private func _doubleToString(value: Double) throws -> String {
   guard let string = value.toString() else {
-    throw AnyCalcExpression.Error.toString(value)
+    throw CalcExpression.Error.toString(value)
   }
   return string
 }
@@ -115,7 +115,7 @@ private func _intToNumber(value: Int) throws -> Double {
 
 private func _stringToNumber(value: String) throws -> Double {
   guard let number = Double(value), number.isFinite else {
-    throw AnyCalcExpression.Error.toNumberIncorrectValue(value)
+    throw CalcExpression.Error.toNumberIncorrectValue(value)
   }
   return number
 }
@@ -126,28 +126,28 @@ private func _boolToInteger(value: Bool) throws -> Int {
 
 private func _stringToInteger(value: String) throws -> Int {
   guard let number = Int(value) else {
-    throw AnyCalcExpression.Error.toInteger("'\(value)'")
+    throw CalcExpression.Error.toInteger("'\(value)'")
   }
   return number
 }
 
 private func _doubleToInteger(value: Double) throws -> Int {
   guard let number = value.toInt() else {
-    throw AnyCalcExpression.Error.toInteger(value.toScientificFormat() ?? "\(value)")
+    throw CalcExpression.Error.toInteger(value.toScientificFormat() ?? "\(value)")
   }
   return number
 }
 
 private func _stringToColor(value: String) throws -> Color {
   guard let color = Color.color(withHexString: value) else {
-    throw AnyCalcExpression.Error.toColor(value)
+    throw CalcExpression.Error.toColor(value)
   }
   return color
 }
 
 private func _stringToUrl(value: String) throws -> URL {
   guard let url = URL(string: value) else {
-    throw AnyCalcExpression.Error.toUrl(value)
+    throw CalcExpression.Error.toUrl(value)
   }
   return url
 }
@@ -185,50 +185,50 @@ extension Double {
   }
 }
 
-extension AnyCalcExpression.Error {
-  fileprivate static func toBooleanIncorrectValue(_ value: Any?) -> AnyCalcExpression.Error {
+extension CalcExpression.Error {
+  fileprivate static func toBooleanIncorrectValue(_ value: Any?) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toBoolean(\(formatValue(value)))]. Unable to convert value to Boolean."
     )
   }
 
-  fileprivate static func toBooleanUnsupportedType(_ value: Any?) -> AnyCalcExpression.Error {
+  fileprivate static func toBooleanUnsupportedType(_ value: Any?) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toBoolean(\(formatValue(value)))]. Function 'toBoolean' has no matching override for given argument types: \(formatType(value))."
     )
   }
 
-  fileprivate static func toString(_ value: Any?) -> AnyCalcExpression.Error {
+  fileprivate static func toString(_ value: Any?) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toString(\(formatValue(value)))]. Unable to convert value to String."
     )
   }
 
-  fileprivate static func toNumberIncorrectValue(_ value: Any?) -> AnyCalcExpression.Error {
+  fileprivate static func toNumberIncorrectValue(_ value: Any?) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toNumber(\(formatValue(value)))]. Unable to convert value to Number."
     )
   }
 
-  fileprivate static func toNumberUnsupportedType(_ value: Any?) -> AnyCalcExpression.Error {
+  fileprivate static func toNumberUnsupportedType(_ value: Any?) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toNumber(\(formatValue(value)))]. Function 'toNumber' has no matching override for given argument types: \(formatType(value))."
     )
   }
 
-  fileprivate static func toInteger(_ value: Any?) -> AnyCalcExpression.Error {
+  fileprivate static func toInteger(_ value: Any?) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toInteger(\(value ?? ""))]. Unable to convert value to Integer."
     )
   }
 
-  fileprivate static func toColor(_ value: String) -> AnyCalcExpression.Error {
+  fileprivate static func toColor(_ value: String) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toColor('\(value)')]. Unable to convert value to Color, expected format #AARRGGBB."
     )
   }
 
-  fileprivate static func toUrl(_ value: String) -> AnyCalcExpression.Error {
+  fileprivate static func toUrl(_ value: String) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toUrl('\(value)')]. Unable to convert value to URL."
     )

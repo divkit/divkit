@@ -7,21 +7,15 @@ public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 public final class ExpressionResolver {
   public typealias VariableTracker = (Set<DivVariableName>) -> Void
 
-  private let variableValueProvider: AnyCalcExpression.ValueProvider
   private let functionsProvider: FunctionsProvider
   private let errorTracker: ExpressionErrorTracker
-  private let variableTracker: VariableTracker
 
   init(
-    variableValueProvider: @escaping AnyCalcExpression.ValueProvider,
     functionsProvider: FunctionsProvider,
-    errorTracker: @escaping ExpressionErrorTracker,
-    variableTracker: @escaping VariableTracker
+    errorTracker: @escaping ExpressionErrorTracker
   ) {
-    self.variableValueProvider = variableValueProvider
     self.functionsProvider = functionsProvider
     self.errorTracker = errorTracker
-    self.variableTracker = variableTracker
   }
 
   public init(
@@ -30,19 +24,15 @@ public final class ExpressionResolver {
     errorTracker: ExpressionErrorTracker? = nil,
     variableTracker: @escaping VariableTracker = { _ in }
   ) {
-    let variableValueProvider: AnyCalcExpression.ValueProvider = {
-      variables[DivVariableName(rawValue: $0)]?.typedValue()
-    }
-    self.variableValueProvider = variableValueProvider
     self.functionsProvider = FunctionsProvider(
       variableValueProvider: {
-        variableTracker([DivVariableName(rawValue: $0)])
-        return variableValueProvider($0)
+        let variableName = DivVariableName(rawValue: $0)
+        variableTracker([variableName])
+        return variables[variableName]?.typedValue()
       },
       persistentValuesStorage: persistentValuesStorage
     )
     self.errorTracker = { errorTracker?($0) }
-    self.variableTracker = variableTracker
   }
 
   public func resolveString(_ expression: String) -> String {
@@ -78,7 +68,6 @@ public final class ExpressionResolver {
     case let .value(value):
       return resolveEscaping(value)
     case let .link(link):
-      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
       return evaluateString(link: link, initializer: initializer)
     case .none:
       return nil
@@ -110,7 +99,6 @@ public final class ExpressionResolver {
     case let .value(value):
       return value
     case let .link(link):
-      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
       return evaluateSingleItem(link: link)
     case .none:
       return nil
@@ -124,7 +112,6 @@ public final class ExpressionResolver {
     case let .value(value):
       return value
     case let .link(link):
-      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
       return evaluateSingleItem(link: link)
     case .none:
       return nil
@@ -138,7 +125,6 @@ public final class ExpressionResolver {
     case let .value(value):
       return value
     case let .link(link):
-      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
       return evaluateSingleItem(link: link)
     case .none:
       return nil
@@ -249,8 +235,7 @@ public final class ExpressionResolver {
   private func evaluate<T>(_ parsedExpression: ParsedCalcExpression) throws -> T {
     try AnyCalcExpression(
       parsedExpression,
-      variables: variableValueProvider,
-      functions: functionsProvider.functions
+      evaluators: functionsProvider.evaluators
     ).evaluate()
   }
 

@@ -9,7 +9,7 @@ enum MathOperators: String, CaseIterable {
   case plus
   case minus
 
-  var symbol: AnyCalcExpression.Symbol {
+  var symbol: CalcExpression.Symbol {
     switch self {
     case .sum, .sub, .mul, .div, .mod:
       .infix(rawValue)
@@ -82,11 +82,11 @@ enum MathOperators: String, CaseIterable {
     }
   }
 
-  private func makeError(args: [Argument]) -> AnyCalcExpression.Error {
+  private func makeError(args: [Argument]) -> CalcExpression.Error {
     OperatorsError.unsupportedType(symbol: symbol.name, args: args).message
   }
 
-  private func makeUnaryError(args: [Argument]) -> AnyCalcExpression.Error {
+  private func makeUnaryError(args: [Argument]) -> CalcExpression.Error {
     Error.unaryUnsupportedType(symbol: symbol.name, symbolName: rawValue, arg: args[0]).message
   }
 }
@@ -174,7 +174,7 @@ private enum Error {
     }
   }
 
-  var message: AnyCalcExpression.Error {
-    AnyCalcExpression.Error.message(description)
+  var message: CalcExpression.Error {
+    CalcExpression.Error.message(description)
   }
 }

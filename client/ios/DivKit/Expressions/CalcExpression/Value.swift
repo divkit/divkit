@@ -33,11 +33,11 @@ extension CalcExpression.Value {
 extension CalcExpression.Value {
   static let maxInteger = Int.max
   static let minInteger = Int.min
-  static func integerError(_ value: Any) -> AnyCalcExpression.Error {
+  static func integerError(_ value: Any) -> CalcExpression.Error {
     .message("Value \(value) can't be converted to Integer type.")
   }
 
-  static func integerOverflow() -> AnyCalcExpression.Error {
+  static func integerOverflow() -> CalcExpression.Error {
     .shortMessage("Integer overflow.")
   }
 }

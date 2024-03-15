@@ -15,7 +15,25 @@ final class FunctionsProvider {
     self.persistentValuesStorage = persistentValuesStorage
   }
 
-  lazy var functions: [AnyCalcExpression.Symbol: Function] =
+  init (
+    cardId: DivCardID,
+    variablesStorage: DivVariablesStorage,
+    variableTracker: @escaping ExpressionResolver.VariableTracker,
+    persistentValuesStorage: DivPersistentValuesStorage,
+    prototypesStorage: [String: Any]? = nil
+  ) {
+    self.variableValueProvider = {
+      if let value: Any = prototypesStorage?[$0] {
+        return value
+      }
+      let variableName = DivVariableName(rawValue: $0)
+      variableTracker([variableName])
+      return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
+    }
+    self.persistentValuesStorage = persistentValuesStorage
+  }
+
+  lazy var functions: [CalcExpression.Symbol: Function] =
     lock.withLock {
       var functions = staticFunctions
       GetValueFunctions.allCases.forEach {
@@ -32,10 +50,33 @@ final class FunctionsProvider {
       }
       return functions
     }
+
+  lazy var evaluators: ((CalcExpression.Symbol) -> AnyCalcExpression.SymbolEvaluator?) =
+    lock.withLock {
+      return { [weak self] symbol in
+        switch symbol {
+        case .variable("true"):
+          { _ in true }
+        case .variable("false"):
+          { _ in false }
+        case let .variable(name):
+          // CalcExpression stores string values as Symbol.variable
+          if name.starts(with: "'") {
+            nil
+          } else {
+            self?.variableValueProvider(name).map { value in { _ in value } }
+          }
+        case .function, .infix, .prefix:
+          self?.functions[symbol]?.symbolEvaluator
+        default:
+          nil
+        }
+      }
+    }
 }
 
-private let staticFunctions: [AnyCalcExpression.Symbol: Function] = {
-  var functions: [AnyCalcExpression.Symbol: Function] = [:]
+private let staticFunctions: [CalcExpression.Symbol: Function] = {
+  var functions: [CalcExpression.Symbol: Function] = [:]
   ArrayFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
   CastFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
   ColorFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
@@ -51,7 +92,7 @@ private let staticFunctions: [AnyCalcExpression.Symbol: Function] = {
   return functions
 }()
 
-extension [AnyCalcExpression.Symbol: Function] {
+extension [CalcExpression.Symbol: Function] {
   fileprivate mutating func put(_ name: String, _ function: Function) {
     self[.function(name, arity: function.arity)] = function
   }

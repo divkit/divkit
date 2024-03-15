@@ -38,52 +38,19 @@ import CommonCorePublic
 /// Wrapper for Expression that works with any type of value
 struct AnyCalcExpression {
   private let expression: CalcExpression
+
   @usableFromInline
   let evaluator: () throws -> Any
-
-  typealias ValueProvider = (_ name: String) -> Any?
 
   /// Evaluator for individual symbols
   typealias SymbolEvaluator = (_ args: [Any]) throws -> Any
 
-  /// Symbols that make up an expression
-  typealias Symbol = CalcExpression.Symbol
-
-  /// Runtime error when parsing or evaluating an expression
-  typealias Error = CalcExpression.Error
+  private typealias Symbol = CalcExpression.Symbol
+  private typealias Error = CalcExpression.Error
 
   init(
     _ expression: ParsedCalcExpression,
-    variables: ValueProvider,
-    functions: [Symbol: Function]
-  ) throws {
-    try self.init(
-      expression,
-      symbols: { symbol in
-        switch symbol {
-        case .variable("true"):
-          { _ in true }
-        case .variable("false"):
-          { _ in false }
-        case let .variable(name):
-          variables(name).map { value in { _ in value } }
-        case .function, .infix, .prefix:
-          functions[symbol]?.symbolEvaluator
-        default:
-          nil
-        }
-      }
-    )
-  }
-
-  /// Private initializer implementation
-  /// Allows for dynamic symbol lookup or generation without any performance overhead
-  /// Note that standard library symbols are all enabled by default - to disable them
-  /// return `{ _ in throw AnyCalcExpression.Error.undefinedSymbol(symbol) }` from your lookup
-  /// function
-  private init(
-    _ expression: ParsedCalcExpression,
-    symbols: (Symbol) -> SymbolEvaluator?
+    evaluators: (CalcExpression.Symbol) -> SymbolEvaluator?
   ) throws {
     let box = NanBox()
     func unwrapString(_ name: String) -> String? {
@@ -119,7 +86,7 @@ struct AnyCalcExpression {
     let expression = try CalcExpression(
       expression,
       symbols: { symbol in
-        if let evaluator = symbols(symbol) {
+        if let evaluator = evaluators(symbol) {
           return { try box.store(evaluator($0.map(box.load))) }
         }
         if let evaluator = try defaultEvaluator(symbol) {
@@ -128,7 +95,7 @@ struct AnyCalcExpression {
         if case let .function(name, actualArity) = symbol {
           for i in 0...10 {
             let symbol = Symbol.function(name, arity: .exactly(i))
-            if symbols(symbol) != nil {
+            if evaluators(symbol) != nil {
               if actualArity == .exactly(0) {
                 return { _ in
                   throw Error.shortMessage("Non empty argument list is required for function '\(name)'.")
@@ -161,53 +128,40 @@ struct AnyCalcExpression {
     self.expression = expression
   }
 
-  /// Evaluate the expression
   @inlinable
   func evaluate<T>() throws -> T {
-    let anyValue = try evaluator()
-    guard let value: T = AnyCalcExpression.cast(anyValue) else {
-      switch T.self {
-      case _ where AnyCalcExpression.isNil(anyValue):
-        break // Fall through
-      case is _String.Type, is NSString?.Type, is String?.Type, is Substring?.Type:
-        // TODO: should we stringify any type like this?
-        return (AnyCalcExpression.cast(AnyCalcExpression.stringify(anyValue)!) as T?)!
-      default:
-        break
-      }
-      throw Error.resultTypeMismatch(T.self, anyValue)
+    let value = try evaluator()
+    if let castedValue: T = AnyCalcExpression.cast(value) {
+      return castedValue
     }
-    return value
-  }
-}
 
-// MARK: Internal API
+    switch T.self {
+    case is _String.Type:
+      return (AnyCalcExpression.cast(AnyCalcExpression.stringify(value)) as T?)!
+    default:
+      break
+    }
 
-extension AnyCalcExpression.Error {
-  @usableFromInline
-  static func resultTypeMismatch(_ type: Any.Type, _ value: Any) -> AnyCalcExpression.Error {
-    let valueType = AnyCalcExpression
-      .stringifyOrNil(AnyCalcExpression.unwrap(value).map { Swift.type(of: $0) } as Any)
-    return .message(
-      "Result type \(valueType) is not compatible with expected type \(AnyCalcExpression.stringifyOrNil(type))"
-    )
+    throw Error.message("Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)")
   }
 }
 
 extension AnyCalcExpression {
-  // Cast a value to the specified type
   @usableFromInline
   static func cast<T>(_ anyValue: Any) -> T? {
     if let value = anyValue as? T {
       return value
     }
+
     var type: Any.Type = T.self
     if let optionalType = type as? _Optional.Type {
       type = optionalType.wrappedType
     }
     switch type {
     case let numericType as _Numeric.Type:
-      if anyValue is Bool { return nil }
+      if anyValue is Bool {
+        return nil
+      }
       return (anyValue as? NSNumber).map { numericType.init(truncating: $0) as! T }
     case is String.Type:
       return (anyValue as? _String).map { String($0.substring) as! T }
@@ -218,13 +172,8 @@ extension AnyCalcExpression {
     }
   }
 
-  fileprivate static func stringifyOrNil(_ value: Any) -> String {
-    stringify(value) ?? "nil"
-  }
-
-  // Convert any value to a printable string
   @usableFromInline
-  static func stringify(_ value: Any) -> String? {
+  static func stringify(_ value: Any) -> String {
     switch value {
     case let number as NSNumber:
       // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
@@ -232,11 +181,11 @@ extension AnyCalcExpression {
       case "c", "B":
         return number == 0 ? "false" : "true"
       case "d":
-        let nf = NumberFormatter()
-        nf.minimumFractionDigits = 1
-        nf.maximumFractionDigits = 15
-        nf.locale = Locale(identifier: "en")
-        return nf.string(from: number)
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 15
+        formatter.locale = Locale(identifier: "en")
+        return formatter.string(from: number)!
       default:
         break
       }
@@ -254,38 +203,9 @@ extension AnyCalcExpression {
       dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
       dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
       return dateFormatter.string(from: date)
-    case is Any.Type:
-      return "\(value)"
-    case let value:
-      return unwrap(value).map { "\($0)" }
-    }
-  }
-
-  // Unwraps a potentially optional value
-  fileprivate static func unwrap(_ value: Any) -> Any? {
-    switch value {
-    case let optional as _Optional:
-      guard let value = optional.value else {
-        fallthrough
-      }
-      return unwrap(value)
-    case is NSNull:
-      return nil
     default:
-      return value
+      return "\(value)"
     }
-  }
-
-  // Test if a value is nil
-  @usableFromInline
-  static func isNil(_ value: Any) -> Bool {
-    if let optional = value as? _Optional {
-      guard let value = optional.value else {
-        return true
-      }
-      return isNil(value)
-    }
-    return value is NSNull
   }
 }
 
@@ -296,15 +216,11 @@ extension AnyCalcExpression {
   fileprivate final class NanBox {
     private static let mask = (-Double.nan).bitPattern
     private static let indexOffset = 4
-    private static let nilBits = bitPattern(for: -1)
 
     private static func bitPattern(for index: Int) -> UInt64 {
       assert(index > -indexOffset)
       return UInt64(index + indexOffset) | mask
     }
-
-    // Literal values
-    static let nilValue = Double(bitPattern: nilBits)
 
     // The values stored in the box
     var values = [Any]()
@@ -334,8 +250,6 @@ extension AnyCalcExpression {
         return .datetime(datetimeValue)
       case let stringValue as String:
         return .string(stringValue)
-      case _ where AnyCalcExpression.isNil(value):
-        return .number(NanBox.nilValue)
       case let error as CalcExpression.Error:
         return .error(error)
       default:
@@ -347,16 +261,11 @@ extension AnyCalcExpression {
 
     // Retrieve a value from the box, if it exists
     fileprivate func loadIfStored(_ arg: Double) -> Any? {
-      switch arg.bitPattern {
-      case NanBox.nilBits:
-        return nil as Any? as Any
-      case let bits:
-        guard var index = Int(exactly: bits ^ NanBox.mask) else {
-          return nil
-        }
-        index -= NanBox.indexOffset
-        return values.indices.contains(index) ? values[index] : nil
+      guard var index = Int(exactly: arg.bitPattern ^ NanBox.mask) else {
+        return nil
       }
+      index -= NanBox.indexOffset
+      return values.indices.contains(index) ? values[index] : nil
     }
 
     // Retrieve a value if it exists, else return the argument
@@ -369,9 +278,8 @@ extension AnyCalcExpression {
       case let .integer(value):
         if CalcExpression.Value.minInteger <= value, value <= CalcExpression.Value.maxInteger {
           return value
-        } else {
-          throw CalcExpression.Value.integerError(value)
         }
+        throw CalcExpression.Value.integerError(value)
       case let .datetime(value):
         return value
       case let .boolean(value):
@@ -383,7 +291,6 @@ extension AnyCalcExpression {
   }
 }
 
-// Used for casting numeric values
 private protocol _Numeric {
   init(truncating: NSNumber)
 }
@@ -403,7 +310,6 @@ extension UInt64: _Numeric {}
 extension Double: _Numeric {}
 extension Float: _Numeric {}
 
-// Used for string values
 @usableFromInline
 protocol _String {
   var substring: Substring { get }
@@ -430,7 +336,6 @@ extension NSString: _String {
   }
 }
 
-// Used to test if a value is Optional
 private protocol _Optional {
   var value: Any? { get }
   static var wrappedType: Any.Type { get }

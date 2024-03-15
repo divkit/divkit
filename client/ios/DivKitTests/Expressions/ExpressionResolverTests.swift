@@ -5,15 +5,25 @@ import XCTest
 import CommonCorePublic
 
 final class ExpressionResolverTests: XCTestCase {
+  private var isErrorExpected = false
+
   private lazy var expressionResolver = ExpressionResolver(
     variables: [
-      "string_var": .string("string value"),
+      "array_var": .array([1]),
+      "boolean_var": .bool(true),
       "color_var": .color(color("#AABBCC")),
       "enum_var": .string("first"),
+      "integer_var": .integer(123),
+      "number_var": .number(12.9),
+      "string_var": .string("string value"),
       "url_var": .url(url("https://some.url")),
-      "array_var": .array([1]),
     ],
     persistentValuesStorage: DivPersistentValuesStorage(),
+    errorTracker: { [unowned self] in
+      if !self.isErrorExpected {
+        XCTFail($0.message)
+      }
+    },
     variableTracker: { [unowned self] in
       self.usedVariables = self.usedVariables.union($0)
     }
@@ -57,6 +67,8 @@ final class ExpressionResolverTests: XCTestCase {
   }
 
   func test_ResolveColor_Invalid() {
+    isErrorExpected = true
+
     XCTAssertNil(
       expressionResolver.resolveColor(expression("@{'invalid'}"))
     )
@@ -76,7 +88,49 @@ final class ExpressionResolverTests: XCTestCase {
     )
   }
 
+  func test_ResolveNumeric_IntegerConstant() {
+    let value: Int? = expressionResolver.resolveNumeric(expression("@{123}"))
+    XCTAssertEqual(value, 123)
+  }
+
+  func test_ResolveNumeric_IntegerExpression() {
+    let value: Int? = expressionResolver.resolveNumeric(expression("@{integer_var}"))
+    XCTAssertEqual(value, 123)
+  }
+
+  func test_ResolveNumeric_NumberConstant() {
+    let value: Double? = expressionResolver.resolveNumeric(expression("@{12.9}"))
+    XCTAssertEqual(value, 12.9)
+  }
+
+  func test_ResolveNumeric_NumberExpression() {
+    let value: Double? = expressionResolver.resolveNumeric(expression("@{number_var}"))
+    XCTAssertEqual(value, 12.9)
+  }
+
+  func test_ResolveNumeric_BooleanConstant() {
+    let value: Bool = expressionResolver.resolveNumeric(expression("@{true}"))!
+    XCTAssertTrue(value)
+  }
+
+  func test_ResolveNumeric_BooleanExpression() {
+    let value: Bool = expressionResolver.resolveNumeric(expression("@{boolean_var}"))!
+    XCTAssertTrue(value)
+  }
+
+  func test_ResolveNumeric_IntegerAsNumber() {
+    let value: Double? = expressionResolver.resolveNumeric(expression("@{integer_var}"))
+    XCTAssertEqual(value, 123.0)
+  }
+
+  func test_ResolveNumeric_NumberAsInteger() {
+    let value: Int? = expressionResolver.resolveNumeric(expression("@{number_var}"))
+    XCTAssertEqual(value, 12)
+  }
+
   func test_ResolveEnum_WithInvalidValue() {
+    isErrorExpected = true
+
     let value: TestEnum? = expressionResolver.resolveEnum(expression("@{'invalid'}"))
     XCTAssertNil(value)
   }
@@ -114,12 +168,36 @@ final class ExpressionResolverTests: XCTestCase {
     XCTAssertEqual(usedVariables, ["string_var"])
   }
 
+  func test_TracksUnknownVariable() {
+    isErrorExpected = true
+
+    let _ = expressionResolver.resolveString(expression("@{unknown_var}"))
+
+    XCTAssertEqual(usedVariables, ["unknown_var"])
+  }
+
   func test_TracksVariable_InGetValueFunction() {
     let _ = expressionResolver.resolveString(
-      expression("@{getStringValue('string_var', 'default')}")
+      expression("@{getStringValue('string_var', 'fallback value')}")
     )
 
-    XCTAssertTrue(usedVariables.contains("string_var"))
+    XCTAssertEqual(usedVariables, ["string_var"])
+  }
+
+  func test_getStringValue_ReturnsVariableValue() {
+    let value = expressionResolver.resolveString(
+      expression("@{getStringValue('string_var', 'fallback value')}")
+    )
+
+    XCTAssertEqual(value, "string value")
+  }
+
+  func test_getStringValue_ReturnsFallbackValue() {
+    let value = expressionResolver.resolveString(
+      expression("@{getStringValue('unknown_var', 'fallback value')}")
+    )
+
+    XCTAssertEqual(value, "fallback value")
   }
 }
 

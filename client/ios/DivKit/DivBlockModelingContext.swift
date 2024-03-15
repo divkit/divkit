@@ -36,7 +36,6 @@ public struct DivBlockModelingContext {
   let tooltipViewFactory: DivTooltipViewFactory?
   public let variablesStorage: DivVariablesStorage
   public private(set) var expressionResolver: ExpressionResolver
-  private var variableValueProvider: (String) -> Any?
   private var functionsProvider: FunctionsProvider
   private let variableTracker: ExpressionResolver.VariableTracker
   public private(set) var parentPath: UIElementPath
@@ -174,22 +173,16 @@ public struct DivBlockModelingContext {
     self.variablesStorage = variablesStorage
     self.extensionHandlers = extensionHandlers
     self.stateInterceptors = stateInterceptors
-    variableValueProvider = makeVariableValueProvider(
-      cardId: cardId,
-      variablesStorage: variablesStorage
-    )
-    functionsProvider = makeFunctionsProvider(
+    functionsProvider = FunctionsProvider(
       cardId: cardId,
       variablesStorage: variablesStorage,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage
     )
     expressionResolver = makeExpressionResolver(
-      variableValueProvider: variableValueProvider,
       functionsProvider: functionsProvider,
       parentPath: parentPath,
-      errorsStorage: errorsStorage,
-      variableTracker: variableTracker
+      errorsStorage: errorsStorage
     )
   }
 
@@ -270,17 +263,11 @@ extension DivBlockModelingContext {
       return context
     }
 
-    let variableValueProvider: AnyCalcExpression.ValueProvider
     let functionsProvider: FunctionsProvider
     if let prototypesData {
       var prototypesStorage = self.prototypesStorage
       prototypesStorage[prototypesData.0] = prototypesData.1
-      variableValueProvider = makeVariableValueProvider(
-        cardId: cardId,
-        variablesStorage: variablesStorage,
-        prototypesStorage: prototypesStorage
-      )
-      functionsProvider = makeFunctionsProvider(
+      functionsProvider = FunctionsProvider(
         cardId: cardId,
         variablesStorage: variablesStorage,
         variableTracker: variableTracker,
@@ -288,21 +275,17 @@ extension DivBlockModelingContext {
         prototypesStorage: prototypesStorage
       )
       context.prototypesStorage = prototypesStorage
-      context.variableValueProvider = variableValueProvider
       context.functionsProvider = functionsProvider
     } else {
-      variableValueProvider = self.variableValueProvider
       functionsProvider = self.functionsProvider
     }
 
     let parentPath = parentPath ?? self.parentPath
     let errorsStorage = errorsStorage ?? self.errorsStorage
     context.expressionResolver = makeExpressionResolver(
-      variableValueProvider: variableValueProvider,
       functionsProvider: functionsProvider,
       parentPath: parentPath,
-      errorsStorage: errorsStorage,
-      variableTracker: variableTracker
+      errorsStorage: errorsStorage
     )
     context.parentPath = parentPath
     context.errorsStorage = errorsStorage
@@ -312,18 +295,14 @@ extension DivBlockModelingContext {
 }
 
 private func makeExpressionResolver(
-  variableValueProvider: @escaping AnyCalcExpression.ValueProvider,
   functionsProvider: FunctionsProvider,
   parentPath: UIElementPath,
-  errorsStorage: DivErrorsStorage?,
-  variableTracker: @escaping ExpressionResolver.VariableTracker
+  errorsStorage: DivErrorsStorage?
 ) -> ExpressionResolver {
   ExpressionResolver(
-    variableValueProvider: variableValueProvider,
     functionsProvider: functionsProvider,
     errorTracker: { [weak errorsStorage] error in
       errorsStorage?.add(DivExpressionError(error, path: parentPath))
-    },
-    variableTracker: variableTracker
+    }
   )
 }

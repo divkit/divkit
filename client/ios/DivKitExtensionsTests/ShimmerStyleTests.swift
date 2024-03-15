@@ -7,7 +7,8 @@ import DivKit
 final class ShimmerStyleTests: XCTestCase {
   private let expressionResolver = ExpressionResolver(
     variables: [:],
-    persistentValuesStorage: DivPersistentValuesStorage()
+    persistentValuesStorage: DivPersistentValuesStorage(),
+    errorTracker: { XCTFail($0.description) }
   )
 
   func test_WhenDecodingEmptyShimmerStyle_DecodesWithDefaultValues() throws {

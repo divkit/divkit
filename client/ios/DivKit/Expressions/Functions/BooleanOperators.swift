@@ -6,7 +6,7 @@ enum BooleanOperators: String, CaseIterable {
   case not = "!"
   case ternary = "?:"
 
-  var symbol: AnyCalcExpression.Symbol {
+  var symbol: CalcExpression.Symbol {
     switch self {
     case .and, .or, .ternary:
       .infix(rawValue)
@@ -37,7 +37,7 @@ enum BooleanOperators: String, CaseIterable {
     }
   }
 
-  private func makeError(args: [Argument]) -> AnyCalcExpression.Error {
+  private func makeError(args: [Argument]) -> CalcExpression.Error {
     switch self {
     case .and, .or:
       if args[0].type == .boolean {

@@ -238,20 +238,15 @@ public final class DivActionHandler {
     cardId: DivCardID,
     prototypeVariables: [String: AnyHashable]
   ) -> ExpressionResolver {
-    let variableValueProvider = makeVariableValueProvider(
-      cardId: cardId,
-      variablesStorage: variablesStorage,
-      prototypesStorage: prototypeVariables
-    )
-    let functionsProvider = FunctionsProvider(
-      variableValueProvider: variableValueProvider,
-      persistentValuesStorage: persistentValuesStorage
-    )
-    return ExpressionResolver(
-      variableValueProvider: variableValueProvider,
-      functionsProvider: functionsProvider,
-      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId),
-      variableTracker: { _ in }
+    ExpressionResolver(
+      functionsProvider: FunctionsProvider(
+        cardId: cardId,
+        variablesStorage: variablesStorage,
+        variableTracker: { _ in },
+        persistentValuesStorage: persistentValuesStorage,
+        prototypesStorage: prototypeVariables
+      ),
+      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )
   }
 
