@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import com.yandex.div.core.util.makeFocusable
-import com.yandex.div.core.view2.divs.widgets.BitmapEffectHelper
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.widget.DivLayoutParams
@@ -101,11 +100,8 @@ internal class DivViewWrapper @JvmOverloads constructor(
 
     override fun getDivBorderDrawer(): DivBorderDrawer? = (child as? DivBorderSupports)?.getDivBorderDrawer()
 
-    override fun setBorder(
-        border: DivBorder?, view: View,
-        effectHelper: BitmapEffectHelper, resolver: ExpressionResolver
-    ) {
-        (child as? DivBorderSupports)?.setBorder(border, view, effectHelper, resolver)
+    override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
+        (child as? DivBorderSupports)?.setBorder(border, view, resolver)
     }
 }
 

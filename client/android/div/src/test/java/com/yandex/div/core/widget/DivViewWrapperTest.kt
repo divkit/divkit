@@ -3,7 +3,6 @@ package com.yandex.div.core.widget
 import android.app.Activity
 import android.content.Context
 import android.view.View
-import com.yandex.div.core.view2.divs.widgets.BitmapEffectHelper
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -19,9 +18,7 @@ import org.robolectric.RobolectricTestRunner
 class DivViewWrapperTest {
     private val context: Context = Robolectric.buildActivity(Activity::class.java).get()
     private val divBorder = DivBorder()
-    private val effectHelper = BitmapEffectHelper(mock())
-    private val divBorderDrawer = DivBorderDrawer(context.resources.displayMetrics,
-        mock(), mock(), effectHelper, divBorder)
+    private val divBorderDrawer = DivBorderDrawer(context.resources.displayMetrics, mock(), mock(), divBorder)
     private val viewWithBorder = object : DivBorderSupports, View(context) {
         override var isDrawing: Boolean
             get() = false
@@ -33,8 +30,7 @@ class DivViewWrapperTest {
 
         override fun getDivBorderDrawer(): DivBorderDrawer = divBorderDrawer
 
-        override fun setBorder(border: DivBorder?, view: View,
-                               effectHelper: BitmapEffectHelper, resolver: ExpressionResolver) { }
+        override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) { }
     }
 
     @Test
