@@ -37,7 +37,7 @@
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
-  import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -447,6 +447,10 @@
     }
 
     async function updateWrapperHeight(): Promise<void> {
+        if ($jsonHeight?.type === 'match_parent') {
+            return;
+        }
+
         await tick();
         const activePanel = document.getElementById(`${instId}-panel-${selected}`);
 
@@ -642,6 +646,10 @@
             });
         }
     }
+
+    $: mods = {
+        'height-parent': $jsonHeight?.type === 'match_parent' ? 'yes' : ''
+    };
 
     onDestroy(() => {
         if (prevId) {
