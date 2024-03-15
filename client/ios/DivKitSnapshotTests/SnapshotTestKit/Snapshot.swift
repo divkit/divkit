@@ -1,7 +1,7 @@
 import UIKit
 
 extension UIView {
-  public func makeSnapshot() -> UIImage? {
+  func makeSnapshot() -> UIImage? {
     layoutIfNeeded()
 
     UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
