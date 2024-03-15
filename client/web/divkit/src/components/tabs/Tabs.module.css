@@ -91,6 +91,10 @@
     width: 100%;
 }
 
+.tabs_height-parent_yes .tabs__panel_visible {
+    height: 100%;
+}
+
 .tabs__separator {
     height: .1em;
     margin: 0 1.2em;
