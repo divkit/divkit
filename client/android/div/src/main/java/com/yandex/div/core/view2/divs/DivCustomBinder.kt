@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs
 
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
 import com.yandex.div.R
@@ -110,12 +109,6 @@ internal class DivCustomBinder @Inject constructor(
             divView.releaseViewVisitor.visitViewTree(parent[0])
             parent.removeViewAt(0)
         }
-        parent.addView(
-            newCustomView,
-            ViewGroup.LayoutParams(
-                MATCH_PARENT,
-                MATCH_PARENT
-            )
-        )
+        parent.addView(newCustomView)
     }
 }
