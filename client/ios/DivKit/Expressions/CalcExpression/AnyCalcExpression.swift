@@ -53,22 +53,16 @@ struct AnyCalcExpression {
     evaluators: (CalcExpression.Symbol) -> SymbolEvaluator?
   ) throws {
     let box = NanBox()
-    func unwrapString(_ name: String) -> String? {
-      guard name.count >= 2, "'\"".contains(name.first!) else {
-        return nil
-      }
-      return String(name.dropFirst().dropLast())
-    }
 
     func defaultEvaluator(_ symbol: Symbol) throws -> CalcExpression.SymbolEvaluator? {
       switch symbol {
       case let .variable(name):
-        // actually it is not a variable, it is a string literal
-        guard let string = unwrapString(name) else {
-          return { _ in throw Error.missingVariable(symbol) }
+        // it is either a string literal or an undefined variable
+        if name.count >= 2, "'\"".contains(name.first!) {
+          let value = String(name.dropFirst().dropLast())
+          return { _ in .string(value) }
         }
-        let stringRef = try box.store(string)
-        return { _ in stringRef }
+        return { _ in throw Error.message("Variable '\(name)' is missing.") }
       case .infix("!:"):
         return { args in
           switch args[0] {

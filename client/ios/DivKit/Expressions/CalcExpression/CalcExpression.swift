@@ -45,7 +45,7 @@ final class CalcExpression: CustomStringConvertible {
   typealias SymbolEvaluator = (_ args: [Value]) throws -> Value
 
   /// Type representing the arity (number of arguments) accepted by a function
-  enum Arity: ExpressibleByIntegerLiteral, CustomStringConvertible, Hashable {
+  enum Arity: ExpressibleByIntegerLiteral, Hashable {
     /// An exact number of arguments
     case exactly(Int)
 
@@ -58,16 +58,6 @@ final class CalcExpression: CustomStringConvertible {
     /// ExpressibleByIntegerLiteral constructor
     init(integerLiteral value: Int) {
       self = .exactly(value)
-    }
-
-    /// The human-readable description of the arity
-    var description: String {
-      switch self {
-      case let .exactly(value):
-        "\(value) argument\(value == 1 ? "" : "s")"
-      case let .atLeast(value):
-        "at least \(value) argument\(value == 1 ? "" : "s")"
-      }
     }
 
     /// No-op Hashable implementation
@@ -136,23 +126,21 @@ final class CalcExpression: CustomStringConvertible {
     var description: String {
       switch self {
       case .variable:
-        "variable \(escapedName)"
+        "Variable \(escapedName)"
       case .infix("?:"):
-        "ternary operator \(escapedName)"
+        "Ternary operator ?:"
       case .infix("[]"):
-        "subscript operator \(escapedName)"
-      case .infix("()"):
-        "function call operator \(escapedName)"
+        "Subscript operator []"
       case .infix:
-        "infix operator \(escapedName)"
+        "Infix operator \(escapedName)"
       case .prefix:
-        "prefix operator \(escapedName)"
+        "Prefix operator \(escapedName)"
       case .postfix:
-        "postfix operator \(escapedName)"
+        "Postfix operator \(escapedName)"
       case .function:
-        "function \(escapedName)()"
+        "Function \(escapedName)()"
       case .array:
-        "array \(escapedName)[]"
+        "Array \(escapedName)"
       }
     }
   }
@@ -231,13 +219,6 @@ extension CalcExpression {
 // MARK: Private API
 
 extension CalcExpression {
-  fileprivate static func stringify(_ number: Double) -> String {
-    if let int = Int64(exactly: number) {
-      return "\(int)"
-    }
-    return "\(number)"
-  }
-
   // https://github.com/apple/swift-evolution/blob/master/proposals/0077-operator-precedence.md
   fileprivate static let operatorPrecedence: [String: (
     precedence: Int,
@@ -372,7 +353,7 @@ private enum Subexpression: CustomStringConvertible {
     }
     switch self {
     case let .literal(literal):
-      return CalcExpression.stringify(literal.value)
+      return AnyCalcExpression.stringify(literal.value)
     case let .symbol(symbol, args, _):
       guard isOperand else {
         return symbol.escapedName

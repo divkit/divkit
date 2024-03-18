@@ -17,9 +17,6 @@ extension CalcExpression {
     /// The specified constant, operator or function was not recognized
     case undefinedSymbol(Symbol)
 
-    /// The specified variable was missing
-    case missingVariable(Symbol)
-
     /// A function was called with the wrong number of arguments (arity)
     case arityMismatch(Symbol)
 
@@ -36,8 +33,6 @@ extension CalcExpression {
         return "Missing delimiter: \(string)"
       case let .undefinedSymbol(symbol):
         return "Undefined symbol: \(symbol)"
-      case let .missingVariable(symbol):
-        return "Variable '\(symbol.escapedName)' is missing."
       case let .arityMismatch(symbol):
         let arity: Arity = switch symbol {
         case let .function(_, requiredArity):
@@ -55,8 +50,7 @@ extension CalcExpression {
         case .variable:
           0
         }
-        let description = symbol.description
-        return "\(description.prefix(1).uppercased())\(description.dropFirst()) expects \(arity)"
+        return "\(symbol.description) expects \(arity)"
       case .escaping:
         return "Incorrect string escape"
       }

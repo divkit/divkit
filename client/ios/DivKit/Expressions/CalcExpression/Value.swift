@@ -12,20 +12,20 @@ extension CalcExpression {
 }
 
 extension CalcExpression.Value {
-  var value: Double {
+  var value: Any {
     switch self {
-    case let .integer(integer):
-      Double(integer)
-    case let .number(number):
-      number
-    case .string:
-      .nan
-    case let .datetime(date):
-      date.timeIntervalSince1970
-    case let .boolean(bool):
-      bool ? 1 : 0
+    case let .integer(value):
+      value
+    case let .number(value):
+      value
+    case let .string(value):
+      value
+    case let .datetime(value):
+      value
+    case let .boolean(value):
+      value
     case .error:
-      .nan
+      "error"
     }
   }
 }
@@ -33,6 +33,7 @@ extension CalcExpression.Value {
 extension CalcExpression.Value {
   static let maxInteger = Int.max
   static let minInteger = Int.min
+
   static func integerError(_ value: Any) -> CalcExpression.Error {
     .message("Value \(value) can't be converted to Integer type.")
   }
