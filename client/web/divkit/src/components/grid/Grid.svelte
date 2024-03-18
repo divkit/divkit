@@ -143,6 +143,7 @@
                 for (let j = y; j < y + rowSpan; ++j) {
                     if (used[i + '_' + j]) {
                         hasLayoutError = true;
+                        componentContext.logError(wrapError(new Error(`No space for item at index ${index}`)));
                         continue;
                     }
 
@@ -182,14 +183,6 @@
                 }
             };
         });
-
-        if (x !== 0) {
-            hasLayoutError = true;
-        }
-
-        if (hasLayoutError) {
-            componentContext.logError(wrapError(new Error('Mismatching "grid" rows/columns')));
-        }
 
         rowCount = y;
     }

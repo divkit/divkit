@@ -1,7 +1,8 @@
 {
   "description": "non-rectangular spanned grid",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "grid_item": {
