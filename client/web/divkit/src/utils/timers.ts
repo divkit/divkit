@@ -165,14 +165,14 @@ export class TimersController {
 
         const duration = timer.duration;
         if (duration) {
-            timer.durationTimeout = window.setTimeout(() => {
+            timer.durationTimeout = window.setTimeout(async() => {
                 this.updateVariable(timer, duration);
                 if (
                     timer.tickCountPredict &&
                     timer.tickCount !== undefined &&
                     timer.tickCount < timer.tickCountPredict
                 ) {
-                    this.callActions(timer, 'tick');
+                    await this.callActions(timer, 'tick');
                 }
                 this.stop(timer);
             }, Math.max(0, duration - (timer.durationPassed || 0)));
@@ -320,12 +320,12 @@ export class TimersController {
         }
     }
 
-    private callActions(timer: TimerState, type: 'tick' | 'end'): void {
+    private async callActions(timer: TimerState, type: 'tick' | 'end'): Promise<void> {
         const actions = timer.definition[type === 'end' ? 'end_actions' : 'tick_actions'];
 
         if (actions) {
             const actionsWithExpressions = this.applyVars(actions);
-            this.execAnyActions(actionsWithExpressions, {
+            return this.execAnyActions(actionsWithExpressions, {
                 processUrls: false
             });
         }
