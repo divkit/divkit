@@ -1,7 +1,8 @@
 {
     "description": "Scroll actions",
     "platforms": [
-      "ios"
+      "ios",
+      "web"
     ],
     "div_data": {
       "templates": {
