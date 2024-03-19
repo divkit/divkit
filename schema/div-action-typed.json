@@ -17,6 +17,12 @@
       ]
     },
     {
+      "$ref": "div-action-clear-focus.json",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
       "$ref": "div-action-copy-to-clipboard.json"
     }
   ]
