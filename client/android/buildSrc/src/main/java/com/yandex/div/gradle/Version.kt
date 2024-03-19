@@ -5,14 +5,27 @@ import org.gradle.api.Project
 class Version private constructor(
     val majorVersion: Int,
     val minorVersion: Int,
-    val fixVersion: Int
+    val fixVersion: Int,
 ) {
 
     val versionCode = computeVersionCode(majorVersion, minorVersion, fixVersion)
-    val versionName =  "$majorVersion.$minorVersion.$fixVersion"
+    val baseVersionName =  "$majorVersion.$minorVersion.$fixVersion"
 
     var buildNumber = 0
         private set
+
+    var releaseLibraryVersion: String = baseVersionName
+        private set
+
+    fun getVersionNameForBuildType(buildType: String): String {
+        return if (buildType == "debug") {
+            // releaseLibraryVersion can contains build start time (see PublicationType.dev)
+            // which will be different for each build. This will cause recompilation on each build.
+            baseVersionName
+        } else {
+            releaseLibraryVersion
+        }
+    }
 
     constructor(
         project: Project,
@@ -25,6 +38,14 @@ class Version private constructor(
         } else {
             val tsrBuildNumber = System.getenv("BUILD_NUMBER")
             buildNumber = tsrBuildNumber?.toInt() ?: 0
+        }
+
+        val publicationType = PublicationType.fromString(project.findProperty("publicationType") as String?)
+        val regularVersion = project.findProperty("regularVersion") as String?
+        releaseLibraryVersion = if (regularVersion != null) {
+            "${baseVersionName}-regular-$regularVersion"
+        } else {
+            "${baseVersionName}${publicationType.getVersionSuffix()}"
         }
     }
 

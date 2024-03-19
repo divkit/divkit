@@ -13,7 +13,7 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                version divkitVersionName
+                version divkitVersion.releaseLibraryVersion
             }
         }
     }

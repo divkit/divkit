@@ -17,7 +17,7 @@ afterEvaluate {
                 artifact sourcesJar
                 artifact javadocJar
                 from components.java
-                version divkitVersionName
+                version divkitVersion.releaseLibraryVersion
             }
         }
     }

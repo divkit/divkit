@@ -1,3 +1,4 @@
+import com.android.build.api.variant.BuildConfigField
 import groovy.json.JsonOutput
 
 apply from: "${project.projectDir}/../div-library.gradle"
@@ -16,8 +17,12 @@ android {
 
     defaultConfig {
         buildConfigField "String", "DIV2_JSON_PATH", JsonOutput.toJson(crossplatformProjectDir)
-        buildConfigField "String", "VERSION_NAME", JsonOutput.toJson(rootProject.property('divkitVersionName'))
     }
+}
+
+androidComponents.onVariants(androidComponents.selector().all()) {
+    def versionName = divkitVersion.getVersionNameForBuildType(buildType)
+    buildConfigFields.put("VERSION_NAME", new BuildConfigField("String", JsonOutput.toJson(versionName), null))
 }
 
 dependencies {

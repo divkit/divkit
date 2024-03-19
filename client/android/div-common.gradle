@@ -15,7 +15,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        versionName divkitVersion.versionName
+        versionName divkitVersion.baseVersionName
         versionCode divkitVersion.versionCode
 
         vectorDrawables.useSupportLibrary = true

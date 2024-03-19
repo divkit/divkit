@@ -1,22 +1,12 @@
 import com.yandex.div.gradle.FileExtensions
-import com.yandex.div.gradle.PublicationType
 
 apply from: "$projectDir/version.gradle"
-
-def publicationType = project.findProperty("publicationType")
-def regularVersion = project.findProperty("regularVersion")
 
 ext {
     minSdkVersion = 21
     compileSdkVersion = 34
     targetSdkVersion = 34
     buildToolsVersion = "34.0.0"
-
-    if (regularVersion == null) {
-        divkitVersionName = "${divkitVersion.versionName}${PublicationType.fromString(publicationType).getVersionSuffix()}"
-    } else {
-        divkitVersionName = "${divkitVersion.versionName}-regular-$regularVersion"
-    }
 }
 
 buildscript {
@@ -124,13 +114,13 @@ apiValidation {
 
 task reportVersion {
     doLast {
-        println "DivKit version ${rootProject.property('divkitVersionName')}"
+        println "DivKit version ${divkitVersion.releaseLibraryVersion}"
     }
 }
 
 task reportBuildNumber {
     doLast {
-        println "buildNumber ${rootProject.property('divkitVersionName')}"
+        println "buildNumber ${divkitVersion.releaseLibraryVersion}"
     }
 }
 
