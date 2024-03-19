@@ -5,20 +5,22 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeSpec
-import com.yandex.test.screenshot.ScreenshotTestPluginExtension
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import java.io.File
 
 @CacheableTask
-open class GenerateScreenshotConfigTask : DefaultTask() {
+abstract class GenerateScreenshotConfigTask : DefaultTask() {
+
+    @get:Input
+    abstract val deviceDir: Property<String>
 
     @get:OutputDirectory
-    val outputDir = File(project.buildDir, "generated/source/screenshots")
-
-    private val screenshots = project.extensions.getByType(ScreenshotTestPluginExtension::class.java)
+    abstract val outputDir: DirectoryProperty
 
     init {
         group = "other"
@@ -26,10 +28,7 @@ open class GenerateScreenshotConfigTask : DefaultTask() {
 
     @TaskAction
     fun perform() {
-        outputDir.apply {
-            deleteRecursively()
-        }
-        generateConfig().writeTo(outputDir)
+        generateConfig().writeTo(outputDir.get().asFile)
     }
 
     private fun generateConfig(): FileSpec {
@@ -41,7 +40,7 @@ open class GenerateScreenshotConfigTask : DefaultTask() {
                     .superclass(HashMap::class.parameterizedBy(String::class, String::class))
                     .addInitializerBlock(
                         CodeBlock.builder()
-                            .addStatement("put(%S, %S)", "DEVICE_SCREENSHOT_DIR", screenshots.deviceDir)
+                            .addStatement("put(%S, %S)", "DEVICE_SCREENSHOT_DIR", deviceDir.get())
                             .build()
                     )
                     .build()
@@ -50,8 +49,6 @@ open class GenerateScreenshotConfigTask : DefaultTask() {
     }
 
     companion object {
-
-        const val NAME = "generateScreenshotConfig"
         private const val CONFIG_PACKAGE = "com.yandex.test.screenshot"
         private const val CONFIG_CLASS_NAME = "ScreenshotConfig"
     }

@@ -6,66 +6,60 @@ import com.yandex.test.screenshot.tasks.PullScreenshotsTask
 import com.yandex.test.screenshot.tasks.ValidateTestResultsTask
 import com.yandex.test.util.android
 import com.yandex.test.util.androidComponents
-import com.yandex.test.util.variants
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class ScreenshotTestPlugin : Plugin<Project> {
 
-    private val enabled: Boolean
-        get() = screenshotTests.enabled
-
-    private lateinit var screenshotTests: ScreenshotTestPluginExtension
-
     override fun apply(project: Project) {
-        configure(project)
-        register(project)
-    }
-
-    private fun configure(project: Project) {
-        screenshotTests = project.extensions.create(
+        val extension = project.extensions.create(
             ScreenshotTestPluginExtension.NAME,
             ScreenshotTestPluginExtension::class.java
         )
-    }
 
-    private fun register(project: Project) {
-        project.tasks.register(GenerateScreenshotConfigTask.NAME, GenerateScreenshotConfigTask::class.java).let {
-            val outputDir = it.get().outputDir
-            project.android.variants.all { variant ->
-                variant.registerJavaGeneratingTask(it, outputDir)
-            }
+        val generateScreenshotConfigTask = project.tasks.register(
+            "generateScreenshotConfig",
+            GenerateScreenshotConfigTask::class.java,
+        ) {
+            it.deviceDir.set(extension.deviceDir)
         }
-        project.tasks.register(ValidateTestResultsTask.NAME, ValidateTestResultsTask::class.java)
-        project.tasks.register(PullScreenshotsTask.NAME, PullScreenshotsTask::class.java)
-        project.tasks.register(CompareScreenshotsTask.NAME, CompareScreenshotsTask::class.java).configure {
-            it.mustRunAfter(PullScreenshotsTask.NAME)
-        }
-
-        project.tasks.configureEach { task ->
-            val isDependentTask = task.name.run {
-                startsWith("compile") && (endsWith("JavaWithJavac") || endsWith("Kotlin"))
-            }
-            if (enabled && isDependentTask) task.dependsOn(GenerateScreenshotConfigTask.NAME)
-        }
-
-        project.tasks.configureEach { task ->
-            val isDependentTask = task.name.run {
-                startsWith("connected") && endsWith("AndroidTest")
-            }
-            if (enabled && isDependentTask) {
-                task.finalizedBy(PullScreenshotsTask.NAME)
-                if (screenshotTests.enableComparison) {
-                    task.finalizedBy(CompareScreenshotsTask.NAME)
+        project.androidComponents.onVariants { variant ->
+            if (extension.enabled) {
+                val javaSources = checkNotNull(variant.sources.java) {
+                    "Not found java sources for variant $variant"
                 }
-                task.finalizedBy(ValidateTestResultsTask.NAME)
+                javaSources.addGeneratedSourceDirectory(
+                    generateScreenshotConfigTask,
+                    GenerateScreenshotConfigTask::outputDir
+                )
             }
         }
 
+        project.afterEvaluate {
+            val validateTestResultsTask = ValidateTestResultsTask.register(project)
+            val pullScreenshotsTask = PullScreenshotsTask.register(project, extension)
+            val compareScreenshotsTask = CompareScreenshotsTask.register(project, extension,) {
+                it.mustRunAfter(pullScreenshotsTask)
+            }
+
+            if (extension.enabled) {
+                project.tasks.matching {
+                    it.name.startsWith("connected") && it.name.endsWith("AndroidTest")
+                }.configureEach { task ->
+                    task.finalizedBy(pullScreenshotsTask)
+                    if (extension.enableComparison) {
+                        task.finalizedBy(compareScreenshotsTask)
+                    }
+                    task.finalizedBy(validateTestResultsTask)
+                }
+            }
+        }
+
+        @Suppress("UnstableApiUsage")
         project.androidComponents.finalizeDsl {
-            val screenshotTestAnnotations = screenshotTests.testAnnotations
+            val screenshotTestAnnotations = extension.testAnnotations
             if (screenshotTestAnnotations.isNotEmpty()) {
-                if (enabled) {
+                if (extension.enabled) {
                     includeByAnnotations(project, screenshotTestAnnotations)
                 } else {
                     excludeByAnnotations(project, screenshotTestAnnotations)
@@ -74,7 +68,6 @@ class ScreenshotTestPlugin : Plugin<Project> {
         }
     }
 
-    @Suppress("UnstableApiUsage")
     private fun includeByAnnotations(project: Project, screenshotTestAnnotations: List<String>) {
         val runnerArguments = project.android.defaultConfig.testInstrumentationRunnerArguments
         val annotations = runnerArguments[RUNNER_ARGUMENT_INCLUDE]?.split(",") ?: emptyList()

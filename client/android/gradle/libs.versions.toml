@@ -175,5 +175,6 @@ zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = 
 
 [plugins]
 apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 screenshotTestPlugin = { id = "com.yandex.test.screenshot-test-plugin", version = "unspecified" }
 

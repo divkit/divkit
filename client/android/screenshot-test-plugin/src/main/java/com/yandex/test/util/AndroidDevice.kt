@@ -1,10 +1,12 @@
 package com.yandex.test.util
 
-import org.gradle.api.Project
+import org.gradle.api.logging.Logger
+import java.io.File
 
 internal class AndroidDevice(
-    private val project: Project,
-    private val exec: CmdExecutor = CmdExecutor(project.rootDir)
+    private val adbExecutable: File,
+    logger: Logger,
+    private val exec: CmdExecutor = CmdExecutor()
 ) {
 
     init {
@@ -12,18 +14,15 @@ internal class AndroidDevice(
         try {
             adb("devices")
         } catch (e: RuntimeException) {
-            project.logger.info("AndroidDevice: adb warm-up failed due to '$e'")
+            logger.info("AndroidDevice: adb warm-up failed due to '$e'")
         }
     }
 
     val externalStorage: String
         get () = exec.runCommand("$adb shell echo \$EXTERNAL_STORAGE")
 
-    private val android: AndroidExtension
-        get() = project.android
-
     private val adb: String
-        get() = android.adbExecutable.absolutePath
+        get() = adbExecutable.absolutePath
 
     fun adb(args: String) = exec.runCommand("$adb $args")
 

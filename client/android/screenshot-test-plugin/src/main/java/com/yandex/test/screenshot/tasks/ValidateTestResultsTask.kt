@@ -7,6 +7,7 @@ import com.google.testing.platform.proto.api.core.TestStatusProto.TestStatus
 import com.google.testing.platform.proto.api.core.TestSuiteResultProto.TestSuiteResult
 import com.yandex.test.util.FileOutput
 import com.yandex.test.util.Logger
+import com.yandex.test.util.StreamOutput
 import com.yandex.test.util.android
 import com.yandex.test.util.filterKeysIn
 import com.yandex.test.util.filterKeysNotIn
@@ -14,17 +15,30 @@ import com.yandex.test.util.reportDir
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
-import java.io.File
+import org.gradle.api.tasks.TaskProvider
 
-open class ValidateTestResultsTask : DefaultTask() {
+abstract class ValidateTestResultsTask : DefaultTask() {
+
+    @get:InputFiles
+    abstract val testResultsDir: ConfigurableFileCollection
+
+    @get:Internal
+    abstract val reportDir: DirectoryProperty
+
+    private val logger: Logger by lazy {
+        val logFile = reportDir.file(LOG_FILENAME).get().asFile.apply { delete() }
+        Logger(TAG, StreamOutput(), FileOutput(logFile))
+    }
+
     init {
         group = "verification"
     }
-
-    private val logFile = File(project.reportDir, LOG_FILENAME)
-    private val logger = Logger(TAG, FileOutput(logFile))
 
     @TaskAction
     fun perform() {
@@ -37,7 +51,7 @@ open class ValidateTestResultsTask : DefaultTask() {
     }
 
     private fun parseTestSuiteResults(): List<TestSuiteResult> {
-        return project.androidTestResultsDir.asFileTree
+        return testResultsDir.asFileTree
             .asSequence()
             .filter { it.name == TEST_SUITE_RESULT_FILENAME }
             .map {
@@ -102,7 +116,6 @@ open class ValidateTestResultsTask : DefaultTask() {
     }
 
     companion object {
-        const val NAME = "validateTestResults"
         private const val TAG = "ValidateTestResultsTask"
 
         private const val TEST_SUITE_RESULT_FILENAME = "test-result.textproto"
@@ -111,6 +124,14 @@ open class ValidateTestResultsTask : DefaultTask() {
         private fun TestResult.toReportString(): String {
             val name = testCase.run { "$testClass $testMethod" }
             return "$name - $testStatus"
+        }
+
+        fun register(project: Project): TaskProvider<ValidateTestResultsTask> = project.tasks.register(
+            "validateTestResults",
+            ValidateTestResultsTask::class.java
+        ) {
+            it.testResultsDir.from(project.androidTestResultsDir)
+            it.reportDir.set(project.reportDir)
         }
 
         private val Project.androidTestResultsDir: Directory

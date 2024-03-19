@@ -7,7 +7,17 @@ import com.yandex.test.util.StreamOutput
 import com.yandex.test.util.reportDir
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.Project
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.TaskProvider
 import java.io.File
 import java.io.IOException
 import java.util.Properties
@@ -15,17 +25,30 @@ import java.util.Properties
 private typealias ActualPath = String
 private typealias ReferencePath = String
 
-open class CompareScreenshotsTask : DefaultTask() {
+abstract class CompareScreenshotsTask : DefaultTask() {
 
-    private val screenshots = project.extensions.getByType(ScreenshotTestPluginExtension::class.java)
+    @get:InputDirectory
+    abstract val referencesDir: DirectoryProperty
 
-    private val screenshotDir = File(project.reportDir, screenshots.collectedDir)
-    private val comparisonDir = File(project.reportDir, screenshots.comparisonDir)
-    private val logFile = File(project.reportDir, "screenshot-comparison.log").apply { delete() }
+    @get:InputDirectory
+    abstract val screenshotDir: DirectoryProperty
 
-    private val logger = Logger(TAG, StreamOutput(), FileOutput(logFile))
-    private val comparator = ImageComparator(logger)
-    private val referenceOverrides = ReferenceFileReader(screenshotDir)
+    @get:Input
+    abstract val comparableCategories: ListProperty<String>
+
+    @get:Input
+    abstract val strictComparison: Property<Boolean>
+
+    @get:Internal
+    abstract val reportDir: DirectoryProperty
+
+    @get:OutputDirectory
+    abstract val comparisonDir: DirectoryProperty
+
+    private val logger: Logger by lazy {
+        val logFile = reportDir.file("screenshot-comparison.log").get().asFile.apply { delete() }
+        Logger(TAG, StreamOutput(), FileOutput(logFile))
+    }
 
     init {
         group = "verification"
@@ -33,22 +56,28 @@ open class CompareScreenshotsTask : DefaultTask() {
 
     @TaskAction
     fun perform() {
-        val referenceDir = File(screenshots.referencesDir, deviceDescription())
+        comparisonDir.asFile.get().deleteRecursively()
+
+        val screenshotDirFile = screenshotDir.asFile.get()
+        val deviceReferenceDir = referencesDir.dir(deviceDescription()).get().asFile
 
         logger.i("Screenshots comparison started")
-        logger.i("\tscreenshots from: $screenshotDir")
-        logger.i("\treferences from: $referenceDir")
+        logger.i("\tscreenshots from: $screenshotDirFile")
+        logger.i("\treferences from: $deviceReferenceDir")
 
-        loadExplicitScreenshotMatchMap()
+        val referenceOverrides = ReferenceFileReader(screenshotDirFile)
+        val comparator = ImageComparator(logger)
 
-        processNewScreenshots(screenshotDir, referenceDir, screenshots.comparableCategories)
-        processSkippedReferences(screenshotDir, referenceDir, screenshots.comparableCategories)
-        processDifferentScreenshots(screenshotDir, referenceDir, screenshots.comparableCategories)
+        loadExplicitScreenshotMatchMap(referenceOverrides)
+
+        processNewScreenshots(referenceOverrides, screenshotDirFile, deviceReferenceDir, comparableCategories.get())
+        processSkippedReferences(screenshotDirFile, deviceReferenceDir, comparableCategories.get())
+        processDifferentScreenshots(referenceOverrides, comparator, screenshotDirFile, deviceReferenceDir, comparableCategories.get())
 
         logger.i("Screenshot comparison finished successfully")
     }
 
-    private fun loadExplicitScreenshotMatchMap() {
+    private fun loadExplicitScreenshotMatchMap(referenceOverrides: ReferenceFileReader) {
         try {
             referenceOverrides.load()
         } catch (e: IOException) {
@@ -56,8 +85,13 @@ open class CompareScreenshotsTask : DefaultTask() {
         }
     }
 
-    private fun processNewScreenshots(screenshotDir: File, referenceDir: File, categories: List<String>) {
-        val newScreenshotDir = File(comparisonDir, "new").apply { deleteRecursively() }
+    private fun processNewScreenshots(
+        referenceOverrides: ReferenceFileReader,
+        screenshotDir: File,
+        referenceDir: File,
+        categories: List<String>,
+    ) {
+        val newScreenshotDir = comparisonDir.dir("new").get().asFile
 
         val newScreenshots = mutableListOf<String>()
         categories.forEach { category ->
@@ -65,7 +99,7 @@ open class CompareScreenshotsTask : DefaultTask() {
             val dst = File(referenceDir, category)
             newScreenshots += enumerateNewImages(src, dst)
                 .map { image -> "$category/$image" }
-                .filter { !hasManualReference(it, referenceDir) }
+                .filter { !hasManualReference( referenceOverrides, it, referenceDir) }
         }
 
         newScreenshots.forEach { image ->
@@ -74,19 +108,19 @@ open class CompareScreenshotsTask : DefaultTask() {
 
         if (newScreenshots.isNotEmpty()) {
             logger.w("${newScreenshots.size} new images:\n\t${newScreenshots.joinToString("\n\t")}")
-            if (screenshots.strictComparison) {
+            if (strictComparison.get()) {
                 throw GradleException("error processing images, see log messages above")
             }
         }
     }
 
-    private fun hasManualReference(relativePath: String, referenceDir: File): Boolean {
+    private fun hasManualReference(referenceOverrides: ReferenceFileReader, relativePath: String, referenceDir: File): Boolean {
         val match = referenceOverrides.resolveReferencePath(relativePath) ?: return false
         return File(referenceDir, match).exists()
     }
 
     private fun processSkippedReferences(screenshotDir: File, referenceDir: File, categories: List<String>) {
-        val skippedScreenshotDir = File(comparisonDir, "skipped").apply { deleteRecursively() }
+        val skippedScreenshotDir = comparisonDir.dir("skipped").get().asFile
 
         val skippedScreenshots = mutableListOf<String>()
         categories.forEach { category ->
@@ -103,14 +137,20 @@ open class CompareScreenshotsTask : DefaultTask() {
 
         if (skippedScreenshots.isNotEmpty()) {
             logger.w("${skippedScreenshots.size} skipped references:\n\t${skippedScreenshots.joinToString("\n\t")}")
-            if (screenshots.strictComparison) {
+            if (strictComparison.get()) {
                 throw GradleException("error processing images, see log messages above")
             }
         }
     }
 
-    private fun processDifferentScreenshots(screenshotDir: File, referenceDir: File, categories: List<String>) {
-        val differentScreenshotDir = File(comparisonDir, "diff").apply { deleteRecursively() }
+    private fun processDifferentScreenshots(
+        referenceOverrides: ReferenceFileReader,
+        comparator: ImageComparator,
+        screenshotDir: File,
+        referenceDir: File,
+        categories: List<String>,
+    ) {
+        val differentScreenshotDir = comparisonDir.dir("diff").get().asFile
 
         val differentScreenshots = mutableListOf<ScreenshotPair>()
         val referenceMap = mutableMapOf<ActualPath, ReferencePath>()
@@ -149,7 +189,7 @@ open class CompareScreenshotsTask : DefaultTask() {
             val actualFile = File(screenshotDir, pair.actual)
             val expectedFile = File(referenceDir, pair.reference)
 
-            createDiff(actualFile, expectedFile, differentScreenshotDir, pair.actual)
+            createDiff(comparator, actualFile, expectedFile, differentScreenshotDir, pair.actual)
         }
 
         if (differentScreenshots.isNotEmpty()) {
@@ -158,7 +198,13 @@ open class CompareScreenshotsTask : DefaultTask() {
         }
     }
 
-    private fun createDiff(actualFile: File, expectedFile: File, diffDir: File, imagePath: String) {
+    private fun createDiff(
+        comparator: ImageComparator,
+        actualFile: File,
+        expectedFile: File,
+        diffDir: File,
+        imagePath: String,
+    ) {
         val diffFile = File(diffDir, imagePath.withSuffix("_diff"))
 
         comparator.createDiff(actualFile, expectedFile, diffFile, imagePath)
@@ -191,7 +237,7 @@ open class CompareScreenshotsTask : DefaultTask() {
     }
 
     private fun deviceDescription(): String {
-        val propertiesFile = File(screenshotDir, "device.properties")
+        val propertiesFile = screenshotDir.file("device.properties").get().asFile
         try {
             val properties = Properties()
             properties.load(propertiesFile.bufferedReader())
@@ -213,9 +259,21 @@ open class CompareScreenshotsTask : DefaultTask() {
 
     companion object {
 
-        const val NAME = "compareScreenshots"
-
         private const val TAG = "CompareScreenshotsTask"
+
+        fun register(
+            project: Project,
+            extension: ScreenshotTestPluginExtension,
+            configure: (CompareScreenshotsTask) -> Unit,
+        ): TaskProvider<CompareScreenshotsTask> = project.tasks.register("compareScreenshots", CompareScreenshotsTask::class.java) {
+            it.referencesDir.set(project.file(extension.referencesDir))
+            it.screenshotDir.set(project.reportDir.map { it.dir(extension.collectedDir) })
+            it.comparableCategories.set(extension.comparableCategories)
+            it.strictComparison.set(extension.strictComparison)
+            it.reportDir.set(project.reportDir)
+            it.comparisonDir.set(project.reportDir.map { it.dir(extension.comparisonDir) })
+            configure(it)
+        }
     }
 }
 

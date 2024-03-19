@@ -127,7 +127,7 @@ screenshotTests {
     strictComparison = project.hasProperty("screenshot-strict-comparison")
     testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
     deviceDir = "${android.defaultConfig.applicationId}/screenshots"
-    referencesDir = "${project.projectDir}/src/screenshotTest/screenshots"
+    referencesDir = "src/screenshotTest/screenshots"
 }
 
 android.applicationVariants.all { variant ->

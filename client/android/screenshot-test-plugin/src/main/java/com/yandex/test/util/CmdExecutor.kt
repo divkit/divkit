@@ -1,7 +1,6 @@
 package com.yandex.test.util
 
 import org.gradle.api.GradleException
-import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -13,7 +12,6 @@ import java.util.concurrent.TimeUnit
  * @property errorBufferSize - size of error buffer, 16 by default
  */
 internal class CmdExecutor(
-    private val workDir: File,
     private val execTimeoutSec: Long = DEFAULT_EXEC_TIMEOUT_SEC,
     private val outputBufferSize: Int = DEFAULT_OUTPUT_BUFFER_SIZE,
     private val errorBufferSize: Int = DEFAULT_ERROR_BUFFER_SIZE
@@ -32,7 +30,6 @@ internal class CmdExecutor(
         try {
             val args = command.split("\\s".toRegex())
             val process = ProcessBuilder(args)
-                .directory(workDir)
                 .redirectOutput(ProcessBuilder.Redirect.PIPE)
                 .redirectError(ProcessBuilder.Redirect.PIPE)
                 .start()
