@@ -137,11 +137,13 @@ public final class DivKitComponents {
 
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
 
-    self.imageHolderFactory = imageHolderFactory
-      ?? DefaultImageHolderFactory(
-        requestPerformer: requestPerformer,
-        imageLoadingOptimizationEnabled: flagsInfo.imageLoadingOptimizationEnabled
-      )
+    self.imageHolderFactory = (
+      imageHolderFactory
+        ?? DefaultImageHolderFactory(
+          requestPerformer: requestPerformer,
+          imageLoadingOptimizationEnabled: flagsInfo.imageLoadingOptimizationEnabled
+        )
+    ).withAssets()
 
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)

@@ -23,6 +23,12 @@ extension DivImageHolderFactory {
       cachedImageHolders: cachedImageHolders
     )
   }
+
+  public func withAssets() -> DivImageHolderFactory {
+    AssetsImageProvider(
+      imageHolderFactory: self
+    )
+  }
 }
 
 extension ImageHolderFactory: DivImageHolderFactory {}
@@ -75,5 +81,23 @@ private final class CachedImageHolderFactory: DivImageHolderFactory {
       $0.reused(with: placeholder, remoteImageURL: url) != nil
     }
     return cachedImageHolder ?? imageHolderFactory.make(url, placeholder)
+  }
+}
+
+private struct AssetsImageProvider: DivImageHolderFactory {
+  private let imageHolderFactory: DivImageHolderFactory
+
+  init(
+    imageHolderFactory: DivImageHolderFactory
+  ) {
+    self.imageHolderFactory = imageHolderFactory
+  }
+
+  func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
+    var localImage: ImageHolder?
+    if url?.scheme == "divkit-asset", let name = url?.host {
+      localImage = Image(named: "divkit/\(name)")
+    }
+    return localImage ?? imageHolderFactory.make(url, placeholder)
   }
 }
