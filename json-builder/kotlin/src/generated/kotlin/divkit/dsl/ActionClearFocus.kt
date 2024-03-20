@@ -18,10 +18,20 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [ActionArrayInsertValue], [ActionArrayRemoveValue], [ActionSetVariable], [ActionFocusElement], [ActionClearFocus], [ActionCopyToClipboard].
+ * Removes focus from focused item.
+ * 
+ * Can be created using the method [actionClearFocus].
+ * 
+ * Required parameters: `type`.
  */
 @Generated
-sealed interface ActionTyped
+object ActionClearFocus : ActionTyped {
+    @JsonAnyGetter
+    internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "clear_focus")
+}
 
 @Generated
-fun ActionTyped.asList() = listOf(this)
+fun DivScope.actionClearFocus(): ActionClearFocus = ActionClearFocus
+
+@Generated
+fun ActionClearFocus.asList() = listOf(this)
