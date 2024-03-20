@@ -836,7 +836,7 @@ internal fun View.applyBitmapFilters(
         for (filter in filters) {
             when (filter) {
                 is DivFilter.Blur -> {
-                    val radius = filter.value.radius.evaluate(resolver).toIntSafely().dpToPxF(resources.displayMetrics)
+                    val radius = filter.value.radius.evaluate(resolver).toIntSafely().dpToPx(resources.displayMetrics)
                     result = bitmapEffectHelper.blurBitmap(result, radius)
                 }
 

@@ -18,10 +18,7 @@ internal class DivBorderSupportsMixin: DivBorderSupports {
 
     override fun getDivBorderDrawer() = borderDrawer
 
-    override fun setBorder(
-        border: DivBorder?, view: View,
-        effectHelper: BitmapEffectHelper, resolver: ExpressionResolver
-    ) {
+    override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
         if (border == borderDrawer?.border) {
             return
         }
@@ -43,8 +40,7 @@ internal class DivBorderSupportsMixin: DivBorderSupports {
                 outlineProvider = ViewOutlineProvider.BOUNDS
             }
             else -> {
-                borderDrawer = DivBorderDrawer(
-                    view.resources.displayMetrics, view, resolver, effectHelper, border)
+                borderDrawer = DivBorderDrawer(view.resources.displayMetrics, view, resolver, border)
             }
         }
         borderDrawer?.needClipping = needClipping

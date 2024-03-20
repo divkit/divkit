@@ -15,7 +15,7 @@ internal interface DivBorderSupports {
 
     // This code is pretty hot since it's executed during binding for most of divs, so avoid creating
     // DivBorderDrawer or reuse it if possible.
-    fun setBorder(border: DivBorder?, view: View, effectHelper: BitmapEffectHelper, resolver: ExpressionResolver)
+    fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver)
 
     fun onBoundsChanged(width: Int, height: Int) {
         getDivBorderDrawer()?.onBoundsChanged(width, height)
