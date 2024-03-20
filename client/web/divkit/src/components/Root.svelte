@@ -423,7 +423,7 @@
         }
     }
 
-    function setState(stateId: string | null): void {
+    async function setState(stateId: string | null): Promise<void> {
         if (!process.env.ENABLE_COMPONENT_STATE && process.env.ENABLE_COMPONENT_STATE !== undefined) {
             throw new Error('State is not supported');
         }
@@ -446,7 +446,7 @@
 
             let childState = state.getChild(divId);
             if (childState) {
-                childState.setState(selectedStateId);
+                await childState.setState(selectedStateId);
                 state = childState;
             } else {
                 return;
@@ -711,10 +711,10 @@
         execActionInternal(getJsonWithVars(logError, action));
     }
 
-    function execActionInternal(
+    async function execActionInternal(
         action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
         componentContext?: ComponentContext
-    ): void {
+    ): Promise<void> {
         const actionUrl = action.url ? String(action.url) : '';
         const actionTyped = action.typed;
 
@@ -735,7 +735,7 @@
 
                 switch (parts[1]) {
                     case 'set_state':
-                        setState(params.get('state_id'));
+                        await setState(params.get('state_id'));
                         break;
                     case 'set_current_item':
                     case 'set_previous_item':
@@ -925,7 +925,7 @@
                             }
                         }
                     } else if (schema === 'div-action') {
-                        execActionInternal(action, opts.componentContext);
+                        await execActionInternal(action, opts.componentContext);
                         await tick();
                     } else if (action.log_id) {
                         execCustomAction(action as Action & { url: string });
@@ -933,7 +933,7 @@
                     }
                 }
             } else if (actionTyped) {
-                execActionInternal(action, opts.componentContext);
+                await execActionInternal(action, opts.componentContext);
             }
         }
         filtered.forEach(action => {
@@ -1256,7 +1256,7 @@
     });
 
     const stateInterface: StateInterface = {
-        setState(_stateId: string): void {
+        setState(_stateId: string): Promise<void> {
             throw new Error('Not implemented');
         },
         getChild(id: string): StateInterface | undefined {
@@ -1517,7 +1517,7 @@
                             res.warnings.forEach(logError);
 
                             return res.result;
-                        }).subscribe(conditionResult => {
+                        }).subscribe(async conditionResult => {
                             if (conditionResult.type === 'error') {
                                 logError(wrapError(new Error('variable_trigger condition execution error'), {
                                     additional: {
@@ -1533,12 +1533,12 @@
                                 // and trigger mode matches
                                 (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                             ) {
-                                trigger.actions.forEach(action => {
+                                for (const action of trigger.actions) {
                                     const resultAction = getJsonWithVars(logError, action);
                                     if (resultAction.log_id) {
-                                        execActionInternal(resultAction as Action);
+                                        await execActionInternal(resultAction as Action);
                                     }
-                                });
+                                }
                             }
 
                             prevConditionResult = Boolean(conditionResult.value);

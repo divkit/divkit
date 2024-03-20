@@ -7,7 +7,7 @@ export const STATE_CTX = Symbol('state');
 
 export interface StateInterface {
     getChild(id: string): StateInterface | undefined;
-    setState(stateId: string): void;
+    setState(stateId: string): Promise<void>;
 }
 
 export interface StateCtxValue {
