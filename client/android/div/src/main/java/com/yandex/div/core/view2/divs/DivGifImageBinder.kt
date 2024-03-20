@@ -52,7 +52,8 @@ internal class DivGifImageBinder @Inject constructor(
 
         baseBinder.bindView(view, div, oldDiv, divView)
 
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
+        view.applyDivActions(divView, div.action, div.actions, div.longtapActions,
+            div.doubletapActions, div.actionAnimation, div.accessibility)
 
         view.bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
 

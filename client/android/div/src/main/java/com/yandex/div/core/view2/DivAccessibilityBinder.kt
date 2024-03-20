@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2
 
 import android.view.View
+import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.yandex.div.core.annotations.Mockable
@@ -10,9 +11,12 @@ import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
+import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
@@ -56,17 +60,23 @@ internal class DivAccessibilityBinder @Inject constructor(
         }
     }
 
-    fun bindType(view: View, divBase: DivBase, type: DivAccessibility.Type) {
+    fun bindType(view: View, divBase: DivBase, type: DivAccessibility.Type, resolver: ExpressionResolver) {
         if (!accessibilityStateProvider.isAccessibilityEnabled(view.context)) {
             return
         }
 
         val originalDelegate = ViewCompat.getAccessibilityDelegate(view)
-        val accessibilityType = type.toAccessibilityType(divBase)
+        val accessibilityType = type.toAccessibilityType(divBase, resolver)
 
         val accessibilityDelegate =
             if (accessibilityType == AccessibilityType.LIST && view is BackHandlingRecyclerView) {
                 AccessibilityListDelegate(view)
+            } else if (originalDelegate is AccessibilityDelegateWrapper) {
+                originalDelegate.apply {
+                    initializeAccessibilityNodeInfo = { _, info ->
+                        info?.bindType(accessibilityType)
+                    }
+                }
             } else {
                 AccessibilityDelegateWrapper(
                     originalDelegate,
@@ -168,15 +178,23 @@ internal class DivAccessibilityBinder @Inject constructor(
         isFocusable = actionable
     }
 
-    private fun DivAccessibility.Type.toAccessibilityType(div: DivBase): AccessibilityType =
-        when (this) {
+    private fun DivImage.isClickable(resolver: ExpressionResolver): Boolean =
+        if (action != null && action?.isEnabled?.evaluate(resolver) == true) {
+            true
+        } else if (actions != null && actions?.any { it.isEnabled.evaluate(resolver) } == true) {
+            true
+        } else longtapActions != null && longtapActions?.any { it.isEnabled.evaluate(resolver) } == true
+
+    private fun DivAccessibility.Type.toAccessibilityType(
+        div: DivBase, resolver: ExpressionResolver
+    ): AccessibilityType = when (this) {
             DivAccessibility.Type.AUTO -> when {
                 div is DivInput -> AccessibilityType.EDIT_TEXT
                 div is DivText -> AccessibilityType.TEXT
                 div is DivTabs -> AccessibilityType.TAB_WIDGET
                 div is DivSelect -> AccessibilityType.SELECT
                 div is DivSlider -> AccessibilityType.SLIDER
-                div is DivImage && div.accessibility != null -> AccessibilityType.IMAGE
+                div is DivImage && (div.accessibility != null || div.isClickable(resolver))-> AccessibilityType.IMAGE
                 div is DivGallery && div.accessibility?.description != null -> AccessibilityType.PAGER
                 else -> AccessibilityType.NONE
             }

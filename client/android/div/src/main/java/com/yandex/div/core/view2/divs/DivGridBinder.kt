@@ -47,7 +47,8 @@ internal class DivGridBinder @Inject constructor(
         view.releaseViewVisitor = divView.releaseViewVisitor
         baseBinder.bindView(view, div, oldDiv, divView)
 
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
+        view.applyDivActions(divView, div.action, div.actions, div.longtapActions,
+            div.doubletapActions, div.actionAnimation, div.accessibility)
 
         view.addSubscription(
             div.columnCount.observeAndGet(resolver) { columnCount -> view.columnCount = columnCount.toIntSafely() }

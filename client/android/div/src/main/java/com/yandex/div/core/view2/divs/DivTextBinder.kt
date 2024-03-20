@@ -91,7 +91,8 @@ internal class DivTextBinder @Inject constructor(
         if (div === oldDiv) return
 
         baseBinder.bindView(view, div, oldDiv, divView)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
+        view.applyDivActions(divView, div.action, div.actions, div.longtapActions,
+            div.doubletapActions, div.actionAnimation, div.accessibility)
 
         val expressionResolver = divView.expressionResolver
         view.bindTypeface(div, oldDiv, expressionResolver)

@@ -21,6 +21,7 @@ internal fun assertActionApplied(divView: Div2View, target: View, actionUri: Uri
         longTapActions = anyOrNull(),
         doubleTapActions = anyOrNull(),
         actionAnimation = any(),
+        accessibility = anyOrNull(),
     )
 
     val action = actionCaptor.firstValue.find {

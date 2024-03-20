@@ -26,10 +26,13 @@ internal class DivInputView @JvmOverloads constructor(
 
     private var textChangeWatcher: TextWatcher? = null
 
-    private val accessibilityManager = context.getSystemService(
-        Context.ACCESSIBILITY_SERVICE) as? AccessibilityManager
-
     private var _hint: String? = null
+
+    internal var accessibilityEnabled: Boolean = false
+        set(value) {
+            field = value
+            setInputHint(_hint)
+        }
 
     init {
         setPadding(0, 0, 0, 0)
@@ -38,7 +41,7 @@ internal class DivInputView @JvmOverloads constructor(
     fun setInputHint(hint: String?) {
         _hint = hint
         this.hint = when {
-            accessibilityManager?.isTouchExplorationEnabled != true -> hint
+            !accessibilityEnabled -> hint
             hint.isNullOrEmpty() && contentDescription.isNullOrEmpty() -> null
             hint.isNullOrEmpty() -> contentDescription
             contentDescription.isNullOrEmpty() -> hint

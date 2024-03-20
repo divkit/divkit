@@ -11,8 +11,11 @@ import androidx.core.view.accessibility.AccessibilityNodeProviderCompat
 internal class AccessibilityDelegateWrapper(
     private val originalDelegate: AccessibilityDelegateCompat?,
 
-    private val initializeAccessibilityNodeInfo:
-        (host: View?, info: AccessibilityNodeInfoCompat?) -> Unit = { _, _ -> }
+    var initializeAccessibilityNodeInfo:
+        (host: View?, info: AccessibilityNodeInfoCompat?) -> Unit = { _, _ -> },
+
+    var actionsAccessibilityNodeInfo:
+        (host: View?, info: AccessibilityNodeInfoCompat?) -> Unit = { _, _ -> },
 
 ) : AccessibilityDelegateCompat() {
 
@@ -52,6 +55,8 @@ internal class AccessibilityDelegateWrapper(
             ?: super.onInitializeAccessibilityNodeInfo(host, info)
 
         initializeAccessibilityNodeInfo(host, info)
+
+        actionsAccessibilityNodeInfo(host, info)
     }
 
     override fun onRequestSendAccessibilityEvent(

@@ -10,6 +10,7 @@ import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.mask.BaseInputMask
 import com.yandex.div.core.util.mask.CurrencyInputMask
@@ -47,6 +48,7 @@ internal class DivInputBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
     private val variableBinder: TwoWayStringVariableBinder,
+    private val accessibilityStateProvider: AccessibilityStateProvider,
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivInput, DivInputView> {
 
@@ -62,6 +64,7 @@ internal class DivInputBinder @Inject constructor(
             isFocusable = true
             isFocusableInTouchMode = true
             textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
+            accessibilityEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
 
             observeBackground(divView, div, oldDiv, expressionResolver)
 

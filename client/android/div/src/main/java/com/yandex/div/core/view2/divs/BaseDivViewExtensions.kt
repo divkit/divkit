@@ -50,6 +50,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.Div
+import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -511,7 +512,8 @@ internal fun View.applyDivActions(
     actions: List<DivAction>?,
     longTapActions: List<DivAction>?,
     doubleTapActions: List<DivAction>?,
-    actionAnimation: DivAnimation
+    actionAnimation: DivAnimation,
+    accessibility: DivAccessibility?,
 ) {
     val actionBinder = divView.div2Component.actionBinder
     val tapActions = if (actions.isNullOrEmpty()) {
@@ -519,7 +521,8 @@ internal fun View.applyDivActions(
     } else {
         actions
     }
-    actionBinder.bindDivActions(divView, this, tapActions, longTapActions, doubleTapActions, actionAnimation)
+    actionBinder.bindDivActions(divView, this, tapActions, longTapActions, doubleTapActions,
+        actionAnimation, accessibility)
 }
 
 internal fun View.setAnimatedTouchListener(

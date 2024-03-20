@@ -75,7 +75,8 @@ internal class DivContainerBinder @Inject constructor(
         val oldDiv = divHolderView.div
 
         baseBinder.bindView(view, div, oldDiv, divView)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
+        view.applyDivActions(divView, div.action, div.actions, div.longtapActions,
+            div.doubletapActions, div.actionAnimation, div.accessibility)
 
         val resolver = divView.expressionResolver
         val oldResolver = divView.oldExpressionResolver
