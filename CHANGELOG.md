@@ -1,3 +1,23 @@
+## 29.11.0
+
+# Android Client:
+* Fixed visibility recognition of pages in pager.
+* Removed validation for rectangular grid layout.
+* Screenshot test plugin improvements.
+* Set version without build start time in debug build.
+* Fixed `restrict_parent_scroll`.
+* Implemented new typed action `clear_focus` which removes focus from any focused view inside Div2View.
+* Fixed overriding of `custom` layout params.
+
+# iOS Client:
+* Fixed variable names parsing.
+* Add default assets image provider.
+
+# Web Client:
+* Fixed a rare call to "tick_actions" after "end_actions" in timers.
+* Removed validation for rectangular grid layout.
+
+
 ## 29.10.0
 
 # Android Client:
