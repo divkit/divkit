@@ -1,3 +1,9 @@
+## 29.11.0 (March 25, 2024)
+
+* Fixed a rare call to "tick_actions" after "end_actions" in timers.
+* Removed validation for rectangular grid layout.
+
+
 ## 29.10.0 (March 18, 2024)
 
 * Fixed several issues with the `tabs` component with the `match_parent` and `wrap_content` heights with the `constrained` flag.
