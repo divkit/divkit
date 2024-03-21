@@ -165,23 +165,39 @@ public final class ExpressionResolver {
   }
 
   private func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
-    guard link.items.count == 1,
-          case let .calcExpression(parsedExpression) = link.items.first
-    else {
+    func incorrectExpression() -> T? {
       errorTracker(ExpressionError("Incorrect single item expression", expression: link.rawValue))
       return nil
     }
-    do {
-      return try validatedValue(value: evaluate(parsedExpression), link: link)
-    } catch let error as CalcExpression.Error {
-      let expression = parsedExpression.description
-      errorTracker(
-        ExpressionError(error.makeOutputMessage(for: expression), expression: link.rawValue)
-      )
-      return nil
-    } catch {
-      errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
-      return nil
+    guard link.items.count == 1, let item = link.items.first else {
+      return incorrectExpression()
+    }
+    switch item {
+    case let .calcExpression(parsedExpression):
+      do {
+        return try validatedValue(value: evaluate(parsedExpression), link: link)
+      } catch let error as CalcExpression.Error {
+        let expression = parsedExpression.description
+        errorTracker(
+          ExpressionError(error.makeOutputMessage(for: expression), expression: link.rawValue)
+        )
+        return nil
+      } catch {
+        errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
+        return nil
+      }
+    case let .nestedCalcExpression(link):
+      if let expression = evaluateString(link: link),
+         let link = ExpressionLink<T>(
+          rawValue: "@{\(expression)}",
+          errorTracker: errorTracker,
+          resolveNested: false
+         ) {
+        return evaluateSingleItem(link: link)
+      }
+      return incorrectExpression()
+    case .string:
+      return incorrectExpression()
     }
   }
 

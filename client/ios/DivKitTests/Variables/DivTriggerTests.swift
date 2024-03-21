@@ -149,11 +149,6 @@ final class DivTriggerTests: XCTestCase {
   }
 
   func test_Triggers_WhenVariableInNestedExpressionIsChanged() throws {
-    try XCTSkipIf(
-      true,
-      "Test is broken. Numeric/Bool properties does not support nested expressions."
-    )
-
     let trigger = DivTrigger(
       actions: [action],
       condition: expression("@{'@{var}' == 'OK'}"),
