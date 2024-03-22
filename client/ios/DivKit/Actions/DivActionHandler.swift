@@ -21,6 +21,7 @@ public final class DivActionHandler {
   private let arrayRemoveValueActionHandler: ArrayRemoveValueActionHandler
   private let copyToClipboardActionHandler: CopyToClipboardActionHandler
   private let focusElementActionHandler: FocusElementActionHandler
+  private let clearFocusActionHandler: ClearFocusActionHandler
 
   init(
     divActionURLHandler: DivActionURLHandler,
@@ -50,6 +51,7 @@ public final class DivActionHandler {
     arrayRemoveValueActionHandler = ArrayRemoveValueActionHandler()
     copyToClipboardActionHandler = CopyToClipboardActionHandler()
     focusElementActionHandler = FocusElementActionHandler()
+    clearFocusActionHandler = ClearFocusActionHandler()
   }
 
   public convenience init(
@@ -148,6 +150,8 @@ public final class DivActionHandler {
       copyToClipboardActionHandler.handle(action, context: context)
     case let .divActionFocusElement(action):
       focusElementActionHandler.handle(action, context: context)
+    case .divActionClearFocus:
+      clearFocusActionHandler.handle(context: context)
     case .none:
       isHandled = false
     }

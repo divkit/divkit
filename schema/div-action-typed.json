@@ -10,16 +10,13 @@
       "$ref": "div-action-set-variable.json"
     },
     {
-      "$ref": "div-action-focus-element.json",
-      "platforms": [
-        "android",
-        "web"
-      ]
+      "$ref": "div-action-focus-element.json"
     },
     {
       "$ref": "div-action-clear-focus.json",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {

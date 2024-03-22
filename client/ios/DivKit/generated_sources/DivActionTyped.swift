@@ -10,6 +10,7 @@ public enum DivActionTyped {
   case divActionArrayRemoveValue(DivActionArrayRemoveValue)
   case divActionSetVariable(DivActionSetVariable)
   case divActionFocusElement(DivActionFocusElement)
+  case divActionClearFocus(DivActionClearFocus)
   case divActionCopyToClipboard(DivActionCopyToClipboard)
 
   public var value: Serializable {
@@ -21,6 +22,8 @@ public enum DivActionTyped {
     case let .divActionSetVariable(value):
       return value
     case let .divActionFocusElement(value):
+      return value
+    case let .divActionClearFocus(value):
       return value
     case let .divActionCopyToClipboard(value):
       return value
@@ -39,6 +42,8 @@ extension DivActionTyped: Equatable {
     case let (.divActionSetVariable(l), .divActionSetVariable(r)):
       return l == r
     case let (.divActionFocusElement(l), .divActionFocusElement(r)):
+      return l == r
+    case let (.divActionClearFocus(l), .divActionClearFocus(r)):
       return l == r
     case let (.divActionCopyToClipboard(l), .divActionCopyToClipboard(r)):
       return l == r

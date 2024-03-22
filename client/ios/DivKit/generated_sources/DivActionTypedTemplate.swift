@@ -10,6 +10,7 @@ public enum DivActionTypedTemplate: TemplateValue {
   case divActionArrayRemoveValueTemplate(DivActionArrayRemoveValueTemplate)
   case divActionSetVariableTemplate(DivActionSetVariableTemplate)
   case divActionFocusElementTemplate(DivActionFocusElementTemplate)
+  case divActionClearFocusTemplate(DivActionClearFocusTemplate)
   case divActionCopyToClipboardTemplate(DivActionCopyToClipboardTemplate)
 
   public var value: Any {
@@ -21,6 +22,8 @@ public enum DivActionTypedTemplate: TemplateValue {
     case let .divActionSetVariableTemplate(value):
       return value
     case let .divActionFocusElementTemplate(value):
+      return value
+    case let .divActionClearFocusTemplate(value):
       return value
     case let .divActionCopyToClipboardTemplate(value):
       return value
@@ -37,6 +40,8 @@ public enum DivActionTypedTemplate: TemplateValue {
       return .divActionSetVariableTemplate(try value.resolveParent(templates: templates))
     case let .divActionFocusElementTemplate(value):
       return .divActionFocusElementTemplate(try value.resolveParent(templates: templates))
+    case let .divActionClearFocusTemplate(value):
+      return .divActionClearFocusTemplate(try value.resolveParent(templates: templates))
     case let .divActionCopyToClipboardTemplate(value):
       return .divActionCopyToClipboardTemplate(try value.resolveParent(templates: templates))
     }
@@ -81,6 +86,14 @@ public enum DivActionTypedTemplate: TemplateValue {
       switch result {
       case let .success(value): return .success(.divActionFocusElement(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionFocusElement(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divActionClearFocusTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionClearFocus(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionClearFocus(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -133,6 +146,14 @@ public enum DivActionTypedTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivActionClearFocus.type:
+      let result = DivActionClearFocusTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionClearFocus(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionClearFocus(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case DivActionCopyToClipboard.type:
       let result = DivActionCopyToClipboardTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
@@ -160,6 +181,8 @@ extension DivActionTypedTemplate {
       self = .divActionSetVariableTemplate(try DivActionSetVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionFocusElementTemplate.type:
       self = .divActionFocusElementTemplate(try DivActionFocusElementTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionClearFocusTemplate.type:
+      self = .divActionClearFocusTemplate(try DivActionClearFocusTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionCopyToClipboardTemplate.type:
       self = .divActionCopyToClipboardTemplate(try DivActionCopyToClipboardTemplate(dictionary: dictionary, templateToType: templateToType))
     default:

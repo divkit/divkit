@@ -137,6 +137,18 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
+  private func clearFocus() {
+    if singleLineInput.isHidden {
+      if multiLineInput.isFirstResponder {
+        multiLineInput.resignFirstResponder()
+      }
+    } else {
+      if singleLineInput.isFirstResponder {
+        singleLineInput.resignFirstResponder()
+      }
+    }
+  }
+
   private var currentText: String {
     guard singleLineInput.isHidden else {
       return singleLineInput.attributedText?.string ?? ""
@@ -200,6 +212,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     isInputFocused = isFocused
     if isFocused {
       focusTextInput()
+    } else {
+      clearFocus()
     }
   }
 

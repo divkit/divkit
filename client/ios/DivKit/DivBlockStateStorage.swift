@@ -76,6 +76,12 @@ public final class DivBlockStateStorage {
     }
   }
 
+  public func clearFocus() {
+    lock.write {
+      focusedElement = nil
+    }
+  }
+
   public func isFocused(element: IdAndCardId) -> Bool {
     lock.read {
       focusedElement == element
