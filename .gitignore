@@ -10,6 +10,7 @@ build/
 Pods/
 XcodeBuild/
 xcuserdata/
+__pycache__/
 
 local.properties
 Package.resolved

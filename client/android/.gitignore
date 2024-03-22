@@ -13,4 +13,3 @@ venv
 /yahooks/linters/detekt/temp
 .hpe
 .sdk
-__pycache__
