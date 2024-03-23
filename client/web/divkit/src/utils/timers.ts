@@ -143,14 +143,14 @@ export class TimersController {
         }
     }
 
-    private tickOrUnholdAction(timer: TimerState): void {
+    private async tickOrUnholdAction(timer: TimerState): Promise<void> {
         const now = performance.now();
         const value = (timer.durationPassed || 0) + now - (timer.durationStarted || 0);
         if (timer.duration && value > timer.duration) {
             return;
         }
         this.updateVariable(timer, value);
-        this.callActions(timer, 'tick');
+        await this.callActions(timer, 'tick');
 
         if (timer.tickCount !== undefined) {
             ++timer.tickCount;
@@ -182,10 +182,12 @@ export class TimersController {
             const startTick = () => {
                 const started = timer.tickStarted = performance.now();
                 const duration = Math.max(0, tick - (timer.tickPassed || 0));
-                timer.tickTimeout = window.setTimeout(() => {
-                    this.tickOrUnholdAction(timer);
+                timer.tickTimeout = window.setTimeout(async() => {
+                    await this.tickOrUnholdAction(timer);
                     timer.tickPassed = ((performance.now() - started) - duration) % tick;
-                    startTick();
+                    if (timer.state === 'running') {
+                        startTick();
+                    }
                 }, duration);
             };
 
@@ -340,7 +342,7 @@ export class TimersController {
         }
     }
 
-    private unholdAll(): void {
+    private async unholdAll(): Promise<void> {
         for (const [_id, timer] of this.timers) {
             if (timer.state === 'running' && timer.hold) {
                 // All timeouts were canceled, but the time is not stopped
@@ -357,7 +359,7 @@ export class TimersController {
                     // Run tick actions and update variable instantly after the page is shown, if:
                     // Timer has the tick_interval
                     // Timer is not done yet (check inside function)
-                    this.tickOrUnholdAction(timer);
+                    await this.tickOrUnholdAction(timer);
                 }
 
                 this.startOrResume(timer);
