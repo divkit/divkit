@@ -176,6 +176,9 @@
 
     let prevExtensionsVal: MaybeMissing<Extension>[] | undefined = undefined;
 
+    let registred: {
+        destroy(): void;
+    } | undefined;
     let dev: DevtoolResult | null = null;
 
     $: if (componentContext.json && layoutParams) {
@@ -194,6 +197,8 @@
             (componentContext.json.transition_triggers || ['state_change', 'visibility_change']);
         hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.json.id);
         hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.json.id);
+
+        reregisterNode();
     }
 
     $: jsonFocus = componentContext.getDerivedFromVars(componentContext.json.focus);
@@ -840,7 +845,15 @@
         '--divkit-animation-scale-end': animationScaleEnd
     };
 
+    function reregisterNode(): void {
+        if (currentNode) {
+            useAction(currentNode);
+        }
+    }
+
     function useAction(node: HTMLElement) {
+        registred?.destroy();
+
         currentNode = node;
         if (hasStateChangeTrigger && componentContext.json.transition_in) {
             stateCtx.registerChildWithTransitionIn(
@@ -914,7 +927,7 @@
             dev = devtool(node, rootCtx, componentContext);
         }
 
-        return {
+        registred = {
             destroy() {
                 if (id) {
                     stateCtx.unregisterChild(id);
@@ -927,6 +940,8 @@
                 }
             }
         };
+
+        return registred;
     }
 
     function focusHandler() {
