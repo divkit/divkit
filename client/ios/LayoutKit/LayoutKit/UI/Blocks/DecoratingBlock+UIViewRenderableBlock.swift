@@ -11,6 +11,13 @@ extension DecoratingBlock {
     DecoratingView()
   }
 
+  func isBestViewForReuse(_ view: BlockView) -> Bool {
+    guard let view = view as? DecoratingView else {
+      return false
+    }
+    return view.model.source.value as? DecoratingBlock == self
+  }
+  
   func canConfigureBlockView(_ view: BlockView) -> Bool {
     guard let view = view as? DecoratingView else { return false }
     return view.childView.map(child.canConfigureBlockView) ?? false
@@ -126,7 +133,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  private var model: Model!
+  fileprivate var model: Model!
   private weak var observer: ElementStateObserver?
   private weak var renderingDelegate: RenderingDelegate?
   private(set) var childView: BlockView?

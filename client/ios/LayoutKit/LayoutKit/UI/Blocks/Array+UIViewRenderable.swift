@@ -10,11 +10,10 @@ extension [BlockView] {
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) -> [BlockView] {
-    let reuseResult = calculateReusabilityFor(self, with: blocks) { $1.canConfigureBlockView($0) }
-    let newViews: [BlockView] = reuseResult.modelsReusability.map {
-      switch $0.1 {
-      case let .hasReusableObject(view):
-        $0.0.configureBlockView(
+    let reuseResult = calculateReusability(self, blocks: blocks)
+    let newViews: [BlockView] = reuseResult.reusability.map { (block, view) in
+      if let view = view {
+        block.configureBlockView(
           view,
           observer: observer,
           overscrollDelegate: overscrollDelegate,
@@ -22,8 +21,8 @@ extension [BlockView] {
         )
         parent.bringSubviewToFront(view)
         return view
-      case .orphan:
-        let view = $0.0.makeBlockView(
+      } else {
+        let view = block.makeBlockView(
           observer: observer,
           overscrollDelegate: overscrollDelegate,
           renderingDelegate: renderingDelegate
@@ -32,7 +31,58 @@ extension [BlockView] {
         return view
       }
     }
-    reuseResult.orphanObjects.forEach { $0.removeFromSuperview() }
+    reuseResult.orphanViews.forEach { $0.removeFromSuperview() }
     return newViews
   }
+}
+
+private struct ReuseResult {
+  let reusability: [(UIViewRenderable, BlockView?)]
+  let orphanViews: [BlockView]
+
+  init(
+    reusability: [(UIViewRenderable, BlockView?)],
+    orphanViews: [BlockView]
+  ) {
+    self.reusability = reusability
+    self.orphanViews = orphanViews
+  }
+}
+
+private func calculateReusability(
+  _ views: [BlockView],
+  blocks: [UIViewRenderable]
+) -> ReuseResult {
+  var orphanViews = views
+  var reusableViews = Dictionary<Int, BlockView>(minimumCapacity: blocks.count)
+  blocks.enumerated().forEach { (blockIndex, block) in
+    let reusableView = orphanViews
+      .enumerated()
+      .first { block.isBestViewForReuse($0.element) }
+    if let (viewIndex, view) = reusableView {
+      orphanViews.remove(at: viewIndex)
+      reusableViews[blockIndex] = view
+    }
+  }
+
+  let reusability: [(UIViewRenderable, BlockView?)] = blocks
+    .enumerated()
+    .map { (blockIndex, block) in
+      if let view = reusableViews[blockIndex] {
+        return (block, view)
+      }
+      let reusableView = orphanViews
+        .enumerated()
+        .first { block.canConfigureBlockView($0.element) }
+      if let (index, view) = reusableView {
+        orphanViews.remove(at: index)
+        return (block, view)
+      }
+      return (block, nil)
+    }
+
+  return ReuseResult(
+    reusability: reusability,
+    orphanViews: orphanViews
+  )
 }

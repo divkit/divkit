@@ -5,12 +5,15 @@ import CommonCorePublic
 
 public protocol UIViewRenderable {
   static func makeBlockView() -> BlockView
+
   func configureBlockView(
     _ view: BlockView,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   )
+
+  func isBestViewForReuse(_ view: BlockView) -> Bool
   func canConfigureBlockView(_ view: BlockView) -> Bool
 }
 
@@ -28,6 +31,10 @@ extension UIViewRenderable {
       renderingDelegate: renderingDelegate
     )
     return result
+  }
+
+  public func isBestViewForReuse(_ view: BlockView) -> Bool {
+    canConfigureBlockView(view)
   }
 
   public func configureBlockView(_ view: BlockView) {
