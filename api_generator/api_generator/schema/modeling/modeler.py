@@ -52,7 +52,6 @@ def __generate_objects(
             name=alias(config.lang, contents) or name,
             original_name=name,
             include_in_documentation_toc=include_in_documentation_toc,
-            root_entity=contents.get('root_entity', False),
             generate_case_for_templates=generate_cases_for_templates(config.lang, contents),
             location=location,
             config=config

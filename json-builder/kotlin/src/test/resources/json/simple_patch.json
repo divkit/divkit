@@ -1,0 +1,16 @@
+{
+  "templates": {},
+  "patch": {
+    "changes": [
+      {
+        "id": "test",
+        "items": [
+          {
+            "type": "text",
+            "text": "patched"
+          }
+        ]
+      }
+    ]
+  }
+}

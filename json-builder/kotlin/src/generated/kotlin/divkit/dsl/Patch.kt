@@ -32,13 +32,6 @@ class Patch internal constructor(
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
-    operator fun plus(additive: Properties): Patch = Patch(
-        Properties(
-            changes = additive.changes ?: properties.changes,
-            mode = additive.mode ?: properties.mode,
-        )
-    )
-
     class Properties internal constructor(
         /**
          * Element changes.
@@ -116,7 +109,7 @@ class Patch internal constructor(
 @Generated
 fun DivScope.patch(
     `use named arguments`: Guard = Guard.instance,
-    changes: List<Patch.Change>? = null,
+    changes: List<Patch.Change>,
     mode: Patch.Mode? = null,
 ): Patch = Patch(
     Patch.Properties(

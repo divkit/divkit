@@ -1,6 +1,13 @@
 {
   "type": "object",
   "$description": "translations.json#/div_patch",
+  "typescript_templatable": false,
+  "codegen": {
+    "divan": {
+      "plus_operator": false,
+      "required_properties_at_factory": true
+    }
+  },
   "definitions": {
     "change": {
       "type": "object",

@@ -1,7 +1,6 @@
 {
   "$description": "translations.json#/div_data",
   "typescript_templatable": false,
-  "root_entity": true,
   "codegen": {
     "divan": {
       "plus_operator": false,

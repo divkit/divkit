@@ -85,8 +85,6 @@ class KotlinDSLEntity(Entity):
         supertypes = []
         for enumeration in self.enclosing_enumerations:
             supertypes.append(f'{utils.capitalize_camel_case(enumeration.name)}')
-        if self.root_entity:
-            supertypes.append('Root')
         additional_supertypes = self.protocol_plus_super_entities(with_impl_protocol=False)
         if additional_supertypes is not None:
             supertypes.append(additional_supertypes)
@@ -361,9 +359,7 @@ class KotlinDSLEntityEnumeration(EntityEnumeration):
 
     @property
     def supertype_declaration(self) -> str:
-        if not self._root_entity:
-            return ''
-        return ' : Root'
+        return ''
 
     @property
     def enumeration_name(self) -> str:

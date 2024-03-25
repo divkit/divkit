@@ -47,9 +47,8 @@ class KotlinDSLGenerator(Generator):
             result += body_decl
         result += '}'
         if with_factory_methods:
-            if not entity.root_entity:
-                result += EMPTY
-                result += entity.factory_methods_declaration(for_templates=True)
+            result += EMPTY
+            result += entity.factory_methods_declaration(for_templates=True)
             result += EMPTY
             result += entity.factory_methods_declaration(for_templates=False)
         return result

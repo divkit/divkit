@@ -265,7 +265,6 @@ class Entity(Declarable):
         self._super_entities: Optional[str] = _super_entities(config, dictionary)
         self._resolved_name: str = alias(config.lang, dictionary) or fixing_reserved_typename(name, config.lang)
         self._name: str = self._resolved_name + mode.name_suffix
-        self._root_entity: bool = dictionary.get('root_entity', False)
         self._description: str = dictionary.get('description', '')
         self._description_object: Dict[str, str] = dictionary.get('description_translations', {})
         self._original_name: str = original_name
@@ -512,10 +511,6 @@ class Entity(Declarable):
         return prop is not None and (prop.optional or False)
 
     @property
-    def root_entity(self) -> bool:
-        return self._root_entity
-
-    @property
     def as_json(self) -> Dict:
         return {
             'type': 'entity',
@@ -539,7 +534,6 @@ class EntityEnumeration(Declarable):
                  name: str,
                  original_name: str,
                  include_in_documentation_toc: bool,
-                 root_entity: bool,
                  generate_case_for_templates: bool,
                  entities: List[str],
                  default_entity_declaration: str,
@@ -549,7 +543,6 @@ class EntityEnumeration(Declarable):
         self._name: str = self._resolved_name + mode.name_suffix
         self._original_name: str = original_name
         self._include_in_documentation_toc: bool = include_in_documentation_toc
-        self._root_entity: bool = root_entity
         self._generate_case_for_templates: bool = generate_case_for_templates
         self._resolved_entity_names: List[str] = entities
         self._entities: List[Tuple[str, Optional[Declarable]]] = list(map(
@@ -1012,7 +1005,6 @@ class KotlinDSLGeneratorProperties(GeneratorProperties):
             specific_properties: Dict[str, Any],
     ):
         super().__init__(general_properties, lang, mode)
-        self.root_entity: bool = specific_properties.get('root_entity', False)
 
 
 class DivanGeneratorProperties(GeneratorProperties):
