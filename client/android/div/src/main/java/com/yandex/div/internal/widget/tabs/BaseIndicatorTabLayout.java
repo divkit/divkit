@@ -263,9 +263,9 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
 
         // Text colors/sizes come from the text appearance first
         final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
-                                                             R.styleable.TextAppearance);
+                                                             androidx.appcompat.R.styleable.TextAppearance);
         try {
-            mTabTextColors = ta.getColorStateList(R.styleable.TextAppearance_android_textColor);
+            mTabTextColors = ta.getColorStateList(androidx.appcompat.R.styleable.TextAppearance_android_textColor);
         } finally {
             ta.recycle();
         }

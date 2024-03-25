@@ -88,7 +88,7 @@ internal open class SelectView constructor(context: Context) : EllipsizedTextVie
     private class PopupWindow @JvmOverloads constructor(
         private val context: Context,
         attrs: AttributeSet? = null,
-        defStyleAttr: Int = R.attr.listPopupWindowStyle
+        defStyleAttr: Int = androidx.appcompat.R.attr.listPopupWindowStyle
     ) : ListPopupWindow(context, attrs, defStyleAttr) {
         val adapter = PopupAdapter()
 

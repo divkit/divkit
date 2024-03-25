@@ -3,7 +3,7 @@ package com.yandex.div.steps
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
-import com.yandex.divkit.demo.R
+import com.yandex.divkit.regression.R
 import com.yandex.test.util.Report
 
 internal fun sliderActivity(f: SliderActivitySteps.() -> Unit) = f(SliderActivitySteps())
