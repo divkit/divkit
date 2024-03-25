@@ -49,8 +49,14 @@ class EntityWithComplexPropertyWithDefaultValue(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithComplexPropertyWithDefaultValue {
             val logger = env.logger
+            var property: Property = PROPERTY_DEFAULT_VALUE
+            for (jsonKey in json.keys()) {
+                when (jsonKey) {
+                    "property" -> property = JsonParser.readOptional(json, "property", Property.CREATOR, logger, env) ?: PROPERTY_DEFAULT_VALUE
+                }
+            }
             return EntityWithComplexPropertyWithDefaultValue(
-                property = JsonParser.readOptional(json, "property", Property.CREATOR, logger, env) ?: PROPERTY_DEFAULT_VALUE
+                property = property
             )
         }
 
@@ -86,8 +92,9 @@ class EntityWithComplexPropertyWithDefaultValue(
             @JvmName("fromJson")
             operator fun invoke(env: ParsingEnvironment, json: JSONObject): Property {
                 val logger = env.logger
+                var value: Expression<String> = JsonParser.readExpression(json, "value", logger, env, TYPE_HELPER_STRING)
                 return Property(
-                    value = JsonParser.readExpression(json, "value", logger, env, TYPE_HELPER_STRING)
+                    value = value
                 )
             }
 

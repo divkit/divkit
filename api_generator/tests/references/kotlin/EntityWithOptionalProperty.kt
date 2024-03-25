@@ -47,8 +47,14 @@ class EntityWithOptionalProperty(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithOptionalProperty {
             val logger = env.logger
+            var property: Expression<String>? = null
+            for (jsonKey in json.keys()) {
+                when (jsonKey) {
+                    "property" -> property = JsonParser.readOptionalExpression(json, "property", logger, env, TYPE_HELPER_STRING)
+                }
+            }
             return EntityWithOptionalProperty(
-                property = JsonParser.readOptionalExpression(json, "property", logger, env, TYPE_HELPER_STRING)
+                property = property
             )
         }
 

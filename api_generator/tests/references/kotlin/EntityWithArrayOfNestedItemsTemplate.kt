@@ -27,7 +27,8 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         json: JSONObject
     ) {
         val logger = env.logger
-        items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, ItemTemplate.CREATOR, ITEMS_TEMPLATE_VALIDATOR, logger, env)
+        var items: Field<List<ItemTemplate>>? = null
+        this.items = items ?: JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, ItemTemplate.CREATOR, ITEMS_TEMPLATE_VALIDATOR, logger, env)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfNestedItems {
@@ -68,8 +69,10 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
             json: JSONObject
         ) {
             val logger = env.logger
-            entity = JsonTemplateParser.readField(json, "entity", topLevel, parent?.entity, EntityTemplate.CREATOR, logger, env)
-            property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, logger, env, TYPE_HELPER_STRING)
+            var entity: Field<EntityTemplate>? = null
+            var property: Field<Expression<String>>? = null
+            this.entity = entity ?: JsonTemplateParser.readField(json, "entity", topLevel, parent?.entity, EntityTemplate.CREATOR, logger, env)
+            this.property = property ?: JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, logger, env, TYPE_HELPER_STRING)
         }
 
         override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfNestedItems.Item {

@@ -56,8 +56,14 @@ class EntityWithJsonProperty(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithJsonProperty {
             val logger = env.logger
+            var jsonProperty: JSONObject = JSON_PROPERTY_DEFAULT_VALUE
+            for (jsonKey in json.keys()) {
+                when (jsonKey) {
+                    "json_property" -> jsonProperty = JsonParser.readOptional(json, "json_property", logger, env) ?: JSON_PROPERTY_DEFAULT_VALUE
+                }
+            }
             return EntityWithJsonProperty(
-                jsonProperty = JsonParser.readOptional(json, "json_property", logger, env) ?: JSON_PROPERTY_DEFAULT_VALUE
+                jsonProperty = jsonProperty
             )
         }
 

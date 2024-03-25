@@ -53,8 +53,9 @@ class EntityWithArray(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithArray {
             val logger = env.logger
+            var array: List<Entity> = JsonParser.readList(json, "array", Entity.CREATOR, ARRAY_VALIDATOR, logger, env)
             return EntityWithArray(
-                array = JsonParser.readList(json, "array", Entity.CREATOR, ARRAY_VALIDATOR, logger, env)
+                array = array
             )
         }
 

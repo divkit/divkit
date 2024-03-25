@@ -47,8 +47,9 @@ class EntityWithStringArrayProperty(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithStringArrayProperty {
             val logger = env.logger
+            var array: ExpressionList<String> = JsonParser.readExpressionList(json, "array", ARRAY_VALIDATOR, logger, env, TYPE_HELPER_STRING)
             return EntityWithStringArrayProperty(
-                array = JsonParser.readExpressionList(json, "array", ARRAY_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+                array = array
             )
         }
 

@@ -35,15 +35,46 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         json: JSONObject
     ) {
         val logger = env.logger
-        boolean = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean", topLevel, parent?.boolean, ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
-        booleanInt = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean_int", topLevel, parent?.booleanInt, ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
-        color = JsonTemplateParser.readOptionalFieldWithExpression(json, "color", topLevel, parent?.color, STRING_TO_COLOR_INT, logger, env, TYPE_HELPER_COLOR)
-        double = JsonTemplateParser.readOptionalFieldWithExpression(json, "double", topLevel, parent?.double, NUMBER_TO_DOUBLE, logger, env, TYPE_HELPER_DOUBLE)
-        id = JsonTemplateParser.readOptionalField(json, "id", topLevel, parent?.id, NUMBER_TO_INT, logger, env)
-        integer = JsonTemplateParser.readOptionalFieldWithExpression(json, "integer", topLevel, parent?.integer, NUMBER_TO_INT, logger, env, TYPE_HELPER_INT)
-        positiveInteger = JsonTemplateParser.readOptionalFieldWithExpression(json, "positive_integer", topLevel, parent?.positiveInteger, NUMBER_TO_INT, POSITIVE_INTEGER_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
-        string = JsonTemplateParser.readOptionalFieldWithExpression(json, "string", topLevel, parent?.string, logger, env, TYPE_HELPER_STRING)
-        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+        var boolean: Field<Expression<Boolean>>? = null
+        var booleanInt: Field<Expression<Boolean>>? = null
+        var color: Field<Expression<Int>>? = null
+        var double: Field<Expression<Double>>? = null
+        var id: Field<Long>? = null
+        var integer: Field<Expression<Long>>? = null
+        var positiveInteger: Field<Expression<Long>>? = null
+        var string: Field<Expression<String>>? = null
+        var url: Field<Expression<Uri>>? = null
+        for (jsonKey in json.keys()) {
+            when (jsonKey) {
+                "boolean" -> boolean = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean", topLevel, parent?.boolean, ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
+                "\$boolean" -> boolean = boolean ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "boolean", topLevel, logger, env)
+                "boolean_int" -> booleanInt = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean_int", topLevel, parent?.booleanInt, ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
+                "\$boolean_int" -> booleanInt = booleanInt ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "boolean_int", topLevel, logger, env)
+                "color" -> color = JsonTemplateParser.readOptionalFieldWithExpression(json, "color", topLevel, parent?.color, STRING_TO_COLOR_INT, logger, env, TYPE_HELPER_COLOR)
+                "\$color" -> color = color ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "color", topLevel, logger, env)
+                "double" -> double = JsonTemplateParser.readOptionalFieldWithExpression(json, "double", topLevel, parent?.double, NUMBER_TO_DOUBLE, logger, env, TYPE_HELPER_DOUBLE)
+                "\$double" -> double = double ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "double", topLevel, logger, env)
+                "id" -> id = JsonTemplateParser.readOptionalField(json, "id", topLevel, parent?.id, NUMBER_TO_INT, logger, env)
+                "\$id" -> id = id ?: JsonTemplateParser.readOptionalReferenceField(json, "id", topLevel, logger, env)
+                "integer" -> integer = JsonTemplateParser.readOptionalFieldWithExpression(json, "integer", topLevel, parent?.integer, NUMBER_TO_INT, logger, env, TYPE_HELPER_INT)
+                "\$integer" -> integer = integer ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "integer", topLevel, logger, env)
+                "positive_integer" -> positiveInteger = JsonTemplateParser.readOptionalFieldWithExpression(json, "positive_integer", topLevel, parent?.positiveInteger, NUMBER_TO_INT, POSITIVE_INTEGER_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
+                "\$positive_integer" -> positiveInteger = positiveInteger ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "positive_integer", topLevel, logger, env)
+                "string" -> string = JsonTemplateParser.readOptionalFieldWithExpression(json, "string", topLevel, parent?.string, logger, env, TYPE_HELPER_STRING)
+                "\$string" -> string = string ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "string", topLevel, logger, env)
+                "url" -> url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+                "\$url" -> url = url ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "url", topLevel, logger, env)
+            }
+        }
+        this.boolean = boolean ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.boolean)
+        this.booleanInt = booleanInt ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.booleanInt)
+        this.color = color ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.color)
+        this.double = double ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.double)
+        this.id = id ?: JsonTemplateParser.readOptionalFallbackField(topLevel, parent?.id)
+        this.integer = integer ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.integer)
+        this.positiveInteger = positiveInteger ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.positiveInteger)
+        this.string = string ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.string)
+        this.url = url ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.url)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithSimpleProperties {

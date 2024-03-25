@@ -27,7 +27,14 @@ class EntityWithOptionalComplexPropertyTemplate : JSONSerializable, JsonTemplate
         json: JSONObject
     ) {
         val logger = env.logger
-        property = JsonTemplateParser.readOptionalField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, logger, env)
+        var property: Field<PropertyTemplate>? = null
+        for (jsonKey in json.keys()) {
+            when (jsonKey) {
+                "property" -> property = JsonTemplateParser.readOptionalField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, logger, env)
+                "\$property" -> property = property ?: JsonTemplateParser.readOptionalReferenceField(json, "property", topLevel, logger, env)
+            }
+        }
+        this.property = property ?: JsonTemplateParser.readOptionalFallbackField(topLevel, parent?.property)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithOptionalComplexProperty {
@@ -64,7 +71,8 @@ class EntityWithOptionalComplexPropertyTemplate : JSONSerializable, JsonTemplate
             json: JSONObject
         ) {
             val logger = env.logger
-            value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+            var value: Field<Expression<Uri>>? = null
+            this.value = value ?: JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
         }
 
         override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithOptionalComplexProperty.Property {

@@ -27,7 +27,8 @@ class EntityWithRequiredPropertyTemplate : JSONSerializable, JsonTemplate<Entity
         json: JSONObject
     ) {
         val logger = env.logger
-        property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+        var property: Field<Expression<String>>? = null
+        this.property = property ?: JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithRequiredProperty {

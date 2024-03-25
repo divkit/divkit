@@ -43,6 +43,7 @@ class WithDefault() : JSONSerializable, Hashable {
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): WithDefault {
             val logger = env.logger
+
             return WithDefault(
             )
         }

@@ -49,8 +49,9 @@ class EntityWithStringEnumProperty(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithStringEnumProperty {
             val logger = env.logger
+            var property: Expression<Property> = JsonParser.readExpression(json, "property", Property.Converter.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
             return EntityWithStringEnumProperty(
-                property = JsonParser.readExpression(json, "property", Property.Converter.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
+                property = property
             )
         }
 

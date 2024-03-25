@@ -58,8 +58,9 @@ class EntityWithArrayOfExpressions(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithArrayOfExpressions {
             val logger = env.logger
+            var items: ExpressionList<String> = JsonParser.readExpressionList(json, "items", ITEMS_VALIDATOR, logger, env, TYPE_HELPER_STRING)
             return EntityWithArrayOfExpressions(
-                items = JsonParser.readExpressionList(json, "items", ITEMS_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+                items = items
             )
         }
 

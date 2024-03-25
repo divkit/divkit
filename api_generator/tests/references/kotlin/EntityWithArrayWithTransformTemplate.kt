@@ -27,7 +27,8 @@ class EntityWithArrayWithTransformTemplate : JSONSerializable, JsonTemplate<Enti
         json: JSONObject
     ) {
         val logger = env.logger
-        array = JsonTemplateParser.readExpressionListField(json, "array", topLevel, parent?.array, STRING_TO_COLOR_INT, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
+        var array: Field<ExpressionList<Int>>? = null
+        this.array = array ?: JsonTemplateParser.readExpressionListField(json, "array", topLevel, parent?.array, STRING_TO_COLOR_INT, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayWithTransform {

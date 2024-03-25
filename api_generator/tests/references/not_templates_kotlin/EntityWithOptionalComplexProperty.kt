@@ -47,8 +47,14 @@ class EntityWithOptionalComplexProperty(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithOptionalComplexProperty {
             val logger = env.logger
+            var property: Property? = null
+            for (jsonKey in json.keys()) {
+                when (jsonKey) {
+                    "property" -> property = JsonParser.readOptional(json, "property", Property.CREATOR, logger, env)
+                }
+            }
             return EntityWithOptionalComplexProperty(
-                property = JsonParser.readOptional(json, "property", Property.CREATOR, logger, env)
+                property = property
             )
         }
 
@@ -84,8 +90,9 @@ class EntityWithOptionalComplexProperty(
             @JvmName("fromJson")
             operator fun invoke(env: ParsingEnvironment, json: JSONObject): Property {
                 val logger = env.logger
+                var value: Expression<Uri> = JsonParser.readExpression(json, "value", STRING_TO_URI, logger, env, TYPE_HELPER_URI)
                 return Property(
-                    value = JsonParser.readExpression(json, "value", STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+                    value = value
                 )
             }
 
