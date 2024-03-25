@@ -25,6 +25,7 @@
 
 <script lang="ts">
     import { afterUpdate, getContext, onDestroy, tick } from 'svelte';
+    import { get } from 'svelte/store';
 
     import css from './Outer.module.css';
 
@@ -90,7 +91,6 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
-    const isPointerFocus = rootCtx.isPointerFocus;
     const direction = rootCtx.direction;
 
     let currentNode: HTMLElement;
@@ -949,7 +949,7 @@
             return;
         }
 
-        if (!$isPointerFocus) {
+        if (!get(rootCtx.isPointerFocus)) {
             hasCustomFocus = true;
         }
 
