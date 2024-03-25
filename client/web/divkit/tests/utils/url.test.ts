@@ -6,6 +6,7 @@ describe('getUrlSchema', () => {
         expect(getUrlSchema('https://ya.ru')).toBe('https');
         expect(getUrlSchema('https://smth')).toBe('https');
         expect(getUrlSchema('div-smth://smth')).toBe('div-smth');
+        expect(getUrlSchema('tel:123')).toBe('tel');
     });
 
     test('incorrect', () => {
