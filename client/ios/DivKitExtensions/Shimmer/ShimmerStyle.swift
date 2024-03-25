@@ -5,7 +5,7 @@ import BaseTinyPublic
 import DivKit
 import Serialization
 
-public struct ShimmerStyle {
+public struct ShimmerStyle: Equatable {
   public let colorsAndLocations: [(Color, CGFloat)]
   public let angle: CGFloat
   public let duration: CGFloat
@@ -14,6 +14,12 @@ public struct ShimmerStyle {
     self.colorsAndLocations = colorsAndLocations
     self.angle = angle
     self.duration = duration
+  }
+
+  public static func ==(lhs: ShimmerStyle, rhs: ShimmerStyle) -> Bool {
+    zip(lhs.colorsAndLocations, rhs.colorsAndLocations).allSatisfy { $0 == $1 }
+      && lhs.angle == rhs.angle
+      && lhs.duration == rhs.duration
   }
 }
 

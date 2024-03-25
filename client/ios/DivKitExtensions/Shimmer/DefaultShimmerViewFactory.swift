@@ -1,5 +1,7 @@
 import UIKit
 
+import BasePublic
+
 public class DefaultShimmerViewFactory {
   private let effectBeginTime: CFTimeInterval
 
@@ -7,7 +9,7 @@ public class DefaultShimmerViewFactory {
     self.effectBeginTime = effectBeginTime
   }
 
-  public func makeView(style: ShimmerStyle) -> UIView {
-    ShimmerView(style: style, effectBeginTime: effectBeginTime)
+  public func makeViewProvider(style: ShimmerStyle) -> ViewProvider {
+    ShimmerViewProvider(style: style, effectBeginTime: effectBeginTime)
   }
 }

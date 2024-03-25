@@ -64,13 +64,3 @@ private let expectedShimmerStyle = ShimmerStyle(
   angle: 15,
   duration: 1.6
 )
-
-extension ShimmerStyle: Equatable {
-  public static func ==(
-    lhs: DivKitExtensions.ShimmerStyle,
-    rhs: DivKitExtensions.ShimmerStyle
-  ) -> Bool {
-    lhs.angle == rhs.angle && lhs.duration == rhs.duration && lhs.colorsAndLocations == rhs
-      .colorsAndLocations
-  }
-}

@@ -7,10 +7,10 @@ import LayoutKit
 
 public final class ShimmerImagePreviewExtension: DivExtensionHandler {
   public let id: String = extensionID
-  private let viewFactory: (ShimmerStyle) -> UIView
+  private let viewFactory: (ShimmerStyle) -> ViewProvider
 
-  public init(viewFactory: ((ShimmerStyle) -> UIView)? = nil) {
-    self.viewFactory = viewFactory ?? DefaultShimmerViewFactory().makeView(style:)
+  public init(viewFactory: ((ShimmerStyle) -> ViewProvider)? = nil) {
+    self.viewFactory = viewFactory ?? DefaultShimmerViewFactory().makeViewProvider(style:)
   }
 
   public func applyBeforeBaseProperties(

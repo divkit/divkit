@@ -6,11 +6,11 @@ import LayoutKit
 
 public final class CustomImagePreviewExtensionHandler: DivExtensionHandler {
   public let id: String
-  private let viewFactory: () -> ViewType
+  private let viewProvider: ViewProvider
 
-  public init(id: String, viewFactory: @escaping () -> ViewType) {
+  public init(id: String, viewProvider: ViewProvider) {
     self.id = id
-    self.viewFactory = viewFactory
+    self.viewProvider = viewProvider
   }
 
   public func applyBeforeBaseProperties(
@@ -27,7 +27,7 @@ public final class CustomImagePreviewExtensionHandler: DivExtensionHandler {
 
     let imageHolder = context.imageHolderFactory.make(
       div.resolveImageUrl(context.expressionResolver) ?? defaultImageURL,
-      .view(viewFactory())
+      .view(viewProvider)
     )
     return block.makeCopy(with: imageHolder)
   }

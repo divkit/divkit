@@ -1,3 +1,4 @@
+import BasePublic
 import DivKitExtensions
 import DivKit
 import Testing
@@ -63,13 +64,31 @@ private let exclusions = [
 
 private let labelImagePreviewExtension = CustomImagePreviewExtensionHandler(
   id: "label_image_preview",
-  viewFactory: {
+  viewProvider: LabelImagePreviewProvider()
+)
+
+private class LabelImagePreviewProvider: ViewProvider {
+  private var label: UILabel?
+
+  func loadView() -> BasePublic.ViewType {
+    if let label {
+      return label
+    }
+    label = makeLabel()
+    return label!
+  }
+
+  private func makeLabel() -> UILabel {
     let label = UILabel()
     label.text = "Preview"
     label.backgroundColor = .yellow
     return label
   }
-)
+
+  func equals(other: BasePublic.ViewProvider) -> Bool {
+    return loadView() == other.loadView()
+  }
+}
 
 private let defaultPagerViewState = [
   pagerId: PagerViewState(numberOfPages: 11, currentPage: 1),
