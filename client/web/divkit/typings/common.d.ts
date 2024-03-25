@@ -182,8 +182,12 @@ export interface ActionFocusElement {
     element_id: string;
 }
 
+export interface ActionClearFocus {
+    type: 'clear_focus';
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
-    ActionCopyToClipboard | ActionFocusElement;
+    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus;
 
 export interface ActionBase {
     log_id: string;

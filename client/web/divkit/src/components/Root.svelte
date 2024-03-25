@@ -880,6 +880,16 @@
                     }
                     break;
                 }
+                case 'clear_focus': {
+                    try {
+                        if (document.activeElement instanceof HTMLElement) {
+                            document.activeElement.blur();
+                        }
+                    } catch (err) {
+                        // do nothing
+                    }
+                    break;
+                }
                 default: {
                     log(wrapError(new Error('Unknown type of action'), {
                         additional: {

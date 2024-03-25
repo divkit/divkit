@@ -33,6 +33,25 @@
       "file": "actions/focus-element.json"
     },
     {
+      "title": "Clear focus actions",
+      "platforms": [
+        "android",
+        "web"
+      ],
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "click on button",
+        "Wait 2 seconds"
+      ],
+      "expected_results": [
+        "input has focus, label says that timer is started",
+        "input had lost the foucs, label says that timer is finished"
+      ],
+      "file": "actions/clear-focus.json"
+    },
+    {
       "title": "Focus action",
       "platforms": [
         "ios"
