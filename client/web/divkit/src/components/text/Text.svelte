@@ -211,7 +211,8 @@
     function updateRenderList(
         text: string,
         textRanges: MaybeMissing<TextRange[]> | undefined,
-        textImages: MaybeMissing<TextImage[]> | undefined
+        textImages: MaybeMissing<TextImage[]> | undefined,
+        rootTextStyles: typeof $jsonRootTextStyles
     ) {
         let newRenderList: typeof renderList = [];
 
@@ -322,7 +323,7 @@
             let index = item.index;
 
             if (index > prevIndex) {
-                let textStyles = Object.assign({ ...$jsonRootTextStyles }, ...activeRanges as any[]) as TextStyles;
+                let textStyles = Object.assign({ ...rootTextStyles }, ...activeRanges as any[]) as TextStyles;
                 newRenderList.push({
                     text: content.substring(prevIndex, index),
                     textStyles,
@@ -335,7 +336,7 @@
             } else if (item.type === 'rangeEnd') {
                 activeRanges = activeRanges.filter(range => range !== item.range);
             } else if (item.type === 'image') {
-                let textStyles2 = Object.assign({ ...$jsonRootTextStyles }, ...activeRanges as any[]) as TextStyles;
+                let textStyles2 = Object.assign({ ...rootTextStyles }, ...activeRanges as any[]) as TextStyles;
                 let imageWidth = pxToEm(
                     (((item.image.width && item.image.width.value) || 20) * 10) / (textStyles2.font_size || 12)
                 );
@@ -373,14 +374,14 @@
         if (prevIndex < content.length) {
             newRenderList.push({
                 text: content.substring(prevIndex),
-                textStyles: { ...$jsonRootTextStyles } as TextStyles
+                textStyles: { ...rootTextStyles } as TextStyles
             });
         }
 
         renderList = newRenderList;
     }
 
-    $: updateRenderList(text, $jsonRanges, $jsonImages);
+    $: updateRenderList(text, $jsonRanges, $jsonImages, $jsonRootTextStyles);
 
     $: mods = {
         singleline,
