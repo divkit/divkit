@@ -23,6 +23,7 @@ export interface DivVideoData extends DivBaseData {
     video_sources: VideoSource[];
     repeatable?: BooleanInt;
     autostart?: BooleanInt;
+    preload_required?: BooleanInt;
     muted?: BooleanInt;
     preview?: string;
     elapsed_time_variable?: string;

@@ -36,7 +36,8 @@
           "default_value": "false",
           "$description": "translations.json#/div_video_preload_required",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "muted": {

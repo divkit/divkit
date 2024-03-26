@@ -32,6 +32,7 @@
     let loop = false;
     let autoplay = false;
     let muted = false;
+    let preload = false;
     let poster: string | undefined = undefined;
     let scale = 'fit';
     let aspectPaddingBottom = '0';
@@ -41,6 +42,7 @@
         loop = false;
         autoplay = false;
         muted = false;
+        preload = false;
         poster = undefined;
         scale = 'fit';
     }
@@ -69,6 +71,7 @@
     $: jsonRepeatable = componentContext.getDerivedFromVars(componentContext.json.repeatable);
     $: jsonAutostart = componentContext.getDerivedFromVars(componentContext.json.autostart);
     $: jsonMuted = componentContext.getDerivedFromVars(componentContext.json.muted);
+    $: jsonPreload = componentContext.getDerivedFromVars(componentContext.json.preload_required);
     $: jsonPreview = componentContext.getDerivedFromVars(componentContext.json.preview);
     $: jsonScale = componentContext.getDerivedFromVars(componentContext.json.scale);
     $: jsonAspect = componentContext.getDerivedFromVars(componentContext.json.aspect);
@@ -89,6 +92,8 @@
     $: autoplay = correctBooleanInt($jsonAutostart, autoplay);
 
     $: muted = correctBooleanInt($jsonMuted, muted);
+
+    $: preload = correctBooleanInt($jsonPreload, preload);
 
     $: poster = typeof $jsonPreview === 'string' ? prepareBase64($jsonPreview) : poster;
 
@@ -214,6 +219,7 @@
                     {autoplay}
                     {muted}
                     {poster}
+                    preload={preload ? 'metadata' : 'auto'}
                     on:timeupdate={onTimeUpdate}
                     on:ended={onEnd}
                     on:playing={onPlaying}
@@ -238,6 +244,7 @@
                 {autoplay}
                 {muted}
                 {poster}
+                preload={preload ? 'metadata' : 'auto'}
                 on:timeupdate={onTimeUpdate}
                 on:ended={onEnd}
                 on:playing={onPlaying}
