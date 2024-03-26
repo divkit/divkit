@@ -137,6 +137,9 @@
                         });
 
                         return {
+                            isFocused() {
+                                return editor.hasTextFocus();
+                            },
                             setValue(value) {
                                 if (!editor.hasTextFocus()) {
                                     editor.setValue(value);
