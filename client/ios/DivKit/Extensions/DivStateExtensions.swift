@@ -18,8 +18,9 @@ extension DivState: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    guard let id = divId ?? id else {
-      throw DivBlockModelingError("DivState has no id", path: context.parentPath)
+    let id = divId ?? id ?? ""
+    if id == "" {
+      context.addWarning("DivState has no id")
     }
 
     let stateInterceptor = context.getStateInterceptor(for: self)

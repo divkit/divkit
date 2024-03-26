@@ -21,7 +21,7 @@ struct DivGallerySizeModifier: DivSizeModifier {
        gallery.getTransformedWidth(context).isIntrinsic,
        items.allHorizontallyMatchParent {
       context.addWarning(
-        message: "All items in vertical \(gallery.typeName) with wrap_content width has match_parent width"
+        "All items in vertical \(gallery.typeName) with wrap_content width has match_parent width"
       )
       shouldOverrideMatchParentWidth = true
     } else {
@@ -32,7 +32,7 @@ struct DivGallerySizeModifier: DivSizeModifier {
        gallery.getTransformedHeight(context).isIntrinsic,
        items.allVerticallyMatchParent {
       context.addWarning(
-        message: "All items in horizontal \(gallery.typeName) with wrap_content height has match_parent height"
+        "All items in horizontal \(gallery.typeName) with wrap_content height has match_parent height"
       )
       shouldOverrideMatchParentHeight = true
     } else {

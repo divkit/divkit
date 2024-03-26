@@ -18,13 +18,13 @@ extension DivContainer {
       }
       if orientation == .vertical, $0.isHorizontallyMatchParent {
         context.addWarning(
-          message: "Vertical DivContainer with wrap layout mode contains item with match_parent width"
+          "Vertical DivContainer with wrap layout mode contains item with match_parent width"
         )
         return false
       }
       if orientation == .horizontal, $0.isVerticallyMatchParent {
         context.addWarning(
-          message: "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
+          "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
         )
         return false
       }
