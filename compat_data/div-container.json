@@ -1,0 +1,14 @@
+{
+    "features": [{
+        "id": "container_item_builder",
+        "name": "Container property <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "29.0.0"
+            },
+            "web": {
+                "version_added": "29.4.0"
+            }
+        }
+    }]
+}

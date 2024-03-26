@@ -1,0 +1,14 @@
+{
+    "features": [{
+        "id": "input_password",
+        "name": "Input property <code>keyboard_type</code> = <code>password</code>",
+        "compat": {
+            "android": {
+                "version_added": "29.9.0"
+            },
+            "web": {
+                "version_added": "29.9.0"
+            }
+        }
+    }]
+}

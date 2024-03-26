@@ -1,0 +1,8 @@
+{
+    "features": [{
+        "id": "grid_not_fullfilled_support",
+        "name": "The grid supports empty cells at the end",
+        "compat": {
+        }
+    }]
+}

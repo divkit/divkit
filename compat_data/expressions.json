@@ -1,0 +1,14 @@
+{
+    "features": [{
+        "id": "expressions_implicit_integer_to_number_cast",
+        "name": "Expressions: implicit <code>integer</code> to <code>number</code> cast",
+        "compat": {
+            "ios": {
+                "version_added": "29.9.0"
+            },
+            "web": {
+                "version_added": "29.10.0"
+            }
+        }
+    }]
+}

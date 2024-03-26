@@ -1,0 +1,18 @@
+{
+    "features": [{
+        "id": "text_truncate",
+        "name": "Text truncate",
+        "status": {
+            "deprecated": true,
+            "notes": "Property is deprecated and should not be used. Use <code>ellipsis</code> instead"
+        },
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            }
+        }
+    }]
+}

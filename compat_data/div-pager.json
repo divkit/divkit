@@ -1,0 +1,19 @@
+{
+    "features": [{
+        "id": "pager_scroll_action_start_end",
+        "name": "Pager scroll action <code>scroll_to_start</code> / <code>scroll_to_end</code>",
+        "compat": {
+            "web": {
+                "version_added": "29.10.0"
+            }
+        }
+    }, {
+        "id": "pager_scroll_action_move_with_step",
+        "name": "Pager scroll action <code>set_previous_item</code> and <code>set_next_item</code> with the <code>step</code> argument",
+        "compat": {
+            "web": {
+                "version_added": "29.10.0"
+            }
+        }
+    }]
+}

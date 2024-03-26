@@ -1,0 +1,14 @@
+{
+    "features": [{
+        "id": "image_high_priority_preview_show",
+        "name": "Image property <code>high_priority_preview_show</code>",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            }
+        }
+    }]
+}
