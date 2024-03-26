@@ -31,7 +31,7 @@ class DivJoinedStateSwitcherTest {
     private val viewBinder = mock<DivBinder>()
     private val div2Context = Div2Context(
         baseContext = activity,
-        configuration = DivConfiguration.Builder(mock()).build()
+        configuration = DivConfiguration.Builder(mock(), mock()).build()
     )
     private val div2View = Div2View(div2Context).apply {
         setData(

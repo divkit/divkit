@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.androidx.viewpager2) {
         exclude group: "androidx.fragment", module: "fragment"
     }
+    implementation 'com.caverock:androidsvg-aar:1.4'
+    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
 
     implementation libs.androidx.datastore
     implementation libs.kotlin.serialization.json

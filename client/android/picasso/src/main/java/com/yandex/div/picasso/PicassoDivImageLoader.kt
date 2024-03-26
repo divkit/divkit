@@ -48,6 +48,10 @@ class PicassoDivImageLoader(
             .build()
     }
 
+    override fun doesSupportSvg(): Boolean {
+        return false
+    }
+
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
         val target = DownloadCallbackAdapter(imageUri, callback)

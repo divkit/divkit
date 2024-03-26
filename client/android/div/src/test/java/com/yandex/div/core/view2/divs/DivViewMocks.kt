@@ -32,7 +32,7 @@ internal fun divView(
     val context = context()
     val div2Context = Div2Context(
         ContextThemeWrapper(context, context.theme),
-        DivConfiguration.Builder(mock()).build(),
+        DivConfiguration.Builder(mock(), mock()).build(),
         lifecycleOwner = null
     )
 

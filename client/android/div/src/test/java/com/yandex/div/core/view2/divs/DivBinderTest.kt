@@ -8,6 +8,7 @@ import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.svg.FlexibleDivImageLoader
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivValidator
@@ -40,6 +41,7 @@ open class DivBinderTest {
         on { validate(any(), any()) } doReturn true
     }
     internal val imageLoader = mock<DivImageLoader>()
+    internal val flexibleImageLoader = mock<FlexibleDivImageLoader>()
 
     internal val context = RuntimeEnvironment.application
     private val expressionResolver = mock<ExpressionResolver>()

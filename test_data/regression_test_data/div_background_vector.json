@@ -1,0 +1,79 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "text_color": "#FFA500",
+      "height": {
+        "type": "fixed",
+        "value": 184
+      },
+      "paddings": {
+        "left": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      },
+      "text_alignment_vertical": "bottom",
+      "font_size": 18,
+      "line_height": 20
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24
+          },
+          "items": [
+            {
+              "type": "text_block",
+              "background": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg"
+                }
+              ],
+              "text": "Svg background (picture drawable)"
+            },
+            {
+              "type": "text_block",
+              "background": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg",
+                  "alpha": 0.5
+                }
+              ],
+              "text": "Transparent svg background (bitmap)"
+            },
+            {
+              "type": "text_block",
+              "background": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg",
+                  "filters": [
+                    {
+                      "type": "blur",
+                      "radius": 5
+                    }
+                  ]
+                }
+              ],
+              "text": "Blurred svg background (bitmap)"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

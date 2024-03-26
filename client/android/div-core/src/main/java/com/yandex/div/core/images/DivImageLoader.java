@@ -5,6 +5,8 @@ import android.widget.ImageView;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Image loader contract.
  */
@@ -22,6 +24,33 @@ public interface DivImageLoader {
     @MainThread
     @NonNull
     LoadReference loadImage(@NonNull String imageUrl, @NonNull DivImageDownloadCallback callback);
+
+    /**
+     * Starts image loading with a given <code>imageUrl</code>.
+     * If not overridden, works as loadImage(imageUrl, callback)
+     * <p>
+     * Contract : <code>callback</code> MUST BE stored in {@link java.lang.ref.WeakReference} in order to prevent leakage.
+     *
+     * @param imageUrl image url.
+     * @param shouldBeRasterized property indicating if the vector image should be rasterized
+     * @param callback callback to invoke after image is loaded.
+     * @return reference to cancel loading
+     */
+    @MainThread
+    @NonNull
+    default LoadReference loadImage(@NonNull String imageUrl, @NotNull boolean shouldBeRasterized, @NonNull DivImageDownloadCallback callback) {
+        return loadImage(imageUrl, callback);
+    }
+
+    /**
+     * Property indicating if the image loader can handle svg.
+     * False if not overridden.
+     *
+     * @return true if image loader supports svg.
+     */
+    default Boolean doesSupportSvg() {
+        return false;
+    }
 
     /**
      * Starts image loading by given <code>imageUrl</code>. Download raw bytes in result.

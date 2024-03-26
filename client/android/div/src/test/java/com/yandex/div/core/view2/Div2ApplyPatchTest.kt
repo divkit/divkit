@@ -8,6 +8,7 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.svg.SvgDivImageLoader
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.viewEquals
 import com.yandex.div.internal.Assert
@@ -24,10 +25,10 @@ class Div2ApplyPatchTest {
     private val divImageLoader = mock<DivImageLoader>()
     private val controller = Robolectric.buildActivity(Activity::class.java)
     private val activity = controller.get()
-
+    private val svgDivImageLoader = mock<Lazy<SvgDivImageLoader>>()
     private val div2Context = Div2Context(
         activity,
-        DivConfiguration.Builder(divImageLoader).build()
+        DivConfiguration.Builder(divImageLoader, svgDivImageLoader).build()
     )
 
     private val div2View = Div2View(div2Context)

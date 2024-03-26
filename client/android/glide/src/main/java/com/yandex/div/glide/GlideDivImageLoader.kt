@@ -24,6 +24,10 @@ class GlideDivImageLoader(
     private val context: Context
 ) : DivImageLoader {
 
+    override fun doesSupportSvg(): Boolean {
+        return false
+    }
+
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
         // create target to be able to cancel loading
@@ -47,7 +51,6 @@ class GlideDivImageLoader(
         val imageUri = Uri.parse(imageUrl)
 
         Glide.with(context).asBitmap().load(imageUri).into(imageView)
-
         return LoadReference {
             Glide.with(context).clear(imageView)
         }
@@ -60,7 +63,6 @@ class GlideDivImageLoader(
             override fun onResourceReady(resource: GifDrawable, transition: Transition<in GifDrawable>?) { }
             override fun onLoadCleared(placeholder: Drawable?) { }
         }
-
         // load result will be handled by RequestListener to get dataSource
         Glide.with(context).asGif().listener(GifImageRequestListener(callback, imageUri)).load(imageUri).into(target)
 

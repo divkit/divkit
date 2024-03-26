@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.PictureDrawable
 import android.graphics.drawable.StateListDrawable
 import android.net.Uri
 import android.util.DisplayMetrics
@@ -18,6 +19,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.observeBackground
+import com.yandex.div.core.svg.FlexibleDivImageLoader
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -25,11 +27,13 @@ import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivFilter
+import com.yandex.div2.DivImageBackground
 import com.yandex.div2.DivImageScale
 import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
@@ -39,7 +43,7 @@ import javax.inject.Inject
 @DivScope
 @Mockable
 internal class DivBackgroundBinder @Inject constructor(
-    private val imageLoader: DivImageLoader
+    private val imageLoader: FlexibleDivImageLoader
 ) {
 
     @Suppress("UNCHECKED_CAST")
@@ -195,7 +199,8 @@ internal class DivBackgroundBinder @Inject constructor(
             imageUrl = value.imageUrl.evaluate(resolver),
             preloadRequired = value.preloadRequired.evaluate(resolver),
             scale = value.scale.evaluate(resolver),
-            filters = value.filters?.map { it.toBackgroundState(resolver) }
+            filters = value.filters?.map { it.toBackgroundState(resolver) },
+            shouldBeRasterized = value.shouldBeRasterized()
         )
         is DivBackground.Solid -> DivBackgroundState.Solid(
             color = value.color.evaluate(resolver)
@@ -209,6 +214,14 @@ internal class DivBackgroundBinder @Inject constructor(
                     value.insets.bottom.evaluate(resolver).toIntSafely()
             )
         )
+    }
+
+    /**
+     * Vector format ImageBackground doesn't support alpha and filters.
+     * If alpha is not 1.0 or filters are specified for ImageBackground, it should be rasterized.
+     */
+    private fun DivImageBackground.shouldBeRasterized() : Boolean {
+        return alpha != Expression.constant(1.0) || !filters.isNullOrEmpty()
     }
 
     private fun DivRadialGradientCenter.toBackgroundState(
@@ -291,7 +304,8 @@ internal class DivBackgroundBinder @Inject constructor(
             val imageUrl: Uri,
             val preloadRequired: Boolean,
             val scale: DivImageScale,
-            val filters: List<Filter>?
+            val filters: List<Filter>?,
+            val shouldBeRasterized: Boolean
         ): DivBackgroundState() {
             sealed class Filter {
                 data class Blur(val radius: Int, val div: DivFilter.Blur) : Filter()
@@ -306,28 +320,33 @@ internal class DivBackgroundBinder @Inject constructor(
             fun getDivImageBackground(
                 divView: Div2View,
                 target: View,
-                imageLoader: DivImageLoader
+                imageLoader: FlexibleDivImageLoader,
             ): Drawable {
-                val scaleDrawable = ScalingDrawable()
+                val scalingDrawable = ScalingDrawable()
+                scalingDrawable.alpha = (alpha * 255).toInt()
+                scalingDrawable.customScaleType = scale.toScaleType()
+                scalingDrawable.alignmentHorizontal = contentAlignmentHorizontal.toHorizontalAlignment()
+                scalingDrawable.alignmentVertical = contentAlignmentVertical.toVerticalAlignment()
 
                 val url = imageUrl.toString()
-                val loadReference = imageLoader.loadImage(url, object : DivIdLoggingImageDownloadCallback(divView) {
+                val loadReference = imageLoader.loadImage(url, shouldBeRasterized, object : DivIdLoggingImageDownloadCallback(divView) {
                     @UiThread
                     override fun onSuccess(cachedBitmap: CachedBitmap) {
                         target.applyBitmapFilters(
                             divView,
                             cachedBitmap.bitmap,
                             filters?.map { it.toDiv() },
-                        ) { scaleDrawable.setBitmap(it) }
-                        scaleDrawable.alpha = (alpha * 255).toInt()
-                        scaleDrawable.customScaleType = scale.toScaleType()
-                        scaleDrawable.alignmentHorizontal = contentAlignmentHorizontal.toHorizontalAlignment()
-                        scaleDrawable.alignmentVertical = contentAlignmentVertical.toVerticalAlignment()
+                        ) { scalingDrawable.setBitmap(it) }
+                    }
+
+                    @UiThread
+                    override fun onSuccess(pictureDrawable: PictureDrawable) {
+                        scalingDrawable.setPicture(pictureDrawable.picture)
                     }
                 })
                 divView.addLoadReference(loadReference, target)
 
-                return scaleDrawable
+                return scalingDrawable
             }
         }
 
@@ -368,7 +387,7 @@ internal class DivBackgroundBinder @Inject constructor(
         fun toDrawable(
             divView: Div2View,
             target: View,
-            imageLoader: DivImageLoader
+            imageLoader: FlexibleDivImageLoader,
         ): Drawable = when (this) {
             is Image -> getDivImageBackground(divView, target, imageLoader)
             is NinePatch -> getNinePatchDrawable(divView, target, imageLoader)

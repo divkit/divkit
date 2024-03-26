@@ -37,7 +37,7 @@ class Div2ViewReleaseChildrenTest {
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val backingContext = Div2Context(
         baseContext = activity,
-        configuration = DivConfiguration.Builder(mock()).build()
+        configuration = DivConfiguration.Builder(mock(), mock()).build()
     )
     private val viewBinder = mock<DivBinder>()
     private val divExtensionController = DivExtensionController(emptyList())

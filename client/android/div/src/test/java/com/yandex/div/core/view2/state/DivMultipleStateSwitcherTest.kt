@@ -34,7 +34,7 @@ class DivMultipleStateSwitcherTest {
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val div2Context = Div2Context(
         baseContext = activity,
-        configuration = DivConfiguration.Builder(mock())
+        configuration = DivConfiguration.Builder(mock(), mock())
             .build()
     )
     private val divView = Div2View(div2Context).apply {
