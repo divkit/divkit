@@ -151,7 +151,7 @@
                 }
             });
         } else {
-            newItems = (jsonItems || []).map(it => {
+            newItems = (Array.isArray(jsonItems) && jsonItems || []).map(it => {
                 return {
                     div: it
                 };

@@ -113,7 +113,7 @@
         titlePadding = null;
     }
 
-    $: items = componentContext.json.items || [];
+    $: items = Array.isArray(componentContext.json.items) && componentContext.json.items || [];
     $: parentOfItems = items.map(it => {
         return it.div;
     });

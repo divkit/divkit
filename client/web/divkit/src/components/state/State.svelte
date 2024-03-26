@@ -63,7 +63,7 @@
         childrenIds = new Set<string>();
     }
 
-    $: items = componentContext.json.states || [];
+    $: items = Array.isArray(componentContext.json.states) && componentContext.json.states || [];
     $: parentOfItems = items.map(it => {
         return it.div;
     });
