@@ -18,8 +18,8 @@ public class DivPatchDownloader: DivPatchProvider {
     var request: NetworkTask?
     request = requestPerformer.performRequest(
       URLRequest(url: url),
-      completion: { [unowned self] result in
-        self.requests.removeAll { $0 === request }
+      completion: { [weak self] result in
+        self?.requests.removeAll { $0 === request }
         parseResult(result, completion: completion)
       }
     )
