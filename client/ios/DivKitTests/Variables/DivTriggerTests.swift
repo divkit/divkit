@@ -10,7 +10,6 @@ final class DivTriggerTests: XCTestCase {
     patchProvider: FakeDivPatchDownloader(),
     variablesStorage: variablesStorage,
     updateCard: { _ in },
-    showTooltip: { _ in },
     urlHandler: DivUrlHandlerDelegate { [unowned self] _, _ in
       self.triggersCount += 1
     },
