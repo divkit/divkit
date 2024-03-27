@@ -82,7 +82,9 @@
     let verticalPadding = '';
     let description = '';
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         hintColor = '';
         fontSize = 12;
         fontWeight = undefined;
@@ -95,6 +97,10 @@
         keyboardType = 'multi_line_text';
         inputType = 'text';
         inputMode = undefined;
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: variable = componentContext.json.text_variable;

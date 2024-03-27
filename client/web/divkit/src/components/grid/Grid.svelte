@@ -44,10 +44,16 @@
     let contentVAlign: AlignmentVerticalMapped = 'start';
     let contentHAlign: AlignmentHorizontal = 'start';
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         columnCount = 1;
         contentVAlign = 'start';
         contentHAlign = 'start';
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: jsonItems = Array.isArray(componentContext.json.items) && componentContext.json.items || [];

@@ -19,9 +19,15 @@
     // let background = correctColor('#14000000');
     let background = 'rgba(0,0,0,0.08)';
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         orientation = 'horizontal';
         background = 'rgba(0,0,0,0.08)';
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: jsonDelimiterStyle = componentContext.getDerivedFromVars(componentContext.json.delimiter_style);

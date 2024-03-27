@@ -44,7 +44,9 @@
     let textColor = '#000';
     let description = '';
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         selfPadding = null;
         hintColor = 'rgba(0,0,0,.45)';
         fontSize = 12;
@@ -54,6 +56,10 @@
         letterSpacing = '';
         textColor = '#000';
         description = '';
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: variable = componentContext.json.value_variable;

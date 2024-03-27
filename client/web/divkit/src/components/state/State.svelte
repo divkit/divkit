@@ -48,8 +48,14 @@
         null;
     let inited = false;
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         inited = false;
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: if (stateId) {
