@@ -20,7 +20,7 @@ public final class VisibilityActionPerformers {
 
   func onVisibleBoundsChanged(to: CGRect, bounds: CGRect) {
     let visibleAreaPercentageBefore = lastVisibleArea.value
-    let visibleAreaPercentageAfter = bounds.isEmpty ? 0 : Int(to.area * 100 / bounds.area)
+    let visibleAreaPercentageAfter = bounds.isEmpty ? 100 : Int(to.area * 100 / bounds.area)
     lastVisibleArea.value = visibleAreaPercentageAfter
 
     for performer in actionPerformers {
