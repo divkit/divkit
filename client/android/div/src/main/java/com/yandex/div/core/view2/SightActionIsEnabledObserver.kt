@@ -4,14 +4,15 @@ import android.view.View
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.divs.allSightActions
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivSightAction
 import java.lang.ref.WeakReference
 import java.util.WeakHashMap
 
 internal class SightActionIsEnabledObserver(
-    private val onEnable: (Div2View, View, Div, DivSightAction) -> Unit,
-    private val onDisable: (Div2View, View, Div, DivSightAction) -> Unit
+    private val onEnable: (Div2View, ExpressionResolver, View, Div, DivSightAction) -> Unit,
+    private val onDisable: (Div2View, ExpressionResolver, View, Div, DivSightAction) -> Unit
 ) {
 
     private val boundedActions = WeakHashMap<View, MutableSet<DivSightAction>>()
@@ -22,6 +23,7 @@ internal class SightActionIsEnabledObserver(
     fun observe(
         view: View,
         div2View: Div2View,
+        resolver: ExpressionResolver,
         div: Div,
         actions: List<DivSightAction> = div.value().allSightActions
     ) {
@@ -34,13 +36,12 @@ internal class SightActionIsEnabledObserver(
             },
             onAdd = { action ->
                 cancelObserving(action)
-                val resolver = div2View.expressionResolver
                 subscriptions[action] = Subscription(
                    disposable = action.isEnabled.observe(resolver) { isEnabled ->
                        if (isEnabled) {
-                           onEnable(div2View, view, div, action)
+                           onEnable(div2View, resolver, view, div, action)
                        } else {
-                           onDisable(div2View, view, div, action)
+                           onDisable(div2View, resolver, view, div, action)
                        }
                    },
                    owner = view

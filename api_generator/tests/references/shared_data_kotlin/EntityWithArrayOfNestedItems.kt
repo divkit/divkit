@@ -31,10 +31,10 @@ class EntityWithArrayOfNestedItems(
         return hash
     }
 
-    fun copyWithNewProperties(
-        items: List<EntityWithArrayOfNestedItems.Item>,
+    fun copy(
+        items: List<Item> = this.items,
     ) = EntityWithArrayOfNestedItems(
-        items,
+        items = items,
     )
 
     companion object {
@@ -61,5 +61,13 @@ class EntityWithArrayOfNestedItems(
             _hash = hash
             return hash
         }
+
+        fun copy(
+            entity: Entity = this.entity,
+            property: Expression<String> = this.property,
+        ) = Item(
+            entity = entity,
+            property = property,
+        )
     }
 }

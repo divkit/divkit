@@ -36,6 +36,8 @@ class WithDefault() : JSONSerializable, Hashable {
         return json
     }
 
+    fun copy() = WithDefault()
+
     companion object {
         const val TYPE = "default"
 

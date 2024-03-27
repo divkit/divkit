@@ -26,6 +26,7 @@ import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isActuallyLaidOut
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
@@ -72,18 +73,18 @@ internal class DivTooltipController @VisibleForTesting constructor(
         accessibilityStateProvider,
         { c: View, w: Int, h: Int -> DivTooltipWindow(c, w, h) })
 
-    fun showTooltip(tooltipId: String, div2View: Div2View, multiple: Boolean = false) {
-        findChildWithTooltip(tooltipId, div2View)?.let { (divTooltip, anchor) ->
-            showTooltip(divTooltip, anchor, div2View, multiple)
+    fun showTooltip(tooltipId: String, context: BindingContext, multiple: Boolean = false) {
+        findChildWithTooltip(tooltipId, context.divView)?.let { (divTooltip, anchor) ->
+            showTooltip(divTooltip, anchor, context, multiple)
         }
     }
 
-    private fun showTooltip(divTooltip: DivTooltip, anchor: View, div2View: Div2View, multiple: Boolean) {
+    private fun showTooltip(divTooltip: DivTooltip, anchor: View, context: BindingContext, multiple: Boolean) {
         if (tooltips.contains(divTooltip.id)) {
             return
         }
         anchor.doOnActualLayout {
-            tryShowTooltip(anchor, divTooltip, div2View, multiple)
+            tryShowTooltip(anchor, divTooltip, context, multiple)
         }
         if (!anchor.isActuallyLaidOut && !anchor.isLayoutRequested) {
             anchor.requestLayout()
@@ -94,9 +95,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
         tooltips[id]?.popupWindow?.dismiss()
     }
 
-    fun cancelTooltips(div2View: Div2View) = cancelTooltips(div2View, div2View)
+    fun cancelTooltips(context: BindingContext) = cancelTooltips(context, context.divView)
 
-    private fun cancelTooltips(div2View: Div2View, view: View) {
+    private fun cancelTooltips(context: BindingContext, view: View) {
         @Suppress("UNCHECKED_CAST")
         (view.getTag(R.id.div_tooltips_tag) as? List<DivTooltip>)?.let { tooltipList ->
             tooltipList.forEach { tooltip ->
@@ -108,7 +109,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
                         popupWindow.dismiss()
                     } else {
                         forRemove.add(tooltip.id)
-                        stopVisibilityTracking(div2View, tooltip.div)
+                        stopVisibilityTracking(context, tooltip.div)
                     }
                     ticket?.cancel()
                 }
@@ -117,7 +118,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
         }
         if (view is ViewGroup) {
             view.children.forEach { child ->
-                cancelTooltips(div2View, child)
+                cancelTooltips(context, child)
             }
         }
     }
@@ -138,23 +139,24 @@ internal class DivTooltipController @VisibleForTesting constructor(
     private fun tryShowTooltip(
         anchor: View,
         divTooltip: DivTooltip,
-        div2View: Div2View,
+        context: BindingContext,
         multiple: Boolean
     ) {
+        val div2View = context.divView
         if (!tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip, multiple)) {
             return
         }
         val div = divTooltip.div
         val divBase = div.value()
-        val tooltipView = div2Builder.get().buildView(div, div2View, DivStatePath.fromState(0))
+        val tooltipView = div2Builder.get().buildView(div, context, DivStatePath.fromState(0))
 
         if (tooltipView == null) {
             Assert.fail("Broken div in popup")
             return
         }
 
-        val displayMetrics = div2View.resources.displayMetrics
-        val resolver = div2View.expressionResolver
+        val displayMetrics = context.divView.resources.displayMetrics
+        val resolver = context.expressionResolver
 
         val popup = createPopup(
             tooltipView,
@@ -163,23 +165,23 @@ internal class DivTooltipController @VisibleForTesting constructor(
         ).apply {
             setOnDismissListener {
                 tooltips.remove(divTooltip.id)
-                stopVisibilityTracking(div2View, divTooltip.div)
+                stopVisibilityTracking(context, divTooltip.div)
                 divVisibilityActionTracker.getDivWithWaitingDisappearActions()[tooltipView]?.let {
-                    divVisibilityActionTracker.trackDetachedView(div2View, tooltipView, it)
+                    divVisibilityActionTracker.trackDetachedView(context, tooltipView, it)
                 }
                 tooltipRestrictor.tooltipShownCallback?.onDivTooltipDismissed(div2View, anchor, divTooltip)
             }
             setDismissOnTouchOutside()
-            setupAnimation(divTooltip, div2View.expressionResolver)
+            setupAnimation(divTooltip, resolver)
         }
         val tooltipData = TooltipData(popup, div, null)
         tooltips[divTooltip.id] = tooltipData
-        val ticket = divPreloader.preload(div, div2View.expressionResolver) { hasFailures ->
+        val ticket = divPreloader.preload(div, resolver) { hasFailures ->
             if (!hasFailures && !tooltipData.dismissed && anchor.isViewAttachedToWindow()
                     && tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip, multiple)) {
                 tooltipView.doOnActualLayout {
                     val windowFrame = div2View.getWindowFrame()
-                    val location = calcPopupLocation(tooltipView, anchor, divTooltip, div2View.expressionResolver)
+                    val location = calcPopupLocation(tooltipView, anchor, divTooltip, resolver)
                     val finalTooltipWidth = minOf(tooltipView.width, windowFrame.right)
                     val finalTooltipHeight = minOf(tooltipView.height, windowFrame.bottom)
 
@@ -193,7 +195,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
                     }
 
                     popup.update(location.x, location.y, finalTooltipWidth, finalTooltipHeight)
-                    startVisibilityTracking(div2View, div, tooltipView)
+                    startVisibilityTracking(context, div, tooltipView)
                     tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
                 }
 
@@ -208,7 +210,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
 
                 popup.showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
                 if (divTooltip.duration.evaluate(resolver) != 0L) {
-                    mainThreadHandler.postDelayed(divTooltip.duration.evaluate(resolver).toLong()) {
+                    mainThreadHandler.postDelayed(divTooltip.duration.evaluate(resolver)) {
                         hideTooltip(divTooltip.id, div2View)
                     }
                 }
@@ -217,13 +219,18 @@ internal class DivTooltipController @VisibleForTesting constructor(
         tooltips[divTooltip.id]?.ticket = ticket
     }
 
-    private fun startVisibilityTracking(div2View: Div2View, div: Div, tooltipView: View) {
-        stopVisibilityTracking(div2View, div)
-        divVisibilityActionTracker.trackVisibilityActionsOf(div2View, tooltipView, div)
+    private fun startVisibilityTracking(context: BindingContext, div: Div, tooltipView: View) {
+        stopVisibilityTracking(context, div)
+        divVisibilityActionTracker.trackVisibilityActionsOf(
+            context.divView,
+            context.expressionResolver,
+            tooltipView,
+            div
+        )
     }
 
-    private fun stopVisibilityTracking(div2View: Div2View, div: Div) {
-        divVisibilityActionTracker.trackVisibilityActionsOf(div2View, null, div)
+    private fun stopVisibilityTracking(context: BindingContext, div: Div) {
+        divVisibilityActionTracker.trackVisibilityActionsOf(context.divView, context.expressionResolver, null, div)
     }
 
     private fun View.getWrappedTooltip(): View =

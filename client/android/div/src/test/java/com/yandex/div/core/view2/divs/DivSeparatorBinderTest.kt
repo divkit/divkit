@@ -21,9 +21,9 @@ class DivSeparatorBinderTest : DivBinderTest() {
         val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivSeparatorView
         view.layoutParams = defaultLayoutParams()
 
-        binder.bindView(view, divContainer, divView)
+        binder.bindView(bindingContext, view, divContainer)
 
-        assertActionApplied(divView, view, Expected.ACTION_URI)
+        assertActionApplied(bindingContext, view, Expected.ACTION_URI)
     }
 
     @Test
@@ -33,9 +33,9 @@ class DivSeparatorBinderTest : DivBinderTest() {
         val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivSeparatorView
         view.layoutParams = defaultLayoutParams()
 
-        binder.bindView(view, divContainer, divView)
+        binder.bindView(bindingContext, view, divContainer)
 
-        assertActionApplied(divView, view, Expected.STATE_ACTION_URI)
+        assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
     }
 
     companion object {

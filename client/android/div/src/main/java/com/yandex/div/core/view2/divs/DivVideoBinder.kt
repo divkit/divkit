@@ -17,6 +17,7 @@ import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.player.DivVideoViewMapper
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
@@ -31,11 +32,12 @@ internal class DivVideoBinder @Inject constructor(
     private val divActionBinder: DivActionBinder,
     private val videoViewMapper: DivVideoViewMapper,
 ) : DivViewBinder<DivVideo, DivVideoView> {
-    override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
+    override fun bindView(context: BindingContext, view: DivVideoView, div: DivVideo) {
         val oldDiv = view.div
-        val resolver = divView.expressionResolver
+        val divView = context.divView
+        val resolver = context.expressionResolver
 
-        baseBinder.bindView(view, div, oldDiv, divView)
+        baseBinder.bindView(context, view, div, oldDiv)
 
         val source = div.createSource(resolver)
         val config = DivPlayerPlaybackConfig(
@@ -88,23 +90,23 @@ internal class DivVideoBinder @Inject constructor(
 
         val playerListener = object : DivPlayer.Observer {
             override fun onPlay() {
-                divActionBinder.handleActions(divView, div.resumeActions, DivActionReason.VIDEO)
+                divActionBinder.handleActions(divView, resolver, div.resumeActions, DivActionReason.VIDEO)
             }
 
             override fun onPause() {
-                divActionBinder.handleActions(divView, div.pauseActions, DivActionReason.VIDEO)
+                divActionBinder.handleActions(divView, resolver, div.pauseActions, DivActionReason.VIDEO)
             }
 
             override fun onBuffering() {
-                divActionBinder.handleActions(divView, div.bufferingActions, DivActionReason.VIDEO)
+                divActionBinder.handleActions(divView, resolver, div.bufferingActions, DivActionReason.VIDEO)
             }
 
             override fun onEnd() {
-                divActionBinder.handleActions(divView, div.endActions, DivActionReason.VIDEO)
+                divActionBinder.handleActions(divView, resolver, div.endActions, DivActionReason.VIDEO)
             }
 
             override fun onFatal() {
-                divActionBinder.handleActions(divView, div.fatalActions, DivActionReason.VIDEO)
+                divActionBinder.handleActions(divView, resolver, div.fatalActions, DivActionReason.VIDEO)
             }
 
             override fun onReady() {
@@ -117,14 +119,14 @@ internal class DivVideoBinder @Inject constructor(
 
         if (div === oldDiv) {
             view.observeElapsedTime(div, divView, player)
-            view.observeMuted(div, divView, player)
-            view.observeScale(div, divView, playerView)
+            view.observeMuted(div, resolver, player)
+            view.observeScale(div, resolver, playerView)
             return
         }
 
         view.observeElapsedTime(div, divView, player)
-        view.observeMuted(div, divView, player)
-        view.observeScale(div, divView, playerView)
+        view.observeMuted(div, resolver, player)
+        view.observeScale(div, resolver, playerView)
 
         if (currentPreviewView == null && currentPlayerView == null) {
             view.removeAllViews()
@@ -165,11 +167,11 @@ internal class DivVideoBinder @Inject constructor(
 
     private fun DivVideoView.observeMuted(
         div: DivVideo,
-        divView: Div2View,
+        resolver: ExpressionResolver,
         player: DivPlayer
     ) {
         addSubscription(
-            div.muted.observeAndGet(divView.expressionResolver) {
+            div.muted.observeAndGet(resolver) {
                 player.setMuted(it)
             }
         )
@@ -177,11 +179,11 @@ internal class DivVideoBinder @Inject constructor(
 
     private fun DivVideoView.observeScale(
         div: DivVideo,
-        divView: Div2View,
+        resolver: ExpressionResolver,
         playerView: DivPlayerView
     ) {
         addSubscription(
-            div.scale.observeAndGet(divView.expressionResolver) {
+            div.scale.observeAndGet(resolver) {
                 playerView.setScale(it)
             }
         )

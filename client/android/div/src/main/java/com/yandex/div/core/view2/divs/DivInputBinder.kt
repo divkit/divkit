@@ -21,6 +21,7 @@ import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.validator.ExpressionValidator
 import com.yandex.div.core.util.validator.RegexValidator
 import com.yandex.div.core.util.validator.ValidatorItemData
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
@@ -52,13 +53,13 @@ internal class DivInputBinder @Inject constructor(
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivInput, DivInputView> {
 
-    override fun bindView(view: DivInputView, div: DivInput, divView: Div2View) {
+    override fun bindView(context: BindingContext, view: DivInputView, div: DivInput) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
-        val expressionResolver = divView.expressionResolver
+        val expressionResolver = context.expressionResolver
 
-        baseBinder.bindView(view, div, oldDiv, divView)
+        baseBinder.bindView(context, view, div, oldDiv)
 
         view.apply {
             isFocusable = true
@@ -66,7 +67,7 @@ internal class DivInputBinder @Inject constructor(
             textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
             accessibilityEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
 
-            observeBackground(divView, div, oldDiv, expressionResolver)
+            observeBackground(context, div, oldDiv, expressionResolver)
 
             observeFontSize(div, expressionResolver)
             observeTypeface(div, expressionResolver)
@@ -82,7 +83,7 @@ internal class DivInputBinder @Inject constructor(
             observeKeyboardType(div, expressionResolver)
             observeSelectAllOnFocus(div, expressionResolver)
 
-            observeText(div, expressionResolver, divView)
+            observeText(div, expressionResolver, context.divView)
         }
     }
 
@@ -116,7 +117,7 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.observeBackground(
-        divView: Div2View,
+        bindingContext: BindingContext,
         newDiv: DivInput,
         oldDiv: DivInput?,
         resolver: ExpressionResolver
@@ -125,7 +126,7 @@ internal class DivInputBinder @Inject constructor(
         val drawable = nativeBackground ?: return
 
         val callback = { color: Int ->
-            applyNativeBackgroundColor(color, newDiv, oldDiv, divView, resolver, drawable)
+            applyNativeBackgroundColor(color, newDiv, oldDiv, bindingContext, drawable)
         }
         addSubscription(nativeBackgroundColorVariable.observeAndGet(resolver, callback))
     }
@@ -134,12 +135,11 @@ internal class DivInputBinder @Inject constructor(
         color: Int,
         newDiv: DivInput,
         oldDiv: DivInput?,
-        divView: Div2View,
-        resolver: ExpressionResolver,
+        bindingContext: BindingContext,
         nativeBackground: Drawable
     ) {
         nativeBackground.setTint(color)
-        baseBinder.bindBackground(divView, this, newDiv, oldDiv, resolver, expressionSubscriber, nativeBackground)
+        baseBinder.bindBackground(bindingContext, this, newDiv, oldDiv, expressionSubscriber, nativeBackground)
     }
 
     private fun DivInputView.observeFontSize(div: DivInput, resolver: ExpressionResolver) {

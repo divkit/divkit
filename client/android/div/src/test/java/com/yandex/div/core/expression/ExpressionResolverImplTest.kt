@@ -1,7 +1,7 @@
 package com.yandex.div.core.expression
 
 import com.yandex.div.core.expression.variables.GlobalVariableController
-import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.util.EnableAssertsRule
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluationContext
@@ -56,7 +56,7 @@ class ExpressionResolverImplTest {
     private val globalVariableController = GlobalVariableController().apply {
         declare(*globalVariables.values.toTypedArray())
     }
-    private val externalVariables = VariableController().apply {
+    private val externalVariables = VariableControllerImpl().apply {
         variables.values.forEach {
             declare(it)
         }
@@ -78,7 +78,7 @@ class ExpressionResolverImplTest {
 
     private val withFuncGetCallback = { callback: () -> Unit ->
         ExpressionResolverImpl(
-            VariableController(),
+            VariableControllerImpl(),
             Evaluator(
                 EvaluationContext(
                     variableProvider = evaluationContext.variableProvider,

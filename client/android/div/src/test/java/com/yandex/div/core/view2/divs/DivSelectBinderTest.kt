@@ -25,7 +25,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DivSelectBinderTest : DivBinderTest() {
     private val divTypefaceResolver = mock<DivTypefaceResolver>()
-    private val variableBinder = mock<TwoWayStringVariableBinder>() {
+    private val variableBinder = mock<TwoWayStringVariableBinder> {
         on { bindVariable(any(), any(), any()) } doReturn mock()
     }
     private val errorCollectors = mock<ErrorCollectors> {
@@ -48,7 +48,7 @@ class DivSelectBinderTest : DivBinderTest() {
 
     @Test
     fun `bind value_variable`() {
-        underTest.bindView(view, divSelect, divView)
+        underTest.bindView(bindingContext, view, divSelect)
 
         verify(variableBinder).bindVariable(any(), eq(divSelect.valueVariable), any())
         verifyNoMoreInteractions(variableBinder)
@@ -56,7 +56,7 @@ class DivSelectBinderTest : DivBinderTest() {
 
     @Test
     fun `update text after variable changed`() {
-        underTest.bindView(view, divSelect, divView)
+        underTest.bindView(bindingContext, view, divSelect)
         verify(variableBinder).bindVariable(any(), any(), captor.capture())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
@@ -73,7 +73,7 @@ class DivSelectBinderTest : DivBinderTest() {
     fun `update text and variable after option selected`() {
         val viewStateChangeListener = mock<(String) -> Unit>()
 
-        underTest.bindView(view, divSelect, divView)
+        underTest.bindView(bindingContext, view, divSelect)
         verify(variableBinder).bindVariable(any(), any(), captor.capture())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
@@ -94,8 +94,8 @@ class DivSelectBinderTest : DivBinderTest() {
     private fun List<DivSelect.Option>.evaluateLastOption(): Pair<String, String> {
         val option = last()
 
-        val optionValue = option.value.evaluate(divView.expressionResolver)
-        val optionText = option.text?.evaluate(divView.expressionResolver) ?: optionValue
+        val optionValue = option.value.evaluate(bindingContext.expressionResolver)
+        val optionText = option.text?.evaluate(bindingContext.expressionResolver) ?: optionValue
 
         return optionText to optionValue
     }

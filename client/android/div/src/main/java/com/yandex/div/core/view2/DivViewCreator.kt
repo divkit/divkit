@@ -118,8 +118,8 @@ internal class DivViewCreator @Inject constructor(
 
     override fun visit(data: Div.Container, resolver: ExpressionResolver): View {
         val view = defaultVisit(data, resolver) as ViewGroup
-        data.value.buildItems(resolver).forEach { childData ->
-            view.addView(create(childData, resolver))
+        data.value.buildItems(resolver).forEach { item ->
+            view.addView(create(item.div, item.expressionResolver))
         }
         return view
     }

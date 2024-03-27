@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 import com.yandex.div.core.view2.divs.gallery.ScrollPosition
@@ -14,7 +14,7 @@ import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div2.DivGallery
 
 internal class DivLinearLayoutManager(
-    override val divView: Div2View,
+    override val bindingContext: BindingContext,
     override val view: RecyclerView,
     override val div: DivGallery,
     @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL

@@ -30,11 +30,6 @@
     "swift": {
       "generate_optional_arguments": false
     },
-    "kotlin": {
-      "properties_to_patch": [
-        "items"
-      ]
-    },
     "typescript": {
       "union_interfaces": [
          {
@@ -140,11 +135,7 @@
         },
         "item_builder": {
           "$ref": "div-collection-item-builder.json",
-          "$description": "translations.json#/div_collection_item_builder",
-          "platforms": [
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_collection_item_builder"
         },
         "aspect": {
           "$ref": "div-aspect.json",

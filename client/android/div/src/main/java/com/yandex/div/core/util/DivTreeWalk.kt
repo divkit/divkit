@@ -1,5 +1,6 @@
 package com.yandex.div.core.util
 
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -18,11 +19,11 @@ internal class DivTreeWalk private constructor(
     private val onEnter: ((Div) -> Boolean)?,
     private val onLeave: ((Div) -> Unit)?,
     private val maxDepth: Int = Int.MAX_VALUE
-) : Sequence<Div> {
+) : Sequence<DivItemBuilderResult> {
 
     internal constructor(root: Div, resolver: ExpressionResolver) : this(root, resolver, null, null)
 
-    override fun iterator(): Iterator<Div> = DivTreeWalkIterator(root, resolver)
+    override fun iterator(): Iterator<DivItemBuilderResult> = DivTreeWalkIterator(root, resolver)
 
     /**
      * Sets a [predicate], that is called on any entered container div (div-container, div-gallery, etc.)
@@ -61,106 +62,103 @@ internal class DivTreeWalk private constructor(
     private inner class DivTreeWalkIterator(
         private val root: Div,
         private val resolver: ExpressionResolver
-    ) : AbstractIterator<Div>() {
+    ) : AbstractIterator<DivItemBuilderResult>() {
 
         private val stack = ArrayDeque<Node>().apply {
-            addLast(node(root, resolver))
+            addLast(node(DivItemBuilderResult(root, resolver)))
         }
 
         override fun computeNext() {
-            val nextDiv = nextDiv()
-            if (nextDiv != null) {
-                setNext(nextDiv)
+            val nextItem = nextItem()
+            if (nextItem != null) {
+                setNext(nextItem)
             } else {
                 done()
             }
         }
 
-        private fun nextDiv(): Div? {
+        private fun nextItem(): DivItemBuilderResult? {
             val node = stack.lastOrNull() ?: return null
-            val div = node.step()
-            return if (div == null) {
+            val item = node.step()
+            return if (item == null) {
                 stack.removeLast()
-                nextDiv()
-            } else if (div === node.div || div.isLeaf || stack.size >= maxDepth) {
-                div
+                nextItem()
+            } else if (item === node.item || item.div.isLeaf || stack.size >= maxDepth) {
+                item
             } else {
-                stack.addLast(node(div, resolver))
-                nextDiv()
+                stack.addLast(node(item))
+                nextItem()
             }
         }
 
-        private fun node(div: Div, resolver: ExpressionResolver): Node {
-            return if (div.isBranch) {
-                BranchNode(div, resolver, onEnter, onLeave)
+        private fun node(item: DivItemBuilderResult): Node {
+            return if (item.div.isBranch) {
+                BranchNode(item, onEnter, onLeave)
             } else {
-                LeafNode(div, resolver)
+                LeafNode(item)
             }
         }
     }
 
     private interface Node {
 
-        val div: Div
-        val resolver: ExpressionResolver
+        val item: DivItemBuilderResult
 
-        fun step(): Div?
+        fun step(): DivItemBuilderResult?
     }
 
     private class LeafNode(
-        override val div: Div,
-        override val resolver: ExpressionResolver
+        override val item: DivItemBuilderResult,
     ) : Node {
 
         private var visited = false
 
-        override fun step(): Div? {
+        override fun step(): DivItemBuilderResult? {
             if (visited) {
                 return null
             }
 
             visited = true
-            return div
+            return item
         }
     }
 
     private class BranchNode(
-        override val div: Div,
-        override val resolver: ExpressionResolver,
+        override val item: DivItemBuilderResult,
         private val onEnter: ((Div) -> Boolean)?,
         private val onLeave: ((Div) -> Unit)?
     ) : Node {
 
         private var rootVisited = false
-        private var children: List<Div>? = null
+        private var children: List<DivItemBuilderResult>? = null
         private var childIndex = 0
 
-        override fun step(): Div? {
+        override fun step(): DivItemBuilderResult? {
             if (!rootVisited) {
-                if (onEnter?.invoke(div) == false) {
+                if (onEnter?.invoke(item.div) == false) {
                     return null
                 }
                 rootVisited = true
-                return div
+                return item
             }
 
             var children = this.children
             if (children == null) {
-                children = div.getItems(resolver)
+                children = item.div.getItems(item.expressionResolver)
                 this.children = children
             }
 
             return if (childIndex < children.size) {
                 children[childIndex++]
             } else {
-                onLeave?.invoke(div)
+                onLeave?.invoke(item.div)
                 null
             }
         }
     }
 }
 
-private fun Div.getItems(resolver: ExpressionResolver): List<Div> {
+private fun Div.getItems(resolver: ExpressionResolver): List<DivItemBuilderResult> {
     return when (this) {
         is Div.Text -> emptyList()
         is Div.Image -> emptyList()
@@ -173,10 +171,10 @@ private fun Div.getItems(resolver: ExpressionResolver): List<Div> {
         is Div.Select -> emptyList()
         is Div.Video -> emptyList()
         is Div.Container -> value.buildItems(resolver)
-        is Div.Grid -> value.nonNullItems
-        is Div.Gallery -> value.nonNullItems
-        is Div.Pager -> value.nonNullItems
-        is Div.Tabs -> value.items.map { tab -> tab.div }
-        is Div.State -> value.states.mapNotNull { state -> state.div }
+        is Div.Grid -> value.nonNullItems.map { DivItemBuilderResult(it, resolver) }
+        is Div.Gallery -> value.nonNullItems.map { DivItemBuilderResult(it, resolver) }
+        is Div.Pager -> value.nonNullItems.map { DivItemBuilderResult(it, resolver) }
+        is Div.Tabs -> value.items.map { DivItemBuilderResult(it.div, resolver) }
+        is Div.State -> value.states.mapNotNull { state -> state.div?.let { DivItemBuilderResult(it, resolver) } }
     }
 }

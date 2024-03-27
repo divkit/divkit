@@ -17,6 +17,8 @@ class WithDefault() : Hashable {
         return hash
     }
 
+    fun copy() = WithDefault()
+
     companion object {
         const val TYPE = "default"
     }

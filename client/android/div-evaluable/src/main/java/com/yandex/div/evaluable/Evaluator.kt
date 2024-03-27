@@ -6,7 +6,7 @@ import com.yandex.div.evaluable.types.DateTime
 import kotlin.math.abs
 
 @Mockable
-class Evaluator(private val evaluationContext: EvaluationContext) {
+class Evaluator(val evaluationContext: EvaluationContext) {
 
     @Throws(EvaluableException::class)
     @Suppress("UNCHECKED_CAST")

@@ -22,6 +22,7 @@ import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.containsStateInnerTransitions
 import com.yandex.div.core.util.getDefaultState
 import com.yandex.div.core.util.walk
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivTransitionBuilder
@@ -66,24 +67,26 @@ internal class DivStateBinder @Inject constructor(
 
     /**
      * For example, to bind state to path 0/content/expanded/comments/expanded/comment_03/collapsed you should have:
+     * @param context includes Div2View and ExpressionResolver for current Div.
      * @param layout layout with path 0/content/expanded/comments/expanded/comment_03/{any_state_here}.
      * @param div [DivState], corresponding to path 0/content/expanded/comments/expanded/comment_03,
      * Exact stateId will be set via [DivStateCache] or [TemporaryDivStateCache], and this class will
      * handle receiving corresponding to the state [Div] by itself.
-     * @param divView papa-view, it always the same.
      * @param divStatePath path 0/content/expanded/comments/expanded, so to previous [DivStateLayout].
      */
     fun bindView(
+        context: BindingContext,
         layout: DivStateLayout,
         div: DivState,
-        divView: Div2View,
         divStatePath: DivStatePath
     ) {
         val oldDivState = layout.div
         val oldDiv = layout.activeStateDiv
-        baseBinder.bindView(layout, div, oldDivState, divView)
+        val divView = context.divView
+        val oldResolver = divView.getExpressionResolver(oldDiv?.value())
+        baseBinder.bindView(context, layout, div, oldDivState)
 
-        val resolver = divView.expressionResolver
+        val resolver = context.expressionResolver
         layout.fixAlignment(div, oldDivState, resolver)
         val cardId = divView.divTag.id
         val id = div.getId {
@@ -117,7 +120,7 @@ internal class DivStateBinder @Inject constructor(
             } else {
                 null
             }
-            val transition = replaceViewsAnimated(divView, div, newState, oldState, incoming, outgoing)
+            val transition = replaceViewsAnimated(context, div, newState, oldState, incoming, outgoing)
 
             if (transition != null) {
                 TransitionManager.endTransitions(layout)
@@ -127,15 +130,19 @@ internal class DivStateBinder @Inject constructor(
             if (incoming != null) {
                 layout.addView(incoming)
                 if (newStateDiv != null) {
-                    viewBinder.get().bind(incoming, newStateDiv, divView, currentPath)
+                    viewBinder.get().bind(context, incoming, newStateDiv, currentPath)
                 }
             }
             if (outgoing != null) {
                 divView.divTransitionHandler.runTransitions(root = layout, endTransitions = false)
             }
         } else if (newStateDivValue != null) {
-            val areDivsReplaceable = outgoing != null &&
-                DivComparator.areDivsReplaceable(oldDiv, newStateDiv, divView.oldExpressionResolver, resolver)
+            val areDivsReplaceable = outgoing != null && DivComparator.areDivsReplaceable(
+                oldDiv,
+                newStateDiv,
+                oldResolver,
+                resolver
+            )
             incoming = if (areDivsReplaceable) {
                 outgoing
             } else {
@@ -146,7 +153,7 @@ internal class DivStateBinder @Inject constructor(
                 layout.addView(incoming)
             }
             if (incoming != null) {
-                viewBinder.get().bind(incoming, newStateDiv, divView, currentPath)
+                viewBinder.get().bind(context, incoming, newStateDiv, currentPath)
             }
         } else {
             layout.releaseAndRemoveChildren(divView)
@@ -161,8 +168,8 @@ internal class DivStateBinder @Inject constructor(
                 divView.unbindViewFromDiv(outgoing)
                 if (oldDiv != null) {
                     // We pass null instead of outgoing view to mark previous state as invisible
-                    divVisibilityActionTracker.trackVisibilityActionsOf(divView, null, oldDiv)
-                    untrackRecursively(outgoing, divView)
+                    divVisibilityActionTracker.trackVisibilityActionsOf(divView, oldResolver, null, oldDiv)
+                    untrackRecursively(outgoing, divView, divView.getExpressionResolver(oldDiv.value()))
                 }
             }
         }
@@ -170,7 +177,7 @@ internal class DivStateBinder @Inject constructor(
             if (newStateDivValue.visibilityAction != null || newStateDivValue.visibilityActions != null) {
                 divView.bindViewToDiv(incoming, newStateDiv)
                 incoming.doOnNextLayout {
-                    divVisibilityActionTracker.trackVisibilityActionsOf(divView, incoming, newStateDiv)
+                    divVisibilityActionTracker.trackVisibilityActionsOf(divView, resolver, incoming, newStateDiv)
                 }
             }
         }
@@ -180,7 +187,7 @@ internal class DivStateBinder @Inject constructor(
 
         // applying div patch
         if (childDivId != null) {
-            val patchView = divPatchManager.createViewsForId(divView, childDivId)?.let { views ->
+            val patchView = divPatchManager.createViewsForId(context, childDivId)?.let { views ->
                 if (views.size > 1) {
                     KLog.e(TAG) { "Unable to patch state because there is more than 1 div in the patch" }
                     null
@@ -195,7 +202,7 @@ internal class DivStateBinder @Inject constructor(
                 if (patchDiv.value().hasSightActions) {
                     divView.bindViewToDiv(patchView, patchDiv)
                 }
-                viewBinder.get().bind(patchView, patchDiv, divView, currentPath)
+                viewBinder.get().bind(context, patchView, patchDiv, currentPath)
             }
         }
 
@@ -204,7 +211,7 @@ internal class DivStateBinder @Inject constructor(
             layout.swipeOutCallback = {
                 divView.bulkActions {
                     actions.forEach {
-                        divActionBinder.handleAction(divView, it, DivActionReason.STATE_SWIPE_OUT)
+                        divActionBinder.handleAction(divView, resolver, it, DivActionReason.STATE_SWIPE_OUT)
                         div2Logger.logSwipedAway(divView, layout, it)
                         divActionBeaconSender.sendSwipeOutActionBeacon(it, resolver)
                     }
@@ -259,21 +266,21 @@ internal class DivStateBinder @Inject constructor(
         addSubscription(subscription)
     }
 
-    private fun untrackRecursively(outgoing: View?, divView: Div2View) {
+    private fun untrackRecursively(outgoing: View?, divView: Div2View, resolver: ExpressionResolver) {
         if (outgoing is ViewGroup) {
             // Also, unbind every child
             outgoing.children.forEach { childView: View ->
                 val childDiv: Div? = divView.unbindViewFromDiv(childView)
                 if (childDiv != null) {
-                    divVisibilityActionTracker.trackVisibilityActionsOf(divView, null, childDiv)
+                    divVisibilityActionTracker.trackVisibilityActionsOf(divView, resolver, null, childDiv)
                 }
-                untrackRecursively(childView, divView)
+                untrackRecursively(childView, divView, resolver)
             }
         }
     }
 
     private fun replaceViewsAnimated(
-        divView: Div2View,
+        context: BindingContext,
         divState: DivState,
         incomingState: DivState.State,
         outgoingState: DivState.State?,
@@ -282,9 +289,11 @@ internal class DivStateBinder @Inject constructor(
     ): Transition? {
         val outgoingDiv = outgoingState?.div
         val incomingDiv = incomingState.div
-        val resolver = divView.expressionResolver
+        val divView = context.divView
+        val resolver = context.expressionResolver
+        val oldResolver = divView.getExpressionResolver(outgoingDiv?.value())
         val transition = if (divState.allowsTransitionsOnStateChange(resolver)
-            && (outgoingDiv?.containsStateInnerTransitions(resolver) == true
+            && (outgoingDiv?.containsStateInnerTransitions(oldResolver) == true
                     || incomingDiv?.containsStateInnerTransitions(resolver) == true)) {
             setupTransitions(
                 divView.viewComponent.transitionBuilder,
@@ -292,10 +301,10 @@ internal class DivStateBinder @Inject constructor(
                 incomingState,
                 outgoingState,
                 resolver,
-                divView.oldExpressionResolver
+                oldResolver
             )
         } else {
-            setupAnimation(divView, incomingState, outgoingState, incoming, outgoing)
+            setupAnimation(context, incomingState, outgoingState, incoming, outgoing)
         }
         return transition
     }
@@ -322,13 +331,13 @@ internal class DivStateBinder @Inject constructor(
         val transition = transitionBuilder.buildTransitions(
             from = outgoingState?.div?.walk(outgoingResolver)
                 ?.onEnter { div -> div !is Div.State }
-                ?.filter { div ->
-                    div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
+                ?.filter { item ->
+                    item.div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
                 },
             to = incomingState.div?.walk(incomingResolver)
                 ?.onEnter { div -> div !is Div.State }
-                ?.filter { div ->
-                    div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
+                ?.filter { item ->
+                    item.div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
                 },
             fromResolver = outgoingResolver,
             toResolver = incomingResolver
@@ -339,13 +348,13 @@ internal class DivStateBinder @Inject constructor(
     }
 
     private fun setupAnimation(
-        divView: Div2View,
+        context: BindingContext,
         incomingState: DivState.State,
         outgoingState: DivState.State?,
         incoming: View?,
         outgoing: View?
     ): Transition? {
-        val resolver = divView.expressionResolver
+        val resolver = context.expressionResolver
         val animationIn = incomingState.animationIn
         val animationOut = outgoingState?.animationOut
         if (animationIn != null || animationOut != null ) {
@@ -369,20 +378,21 @@ internal class DivStateBinder @Inject constructor(
                 }
             }
 
+            val outResolver = context.divView.getExpressionResolver(outgoingState?.div?.value())
             if (animationOut != null && outgoing != null) {
-                val animationsOut = if (animationOut.name.evaluate(resolver) != DivAnimation.Name.SET) {
+                val animationsOut = if (animationOut.name.evaluate(outResolver) != DivAnimation.Name.SET) {
                     listOf(animationOut)
                 } else {
                     animationOut.items.orEmpty()
                 }
 
                 for (animation in animationsOut) {
-                    animation.toTransition(incoming = false, resolver)?.let {
+                    animation.toTransition(incoming = false, outResolver)?.let {
                         transition.addTransition(it
                             .addTarget(outgoing)
-                            .setDuration(animation.duration.evaluate(resolver))
-                            .setStartDelay(animation.startDelay.evaluate(resolver))
-                            .setInterpolator(animation.interpolator.evaluate(resolver).androidInterpolator)
+                            .setDuration(animation.duration.evaluate(outResolver))
+                            .setStartDelay(animation.startDelay.evaluate(outResolver))
+                            .setInterpolator(animation.interpolator.evaluate(outResolver).androidInterpolator)
                         )
                     }
                 }

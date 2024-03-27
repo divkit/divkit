@@ -2,10 +2,13 @@ package com.yandex.div.core.expression
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
+import com.yandex.div.core.expression.variables.LocalVariableController
 import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.expression.variables.VariableSource
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
+import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.MissingVariableException
 import com.yandex.div.internal.parser.Converter
@@ -21,10 +24,11 @@ import com.yandex.div.json.resolveFailed
 import com.yandex.div.json.typeMismatch
 
 internal class ExpressionResolverImpl(
-    variableController: VariableController,
+    private val variableController: VariableController,
     private val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
 ) : ExpressionResolver {
+
     private val evaluationsCache = mutableMapOf<String, Any>()
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
 
@@ -208,5 +212,21 @@ internal class ExpressionResolverImpl(
         val observers = expressionObservers.getOrPut(rawExpression) { ObserverList() }
         observers.addObserver(callback)
         return Disposable { expressionObservers[rawExpression]?.removeObserver(callback) }
+    }
+
+    operator fun plus(variableSource: VariableSource): ExpressionResolverImpl {
+        val localVariableController = LocalVariableController(variableController, variableSource)
+        return ExpressionResolverImpl(
+            variableController = localVariableController,
+            evaluator = Evaluator(
+                evaluationContext = EvaluationContext(
+                    variableProvider = localVariableController,
+                    storedValueProvider = evaluator.evaluationContext.storedValueProvider,
+                    functionProvider = evaluator.evaluationContext.functionProvider,
+                    warningSender = evaluator.evaluationContext.warningSender
+                )
+            ),
+            errorCollector = errorCollector
+        )
     }
 }

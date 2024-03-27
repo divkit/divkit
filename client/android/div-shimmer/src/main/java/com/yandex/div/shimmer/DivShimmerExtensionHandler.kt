@@ -48,11 +48,12 @@ open class DivShimmerExtensionHandler(
         if (animationStartTime == 0L) {
             animationStartTime = SystemClock.uptimeMillis()
         }
+        val resolver = divView.getExpressionResolver(div)
         val drawable = ShimmerDrawable(
-                data.createShimmer(divView.expressionResolver),
+                data.createShimmer(resolver),
                 animationStartTime
         )
-        data.observeTo(drawable, divView.expressionResolver)
+        data.observeTo(drawable, resolver)
         imageView.setImage(drawable)
         view.setTag(R.id.div_shimmer_drawable, drawable)
     }
