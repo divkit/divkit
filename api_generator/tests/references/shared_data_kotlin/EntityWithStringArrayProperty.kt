@@ -20,6 +20,12 @@ class EntityWithStringArrayProperty(
         return hash
     }
 
+    fun copy(
+        array: ExpressionList<String> = this.array,
+    ) = EntityWithStringArrayProperty(
+        array = array,
+    )
+
     companion object {
         const val TYPE = "entity_with_string_array_property"
 

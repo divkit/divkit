@@ -29,7 +29,7 @@ import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.text.DivBackgroundSpan
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
@@ -86,15 +86,22 @@ internal class DivTextBinder @Inject constructor(
     @ExperimentFlag(HYPHENATION_SUPPORT_ENABLED) private val isHyphenationEnabled: Boolean
 ) : DivViewBinder<DivText, DivLineHeightTextView> {
 
-    override fun bindView(view: DivLineHeightTextView, div: DivText, divView: Div2View) {
+    override fun bindView(context: BindingContext, view: DivLineHeightTextView, div: DivText) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
-        baseBinder.bindView(view, div, oldDiv, divView)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions,
-            div.doubletapActions, div.actionAnimation, div.accessibility)
+        baseBinder.bindView(context, view, div, oldDiv)
+        view.applyDivActions(
+            context,
+            div.action,
+            div.actions,
+            div.longtapActions,
+            div.doubletapActions,
+            div.actionAnimation,
+            div.accessibility,
+        )
 
-        val expressionResolver = divView.expressionResolver
+        val expressionResolver = context.expressionResolver
         view.bindTypeface(div, oldDiv, expressionResolver)
         view.bindTextAlignment(div, oldDiv, expressionResolver)
         view.bindFontSize(div, oldDiv, expressionResolver)
@@ -103,8 +110,8 @@ internal class DivTextBinder @Inject constructor(
         view.bindUnderline(div, oldDiv, expressionResolver)
         view.bindStrikethrough(div, oldDiv, expressionResolver)
         view.bindMaxLines(div, oldDiv, expressionResolver)
-        view.bindText(divView, div, oldDiv, expressionResolver)
-        view.bindEllipsis(divView, div, oldDiv, expressionResolver)
+        view.bindText(context, div, oldDiv)
+        view.bindEllipsis(context, div, oldDiv)
         view.bindAutoEllipsize(div, oldDiv, expressionResolver)
         view.bindTextGradient(div, oldDiv, expressionResolver)
         view.bindTextShadow(div, oldDiv, expressionResolver)
@@ -605,34 +612,33 @@ internal class DivTextBinder @Inject constructor(
     //region Text
 
     private fun DivLineHeightTextView.bindText(
-        divView: Div2View,
+        bindingContext: BindingContext,
         newDiv: DivText,
         oldDiv: DivText?,
-        resolver: ExpressionResolver
     ) {
         if (newDiv.ranges == null && newDiv.images == null) {
-            bindPlainText(newDiv, oldDiv, resolver)
+            bindPlainText(newDiv, oldDiv, bindingContext.expressionResolver)
         } else {
-            bindRichText(divView, newDiv, resolver)
+            bindRichText(bindingContext, newDiv)
         }
     }
 
     private fun DivLineHeightTextView.bindRichText(
-        divView: Div2View,
+        bindingContext: BindingContext,
         newDiv: DivText,
-        resolver: ExpressionResolver
     ) {
-        applyRichText(divView, resolver, newDiv)
+        val resolver = bindingContext.expressionResolver
+        applyRichText(bindingContext, newDiv)
         applyHyphenation(newDiv.text.evaluate(resolver))
 
         addSubscription(
             newDiv.text.observe(resolver) { text ->
-                applyRichText(divView, resolver, newDiv)
+                applyRichText(bindingContext, newDiv)
                 applyHyphenation(text)
             }
         )
 
-        val callback = { _: Any -> applyRichText(divView, resolver, newDiv) }
+        val callback = { _: Any -> applyRichText(bindingContext, newDiv) }
         newDiv.ranges?.forEach { range ->
             addSubscription(range.start.observe(resolver, callback))
             addSubscription(range.end.observe(resolver, callback))
@@ -656,14 +662,13 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun TextView.applyRichText(
-        divView: Div2View,
-        resolver: ExpressionResolver,
+        bindingContext: BindingContext,
         div: DivText
     ) {
+        val resolver = bindingContext.expressionResolver
         val ranger = DivTextRanger(
-            divView,
+            bindingContext,
             this,
-            resolver,
             div.text.evaluate(resolver),
             div.fontSize.evaluate(resolver),
             div.fontFamily?.evaluate(resolver),
@@ -739,16 +744,15 @@ internal class DivTextBinder @Inject constructor(
     //region Ellipsis
 
     private fun DivLineHeightTextView.bindEllipsis(
-        divView: Div2View,
+        bindingContext: BindingContext,
         newDiv: DivText,
         oldDiv: DivText?,
-        resolver: ExpressionResolver
     ) {
         val ellipsis = newDiv.ellipsis
         if (ellipsis?.ranges == null && ellipsis?.images == null && ellipsis?.actions == null) {
-            bindPlainEllipsis(newDiv.ellipsis, oldDiv?.ellipsis, resolver)
+            bindPlainEllipsis(newDiv.ellipsis, oldDiv?.ellipsis, bindingContext.expressionResolver)
         } else {
-            bindRichEllipsis(divView, newDiv, resolver)
+            bindRichEllipsis(bindingContext, newDiv)
         }
     }
 
@@ -777,15 +781,15 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun DivLineHeightTextView.bindRichEllipsis(
-        divView: Div2View,
+        bindingContext: BindingContext,
         newDiv: DivText,
-        resolver: ExpressionResolver
     ) {
-        applyRichEllipsis(divView, newDiv, resolver)
+        applyRichEllipsis(bindingContext, newDiv)
 
         val ellipsis = newDiv.ellipsis ?: return
 
-        val callback = { _: Any -> applyRichEllipsis(divView, newDiv, resolver) }
+        val resolver = bindingContext.expressionResolver
+        val callback = { _: Any -> applyRichEllipsis(bindingContext, newDiv) }
         addSubscription(ellipsis.text.observe(resolver, callback))
         ellipsis.ranges?.forEach { range ->
             addSubscription(range.start.observe(resolver, callback))
@@ -815,9 +819,8 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun EllipsizedTextView.applyRichEllipsis(
-        divView: Div2View,
+        bindingContext: BindingContext,
         newDiv: DivText,
-        resolver: ExpressionResolver
     ) {
         val ellipsis = newDiv.ellipsis
         if (ellipsis == null) {
@@ -825,10 +828,10 @@ internal class DivTextBinder @Inject constructor(
             return
         }
 
+        val resolver = bindingContext.expressionResolver
         val ranger = DivTextRanger(
-            divView,
+            bindingContext,
             this,
-            resolver,
             ellipsis.text.evaluate(resolver),
             newDiv.fontSize.evaluate(resolver),
             newDiv.fontFamily?.evaluate(resolver),
@@ -932,9 +935,8 @@ internal class DivTextBinder @Inject constructor(
 
     // TODO: refactor to SpannedTextBuilder scoped by div context.
     private inner class DivTextRanger(
-        private val divView: Div2View,
+        private val bindingContext: BindingContext,
         private val textView: TextView,
-        private val resolver: ExpressionResolver,
         private val text: String,
         private val fontSize: Long,
         private val fontFamily: String?,
@@ -943,6 +945,8 @@ internal class DivTextBinder @Inject constructor(
         images: List<DivText.Image>?
     ) {
 
+        private val divView = bindingContext.divView
+        private val resolver = bindingContext.expressionResolver
         private val context = divView.context
         private val metrics = divView.resources.displayMetrics
         private val sb: SpannableStringBuilder = SpannableStringBuilder(text)
@@ -1142,7 +1146,7 @@ internal class DivTextBinder @Inject constructor(
         private inner class DivClickableSpan(private val actions: List<DivAction>) : ClickableSpan() {
             override fun onClick(p0: View) {
                 val actionBinder = divView.div2Component.actionBinder
-                actionBinder.handleTapClick(divView, p0, actions)
+                actionBinder.handleTapClick(bindingContext, p0, actions)
             }
 
             override fun updateDrawState(ds: TextPaint) {

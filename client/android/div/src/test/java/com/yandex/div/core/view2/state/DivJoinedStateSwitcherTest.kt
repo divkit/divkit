@@ -52,7 +52,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(notActiveState), resolver)
 
-        verify(viewBinder).bind(any(), eq(div), any(), eq(DivStatePath.fromState(0)))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(DivStatePath.fromState(0)))
     }
 
     @Test
@@ -62,7 +62,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
-        verify(viewBinder).bind(any(), eq(div), any(), eq(activeState.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
     }
 
     @Test
@@ -72,7 +72,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
-        verify(viewBinder).bind(any(), eq(div), any(), eq(activeState.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
     }
 
     @Test
@@ -85,7 +85,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), eq(div), any(), eq(commonPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(commonPath.parentState()))
     }
 
     @Test
@@ -99,7 +99,7 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), eq(div), any(), eq(commonPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(commonPath.parentState()))
     }
 
     @Test
@@ -111,6 +111,6 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), eq(rootDiv), any(), eq(commonPath))
+        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(commonPath))
     }
 }

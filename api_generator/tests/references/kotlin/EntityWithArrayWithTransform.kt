@@ -40,6 +40,12 @@ class EntityWithArrayWithTransform(
         return json
     }
 
+    fun copy(
+        array: ExpressionList<Int> = this.array,
+    ) = EntityWithArrayWithTransform(
+        array = array,
+    )
+
     companion object {
         const val TYPE = "entity_with_array_with_transform"
 

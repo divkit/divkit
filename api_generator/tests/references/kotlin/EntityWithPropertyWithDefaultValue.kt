@@ -46,6 +46,16 @@ class EntityWithPropertyWithDefaultValue(
         return json
     }
 
+    fun copy(
+        int: Expression<Long> = this.int,
+        nested: Nested? = this.nested,
+        url: Expression<Uri> = this.url,
+    ) = EntityWithPropertyWithDefaultValue(
+        int = int,
+        nested = nested,
+        url = url,
+    )
+
     companion object {
         const val TYPE = "entity_with_property_with_default_value"
 
@@ -108,6 +118,16 @@ class EntityWithPropertyWithDefaultValue(
             json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
             return json
         }
+
+        fun copy(
+            int: Expression<Long> = this.int,
+            nonOptional: Expression<String> = this.nonOptional,
+            url: Expression<Uri> = this.url,
+        ) = Nested(
+            int = int,
+            nonOptional = nonOptional,
+            url = url,
+        )
 
         companion object {
             private val INT_DEFAULT_VALUE = Expression.constant(0L)

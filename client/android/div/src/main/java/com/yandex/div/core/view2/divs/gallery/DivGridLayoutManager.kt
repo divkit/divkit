@@ -4,19 +4,19 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivSize
 
 internal class DivGridLayoutManager(
-    override val divView: Div2View,
+    override val bindingContext: BindingContext,
     override val view: RecyclerView,
     override val div: DivGallery,
     @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL
 ) : StaggeredGridLayoutManager (
-        div.columnCount?.evaluate(divView.expressionResolver)?.toIntSafely() ?: 1,
+        div.columnCount?.evaluate(bindingContext.expressionResolver)?.toIntSafely() ?: 1,
     orientation
 ), DivGalleryItemHelper {
 
@@ -26,7 +26,7 @@ internal class DivGridLayoutManager(
         get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.nonNullItems
 
     private val midPadding
-        get() = div.itemSpacing.evaluate(divView.expressionResolver).dpToPx(view.resources.displayMetrics)
+        get() = div.itemSpacing.evaluate(bindingContext.expressionResolver).dpToPx(view.resources.displayMetrics)
 
     override fun toLayoutManager() = this
 

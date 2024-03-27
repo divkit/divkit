@@ -7,7 +7,7 @@ import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.toLayoutParamsSize
@@ -29,7 +29,7 @@ internal class DivTabsAdapter(
     tabbedCardConfig: TabbedCardConfig,
     heightCalculatorFactory: HeightCalculatorFactory,
     val isDynamicHeight: Boolean,
-    private val div2View: Div2View,
+    private val bindingContext: BindingContext,
     textStyleProvider: TabTextStyleProvider,
     private val viewCreator: DivViewCreator,
     private val divBinder: DivBinder,
@@ -49,7 +49,7 @@ internal class DivTabsAdapter(
     private val tabModels = mutableMapOf<ViewGroup, TabModel>()
 
     fun setData(data: Input<DivSimpleTab>, selectedTab: Int) {
-        super.setData(data, div2View.expressionResolver, div2View.expressionSubscriber)
+        super.setData(data, bindingContext.expressionResolver, bindingContext.divView.expressionSubscriber)
         tabModels.clear()
         mPager.setCurrentItem(selectedTab, true)
     }
@@ -59,10 +59,10 @@ internal class DivTabsAdapter(
         tab: DivSimpleTab,
         tabNumber: Int
     ): ViewGroup {
-        tabView.releaseAndRemoveChildren(div2View)
+        tabView.releaseAndRemoveChildren(bindingContext.divView)
 
         val itemDiv = tab.item.div
-        val itemView = createItemView(itemDiv, div2View.expressionResolver)
+        val itemView = createItemView(itemDiv, bindingContext.expressionResolver)
         tabModels[tabView] = TabModel(tabNumber, itemDiv, itemView)
         tabView.addView(itemView)
 
@@ -71,12 +71,12 @@ internal class DivTabsAdapter(
 
     override fun unbindTabData(tabView: ViewGroup) {
         tabModels.remove(tabView)
-        tabView.releaseAndRemoveChildren(div2View)
+        tabView.releaseAndRemoveChildren(bindingContext.divView)
     }
 
     override fun fillMeasuringTab(tabView: ViewGroup, tab: DivSimpleTab, tabNumber: Int) {
-        tabView.releaseAndRemoveChildren(div2View)
-        val itemView = createItemView(tab.item.div, div2View.expressionResolver)
+        tabView.releaseAndRemoveChildren(bindingContext.divView)
+        val itemView = createItemView(tab.item.div, bindingContext.expressionResolver)
         tabView.addView(itemView)
     }
 
@@ -87,23 +87,23 @@ internal class DivTabsAdapter(
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
-        divBinder.bind(itemView, div, div2View, path)
+        divBinder.bind(bindingContext, itemView, div, path)
 
         return itemView
     }
 
     fun notifyStateChanged() {
         tabModels.forEach { (tabView, tabModel) ->
-            divBinder.bind(tabModel.view, tabModel.div, div2View, path)
+            divBinder.bind(bindingContext, tabModel.view, tabModel.div, path)
             // ... and a little bit of a magic
             tabView.requestLayout()
         }
     }
 
     fun applyPatch(resolver: ExpressionResolver, div: DivTabs): DivTabs? {
-        val patchMap = divPatchCache.getPatch(div2View.dataTag) ?: return null
+        val patchMap = divPatchCache.getPatch(bindingContext.divView.dataTag) ?: return null
         val newTabs = DivPatchApply(patchMap).applyPatchForDiv(Div.Tabs(div), resolver)[0].value() as DivTabs
-        val displayMetrics = div2View.resources.displayMetrics
+        val displayMetrics = bindingContext.divView.resources.displayMetrics
         val list = newTabs.items.map { DivSimpleTab(it, displayMetrics, resolver) }
         setData ({ list }, mPager.currentItem)
         return newTabs

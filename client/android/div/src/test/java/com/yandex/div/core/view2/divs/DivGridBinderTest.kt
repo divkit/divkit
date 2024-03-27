@@ -24,18 +24,18 @@ class DivGridBinderTest : DivBinderTest() {
     fun `url action applied`() {
         val (divGrid, view) = createTestData("with-action.json")
 
-        binder.bindView(view, divGrid, divView, DivStatePath.parse("0"))
+        binder.bindView(bindingContext, view, divGrid, DivStatePath.parse("0"))
 
-        assertActionApplied(divView, view, Expected.ACTION_URI)
+        assertActionApplied(bindingContext, view, Expected.ACTION_URI)
     }
 
     @Test
     fun `state action applied`() {
         val (divGrid, view) = createTestData("with-set-state-action.json")
 
-        binder.bindView(view, divGrid, divView, DivStatePath.parse("0"))
+        binder.bindView(bindingContext, view, divGrid, DivStatePath.parse("0"))
 
-        assertActionApplied(divView, view, Expected.STATE_ACTION_URI)
+        assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
     }
 
     private fun createTestData(filename: String): Pair<DivGrid, DivGridLayout> {

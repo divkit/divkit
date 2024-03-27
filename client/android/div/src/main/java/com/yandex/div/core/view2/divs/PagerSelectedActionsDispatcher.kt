@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.DivActionHandler.DivActionReason
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
@@ -15,8 +15,7 @@ private const val TAG = "Ya:PagerSelectedActionsTracker"
  * Responsible to dispatch item's `selected_actions` for [DivPager].
  */
 internal class PagerSelectedActionsDispatcher(
-    private val divView: Div2View,
-    private val div: DivPager,
+    private val bindingContext: BindingContext,
     private val divs: List<Div>,
     private val divActionBinder: DivActionBinder
 ) {
@@ -68,9 +67,14 @@ internal class PagerSelectedActionsDispatcher(
 
     private fun dispatchSelectedActions(div: Div) {
         div.value().selectedActions?.let { actions ->
-            divView.bulkActions {
+            bindingContext.divView.bulkActions {
                 actions.forEach { action ->
-                    divActionBinder.handleAction(divView, action, DivActionReason.SELECTION)
+                    divActionBinder.handleAction(
+                        bindingContext.divView,
+                        bindingContext.expressionResolver,
+                        action,
+                        DivActionReason.SELECTION
+                    )
                 }
             }
         }

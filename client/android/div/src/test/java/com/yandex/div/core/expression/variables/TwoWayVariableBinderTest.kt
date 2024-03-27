@@ -31,7 +31,7 @@ class TwoWayVariableBinderTest {
         on { getOrCreate(any(), any()) } doReturn errorCollector
     }
     private val variable = Variable.StringVariable(VARIABLE_NAME, INITIAL_VALUE)
-    private val variableController = VariableController().apply {
+    private val variableController = VariableControllerImpl().apply {
         declare(variable)
     }
     private val expressionsRuntime = ExpressionsRuntime(mock(), variableController, mock())

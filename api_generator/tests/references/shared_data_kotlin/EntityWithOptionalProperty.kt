@@ -20,6 +20,12 @@ class EntityWithOptionalProperty(
         return hash
     }
 
+    fun copy(
+        property: Expression<String>? = this.property,
+    ) = EntityWithOptionalProperty(
+        property = property,
+    )
+
     companion object {
         const val TYPE = "entity_with_optional_property"
     }

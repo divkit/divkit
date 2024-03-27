@@ -36,6 +36,28 @@ class EntityWithSimpleProperties(
         return hash
     }
 
+    fun copy(
+        boolean: Expression<Boolean>? = this.boolean,
+        booleanInt: Expression<Boolean>? = this.booleanInt,
+        color: Expression<Int>? = this.color,
+        double: Expression<Double>? = this.double,
+        id: Long = this.id,
+        integer: Expression<Long> = this.integer,
+        positiveInteger: Expression<Long>? = this.positiveInteger,
+        string: Expression<String>? = this.string,
+        url: Expression<Uri>? = this.url,
+    ) = EntityWithSimpleProperties(
+        boolean = boolean,
+        booleanInt = booleanInt,
+        color = color,
+        double = double,
+        id = id,
+        integer = integer,
+        positiveInteger = positiveInteger,
+        string = string,
+        url = url,
+    )
+
     companion object {
         const val TYPE = "entity_with_simple_properties"
 
