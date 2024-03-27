@@ -24,7 +24,7 @@ public protocol DivCustomBlockFactory {
 
 struct EmptyDivCustomBlockFactory: DivCustomBlockFactory {
   func makeBlock(data: DivCustomData, context: DivBlockModelingContext) -> Block {
-    context.addError("No block factory for DivCustom: \(data.name)")
+    context.addError(message: "No block factory for DivCustom: \(data.name)")
     return EmptyBlock.zeroSized
   }
 }
