@@ -63,10 +63,16 @@
     let filterClipPath = '';
     let isRTLMirror = false;
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         scale = 'none';
         position = '50% 50%';
         tintMode = 'source_in';
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: jsonImageUrl = componentContext.getDerivedFromVars(componentContext.json.image_url);

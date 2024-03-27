@@ -64,7 +64,9 @@
     let secondaryDescription = '';
     let hasError = false;
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         thumbStyle = DEFAULT_DRAWABLE_STYLE;
         thumbSecondaryStyle = thumbStyle;
         trackInactiveStyle = DEFAULT_DRAWABLE_STYLE;
@@ -75,6 +77,10 @@
         textSecondaryStyle = undefined;
         description = '';
         secondaryDescription = '';
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: firstVariable = componentContext.json.thumb_value_variable;

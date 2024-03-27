@@ -59,8 +59,14 @@
     let padding = '';
     let sizeVal = '';
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         padding = '';
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: jsonLayoutMode = componentContext.getDerivedFromVars(componentContext.json.layout_mode);

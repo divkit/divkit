@@ -67,12 +67,18 @@
     let childLayoutParams: LayoutParams = {};
     let defaultItem = 0;
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         columns = 1;
         orientation = 'horizontal';
         align = 'start';
         itemSpacing = 8;
         padding = '';
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: jsonItems = Array.isArray(componentContext.json.items) && componentContext.json.items || [];

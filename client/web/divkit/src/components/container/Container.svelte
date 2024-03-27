@@ -71,11 +71,17 @@
     let aspect: number | undefined = undefined;
     let childLayoutParams: LayoutParams = {};
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         orientation = 'vertical';
         contentVAlign = 'start';
         contentHAlign = 'start';
         aspect = undefined;
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: jsonItems = componentContext.json.items;

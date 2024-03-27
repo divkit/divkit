@@ -57,7 +57,9 @@
     let indicatorItemsWrapper: HTMLElement;
     let pagerData: PagerData;
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         placement = 'default';
         spaceBetweenCenters = 15;
         maxVisibleItems = 10;
@@ -74,6 +76,10 @@
             borderRadius: 5,
             background: '#33919cb5'
         };
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: jsonShape = componentContext.getDerivedFromVars(componentContext.json.shape);

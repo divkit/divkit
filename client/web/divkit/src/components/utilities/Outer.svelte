@@ -181,7 +181,9 @@
     } | undefined;
     let dev: DevtoolResult | null = null;
 
-    $: if (componentContext.json && layoutParams) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         selfPadding = null;
         margin = '';
         alpha = 1;
@@ -198,7 +200,15 @@
         hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.json.id);
         hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.json.id);
 
-        reregisterNode();
+        if (currentNode) {
+            useAction(currentNode);
+        }
+    }
+
+    // If origJson is same, than the component itself is the same
+    // componentContext could be changed
+    $: if (origJson) {
+        rebind();
     }
 
     $: jsonFocus = componentContext.getDerivedFromVars(componentContext.json.focus);
@@ -844,12 +854,6 @@
         '--divkit-animation-scale-start': animationScaleStart,
         '--divkit-animation-scale-end': animationScaleEnd
     };
-
-    function reregisterNode(): void {
-        if (currentNode) {
-            useAction(currentNode);
-        }
-    }
 
     function useAction(node: HTMLElement) {
         registred?.destroy();

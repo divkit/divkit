@@ -95,7 +95,9 @@
     let startTransform: number;
     let currentTransform: number;
 
-    $: if (componentContext.json) {
+    $: origJson = componentContext.origJson;
+
+    function rebind(): void {
         tabFontSize = 12;
         tabPaddings = '';
         tabBorderRadius = '';
@@ -111,6 +113,10 @@
         separatorBackground = '';
         separatorMargins = '';
         titlePadding = null;
+    }
+
+    $: if (origJson) {
+        rebind();
     }
 
     $: items = Array.isArray(componentContext.json.items) && componentContext.json.items || [];
