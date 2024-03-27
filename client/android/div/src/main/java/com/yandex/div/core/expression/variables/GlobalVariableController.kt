@@ -2,15 +2,12 @@ package com.yandex.div.core.expression.variables
 
 import android.os.Handler
 import android.os.Looper
-import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.Assert
-import com.yandex.div.internal.util.SynchronizedList
-import com.yandex.div.internal.util.UiThreadHandler
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Inject
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Allows to introduce new global variables and update existing.
@@ -29,14 +26,10 @@ import javax.inject.Inject
 class GlobalVariableController {
     private val mainHandler = Handler(Looper.getMainLooper())
     private val variables = ConcurrentHashMap<String, Variable>()
-    private val declarationObservers = SynchronizedList<DeclarationObserver>(
-        ownerThread = UiThreadHandler.mainThread()
-    )
+    private val declarationObservers = ConcurrentLinkedQueue<DeclarationObserver>()
     private val declaredVariableNames = mutableSetOf<String>()
     private val pendingDeclaration = mutableSetOf<String>()
-    private val externalVariableRequestObservers = SynchronizedList<VariableRequestObserver>(
-        ownerThread = UiThreadHandler.mainThread()
-    )
+    private val externalVariableRequestObservers = ConcurrentLinkedQueue<VariableRequestObserver>()
 
     private val requestsObserver = { variableName: String ->
         externalVariableRequestObservers.forEach { it.invoke(variableName) }

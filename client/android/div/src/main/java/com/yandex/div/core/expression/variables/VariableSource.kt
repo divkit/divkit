@@ -2,13 +2,12 @@ package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.data.Variable
-import com.yandex.div.internal.util.SynchronizedList
 
 @Mockable
 internal class VariableSource(
     private val variables: Map<String, Variable>,
     private val requestObserver: (variableName: String) -> Unit,
-    private val declarationObservers: SynchronizedList<(Variable) -> Unit>
+    private val declarationObservers: MutableCollection<(Variable) -> Unit>
 ) {
 
     internal fun getMutableVariable(name: String): Variable? {

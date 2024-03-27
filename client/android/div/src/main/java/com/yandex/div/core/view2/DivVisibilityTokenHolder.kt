@@ -2,8 +2,8 @@ package com.yandex.div.core.view2
 
 import android.os.Handler
 import androidx.annotation.AnyThread
-import com.yandex.div.internal.util.SynchronizedList
 import com.yandex.div2.DivSightAction
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Utility wrapper for MutableList<MutableMap<CompositeLogId, DivSightAction>>.
@@ -14,7 +14,7 @@ import com.yandex.div2.DivSightAction
 @AnyThread
 internal class DivVisibilityTokenHolder {
 
-    private val tokens: SynchronizedList<MutableMap<CompositeLogId, DivSightAction>> = SynchronizedList()
+    private val tokens = ConcurrentLinkedQueue<MutableMap<CompositeLogId, DivSightAction>>()
 
     fun remove(logId: CompositeLogId,
                emptyTokenCallback: (Map<CompositeLogId, DivSightAction>) -> Unit) {
