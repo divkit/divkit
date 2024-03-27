@@ -299,6 +299,8 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        /* Fix monaco autoLayout, that causes recursive relayout */
+        overflow: hidden;
     }
 
     .editor__select {
