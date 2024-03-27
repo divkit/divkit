@@ -193,7 +193,7 @@ public struct DivBlockModelingContext {
     return extensions.compactMap {
       let id = $0.id
       if !extensionHandlers.keys.contains(id), !stateInterceptors.keys.contains(id) {
-        addError("No DivExtensionHandler for: \(id)")
+        addError(message: "No DivExtensionHandler for: \(id)")
       }
       return extensionHandlers[id]
     }
@@ -203,11 +203,11 @@ public struct DivBlockModelingContext {
     divState.extensions?.compactMap { stateInterceptors[$0.id] }.first
   }
 
-  public func addError(_ message: String) {
+  public func addError(message: String) {
     errorsStorage.add(DivBlockModelingError(message, path: parentPath))
   }
 
-  public func addWarning(_ message: String) {
+  public func addWarning(message: String) {
     errorsStorage.add(DivBlockModelingWarning(message, path: parentPath))
   }
 

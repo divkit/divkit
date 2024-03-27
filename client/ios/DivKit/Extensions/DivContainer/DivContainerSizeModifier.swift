@@ -19,7 +19,7 @@ struct DivContainerSizeModifier: DivSizeModifier {
     case .horizontal:
       if isWrapContentWidth, items.hasHorizontallyMatchParent {
         context.addWarning(
-          "Horizontal DivContainer with wrap_content width contains item with match_parent width"
+          message: "Horizontal DivContainer with wrap_content width contains item with match_parent width"
         )
         shouldOverrideWidth = true
       } else {
@@ -28,7 +28,7 @@ struct DivContainerSizeModifier: DivSizeModifier {
     case .vertical, .overlap:
       if isWrapContentWidth, items.allHorizontallyMatchParent {
         context.addWarning(
-          "All items in DivContainer with wrap_content width has match_parent width"
+          message: "All items in DivContainer with wrap_content width has match_parent width"
         )
         shouldOverrideWidth = true
       } else {
@@ -41,7 +41,7 @@ struct DivContainerSizeModifier: DivSizeModifier {
     case .vertical:
       if isWrapContentHeight, items.hasVerticallyMatchParent {
         context.addWarning(
-          "Vertical DivContainer with wrap_content height contains item with match_parent height"
+          message: "Vertical DivContainer with wrap_content height contains item with match_parent height"
         )
         shouldOverrideHeight = true
       } else {
@@ -50,7 +50,7 @@ struct DivContainerSizeModifier: DivSizeModifier {
     case .horizontal, .overlap:
       if isWrapContentHeight, items.allVerticallyMatchParent {
         context.addWarning(
-          "All items in DivContainer with wrap_content height has match_parent height"
+          message: "All items in DivContainer with wrap_content height has match_parent height"
         )
         shouldOverrideHeight = true
       } else {
