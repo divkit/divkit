@@ -1,3 +1,31 @@
+## 29.12.0
+
+# Android Client:
+* Enable android.nonTransitiveRClass.
+* Supported `item-builder` property in `container`.
+* Removed excessive list copy creation for thread-safe iteration.
+
+# iOS Client:
+* Fixed nested expression parsing.
+* Implemented new typed action `clear_focus` which removes focus from any focused view.
+* Improved views reuse.
+* Removed `id` requirement for `div-state`.
+
+# Web Client:
+* Fixed an issue with deep `state` changes.
+* Implemented new typed action `clear_focus` which removes focus from any focused view.
+* Supported `preload_required` property for the `video` component.
+* Fix timer stop in rare cases.
+* Fixed an issue with the `visibility_actions`, `disappear_actions` and `tooltips` in `patch`es.
+* Fixed a bug where several `text` styles were not updated when the expression was changed.
+* Fixed an issue with the `tel:` schema in actions.
+* Minor performance optimization.
+* Fixed parsing of incorrect values of `items` / `states` in `container`, `tabs` and `state`.
+
+# Kotlin JSON Builder:
+* Added ability to create `Patch` declaration.
+
+
 ## 29.11.0
 
 # Android Client:
