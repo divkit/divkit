@@ -1,3 +1,16 @@
+## 29.12.0 (April 1, 2024)
+
+* Fixed an issue with deep `state` changes.
+* Implemented new typed action `clear_focus` which removes focus from any focused view.
+* Supported `preload_required` property for the `video` component.
+* Fix timer stop in rare cases.
+* Fixed an issue with the `visibility_actions`, `disappear_actions` and `tooltips` in `patch`es.
+* Fixed a bug where several `text` styles were not updated when the expression was changed.
+* Fixed an issue with the `tel:` schema in actions.
+* Minor performance optimization.
+* Fixed parsing of incorrect values of `items` / `states` in `container`, `tabs` and `state`.
+
+
 ## 29.11.0 (March 25, 2024)
 
 * Fixed a rare call to "tick_actions" after "end_actions" in timers.
