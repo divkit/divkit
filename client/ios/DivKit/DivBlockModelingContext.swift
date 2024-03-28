@@ -12,7 +12,7 @@ import AppKit
 #endif
 
 public struct DivBlockModelingContext {
-  public let cardId: DivCardID
+  let viewId: DivViewId
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
   let stateManager: DivStateManager
@@ -44,6 +44,7 @@ public struct DivBlockModelingContext {
 
   public init(
     cardId: DivCardID,
+    additionalId: String? = nil,
     cardLogId: String? = nil,
     parentPath: UIElementPath? = nil,
     parentDivStatePath: DivStatePath? = nil,
@@ -69,8 +70,9 @@ public struct DivBlockModelingContext {
     persistentValuesStorage: DivPersistentValuesStorage? = nil,
     tooltipViewFactory: DivTooltipViewFactory? = nil
   ) {
+    let viewId = DivViewId(cardId: cardId, additionalId: additionalId)
     let variableTracker: ExpressionResolver.VariableTracker = { variables in
-      variableTracker?.onVariablesUsed(cardId: cardId, variables: variables)
+      variableTracker?.onVariablesUsed(id: viewId, variables: variables)
     }
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     extensionHandlers.forEach {
@@ -91,7 +93,7 @@ public struct DivBlockModelingContext {
       stateInterceptorsDictionary[id] = $0
     }
     self.init(
-      cardId: cardId,
+      viewId: viewId,
       cardLogId: cardLogId,
       parentPath: parentPath,
       parentDivStatePath: parentDivStatePath,
@@ -120,7 +122,7 @@ public struct DivBlockModelingContext {
   }
 
   init(
-    cardId: DivCardID,
+    viewId: DivViewId,
     cardLogId: String?,
     parentPath: UIElementPath?,
     parentDivStatePath: DivStatePath?,
@@ -146,8 +148,9 @@ public struct DivBlockModelingContext {
     persistentValuesStorage: DivPersistentValuesStorage?,
     tooltipViewFactory: DivTooltipViewFactory?
   ) {
-    self.cardId = cardId
+    self.viewId = viewId
     self.cardLogId = cardLogId
+    let cardId = viewId.cardId
     let parentPath = parentPath ?? UIElementPath(cardId.rawValue)
     self.parentPath = parentPath
     self.parentDivStatePath = parentDivStatePath
@@ -186,6 +189,10 @@ public struct DivBlockModelingContext {
     )
   }
 
+  public var cardId: DivCardID {
+    viewId.cardId
+  }
+  
   public func getExtensionHandlers(for div: DivBase) -> [DivExtensionHandler] {
     guard let extensions = div.extensions else {
       return []

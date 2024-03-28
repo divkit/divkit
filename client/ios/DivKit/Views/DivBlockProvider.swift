@@ -17,12 +17,16 @@ final class DivBlockProvider {
     }
   }
 
-  private(set) var cardId: DivCardID!
+  private(set) var id: DivViewId!
+
+  var cardId: DivCardID {
+    id.cardId
+  }
 
   private(set) var cardSize: DivViewSize? {
     didSet {
-      if let cardSize, let cardId {
-        onCardSizeChanged(cardId, cardSize)
+      if let cardSize, let id {
+        onCardSizeChanged(id.cardId, cardSize)
       }
     }
   }
@@ -68,12 +72,16 @@ final class DivBlockProvider {
     _ source: DivViewSource,
     debugParams: DebugParams
   ) {
-    cardId = source.cardId
+    id = source.id
     self.debugParams = debugParams
+
     switch source.kind {
-    case let .data(data): update(data: data)
-    case let .divData(divData): update(divData: divData)
-    case let .json(json): update(json: json)
+    case let .data(data):
+      update(data: data)
+    case let .divData(divData):
+      update(divData: divData)
+    case let .json(json):
+      update(json: json)
     }
   }
 
@@ -132,6 +140,7 @@ final class DivBlockProvider {
 
     let context = divKitComponents.makeContext(
       cardId: cardId,
+      additionalId: id.additionalId,
       cachedImageHolders: block.getImageHolders(),
       debugParams: debugParams,
       parentScrollView: parentScrollView

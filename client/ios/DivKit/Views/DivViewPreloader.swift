@@ -42,7 +42,7 @@ public final class DivViewPreloader {
     _ source: DivViewSource,
     debugParams: DebugParams = DebugParams()
   ) {
-    let blockProvider = blockProviders[source.cardId] ??
+    let blockProvider = blockProviders[source.id.cardId] ??
       DivBlockProvider(divKitComponents: divKitComponents) { [weak self] in
         self?.changeEventsPipe.send(DivViewSizeChange(cardId: $0, estimatedSize: $1))
       }
@@ -50,7 +50,7 @@ public final class DivViewPreloader {
       source,
       debugParams: debugParams
     )
-    blockProviders[source.cardId] = blockProvider
+    blockProviders[source.id.cardId] = blockProvider
   }
 
   /// Fetches the expected size for a ``DivView`` with a specific identifier.

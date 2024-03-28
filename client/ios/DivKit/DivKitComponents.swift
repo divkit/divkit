@@ -281,13 +281,15 @@ public final class DivKitComponents {
 
   public func makeContext(
     cardId: DivCardID,
+    additionalId: String? = nil,
     cachedImageHolders: [ImageHolder],
     debugParams: DebugParams = DebugParams(),
     parentScrollView: ScrollView? = nil
   ) -> DivBlockModelingContext {
-    variableTracker.onModelingStarted(cardId: cardId)
+    variableTracker.onModelingStarted(id: DivViewId(cardId: cardId, additionalId: additionalId))
     return DivBlockModelingContext(
       cardId: cardId,
+      additionalId: additionalId,
       stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
@@ -304,7 +306,7 @@ public final class DivKitComponents {
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
-      tooltipViewFactory: makeTooltipViewFactory(divKitComponents: self, cardId: cardId)
+      tooltipViewFactory: DivTooltipViewFactory(divKitComponents: self, cardId: cardId)
     )
   }
 

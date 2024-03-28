@@ -3,12 +3,6 @@ import CommonCorePublic
 import Foundation
 import LayoutKit
 
-#if os(iOS)
-public typealias DivTooltipViewFactory = (Div) -> VisibleBoundsTrackingView
-#else
-public typealias DivTooltipViewFactory = (Div) -> ViewType
-#endif
-
 extension DivTooltip {
   fileprivate func makeTooltip(
     context: DivBlockModelingContext
@@ -18,17 +12,16 @@ extension DivTooltip {
       return nil
     }
 
-    let block = try div.value.makeBlock(context: context)
-
-    let tooltipViewFactory: TooltipViewFactory =
-      Variable { [tooltipViewFactory = context.tooltipViewFactory, div = self.div] in
-        guard let tooltipViewFactory else { return nil }
-        return tooltipViewFactory(div)
+    let tooltipViewFactory: TooltipViewFactory = Variable { [weak self] in
+      guard let self = self, let tooltipViewFactory = context.tooltipViewFactory else {
+        return nil
       }
+      return tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
+    }
 
     return BlockTooltip(
       id: id,
-      block: block,
+      block: try div.value.makeBlock(context: context),
       duration: Duration(milliseconds: resolveDuration(expressionResolver)),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
@@ -64,27 +57,4 @@ extension [DivTooltip]? {
       return try div.makeTooltip(context: tooltipContext)
     } ?? []
   }
-}
-
-public func makeTooltipViewFactory(
-  divKitComponents: DivKitComponents,
-  cardId: DivCardID
-) -> DivTooltipViewFactory? {
-  #if os(iOS)
-  return { (div: Div) in
-    let view = DivView(divKitComponents: divKitComponents)
-    let divData = DivData(
-      logId: cardId.rawValue,
-      states: [.init(div: div, stateId: 0)],
-      timers: nil,
-      transitionAnimationSelector: nil,
-      variableTriggers: nil,
-      variables: nil
-    )
-    view.setSource(.init(kind: .divData(divData), cardId: cardId))
-    return view
-  }
-  #else
-  return nil
-  #endif
 }

@@ -10,8 +10,8 @@ public struct DivViewSource {
     case divData(DivData)
   }
 
+  let id: DivViewId
   let kind: Kind
-  let cardId: DivCardID
 
   /// Initializes a new ``DivViewSource``.
   ///
@@ -22,7 +22,20 @@ public struct DivViewSource {
     kind: Kind,
     cardId: DivCardID
   ) {
-    self.kind = kind
-    self.cardId = cardId
+    self.init(kind: kind, cardId: cardId, additionalId: nil)
   }
+
+  init(
+    kind: Kind,
+    cardId: DivCardID,
+    additionalId: String?
+  ) {
+    id = DivViewId(cardId: cardId, additionalId: additionalId)
+    self.kind = kind
+  }
+}
+
+struct DivViewId: Hashable {
+  let cardId: DivCardID
+  let additionalId: String?
 }

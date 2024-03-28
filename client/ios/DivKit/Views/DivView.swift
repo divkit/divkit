@@ -57,11 +57,11 @@ public final class DivView: VisibleBoundsTrackingView {
     debugParams: DebugParams = DebugParams(),
     shouldResetPreviousCardData: Bool = false
   ) {
-    if shouldResetPreviousCardData {
-      blockProvider?.cardId.flatMap(divKitComponents.reset(cardId:))
+    if shouldResetPreviousCardData, let blockProvider {
+      divKitComponents.reset(cardId: blockProvider.cardId)
     }
     preloader.setSource(source, debugParams: debugParams)
-    blockProvider = preloader.blockProvider(for: source.cardId)
+    blockProvider = preloader.blockProvider(for: source.id.cardId)
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
@@ -74,8 +74,8 @@ public final class DivView: VisibleBoundsTrackingView {
   /// - shouldResetPreviousCardData: Specifies whether to clear the data of the previous card when
   /// updating the ``DivView`` with new content.
   public func showCardId(_ cardId: DivCardID, shouldResetPreviousCardData: Bool = false) {
-    if shouldResetPreviousCardData {
-      blockProvider?.cardId.flatMap(divKitComponents.reset(cardId:))
+    if shouldResetPreviousCardData, let blockProvider {
+      divKitComponents.reset(cardId: blockProvider.cardId)
     }
     blockProvider = preloader.blockProvider(for: cardId)
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
