@@ -21,7 +21,7 @@ public final class MaskValidator: Equatable {
   public func removeSymbols(at index: String.Index, data: InputData) -> (String, CursorData?) {
     var data = data
     let removePosition = data.rawData.lastIndex {
-      data.text.distance(from: index, to: $0.index) <= 0
+      data.text.distance(from: min(index, data.text.endIndex), to: $0.index) <= 0
     }
     if let removePosition {
       data.rawData.remove(at: removePosition)
