@@ -39,10 +39,10 @@
   },
   "anyOf": [
     {
-      "$ref": "#definitions/content_text"
+      "$ref": "#/definitions/content_text"
     },
     {
-      "$ref": "#definitions/content_url"
+      "$ref": "#/definitions/content_url"
     }
   ]
 }

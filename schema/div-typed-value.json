@@ -150,28 +150,28 @@
   },
   "anyOf": [
     {
-      "$ref": "#definitions/string_value"
+      "$ref": "#/definitions/string_value"
     },
     {
-      "$ref": "#definitions/integer_value"
+      "$ref": "#/definitions/integer_value"
     },
     {
-      "$ref": "#definitions/number_value"
+      "$ref": "#/definitions/number_value"
     },
     {
-      "$ref": "#definitions/color_value"
+      "$ref": "#/definitions/color_value"
     },
     {
-      "$ref": "#definitions/boolean_value"
+      "$ref": "#/definitions/boolean_value"
     },
     {
-      "$ref": "#definitions/url_value"
+      "$ref": "#/definitions/url_value"
     },
     {
-      "$ref": "#definitions/dict_value"
+      "$ref": "#/definitions/dict_value"
     },
     {
-      "$ref": "#definitions/array_value"
+      "$ref": "#/definitions/array_value"
     }
   ]
 }
