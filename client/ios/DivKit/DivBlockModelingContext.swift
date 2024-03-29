@@ -226,23 +226,27 @@ public struct DivBlockModelingContext {
     errorsStorage.add(DivUnknownError(error, path: parentPath))
   }
 
-  func makeBinding<T>(variableName: String, defaultValue: T) -> Binding<T> {
-    let variableName = DivVariableName(rawValue: variableName)
-    variableTracker([variableName])
+  func makeBinding<T>(variableName: String?, defaultValue: T) -> Binding<T> {
+    guard let variableName else {
+      return Binding(name: "", value: Property(initialValue: defaultValue))
+    }
+
+    let divVariableName = DivVariableName(rawValue: variableName)
+    variableTracker([divVariableName])
     let value: T = variablesStorage
-      .getVariableValue(cardId: cardId, name: variableName) ?? defaultValue
+      .getVariableValue(cardId: cardId, name: divVariableName) ?? defaultValue
     let valueProp = Property<T>(
       getter: { value },
       setter: {
         guard let newValue = DivVariableValue($0) else { return }
         self.variablesStorage.update(
           cardId: cardId,
-          name: variableName,
+          name: divVariableName,
           value: newValue
         )
       }
     )
-    return Binding(name: variableName.rawValue, value: valueProp)
+    return Binding(name: variableName, value: valueProp)
   }
 }
 

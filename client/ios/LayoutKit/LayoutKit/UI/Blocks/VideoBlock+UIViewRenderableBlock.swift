@@ -57,7 +57,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
         switch event {
         case let .currentTimeUpdate(time):
-          self.model.elapsedTime?.value = Int(time)
+          self.model.elapsedTime.value = Int(time)
           self.previousTime = time
         case .end:
           self.observer?.elementStateChanged(self.state, forPath: self.model.path)
@@ -127,8 +127,9 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       player?.set(isMuted: model.playbackConfig.isMuted)
     }
 
-    if (model.elapsedTime?.value ?? 0) != previousTime {
-      model.elapsedTime.flatMap { player?.seek(to: .init(value: $0.value)) }
+    let elapsedTime = model.elapsedTime.value
+    if elapsedTime != previousTime {
+      player?.seek(to: CMTime(value: elapsedTime))
     }
   }
 
