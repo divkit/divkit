@@ -149,7 +149,7 @@
                   "items": [
                     {
                       "type": "button_image",
-                      "image_url": "file:///android_asset/application/images/file.png",
+                      "image_url": "divkit-asset://samples/file.png",
                       "actions": [
                         {
                           "log_id": "paste",
@@ -159,7 +159,7 @@
                     },
                     {
                       "type": "button_image",
-                      "image_url": "file:///android_asset/application/images/qr_code_scanner.png",
+                      "image_url": "divkit-asset://samples/qr_code_scanner.png",
                       "margins": {
                         "left": 12
                       },
@@ -172,7 +172,7 @@
                     },
                     {
                       "type": "button_image",
-                      "image_url": "file:///android_asset/application/images/folder_open.png",
+                      "image_url": "divkit-asset://samples/folder_open.png",
                       "margins": {
                         "left": 12
                       },

@@ -11,6 +11,7 @@ import com.yandex.div.core.expression.variables.DivVariableController;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
+import com.yandex.div.core.image.DivImageLoaderWrapper;
 import com.yandex.div.core.images.DivImageLoader;
 import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.player.DivPlayerPreloader;
@@ -727,7 +728,7 @@ public class DivConfiguration {
             DivTypefaceProvider nonNullTypefaceProvider =
                     mTypefaceProvider == null ? DivTypefaceProvider.DEFAULT : mTypefaceProvider;
             return new DivConfiguration(
-                    mImageLoader,
+                    new DivImageLoaderWrapper(mImageLoader),
                     mActionHandler == null ? new DivActionHandler() : mActionHandler,
                     mDiv2Logger == null ? Div2Logger.STUB : mDiv2Logger,
                     mDivDataChangeListener == null ? DivDataChangeListener.STUB : mDivDataChangeListener,

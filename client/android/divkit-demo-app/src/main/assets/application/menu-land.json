@@ -61,7 +61,7 @@
                     "value": 44
                   },
                   "placeholder_color": "#00000000",
-                  "image_url": "file:///android_asset/application/images/DivKit.png"
+                  "image_url": "divkit-asset://DivKit.png"
                 },
                 {
                   "type": "text",
@@ -161,7 +161,7 @@
                               "aspect": {
                                 "ratio": 1
                               },
-                              "image_url": "file:///android_asset/application/images/Circle.png"
+                              "image_url": "divkit-asset://Circle.png"
                             },
                             {
                               "type": "bubble_text",
