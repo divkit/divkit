@@ -19,7 +19,10 @@ public class DivPatchDownloader: DivPatchProvider {
     request = requestPerformer.performRequest(
       URLRequest(url: url),
       completion: { [weak self] result in
-        self?.requests.removeAll { $0 === request }
+        guard let self else {
+          return
+        }
+        self.requests.removeAll { $0 === request }
         parseResult(result, completion: completion)
       }
     )
