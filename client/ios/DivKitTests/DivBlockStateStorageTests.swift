@@ -97,6 +97,78 @@ final class DivBlockStateStorageTests: XCTestCase {
     storage.setFocused(isFocused: false, element: IdAndCardId(id: "id_2", cardId: "card_id_2"))
     XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id_1", cardId: "card_id_1")))
   }
+
+  func test_Reset_ResetsFocusedElementByPath() {
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id_1"))
+    storage.reset()
+    XCTAssertFalse(storage.isFocused(path: path(cardId: "card_id", path: "0/id_1")))
+    XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id_1", cardId: "card_id")))
+  }
+
+  func test_Reset_ResetsByCardIdFocusedElementByPath() {
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id_1"))
+    storage.reset(cardId: "card_id")
+    XCTAssertFalse(storage.isFocused(path: path(cardId: "card_id", path: "0/id_1")))
+  }
+
+  func test_SetFocusedByPath_StoresLast() {
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id_1"))
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id_2"))
+    XCTAssertFalse(storage.isFocused(path: path(cardId: "card_id", path: "0/id_1")))
+    XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id_1", cardId: "card_id")))
+    XCTAssertTrue(storage.isFocused(path: path(cardId: "card_id", path: "0/id_2")))
+    XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id_2", cardId: "card_id")))
+  }
+
+  func test_SetFocusedByPath_WithTheSameId() {
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id"))
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "1/id"))
+    XCTAssertFalse(storage.isFocused(path: path(cardId: "card_id", path: "0/id")))
+    XCTAssertTrue(storage.isFocused(path: path(cardId: "card_id", path: "1/id")))
+    XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
+  }
+
+  func test_SetFocusedById_WithTheSameId() {
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id", cardId: "card_id"))
+    XCTAssertTrue(storage.isFocused(path: path(cardId: "card_id", path: "0/id")))
+    XCTAssertTrue(storage.isFocused(path: path(cardId: "card_id", path: "1/id")))
+    XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
+  }
+
+  func test_SetFocusedByPathAndId_StoresLast() {
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id_1"))
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id_2", cardId: "card_id"))
+    XCTAssertFalse(storage.isFocused(path: path(cardId: "card_id", path: "0/id_1")))
+    XCTAssertTrue(storage.isFocused(path: path(cardId: "card_id", path: "0/id_2")))
+    XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id_1", cardId: "card_id")))
+    XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id_2", cardId: "card_id")))
+  }
+
+  func test_SetFocusedByIdAndPath_StoresLast() {
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id_2", cardId: "card_id"))
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id_1"))
+    XCTAssertTrue(storage.isFocused(path: path(cardId: "card_id", path: "0/id_1")))
+    XCTAssertFalse(storage.isFocused(path: path(cardId: "card_id", path: "0/id_2")))
+    XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id_1", cardId: "card_id")))
+    XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id_2", cardId: "card_id")))
+  }
+
+  func test_IfElementByPathFocused_Unfocuses() {
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id"))
+    storage.setFocused(isFocused: false, path: path(cardId: "card_id", path: "0/id"))
+    XCTAssertFalse(storage.isFocused(path: path(cardId: "card_id", path: "0/id")))
+    XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
+  }
+
+  func test_SetFocusedByPath_GetById() {
+    storage.setFocused(isFocused: true, path: path(cardId: "card_id", path: "0/id"))
+    XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
+  }
+
+  func test_SetFocusedById_GetByPath() {
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id", cardId: "card_id"))
+    XCTAssertTrue(storage.isFocused(path: path(cardId: "card_id", path: "0/id")))
+  }
 }
 
 private let state1 = State(name: "State 1")

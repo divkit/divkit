@@ -20,8 +20,9 @@ public struct IdAndCardId: Hashable {
 
 public final class DivBlockStateStorage {
   public private(set) var states: BlocksState
-  var focusedElement: IdAndCardId?
   private var statesById: [IdAndCardId: ElementState] = [:]
+  private var focusedElement: UIElementPath?
+  private var focusedElementById: IdAndCardId?
   private let lock = RWLock()
 
   public init(states: BlocksState = [:]) {
@@ -67,11 +68,23 @@ public final class DivBlockStateStorage {
   public func setFocused(isFocused: Bool, element: IdAndCardId) {
     lock.write {
       if isFocused {
-        focusedElement = element
-      } else {
-        if focusedElement == element {
-          focusedElement = nil
-        }
+        focusedElement = nil
+        focusedElementById = element
+      } else if self.isFocused(element: element) {
+        focusedElement = nil
+        focusedElementById = nil
+      }
+    }
+  }
+
+  public func setFocused(isFocused: Bool, path: UIElementPath) {
+    lock.write {
+      if isFocused {
+        focusedElement = path
+        focusedElementById = nil
+      } else if self.isFocused(path: path)  {
+        focusedElement = nil
+        focusedElementById = nil
       }
     }
   }
@@ -79,13 +92,24 @@ public final class DivBlockStateStorage {
   public func clearFocus() {
     lock.write {
       focusedElement = nil
+      focusedElementById = nil
     }
   }
 
   public func isFocused(element: IdAndCardId) -> Bool {
     lock.read {
-      focusedElement == element
+      getFocusedElement() == element
     }
+  }
+
+  public func isFocused(path: UIElementPath) -> Bool {
+    lock.read {
+      focusedElement == path || focusedElementById == IdAndCardId(path: path)
+    }
+  }
+
+  public func getFocusedElement() -> IdAndCardId? {
+    focusedElementById ?? focusedElement.map(IdAndCardId.init)
   }
 
   public func reset() {
@@ -93,6 +117,7 @@ public final class DivBlockStateStorage {
       states = [:]
       statesById = [:]
       focusedElement = nil
+      focusedElementById = nil
     }
   }
 
@@ -100,8 +125,9 @@ public final class DivBlockStateStorage {
     lock.write {
       states = states.filter { $0.key.root != cardId.rawValue }
       statesById = statesById.filter { $0.key.cardId != cardId }
-      if focusedElement?.cardId == cardId {
+      if getFocusedElement()?.cardId == cardId {
         focusedElement = nil
+        focusedElementById = nil
       }
     }
   }
@@ -113,7 +139,7 @@ extension DivBlockStateStorage: ElementStateObserver {
   }
 
   public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
-    setFocused(isFocused: isFocused, element: IdAndCardId(path: path))
+    setFocused(isFocused: isFocused, path: path)
   }
 
   func state(for path: UIElementPath) -> ElementState? {

@@ -61,9 +61,7 @@ extension DivBase {
     visibilityActions += makeDisappearActions(context: context)
     let hasVisibilityActions = !visibilityActions.isEmpty
 
-    let isFocused = context.blockStateStorage.isFocused(
-      element: IdAndCardId(path: context.parentPath)
-    )
+    let isFocused = context.blockStateStorage.isFocused(path: context.parentPath)
     let border = getBorder(isFocused)
 
     let boundary: BoundaryTrait? = if !clipToBounds {
