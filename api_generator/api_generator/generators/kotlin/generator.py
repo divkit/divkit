@@ -52,8 +52,7 @@ class KotlinGenerator(Generator):
             result += '        json: JSONObject'
             result += '    ) {'
             result += '        val logger = env.logger'
-            constructor = entity.local_variables(entity.generation_mode).indented(indent_width=8)
-            constructor += entity.constructor_body(with_commas=False)
+            constructor = entity.constructor_body(with_commas=False).indented(indent_width=8)
             if constructor.lines:
                 result += constructor
             result += '    }'

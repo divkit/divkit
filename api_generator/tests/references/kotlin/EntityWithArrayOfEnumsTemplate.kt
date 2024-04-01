@@ -27,8 +27,7 @@ class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWith
         json: JSONObject
     ) {
         val logger = env.logger
-        var items: Field<List<EntityWithArrayOfEnums.Item>>? = null
-        this.items = items ?: JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, EntityWithArrayOfEnums.Item.Converter.FROM_STRING, ITEMS_TEMPLATE_VALIDATOR, logger, env)
+        items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, EntityWithArrayOfEnums.Item.Converter.FROM_STRING, ITEMS_TEMPLATE_VALIDATOR, logger, env)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfEnums {

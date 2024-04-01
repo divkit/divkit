@@ -27,14 +27,7 @@ class EntityWithEntityPropertyTemplate : JSONSerializable, JsonTemplate<EntityWi
         json: JSONObject
     ) {
         val logger = env.logger
-        var entity: Field<EntityTemplate>? = null
-        for (jsonKey in json.keys()) {
-            when (jsonKey) {
-                "entity" -> entity = JsonTemplateParser.readOptionalField(json, "entity", topLevel, parent?.entity, EntityTemplate.CREATOR, logger, env)
-                "\$entity" -> entity = entity ?: JsonTemplateParser.readOptionalReferenceField(json, "entity", topLevel, logger, env)
-            }
-        }
-        this.entity = entity ?: JsonTemplateParser.readOptionalFallbackField(topLevel, parent?.entity)
+        entity = JsonTemplateParser.readOptionalField(json, "entity", topLevel, parent?.entity, EntityTemplate.CREATOR, logger, env)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithEntityProperty {

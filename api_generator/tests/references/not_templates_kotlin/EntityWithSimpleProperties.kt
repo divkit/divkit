@@ -96,38 +96,16 @@ class EntityWithSimpleProperties(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithSimpleProperties {
             val logger = env.logger
-            var boolean: Expression<Boolean>? = null
-            var booleanInt: Expression<Boolean>? = null
-            var color: Expression<Int>? = null
-            var double: Expression<Double>? = null
-            var id: Long = ID_DEFAULT_VALUE
-            var integer: Expression<Long> = INTEGER_DEFAULT_VALUE
-            var positiveInteger: Expression<Long>? = null
-            var string: Expression<String>? = null
-            var url: Expression<Uri>? = null
-            for (jsonKey in json.keys()) {
-                when (jsonKey) {
-                    "boolean" -> boolean = JsonParser.readOptionalExpression(json, "boolean", ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
-                    "boolean_int" -> booleanInt = JsonParser.readOptionalExpression(json, "boolean_int", ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
-                    "color" -> color = JsonParser.readOptionalExpression(json, "color", STRING_TO_COLOR_INT, logger, env, TYPE_HELPER_COLOR)
-                    "double" -> double = JsonParser.readOptionalExpression(json, "double", NUMBER_TO_DOUBLE, logger, env, TYPE_HELPER_DOUBLE)
-                    "id" -> id = JsonParser.readOptional(json, "id", NUMBER_TO_INT, logger, env) ?: ID_DEFAULT_VALUE
-                    "integer" -> integer = JsonParser.readOptionalExpression(json, "integer", NUMBER_TO_INT, logger, env, INTEGER_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INTEGER_DEFAULT_VALUE
-                    "positive_integer" -> positiveInteger = JsonParser.readOptionalExpression(json, "positive_integer", NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, logger, env, TYPE_HELPER_INT)
-                    "string" -> string = JsonParser.readOptionalExpression(json, "string", logger, env, TYPE_HELPER_STRING)
-                    "url" -> url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, logger, env, TYPE_HELPER_URI)
-                }
-            }
             return EntityWithSimpleProperties(
-                boolean = boolean,
-                booleanInt = booleanInt,
-                color = color,
-                double = double,
-                id = id,
-                integer = integer,
-                positiveInteger = positiveInteger,
-                string = string,
-                url = url
+                boolean = JsonParser.readOptionalExpression(json, "boolean", ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN),
+                booleanInt = JsonParser.readOptionalExpression(json, "boolean_int", ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN),
+                color = JsonParser.readOptionalExpression(json, "color", STRING_TO_COLOR_INT, logger, env, TYPE_HELPER_COLOR),
+                double = JsonParser.readOptionalExpression(json, "double", NUMBER_TO_DOUBLE, logger, env, TYPE_HELPER_DOUBLE),
+                id = JsonParser.readOptional(json, "id", NUMBER_TO_INT, logger, env) ?: ID_DEFAULT_VALUE,
+                integer = JsonParser.readOptionalExpression(json, "integer", NUMBER_TO_INT, logger, env, INTEGER_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INTEGER_DEFAULT_VALUE,
+                positiveInteger = JsonParser.readOptionalExpression(json, "positive_integer", NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, logger, env, TYPE_HELPER_INT),
+                string = JsonParser.readOptionalExpression(json, "string", logger, env, TYPE_HELPER_STRING),
+                url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, logger, env, TYPE_HELPER_URI)
             )
         }
 

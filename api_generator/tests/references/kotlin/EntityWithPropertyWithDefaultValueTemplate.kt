@@ -29,22 +29,9 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         json: JSONObject
     ) {
         val logger = env.logger
-        var int: Field<Expression<Long>>? = null
-        var nested: Field<NestedTemplate>? = null
-        var url: Field<Expression<Uri>>? = null
-        for (jsonKey in json.keys()) {
-            when (jsonKey) {
-                "int" -> int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
-                "\$int" -> int = int ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "int", topLevel, logger, env)
-                "nested" -> nested = JsonTemplateParser.readOptionalField(json, "nested", topLevel, parent?.nested, NestedTemplate.CREATOR, logger, env)
-                "\$nested" -> nested = nested ?: JsonTemplateParser.readOptionalReferenceField(json, "nested", topLevel, logger, env)
-                "url" -> url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
-                "\$url" -> url = url ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "url", topLevel, logger, env)
-            }
-        }
-        this.int = int ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.int)
-        this.nested = nested ?: JsonTemplateParser.readOptionalFallbackField(topLevel, parent?.nested)
-        this.url = url ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.url)
+        int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
+        nested = JsonTemplateParser.readOptionalField(json, "nested", topLevel, parent?.nested, NestedTemplate.CREATOR, logger, env)
+        url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithPropertyWithDefaultValue {
@@ -97,20 +84,9 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
             json: JSONObject
         ) {
             val logger = env.logger
-            var int: Field<Expression<Long>>? = null
-            var nonOptional: Field<Expression<String>>? = null
-            var url: Field<Expression<Uri>>? = null
-            for (jsonKey in json.keys()) {
-                when (jsonKey) {
-                    "int" -> int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
-                    "\$int" -> int = int ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "int", topLevel, logger, env)
-                    "url" -> url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
-                    "\$url" -> url = url ?: JsonTemplateParser.readOptionalReferenceFieldWithExpression(json, "url", topLevel, logger, env)
-                }
-            }
-            this.int = int ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.int)
-            this.nonOptional = nonOptional ?: JsonTemplateParser.readFieldWithExpression(json, "non_optional", topLevel, parent?.nonOptional, logger, env, TYPE_HELPER_STRING)
-            this.url = url ?: JsonTemplateParser.readOptionalFallbackFieldWithExpression(topLevel, parent?.url)
+            int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
+            nonOptional = JsonTemplateParser.readFieldWithExpression(json, "non_optional", topLevel, parent?.nonOptional, logger, env, TYPE_HELPER_STRING)
+            url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
         }
 
         override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithPropertyWithDefaultValue.Nested {

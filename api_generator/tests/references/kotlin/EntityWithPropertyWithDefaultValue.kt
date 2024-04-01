@@ -66,20 +66,10 @@ class EntityWithPropertyWithDefaultValue(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithPropertyWithDefaultValue {
             val logger = env.logger
-            var int: Expression<Long> = INT_DEFAULT_VALUE
-            var nested: Nested? = null
-            var url: Expression<Uri> = URL_DEFAULT_VALUE
-            for (jsonKey in json.keys()) {
-                when (jsonKey) {
-                    "int" -> int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE
-                    "nested" -> nested = JsonParser.readOptional(json, "nested", Nested.CREATOR, logger, env)
-                    "url" -> url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
-                }
-            }
             return EntityWithPropertyWithDefaultValue(
-                int = int,
-                nested = nested,
-                url = url
+                int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
+                nested = JsonParser.readOptional(json, "nested", Nested.CREATOR, logger, env),
+                url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
             )
         }
 
@@ -137,19 +127,10 @@ class EntityWithPropertyWithDefaultValue(
             @JvmName("fromJson")
             operator fun invoke(env: ParsingEnvironment, json: JSONObject): Nested {
                 val logger = env.logger
-                var int: Expression<Long> = INT_DEFAULT_VALUE
-                var nonOptional: Expression<String> = JsonParser.readExpression(json, "non_optional", logger, env, TYPE_HELPER_STRING)
-                var url: Expression<Uri> = URL_DEFAULT_VALUE
-                for (jsonKey in json.keys()) {
-                    when (jsonKey) {
-                        "int" -> int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE
-                        "url" -> url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
-                    }
-                }
                 return Nested(
-                    int = int,
-                    nonOptional = nonOptional,
-                    url = url
+                    int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
+                    nonOptional = JsonParser.readExpression(json, "non_optional", logger, env, TYPE_HELPER_STRING),
+                    url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
                 )
             }
 

@@ -53,9 +53,8 @@ class EntityWithRequiredProperty(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithRequiredProperty {
             val logger = env.logger
-            var property: Expression<String> = JsonParser.readExpression(json, "property", PROPERTY_VALIDATOR, logger, env, TYPE_HELPER_STRING)
             return EntityWithRequiredProperty(
-                property = property
+                property = JsonParser.readExpression(json, "property", PROPERTY_VALIDATOR, logger, env, TYPE_HELPER_STRING)
             )
         }
 

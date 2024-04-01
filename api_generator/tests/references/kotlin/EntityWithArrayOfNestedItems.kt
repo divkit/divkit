@@ -64,9 +64,8 @@ class EntityWithArrayOfNestedItems(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithArrayOfNestedItems {
             val logger = env.logger
-            var items: List<Item> = JsonParser.readList(json, "items", Item.CREATOR, ITEMS_VALIDATOR, logger, env)
             return EntityWithArrayOfNestedItems(
-                items = items
+                items = JsonParser.readList(json, "items", Item.CREATOR, ITEMS_VALIDATOR, logger, env)
             )
         }
 
@@ -115,11 +114,9 @@ class EntityWithArrayOfNestedItems(
             @JvmName("fromJson")
             operator fun invoke(env: ParsingEnvironment, json: JSONObject): Item {
                 val logger = env.logger
-                var entity: Entity = JsonParser.read(json, "entity", Entity.CREATOR, logger, env)
-                var property: Expression<String> = JsonParser.readExpression(json, "property", logger, env, TYPE_HELPER_STRING)
                 return Item(
-                    entity = entity,
-                    property = property
+                    entity = JsonParser.read(json, "entity", Entity.CREATOR, logger, env),
+                    property = JsonParser.readExpression(json, "property", logger, env, TYPE_HELPER_STRING)
                 )
             }
 

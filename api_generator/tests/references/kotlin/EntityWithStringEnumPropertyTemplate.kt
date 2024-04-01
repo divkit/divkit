@@ -27,8 +27,7 @@ class EntityWithStringEnumPropertyTemplate : JSONSerializable, JsonTemplate<Enti
         json: JSONObject
     ) {
         val logger = env.logger
-        var property: Field<Expression<EntityWithStringEnumProperty.Property>>? = null
-        this.property = property ?: JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithStringEnumProperty.Property.Converter.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
+        property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithStringEnumProperty.Property.Converter.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithStringEnumProperty {

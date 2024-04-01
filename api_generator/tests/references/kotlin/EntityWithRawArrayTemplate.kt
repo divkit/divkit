@@ -27,8 +27,7 @@ class EntityWithRawArrayTemplate : JSONSerializable, JsonTemplate<EntityWithRawA
         json: JSONObject
     ) {
         val logger = env.logger
-        var array: Field<Expression<JSONArray>>? = null
-        this.array = array ?: JsonTemplateParser.readFieldWithExpression(json, "array", topLevel, parent?.array, logger, env, TYPE_HELPER_JSON_ARRAY)
+        array = JsonTemplateParser.readFieldWithExpression(json, "array", topLevel, parent?.array, logger, env, TYPE_HELPER_JSON_ARRAY)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithRawArray {
