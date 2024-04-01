@@ -50,44 +50,35 @@ struct AnyCalcExpression {
 
   init(
     _ expression: ParsedCalcExpression,
-    evaluators: (CalcExpression.Symbol) -> SymbolEvaluator?
+    evaluators: @escaping (CalcExpression.Symbol) -> SymbolEvaluator?
   ) throws {
     let box = NanBox()
 
-    func defaultEvaluator(_ symbol: Symbol) throws -> CalcExpression.SymbolEvaluator? {
-      switch symbol {
-      case let .variable(name):
-        // it is either a string literal or an undefined variable
-        if name.count >= 2, "'\"".contains(name.first!) {
-          let value = String(name.dropFirst().dropLast())
-          return { _ in .string(value) }
-        }
-        return { _ in throw Error.message("Variable '\(name)' is missing.") }
-      case .infix("!:"):
-        return { args in
-          switch args[0] {
-          case .error:
-            args[1]
-          default:
-            args[0]
-          }
-        }
-      default:
-        return nil
-      }
-    }
-
-    let expression = try CalcExpression(
+    let expression = CalcExpression(
       expression,
-      symbols: { symbol in
+      evaluators: { symbol in
         if let evaluator = evaluators(symbol) {
           return { try box.store(evaluator($0.map(box.load))) }
         }
-        if let evaluator = try defaultEvaluator(symbol) {
-          return evaluator
-        }
-        if case let .function(name, actualArity) = symbol {
-          for i in 0...10 {
+        switch symbol {
+        case let .variable(name):
+          // it is either a string literal or an undefined variable
+          if name.count >= 2, "'\"".contains(name.first!) {
+            let value = String(name.dropFirst().dropLast())
+            return { _ in .string(value) }
+          }
+          return { _ in throw Error.message("Variable '\(name)' is missing.") }
+        case .infix("!:"):
+          return { args in
+            switch args[0] {
+            case .error:
+              args[1]
+            default:
+              args[0]
+            }
+          }
+        case let .function(name, actualArity):
+          for i in 0...5 {
             let symbol = Symbol.function(name, arity: .exactly(i))
             if evaluators(symbol) != nil {
               if actualArity == .exactly(0) {
@@ -98,6 +89,8 @@ struct AnyCalcExpression {
               return { _ in throw Error.arityMismatch(symbol) }
             }
           }
+        default:
+          break
         }
         return CalcExpression.errorEvaluator(for: symbol)
       }
@@ -116,7 +109,7 @@ struct AnyCalcExpression {
         box.values = literals
         lock.unlock()
       }
-      let value = try expression.evaluate()
+      let value = expression.evaluate()
       return try box.load(value)
     }
     self.expression = expression

@@ -40,6 +40,7 @@ import CommonCorePublic
 /// than creating a new one each time you wish to evaluate an expression string
 final class CalcExpression: CustomStringConvertible {
   private let root: Subexpression
+  private let evaluators: (Symbol) -> SymbolEvaluator
 
   /// Evaluator for individual symbols
   typealias SymbolEvaluator = (_ args: [Value]) throws -> Value
@@ -101,9 +102,6 @@ final class CalcExpression: CustomStringConvertible {
     /// A function accepting a number of arguments specified by `arity`
     case function(String, arity: Arity)
 
-    /// A array of values accessed by index
-    case array(String)
-
     /// The symbol name
     var name: String {
       switch self {
@@ -111,8 +109,7 @@ final class CalcExpression: CustomStringConvertible {
            let .infix(name),
            let .prefix(name),
            let .postfix(name),
-           let .function(name, _),
-           let .array(name):
+           let .function(name, _):
         name
       }
     }
@@ -129,8 +126,6 @@ final class CalcExpression: CustomStringConvertible {
         "Variable \(escapedName)"
       case .infix("?:"):
         "Ternary operator ?:"
-      case .infix("[]"):
-        "Subscript operator []"
       case .infix:
         "Infix operator \(escapedName)"
       case .prefix:
@@ -139,8 +134,6 @@ final class CalcExpression: CustomStringConvertible {
         "Postfix operator \(escapedName)"
       case .function:
         "Function \(escapedName)()"
-      case .array:
-        "Array \(escapedName)"
       }
     }
   }
@@ -151,9 +144,10 @@ final class CalcExpression: CustomStringConvertible {
   /// return `{ _ in throw CalcExpression.Error.undefinedSymbol(symbol) }` from your lookup function
   init(
     _ expression: ParsedCalcExpression,
-    symbols: (Symbol) throws -> SymbolEvaluator
-  ) throws {
-    root = try expression.root.optimized(symbols: symbols)
+    evaluators: @escaping (Symbol) -> SymbolEvaluator
+  ) {
+    root = expression.root
+    self.evaluators = evaluators
   }
 
   /// Parse an expression.
@@ -193,8 +187,8 @@ final class CalcExpression: CustomStringConvertible {
   var symbols: Set<Symbol> { root.symbols }
 
   /// Evaluate the expression
-  func evaluate() throws -> Value {
-    try root.evaluate()
+  func evaluate() -> Value {
+    root.evaluate(evaluators)
   }
 }
 
@@ -204,8 +198,6 @@ extension CalcExpression {
   // Fallback evaluator for when symbol is not found
   static func errorEvaluator(for symbol: Symbol) -> SymbolEvaluator {
     switch symbol {
-    case .infix("[]"), .function("[]", _), .infix("()"):
-      { _ in throw Error.unexpectedToken(String(symbol.name.prefix(1))) }
     case let .function(name, _):
       { _ in
         throw Error.message("Failed to evaluate [\(name)()]. Unknown function name: \(name).")
@@ -306,15 +298,14 @@ struct ParsedCalcExpression: CustomStringConvertible {
   }
 }
 
-// The internal expression implementation
 private enum Subexpression: CustomStringConvertible {
   case literal(CalcExpression.Value)
-  case symbol(CalcExpression.Symbol, [Subexpression], CalcExpression.SymbolEvaluator?)
+  case symbol(CalcExpression.Symbol, [Subexpression])
   case error(CalcExpression.Error, String)
 
   var isOperand: Bool {
     switch self {
-    case let .symbol(symbol, args, _) where args.isEmpty:
+    case let .symbol(symbol, args) where args.isEmpty:
       switch symbol {
       case .infix, .prefix, .postfix:
         false
@@ -328,16 +319,16 @@ private enum Subexpression: CustomStringConvertible {
     }
   }
 
-  func evaluate() throws -> CalcExpression.Value {
+  func evaluate(
+    _ evaluators: (CalcExpression.Symbol) -> CalcExpression.SymbolEvaluator
+  ) -> CalcExpression.Value {
     switch self {
     case let .literal(literal):
       return literal
-    case let .symbol(symbol, args, fn):
-      guard let fn else {
-        return .error(CalcExpression.Error.undefinedSymbol(symbol))
-      }
+    case let .symbol(symbol, args):
+      let evaluator = evaluators(symbol)
       do {
-        return try fn(args.map { try $0.evaluate() })
+        return try evaluator(args.map { $0.evaluate(evaluators) })
       } catch {
         return .error(error)
       }
@@ -354,7 +345,7 @@ private enum Subexpression: CustomStringConvertible {
     switch self {
     case let .literal(literal):
       return AnyCalcExpression.stringify(literal.value)
-    case let .symbol(symbol, args, _):
+    case let .symbol(symbol, args):
       guard isOperand else {
         return symbol.escapedName
       }
@@ -368,7 +359,7 @@ private enum Subexpression: CustomStringConvertible {
         let arg = args[0]
         let description = "\(arg)"
         switch arg {
-        case .symbol(.infix, _, _), .symbol(.postfix, _, _), .error,
+        case .symbol(.infix, _), .symbol(.postfix, _), .error,
              .symbol where needsSeparation(name, description):
           return "\(symbol.escapedName)(\(description))" // Parens required
         case .symbol, .literal:
@@ -378,7 +369,7 @@ private enum Subexpression: CustomStringConvertible {
         let arg = args[0]
         let description = "\(arg)"
         switch arg {
-        case .symbol(.infix, _, _), .symbol(.postfix, _, _), .error,
+        case .symbol(.infix, _), .symbol(.postfix, _), .error,
              .symbol where needsSeparation(description, name):
           return "(\(description))\(symbol.escapedName)" // Parens required
         case .symbol, .literal:
@@ -386,12 +377,10 @@ private enum Subexpression: CustomStringConvertible {
         }
       case .infix("?:") where args.count == 3:
         return "\(args[0]) ? \(args[1]) : \(args[2])"
-      case .infix("[]"):
-        return "\(args[0])[\(args[1])]"
       case let .infix(name):
         let lhs = args[0]
         let lhsDescription = switch lhs {
-        case let .symbol(.infix(opName), _, _)
+        case let .symbol(.infix(opName), _)
           where !CalcExpression.operator(opName, takesPrecedenceOver: name):
           "(\(lhs))"
         default:
@@ -399,7 +388,7 @@ private enum Subexpression: CustomStringConvertible {
         }
         let rhs = args[1]
         let rhsDescription = switch rhs {
-        case let .symbol(.infix(opName), _, _)
+        case let .symbol(.infix(opName), _)
           where CalcExpression.operator(name, takesPrecedenceOver: opName):
           "(\(rhs))"
         default:
@@ -408,12 +397,8 @@ private enum Subexpression: CustomStringConvertible {
         return "\(lhsDescription) \(symbol.escapedName) \(rhsDescription)"
       case .variable:
         return symbol.escapedName
-      case .function("[]", _):
-        return "[\(arguments(args))]"
       case .function:
         return "\(symbol.escapedName)(\(arguments(args)))"
-      case .array:
-        return "\(symbol.escapedName)[\(arguments(args))]"
       }
     case let .error(_, expression):
       return expression
@@ -424,25 +409,13 @@ private enum Subexpression: CustomStringConvertible {
     switch self {
     case .literal, .error:
       return []
-    case let .symbol(symbol, subexpressions, _):
+    case let .symbol(symbol, subexpressions):
       var symbols = Set([symbol])
       for subexpression in subexpressions {
         symbols.formUnion(subexpression.symbols)
       }
       return symbols
     }
-  }
-
-  func optimized(
-    symbols: (CalcExpression.Symbol) throws -> CalcExpression.SymbolEvaluator
-  ) throws -> Subexpression {
-    guard case .symbol(let symbol, var args, _) = self else {
-      return self
-    }
-    args = try args.map {
-      try $0.optimized(symbols: symbols)
-    }
-    return try .symbol(symbol, args, symbols(symbol))
   }
 }
 
@@ -702,11 +675,11 @@ extension UnicodeScalarView {
       if let tail = scanCharacters(CalcExpression.isOperator) {
         op += tail
       }
-      return .symbol(.infix(op), [], nil)
+      return .symbol(.infix(op), [])
     }
     if let op = scanCharacters(CalcExpression.isOperator) ??
       scanCharacter({ "([,".unicodeScalars.contains($0) }) {
-      return .symbol(.infix(op), [], nil)
+      return .symbol(.infix(op), [])
     }
     return nil
   }
@@ -724,7 +697,7 @@ extension UnicodeScalarView {
     if scanCharacter("'") {
       identifier.append("'")
     }
-    return .symbol(.variable(identifier), [], nil)
+    return .symbol(.variable(identifier), [])
   }
 
   // Note: this is not actually part of the parser, but is colocated
@@ -820,11 +793,12 @@ extension UnicodeScalarView {
       )
     }
     string.append(Character(delimiter))
-    return .symbol(.variable(string), [], nil)
+    return .symbol(.variable(string), [])
   }
 
-  fileprivate mutating func parseSubexpression(upTo delimiters: [String]) throws
-    -> Subexpression {
+  fileprivate mutating func parseSubexpression(
+    upTo delimiters: [String]
+  ) throws -> Subexpression {
     var stack: [Subexpression] = []
 
     func collapseStack(from i: Int) throws {
@@ -835,27 +809,27 @@ extension UnicodeScalarView {
       let rhs = stack[i + 1]
       if lhs.isOperand {
         if rhs.isOperand {
-          guard case let .symbol(.postfix(op), args, _) = lhs else {
+          guard case let .symbol(.postfix(op), args) = lhs else {
             // Cannot follow an operand
             throw CalcExpression.Error.unexpectedToken("\(rhs)")
           }
           // Assume postfix operator was actually an infix operator
           stack[i] = args[0]
-          stack.insert(.symbol(.infix(op), [], nil), at: i + 1)
+          stack.insert(.symbol(.infix(op), []), at: i + 1)
           try collapseStack(from: i)
-        } else if case let .symbol(symbol, _, _) = rhs {
+        } else if case let .symbol(symbol, _) = rhs {
           switch symbol {
           case _ where stack.count <= i + 2, .postfix:
-            stack[i...i + 1] = [.symbol(.postfix(symbol.name), [lhs], nil)]
+            stack[i...i + 1] = [.symbol(.postfix(symbol.name), [lhs])]
             try collapseStack(from: 0)
           default:
             let rhs = stack[i + 2]
             if rhs.isOperand {
               if stack.count > i + 3 {
                 switch stack[i + 3] {
-                case let .symbol(.infix(op2), _, _),
-                     let .symbol(.prefix(op2), _, _),
-                     let .symbol(.postfix(op2), _, _):
+                case let .symbol(.infix(op2), _),
+                     let .symbol(.prefix(op2), _),
+                     let .symbol(.postfix(op2), _):
                   guard stack.count > i + 4,
                         CalcExpression.operator(symbol.name, takesPrecedenceOver: op2)
                   else {
@@ -868,22 +842,22 @@ extension UnicodeScalarView {
                 }
               }
               if symbol.name == ":",
-                 case let .symbol(.infix("?"), args, _) = lhs { // ternary
+                 case let .symbol(.infix("?"), args) = lhs { // ternary
                 stack[i...i + 2] =
-                  [.symbol(.infix("?:"), [args[0], args[1], rhs], nil)]
+                  [.symbol(.infix("?:"), [args[0], args[1], rhs])]
               } else {
-                stack[i...i + 2] = [.symbol(.infix(symbol.name), [lhs, rhs], nil)]
+                stack[i...i + 2] = [.symbol(.infix(symbol.name), [lhs, rhs])]
               }
               let from = symbol.name == "?" ? i : 0
               try collapseStack(from: from)
-            } else if case let .symbol(symbol2, _, _) = rhs {
+            } else if case let .symbol(symbol2, _) = rhs {
               if case .prefix = symbol2 {
                 try collapseStack(from: i + 2)
               } else if ["+", "/", "*"].contains(symbol.name) { // Assume infix
-                stack[i + 2] = .symbol(.prefix(symbol2.name), [], nil)
+                stack[i + 2] = .symbol(.prefix(symbol2.name), [])
                 try collapseStack(from: i + 2)
               } else { // Assume postfix
-                stack[i + 1] = .symbol(.postfix(symbol.name), [], nil)
+                stack[i + 1] = .symbol(.postfix(symbol.name), [])
                 try collapseStack(from: i)
               }
             } else if case let .error(error, _) = rhs {
@@ -893,10 +867,10 @@ extension UnicodeScalarView {
         } else if case let .error(error, _) = rhs {
           throw error
         }
-      } else if case let .symbol(symbol, _, _) = lhs {
+      } else if case let .symbol(symbol, _) = lhs {
         // Treat as prefix operator
         if rhs.isOperand {
-          stack[i...i + 1] = [.symbol(.prefix(symbol.name), [rhs], nil)]
+          stack[i...i + 1] = [.symbol(.prefix(symbol.name), [rhs])]
           try collapseStack(from: 0)
         } else if case .symbol = rhs {
           // Nested prefix operator?
@@ -909,7 +883,8 @@ extension UnicodeScalarView {
       }
     }
 
-    func scanArguments(upTo delimiter: Unicode.Scalar) throws -> [Subexpression] {
+    func scanArguments() throws -> [Subexpression] {
+      let delimiter: Unicode.Scalar = ")"
       var args = [Subexpression]()
       if first != delimiter {
         let delimiters = [",", String(delimiter)]
@@ -943,23 +918,20 @@ extension UnicodeScalarView {
       func appendLiteralWithNegativeValue() {
         operandPosition = false
         if let last = stack.last, last.isOperand {
-          stack.append(.symbol(.infix("+"), [], nil))
+          stack.append(.symbol(.infix("+"), []))
         }
         stack.append(expression)
       }
 
       switch expression {
-      case let .symbol(.infix(name), _, _):
+      case let .symbol(.infix(name), _):
         switch name {
         case "(":
           switch stack.last {
-          case let .symbol(.variable(name), _, _)?:
-            let args = try scanArguments(upTo: ")")
+          case let .symbol(.variable(name), _)?:
+            let args = try scanArguments()
             stack[stack.count - 1] =
-              .symbol(.function(name, arity: .exactly(args.count)), args, nil)
-          case let last? where last.isOperand:
-            let args = try scanArguments(upTo: ")")
-            stack[stack.count - 1] = .symbol(.infix("()"), [last] + args, nil)
+              .symbol(.function(name, arity: .exactly(args.count)), args)
           default:
             // TODO: if we make `,` a multifix operator, we can use `scanArguments()` here instead
             // Alternatively: add .function("()", arity: .any), as with []
@@ -993,46 +965,27 @@ extension UnicodeScalarView {
         case ",":
           operandPosition = true
           if let last = stack.last, !last.isOperand,
-             case let .symbol(.infix(op), _, _) = last {
+             case let .symbol(.infix(op), _) = last {
             // If previous token was an infix operator, convert it to postfix
-            stack[stack.count - 1] = .symbol(.postfix(op), [], nil)
+            stack[stack.count - 1] = .symbol(.postfix(op), [])
           }
           stack.append(expression)
           operandPosition = true
-          followedByWhitespace = skipWhitespace()
-        case "[":
-          let args = try scanArguments(upTo: "]")
-          switch stack.last {
-          case let .symbol(.variable(name), _, _)?:
-            guard args.count == 1 else {
-              throw CalcExpression.Error.arityMismatch(.array(name))
-            }
-            stack[stack.count - 1] = .symbol(.array(name), [args[0]], nil)
-          case let last? where last.isOperand:
-            guard args.count == 1 else {
-              throw CalcExpression.Error.arityMismatch(.infix("[]"))
-            }
-            stack[stack.count - 1] = .symbol(.infix("[]"), [last, args[0]], nil)
-          default:
-            stack
-              .append(.symbol(.function("[]", arity: .exactly(args.count)), args, nil))
-          }
-          operandPosition = false
           followedByWhitespace = skipWhitespace()
         default:
           switch (precededByWhitespace, followedByWhitespace) {
           case (true, true), (false, false):
             stack.append(expression)
           case (true, false):
-            stack.append(.symbol(.prefix(name), [], nil))
+            stack.append(.symbol(.prefix(name), []))
           case (false, true):
-            stack.append(.symbol(.postfix(name), [], nil))
+            stack.append(.symbol(.postfix(name), []))
           }
           operandPosition = true
         }
-      case let .symbol(.variable(name), _, _) where !operandPosition:
+      case let .symbol(.variable(name), _) where !operandPosition:
         operandPosition = true
-        stack.append(.symbol(.infix(name), [], nil))
+        stack.append(.symbol(.infix(name), []))
       case let .literal(.integer(value)) where value < 0:
         appendLiteralWithNegativeValue()
       case let .literal(.number(value)) where value < 0:

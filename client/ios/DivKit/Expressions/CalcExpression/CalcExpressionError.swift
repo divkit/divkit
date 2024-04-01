@@ -37,10 +37,6 @@ extension CalcExpression {
         let arity: Arity = switch symbol {
         case let .function(_, requiredArity):
           requiredArity
-        case .infix("()"):
-          .atLeast(1)
-        case .array, .infix("[]"):
-          1
         case .infix("?:"):
           3
         case .infix:
