@@ -53,9 +53,8 @@ class EntityWithArrayWithTransform(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithArrayWithTransform {
             val logger = env.logger
-            var array: ExpressionList<Int> = JsonParser.readExpressionList(json, "array", STRING_TO_COLOR_INT, ARRAY_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
             return EntityWithArrayWithTransform(
-                array = array
+                array = JsonParser.readExpressionList(json, "array", STRING_TO_COLOR_INT, ARRAY_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
             )
         }
 

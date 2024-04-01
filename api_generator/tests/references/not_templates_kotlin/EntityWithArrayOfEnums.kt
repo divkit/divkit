@@ -64,9 +64,8 @@ class EntityWithArrayOfEnums(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithArrayOfEnums {
             val logger = env.logger
-            var items: List<Item> = JsonParser.readList(json, "items", Item.Converter.FROM_STRING, ITEMS_VALIDATOR, logger, env)
             return EntityWithArrayOfEnums(
-                items = items
+                items = JsonParser.readList(json, "items", Item.Converter.FROM_STRING, ITEMS_VALIDATOR, logger, env)
             )
         }
 

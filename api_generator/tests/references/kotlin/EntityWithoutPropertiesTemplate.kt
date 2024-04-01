@@ -26,7 +26,6 @@ class EntityWithoutPropertiesTemplate : JSONSerializable, JsonTemplate<EntityWit
         json: JSONObject
     ) {
         val logger = env.logger
-
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithoutProperties {

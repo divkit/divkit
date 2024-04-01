@@ -26,7 +26,6 @@ class WithDefaultTemplate : JSONSerializable, JsonTemplate<WithDefault> {
         json: JSONObject
     ) {
         val logger = env.logger
-
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): WithDefault {

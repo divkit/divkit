@@ -57,14 +57,8 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
             val logger = env.logger
-            var value: Expression<Value> = VALUE_DEFAULT_VALUE
-            for (jsonKey in json.keys()) {
-                when (jsonKey) {
-                    "value" -> value = JsonParser.readOptionalExpression(json, "value", Value.Converter.FROM_STRING, logger, env, VALUE_DEFAULT_VALUE, TYPE_HELPER_VALUE) ?: VALUE_DEFAULT_VALUE
-                }
-            }
             return EntityWithStringEnumPropertyWithDefaultValue(
-                value = value
+                value = JsonParser.readOptionalExpression(json, "value", Value.Converter.FROM_STRING, logger, env, VALUE_DEFAULT_VALUE, TYPE_HELPER_VALUE) ?: VALUE_DEFAULT_VALUE
             )
         }
 

@@ -45,7 +45,6 @@ class EntityWithoutProperties() : JSONSerializable, Hashable {
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithoutProperties {
             val logger = env.logger
-
             return EntityWithoutProperties(
             )
         }

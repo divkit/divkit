@@ -96,59 +96,15 @@ class KotlinEntity(Entity):
         if not self.instance_properties and not extra_properties:
             return Text()
         expressions = []
-        initial_var = ''
-        mode = self.generation_mode
         for prop in self.instance_properties_kotlin:
-            if self.generation_mode.is_template:
-                if prop.parsed_value_is_optional:
-                    initial_var = f'{prop.deserialization_expression(mode=mode, reuse_logger_instance=True, suffix="Fallback")}'
-                else:
-                    initial_var = f'{prop.deserialization_expression(mode=mode, reuse_logger_instance=True)}'
-                expressions.append(f'this.{prop.declaration_name} = {prop.declaration_name} ?: {initial_var}')
-            else:
-                expressions.append(f'{prop.declaration_name} = {prop.declaration_name}')
+            expressions.append(prop.deserialization_declaration(mode=self.generation_mode))
         expressions.extend(extra_properties)
-
         result = Text()
-        comma = ',\n' if with_commas else '\n'
-        result += comma.join(expressions)
-        return result
-
-    def local_variables(self, mode: GenerationMode) -> Text:
-        local_variables = []
-        for prop in self.instance_properties_kotlin:
-            if mode.is_template:
-                local_variables.append(f'var {prop.declaration_name}: {prop.type_declaration}? = null')
-            elif prop.should_be_optional:
-                local_variables.append(f'var {prop.declaration_name}: {prop.type_declaration} = null')
-            elif prop.default_value_declaration() is not None:
-                local_variables.append(f'var {prop.declaration_name}: {prop.type_declaration} = {prop.default_value_var_name}')
-            else:
-                deserialization_expr = prop.deserialization_expression(mode=mode, reuse_logger_instance=True)
-                local_variables.append(f'var {prop.declaration_name}: {prop.type_declaration} = {deserialization_expr}{prop.default_value_coalescing(mode)}')
-        expressions = []
-        result = Text()
-        result += '\n'.join(local_variables)
-        for prop in self.instance_properties_kotlin:
-            if mode.is_template:
-                if prop.parsed_value_is_optional:
-                    expressions.append(f'        "{prop.dict_field}" -> {prop.declaration_name} = {prop.deserialization_expression(mode=mode, reuse_logger_instance=True)}')
-                    expressions.append(
-                        rf'        "\${prop.dict_field}" -> {prop.declaration_name} = {prop.declaration_name} ?: '
-                        + f'{prop.deserialization_expression(mode=mode, reuse_logger_instance=True, suffix="Reference")}'
-                    )
-            elif prop.should_be_optional or prop.default_value_declaration() is not None:
-                deserialization_expr = prop.deserialization_expression(mode=mode, reuse_logger_instance=True)
-                expressions.append(f'        "{prop.dict_field}" -> {prop.declaration_name} = {deserialization_expr}{prop.default_value_coalescing(mode)}')
-
-        if not expressions:
-            return result
-
-        result += 'for (jsonKey in json.keys()) {'
-        result += '    when (jsonKey) {'
-        result += '\n'.join(expressions)
-        result += '    }'
-        result += '}'
+        for ind, expr in enumerate(expressions):
+            comma = ''
+            if with_commas and ind != (len(expressions) - 1):
+                comma = ','
+            result += f'{expr}{comma}'
         return result
 
     @property
@@ -221,7 +177,6 @@ class KotlinEntity(Entity):
                 constructor += '    val env = env.withErrorsCollector()'
 
             constructor += '    val logger = env.logger'
-            constructor += self.local_variables(mode=self.generation_mode).indented(indent_width=4)
             constructor += f'    return {name}('
             extra_properties = []
             if self.errors_collector_enabled:
@@ -572,7 +527,7 @@ class KotlinProperty(Property):
         deserialization_expr = self.deserialization_expression(mode=mode, reuse_logger_instance=True)
         return f'{self.declaration_name} = {deserialization_expr}{self.default_value_coalescing(mode)}'
 
-    def deserialization_expression(self, mode: GenerationMode, reuse_logger_instance: bool, suffix: str = '') -> str:
+    def deserialization_expression(self, mode: GenerationMode, reuse_logger_instance: bool) -> str:
         if isinstance(self.property_type, Array):
             if self.supports_expressions and cast(KotlinPropertyType, self.property_type).is_array_of_expressions:
                 list_or_empty = EXPRESSION_LIST_TYPE_NAME
@@ -594,7 +549,7 @@ class KotlinProperty(Property):
         else:
             logger_arg = 'env.logger'
         if mode.is_template:
-            method_name = f'read{optionality}{list_or_empty}{suffix}Field{expression_suffix_or_empty}'
+            method_name = f'read{optionality}{list_or_empty}Field{expression_suffix_or_empty}'
             key_value = f'"{self.dict_field}"'
             template_args = f'topLevel, parent?.{self.declaration_name}'
         else:
@@ -606,11 +561,10 @@ class KotlinProperty(Property):
         transform = kotlin_type.deserialization_transform(
             string_enum_prefixed=self.mode.is_template
         )
-        arg_list = []
         arg_list = ['json', key_value, template_args, creator, transform, kotlin_type.validator_arg(
             property_name=self.name,
             with_template_validators=mode.is_template
-        ), logger_arg, 'env']
+        )]
 
         if isinstance(kotlin_type, Array):
             arg_list.append(cast(KotlinPropertyType, kotlin_type.property_type).validator_arg(
@@ -618,16 +572,14 @@ class KotlinProperty(Property):
                 with_template_validators=mode.is_template
             ))
 
+        arg_list.extend([logger_arg, 'env'])
+
         if self.supports_expressions and not mode.is_template and self.default_value_definition is not None:
             arg_list.append(self.default_value_var_name)
 
         if self.supports_expressions:
             arg_list.append(kotlin_type.type_helper_reference(self))
 
-        if suffix == 'Fallback':
-            arg_list = [template_args]
-        elif suffix == 'Reference':
-            arg_list = ['json', f'"{self.dict_field}"', 'topLevel', logger_arg, 'env']
         args = ', '.join(filter(lambda s: s, arg_list))
         receiver = 'JsonTemplateParser.' if mode.is_template else 'JsonParser.'
         return f'{receiver}{method_name}({args})'

@@ -27,8 +27,7 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
         json: JSONObject
     ) {
         val logger = env.logger
-        var property: Field<PropertyTemplate>? = null
-        this.property = property ?: JsonTemplateParser.readField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, logger, env)
+        property = JsonTemplateParser.readField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, logger, env)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithComplexProperty {
@@ -65,8 +64,7 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
             json: JSONObject
         ) {
             val logger = env.logger
-            var value: Field<Expression<Uri>>? = null
-            this.value = value ?: JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
+            value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
         }
 
         override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithComplexProperty.Property {
