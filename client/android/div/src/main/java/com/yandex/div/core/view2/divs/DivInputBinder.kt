@@ -84,6 +84,9 @@ internal class DivInputBinder @Inject constructor(
             observeSelectAllOnFocus(div, expressionResolver)
 
             observeText(div, expressionResolver, context.divView)
+
+            focusTracker = context.divView.inputFocusTracker
+            focusTracker?.requestFocusIfNeeded(view)
         }
     }
 

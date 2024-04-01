@@ -27,6 +27,7 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
+import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.downloader.DivDataChangedObserver
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
@@ -105,6 +106,7 @@ class Div2View private constructor(
     private val loadReferences = mutableListOf<LoadReference>()
     private val overflowMenuListeners = mutableListOf<OverflowMenuSubscriber.Listener>()
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
+    private val persistentDivDataObservers = mutableListOf<PersistentDivDataObserver>()
     private val viewToDivBindings = WeakHashMap<View, Div>()
     private val divToBindingContextBindings = WeakHashMap<DivBase, BindingContext>()
     private val propagatedAccessibilityModes = WeakHashMap<View, DivAccessibility.Mode>()
@@ -158,6 +160,8 @@ class Div2View private constructor(
             renderConfig
         )
     }
+    internal val inputFocusTracker = viewComponent.inputFocusTracker
+
     var dataTag: DivDataTag = DivDataTag.INVALID
         internal set(value) {
             prevDataTag = field
@@ -258,6 +262,8 @@ class Div2View private constructor(
         if (data == null || divData === data) {
             return false
         }
+
+        persistentDivDataObservers.forEach { it.onBeforeDivDataChanged() }
         bindOnAttachRunnable?.cancel()
 
         histogramReporter.onRenderStarted()
@@ -292,6 +298,7 @@ class Div2View private constructor(
         }
         sendCreationHistograms()
         oldExpressionsRuntime = _expressionsRuntime
+        persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
         return result
     }
 
@@ -304,6 +311,7 @@ class Div2View private constructor(
         if (data == null || divData === data) {
             return false
         }
+        persistentDivDataObservers.forEach { it.onBeforeDivDataChanged() }
         bindOnAttachRunnable?.cancel()
 
         histogramReporter.onRenderStarted()
@@ -330,6 +338,7 @@ class Div2View private constructor(
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
         oldExpressionsRuntime = _expressionsRuntime
+        persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
         return result
     }
 
@@ -597,7 +606,8 @@ class Div2View private constructor(
     }
 
     /**
-     * Observers called when DivData changed. Now it used when patch applied
+     * Observers called when DivData changed. Now it used when patch applied.
+     * The list with these observers cleans when setting new DivData.
      */
     fun addDivDataChangeObserver(observer: DivDataChangedObserver) {
         synchronized(monitor) {
@@ -608,6 +618,22 @@ class Div2View private constructor(
     fun removeDivDataChangeObserver(observer: DivDataChangedObserver) {
         synchronized(monitor) {
             divDataChangedObservers.remove(observer)
+        }
+    }
+
+    /**
+     * Observers called before and after changing div data.
+     * The list with these observers doesn't cleans when setting new DivData.
+     */
+    internal fun addPersistentDivDataObserver(observer: PersistentDivDataObserver) {
+        synchronized(monitor) {
+            persistentDivDataObservers.add(observer)
+        }
+    }
+
+    internal fun removePersistentDivDataObserver(observer: PersistentDivDataObserver) {
+        synchronized(monitor) {
+            persistentDivDataObservers.remove(observer)
         }
     }
 

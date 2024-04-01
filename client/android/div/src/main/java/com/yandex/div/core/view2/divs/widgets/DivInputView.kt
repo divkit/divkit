@@ -2,13 +2,14 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.view.accessibility.AccessibilityManager
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.internal.widget.SuperLineHeightEditText
 import com.yandex.div2.DivInput
 
@@ -21,6 +22,8 @@ internal class DivInputView @JvmOverloads constructor(
     DivAnimator {
 
     internal val nativeBackground: Drawable? = background
+
+    internal var focusTracker: InputFocusTracker? = null
 
     private val onTextChangedActions = mutableListOf<(Editable?) -> Unit>()
 
@@ -57,6 +60,11 @@ internal class DivInputView @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         onBoundsChanged(w, h)
+    }
+
+    override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
+        tag?.let { focusTracker?.inputFocusChanged(tag = it, focused = focused) }
+        super.onFocusChanged(focused, direction, previouslyFocusedRect)
     }
 
     override fun draw(canvas: Canvas) {

@@ -7,6 +7,7 @@ import com.yandex.div.core.view2.ViewBindingProvider
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.errors.ErrorVisualMonitor
+import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
 import com.yandex.yatagan.BindsInstance
@@ -29,6 +30,7 @@ internal interface Div2ViewComponent {
     val errorMonitor: ErrorVisualMonitor
     val bindingProvider: ViewBindingProvider
     val errorCollectors: ErrorCollectors
+    val inputFocusTracker: InputFocusTracker
 
     @Component.Builder
     interface Builder {
