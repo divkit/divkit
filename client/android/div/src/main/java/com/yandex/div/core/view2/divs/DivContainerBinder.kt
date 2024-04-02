@@ -170,12 +170,11 @@ internal class DivContainerBinder @Inject constructor(
         div.itemBuilder?.result = items
 
         val divView = context.divView
-        val subscriber = divView.expressionSubscriber
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
         tryRebindPlainContainerChildren(divView, items, divViewCreator)
 
         validateChildren(div, items, context.expressionResolver, errorCollector)
-        dispatchBinding(context, div, oldDiv, items, path, subscriber)
+        dispatchBinding(context, div, oldDiv, items, path, expressionSubscriber)
 
         items.forEachIndexed { i, item ->
             if (item.div.value().hasSightActions) {
