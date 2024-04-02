@@ -1,0 +1,17 @@
+{
+    "features": [{
+        "id": "actions_typed_clear_focus",
+        "name": "Typed action <code>clear_focus</code>",
+        "compat": {
+            "android": {
+                "version_added": "29.11.0"
+            },
+            "ios": {
+                "version_added": "29.12.0"
+            },
+            "web": {
+                "version_added": "29.12.0"
+            }
+        }
+    }]
+}

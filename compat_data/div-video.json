@@ -1,0 +1,14 @@
+{
+    "features": [{
+        "id": "video_preload_required",
+        "name": "Video property <code>preload_required</code>",
+        "compat": {
+            "android": {
+                "version_added": "29.3.0"
+            },
+            "web": {
+                "version_added": "29.12.0"
+            }
+        }
+    }]
+}
