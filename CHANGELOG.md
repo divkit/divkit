@@ -1,3 +1,19 @@
+## 29.13.0
+
+# Android Client:
+* Supported loading images from assets by url `divkit-asset://`
+* Fixed that sometimes extensions could be removed on state change.
+* Fixed a memory leak occurring when using expressions in the "alignment" fields of the `container` element.
+
+# iOS Client:
+* Fixed focus setting when state changes and there are multiple inputs without id.
+* Supported `is_enabled` property in `input`.
+* Fixed variables usage in tooltips.
+* Fixed visibility action of empty container.
+* Fixed crash in input with mask.
+* Fixed DivVideo view reconfiguration.
+
+
 ## 29.12.0
 
 # Android Client:
