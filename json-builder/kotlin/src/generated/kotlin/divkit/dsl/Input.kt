@@ -55,6 +55,7 @@ class Input internal constructor(
             hintColor = additive.hintColor ?: properties.hintColor,
             hintText = additive.hintText ?: properties.hintText,
             id = additive.id ?: properties.id,
+            isEnabled = additive.isEnabled ?: properties.isEnabled,
             keyboardType = additive.keyboardType ?: properties.keyboardType,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
@@ -167,6 +168,11 @@ class Input internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Indicates if the text editing is enabled.
+         * Default value: `true`.
+         */
+        val isEnabled: Property<Boolean>?,
         /**
          * Keyboard type.
          * Default value: `multi_line_text`.
@@ -302,6 +308,7 @@ class Input internal constructor(
             result.tryPutProperty("hint_color", hintColor)
             result.tryPutProperty("hint_text", hintText)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("is_enabled", isEnabled)
             result.tryPutProperty("keyboard_type", keyboardType)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
@@ -398,6 +405,7 @@ class Input internal constructor(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -447,6 +455,7 @@ fun DivScope.input(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -494,6 +503,7 @@ fun DivScope.input(
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
+        isEnabled = valueOrNull(isEnabled),
         keyboardType = valueOrNull(keyboardType),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
@@ -543,6 +553,7 @@ fun DivScope.input(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -592,6 +603,7 @@ fun DivScope.inputProps(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -638,6 +650,7 @@ fun DivScope.inputProps(
     hintColor = valueOrNull(hintColor),
     hintText = valueOrNull(hintText),
     id = valueOrNull(id),
+    isEnabled = valueOrNull(isEnabled),
     keyboardType = valueOrNull(keyboardType),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
@@ -686,6 +699,7 @@ fun DivScope.inputProps(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -735,6 +749,7 @@ fun TemplateScope.inputRefs(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -781,6 +796,7 @@ fun TemplateScope.inputRefs(
     hintColor = hintColor,
     hintText = hintText,
     id = id,
+    isEnabled = isEnabled,
     keyboardType = keyboardType,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
@@ -829,6 +845,7 @@ fun TemplateScope.inputRefs(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -878,6 +895,7 @@ fun Input.override(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -925,6 +943,7 @@ fun Input.override(
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
         hintText = valueOrNull(hintText) ?: properties.hintText,
         id = valueOrNull(id) ?: properties.id,
+        isEnabled = valueOrNull(isEnabled) ?: properties.isEnabled,
         keyboardType = valueOrNull(keyboardType) ?: properties.keyboardType,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
@@ -974,6 +993,7 @@ fun Input.override(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -1023,6 +1043,7 @@ fun Input.defer(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -1070,6 +1091,7 @@ fun Input.defer(
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = id ?: properties.id,
+        isEnabled = isEnabled ?: properties.isEnabled,
         keyboardType = keyboardType ?: properties.keyboardType,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
@@ -1111,6 +1133,7 @@ fun Input.defer(
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -1136,6 +1159,7 @@ fun Input.evaluate(
     highlightColor: ExpressionProperty<Color>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
+    isEnabled: ExpressionProperty<Boolean>? = null,
     keyboardType: ExpressionProperty<Input.KeyboardType>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
@@ -1167,6 +1191,7 @@ fun Input.evaluate(
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = properties.id,
+        isEnabled = isEnabled ?: properties.isEnabled,
         keyboardType = keyboardType ?: properties.keyboardType,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
@@ -1216,6 +1241,7 @@ fun Input.evaluate(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -1265,6 +1291,7 @@ fun Component<Input>.override(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -1313,6 +1340,7 @@ fun Component<Input>.override(
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
+        isEnabled = valueOrNull(isEnabled),
         keyboardType = valueOrNull(keyboardType),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
@@ -1362,6 +1390,7 @@ fun Component<Input>.override(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -1411,6 +1440,7 @@ fun Component<Input>.defer(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -1459,6 +1489,7 @@ fun Component<Input>.defer(
         hintColor = hintColor,
         hintText = hintText,
         id = id,
+        isEnabled = isEnabled,
         keyboardType = keyboardType,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
@@ -1500,6 +1531,7 @@ fun Component<Input>.defer(
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
+ * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -1525,6 +1557,7 @@ fun Component<Input>.evaluate(
     highlightColor: ExpressionProperty<Color>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
+    isEnabled: ExpressionProperty<Boolean>? = null,
     keyboardType: ExpressionProperty<Input.KeyboardType>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
@@ -1557,6 +1590,7 @@ fun Component<Input>.evaluate(
         hintColor = hintColor,
         hintText = hintText,
         id = null,
+        isEnabled = isEnabled,
         keyboardType = keyboardType,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
