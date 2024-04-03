@@ -149,6 +149,29 @@
                 "web",
                 "ios"
             ]
+        },
+        {
+            "name": "stringVariable == 'first' ? 1 : (stringVariable == 'second' ? 2 : (stringVariable == 'third' && intVariable < 42 ? 3 : 4)) => 3",
+            "expression": "@{stringVariable == 'first' ? 1 : (stringVariable == 'second' ? 2 : (stringVariable == 'third' && intVariable < 42 ? 3 : 4))}",
+            "expected": {
+                "type": "integer",
+                "value": 3
+            },
+            "variables": [
+                {
+                    "name": "stringVariable",
+                    "type": "string",
+                    "value": "third"
+                },
+                {
+                    "name": "intVariable",
+                    "type": "integer",
+                    "value": 41
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
         }
     ]
 }
