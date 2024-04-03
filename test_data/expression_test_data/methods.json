@@ -1,0 +1,194 @@
+{
+  "cases": [
+    {
+      "name": "'Hello!'.toString()",
+      "expression": "@{'Hello!'.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "123.toString()",
+      "expression": "@{123.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "123"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "123.45.toString()",
+      "expression": "@{123.45.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "123.45"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "true.toString()",
+      "expression": "@{true.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "true"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "color_var.toString()",
+      "expression": "@{color_var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "#FFAABBCC"
+      },
+      "variables": [
+        {
+          "name": "color_var",
+          "type": "color",
+          "value": "#AABBCC"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "url_var.toString()",
+      "expression": "@{url_var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "https://some.url"
+      },
+      "variables": [
+        {
+          "name": "url_var",
+          "type": "url",
+          "value": "https://some.url"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.toString()",
+      "expression": "@{dict_var.toString()}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "param1": "value 1"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "'Hello!'.toString().toString()",
+      "expression": "@{'Hello!'.toString().toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "toString(123).toString()",
+      "expression": "@{toString(123).toString()}",
+      "expected": {
+        "type": "string",
+        "value": "123"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "string.var.toString()",
+      "expression": "@{string.var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "variables": [
+        {
+          "name": "string.var",
+          "type": "string",
+          "value": "Hello!"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "'Hello!' .toString()",
+      "expression": "@{'Hello!' .toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "'Hello!'. toString()",
+      "expression": "@{'Hello!'. toString()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "'Hello!'.toString ()",
+      "expression": "@{'Hello!'.toString ()}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "'Hello!'.toString",
+      "expression": "@{'Hello!'.toString}",
+      "expected": {
+        "type": "error",
+        "value": "Method expected after ."
+      },
+      "platforms": [
+        "ios"
+      ]
+    }
+  ]
+}

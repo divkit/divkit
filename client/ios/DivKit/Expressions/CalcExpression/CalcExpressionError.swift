@@ -37,14 +37,16 @@ extension CalcExpression {
         let arity: Arity = switch symbol {
         case let .function(_, requiredArity):
           requiredArity
+        case let .method(_, requiredArity):
+          requiredArity
         case .infix("?:"):
-          3
+          .exactly(3)
         case .infix:
-          2
+          .exactly(2)
         case .postfix, .prefix:
-          1
+          .exactly(1)
         case .variable:
-          0
+          .exactly(0)
         }
         return "\(symbol.description) expects \(arity)"
       case .escaping:

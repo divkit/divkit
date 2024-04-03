@@ -5,7 +5,6 @@ import BasePublic
 protocol Function {
   var arity: CalcExpression.Arity { get }
   func invoke(args: [Any]) throws -> Any
-  func symbolEvaluator(_ args: [Any]) throws -> Any
   func verify(signature: FunctionSignature) throws
 }
 
@@ -15,11 +14,7 @@ protocol SimpleFunction: Function {
 
 extension SimpleFunction {
   var arity: CalcExpression.Arity {
-    (try? signature.arity) ?? 0
-  }
-
-  func symbolEvaluator(_ args: [Any]) throws -> Any {
-    try invoke(args: args)
+    (try? signature.arity) ?? .exactly(0)
   }
 
   func verify(signature: FunctionSignature) throws {
@@ -242,7 +237,7 @@ struct OverloadedFunction: Function {
   private let makeError: ([Argument]) -> Error
 
   var arity: CalcExpression.Arity {
-    functions.first?.arity ?? 0
+    functions.first?.arity ?? .exactly(0)
   }
 
   init(functions: [SimpleFunction], makeError: (([Argument]) -> Error)? = nil) {
@@ -272,10 +267,6 @@ struct OverloadedFunction: Function {
       return try function.invoke(args: args)
     }
     throw makeError(zip(args, arguments).map { Argument(type: $1.type, value: $0) })
-  }
-
-  func symbolEvaluator(_ args: [Any]) throws -> Any {
-    try invoke(args: args)
   }
 
   private func getFunction(

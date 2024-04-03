@@ -83,7 +83,8 @@ struct AnyCalcExpression {
             if evaluators(symbol) != nil {
               if actualArity == .exactly(0) {
                 return { _ in
-                  throw Error.shortMessage("Non empty argument list is required for function '\(name)'.")
+                  throw Error
+                    .shortMessage("Non empty argument list is required for function '\(name)'.")
                 }
               }
               return { _ in throw Error.arityMismatch(symbol) }
@@ -129,7 +130,10 @@ struct AnyCalcExpression {
       break
     }
 
-    throw Error.message("Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)")
+    throw Error
+      .message(
+        "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
+      )
   }
 }
 

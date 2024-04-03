@@ -119,7 +119,8 @@ final class ExpressionResolverTests: XCTestCase {
   }
 
   func test_ResolveNumeric_NestedBooleanExpression() {
-    let value: Bool = expressionResolver.resolveNumeric(expression("@{'@{string_var}' == string_var}"))!
+    let value: Bool = expressionResolver
+      .resolveNumeric(expression("@{'@{string_var}' == string_var}"))!
     XCTAssertTrue(value)
   }
 

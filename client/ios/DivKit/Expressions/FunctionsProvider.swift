@@ -66,9 +66,9 @@ final class FunctionsProvider {
           } else {
             self?.variableValueProvider(name).map { value in { _ in value } }
           }
-        case .function, .infix, .prefix:
-          self?.functions[symbol]?.symbolEvaluator
-        default:
+        case .function, .method, .infix, .prefix:
+          self?.functions[symbol]?.invoke
+        case .postfix:
           nil
         }
       }
@@ -89,6 +89,7 @@ private let staticFunctions: [CalcExpression.Symbol: Function] = {
   EqualityOperators.allCases.forEach { functions[.infix($0.rawValue)] = $0.function }
   BooleanOperators.allCases.forEach { functions[$0.symbol] = $0.function }
   MathOperators.allCases.forEach { functions[$0.symbol] = $0.function }
+  ToStringFunctions.all.forEach { functions[$0] = $1 }
   return functions
 }()
 

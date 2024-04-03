@@ -4,7 +4,6 @@ import CommonCorePublic
 
 enum CastFunctions: String, CaseIterable {
   case toBoolean
-  case toString
   case toNumber
   case toInteger
   case toColor
@@ -20,19 +19,6 @@ enum CastFunctions: String, CaseIterable {
         ],
         makeError: {
           CalcExpression.Error.toBooleanUnsupportedType($0.first?.value)
-        }
-      )
-    case .toString:
-      OverloadedFunction(
-        functions: [
-          FunctionUnary(impl: _boolToString),
-          FunctionUnary(impl: _intToString),
-          FunctionUnary(impl: _doubleToString),
-          FunctionUnary(impl: _colorToString),
-          FunctionUnary(impl: _urlToString),
-        ],
-        makeError: {
-          CalcExpression.Error.toString($0.first?.value)
         }
       )
     case .toNumber:
@@ -84,29 +70,6 @@ private func _intToBoolean(value: Int) throws -> Bool {
   default:
     throw CalcExpression.Error.toBooleanIncorrectValue(value)
   }
-}
-
-private func _boolToString(value: Bool) throws -> String {
-  value.description
-}
-
-private func _doubleToString(value: Double) throws -> String {
-  guard let string = value.toString() else {
-    throw CalcExpression.Error.toString(value)
-  }
-  return string
-}
-
-private func _intToString(value: Int) throws -> String {
-  value.description
-}
-
-private func _colorToString(value: Color) throws -> String {
-  value.argbString
-}
-
-private func _urlToString(value: URL) throws -> String {
-  value.description
 }
 
 private func _intToNumber(value: Int) throws -> Double {
@@ -164,14 +127,6 @@ extension Bool {
 }
 
 extension Double {
-  fileprivate func toString() -> String? {
-    let formatter = NumberFormatter()
-    formatter.minimumFractionDigits = 0
-    formatter.maximumFractionDigits = 14
-    formatter.decimalSeparator = "."
-    return formatter.string(from: NSNumber(value: self))
-  }
-
   fileprivate func toScientificFormat() -> String? {
     let formatter = NumberFormatter()
     formatter.numberStyle = NumberFormatter.Style.scientific
@@ -195,12 +150,6 @@ extension CalcExpression.Error {
   fileprivate static func toBooleanUnsupportedType(_ value: Any?) -> CalcExpression.Error {
     .message(
       "Failed to evaluate [toBoolean(\(formatValue(value)))]. Function 'toBoolean' has no matching override for given argument types: \(formatType(value))."
-    )
-  }
-
-  fileprivate static func toString(_ value: Any?) -> CalcExpression.Error {
-    .message(
-      "Failed to evaluate [toString(\(formatValue(value)))]. Unable to convert value to String."
     )
   }
 
@@ -239,7 +188,7 @@ extension CalcExpression.Error {
     case let strValue as String:
       "'\(strValue)'"
     case let doubleValue as Double:
-      doubleValue.toString() ?? ""
+      String(doubleValue)
     default:
       "\(value ?? "")"
     }
