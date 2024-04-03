@@ -49,6 +49,7 @@ public final class DivInput: DivBase {
   public let hintColor: Expression<Color> // default value: #73000000
   public let hintText: Expression<String>?
   public let id: String?
+  public let isEnabled: Expression<Bool> // default value: true
   public let keyboardType: Expression<KeyboardType> // default value: multi_line_text
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
@@ -118,6 +119,10 @@ public final class DivInput: DivBase {
 
   public func resolveHintText(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(hintText, initializer: { $0 })
+  }
+
+  public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(isEnabled) ?? true
   }
 
   public func resolveKeyboardType(_ resolver: ExpressionResolver) -> KeyboardType {
@@ -201,6 +206,7 @@ public final class DivInput: DivBase {
     hintColor: Expression<Color>? = nil,
     hintText: Expression<String>? = nil,
     id: String? = nil,
+    isEnabled: Expression<Bool>? = nil,
     keyboardType: Expression<KeyboardType>? = nil,
     letterSpacing: Expression<Double>? = nil,
     lineHeight: Expression<Int>? = nil,
@@ -247,6 +253,7 @@ public final class DivInput: DivBase {
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
     self.hintText = hintText
     self.id = id
+    self.isEnabled = isEnabled ?? .value(true)
     self.keyboardType = keyboardType ?? .value(.multiLineText)
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
@@ -323,63 +330,68 @@ extension DivInput: Equatable {
     }
     guard
       lhs.id == rhs.id,
-      lhs.keyboardType == rhs.keyboardType,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.isEnabled == rhs.isEnabled,
+      lhs.keyboardType == rhs.keyboardType
     else {
       return false
     }
     guard
+      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.margins == rhs.margins,
-      lhs.mask == rhs.mask
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.mask == rhs.mask,
       lhs.maxVisibleLines == rhs.maxVisibleLines,
-      lhs.nativeInterface == rhs.nativeInterface,
-      lhs.paddings == rhs.paddings
+      lhs.nativeInterface == rhs.nativeInterface
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectAllOnFocus == rhs.selectAllOnFocus
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
-      lhs.textColor == rhs.textColor
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical
     else {
       return false
     }
     guard
+      lhs.textColor == rhs.textColor,
       lhs.textVariable == rhs.textVariable,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.validators == rhs.validators,
-      lhs.visibility == rhs.visibility
+      lhs.validators == rhs.validators
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -412,6 +424,7 @@ extension DivInput: Serializable {
     result["hint_color"] = hintColor.toValidSerializationValue()
     result["hint_text"] = hintText?.toValidSerializationValue()
     result["id"] = id
+    result["is_enabled"] = isEnabled.toValidSerializationValue()
     result["keyboard_type"] = keyboardType.toValidSerializationValue()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()

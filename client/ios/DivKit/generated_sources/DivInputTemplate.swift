@@ -102,6 +102,7 @@ public final class DivInputTemplate: TemplateValue {
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
   public let hintText: Field<Expression<String>>?
   public let id: Field<String>?
+  public let isEnabled: Field<Expression<Bool>>? // default value: true
   public let keyboardType: Field<Expression<KeyboardType>>? // default value: multi_line_text
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
@@ -151,6 +152,7 @@ public final class DivInputTemplate: TemplateValue {
       hintColor: dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:)),
       hintText: dictionary.getOptionalExpressionField("hint_text"),
       id: dictionary.getOptionalField("id"),
+      isEnabled: dictionary.getOptionalExpressionField("is_enabled"),
       keyboardType: dictionary.getOptionalExpressionField("keyboard_type"),
       letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
       lineHeight: dictionary.getOptionalExpressionField("line_height"),
@@ -201,6 +203,7 @@ public final class DivInputTemplate: TemplateValue {
     hintColor: Field<Expression<Color>>? = nil,
     hintText: Field<Expression<String>>? = nil,
     id: Field<String>? = nil,
+    isEnabled: Field<Expression<Bool>>? = nil,
     keyboardType: Field<Expression<KeyboardType>>? = nil,
     letterSpacing: Field<Expression<Double>>? = nil,
     lineHeight: Field<Expression<Int>>? = nil,
@@ -248,6 +251,7 @@ public final class DivInputTemplate: TemplateValue {
     self.hintColor = hintColor
     self.hintText = hintText
     self.id = id
+    self.isEnabled = isEnabled
     self.keyboardType = keyboardType
     self.letterSpacing = letterSpacing
     self.lineHeight = lineHeight
@@ -296,6 +300,7 @@ public final class DivInputTemplate: TemplateValue {
     let hintColorValue = parent?.hintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let hintTextValue = parent?.hintText?.resolveOptionalValue(context: context) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
+    let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue
     let keyboardTypeValue = parent?.keyboardType?.resolveOptionalValue(context: context) ?? .noValue
     let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
@@ -342,6 +347,7 @@ public final class DivInputTemplate: TemplateValue {
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       keyboardTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "keyboard_type", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
@@ -397,6 +403,7 @@ public final class DivInputTemplate: TemplateValue {
       hintColor: hintColorValue.value,
       hintText: hintTextValue.value,
       id: idValue.value,
+      isEnabled: isEnabledValue.value,
       keyboardType: keyboardTypeValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
@@ -450,6 +457,7 @@ public final class DivInputTemplate: TemplateValue {
     var hintColorValue: DeserializationResult<Expression<Color>> = parent?.hintColor?.value() ?? .noValue
     var hintTextValue: DeserializationResult<Expression<String>> = parent?.hintText?.value() ?? .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+    var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
     var keyboardTypeValue: DeserializationResult<Expression<DivInput.KeyboardType>> = parent?.keyboardType?.value() ?? .noValue
     var letterSpacingValue: DeserializationResult<Expression<Double>> = parent?.letterSpacing?.value() ?? .noValue
     var lineHeightValue: DeserializationResult<Expression<Int>> = parent?.lineHeight?.value() ?? .noValue
@@ -516,6 +524,8 @@ public final class DivInputTemplate: TemplateValue {
         hintTextValue = deserialize(__dictValue).merged(with: hintTextValue)
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
+      case "is_enabled":
+        isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
       case "keyboard_type":
         keyboardTypeValue = deserialize(__dictValue).merged(with: keyboardTypeValue)
       case "letter_spacing":
@@ -606,6 +616,8 @@ public final class DivInputTemplate: TemplateValue {
         hintTextValue = hintTextValue.merged(with: { deserialize(__dictValue) })
       case parent?.id?.link:
         idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.isEnabled?.link:
+        isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
       case parent?.keyboardType?.link:
         keyboardTypeValue = keyboardTypeValue.merged(with: { deserialize(__dictValue) })
       case parent?.letterSpacing?.link:
@@ -704,6 +716,7 @@ public final class DivInputTemplate: TemplateValue {
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       keyboardTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "keyboard_type", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
@@ -759,6 +772,7 @@ public final class DivInputTemplate: TemplateValue {
       hintColor: hintColorValue.value,
       hintText: hintTextValue.value,
       id: idValue.value,
+      isEnabled: isEnabledValue.value,
       keyboardType: keyboardTypeValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
@@ -817,6 +831,7 @@ public final class DivInputTemplate: TemplateValue {
       hintColor: hintColor ?? mergedParent.hintColor,
       hintText: hintText ?? mergedParent.hintText,
       id: id ?? mergedParent.id,
+      isEnabled: isEnabled ?? mergedParent.isEnabled,
       keyboardType: keyboardType ?? mergedParent.keyboardType,
       letterSpacing: letterSpacing ?? mergedParent.letterSpacing,
       lineHeight: lineHeight ?? mergedParent.lineHeight,
@@ -870,6 +885,7 @@ public final class DivInputTemplate: TemplateValue {
       hintColor: merged.hintColor,
       hintText: merged.hintText,
       id: merged.id,
+      isEnabled: merged.isEnabled,
       keyboardType: merged.keyboardType,
       letterSpacing: merged.letterSpacing,
       lineHeight: merged.lineHeight,

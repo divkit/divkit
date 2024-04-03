@@ -2579,6 +2579,24 @@
         "Text inside password input became readable"
       ],
       "file": "input_password.json"
+    },
+    {
+      "title": "Disabled input",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "input"
+      ],
+      "steps": [
+        "Tap the \"Disable\" button and try to edit text",
+        "Tap the \"Enable\" button and try to edit text"
+      ],
+      "expected_results": [
+        "Text is not editable",
+        "Text became editable"
+      ],
+      "file": "input_is_enabled.json"
     }
   ]
 }

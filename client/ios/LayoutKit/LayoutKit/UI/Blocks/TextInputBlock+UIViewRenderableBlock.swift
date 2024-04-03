@@ -36,6 +36,7 @@ extension TextInputBlock {
     inputView.setOnBlurActions(onBlurActions)
     inputView.setPath(path)
     inputView.setObserver(observer)
+    inputView.setIsEnabled(isEnabled)
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -214,6 +215,14 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       focusTextInput()
     } else {
       clearFocus()
+    }
+  }
+
+  func setIsEnabled(_ isEnabled: Bool) {
+    if singleLineInput.isHidden {
+      multiLineInput.isEditable = isEnabled
+    } else {
+      singleLineInput.isEnabled = isEnabled
     }
   }
 

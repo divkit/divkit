@@ -76,7 +76,8 @@ extension DivInput: DivBlockModeling {
       validators: makeValidators(context),
       layoutDirection: context.layoutDirection,
       textAlignmentHorizontal: resolveTextAlignmentHorizontal(expressionResolver).textAlignment,
-      textAlignmentVertical: resolveTextAlignmentVertical(expressionResolver).textAlignment
+      textAlignmentVertical: resolveTextAlignmentVertical(expressionResolver).textAlignment,
+      isEnabled: resolveIsEnabled(expressionResolver)
     )
   }
 }
