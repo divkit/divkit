@@ -999,6 +999,10 @@
     "en": "Tooltip text.",
     "ru": "Текст подсказки."
   },
+  "div_input_is_enabled": {
+    "en": "Indicates if the text editing is enabled.",
+    "ru": "Определяет, включено ли редактирование текста."
+  },
   "div_input_keyboard_type": {
     "en": "Keyboard type.",
     "ru": "Тип клавиатуры."
@@ -1118,10 +1122,6 @@
   "div_input_validators_variable": {
     "en": "The name of the variable that stores the calculation results.",
     "ru": "Имя переменной, в которой хранится результат вычисления выражения."
-  },
-  "div_input_is_enabled": {
-    "en": "Indicates if the text editing is enabled.",
-    "ru": "Определяет, включено ли редактирование текста."
   },
   "div_keyboard_input": {
     "en": "Enter data manually using a keyboard.",
