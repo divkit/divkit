@@ -111,7 +111,7 @@ internal class DivTabsBinder @Inject constructor(
 
         view.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictScroll ->
             view.viewPager.onInterceptTouchEventListener = if (restrictScroll) {
-                ParentScrollRestrictor(ParentScrollRestrictor.DIRECTION_HORIZONTAL)
+                ParentScrollRestrictor
             } else {
                 null
             }

@@ -172,9 +172,7 @@ internal class DivGalleryBinder @Inject constructor(
         }
         view.addOnScrollListener(ScrollListener(context, view, itemHelper, div))
         view.onInterceptTouchEventListener = if (div.restrictParentScroll.evaluate(resolver)) {
-            ParentScrollRestrictor(
-                divOrientation.toRestrictorDirection()
-            )
+            ParentScrollRestrictor
         } else {
             null
         }
@@ -366,14 +364,6 @@ internal class DivGalleryBinder @Inject constructor(
 
             oldDiv = div
             divBinder.bind(context, divView, div, path)
-        }
-    }
-
-    @ParentScrollRestrictor.Direction
-    private fun DivGallery.Orientation.toRestrictorDirection(): Int {
-        return when (this) {
-            DivGallery.Orientation.HORIZONTAL -> ParentScrollRestrictor.DIRECTION_HORIZONTAL
-            DivGallery.Orientation.VERTICAL -> ParentScrollRestrictor.DIRECTION_VERTICAL
         }
     }
 }

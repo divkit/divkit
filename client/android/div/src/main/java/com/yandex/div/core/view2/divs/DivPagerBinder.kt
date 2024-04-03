@@ -178,7 +178,7 @@ internal class DivPagerBinder @Inject constructor(
 
         view.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictParentScroll ->
             view.onInterceptTouchEventListener = if (restrictParentScroll) {
-                ParentScrollRestrictor(ParentScrollRestrictor.DIRECTION_HORIZONTAL)
+                ParentScrollRestrictor
             } else {
                 null
             }
