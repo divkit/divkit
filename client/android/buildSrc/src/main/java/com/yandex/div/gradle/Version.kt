@@ -41,12 +41,7 @@ class Version private constructor(
         }
 
         val publicationType = PublicationType.fromString(project.findProperty("publicationType") as String?)
-        val regularVersion = project.findProperty("regularVersion") as String?
-        releaseLibraryVersion = if (regularVersion != null) {
-            "${baseVersionName}-regular-$regularVersion"
-        } else {
-            "${baseVersionName}${publicationType.getVersionSuffix()}"
-        }
+        releaseLibraryVersion = "${baseVersionName}${publicationType.getVersionSuffix()}"
     }
 
     companion object {
