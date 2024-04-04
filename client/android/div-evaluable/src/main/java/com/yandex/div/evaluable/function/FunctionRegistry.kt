@@ -39,8 +39,14 @@ internal class FunctionRegistry : FunctionProvider {
             return function.withArgumentsValidation(args)
         }
 
-        return overloadedFunctions.find { function ->
+        val matched = overloadedFunctions.find { function ->
             function.matchesArguments(args) == Function.MatchResult.Ok
+        }
+
+        if (matched != null) return matched
+
+        return overloadedFunctions.singleOrNull {
+            it.matchesArgumentsWithCast(args) == Function.MatchResult.Ok
         } ?: throw getFunctionArgumentsException(name, args)
     }
 

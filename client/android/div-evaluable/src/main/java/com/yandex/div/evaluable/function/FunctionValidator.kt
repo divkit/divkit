@@ -79,7 +79,8 @@ internal fun Function.withArgumentsValidation(args: List<EvaluableType>): Functi
         }
 
         is Function.MatchResult.ArgTypeMismatch -> {
-            throw EvaluableException("Call of function '$name' has argument type mismatch: expected ${result.expected}, got ${result.actual}.")
+            if (matchesArgumentsWithCast(args) == Function.MatchResult.Ok) return this
+            else throw EvaluableException("Call of function '$name' has argument type mismatch: expected ${result.expected}, got ${result.actual}.")
         }
     }
 }

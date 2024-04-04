@@ -77,6 +77,16 @@ object BuiltinFunctionProviderGenerator {
                         addStatement("return %T", function)
                         endControlFlow()
                     }
+                    functions.forEach { function ->
+                        beginControlFlow(
+                            "if (%T.matchesArgumentsWithCast(%N) == %T)",
+                            function,
+                            argsParameterSpec,
+                            Function.MatchResult.Ok::class
+                        )
+                        addStatement("return %T", function)
+                        endControlFlow()
+                    }
                 }.endControlFlow()
             }
 

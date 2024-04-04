@@ -49,19 +49,20 @@ class Evaluator(private val evaluationContext: EvaluationContext) {
     }
 
     internal fun evalBinary(binary: Evaluable.Binary): Any {
-        val left: Any = eval(binary.left)
+        val rawLeft: Any = eval(binary.left)
         binary.updateIsCacheable(binary.left.checkIsCacheable())
         // Logical
         if (binary.token is Token.Operator.Binary.Logical) {
-            return evalLogical(binary.token, left) {
+            return evalLogical(binary.token, rawLeft) {
                 val res : Any = eval(binary.right)
                 binary.updateIsCacheable(binary.right.checkIsCacheable())
                 res
             }
         }
 
-        val right: Any = eval(binary.right)
+        val rawRight: Any = eval(binary.right)
         binary.updateIsCacheable(binary.right.checkIsCacheable())
+        val (left, right) = castArgumentsIfNeeded(rawLeft, rawRight)
         if (left.javaClass != right.javaClass) {
             throwExceptionOnEvaluationFailed(binary.token, left, right)
         }
@@ -190,8 +191,9 @@ class Evaluator(private val evaluationContext: EvaluationContext) {
         val expressionContext = ExpressionContext(functionCall)
 
         functionCall.updateIsCacheable(function.isPure)
+        val castedArguments = castEvalArgumentsIfNeeded(function, arguments)
         try {
-            return function.invoke(evaluationContext, expressionContext, arguments)
+            return function.invoke(evaluationContext, expressionContext, castedArguments)
         } catch (e: IntegerOverflow) {
             throw IntegerOverflow(functionToMessageFormat(function.name, arguments))
         }
@@ -312,5 +314,28 @@ class Evaluator(private val evaluationContext: EvaluationContext) {
                 else -> throwExceptionOnEvaluationFailed(operator, left, right)
             }
         }
+    }
+
+    private fun castArgumentsIfNeeded(left: Any, right: Any): Pair<Any, Any> = when {
+            left.javaClass == right.javaClass -> left to right
+            left is Long && right is Double -> left.toDouble() to right
+            left is Double && right is Long -> left to right.toDouble()
+            else -> left to right
+        }
+
+    private fun castEvalArgumentsIfNeeded(function: Function, args: List<Any>): List<Any> {
+        val declaredArgs = function.declaredArgs
+        return args.mapIndexed { index, arg ->
+            val declaredType = declaredArgs[index.coerceAtMost(declaredArgs.lastIndex)].type
+            if (declaredType != EvaluableType.of(arg)) arg.castIfPossible(declaredType) else arg
+        }
+    }
+
+    private fun Any.castIfPossible(type: EvaluableType) = when (this) {
+        is Long -> when (type) {
+            EvaluableType.NUMBER -> this.toDouble()
+            else -> this
+        }
+        else -> this
     }
 }

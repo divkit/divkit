@@ -225,18 +225,6 @@
       ]
     },
     {
-      "name": "integer to integer => error",
-      "expression": "@{toInteger(3)}",
-      "expected": {
-        "type": "error",
-        "value": "Failed to evaluate [toInteger(3)]. Function 'toInteger' has no matching override for given argument types: Integer."
-      },
-      "variables": [],
-      "platforms": [
-        "android"
-      ]
-    },
-    {
       "name": "empty argument list => error",
       "expression": "@{toInteger()}",
       "expected": {
