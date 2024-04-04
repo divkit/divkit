@@ -855,10 +855,9 @@ extension UnicodeScalarView {
                   return
                 }
               }
-              if symbol.name == ":",
-                 case let .symbol(.infix("?"), args) = lhs { // ternary
-                stack[i...i + 2] =
-                  [.symbol(.infix("?:"), [args[0], args[1], rhs])]
+              if symbol.name == ":", // ternary
+                 case let .symbol(.infix(_), args) = lhs {
+                stack[i...i + 2] = [.symbol(.infix("?:"), [args[0], args[1], rhs])]
               } else {
                 stack[i...i + 2] = [.symbol(.infix(symbol.name), [lhs, rhs])]
               }

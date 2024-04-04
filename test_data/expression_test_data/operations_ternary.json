@@ -149,6 +149,20 @@
                 "web",
                 "ios"
             ]
+        },
+        {
+            "name": "false ? 1 : false ? 2 : false ? 3 : 4",
+            "expression": "@{false ? 1 : false ? 2 : false ? 3 : 4}",
+            "expected": {
+                "type": "integer",
+                "value": 4
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "web",
+                "ios"
+            ]
         }
     ]
 }
