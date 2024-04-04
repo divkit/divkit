@@ -4,7 +4,9 @@
         "name": "Container property <code>item_builder</code>",
         "compat": {
             "android": {
-                "version_added": "29.12.0"
+                "version_added": "29.12.0",
+                "version_removed": "29.13.0",
+                "notes": "Removed due to performance issues"
             },
             "ios": {
                 "version_added": "29.0.0"
