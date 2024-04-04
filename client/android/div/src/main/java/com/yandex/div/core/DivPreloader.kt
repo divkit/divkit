@@ -81,7 +81,7 @@ class DivPreloader internal constructor(
         }
 
         override fun visit(data: Div.Container, resolver: ExpressionResolver) {
-            data.value.buildItems(resolver).forEach { (item, newResolver) -> visit(item, newResolver) }
+            data.value.buildItems(resolver).forEach { visit(it, resolver) }
             defaultVisit(data, resolver)
         }
 

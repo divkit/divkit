@@ -25,7 +25,7 @@ import com.yandex.div.core.util.doOnEveryDetach
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.makeFocusable
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
@@ -62,26 +62,25 @@ internal class DivPagerBinder @Inject constructor(
 ) : DivViewBinder<DivPager, DivPagerView> {
 
     override fun bindView(
-        context: BindingContext,
         view: DivPagerView,
         div: DivPager,
+        divView: Div2View,
         path: DivStatePath
     ) {
         div.id?.let {
             pagerIndicatorConnector.submitPager(it, view)
         }
-        val divView = context.divView
-        val resolver = context.expressionResolver
+        val resolver = divView.expressionResolver
         val oldDiv = view.div
         if (div === oldDiv) {
             val adapter = view.viewPager.adapter as PagerAdapter
-            if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache)) {
+            if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache, divView)) {
                 adapter.notifyItemRangeChanged(0, adapter.itemCount)
             }
             return
         }
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
 
         val pageTranslations = SparseArray<Float>()
         val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
@@ -103,7 +102,7 @@ internal class DivPagerBinder @Inject constructor(
         }
         view.viewPager.adapter = PagerAdapter(
             divs = divItems,
-            bindingContext = context,
+            div2View = divView,
             divBinder = divBinder.get(),
             translationBinder = { holder: PagerViewHolder, position: Int ->
                 pageTranslations[position]?.let {
@@ -155,13 +154,14 @@ internal class DivPagerBinder @Inject constructor(
         })
 
         view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
-            bindingContext = context,
+            divView = divView,
+            div = div,
             divs = divItems,
             divActionBinder = divActionBinder,
         )
 
         view.changePageCallbackForLogger = PageChangeCallback(
-            bindingContext = context,
+            divView = divView,
             divPager = div,
             divs = divItems,
             recyclerView = view.viewPager.getChildAt(0) as RecyclerView
@@ -435,12 +435,11 @@ internal class DivPagerBinder @Inject constructor(
     class PageChangeCallback(
         private val divPager: DivPager,
         private val divs: List<Div>,
-        private val bindingContext: BindingContext,
+        private val divView: Div2View,
         private val recyclerView: RecyclerView
     ) : ViewPager2.OnPageChangeCallback() {
         private var prevPosition = RecyclerView.NO_POSITION
 
-        private val divView = bindingContext.divView
         private val minimumSignificantDx = divView.config.logCardScrollSignificantThreshold
         private var totalDelta = 0
 
@@ -508,39 +507,38 @@ internal class DivPagerBinder @Inject constructor(
                 }
                 val childDiv = divs[childPosition]
 
-                divView.div2Component.visibilityActionTracker
-                    .startTrackingViewsHierarchy(bindingContext, child, childDiv)
+                divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(divView, child, childDiv)
             }
         }
     }
 
     private class PagerAdapter(
         divs: List<Div>,
-        private val bindingContext: BindingContext,
+        private val div2View: Div2View,
         private val divBinder: DivBinder,
         private val translationBinder: (holder: PagerViewHolder, position: Int) -> Unit,
         private val viewCreator: DivViewCreator,
         private val path: DivStatePath,
         private val accessibilityEnabled: Boolean,
-    ) : DivPatchableAdapter<PagerViewHolder>(divs, bindingContext) {
+    ) : DivPatchableAdapter<PagerViewHolder>(divs, div2View) {
 
         override val subscriptions = mutableListOf<Disposable>()
 
         var orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
-            val view = PageLayout(bindingContext.divView.context) { orientation }
+            val view = PageLayout(div2View.context) { orientation }
             view.layoutParams =
                 ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
-            return PagerViewHolder(bindingContext, view, divBinder, viewCreator, accessibilityEnabled)
+            return PagerViewHolder(div2View, view, divBinder, viewCreator, accessibilityEnabled)
         }
 
         override fun getItemCount() = items.size
 
         override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
             val div = items[position]
-            holder.bind(bindingContext, div, path, position)
+            holder.bind(div2View, div, path, position)
             translationBinder.invoke(holder, position)
         }
 
@@ -578,7 +576,7 @@ internal class DivPagerBinder @Inject constructor(
     }
 
     private class PagerViewHolder(
-        bindingContext: BindingContext,
+        divView: Div2View,
         val frameLayout: PageLayout,
         private val divBinder: DivBinder,
         private val viewCreator: DivViewCreator,
@@ -588,29 +586,23 @@ internal class DivPagerBinder @Inject constructor(
         init {
             itemView.doOnEveryDetach { view ->
                 val div = oldDiv ?: return@doOnEveryDetach
-                bindingContext.divView.div2Component.visibilityActionTracker
-                    .startTrackingViewsHierarchy(bindingContext, view, div)
+                divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(divView, view, div)
             }
         }
 
         private var oldDiv: Div? = null
 
-        fun bind(bindingContext: BindingContext, div: Div, path: DivStatePath, position: Int) {
-            val div2View = bindingContext.divView
-            val resolver = bindingContext.expressionResolver
+        fun bind(div2View: Div2View, div: Div, path: DivStatePath, position: Int) {
+            val resolver = div2View.expressionResolver
 
-            if (frameLayout.tryRebindRecycleContainerChildren(bindingContext.divView, div)) {
+            if (frameLayout.tryRebindRecycleContainerChildren(div2View, div)) {
                 oldDiv = div
                 return
             }
 
-            val divView = if (oldDiv != null && frameLayout.isNotEmpty() &&
-                DivComparator.areDivsReplaceable(
-                    oldDiv,
-                    div,
-                    div2View.getExpressionResolver(oldDiv?.value()),
-                    resolver
-                )) {
+            val divView = if (oldDiv != null
+                    && frameLayout.isNotEmpty()
+                    && DivComparator.areDivsReplaceable(oldDiv, div, div2View.oldExpressionResolver, resolver)) {
                 frameLayout[0]
             } else {
                 val newDivView = viewCreator.create(div, resolver)
@@ -623,7 +615,11 @@ internal class DivPagerBinder @Inject constructor(
                 frameLayout.setTag(R.id.div_pager_item_clip_id, position)
             }
             oldDiv = div
-            divBinder.bind(bindingContext, divView, div, path)
+            divBinder.bind(divView, div, div2View, path)
+        }
+
+        private fun getPagerView(): DivPagerView {
+            return ((frameLayout.parent as ViewGroup).parent as ViewGroup).parent as DivPagerView
         }
     }
 

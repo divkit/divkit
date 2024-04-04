@@ -17,7 +17,6 @@ import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeEdgeInsets
 import com.yandex.div.core.util.observeSize
 import com.yandex.div.core.util.observeTransform
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
@@ -45,35 +44,31 @@ internal class DivBaseBinder @Inject constructor(
     private val divFocusBinder: DivFocusBinder,
     private val divAccessibilityBinder: DivAccessibilityBinder,
 ) {
-    fun bindView(context: BindingContext, view: View, div: DivBase, oldDiv: DivBase?) {
+    fun bindView(view: View, div: DivBase, oldDiv: DivBase?, divView: Div2View) {
         @Suppress("UNCHECKED_CAST")
         (view as DivHolderView<DivBase>).let {
             it.closeAllSubscription()
             it.div = div
         }
 
-        val divView = context.divView
-        val resolver = context.expressionResolver
+        val resolver = divView.expressionResolver
         val subscriber = view.expressionSubscriber
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             view.defaultFocusHighlightEnabled = false
         }
 
-        divView.bindDivToBindingContext(div, context)
-        divView.unbindDivFromBindingContext(oldDiv)
-
         view.bindId(divView, div, oldDiv)
         view.bindLayoutParams(div, oldDiv, resolver, subscriber)
         view.bindAccessibility(divView, div, oldDiv, resolver, subscriber)
         view.bindAlpha(div, oldDiv, resolver, subscriber)
 
-        view.bindBackground(context, div, subscriber)
-        view.bindBorder(context, div)
+        view.bindBackground(divView, div, resolver, subscriber)
+        view.bindBorder(divView, div, resolver)
         view.bindPaddings(div, oldDiv, resolver, subscriber)
 
         view.bindNextFocus(divView, div, oldDiv, resolver, subscriber)
-        view.bindFocusActions(context, div.focus?.onFocus, div.focus?.onBlur)
+        view.bindFocusActions(divView, resolver, div.focus?.onFocus, div.focus?.onBlur)
         view.bindVisibility(divView, div, oldDiv, resolver, subscriber)
         view.bindTransform(div, oldDiv, resolver, subscriber)
 
@@ -424,10 +419,11 @@ internal class DivBaseBinder @Inject constructor(
     //region Border
 
     private fun View.bindBorder(
-        context: BindingContext,
+        divView: Div2View,
         newDiv: DivBase,
+        resolver: ExpressionResolver
     ) {
-        divFocusBinder.bindDivBorder(this, context, newDiv.focus?.border, newDiv.border)
+        divFocusBinder.bindDivBorder(this, divView, resolver, newDiv.focus?.border, newDiv.border)
     }
 
     //endregion
@@ -435,28 +431,31 @@ internal class DivBaseBinder @Inject constructor(
     //region Background
 
     internal fun bindBackground(
-        context: BindingContext,
+        divView: Div2View,
         target: View,
         newDiv: DivBase,
         oldDiv: DivBase?,
+        resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
         additionalLayer: Drawable? = null
     ) {
-        target.bindBackground(context, newDiv, subscriber, additionalLayer)
-        target.bindPaddings(newDiv, oldDiv, context.expressionResolver, subscriber)
+        target.bindBackground(divView, newDiv, resolver, subscriber, additionalLayer)
+        target.bindPaddings(newDiv, oldDiv, resolver, subscriber)
     }
 
     private fun View.bindBackground(
-        context: BindingContext,
+        divView: Div2View,
         newDiv: DivBase,
+        resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
         additionalLayer: Drawable? = null
     ) {
         divBackgroundBinder.bindBackground(
             this,
-            context,
+            divView,
             newDiv.background,
             newDiv.focus?.background,
+            resolver,
             subscriber,
             additionalLayer
         )
@@ -514,11 +513,12 @@ internal class DivBaseBinder @Inject constructor(
     }
 
     private fun View.bindFocusActions(
-        context: BindingContext,
+        divView: Div2View,
+        resolver: ExpressionResolver,
         onFocus: List<DivAction>?,
         onBlur: List<DivAction>?
     ) {
-        divFocusBinder.bindDivFocusActions(this, context, onFocus, onBlur)
+        divFocusBinder.bindDivFocusActions(this, divView, resolver, onFocus, onBlur)
     }
 
     //endregion

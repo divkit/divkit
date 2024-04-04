@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.view.Gravity
 import com.yandex.div.R
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -17,22 +17,15 @@ internal class DivSeparatorBinder @Inject constructor(
     private val baseBinder: DivBaseBinder
 ) : DivViewBinder<DivSeparator, DivSeparatorView> {
 
-    override fun bindView(context: BindingContext, view: DivSeparatorView, div: DivSeparator) {
+    override fun bindView(view: DivSeparatorView, div: DivSeparator, divView: Div2View) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
-        baseBinder.bindView(context, view, div, oldDiv)
-        view.applyDivActions(
-            context,
-            div.action,
-            div.actions,
-            div.longtapActions,
-            div.doubletapActions,
-            div.actionAnimation,
-            div.accessibility,
-        )
+        baseBinder.bindView(view, div, oldDiv, divView)
+        view.applyDivActions(divView, div.action, div.actions, div.longtapActions,
+            div.doubletapActions, div.actionAnimation, div.accessibility)
 
-        view.bindStyle(div.delimiterStyle, oldDiv?.delimiterStyle, context.expressionResolver)
+        view.bindStyle(div.delimiterStyle, oldDiv?.delimiterStyle, divView.expressionResolver)
 
         view.setDividerHeightResource(R.dimen.div_separator_delimiter_height)
         view.dividerGravity = Gravity.CENTER

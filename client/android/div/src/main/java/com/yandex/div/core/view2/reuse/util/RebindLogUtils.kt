@@ -23,22 +23,22 @@ internal fun logRebindDiff(
         """.trimIndent()
     )
     bindingPoints.forEach {
-        it.item.div.printSelf(reusableList, bindingPoints, log)
+        it.div.printSelf(reusableList, bindingPoints, log)
     }
 
     log.appendLine("\nreuse [${reusableList.count()}]: ")
     reusableList.asList().forEach {
-        it.item.div.printSelf(reusableList, bindingPoints, log)
+        it.div.printSelf(reusableList, bindingPoints, log)
     }
 
     log.appendLine("\nremoved [${aloneExisting.count()}]: ")
     aloneExisting.forEach {
-        it.item.div.printSelf(reusableList, bindingPoints, log)
+        it.div.printSelf(reusableList, bindingPoints, log)
     }
 
     log.appendLine("\nnew [${aloneNew.count()}]: ")
     aloneNew.forEach {
-        it.item.div.printSelf(reusableList, bindingPoints, log)
+        it.div.printSelf(reusableList, bindingPoints, log)
     }
 
     log.appendLine("-----------")

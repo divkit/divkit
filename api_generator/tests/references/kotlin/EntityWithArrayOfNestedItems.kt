@@ -51,10 +51,10 @@ class EntityWithArrayOfNestedItems(
         return json
     }
 
-    fun copy(
-        items: List<Item> = this.items,
+    fun copyWithNewProperties(
+        items: List<EntityWithArrayOfNestedItems.Item>,
     ) = EntityWithArrayOfNestedItems(
-        items = items,
+        items,
     )
 
     companion object {
@@ -100,14 +100,6 @@ class EntityWithArrayOfNestedItems(
             json.writeExpression(key = "property", value = property)
             return json
         }
-
-        fun copy(
-            entity: Entity = this.entity,
-            property: Expression<String> = this.property,
-        ) = Item(
-            entity = entity,
-            property = property,
-        )
 
         companion object {
             @JvmStatic

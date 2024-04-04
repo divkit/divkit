@@ -1,15 +1,4 @@
 {
-  "codegen": {
-    "kotlin": {
-      "additional_fields": [
-        {
-          "name": "result",
-          "type": "List<DivItemBuilderResult>?",
-          "default_value": "null"
-        }
-      ]
-    }
-  },
   "type": "object",
   "properties": {
     "data_element_name": {

@@ -3,15 +3,14 @@ package com.yandex.div.core.view2.divs
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibility
 
 internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
     divs: List<Div>,
-    private val bindingContext: BindingContext,
+    private val div2View: Div2View,
 ) : RecyclerView.Adapter<VH>(), ExpressionSubscriber {
     private val _items = divs.toMutableList()
     val items: List<Div>
@@ -31,7 +30,7 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
         activityMap.clear()
 
         indexedItems.forEach {
-            val isActive = it.value.isActive(bindingContext.expressionResolver)
+            val isActive = it.value.isActive(div2View)
 
             activityMap[it.value] = isActive
             if (isActive) {
@@ -43,7 +42,7 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
     fun subscribeOnElements() {
         indexedItems.forEach { item ->
             val div = item.value
-            val subscription = div.value().visibility.observe(bindingContext.expressionResolver) {
+            val subscription = div.value().visibility.observe(div2View.expressionResolver) {
                 item.updateVisibility(it)
             }
 
@@ -73,8 +72,9 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
     fun applyPatch(
         recyclerView: RecyclerView?,
         divPatchCache: DivPatchCache,
+        divView: Div2View
     ): Boolean {
-        val patch = divPatchCache.getPatch(bindingContext.divView.dataTag) ?: return false
+        val patch = divPatchCache.getPatch(div2View.dataTag) ?: return false
         val divPatchApply = DivPatchApply(patch)
 
         val appliedToListPatchIds = mutableSetOf<String>()
@@ -85,7 +85,7 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
             val childDiv = _items[index]
             val patchId = childDiv.value().id
             val patchDivs = patchId?.let {
-                divPatchCache.getPatchDivListById(bindingContext.divView.dataTag, it)
+                divPatchCache.getPatchDivListById(div2View.dataTag, it)
             }
 
             val isActive = activityMap[childDiv] == true
@@ -98,7 +98,7 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
 
                 _items.addAll(index, patchDivs)
 
-                val activeItemsInserted = patchDivs.count { it.isActive(bindingContext.expressionResolver) }
+                val activeItemsInserted = patchDivs.count { it.isActive(div2View) }
                 notifyItemRangeInserted(activeIndex, activeItemsInserted)
 
                 index += patchDivs.size - 1
@@ -118,10 +118,10 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
             for (i in 0 until _items.size) {
                 val childDiv = _items[i]
                 divPatchApply.patchDivChild(
-                    parentView = recyclerView ?: bindingContext.divView,
+                    parentView = recyclerView ?: divView,
                     childDiv,
                     idToFind,
-                    bindingContext.expressionResolver
+                    divView.expressionResolver
                 )?.let { newDiv ->
                     _items[i] = newDiv
                     return@forEach
@@ -135,8 +135,8 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
     }
 
     companion object {
-        private fun Div.isActive(resolver: ExpressionResolver): Boolean =
-            value().visibility.evaluate(resolver).isActive()
+        private fun Div.isActive(div2View: Div2View): Boolean =
+            value().visibility.evaluate(div2View.expressionResolver).isActive()
 
         private fun DivVisibility?.isActive() =
             this != DivVisibility.GONE

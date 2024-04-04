@@ -40,12 +40,6 @@ class EntityWithOptionalComplexProperty(
         return json
     }
 
-    fun copy(
-        property: Property? = this.property,
-    ) = EntityWithOptionalComplexProperty(
-        property = property,
-    )
-
     companion object {
         const val TYPE = "entity_with_optional_complex_property"
 
@@ -84,12 +78,6 @@ class EntityWithOptionalComplexProperty(
             json.writeExpression(key = "value", value = value, converter = URI_TO_STRING)
             return json
         }
-
-        fun copy(
-            value: Expression<Uri> = this.value,
-        ) = Property(
-            value = value,
-        )
 
         companion object {
             @JvmStatic

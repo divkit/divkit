@@ -36,8 +36,6 @@ class WithoutDefault() : JSONSerializable, Hashable {
         return json
     }
 
-    fun copy() = WithoutDefault()
-
     companion object {
         const val TYPE = "non_default"
 

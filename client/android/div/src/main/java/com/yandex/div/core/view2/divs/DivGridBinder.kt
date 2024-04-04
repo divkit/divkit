@@ -8,19 +8,17 @@ import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
@@ -37,28 +35,20 @@ internal class DivGridBinder @Inject constructor(
     private val divViewCreator: Provider<DivViewCreator>,
 ) : DivViewBinder<DivGrid, DivGridLayout> {
 
-    override fun bindView(context: BindingContext, view: DivGridLayout, div: DivGrid, path: DivStatePath) {
+    override fun bindView(view: DivGridLayout, div: DivGrid, divView: Div2View, path: DivStatePath) {
         val oldDiv = view.div
         if (div === oldDiv) {
             // todo MORDAANDROID-636
             // return
         }
 
-        val divView = context.divView
-        val resolver = context.expressionResolver
+        val resolver = divView.expressionResolver
 
         view.releaseViewVisitor = divView.releaseViewVisitor
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
 
-        view.applyDivActions(
-            context,
-            div.action,
-            div.actions,
-            div.longtapActions,
-            div.doubletapActions,
-            div.actionAnimation,
-            div.accessibility,
-        )
+        view.applyDivActions(divView, div.action, div.actions, div.longtapActions,
+            div.doubletapActions, div.actionAnimation, div.accessibility)
 
         view.addSubscription(
             div.columnCount.observeAndGet(resolver) { columnCount -> view.columnCount = columnCount.toIntSafely() }
@@ -69,7 +59,7 @@ internal class DivGridBinder @Inject constructor(
 
         view.tryRebindPlainContainerChildren(
             divView,
-            items.toDivItemBuilderResults(resolver),
+            items,
             divViewCreator
         )
 
@@ -80,7 +70,7 @@ internal class DivGridBinder @Inject constructor(
             val childDivId = childDivValue.id
             // applying div patch
             if (childDivId != null && !divView.complexRebindInProgress) {
-                val patchViewsToAdd = divPatchManager.createViewsForId(context, childDivId)
+                val patchViewsToAdd = divPatchManager.createViewsForId(divView, childDivId)
                 val patchDivs = divPatchCache.getPatchDivListById(divView.dataTag, childDivId)
                 if (patchViewsToAdd != null && patchDivs != null) {
                     view.removeViewAt(gridIndex + viewsPositionDiff)
@@ -99,7 +89,7 @@ internal class DivGridBinder @Inject constructor(
                 }
             }
             childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            divBinder.get().bind(context, childView, items[gridIndex], path)
+            divBinder.get().bind(childView, items[gridIndex], divView, path)
             bindLayoutParams(childView, childDivValue, resolver)
             if (childDivValue.hasSightActions) {
                 divView.bindViewToDiv(childView, items[gridIndex])
@@ -108,11 +98,7 @@ internal class DivGridBinder @Inject constructor(
             }
         }
 
-        view.trackVisibilityActions(
-            items.toDivItemBuilderResults(resolver),
-            oldDiv?.items?.toDivItemBuilderResults(resolver),
-            divView
-        )
+        view.trackVisibilityActions(items, oldDiv?.items, divView)
     }
 
     private fun DivGridLayout.observeContentAlignment(
@@ -174,7 +160,4 @@ internal class DivGridBinder @Inject constructor(
             )
         }
     }
-
-    private fun List<Div>.toDivItemBuilderResults(resolver: ExpressionResolver) =
-        map { DivItemBuilderResult(it, resolver) }
 }

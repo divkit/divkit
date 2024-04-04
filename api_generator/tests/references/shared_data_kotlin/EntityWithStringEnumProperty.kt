@@ -20,12 +20,6 @@ class EntityWithStringEnumProperty(
         return hash
     }
 
-    fun copy(
-        property: Expression<Property> = this.property,
-    ) = EntityWithStringEnumProperty(
-        property = property,
-    )
-
     companion object {
         const val TYPE = "entity_with_string_enum_property"
     }

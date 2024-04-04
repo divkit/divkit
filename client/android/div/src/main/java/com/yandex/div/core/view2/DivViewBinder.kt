@@ -13,9 +13,9 @@ internal interface DivViewBinder<TData, TView : View> {
     /**
      * Binds div's data to templated view
      */
-    fun bindView(context: BindingContext, view: TView, div: TData) = Unit
+    fun bindView(view: TView, div: TData, divView: Div2View) = Unit
 
-    fun bindView(context: BindingContext, view: TView, div: TData, path: DivStatePath) {
-        bindView(context, view, div)
+    fun bindView(view: TView, div: TData, divView: Div2View, path: DivStatePath) {
+        bindView(view, div, divView)
     }
 }

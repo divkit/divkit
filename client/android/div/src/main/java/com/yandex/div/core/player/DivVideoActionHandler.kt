@@ -59,8 +59,8 @@ internal class DivVideoActionHandler @Inject constructor(
                 return null
             }
             is DivContainer -> {
-                div.buildItems(resolver).forEach { (item, newResolver) ->
-                    findDivVideoWithId(item.value(), id, newResolver)?.let {
+                div.buildItems(resolver).forEach { item ->
+                    findDivVideoWithId(item.value(), id, resolver)?.let {
                         return it
                     }
                 }

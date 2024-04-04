@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs.tabs
 import androidx.viewpager.widget.ViewPager
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler.DivActionReason
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.internal.KLog
@@ -13,7 +13,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivTabs
 
 internal class DivTabsEventManager(
-    private val context: BindingContext,
+    private val div2View: Div2View,
     private val actionBinder: DivActionBinder,
     private val div2Logger: Div2Logger,
     private val visibilityActionTracker: DivVisibilityActionTracker,
@@ -30,7 +30,7 @@ internal class DivTabsEventManager(
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
 
     override fun onPageSelected(position: Int) {
-        div2Logger.logTabPageChanged(context.divView, position)
+        div2Logger.logTabPageChanged(div2View, position)
         onPageDisplayed(position)
     }
 
@@ -44,13 +44,13 @@ internal class DivTabsEventManager(
         // This assumption is safe as long as we display only one page in ViewPager.
         if (currentPagePosition != NO_POSITION) {
             val previousTab = div.items[currentPagePosition]
-            visibilityActionTracker.cancelTrackingViewsHierarchy(context, viewPager, previousTab.div)
-            context.divView.unbindViewFromDiv(viewPager)
+            visibilityActionTracker.cancelTrackingViewsHierarchy(div2View, viewPager, previousTab.div)
+            div2View.unbindViewFromDiv(viewPager)
         }
 
         val selectedTab = div.items[position]
-        visibilityActionTracker.startTrackingViewsHierarchy(context, viewPager, selectedTab.div)
-        context.divView.bindViewToDiv(viewPager, selectedTab.div)
+        visibilityActionTracker.startTrackingViewsHierarchy(div2View, viewPager, selectedTab.div)
+        div2View.bindViewToDiv(viewPager, selectedTab.div)
 
         currentPagePosition = position
     }
@@ -60,8 +60,8 @@ internal class DivTabsEventManager(
             // TODO(MORDAANDROID-90): handle case with menuItems != null
             KLog.w(TAG) { "non-null menuItems ignored in title click action" }
         }
-        div2Logger.logActiveTabTitleClick(context.divView, tabPosition, action)
-        actionBinder.handleAction(context.divView, context.expressionResolver, action, DivActionReason.CLICK)
+        div2Logger.logActiveTabTitleClick(div2View, tabPosition, action)
+        actionBinder.handleAction(div2View, action, DivActionReason.CLICK)
     }
 
     private companion object {

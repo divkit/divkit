@@ -47,7 +47,7 @@ class DivSizeProviderExtensionHandlerTest {
     }
     private val divView = mock<Div2View> {
         on { divData } doReturn data
-        on { getExpressionResolver(any()) } doReturn mock()
+        on { expressionResolver } doReturn mock()
         on { viewTreeObserver } doReturn viewTreeObserver
     }
     private val underTest = DivSizeProviderExtensionHandler()

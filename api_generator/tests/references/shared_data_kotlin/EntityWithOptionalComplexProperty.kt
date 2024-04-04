@@ -20,12 +20,6 @@ class EntityWithOptionalComplexProperty(
         return hash
     }
 
-    fun copy(
-        property: Property? = this.property,
-    ) = EntityWithOptionalComplexProperty(
-        property = property,
-    )
-
     companion object {
         const val TYPE = "entity_with_optional_complex_property"
     }
@@ -46,11 +40,5 @@ class EntityWithOptionalComplexProperty(
             _hash = hash
             return hash
         }
-
-        fun copy(
-            value: Expression<Uri> = this.value,
-        ) = Property(
-            value = value,
-        )
     }
 }

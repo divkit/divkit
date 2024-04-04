@@ -5,8 +5,8 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
@@ -24,15 +24,11 @@ internal class DivPatchManager @Inject constructor(
         return divPatchCache.putPatch(tag, patch)
     }
 
-    fun createViewsForId(context: BindingContext, id: String): List<View>? {
-        val patchDivs = divPatchCache.getPatchDivListById(context.divView.dataTag, id) ?: return null
+    fun createViewsForId(rootView: Div2View, id: String): List<View>? {
+        val patchDivs = divPatchCache.getPatchDivListById(rootView.dataTag, id) ?: return null
         val listViews = mutableListOf<View>()
         patchDivs.forEach {
-            val view = divViewCreator.get().buildView(
-                it,
-                context,
-                DivStatePath.fromState(context.divView.currentStateId)
-            )
+            val view = divViewCreator.get().buildView(it, rootView, DivStatePath.fromState(rootView.currentStateId))
             listViews.add(view)
         }
         return listViews

@@ -20,10 +20,10 @@ class EntityWithArray(
         return hash
     }
 
-    fun copy(
-        array: List<Entity> = this.array,
+    fun copyWithNewProperties(
+        array: List<Entity>,
     ) = EntityWithArray(
-        array = array,
+        array,
     )
 
     companion object {

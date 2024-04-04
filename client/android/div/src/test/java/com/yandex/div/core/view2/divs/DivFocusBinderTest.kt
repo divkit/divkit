@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs
 import android.content.res.Resources
 import android.graphics.Color
 import android.view.View
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.json.expressions.Expression
@@ -56,7 +55,6 @@ class DivFocusBinderTest {
     }
     private val divView = mock<Div2View>()
     private val resolver = mock<ExpressionResolver>()
-    private val context = BindingContext(divView, resolver)
     private val defaultBorder = DivBorder(hasShadow = Expression.constant(true))
     private val focusActions = listOf(mock<DivAction>())
     private val blurActions = listOf(mock<DivAction>())
@@ -365,7 +363,7 @@ class DivFocusBinderTest {
         focusedBorder: DivBorder? = null,
         blurredBorder: DivBorder = defaultBorder,
         viewToBind: View = view
-    ) = underTest.bindDivBorder(viewToBind, context, focusedBorder, blurredBorder)
+    ) = underTest.bindDivBorder(viewToBind, divView, resolver, focusedBorder, blurredBorder)
 
     private fun setViewNotFocused() = whenever(view.isFocused).thenReturn(false)
 
@@ -379,7 +377,7 @@ class DivFocusBinderTest {
     private fun bindActions(
         onFocus: List<DivAction>? = focusActions,
         onBlur: List<DivAction>? = blurActions
-    ) = underTest.bindDivFocusActions(view, context, onFocus, onBlur)
+    ) = underTest.bindDivFocusActions(view, divView, resolver, onFocus, onBlur)
 
     private fun onFocusChange(hasFocus: Boolean) = focusListener?.onFocusChange(view, hasFocus)
 

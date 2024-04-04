@@ -28,12 +28,12 @@ internal class DivMultipleStateSwitcher @Inject constructor(
                 rootView.tryFindStateDivAndLayout(state, path, resolver) ?: return
 
             if (viewByPath != null && viewByPath !in boundLayouts) {
-                divBinder.bind(divView.getBindingContext(divByPath.value()), viewByPath, divByPath, path.parentState())
+                divBinder.bind(viewByPath, divByPath, divView, path.parentState())
                 boundLayouts += viewByPath
             }
         }
         if (boundLayouts.isEmpty()) {
-            divBinder.bind(divView.bindingContext, rootView, rootDiv, DivStatePath.fromState(state.stateId))
+            divBinder.bind(rootView, rootDiv, divView, DivStatePath.fromState(state.stateId))
         }
 
         divBinder.attachIndicators()

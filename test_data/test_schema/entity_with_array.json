@@ -5,6 +5,13 @@
     "ios",
     "web"
   ],
+  "codegen": {
+    "kotlin": {
+      "properties_to_patch": [
+        "array"
+      ]
+    }
+  },
   "properties": {
     "type": {
       "type": "string",

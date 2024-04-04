@@ -26,7 +26,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivGestureListener
@@ -38,7 +37,6 @@ import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.FixedLineHeightView
 import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
 import com.yandex.div.internal.Log
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
@@ -509,7 +507,7 @@ internal fun DivBlendMode.toPorterDuffMode(): PorterDuff.Mode {
 }
 
 internal fun View.applyDivActions(
-    context: BindingContext,
+    divView: Div2View,
     action: DivAction?,
     actions: List<DivAction>?,
     longTapActions: List<DivAction>?,
@@ -517,27 +515,27 @@ internal fun View.applyDivActions(
     actionAnimation: DivAnimation,
     accessibility: DivAccessibility?,
 ) {
-    val actionBinder = context.divView.div2Component.actionBinder
+    val actionBinder = divView.div2Component.actionBinder
     val tapActions = if (actions.isNullOrEmpty()) {
         action?.let { listOf(it) }
     } else {
         actions
     }
-    actionBinder.bindDivActions(context, this, tapActions, longTapActions, doubleTapActions,
+    actionBinder.bindDivActions(divView, this, tapActions, longTapActions, doubleTapActions,
         actionAnimation, accessibility)
 }
 
 internal fun View.setAnimatedTouchListener(
-    context: BindingContext,
+    divView: Div2View,
     divAnimation: DivAnimation?,
     divGestureListener: DivGestureListener?
 ) {
-    val animations = divAnimation?.asTouchListener(context.expressionResolver, this)
+    val animations = divAnimation?.asTouchListener(divView.expressionResolver, this)
 
     // Avoid creating GestureDetector if unnecessary cause it's expensive.
     val gestureDetector = divGestureListener
         ?.takeUnless { it.onSingleTapListener == null && it.onDoubleTapListener == null }
-        ?.let { GestureDetectorCompat(context.divView.context, divGestureListener) }
+        ?.let { GestureDetectorCompat(divView.context, divGestureListener) }
 
     if (animations != null || gestureDetector != null) {
         //noinspection ClickableViewAccessibility
@@ -602,7 +600,7 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
  */
 internal fun View.bindStates(
     div: Div?,
-    context: BindingContext,
+    divView: Div2View,
     resolver: ExpressionResolver,
     binder: DivBinder,
 ) {
@@ -621,7 +619,7 @@ internal fun View.bindStates(
         val divByPath = div.findDivState(path, resolver)
         if (divByPath != null) {
             val parentState = path.parentState()
-            binder.bind(context, layout, divByPath, parentState)
+            binder.bind(layout, divByPath, divView, parentState)
         }
     }
 }
@@ -645,36 +643,21 @@ internal fun DivImageScale.toImageScale(): AspectImageView.Scale {
 }
 
 @MainThread
-internal fun ViewGroup.trackVisibilityActions(
-    newItems: List<DivItemBuilderResult>,
-    oldItems: List<DivItemBuilderResult>?,
-    divView: Div2View
-) {
+internal fun ViewGroup.trackVisibilityActions(newDivs: List<Div>, oldDivs: List<Div>?, divView: Div2View) {
     val visibilityActionTracker = divView.div2Component.visibilityActionTracker
-    if (!oldItems.isNullOrEmpty()) {
-        val newLogIds = newItems.flatMap { it.div.value().allSightActions }.mapTo(HashSet()) { it.logId }
+    if (!oldDivs.isNullOrEmpty()) {
+        val newLogIds = newDivs.flatMap {it.value().allSightActions }.mapTo(HashSet()) { it.logId }
 
-        for (oldDiv in oldItems) {
-            val actionsToRemove = oldDiv.div.value().allSightActions.filter { it.logId !in newLogIds }
-            visibilityActionTracker.trackVisibilityActionsOf(
-                divView,
-                oldDiv.expressionResolver,
-                null,
-                oldDiv.div,
-                actionsToRemove
-            )
+        for (oldDiv in oldDivs) {
+            val actionsToRemove = oldDiv.value().allSightActions.filter { it.logId !in newLogIds }
+            visibilityActionTracker.trackVisibilityActionsOf(divView, null, oldDiv, actionsToRemove)
         }
     }
 
-    if (newItems.isNotEmpty()) {
+    if (newDivs.isNotEmpty()) {
         doOnNextLayout {  // Shortcut to check children are laid out at once
-            for ((view, item) in children zip newItems.asSequence()) {
-                visibilityActionTracker.trackVisibilityActionsOf(
-                    divView,
-                    item.expressionResolver,
-                    view,
-                    item.div
-                )
+            for ((view, div) in children zip newDivs.asSequence()) {
+                visibilityActionTracker.trackVisibilityActionsOf(divView, view, div)
             }
         }
     }
@@ -832,7 +815,7 @@ internal fun View.bindAspectRatio(newAspect: DivAspect?, oldAspect: DivAspect?, 
 }
 
 internal fun View.applyBitmapFilters(
-    context: BindingContext,
+    divView: Div2View,
     bitmap: Bitmap,
     filters: List<DivFilter>?,
     actionAfterFilters: (Bitmap) -> Unit
@@ -842,8 +825,8 @@ internal fun View.applyBitmapFilters(
         return
     }
 
-    val resolver = context.expressionResolver
-    val bitmapEffectHelper = context.divView.div2Component.bitmapEffectHelper
+    val resolver = divView.expressionResolver
+    val bitmapEffectHelper = divView.div2Component.bitmapEffectHelper
 
     doOnActualLayout {
         val scale = max(height / bitmap.height.toFloat(), width / bitmap.width.toFloat())

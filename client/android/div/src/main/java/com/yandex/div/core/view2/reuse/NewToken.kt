@@ -1,20 +1,20 @@
 package com.yandex.div.core.view2.reuse
 
 import com.yandex.div.core.util.getDefaultState
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 
 internal class NewToken(
-    item: DivItemBuilderResult,
+    div: Div,
     override val parentToken: NewToken?,
     childIndex: Int,
     var lastExistingParent: ExistingToken?,
-) : Token(item, parentToken, childIndex) {
+) : Token(div, parentToken, childIndex) {
 
-    override fun getChildrenTokens(): List<NewToken> {
-        return when (val div = item.div) {
+    override fun getChildrenTokens(resolver: ExpressionResolver): List<NewToken> {
+        return when (this.div) {
             is Div.Text -> listOf()
             is Div.Image -> listOf()
             is Div.GifImage -> listOf()
@@ -25,27 +25,23 @@ internal class NewToken(
             is Div.Custom -> listOf()
             is Div.Select -> listOf()
             is Div.Video -> listOf()
-            is Div.Container -> itemsToNewTokenList(div.value.buildItems(item.expressionResolver))
-            is Div.Grid ->
-                itemsToNewTokenList(div.value.nonNullItems.map { DivItemBuilderResult(it, item.expressionResolver) })
-            is Div.Gallery ->
-                itemsToNewTokenList(div.value.nonNullItems.map { DivItemBuilderResult(it, item.expressionResolver) })
-            is Div.Pager ->
-                itemsToNewTokenList(div.value.nonNullItems.map { DivItemBuilderResult(it, item.expressionResolver) })
-            is Div.Tabs ->
-                itemsToNewTokenList(div.value.items.map { DivItemBuilderResult(it.div, item.expressionResolver) })
+            is Div.Container -> itemsToNewTokenList(this.div.value.buildItems(resolver))
+            is Div.Grid -> itemsToNewTokenList(this.div.value.nonNullItems)
+            is Div.Gallery -> itemsToNewTokenList(this.div.value.nonNullItems)
+            is Div.Pager -> itemsToNewTokenList(this.div.value.nonNullItems)
+            is Div.Tabs -> itemsToNewTokenList(this.div.value.items.map { it.div })
             is Div.State -> {
-                val stateToBindDiv = div.value.getDefaultState(item.expressionResolver)?.div ?: return listOf()
-                itemsToNewTokenList(listOf(stateToBindDiv).map { DivItemBuilderResult(it, item.expressionResolver) })
+                val stateToBindDiv = this.div.value.getDefaultState(resolver)?.div ?: return listOf()
+                itemsToNewTokenList(listOf(stateToBindDiv))
             }
         }
     }
 
-    private fun itemsToNewTokenList(items: List<DivItemBuilderResult>): List<NewToken> {
+    private fun itemsToNewTokenList(items: List<Div>): List<NewToken> {
         val tokens = mutableListOf<NewToken>()
         items.forEachIndexed { index, item ->
             val token = NewToken(
-                item = item,
+                div = item,
                 childIndex = index,
                 parentToken = this,
                 lastExistingParent = this.lastExistingParent,

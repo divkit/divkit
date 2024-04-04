@@ -4,7 +4,7 @@ import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
@@ -22,22 +22,21 @@ internal class DivSelectBinder @Inject constructor(
     private val variableBinder: TwoWayStringVariableBinder,
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivSelect, DivSelectView> {
-    override fun bindView(context: BindingContext, view: DivSelectView, div: DivSelect) {
+    override fun bindView(view: DivSelectView, div: DivSelect, divView: Div2View) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
-        val divView = context.divView
-        val expressionResolver = context.expressionResolver
+        val expressionResolver = divView.expressionResolver
 
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
 
         view.apply {
             textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
 
-            applyOptions(div, context)
-            observeVariable(div, context, errorCollector)
+            applyOptions(div, divView)
+            observeVariable(div, divView, errorCollector)
 
             observeFontSize(div, expressionResolver)
             observeTypeface(div, expressionResolver)
@@ -49,16 +48,18 @@ internal class DivSelectBinder @Inject constructor(
         }
     }
 
-    private fun DivSelectView.applyOptions(div: DivSelect, bindingContext: BindingContext) {
-        setAnimatedTouchListener(bindingContext, DEFAULT_CLICK_ANIMATION, null)
+    private fun DivSelectView.applyOptions(div: DivSelect, divView: Div2View) {
+        val resolver = divView.expressionResolver
 
-        val itemList = createObservedItemList(div, bindingContext.expressionResolver)
+        setAnimatedTouchListener(divView, DEFAULT_CLICK_ANIMATION, null)
+
+        val itemList = createObservedItemList(div, divView.expressionResolver)
 
         setItems(itemList)
 
         onItemSelectedListener = { position ->
             text = itemList[position]
-            valueUpdater?.invoke(div.options[position].value.evaluate(bindingContext.expressionResolver))
+            valueUpdater?.invoke(div.options[position].value.evaluate(resolver))
         }
     }
 
@@ -79,15 +80,11 @@ internal class DivSelectBinder @Inject constructor(
         return itemList
     }
 
-    private fun DivSelectView.observeVariable(
-        div: DivSelect,
-        bindingContext: BindingContext,
-        errorCollector: ErrorCollector
-    ) {
-        val resolver = bindingContext.expressionResolver
+    private fun DivSelectView.observeVariable(div: DivSelect, divView: Div2View, errorCollector: ErrorCollector) {
+        val resolver = divView.expressionResolver
 
         val subscription = variableBinder.bindVariable(
-            bindingContext.divView,
+            divView,
             div.valueVariable,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
                 override fun onVariableChanged(value: String?) {

@@ -1,7 +1,6 @@
 {
   "description": "Only the first matched selector should be used. Zero matched selectors means no error.",
   "platforms": [
-    "android",
     "ios",
     "web"
   ],

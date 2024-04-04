@@ -9,7 +9,6 @@ import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
@@ -41,15 +40,14 @@ internal class DivSliderBinder @Inject constructor(
 
     private var errorCollector: ErrorCollector? = null
 
-    override fun bindView(context: BindingContext, view: DivSliderView, div: DivSlider) {
+    override fun bindView(view: DivSliderView, div: DivSlider, divView: Div2View) {
         val oldDiv = view.div
-        val divView = context.divView
         errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
         if (div === oldDiv) return
 
-        val expressionResolver = context.expressionResolver
+        val expressionResolver = divView.expressionResolver
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
 
         view.interceptionAngle = horizontalInterceptionAngle
 

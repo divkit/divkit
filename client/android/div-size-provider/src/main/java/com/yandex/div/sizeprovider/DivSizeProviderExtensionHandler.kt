@@ -41,7 +41,7 @@ class DivSizeProviderExtensionHandler(
         val data = divView.divData ?: return
 
         val variablesHolder = variablesHolders[data] ?: DivSizeProviderVariablesHolder()
-            .apply { observeDivData(data, divView.getExpressionResolver(div)) }
+            .apply { observeDivData(data, divView.expressionResolver) }
             .also { variablesHolders[data] = it }
         divDataCounters[data] = (divDataCounters[data] ?: 0) + 1
         view.setTag(R.id.div_size_provider_data, data)

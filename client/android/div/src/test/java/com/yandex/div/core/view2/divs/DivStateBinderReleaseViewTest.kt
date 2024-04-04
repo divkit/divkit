@@ -67,32 +67,32 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
 
     @Test
     fun `initial bind do not call release`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath())
+        stateBinder.bindView(stateLayout, divOne.asDivState, divView, rootPath())
 
         verify(visitor, never()).release(any())
     }
 
     @Test
     fun `rebind do call release on old views`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath())
+        stateBinder.bindView(stateLayout, divOne.asDivState, divView, rootPath())
 
         val allChildren = stateLayout.childrenToFlatList()
 
-        stateBinder.bindView(bindingContext, stateLayout, divTwo.asDivState, rootPath())
+        stateBinder.bindView(stateLayout, divTwo.asDivState, divView, rootPath())
 
         verifyAllChildrenReleased(allChildren)
     }
 
     @Test
     fun `change state release old views`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath())
+        stateBinder.bindView(stateLayout, divOne.asDivState, divView, rootPath())
         switchToState("second")
         val stateToBeSwitched: DivStateLayout = stateLayout
             .findStateLayout(DivStatePath.parse("0/state_container/first"))
             ?: throw AssertionError("failed to find state")
         val allChildren: List<View> = stateToBeSwitched.childrenToFlatList()
 
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath())
+        stateBinder.bindView(stateLayout, divOne.asDivState, divView, rootPath())
 
         verifyAllChildrenReleased(allChildren)
     }

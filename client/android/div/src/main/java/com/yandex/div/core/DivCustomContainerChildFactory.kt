@@ -20,7 +20,7 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         divStatePath: DivStatePath,
         divView: Div2View
     ): View {
-        return divView.div2Component.div2Builder.buildView(div, divView.bindingContext, divStatePath)
+        return divView.div2Component.div2Builder.buildView(div, divView, divStatePath)
     }
 
     /**
@@ -32,7 +32,7 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         divStatePath: DivStatePath,
         divView: Div2View
     ): View {
-        return divView.div2Component.div2Builder.createView(div, divView.bindingContext, divStatePath)
+        return divView.div2Component.div2Builder.createView(div, divView, divStatePath)
     }
 
     /**
@@ -44,7 +44,7 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         divStatePath: DivStatePath,
         divView: Div2View
     ) {
-        divView.div2Component.divBinder.bind(divView.bindingContext, childView, div, divStatePath)
+        divView.div2Component.divBinder.bind(childView, div, divView, divStatePath)
     }
 
 }
