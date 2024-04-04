@@ -40,12 +40,6 @@ class EntityWithRawArray(
         return json
     }
 
-    fun copy(
-        array: Expression<JSONArray> = this.array,
-    ) = EntityWithRawArray(
-        array = array,
-    )
-
     companion object {
         const val TYPE = "entity_with_raw_array"
 

@@ -10,7 +10,6 @@ import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivCustomViewFactory
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
@@ -29,13 +28,12 @@ internal class DivCustomBinder @Inject constructor(
     private val divBinder: Provider<DivBinder>,
 ) : DivViewBinder<DivCustom, DivCustomWrapper> {
 
-    override fun bindView(context: BindingContext, view: DivCustomWrapper, div: DivCustom, path: DivStatePath) {
+    override fun bindView(view: DivCustomWrapper, div: DivCustom, divView: Div2View, path: DivStatePath) {
         val customView = view.customView
         val oldDiv = view.div
-        val divView = context.divView
 
         if (oldDiv === div) {
-            view.bindStates(divView.rootDiv(), context, context.expressionResolver, divBinder.get())
+            view.bindStates(divView.rootDiv(), divView, divView.expressionResolver, divBinder.get())
             return
         }
 
@@ -43,16 +41,16 @@ internal class DivCustomBinder @Inject constructor(
             extensionController.unbindView(divView, customView, oldDiv)
         }
 
-        baseBinder.bindView(context, view, div, null)
+        baseBinder.bindView(view, div, null, divView)
         baseBinder.bindId(divView, view, null)
 
         if (divCustomContainerViewAdapter.isCustomTypeSupported(div.customType)) {
-            bind(view, customView, div, context,
+            bind(view, customView, div, divView,
                 { divCustomContainerViewAdapter.createView(div, divView, path) },
                 { divCustomContainerViewAdapter.bindView(it, div, divView, path) }
             )
         } else if (divCustomViewAdapter.isCustomTypeSupported(div.customType)) {
-            bind(view, customView, div, context,
+            bind(view, customView, div, divView,
                 { divCustomViewAdapter.createView(div, divView) },
                 { divCustomViewAdapter.bindView(it, div, divView) }
             )
@@ -65,7 +63,7 @@ internal class DivCustomBinder @Inject constructor(
         previousWrapper: DivCustomWrapper,
         oldCustomView: View?,
         div: DivCustom,
-        context: BindingContext,
+        divView: Div2View,
         createView: () -> View,
         bindView: (View) -> Unit
     ) {
@@ -77,10 +75,8 @@ internal class DivCustomBinder @Inject constructor(
             }
         }
 
-        val divView = context.divView
-        baseBinder.bindId(divView, customView, div.id)
-        divView.bindDivToBindingContext(div, context)
         bindView(customView)
+        baseBinder.bindId(divView, customView, div.id)
 
         if (oldCustomView != customView) {
             replaceInParent(previousWrapper, customView, divView)

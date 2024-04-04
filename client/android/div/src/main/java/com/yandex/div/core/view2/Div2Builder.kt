@@ -20,18 +20,18 @@ internal class Div2Builder @Inject constructor(
     private val viewBinder: DivBinder
 ) {
 
-    fun buildView(data: Div, context: BindingContext, path: DivStatePath): View {
-        val view = createView(data, context, path)
+    fun buildView(data: Div, divView: Div2View, path: DivStatePath): View {
+        val view = createView(data, divView, path)
 
         suppressExpressionErrors {
-            viewBinder.bind(context, view, data, path)
+            viewBinder.bind(view, data, divView, path)
         }
 
         return view
     }
 
-    fun createView(data: Div, context: BindingContext, path: DivStatePath): View {
-        val resolver = context.expressionResolver
+    fun createView(data: Div, divView: Div2View, path: DivStatePath): View {
+        val resolver = divView.expressionResolver
         val view = viewCreator.create(data, resolver).apply {
             layoutParams = DivLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         }

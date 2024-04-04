@@ -8,7 +8,6 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.reuse.util.combineTokens
 import com.yandex.div.core.view2.reuse.util.logRebindDiff
 import com.yandex.div.internal.Log
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 
@@ -56,16 +55,14 @@ internal class RebindTask(
         newDivData: DivData,
         rootView: ViewGroup,
     ): Boolean {
-        val existingItem = div2View.stateToBind(oldDivData)?.div ?: return false
         val existingToken = ExistingToken(
-            item = DivItemBuilderResult(existingItem, resolver),
+            div = div2View.stateToBind(oldDivData)?.div ?: return false,
             view = rootView,
             childIndex = 0,
             parentToken = null,
         )
-        val newItem = div2View.stateToBind(newDivData)?.div ?: return false
         val newToken = NewToken(
-            item = DivItemBuilderResult(newItem, newResolver),
+            div = div2View.stateToBind(newDivData)?.div ?: return false,
             childIndex = 0,
             parentToken = null,
             lastExistingParent = null,
@@ -95,10 +92,10 @@ internal class RebindTask(
         val combinedToken = combineTokens(existingToken, newToken)
         newToken.lastExistingParent = combinedToken
 
-        val aloneNewChild = newToken.getChildrenTokens().toMutableList()
+        val aloneNewChild = newToken.getChildrenTokens(newResolver).toMutableList()
         val aloneExistingChild = mutableListOf<ExistingToken>()
 
-        existingToken.getChildrenTokens().forEach { existingChild ->
+        existingToken.getChildrenTokens(resolver).forEach { existingChild ->
             val newChildWithSameHash = aloneNewChild.find { it.divHash == existingChild.divHash }
 
             if (newChildWithSameHash != null) {
@@ -126,7 +123,7 @@ internal class RebindTask(
 
     private fun doNodeInExistingMode(token: ExistingToken) {
         aloneExisting.add(token)
-        token.getChildrenTokens().forEach {
+        token.getChildrenTokens(resolver).forEach {
             doNodeInExistingMode(it)
         }
     }
@@ -139,7 +136,7 @@ internal class RebindTask(
             doNodeInSameMode(existingWithSameHash, token)
         } else {
             aloneNew.add(token)
-            token.getChildrenTokens().forEach {
+            token.getChildrenTokens(newResolver).forEach {
                 doNodeInNewMode(it)
             }
         }
@@ -159,7 +156,7 @@ internal class RebindTask(
         bindingPoints.forEach {
             if (bindingPoints.contains(it.parentToken)) return@forEach
 
-            divBinder.bind(div2View.getBindingContext(it.item.div.value()), it.view, it.item.div, path)
+            divBinder.bind(it.view, it.div, div2View, path)
         }
 
         clear()

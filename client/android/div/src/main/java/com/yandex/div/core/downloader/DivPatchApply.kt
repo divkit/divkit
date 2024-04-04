@@ -9,6 +9,7 @@ import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -75,23 +76,23 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
     }
 
     private fun applyPatch(div: DivContainer, resolver: ExpressionResolver) = Div.Container(
-        div.copy(items = applyPatchForListOfDivs(div.items, resolver))
+        div.copyWithNewProperties(applyPatchForListOfDivs(div.items, resolver))
     )
 
     private fun applyPatch(div: DivGrid, resolver: ExpressionResolver): Div.Grid  = Div.Grid(
-        div.copy(items = applyPatchForListOfDivs(div.items, resolver))
+        div.copyWithNewProperties(applyPatchForListOfDivs(div.items, resolver))
     )
 
     private fun applyPatch(div: DivGallery, resolver: ExpressionResolver) = Div.Gallery(
-        div.copy(items = applyPatchForListOfDivs(div.items, resolver))
+        div.copyWithNewProperties(applyPatchForListOfDivs(div.items, resolver))
     )
 
     private fun applyPatch(div: DivPager, resolver: ExpressionResolver) = Div.Pager(
-        div.copy(items = applyPatchForListOfDivs(div.items, resolver))
+        div.copyWithNewProperties(applyPatchForListOfDivs(div.items, resolver))
     )
 
     private fun applyPatch(div: DivState, resolver: ExpressionResolver) = Div.State(
-        div.copy(states = applyPatchForListStates(div.states, resolver))
+        div.copyWithNewProperties(applyPatchForListStates(div.states, resolver))
     )
 
     private fun applyPatchForListStates(states: List<DivState.State>,
@@ -159,7 +160,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
             }
         }
         return Div.Tabs(
-            div.copy(items = newTabItems)
+            div.copyWithNewProperties(newTabItems)
         )
     }
 
@@ -196,21 +197,24 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
     ): List<Div> {
         currentPath.add(currentDiv)
         return when (val currentDivValue = currentDiv.value()) {
-            is DivContainer ->
-                currentDivValue.nonNullItems
-                    .pathToChildWithId(idToFind, resolver, currentPath)
+            is DivContainer -> currentDivValue.buildItems(resolver).pathToChildWithId(
+                    idToFind,
+                    resolver,
+                    currentPath,
+                    builtByBuilder = currentDivValue.items == null
+                )
 
             is DivGrid ->
                 currentDivValue.nonNullItems
-                    .pathToChildWithId(idToFind, resolver, currentPath)
+                    .pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
             is DivGallery ->
                 currentDivValue.nonNullItems
-                    .pathToChildWithId(idToFind, resolver, currentPath)
+                    .pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
             is DivPager ->
                 currentDivValue.nonNullItems
-                    .pathToChildWithId(idToFind, resolver, currentPath)
+                    .pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
             is DivTabs -> {
                 if (currentDivValue.items.any { it.div.value().id == idToFind }) {
@@ -244,8 +248,14 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         idToFind: String,
         resolver: ExpressionResolver,
         currentPath: MutableList<Div> = mutableListOf(),
+        builtByBuilder: Boolean
     ): List<Div> {
-        if (any { it.value().id == idToFind }) return currentPath
+        if (any { it.value().id == idToFind }) {
+            if (!builtByBuilder) return currentPath
+
+            KAssert.fail { "Unable to patch container which has items built by items_builder." }
+            return emptyList()
+        }
 
         forEach {
             val newPath = pathToChildWithId(it, idToFind, resolver, currentPath)
@@ -261,12 +271,8 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
     ): Div {
         return when (val currentDivValue = currentDiv.value()) {
             is DivContainer -> {
-                getPatchedDivCollection(
-                    currentDiv,
-                    currentDivValue.nonNullItems,
-                    pathIterator,
-                    resolver,
-                    { Div.Container(currentDivValue.copy(items = it)) },
+                getPatchedDivCollection(currentDiv, currentDivValue.buildItems(resolver), pathIterator, resolver,
+                    { Div.Container(currentDivValue.copyWithNewProperties(it)) },
                     { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
                 )
             }
@@ -277,7 +283,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     currentDivValue.nonNullItems,
                     pathIterator,
                     resolver,
-                    { Div.Grid(currentDivValue.copy(items = it)) },
+                    { Div.Grid(currentDivValue.copyWithNewProperties(it)) },
                     { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
                 )
             }
@@ -288,7 +294,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     currentDivValue.nonNullItems,
                     pathIterator,
                     resolver,
-                    { Div.Gallery(currentDivValue.copy(items = it)) },
+                    { Div.Gallery(currentDivValue.copyWithNewProperties(it)) },
                     { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
                 )
             }
@@ -299,7 +305,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     currentDivValue.nonNullItems,
                     pathIterator,
                     resolver,
-                    { Div.Pager(currentDivValue.copy(items = it)) },
+                    { Div.Pager(currentDivValue.copyWithNewProperties(it)) },
                     { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
                 )
             }
@@ -319,7 +325,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                         itemToReplace.title,
                         itemToReplace.titleClickAction
                     )
-                    Div.Tabs(currentDivValue.copy(items = newItems))
+                    Div.Tabs(currentDivValue.copyWithNewProperties(newItems))
                 } else {
                     DivPatchApply(patch).applyPatch(currentDivValue, resolver)
                 }
@@ -345,7 +351,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                         itemToReplace.swipeOutActions
                     )
 
-                    Div.State(currentDivValue.copy(states = newItems))
+                    Div.State(currentDivValue.copyWithNewProperties(newItems))
                 } else {
                     DivPatchApply(patch).applyPatch(currentDivValue, resolver)
                 }

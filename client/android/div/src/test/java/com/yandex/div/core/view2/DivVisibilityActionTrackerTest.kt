@@ -40,6 +40,7 @@ class DivVisibilityActionTrackerTest {
     private val scope = mock<Div2View> {
         on { logId } doReturn "div"
         on { dataTag } doReturn DivDataTag("test")
+        on { expressionResolver } doReturn resolver
     }
 
     private val view1 = mockView()
@@ -79,7 +80,6 @@ class DivVisibilityActionTrackerTest {
 
         verify(visibilityActionDispatcher, never()).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view1),
             argThat { this.contains(action1) && this.size == 1 }
         )
@@ -92,7 +92,6 @@ class DivVisibilityActionTrackerTest {
 
         verify(visibilityActionDispatcher).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view1),
             argThat { this.contains(action1) && this.size == 1 }
         )
@@ -106,7 +105,6 @@ class DivVisibilityActionTrackerTest {
 
         verify(visibilityActionDispatcher, never()).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view1),
             argThat { this.contains(action1) && this.size == 1 }
         )
@@ -116,12 +114,11 @@ class DivVisibilityActionTrackerTest {
     fun `visibility action is not dispatched when view become null before deadline`() {
         trackVisibilityAction(view1, div1, 100)
         updateViewVisibility(view1, visibilityPercentage = 40)
-        visibilityActionTracker.trackVisibilityActionsOf(scope, resolver, null, div1)
+        visibilityActionTracker.trackVisibilityActionsOf(scope, null, div1)
         Robolectric.flushForegroundThreadScheduler()
 
         verify(visibilityActionDispatcher, never()).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view1),
             argThat { this.contains(action1) && this.size == 1 }
         )
@@ -135,7 +132,6 @@ class DivVisibilityActionTrackerTest {
 
         verify(visibilityActionDispatcher, times(1)).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view1),
             argThat { this.contains(action1) && this.size == 1 }
         )
@@ -150,7 +146,6 @@ class DivVisibilityActionTrackerTest {
         Robolectric.flushForegroundThreadScheduler()
         verify(visibilityActionDispatcher, times(1)).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view1),
             argThat { this.contains(action1) && this.size == 1 }
         )
@@ -167,12 +162,7 @@ class DivVisibilityActionTrackerTest {
         trackVisibilityAction(view1, div1, 100)
         Robolectric.flushForegroundThreadScheduler()
 
-        verify(visibilityActionDispatcher, times(2)).dispatchActions(
-            eq(scope),
-            eq(resolver),
-            eq(view1),
-            any()
-        )
+        verify(visibilityActionDispatcher, times(2)).dispatchActions(eq(scope), eq(view1), any())
     }
 
     @Test
@@ -230,7 +220,6 @@ class DivVisibilityActionTrackerTest {
 
         verify(visibilityActionDispatcher, times(1)).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view3),
             argThat { this.toList().containsAll(lottaActions) && this.size == lottaActions.size }
         )
@@ -245,7 +234,6 @@ class DivVisibilityActionTrackerTest {
         Robolectric.flushForegroundThreadScheduler()
         verify(visibilityActionDispatcher, times(1)).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view3),
             argThat { this.toList().containsAll(lottaActions) && this.size == lottaActions.size }
         )
@@ -257,21 +245,18 @@ class DivVisibilityActionTrackerTest {
         Robolectric.getForegroundThreadScheduler().advanceBy(101L, TimeUnit.MILLISECONDS)
         verify(visibilityActionDispatcher, times(1)).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view4),
             argThat { this.size == 2 }
         )
         Robolectric.getForegroundThreadScheduler().advanceBy(101L, TimeUnit.MILLISECONDS)
         verify(visibilityActionDispatcher, times(2)).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view4),
             argThat { this.size == 2 }
         )
         Robolectric.getForegroundThreadScheduler().advanceBy(101L, TimeUnit.MILLISECONDS)
         verify(visibilityActionDispatcher, times(3)).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view4),
             argThat { this.size == 2 }
         )
@@ -283,23 +268,17 @@ class DivVisibilityActionTrackerTest {
         Robolectric.getForegroundThreadScheduler().advanceBy(101L, TimeUnit.MILLISECONDS)
         verify(visibilityActionDispatcher, times(1)).dispatchActions(
             eq(scope),
-            eq(resolver),
             eq(view4),
             argThat { this.size == 2 }
         )
         trackVisibilityAction(view4, div4, 0)
         Robolectric.flushForegroundThreadScheduler()
-        verify(visibilityActionDispatcher, times(1)).dispatchActions(
-            eq(scope),
-            eq(resolver),
-            eq(view4),
-            any()
-        )
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(eq(scope), eq(view4), any())
     }
 
     private fun trackVisibilityAction(view: View, div: Div, visibilityPercentage: Int) {
         updateViewVisibility(view, visibilityPercentage)
-        visibilityActionTracker.trackVisibilityActionsOf(scope, resolver, view, div)
+        visibilityActionTracker.trackVisibilityActionsOf(scope, view, div)
     }
 
     private fun updateViewVisibility(view: View, visibilityPercentage: Int) {

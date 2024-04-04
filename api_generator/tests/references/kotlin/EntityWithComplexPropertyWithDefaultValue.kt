@@ -40,12 +40,6 @@ class EntityWithComplexPropertyWithDefaultValue(
         return json
     }
 
-    fun copy(
-        property: Property = this.property,
-    ) = EntityWithComplexPropertyWithDefaultValue(
-        property = property,
-    )
-
     companion object {
         const val TYPE = "entity_with_complex_property_with_default_value"
 
@@ -86,12 +80,6 @@ class EntityWithComplexPropertyWithDefaultValue(
             json.writeExpression(key = "value", value = value)
             return json
         }
-
-        fun copy(
-            value: Expression<String> = this.value,
-        ) = Property(
-            value = value,
-        )
 
         companion object {
             @JvmStatic

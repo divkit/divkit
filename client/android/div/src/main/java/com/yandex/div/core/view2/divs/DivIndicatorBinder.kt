@@ -5,7 +5,7 @@ import com.yandex.div.core.util.observeFixedSize
 import com.yandex.div.core.util.observeRoundedRectangleShape
 import com.yandex.div.core.util.observeShape
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
 import com.yandex.div.internal.widget.indicator.IndicatorParams
@@ -24,7 +24,7 @@ internal class DivIndicatorBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val pagerIndicatorConnector: PagerIndicatorConnector
 ) : DivViewBinder<DivIndicator, DivPagerIndicatorView> {
-    override fun bindView(context: BindingContext, view: DivPagerIndicatorView, div: DivIndicator) {
+    override fun bindView(view: DivPagerIndicatorView, div: DivIndicator, divView: Div2View) {
         div.pagerId?.let {
             pagerIndicatorConnector.submitIndicator(it, view)
         }
@@ -32,9 +32,9 @@ internal class DivIndicatorBinder @Inject constructor(
         val oldDiv = view.div
         if (div === oldDiv) return
 
-        val expressionResolver = context.expressionResolver
+        val expressionResolver = divView.expressionResolver
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
         view.observeStyle(expressionResolver, div)
     }
 

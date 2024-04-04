@@ -21,7 +21,6 @@ import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.validator.ExpressionValidator
 import com.yandex.div.core.util.validator.RegexValidator
 import com.yandex.div.core.util.validator.ValidatorItemData
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
@@ -53,13 +52,13 @@ internal class DivInputBinder @Inject constructor(
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivInput, DivInputView> {
 
-    override fun bindView(context: BindingContext, view: DivInputView, div: DivInput) {
+    override fun bindView(view: DivInputView, div: DivInput, divView: Div2View) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
-        val expressionResolver = context.expressionResolver
+        val expressionResolver = divView.expressionResolver
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
 
         view.apply {
             isFocusable = true
@@ -67,7 +66,7 @@ internal class DivInputBinder @Inject constructor(
             textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
             accessibilityEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
 
-            observeBackground(context, div, oldDiv, expressionResolver)
+            observeBackground(divView, div, oldDiv, expressionResolver)
 
             observeFontSize(div, expressionResolver)
             observeTypeface(div, expressionResolver)
@@ -83,9 +82,9 @@ internal class DivInputBinder @Inject constructor(
             observeKeyboardType(div, expressionResolver)
             observeSelectAllOnFocus(div, expressionResolver)
 
-            observeText(div, expressionResolver, context.divView)
+            observeText(div, expressionResolver, divView)
 
-            focusTracker = context.divView.inputFocusTracker
+            focusTracker = divView.inputFocusTracker
             focusTracker?.requestFocusIfNeeded(view)
         }
     }
@@ -120,7 +119,7 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.observeBackground(
-        bindingContext: BindingContext,
+        divView: Div2View,
         newDiv: DivInput,
         oldDiv: DivInput?,
         resolver: ExpressionResolver
@@ -129,7 +128,7 @@ internal class DivInputBinder @Inject constructor(
         val drawable = nativeBackground ?: return
 
         val callback = { color: Int ->
-            applyNativeBackgroundColor(color, newDiv, oldDiv, bindingContext, drawable)
+            applyNativeBackgroundColor(color, newDiv, oldDiv, divView, resolver, drawable)
         }
         addSubscription(nativeBackgroundColorVariable.observeAndGet(resolver, callback))
     }
@@ -138,11 +137,12 @@ internal class DivInputBinder @Inject constructor(
         color: Int,
         newDiv: DivInput,
         oldDiv: DivInput?,
-        bindingContext: BindingContext,
+        divView: Div2View,
+        resolver: ExpressionResolver,
         nativeBackground: Drawable
     ) {
         nativeBackground.setTint(color)
-        baseBinder.bindBackground(bindingContext, this, newDiv, oldDiv, expressionSubscriber, nativeBackground)
+        baseBinder.bindBackground(divView, this, newDiv, oldDiv, resolver, expressionSubscriber, nativeBackground)
     }
 
     private fun DivInputView.observeFontSize(div: DivInput, resolver: ExpressionResolver) {

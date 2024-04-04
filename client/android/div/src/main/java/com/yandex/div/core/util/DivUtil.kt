@@ -131,7 +131,7 @@ internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver): Bo
     }
     return when (this) {
         is Div.Container -> value.buildItems(resolver)
-            .map { it.div.containsStateInnerTransitions(it.expressionResolver) }
+            .map { it.containsStateInnerTransitions(resolver) }
             .contains(true)
         is Div.Grid -> value.nonNullItems
             .map { it.containsStateInnerTransitions(resolver) }

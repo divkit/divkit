@@ -31,10 +31,10 @@ class EntityWithArrayOfEnums(
         return hash
     }
 
-    fun copy(
-        items: List<Item> = this.items,
+    fun copyWithNewProperties(
+        items: List<EntityWithArrayOfEnums.Item>,
     ) = EntityWithArrayOfEnums(
-        items = items,
+        items,
     )
 
     companion object {

@@ -20,12 +20,6 @@ class EntityWithComplexPropertyWithDefaultValue(
         return hash
     }
 
-    fun copy(
-        property: Property = this.property,
-    ) = EntityWithComplexPropertyWithDefaultValue(
-        property = property,
-    )
-
     companion object {
         const val TYPE = "entity_with_complex_property_with_default_value"
 
@@ -48,11 +42,5 @@ class EntityWithComplexPropertyWithDefaultValue(
             _hash = hash
             return hash
         }
-
-        fun copy(
-            value: Expression<String> = this.value,
-        ) = Property(
-            value = value,
-        )
     }
 }

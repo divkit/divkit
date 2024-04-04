@@ -40,12 +40,6 @@ class EntityWithRequiredProperty(
         return json
     }
 
-    fun copy(
-        property: Expression<String> = this.property,
-    ) = EntityWithRequiredProperty(
-        property = property,
-    )
-
     companion object {
         const val TYPE = "entity_with_required_property"
 

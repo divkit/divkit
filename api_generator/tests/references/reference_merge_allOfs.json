@@ -105,6 +105,13 @@
           "ios",
           "web"
         ],
+        "codegen": {
+          "kotlin": {
+            "properties_to_patch": [
+              "array"
+            ]
+          }
+        },
         "properties": {
           "type": {
             "type": "string",
@@ -135,6 +142,13 @@
     {
       "entity_with_array_of_enums.json": {
         "type": "object",
+        "codegen": {
+          "kotlin": {
+            "properties_to_patch": [
+              "items"
+            ]
+          }
+        },
         "properties": {
           "type": {
             "type": "string",
@@ -187,6 +201,13 @@
     {
       "entity_with_array_of_nested_items.json": {
         "type": "object",
+        "codegen": {
+          "kotlin": {
+            "properties_to_patch": [
+              "items"
+            ]
+          }
+        },
         "definitions": {
           "item": {
             "type": "object",

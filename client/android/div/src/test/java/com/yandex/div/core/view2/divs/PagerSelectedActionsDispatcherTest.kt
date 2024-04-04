@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
@@ -28,13 +27,12 @@ class PagerSelectedActionsDispatcherTest {
 
     private val divActionBinder = mock<DivActionBinder>()
     private val divView = divView(logId = CARD_ID, divTag = CARD_ID)
-    private val bindingContext = BindingContext(divView, ExpressionResolver.EMPTY)
     private val bulkActionsArgumentCaptor = argumentCaptor<() -> Unit>()
 
     private val div = UnitTestData(PAGER_DIR, "pager_selected_actions.json").div
     private val divPager = div.value() as DivPager
 
-    private val underTest = PagerSelectedActionsDispatcher(bindingContext, ArrayList(divPager.items), divActionBinder)
+    private val underTest = PagerSelectedActionsDispatcher(divView, divPager, ArrayList(divPager.items), divActionBinder)
 
     @Before
     fun setUp() {
@@ -45,7 +43,7 @@ class PagerSelectedActionsDispatcherTest {
     fun `no actions dispatched when selected item has no selected actions`() {
         val divPager = UnitTestData(PAGER_DIR, "pager_default_item.json").div.value() as DivPager
 
-        val underTest = PagerSelectedActionsDispatcher(bindingContext, ArrayList(divPager.items), divActionBinder)
+        val underTest = PagerSelectedActionsDispatcher(divView, divPager, ArrayList(divPager.items), divActionBinder)
         underTest.whenAttached()
         underTest.whenPageSelected(0)
 
@@ -157,12 +155,11 @@ class PagerSelectedActionsDispatcherTest {
     }
 
     private fun verifyActionHandled(urlStr: String, times: Int = 1) {
-        verify(divActionBinder, times(times))
-            .handleAction(eq(divView), any(), urlEq(urlStr), any(), anyOrNull(), anyOrNull())
+        verify(divActionBinder, times(times)).handleAction(eq(divView), urlEq(urlStr), any(), anyOrNull(), anyOrNull())
     }
 
     private fun InOrderOnType<DivActionBinder>.verifyActionHandled(div2View: Div2View, url: String) {
-        verify().handleAction(eq(div2View), any(), urlEq(url), any(), anyOrNull(), anyOrNull())
+        verify().handleAction(eq(div2View), urlEq(url), any(), anyOrNull(), anyOrNull())
     }
 
     private companion object {

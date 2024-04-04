@@ -27,8 +27,8 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
-import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.downloader.DivDataChangedObserver
+import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.expression.variables.VariableController
@@ -59,7 +59,6 @@ import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -70,7 +69,6 @@ import com.yandex.div.util.getInitialStateId
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
@@ -108,7 +106,6 @@ class Div2View private constructor(
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
     private val persistentDivDataObservers = mutableListOf<PersistentDivDataObserver>()
     private val viewToDivBindings = WeakHashMap<View, Div>()
-    private val divToBindingContextBindings = WeakHashMap<DivBase, BindingContext>()
     private val propagatedAccessibilityModes = WeakHashMap<View, DivAccessibility.Mode>()
     private val bulkActionsHandler = BulkActionHandler()
     private val divVideoActionHandler: DivVideoActionHandler
@@ -123,8 +120,6 @@ class Div2View private constructor(
         get() = _expressionsRuntime?.variableController
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
-
-    internal var bindingContext: BindingContext = BindingContext(this, expressionResolver)
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
 
@@ -187,7 +182,6 @@ class Div2View private constructor(
         if (oldExpressionsRuntime != _expressionsRuntime) {
             oldExpressionsRuntime?.clearBinding()
         }
-        bindingContext = BindingContext(this, expressionResolver)
     }
 
     private fun attachVariableTriggers() {
@@ -404,33 +398,18 @@ class Div2View private constructor(
     }
 
     private fun trackStateVisibility(state: DivData.State) {
-        div2Component.visibilityActionTracker.trackVisibilityActionsOf(
-            this,
-            getExpressionResolver(state.div.value()),
-            view,
-            state.div
-        )
+        div2Component.visibilityActionTracker.trackVisibilityActionsOf(this, view, state.div)
     }
 
     private fun discardStateVisibility(state: DivData.State) {
-        div2Component.visibilityActionTracker.trackVisibilityActionsOf(
-            scope = this,
-            resolver = getExpressionResolver(state.div.value()),
-            view = null,
-            div = state.div
-        )
+        div2Component.visibilityActionTracker.trackVisibilityActionsOf(this, null, state.div)
     }
 
     fun trackChildrenVisibility() {
         val visibilityActionTracker = div2Component.visibilityActionTracker
         viewToDivBindings.forEach { (view, div) ->
             if (ViewCompat.isAttachedToWindow(view)) {
-                visibilityActionTracker.trackVisibilityActionsOf(
-                    this,
-                    getExpressionResolver(div.value()),
-                    view,
-                    div
-                )
+                visibilityActionTracker.trackVisibilityActionsOf(this, view, div)
             }
         }
     }
@@ -733,7 +712,7 @@ class Div2View private constructor(
         }
 
         if (bindBeforeViewAdded) {
-            div2Component.divBinder.bind(bindingContext, newStateView, newState.div, DivStatePath.fromState(newState.stateId))
+            div2Component.divBinder.bind(newStateView, newState.div, this, DivStatePath.fromState(newState.stateId))
         }
 
         if (transition != null) {
@@ -762,7 +741,7 @@ class Div2View private constructor(
         isUpdateTemporary: Boolean = true
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
-        return divBuilder.buildView(newState.div, bindingContext, DivStatePath.fromState(newState.stateId)).also {
+        return divBuilder.buildView(newState.div, this, DivStatePath.fromState(newState.stateId)).also {
             div2Component.divBinder.attachIndicators()
         }
     }
@@ -774,16 +753,16 @@ class Div2View private constructor(
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
         val path = DivStatePath.fromState(newState.stateId)
-        val view = divBuilder.createView(newState.div, bindingContext, path)
+        val view = divBuilder.createView(newState.div, this, path)
         if (bindOnAttachEnabled) {
             bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
                 suppressExpressionErrors {
-                    div2Component.divBinder.bind(bindingContext, view, newState.div, path)
+                    div2Component.divBinder.bind(view, newState.div, this, path)
                 }
                 div2Component.divBinder.attachIndicators()
             }
         } else {
-            div2Component.divBinder.bind(bindingContext, view, newState.div, path)
+            div2Component.divBinder.bind(view, newState.div, this, path)
             doOnAttach {
                 div2Component.divBinder.attachIndicators()
             }
@@ -797,8 +776,8 @@ class Div2View private constructor(
         }
 
         val transition = viewComponent.transitionBuilder.buildTransitions(
-            from = oldDiv?.let { itemSequenceForTransition(oldData, it, oldExpressionResolver) },
-            to = newDiv?.let { itemSequenceForTransition(newData, it, expressionResolver) },
+            from = oldDiv?.let { divSequenceForTransition(oldData, it, oldExpressionResolver) },
+            to = newDiv?.let { divSequenceForTransition(newData, it, expressionResolver) },
             fromResolver = oldExpressionResolver,
             toResolver = expressionResolver
         )
@@ -816,11 +795,7 @@ class Div2View private constructor(
         return transition
     }
 
-    private fun itemSequenceForTransition(
-        divData: DivData?,
-        div: Div,
-        resolver: ExpressionResolver
-    ): Sequence<DivItemBuilderResult> {
+    private fun divSequenceForTransition(divData: DivData?, div: Div, resolver: ExpressionResolver): Sequence<Div> {
         val selectors = ArrayDeque<DivTransitionSelector>().apply {
             addLast(divData?.transitionAnimationSelector?.evaluate(resolver) ?: DivTransitionSelector.NONE)
         }
@@ -833,8 +808,8 @@ class Div2View private constructor(
             .onLeave { div ->
                 if (div is Div.State) selectors.removeLast()
             }
-            .filter { item ->
-                item.div.value().transitionTriggers?.allowsTransitionsOnDataChange()
+            .filter { div ->
+                div.value().transitionTriggers?.allowsTransitionsOnDataChange()
                     ?: selectors.lastOrNull()?.allowsTransitionsOnDataChange()
                     ?: false
             }
@@ -849,28 +824,18 @@ class Div2View private constructor(
     }
 
     @JvmOverloads
-    fun handleAction(
-        action: DivAction,
-        reason: String = DivActionReason.EXTERNAL,
-        expressionResolver: ExpressionResolver = getExpressionResolver(),
-    ) {
-        handleActionWithResult(action, reason, expressionResolver)
+    fun handleAction(action: DivAction, reason: String = DivActionReason.EXTERNAL) {
+        handleActionWithResult(action, reason)
     }
 
     @JvmOverloads
-    fun handleActionWithResult(
-        action: DivAction,
-        reason: String = DivActionReason.EXTERNAL,
-        expressionResolver: ExpressionResolver = getExpressionResolver(),
-    ): Boolean {
+    fun handleActionWithResult(action: DivAction, reason: String = DivActionReason.EXTERNAL): Boolean {
         return div2Component.actionBinder.handleAction(
             divView = this,
-            expressionResolver,
             action = action,
             reason = reason,
             actionUid = null,
-            viewActionHandler = actionHandler
-        )
+            viewActionHandler = actionHandler)
     }
 
     override fun handleUri(uri: Uri) {
@@ -928,18 +893,12 @@ class Div2View private constructor(
         return _expressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
     }
 
-    fun getExpressionResolver(div: DivBase?): ExpressionResolver {
-        return divToBindingContextBindings[div]?.expressionResolver ?: expressionResolver
-    }
-
-    internal fun getBindingContext(div: DivBase?) = divToBindingContextBindings[div] ?: bindingContext
-
     override fun showTooltip(tooltipId: String) {
-        tooltipController.showTooltip(tooltipId, bindingContext)
+        tooltipController.showTooltip(tooltipId, this)
     }
 
     override fun showTooltip(tooltipId: String, multiple: Boolean) {
-        tooltipController.showTooltip(tooltipId, bindingContext, multiple)
+        tooltipController.showTooltip(tooltipId, this, multiple)
     }
 
     override fun hideTooltip(tooltipId: String) {
@@ -947,7 +906,7 @@ class Div2View private constructor(
     }
 
     override fun cancelTooltips() {
-        tooltipController.cancelTooltips(bindingContext)
+        tooltipController.cancelTooltips(this)
     }
 
     override fun dispatchDraw(canvas: Canvas) {
@@ -966,10 +925,6 @@ class Div2View private constructor(
 
     internal fun bindViewToDiv(view: View, div: Div) {
         viewToDivBindings[view] = div
-    }
-
-    internal fun bindDivToBindingContext(div: DivBase?, context: BindingContext) {
-        divToBindingContextBindings[div] = context
     }
 
     internal fun takeBindingDiv(view: View) = viewToDivBindings[view]
@@ -1040,8 +995,6 @@ class Div2View private constructor(
 
     internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)
 
-    internal fun unbindDivFromBindingContext(div: DivBase?) = divToBindingContextBindings.remove(div)
-
     private fun rebind(newData: DivData, isAutoanimations: Boolean) {
         try {
             if (childCount == 0) {
@@ -1057,7 +1010,7 @@ class Div2View private constructor(
             }
             divData = newData
             div2Component.stateManager.updateState(dataTag, state.stateId, true)
-            div2Component.divBinder.bind(bindingContext, rootDivView, state.div, DivStatePath.fromState(stateId))
+            div2Component.divBinder.bind(rootDivView, state.div, this, DivStatePath.fromState(stateId))
             requestLayout()
             if (isAutoanimations) {
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)

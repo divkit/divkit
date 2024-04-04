@@ -17,8 +17,6 @@ class WithoutDefault() : Hashable {
         return hash
     }
 
-    fun copy() = WithoutDefault()
-
     companion object {
         const val TYPE = "non_default"
     }

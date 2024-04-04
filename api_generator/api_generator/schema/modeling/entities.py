@@ -982,7 +982,6 @@ class KotlinGeneratorProperties(GeneratorProperties):
     ):
         super().__init__(general_properties, lang, mode)
         self.public_default_values: bool = specific_properties.get('public_default_values', False)
-        self.additional_fields: list[dict] = specific_properties.get('additional_fields')
 
 
 class DocumentationGeneratorProperties(GeneratorProperties):

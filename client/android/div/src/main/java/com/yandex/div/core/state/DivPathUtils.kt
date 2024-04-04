@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -110,7 +109,7 @@ internal object DivPathUtils {
                 }
             }
             is Div.Tabs -> value.items.map { it.div }.findRecursively(divId, resolver)
-            is Div.Container -> value.buildItems(resolver).findRecursively(divId)
+            is Div.Container -> value.buildItems(resolver).findRecursively(divId, resolver)
             is Div.Grid -> value.nonNullItems.findRecursively(divId, resolver)
             is Div.Gallery -> value.nonNullItems.findRecursively(divId, resolver)
             is Div.Pager -> value.nonNullItems.findRecursively(divId, resolver)
@@ -125,13 +124,6 @@ internal object DivPathUtils {
             is Div.Select -> null
             is Div.Video -> null
         }
-    }
-
-    private fun Iterable<DivItemBuilderResult>.findRecursively(divId: String): Div? {
-        forEach { (div, resolver) ->
-            div.findByPath(divId, resolver)?.let { return it }
-        }
-        return null
     }
 
     private fun Iterable<Div>.findRecursively(divId: String, resolver: ExpressionResolver): Div? {

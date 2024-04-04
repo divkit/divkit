@@ -31,12 +31,6 @@ class EntityWithArrayOfExpressions(
         return hash
     }
 
-    fun copy(
-        items: ExpressionList<String> = this.items,
-    ) = EntityWithArrayOfExpressions(
-        items = items,
-    )
-
     companion object {
         const val TYPE = "entity_with_array_of_expressions"
 

@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.dagger.Div2ViewComponent
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
@@ -38,20 +37,20 @@ class DivBaseBinderTest {
     private val expressionResolver = mock<ExpressionResolver>()
     private val viewComponent = mock<Div2ViewComponent>()
     private val divView = mock<Div2View> {
+        on { expressionResolver } doReturn expressionResolver
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
         on { viewComponent } doReturn viewComponent
     }
-    private val context = BindingContext(divView, expressionResolver)
 
     @Test
     fun `do not apply paddings when same`() {
         val div = DivText(text = "text".asExpression(), paddings = paddingsBottom1)
         val oldDiv = DivText(text = "text".asExpression(), paddings = paddingsBottom1)
 
-        baseBinder.bindView(context, view, oldDiv, null)
+        baseBinder.bindView(view, oldDiv, null, divView)
         clearInvocations(view)
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
 
         verify(view, never()).setPadding(any(), any(), any(), any())
         verify(view, never()).requestLayout()
@@ -62,10 +61,10 @@ class DivBaseBinderTest {
         val div = DivText(text = "text".asExpression(), paddings = paddingsBottom1)
         val oldDiv = DivText(text = "text".asExpression(), paddings = paddingsBottom2)
 
-        baseBinder.bindView(context, view, oldDiv, null)
+        baseBinder.bindView(view, oldDiv, null, divView)
         clearInvocations(view)
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
 
         verify(view, never()).setPadding(any(), any(), any(), any())
         verify(view, never()).requestLayout()
@@ -76,7 +75,7 @@ class DivBaseBinderTest {
         val div = DivText(text = "text".asExpression(), paddings = paddingsBottom1)
         val oldDiv = DivText(text = "text".asExpression(), paddings = paddingsTop)
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(view, div, oldDiv, divView)
 
         verify(view).setPadding(any(), any(), any(), any())
         verify(view, atLeastOnce()).requestLayout()
@@ -90,7 +89,7 @@ class DivBaseBinderTest {
                 transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
         )
 
-        baseBinder.bindView(context, view, div, null)
+        baseBinder.bindView(view, div, null, divView)
 
         verify(view, never()).clearAnimation()
     }
@@ -103,7 +102,7 @@ class DivBaseBinderTest {
                 transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
         )
 
-        baseBinder.bindView(context, view, div, null)
+        baseBinder.bindView(view, div, null, divView)
 
         verify(view).clearAnimation()
     }
@@ -116,7 +115,7 @@ class DivBaseBinderTest {
                 transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
         )
 
-        baseBinder.bindView(context, view, div, null)
+        baseBinder.bindView(view, div, null, divView)
 
         verify(view).clearAnimation()
     }

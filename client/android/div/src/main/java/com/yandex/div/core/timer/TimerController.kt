@@ -88,7 +88,7 @@ internal class TimerController(
 
         UiThreadHandler.executeOnMainThread {
             div2View?.let {
-                divActionBinder.handleActions(it, it.expressionResolver, tickActions, DivActionReason.TIMER)
+                divActionBinder.handleActions(it, tickActions, DivActionReason.TIMER)
             }
         }
     }
@@ -98,7 +98,7 @@ internal class TimerController(
 
         UiThreadHandler.executeOnMainThread {
             div2View?.let {
-                divActionBinder.handleActions(it, it.expressionResolver, endActions, DivActionReason.TIMER)
+                divActionBinder.handleActions(it, endActions, DivActionReason.TIMER)
             }
         }
     }
