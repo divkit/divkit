@@ -163,6 +163,20 @@
                 "web",
                 "ios"
             ]
+          },
+          {
+            "name": "false?1.2:3.4 => 3.4",
+            "expression": "@{false?1.2:3.4}",
+            "expected": {
+                "type": "number",
+                "value": 3.4
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "web",
+                "ios"
+            ]
         }
     ]
 }

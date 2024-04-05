@@ -866,7 +866,7 @@ extension UnicodeScalarView {
             } else if case let .symbol(symbol2, _) = rhs {
               if case .prefix = symbol2 {
                 try collapseStack(from: i + 2)
-              } else if ["+", "/", "*"].contains(symbol.name) { // Assume infix
+              } else if ["+", "-", "/", "*"].contains(symbol.name) { // Assume infix
                 stack[i + 2] = .symbol(.prefix(symbol2.name), [])
                 try collapseStack(from: i + 2)
               } else { // Assume postfix

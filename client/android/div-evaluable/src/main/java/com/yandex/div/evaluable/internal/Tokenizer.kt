@@ -302,6 +302,7 @@ internal object Tokenizer {
 
         while (state.currentChar().isValidIdentifier()) state.forward()
         val name = state.part(start, state.index)
+        while (state.currentChar().isWhiteSpace()) state.forward()
         when {
             processKeyword(name, tokens) -> {
                 return
