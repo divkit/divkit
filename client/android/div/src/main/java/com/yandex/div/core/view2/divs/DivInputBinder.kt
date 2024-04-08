@@ -81,6 +81,7 @@ internal class DivInputBinder @Inject constructor(
 
             observeKeyboardType(div, expressionResolver)
             observeSelectAllOnFocus(div, expressionResolver)
+            observeIsEnabled(div, expressionResolver)
 
             observeText(div, expressionResolver, divView)
 
@@ -244,6 +245,11 @@ internal class DivInputBinder @Inject constructor(
     private fun DivInputView.observeSelectAllOnFocus(div: DivInput, resolver: ExpressionResolver) {
         val callback = { _: Any -> setSelectAllOnFocus(div.selectAllOnFocus.evaluate(resolver)) }
         addSubscription(div.selectAllOnFocus.observeAndGet(resolver, callback))
+    }
+
+    private fun DivInputView.observeIsEnabled(div: DivInput, resolver: ExpressionResolver) {
+        val callback = { isEnabled: Boolean -> enabled = isEnabled }
+        addSubscription(div.isEnabled.observeAndGet(resolver, callback))
     }
 
     private fun DivInputView.observeText(

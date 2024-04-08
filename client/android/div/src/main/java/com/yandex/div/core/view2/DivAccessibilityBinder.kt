@@ -163,6 +163,7 @@ internal class DivAccessibilityBinder @Inject constructor(
             DivAccessibility.Mode.EXCLUDE -> {
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
                 isFocusable = false
+                if (this is DivSliderView) isFocusableInTouchMode = true
             }
             DivAccessibility.Mode.DEFAULT -> {
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO

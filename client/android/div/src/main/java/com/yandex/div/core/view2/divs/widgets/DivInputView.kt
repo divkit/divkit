@@ -31,6 +31,14 @@ internal class DivInputView @JvmOverloads constructor(
 
     private var _hint: String? = null
 
+    private var _isFocusable = true
+
+    var enabled = true
+        internal set(value) {
+            field = value
+            isFocusable = _isFocusable
+        }
+
     internal var accessibilityEnabled: Boolean = false
         set(value) {
             field = value
@@ -73,6 +81,13 @@ internal class DivInputView @JvmOverloads constructor(
 
     override fun dispatchDraw(canvas: Canvas) {
         dispatchDrawBorderClippedAndTranslated(canvas, scrollX, scrollY) { super.dispatchDraw(it) }
+    }
+
+    override fun setFocusable(focusable: Boolean) {
+        _isFocusable = focusable
+        val isFocusable = _isFocusable && enabled
+        super.setFocusable(isFocusable)
+        isFocusableInTouchMode = isFocusable
     }
 
     fun addAfterTextChangeAction(action: (Editable?) -> Unit) {
