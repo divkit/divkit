@@ -21,39 +21,71 @@ class DivInputKeyboardTypeTest {
 
     @Test
     fun checkMultiLineText() {
-        checkType("multi_line_text", TEXT_WITH_DIFFERENT_SYMBOLS)
+        checkType(
+            type = "multi_line_text",
+            expectedText = TEXT_WITH_DIFFERENT_SYMBOLS
+        )
     }
 
     @Test
     fun checkSingleLineText() {
-        checkType("single_line_text", TEXT_BEFORE_BREAK)
+        checkType(
+            type = "single_line_text",
+            expectedText = TEXT_BEFORE_BREAK
+        )
     }
 
     @Test
-    fun checkNumber() {
-        checkType("number", "912302.")
+    fun checkPositiveNumber() {
+        checkType(
+            type = "number",
+            expectedText = "912302.",
+            typedText = "912302."
+        )
+    }
+
+    @Test
+    fun checkNegativeNumber() {
+        checkType(
+            type = "number",
+            expectedText = "-912302.",
+            typedText = "-912302."
+        )
     }
 
     @Test
     fun checkPhone() {
-        checkType("phone", ";//- N+(123)2.")
+        checkType(
+            type = "phone",
+            expectedText = ";//- N+(123)2."
+        )
     }
 
     @Test
     fun checkEmail() {
-        checkType("email", TEXT_BEFORE_BREAK)
+        checkType(
+            type = "email",
+            expectedText = TEXT_BEFORE_BREAK
+        )
     }
 
     @Test
     fun checkUri() {
-        checkType("uri", TEXT_BEFORE_BREAK)
+        checkType(
+            type = "uri",
+            expectedText = TEXT_BEFORE_BREAK
+        )
     }
 
-    private fun checkType(type: String, typedText: String) {
+    private fun checkType(
+        type: String,
+        expectedText: String,
+        typedText: String = TEXT_WITH_DIFFERENT_SYMBOLS
+    ) {
         divInput {
             activityRule.buildContainerForCase(type)
-            typeTextInInput()
-            assert { textTyped(typedText) }
+            typeTextInInput(typedText)
+            assert { textTyped(expectedText) }
         }
     }
 }

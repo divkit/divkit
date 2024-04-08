@@ -11,7 +11,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
-import com.yandex.div.TEXT_WITH_DIFFERENT_SYMBOLS
 import com.yandex.divkit.demo.DummyActivity
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
@@ -27,7 +26,7 @@ class DivInputSteps : DivTestAssetSteps() {
         buildContainer(MATCH_PARENT, MATCH_PARENT)
     }
 
-    fun typeTextInInput(text: String = TEXT_WITH_DIFFERENT_SYMBOLS): Unit = step("Enter text ") {
+    fun typeTextInInput(text: String): Unit = step("Enter text ") {
         onView(isAssignableFrom(EditText::class.java)).perform(typeText(text))
     }
 
