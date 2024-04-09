@@ -1,36 +1,6 @@
 import Foundation
 
 enum StringFunctions: String, CaseIterable {
-  enum Error {
-    case cast
-    case indexesCast
-    case indexesOrder(String)
-    case indexesValue(String)
-    case encodeEmpty
-    case decodeEmpty
-
-    private var description: String {
-      switch self {
-      case .cast:
-        "Argument couldn't be casted to String"
-      case .indexesCast:
-        "Indexes couldn't be casted to Integer"
-      case let .indexesOrder(expression):
-        "Failed to evaluate [\(expression)]. Indexes should be in ascending order."
-      case let .indexesValue(expression):
-        "Failed to evaluate [\(expression)]. Indexes are out of bounds."
-      case .encodeEmpty:
-        "String is empty after encoding."
-      case .decodeEmpty:
-        "String is empty after decoding."
-      }
-    }
-
-    var message: CalcExpression.Error {
-      CalcExpression.Error.message(description)
-    }
-  }
-
   case len
   case contains
   case substring
@@ -112,12 +82,10 @@ private func _contains(first: String, second: String) -> Bool {
 
 private func _substring(first: String, second: Int, third: Int) throws -> String {
   guard second <= third else {
-    throw StringFunctions.Error.indexesOrder("substring('\(first)', \(second), \(third))").message
+    throw CalcExpression.Error.message("Indexes should be in ascending order.")
   }
-
-  guard second >= 0, third <= first.count
-  else {
-    throw StringFunctions.Error.indexesValue("substring('\(first)', \(second), \(third))").message
+  guard second >= 0, third <= first.count else {
+    throw CalcExpression.Error.message("Indexes are out of bounds.")
   }
   return String(first[first.rangeOfCharsIn(second..<third)])
 }
@@ -171,14 +139,14 @@ private func _toLowerCase(value: String) -> String {
 private func _encodeUri(value: String) throws -> String {
   guard let encodedValue = value.addingPercentEncoding(withAllowedCharacters: dontNeedEncoding)
   else {
-    throw StringFunctions.Error.encodeEmpty.message
+    throw CalcExpression.Error.message("String is empty after encoding.")
   }
   return encodedValue
 }
 
 private func _decodeUri(value: String) throws -> String {
   guard let decodedValue = value.removingPercentEncoding else {
-    throw StringFunctions.Error.decodeEmpty.message
+    throw CalcExpression.Error.message("String is empty after decoding.")
   }
   return decodedValue
 }
@@ -236,6 +204,6 @@ private func _testRegex(text: String, regex: String) throws -> Bool {
     let range = NSRange(text.startIndex..., in: text)
     return regex.firstMatch(in: text, range: range) != nil
   } catch {
-    throw CalcExpression.Error.shortMessage("Invalid regular expression.")
+    throw CalcExpression.Error.message("Invalid regular expression.")
   }
 }

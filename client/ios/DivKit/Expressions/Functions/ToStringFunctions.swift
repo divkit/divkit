@@ -4,25 +4,25 @@ import CommonCorePublic
 
 enum ToStringFunctions {
   static var all: [CalcExpression.Symbol: Function] = [
-    .function("toString", arity: .exactly(1)): OverloadedFunction(
+    .function("toString"): OverloadedFunction(
       functions: [
         boolFunction,
         intFunction,
         doubleFunction,
         colorFunction,
-        urlFunction
+        urlFunction,
       ]
     ),
-    .method("toString", arity: .exactly(1)): OverloadedFunction(
+    .method("toString"): OverloadedFunction(
       functions: [
         stringFunction,
         boolFunction,
         intFunction,
         doubleFunction,
         colorFunction,
-        urlFunction
+        urlFunction,
       ]
-    )
+    ),
   ]
 }
 
@@ -34,9 +34,7 @@ private let intFunction = FunctionUnary<Int, String> { $0.description }
 
 private let doubleFunction = FunctionUnary<Double, String> {
   guard let string = $0.toString() else {
-    throw CalcExpression.Error.message(
-      "Failed to evaluate [toString()]. Unable to convert value to String."
-    )
+    throw CalcExpression.Error.message("Unable to convert value to String.")
   }
   return string
 }

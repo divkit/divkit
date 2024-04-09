@@ -33,7 +33,6 @@ enum IntervalFunctions: String, CaseIterable {
 
   private func _getIntervalSeconds(_ milliseconds: Int) throws -> Int {
     try getDuration(
-      funcName: "getIntervalSeconds",
       milliseconds: milliseconds,
       divider: MS_IN_SECOND,
       whole: SECONDS_IN_MINUTE
@@ -41,16 +40,11 @@ enum IntervalFunctions: String, CaseIterable {
   }
 
   private func _getIntervalTotalSeconds(_ milliseconds: Int) throws -> Int {
-    try getDuration(
-      funcName: "getIntervalTotalSeconds",
-      milliseconds: milliseconds,
-      divider: MS_IN_SECOND
-    )
+    try getDuration(milliseconds: milliseconds, divider: MS_IN_SECOND)
   }
 
   private func _getIntervalMinutes(_ milliseconds: Int) throws -> Int {
     try getDuration(
-      funcName: "getIntervalMinutes",
       milliseconds: milliseconds,
       divider: MS_IN_MINUTE,
       whole: MINUTES_IN_HOUR
@@ -58,16 +52,11 @@ enum IntervalFunctions: String, CaseIterable {
   }
 
   private func _getIntervalTotalMinutes(_ milliseconds: Int) throws -> Int {
-    try getDuration(
-      funcName: "getIntervalTotalMinutes",
-      milliseconds: milliseconds,
-      divider: MS_IN_MINUTE
-    )
+    try getDuration(milliseconds: milliseconds, divider: MS_IN_MINUTE)
   }
 
   private func _getIntervalHours(_ milliseconds: Int) throws -> Int {
     try getDuration(
-      funcName: "getIntervalHours",
       milliseconds: milliseconds,
       divider: MS_IN_HOUR,
       whole: HOURS_IN_DAY
@@ -75,51 +64,30 @@ enum IntervalFunctions: String, CaseIterable {
   }
 
   private func _getIntervalTotalHours(_ milliseconds: Int) throws -> Int {
-    try getDuration(
-      funcName: "getIntervalTotalHours",
-      milliseconds: milliseconds,
-      divider: MS_IN_HOUR
-    )
+    try getDuration(milliseconds: milliseconds, divider: MS_IN_HOUR)
   }
 
   private func _getIntervalTotalDays(_ milliseconds: Int) throws -> Int {
-    try getDuration(
-      funcName: "getIntervalTotalDays",
-      milliseconds: milliseconds,
-      divider: MS_IN_DAY
-    )
+    try getDuration(milliseconds: milliseconds, divider: MS_IN_DAY)
   }
 
   private func _getIntervalTotalWeeks(_ milliseconds: Int) throws -> Int {
-    try getDuration(
-      funcName: "getIntervalTotalWeeks",
-      milliseconds: milliseconds,
-      divider: MS_IN_WEEK
-    )
+    try getDuration(milliseconds: milliseconds, divider: MS_IN_WEEK)
   }
 
   private func getDuration(
-    funcName: String,
     milliseconds: Int,
     divider: Int,
     whole: Int? = nil
   ) throws -> Int {
     guard milliseconds >= 0 else {
-      throw CalcExpression.Error.incorrectMilliseconds("\(funcName)(\(milliseconds))")
+      throw CalcExpression.Error.message("Expecting non-negative number of milliseconds.")
     }
     var val = milliseconds / divider
     if let whole {
       val = val % whole
     }
     return val
-  }
-}
-
-extension CalcExpression.Error {
-  fileprivate static func incorrectMilliseconds(_ expression: String) -> CalcExpression.Error {
-    .message(
-      "Failed to evaluate [\(expression)]. Expecting non-negative number of milliseconds."
-    )
   }
 }
 

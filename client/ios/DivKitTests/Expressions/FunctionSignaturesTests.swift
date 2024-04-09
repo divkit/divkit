@@ -38,8 +38,8 @@ private func runTest(_ testCase: SignatureTestCase) {
     return
   }
 
-  XCTAssertNoThrow(
-    try function.verify(signature: testCase.toSignature),
+  XCTAssertTrue(
+    function.verify(signature: testCase.toSignature),
     "Function signature mismatch"
   )
 }
@@ -51,8 +51,8 @@ private struct TestCases: Decodable {
 private struct SignatureTestCase: Decodable {
   let name: String
   let functionName: String
-  let arguments: [FunctionSignature.ArgumentSignature]?
-  let resultType: FunctionSignature.ArgumentType
+  let arguments: [ArgumentSignature]?
+  let resultType: ArgumentType
   let platforms: [Platform]
 
   var toSignature: FunctionSignature {

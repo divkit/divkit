@@ -46,7 +46,7 @@ final class CalcExpression: CustomStringConvertible {
   typealias SymbolEvaluator = (_ args: [Value]) throws -> Value
 
   /// Type representing the arity (number of arguments) accepted by a function
-  enum Arity: Hashable {
+  enum Arity {
     /// An exact number of arguments
     case exactly(Int)
 
@@ -91,11 +91,11 @@ final class CalcExpression: CustomStringConvertible {
     /// A postfix operator
     case postfix(String)
 
-    /// A function accepting a number of arguments specified by `arity`
-    case function(String, arity: Arity)
+    /// A function
+    case function(String)
 
-    /// A method accepting a number of arguments specified by `arity` (considering `this` argument)
-    case method(String, arity: Arity)
+    /// A method
+    case method(String)
 
     /// The symbol name
     var name: String {
@@ -104,8 +104,8 @@ final class CalcExpression: CustomStringConvertible {
            let .infix(name),
            let .prefix(name),
            let .postfix(name),
-           let .function(name, _),
-           let .method(name, _):
+           let .function(name),
+           let .method(name):
         name
       }
     }
@@ -187,22 +187,6 @@ final class CalcExpression: CustomStringConvertible {
   /// Evaluate the expression
   func evaluate() -> Value {
     root.evaluate(evaluators)
-  }
-}
-
-// MARK: Internal API
-
-extension CalcExpression {
-  // Fallback evaluator for when symbol is not found
-  static func errorEvaluator(for symbol: Symbol) -> SymbolEvaluator {
-    switch symbol {
-    case let .function(name, _):
-      { _ in
-        throw Error.message("Failed to evaluate [\(name)()]. Unknown function name: \(name).")
-      }
-    default:
-      { _ in throw Error.undefinedSymbol(symbol) }
-    }
   }
 }
 
@@ -939,8 +923,8 @@ extension UnicodeScalarView {
           switch lastSymbol {
           case .literal,
                .symbol(.variable(_), _),
-               .symbol(.function(_, _), _),
-               .symbol(.method(_, _), _):
+               .symbol(.function(_), _),
+               .symbol(.method(_), _):
             guard let methodName = scanMethodName(), scanCharacter("(") else {
               throw CalcExpression.Error.message("Method expected after .")
             }
@@ -1021,9 +1005,9 @@ private func makeVariable(_ name: String) -> Subexpression {
 }
 
 private func makeFunction(_ name: String, _ args: [Subexpression]) -> Subexpression {
-  .symbol(.function(name, arity: .exactly(args.count)), args)
+  .symbol(.function(name), args)
 }
 
 private func makeMethod(_ name: String, _ args: [Subexpression]) -> Subexpression {
-  .symbol(.method(name, arity: .exactly(args.count)), args)
+  .symbol(.method(name), args)
 }

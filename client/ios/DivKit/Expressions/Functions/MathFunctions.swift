@@ -111,28 +111,28 @@ enum MathFunctions: String, CaseIterable {
 
 private func _divInt(lhs: Int, rhs: Int) throws -> Int {
   guard rhs != 0 else {
-    throw Error.divisionByZero("div", lhs, rhs).message
+    throw divisionByZeroError()
   }
   return lhs / rhs
 }
 
 private func _divDouble(lhs: Double, rhs: Double) throws -> Double {
   guard !rhs.isApproximatelyEqualTo(0) else {
-    throw Error.divisionByZero("div", lhs, rhs).message
+    throw divisionByZeroError()
   }
   return lhs / rhs
 }
 
 private func _modInt(lhs: Int, rhs: Int) throws -> Int {
   guard rhs != 0 else {
-    throw Error.divisionByZero("mod", lhs, rhs).message
+    throw divisionByZeroError()
   }
   return lhs % rhs
 }
 
 private func _modDouble(lhs: Double, rhs: Double) throws -> Double {
   guard !rhs.isApproximatelyEqualTo(0) else {
-    throw Error.divisionByZero("mod", lhs, rhs).message
+    throw divisionByZeroError()
   }
   return fmod(lhs, rhs)
 }
@@ -256,20 +256,6 @@ private func _copySignDouble(lhs: Double, rhs: Double) -> Double {
   copysign(lhs, rhs)
 }
 
-private enum Error {
-  case typeMismatch(args: [Any])
-  case divisionByZero(String, Any, Any)
-
-  private var description: String {
-    switch self {
-    case let .typeMismatch(args):
-      "Type mismatch \(args.map { "\($0)" }.joined(separator: " "))"
-    case let .divisionByZero(function, lhs, rhs):
-      "Failed to evaluate [\(function)(\(lhs), \(rhs))]. Division by zero is not supported."
-    }
-  }
-
-  var message: CalcExpression.Error {
-    CalcExpression.Error.message(description)
-  }
+private func divisionByZeroError() -> CalcExpression.Error {
+  .message("Division by zero is not supported.")
 }

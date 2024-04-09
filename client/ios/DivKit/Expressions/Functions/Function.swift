@@ -3,9 +3,8 @@ import Foundation
 import BasePublic
 
 protocol Function {
-  var arity: CalcExpression.Arity { get }
   func invoke(args: [Any]) throws -> Any
-  func verify(signature: FunctionSignature) throws
+  func verify(signature: FunctionSignature) -> Bool
 }
 
 protocol SimpleFunction: Function {
@@ -13,12 +12,12 @@ protocol SimpleFunction: Function {
 }
 
 extension SimpleFunction {
-  var arity: CalcExpression.Arity {
-    (try? signature.arity) ?? .exactly(0)
-  }
-
-  func verify(signature: FunctionSignature) throws {
-    try signature.verify(self.signature)
+  func verify(signature: FunctionSignature) -> Bool {
+    if let selfSignature = try? self.signature {
+      signature.verify(selfSignature)
+    } else {
+      false
+    }
   }
 }
 
@@ -196,7 +195,7 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    return try impl(
+    try impl(
       castArg(args[0]),
       args.dropFirst().map { try castArg($0) }
     )
@@ -236,24 +235,18 @@ struct OverloadedFunction: Function {
   private let functions: [SimpleFunction]
   private let makeError: ([Argument]) -> Error
 
-  var arity: CalcExpression.Arity {
-    functions.first?.arity ?? .exactly(0)
-  }
-
   init(functions: [SimpleFunction], makeError: (([Argument]) -> Error)? = nil) {
     self.functions = functions
-    self.makeError = makeError ?? { _ in FunctionSignature.Error.notFound.message }
+    self.makeError = makeError ?? { _ in CalcExpression.Error.noMatchingSignature }
   }
 
-  func verify(signature: FunctionSignature) throws {
-    if !functions.contains(where: { (try? $0.verify(signature: signature)) != nil }) {
-      throw FunctionSignature.Error.notFound.message
-    }
+  func verify(signature: FunctionSignature) -> Bool {
+    functions.contains { $0.verify(signature: signature) }
   }
 
   func invoke(args: [Any]) throws -> Any {
     let arguments = try args.map {
-      try FunctionSignature.ArgumentSignature(type: .from(type: type(of: $0)))
+      try ArgumentSignature(type: .from(type: type(of: $0)))
     }
     var function = try getFunction(args: arguments) {
       $0.type == $1.type
@@ -270,11 +263,11 @@ struct OverloadedFunction: Function {
   }
 
   private func getFunction(
-    args: [FunctionSignature.ArgumentSignature],
-    predicate: (FunctionSignature.ArgumentSignature, FunctionSignature.ArgumentSignature) -> Bool
+    args: [ArgumentSignature],
+    predicate: (ArgumentSignature, ArgumentSignature) -> Bool
   ) throws -> SimpleFunction? {
     let sutableFunctions = try functions.filter {
-      try zip($0.signature.allArguments(args.count), args).allSatisfy(predicate)
+      try $0.signature.isApplicable(args: args, predicate: predicate)
     }
     if sutableFunctions.count > 1 {
       throw CalcExpression.Error.message("Multiple matching overloads")
@@ -284,7 +277,7 @@ struct OverloadedFunction: Function {
 }
 
 struct Argument {
-  let type: FunctionSignature.ArgumentType
+  let type: ArgumentType
   let value: Any
 
   var formattedValue: String {
@@ -298,140 +291,116 @@ struct Argument {
   }
 }
 
+struct ArgumentSignature: Decodable, Equatable {
+  let type: ArgumentType
+  var vararg: Bool?
+}
+
+enum ArgumentType: String, Decodable, CaseIterable {
+  case string
+  case number
+  case integer
+  case boolean
+  case datetime
+  case color
+  case url
+  case dict
+  case array
+  case any
+
+  var swiftType: Any.Type {
+    switch self {
+    case .string:
+      String.self
+    case .number:
+      Double.self
+    case .integer:
+      Int.self
+    case .boolean:
+      Bool.self
+    case .datetime:
+      Date.self
+    case .color:
+      Color.self
+    case .url:
+      URL.self
+    case .dict:
+      [String: AnyHashable].self
+    case .array:
+      [AnyHashable].self
+    case .any:
+      Any.self
+    }
+  }
+
+  var name: String {
+    switch self {
+    case .datetime:
+      "DateTime"
+    default:
+      rawValue.stringWithFirstCharCapitalized()
+    }
+  }
+
+  func isCastableFrom(_ type: ArgumentType) -> Bool {
+    if self == type {
+      return true
+    }
+    switch self {
+    case .any:
+      return true
+    case .number:
+      return type == .integer
+    default:
+      return false
+    }
+  }
+
+  static func from(type: Any.Type) throws -> ArgumentType {
+    guard let type = allCases.first(where: { $0.swiftType == type }) else {
+      throw CalcExpression.Error.message("Type is not supported")
+    }
+    return type
+  }
+}
+
 struct FunctionSignature: Decodable {
   let arguments: [ArgumentSignature]
   let resultType: ArgumentType
 
-  struct ArgumentSignature: Decodable, Equatable {
-    let type: ArgumentType
-    var vararg: Bool?
-  }
-
-  var arity: CalcExpression.Arity {
-    if arguments.last?.vararg == true {
-      .atLeast(arguments.count)
-    } else {
-      .exactly(arguments.count)
-    }
-  }
-
-  enum ArgumentType: String, Decodable, CaseIterable {
-    case string
-    case number
-    case integer
-    case boolean
-    case datetime
-    case color
-    case url
-    case dict
-    case array
-    case any
-
-    var swiftType: Any.Type {
-      switch self {
-      case .string:
-        String.self
-      case .number:
-        Double.self
-      case .integer:
-        Int.self
-      case .boolean:
-        Bool.self
-      case .datetime:
-        Date.self
-      case .color:
-        Color.self
-      case .url:
-        URL.self
-      case .dict:
-        [String: AnyHashable].self
-      case .array:
-        [AnyHashable].self
-      case .any:
-        Any.self
-      }
+  func isApplicable(
+    args: [ArgumentSignature],
+    predicate: (ArgumentSignature, ArgumentSignature) -> Bool
+  ) -> Bool {
+    if !argsMatch(args) {
+      return false
     }
 
-    var name: String {
-      switch self {
-      case .datetime:
-        "DateTime"
-      default:
-        rawValue.stringWithFirstCharCapitalized()
-      }
-    }
-
-    func isCastableFrom(_ type: ArgumentType) -> Bool {
-      if self == type {
-        return true
-      }
-      switch self {
-      case .any:
-        return true
-      case .number:
-        return type == .integer
-      default:
-        return false
-      }
-    }
-
-    static func from(type: Any.Type) throws -> ArgumentType {
-      guard let type = allCases.first(where: { $0.swiftType == type }) else {
-        throw Error.type.message
-      }
-      return type
-    }
-  }
-
-  enum Error {
-    case arityMismatch
-    case argumentTypeMismatch(Int, ArgumentType, ArgumentType)
-    case resultTypeMismatch(ArgumentType, ArgumentType)
-    case notFound
-    case type
-
-    var message: CalcExpression.Error {
-      CalcExpression.Error.message(description)
-    }
-
-    private var description: String {
-      switch self {
-      case .arityMismatch:
-        "Function arity mismatch"
-      case let .argumentTypeMismatch(i, expected, found):
-        "Argument \(i + 1) type mismatch, expected: \(expected), found: \(found)"
-      case let .resultTypeMismatch(expected, found):
-        "Result type mismatch, expected: \(expected), found: \(found)"
-      case .notFound:
-        "Function with signature is not found"
-      case .type:
-        "Type is not supported"
-      }
-    }
-  }
-
-  fileprivate func allArguments(_ i: Int) -> [ArgumentSignature] {
+    let expectedArgs: [ArgumentSignature]
     if let last = arguments.last, last.vararg == true {
-      (arguments + Array(repeating: last, times: UInt(i - arguments.count))).map {
-        .init(type: $0.type)
-      }
+      let extraArgs = Array(repeating: last, times: UInt(args.count - arguments.count))
+      expectedArgs = (arguments + extraArgs).map { ArgumentSignature(type: $0.type) }
     } else {
-      arguments
+      expectedArgs = arguments
     }
+    return zip(expectedArgs, args).allSatisfy(predicate)
   }
 
-  fileprivate func verify(_ signature: FunctionSignature) throws {
-    guard arity.matches(signature.arity) else {
-      throw Error.arityMismatch.message
+  private func argsMatch(_ args: [ArgumentSignature]) -> Bool {
+    args.count == arguments.count ||
+      (arguments.last?.vararg == true && args.count > arguments.count)
+  }
+
+  fileprivate func verify(_ signature: FunctionSignature) -> Bool {
+    guard argsMatch(signature.arguments) else {
+      return false
     }
-    try zip(arguments, signature.arguments).enumerated().forEach { i, a in
-      if a.0 != a.1 {
-        throw Error.argumentTypeMismatch(i, a.0.type, a.1.type).message
-      }
+    let argsMatch = zip(arguments, signature.arguments).enumerated().allSatisfy { _, args in
+      let expectedArg = args.0
+      let arg = args.1
+      return expectedArg == arg
     }
-    if resultType != signature.resultType {
-      throw Error.resultTypeMismatch(resultType, signature.resultType).message
-    }
+    return argsMatch && resultType == signature.resultType
   }
 }
 

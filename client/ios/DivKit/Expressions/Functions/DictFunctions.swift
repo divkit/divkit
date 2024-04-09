@@ -115,40 +115,25 @@ enum DictFunctions: String, CaseIterable {
   }
 
   private func _getDictString(dict: [String: AnyHashable], path: [String]) throws -> String {
-    let expression = makeExpression("getDictString", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "string", result.actualType).message
+      throw Error.incorrectValueType("string", result.actualType).message
     }
     return stringValue
   }
 
   private func _getStringFromDict(dict: [String: AnyHashable], path: [String]) throws -> String {
-    let expression = makeExpression("getStringFromDict", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "string", result.actualType).message
+      throw Error.incorrectValueType("string", result.actualType).message
     }
     return stringValue
   }
 
   private func _getDictNumber(dict: [String: AnyHashable], path: [String]) throws -> Double {
-    let expression = makeExpression("getDictNumber", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     if result.isBool {
-      throw Error.incorrectValueType(expression, "number", result.actualType).message
+      throw Error.incorrectValueType("number", result.actualType).message
     }
     if let numberValue = result as? Double {
       return numberValue
@@ -156,18 +141,13 @@ enum DictFunctions: String, CaseIterable {
     if let intValue = result as? Int {
       return Double(intValue)
     }
-    throw Error.incorrectValueType(expression, "number", result.actualType).message
+    throw Error.incorrectValueType("number", result.actualType).message
   }
 
   private func _getNumberFromDict(dict: [String: AnyHashable], path: [String]) throws -> Double {
-    let expression = makeExpression("getNumberFromDict", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     if result.isBool {
-      throw Error.incorrectValueType(expression, "number", result.actualType).message
+      throw Error.incorrectValueType("number", result.actualType).message
     }
     if let numberValue = result as? Double {
       return numberValue
@@ -175,145 +155,105 @@ enum DictFunctions: String, CaseIterable {
     if let intValue = result as? Int {
       return Double(intValue)
     }
-    throw Error.incorrectValueType(expression, "number", result.actualType).message
+    throw Error.incorrectValueType("number", result.actualType).message
   }
 
   private func _getDictInteger(dict: [String: AnyHashable], path: [String]) throws -> Int {
-    let expression = makeExpression("getDictInteger", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     if result.isBool {
-      throw Error.incorrectValueType(expression, "integer", result.actualType).message
+      throw Error.incorrectValueType("integer", result.actualType).message
     }
     guard let intValue = result as? Int else {
       if let doubleValue = result as? Double {
         if doubleValue < Double(Int.min) || doubleValue > Double(Int.max) {
-          throw Error.integerOverflow(expression).message
+          throw Error.integerOverflow.message
         }
-        throw Error.cannotConvertToInteger(expression).message
+        throw Error.cannotConvertToInteger.message
       }
-      throw Error.incorrectValueType(expression, "integer", result.actualType).message
+      throw Error.incorrectValueType("integer", result.actualType).message
     }
     return intValue
   }
 
   private func _getIntegerFromDict(dict: [String: AnyHashable], path: [String]) throws -> Int {
-    let expression = makeExpression("getIntegerFromDict", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     if result.isBool {
-      throw Error.incorrectValueType(expression, "integer", result.actualType).message
+      throw Error.incorrectValueType("integer", result.actualType).message
     }
     guard let intValue = result as? Int else {
       if let doubleValue = result as? Double {
         if doubleValue < Double(Int.min) || doubleValue > Double(Int.max) {
-          throw Error.integerOverflow(expression).message
+          throw Error.integerOverflow.message
         }
-        throw Error.cannotConvertToInteger(expression).message
+        throw Error.cannotConvertToInteger.message
       }
-      throw Error.incorrectValueType(expression, "integer", result.actualType).message
+      throw Error.incorrectValueType("integer", result.actualType).message
     }
     return intValue
   }
 
   private func _getDictBoolean(dict: [String: AnyHashable], path: [String]) throws -> Bool {
-    let expression = makeExpression("getDictBoolean", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard result.isBool else {
-      throw Error.incorrectValueType(expression, "boolean", result.actualType).message
+      throw Error.incorrectValueType("boolean", result.actualType).message
     }
     guard let boolValue = result as? Bool else {
-      throw Error.incorrectValueType(expression, "boolean", result.actualType).message
+      throw Error.incorrectValueType("boolean", result.actualType).message
     }
     return boolValue
   }
 
   private func _getBooleanFromDict(dict: [String: AnyHashable], path: [String]) throws -> Bool {
-    let expression = makeExpression("getBooleanFromDict", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard result.isBool else {
-      throw Error.incorrectValueType(expression, "boolean", result.actualType).message
+      throw Error.incorrectValueType("boolean", result.actualType).message
     }
     guard let boolValue = result as? Bool else {
-      throw Error.incorrectValueType(expression, "boolean", result.actualType).message
+      throw Error.incorrectValueType("boolean", result.actualType).message
     }
     return boolValue
   }
 
   private func _getDictColor(dict: [String: AnyHashable], path: [String]) throws -> Color {
-    let expression = makeExpression("getDictColor", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "color", result.actualType).message
+      throw Error.incorrectValueType("color", result.actualType).message
     }
     guard let color = Color.color(withHexString: stringValue) else {
-      throw Error.incorrectColorFormat(expression).message
+      throw Error.incorrectColorFormat.message
     }
     return color
   }
 
   private func _getColorFromDict(dict: [String: AnyHashable], path: [String]) throws -> Color {
-    let expression = makeExpression("getColorFromDict", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "color", result.actualType).message
+      throw Error.incorrectValueType("color", result.actualType).message
     }
     guard let color = Color.color(withHexString: stringValue) else {
-      throw Error.incorrectColorFormat(expression).message
+      throw Error.incorrectColorFormat.message
     }
     return color
   }
 
   private func _getDictUrl(dict: [String: AnyHashable], path: [String]) throws -> URL {
-    let expression = makeExpression("getDictUrl", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "url", result.actualType).message
+      throw Error.incorrectValueType("url", result.actualType).message
     }
     guard let url = URL(string: stringValue) else {
-      throw Error.incorrectValueType(expression, "url", result.actualType).message
+      throw Error.incorrectValueType("url", result.actualType).message
     }
     return url
   }
 
   private func _getUrlFromDict(dict: [String: AnyHashable], path: [String]) throws -> URL {
-    let expression = makeExpression("getUrlFromDict", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "url", result.actualType).message
+      throw Error.incorrectValueType("url", result.actualType).message
     }
     guard let url = URL(string: stringValue) else {
-      throw Error.incorrectValueType(expression, "url", result.actualType).message
+      throw Error.incorrectValueType("url", result.actualType).message
     }
     return url
   }
@@ -322,14 +262,9 @@ enum DictFunctions: String, CaseIterable {
     dict: [String: AnyHashable],
     path: [String]
   ) throws -> [String: AnyHashable] {
-    let expression = makeExpression("getDictFromDict", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard let dict = result as? [String: AnyHashable] else {
-      throw Error.incorrectValueType(expression, "dict", result.actualType).message
+      throw Error.incorrectValueType("dict", result.actualType).message
     }
     return dict
   }
@@ -338,14 +273,9 @@ enum DictFunctions: String, CaseIterable {
     dict: [String: AnyHashable],
     path: [String]
   ) throws -> [AnyHashable] {
-    let expression = makeExpression("getArrayFromDict", path)
-    let result = try getProp(
-      dict: dict,
-      path: path,
-      expression: expression
-    )
+    let result = try getProp(dict: dict, path: path)
     guard let dict = result as? [AnyHashable] else {
-      throw Error.incorrectValueType(expression, "array", result.actualType).message
+      throw Error.incorrectValueType("array", result.actualType).message
     }
     return dict
   }
@@ -548,8 +478,7 @@ enum DictFunctions: String, CaseIterable {
 
   private func getProp(
     dict: [String: AnyHashable],
-    path: [String],
-    expression: String
+    path: [String]
   ) throws -> AnyHashable {
     var dictionary: [String: AnyHashable]? = dict
     var i = 0
@@ -558,48 +487,44 @@ enum DictFunctions: String, CaseIterable {
       if let current = dictionary {
         dictionary = current[key] as? [String: AnyHashable]
       } else {
-        throw Error.missingProperty(expression, key).message
+        throw Error.missingProperty(key).message
       }
       i += 1
     }
     guard let key = path.last else {
-      throw Error.wrongPath(expression).message
+      throw Error.wrongPath.message
     }
     if let current = dictionary,
        let result = current[key] {
       return result
     } else {
-      throw Error.missingProperty(expression, key).message
+      throw Error.missingProperty(key).message
     }
   }
 }
 
-private func makeExpression(_ function: String, _ path: [String]) -> String {
-  "\(function)(<dict>, \(path.map { "'\($0)'" }.joined(separator: ", ")))"
-}
-
 private enum Error {
-  case missingProperty(String, String)
-  case wrongPath(String)
-  case incorrectValueType(String, String, String)
-  case cannotConvertToInteger(String)
-  case integerOverflow(String)
-  case incorrectColorFormat(String)
+  case missingProperty(String)
+  case wrongPath
+  case incorrectValueType(String, String)
+  case cannotConvertToInteger
+  case integerOverflow
+  case incorrectColorFormat
 
   private var description: String {
     switch self {
-    case let .missingProperty(expression, missing):
-      "Failed to evaluate [\(expression)]. Missing property \"\(missing)\" in the dict."
-    case let .wrongPath(expression):
-      "Failed to evaluate [\(expression)]. Path is wrong."
-    case let .incorrectValueType(expression, expectedType, actualType):
-      "Failed to evaluate [\(expression)]. Incorrect value type: expected \"\(expectedType)\", got \"\(actualType)\"."
-    case let .cannotConvertToInteger(expression):
-      "Failed to evaluate [\(expression)]. Cannot convert value to integer."
-    case let .integerOverflow(expression):
-      "Failed to evaluate [\(expression)]. Integer overflow."
-    case let .incorrectColorFormat(expression):
-      "Failed to evaluate [\(expression)]. Unable to convert value to Color, expected format #AARRGGBB."
+    case let .missingProperty(missing):
+      "Missing property \"\(missing)\" in the dict."
+    case .wrongPath:
+      "Path is wrong."
+    case let .incorrectValueType(expectedType, actualType):
+      "Incorrect value type: expected \"\(expectedType)\", got \"\(actualType)\"."
+    case .cannotConvertToInteger:
+      "Cannot convert value to integer."
+    case .integerOverflow:
+      "Integer overflow."
+    case .incorrectColorFormat:
+      "Unable to convert value to Color, expected format #AARRGGBB."
     }
   }
 

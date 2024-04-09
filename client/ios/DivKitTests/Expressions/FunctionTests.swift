@@ -91,7 +91,7 @@ final class FunctionTests: XCTestCase {
 
     XCTAssertThrowsError(
       _ = try function.invoke(args: [1.2, true]),
-      FunctionSignature.Error.notFound.message
+      CalcExpression.Error.noMatchingSignature
     )
   }
 

@@ -3,30 +3,6 @@ import Foundation
 import CommonCorePublic
 
 enum ColorFunctions: CaseIterable {
-  enum Error {
-    case cast(String)
-    case outOfRange(String)
-    case get(Channel, String)
-    case set(Channel, String, Double)
-
-    var message: CalcExpression.Error {
-      CalcExpression.Error.message(description)
-    }
-
-    private var description: String {
-      switch self {
-      case let .cast(type):
-        "Argument couldn't be casted to \(type)"
-      case let .outOfRange(expression):
-        "Failed to evaluate [\(expression)]. Value out of range 0..1."
-      case let .get(channel, value):
-        makeErrorDescription("[getColor\(channel.description)('\(value)')]")
-      case let .set(channel, first, second):
-        makeErrorDescription("[setColor\(channel.description)('\(first)', \(second))]")
-      }
-    }
-  }
-
   enum Channel: String, CaseIterable {
     case alpha
     case red
@@ -72,43 +48,35 @@ enum ColorFunctions: CaseIterable {
           FunctionUnary(impl: { try getChannel(channel, from: $0) }),
           FunctionUnary(impl: { getChannelFromColor(channel, from: $0) }),
         ]
-      ) {
-        ColorFunctions.Error.get(channel, String(describing: $0.first?.value)).message
-      }
+      )
     case let .set(channel):
       OverloadedFunction(
         functions: [
           FunctionBinary(impl: { try setChannel(channel, to: $0, value: $1) }),
           FunctionBinary(impl: { try setChannelForColor(channel, to: $0, value: $1) }),
         ]
-      ) {
-        ColorFunctions.Error
-          .outOfRange(
-            "setColor\(channel.description)(\(String(describing: $0.first?.value)), \(String(describing: $0[1].value))"
-          )
-          .message
-      }
+      )
     }
   }
 }
 
 private func _argb(alpha: Double, red: Double, green: Double, blue: Double) throws -> Color {
   guard isNormalized(alpha), isNormalized(red), isNormalized(green), isNormalized(blue) else {
-    throw ColorFunctions.Error.outOfRange("argb(\(alpha), \(red), \(green), \(blue))").message
+    throw valueOutOfRangeError()
   }
   return Color(red: red, green: green, blue: blue, alpha: alpha)
 }
 
 private func _rgb(red: Double, green: Double, blue: Double) throws -> Color {
   guard isNormalized(red), isNormalized(green), isNormalized(blue) else {
-    throw ColorFunctions.Error.outOfRange("rgb(\(red), \(green), \(blue))").message
+    throw valueOutOfRangeError()
   }
   return Color(red: red, green: green, blue: blue, alpha: 1)
 }
 
 private func getChannel(_ channel: ColorFunctions.Channel, from color: String) throws -> Double {
   guard let color = Color.color(withHexString: color) else {
-    throw ColorFunctions.Error.get(channel, color).message
+    throw invalidValueFormatError()
   }
   return color.makeChannel(channel)
 }
@@ -123,12 +91,11 @@ private func setChannel(
   value: Double
 ) throws -> Color {
   guard let color = Color.color(withHexString: color) else {
-    throw ColorFunctions.Error.set(channel, color, value).message
+    throw invalidValueFormatError()
   }
 
   guard isNormalized(value) else {
-    throw ColorFunctions.Error
-      .outOfRange("setColor\(channel.description)('\(color.argbString)', \(value))").message
+    throw valueOutOfRangeError()
   }
 
   return color.set(value, for: channel)
@@ -140,10 +107,8 @@ private func setChannelForColor(
   value: Double
 ) throws -> Color {
   guard isNormalized(value) else {
-    throw ColorFunctions.Error
-      .outOfRange("setColor\(channel.description)('\(color.argbString)', \(value))").message
+    throw valueOutOfRangeError()
   }
-
   return color.set(value, for: channel)
 }
 
@@ -186,6 +151,10 @@ private func isNormalized(_ value: Double) -> Bool {
   return true
 }
 
-private func makeErrorDescription(_ value: String) -> String {
-  "Failed to evaluate \(value). Unable to convert value to Color, expected format #AARRGGBB."
+private func valueOutOfRangeError() -> CalcExpression.Error {
+  .message("Value out of range 0..1.")
+}
+
+private func invalidValueFormatError() -> CalcExpression.Error {
+  .message("Unable to convert value to Color, expected format #AARRGGBB.")
 }

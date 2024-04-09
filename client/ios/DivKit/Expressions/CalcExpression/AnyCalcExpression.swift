@@ -77,23 +77,9 @@ struct AnyCalcExpression {
               args[0]
             }
           }
-        case let .function(name, actualArity):
-          for i in 0...5 {
-            let symbol = Symbol.function(name, arity: .exactly(i))
-            if evaluators(symbol) != nil {
-              if actualArity == .exactly(0) {
-                return { _ in
-                  throw Error
-                    .shortMessage("Non empty argument list is required for function '\(name)'.")
-                }
-              }
-              return { _ in throw Error.arityMismatch(symbol) }
-            }
-          }
         default:
-          break
+          return { _ in throw Error.undefinedSymbol(symbol) }
         }
-        return CalcExpression.errorEvaluator(for: symbol)
       }
     )
 
@@ -130,10 +116,9 @@ struct AnyCalcExpression {
       break
     }
 
-    throw Error
-      .message(
-        "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
-      )
+    throw Error.message(
+      "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
+    )
   }
 }
 
@@ -173,6 +158,10 @@ extension AnyCalcExpression {
         return number == 0 ? "false" : "true"
       case "d":
         let formatter = NumberFormatter()
+        let double = number.doubleValue
+        if double >= 1e7 || double <= -1e7 {
+          formatter.numberStyle = NumberFormatter.Style.scientific
+        }
         formatter.minimumFractionDigits = 1
         formatter.maximumFractionDigits = 15
         formatter.locale = Locale(identifier: "en")

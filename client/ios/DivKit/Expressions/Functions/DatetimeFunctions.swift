@@ -3,45 +3,6 @@ import Foundation
 import CommonCorePublic
 
 enum DatetimeFunctions: String, CaseIterable {
-  enum Error {
-    case month(Date, Int)
-    case day(Date, Int)
-    case hours(Date, Int)
-    case minutes(Date, Int)
-    case seconds(Date, Int)
-    case millis(Date, Int)
-    case components(String)
-    case component(String, String)
-    case format(String)
-
-    var message: CalcExpression.Error {
-      CalcExpression.Error.message(description)
-    }
-
-    private var description: String {
-      switch self {
-      case let .month(date, value):
-        "Failed to evaluate [setMonth(\(date.formatString), \(value))]. Expecting month in [1..12], instead got \(value)."
-      case let .day(date, value):
-        "Failed to evaluate [setDay(\(date.formatString), \(value))]. Unable to set day \(value) for date \(date.formatString)."
-      case let .hours(date, value):
-        "Failed to evaluate [setHours(\(date.formatString), \(value))]. Expecting hours in [0..23], instead got \(value)."
-      case let .minutes(date, value):
-        "Failed to evaluate [setMinutes(\(date.formatString), \(value))]. Expecting minutes in [0..59], instead got \(value)."
-      case let .seconds(date, value):
-        "Failed to evaluate [setSeconds(\(date.formatString), \(value))]. Expecting seconds in [0..59], instead got \(value)."
-      case let .millis(date, value):
-        "Failed to evaluate [setMillis(\(date.formatString), \(value))]. Expecting millis in [0..999], instead got \(value)."
-      case let .components(funcName):
-        "Failed to evaluate [\(funcName)]. Date components not found."
-      case let .component(funcName, component):
-        "Failed to evaluate [\(funcName)]. Component '\(component)' not found."
-      case let .format(format):
-        "z/Z not supported in [\(format)]"
-      }
-    }
-  }
-
   case parseUnixTime
   case parseUnixTimeAsLocal
   case nowLocal
@@ -139,25 +100,26 @@ private func _setYear(date: Date, newYear: Int) throws -> Date {
   var components = date.components
   components.year = newYear
   guard let result = calendar.date(from: components) else {
-    throw DatetimeFunctions.Error.components(makeFuncName(#function, date, newYear)).message
+    throw componentsError()
   }
   return result
 }
 
 private func _setMonth(date: Date, newMonth: Int) throws -> Date {
-  guard newMonth >= 1,
-        newMonth <= 12 else { throw DatetimeFunctions.Error.month(date, newMonth).message }
+  guard newMonth >= 1, newMonth <= 12 else {
+    throw CalcExpression.Error.message("Expecting month in [1..12], instead got \(newMonth).")
+  }
   var components = date.components
   components.month = newMonth
   guard let result = calendar.date(from: components) else {
-    throw DatetimeFunctions.Error.components(makeFuncName(#function, date, newMonth)).message
+    throw componentsError()
   }
   return result
 }
 
 private func _setDay(date: Date, newDay: Int) throws -> Date {
   guard let range = calendar.range(of: .day, in: .month, for: date) else {
-    throw DatetimeFunctions.Error.components(makeFuncName(#function, date, newDay)).message
+    throw componentsError()
   }
   var components = date.components
   switch newDay {
@@ -166,103 +128,105 @@ private func _setDay(date: Date, newDay: Int) throws -> Date {
   case -1:
     components.day = 0
   default:
-    throw DatetimeFunctions.Error.day(date, newDay).message
+    throw CalcExpression.Error.message(
+      "Unable to set day \(newDay) for date \(date.formatString)."
+    )
   }
   guard let result = calendar.date(from: components) else {
-    throw DatetimeFunctions.Error.components(makeFuncName(#function, date, newDay)).message
+    throw componentsError()
   }
   return result
 }
 
 private func _setHours(date: Date, newHour: Int) throws -> Date {
-  guard newHour >= 0,
-        newHour <= 23 else { throw DatetimeFunctions.Error.hours(date, newHour).message }
+  guard newHour >= 0, newHour <= 23 else {
+    throw CalcExpression.Error.message("Expecting hours in [0..23], instead got \(newHour).")
+  }
   var components = date.components
   components.hour = newHour
   guard let result = calendar.date(from: components) else {
-    throw DatetimeFunctions.Error.components(makeFuncName(#function, date, newHour)).message
+    throw componentsError()
   }
   return result
 }
 
 private func _setMinutes(date: Date, newMinutes: Int) throws -> Date {
-  guard newMinutes >= 0,
-        newMinutes <= 59 else { throw DatetimeFunctions.Error.minutes(date, newMinutes).message }
+  guard newMinutes >= 0, newMinutes <= 59 else {
+    throw CalcExpression.Error.message("Expecting minutes in [0..59], instead got \(newMinutes).")
+  }
   var components = date.components
   components.minute = newMinutes
   guard let result = calendar.date(from: components) else {
-    throw DatetimeFunctions.Error.components(makeFuncName(#function, date, newMinutes)).message
+    throw componentsError()
   }
   return result
 }
 
 private func _setSeconds(date: Date, newSeconds: Int) throws -> Date {
-  guard newSeconds >= 0,
-        newSeconds <= 59 else { throw DatetimeFunctions.Error.seconds(date, newSeconds).message }
+  guard newSeconds >= 0, newSeconds <= 59 else {
+    throw CalcExpression.Error.message("Expecting seconds in [0..59], instead got \(newSeconds).")
+  }
   var components = date.components
   components.second = newSeconds
   guard let result = calendar.date(from: components) else {
-    throw DatetimeFunctions.Error.components(makeFuncName(#function, date, newSeconds)).message
+    throw componentsError()
   }
   return result
 }
 
 private func _setMillis(date: Date, newMillis: Int) throws -> Date {
-  guard newMillis >= 0,
-        newMillis <= 999 else { throw DatetimeFunctions.Error.millis(date, newMillis).message }
+  guard newMillis >= 0, newMillis <= 999 else {
+    throw CalcExpression.Error.message("Expecting millis in [0..999], instead got \(newMillis).")
+  }
   let newTimeInterval = round(date.timeIntervalSince1970) + newMillis.toSeconds
   return Date(timeIntervalSince1970: newTimeInterval)
 }
 
 private func _getYear(_ value: Date) throws -> Int {
   guard let year = value.components.year else {
-    throw DatetimeFunctions.Error.component(makeFuncName(#function, value), "year").message
+    throw componentError("year")
   }
   return year
 }
 
 private func _getMonth(_ value: Date) throws -> Int {
   guard let month = value.components.month else {
-    throw DatetimeFunctions.Error.component(makeFuncName(#function, value), "month").message
+    throw componentError("month")
   }
   return month
 }
 
 private func _getDay(_ value: Date) throws -> Int {
   guard let day = value.components.day else {
-    throw DatetimeFunctions.Error.component(makeFuncName(#function, value), "day").message
+    throw componentError("day")
   }
   return day
 }
 
 private func _getDayOfWeek(_ value: Date) throws -> Int {
   guard let weekday = value.components.weekday else {
-    throw DatetimeFunctions.Error.component(makeFuncName(#function, value), "weekday").message
+    throw componentError("weekday")
   }
-  if weekday == 1 {
-    return 7
-  } else {
-    return weekday - 1
-  }
+  return weekday == 1 ? 7 : weekday - 1
 }
 
 private func _getHours(_ value: Date) throws -> Int {
   guard let hour = value.components.hour else {
-    throw DatetimeFunctions.Error.component(makeFuncName(#function, value), "hour").message
+    throw componentError("hour")
   }
   return hour
 }
 
 private func _getMinutes(_ value: Date) throws -> Int {
   guard let minute = value.components.minute else {
-    throw DatetimeFunctions.Error.component(makeFuncName(#function, value), "minute").message
+    throw componentError("minute")
   }
   return minute
 }
 
 private func _getSeconds(_ value: Date) throws -> Int {
   guard let second = value.components.second else {
-    throw DatetimeFunctions.Error.component(makeFuncName(#function, value), "second").message
+    throw componentError("second")
   }
   return second
 }
@@ -302,24 +266,9 @@ private func formatDate(
   locale: String? = nil
 ) throws -> String {
   guard !format.contains("Z"), !format.contains("z") else {
-    throw DatetimeFunctions.Error.format(format).message
+    throw CalcExpression.Error.message("z/Z not supported in [\(format)].")
   }
   return makeDateFormatter(format, isUTC: isUTC, locale: locale).string(from: value)
-}
-
-private func makeFuncName(_ funcName: String, _ date: Date, _ value: Int) -> String {
-  "\(getFuncName(funcName))('\(date.formatString)', \(value))"
-}
-
-private func makeFuncName(_ funcName: String, _ date: Date) -> String {
-  "\(getFuncName(funcName))('\(date.formatString)')"
-}
-
-private func getFuncName(_ funcName: String) -> String {
-  guard funcName.count > 1 else { return funcName }
-  let startIndex = funcName.index(after: funcName.startIndex)
-  guard let endIndex = funcName.firstIndex(of: "(") else { return funcName }
-  return String(funcName[startIndex...funcName.index(before: endIndex)])
 }
 
 private let dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -382,4 +331,12 @@ private func makeDateFormatter(
     dateFormatter.locale = Locale(identifier: locale)
   }
   return dateFormatter
+}
+
+private func componentsError() -> CalcExpression.Error {
+  .message("Date components not found.")
+}
+
+private func componentError(_ name: String) -> CalcExpression.Error {
+  .message("Component '\(name)' not found.")
 }

@@ -17,8 +17,7 @@ extension CalcExpression {
     /// The specified constant, operator or function was not recognized
     case undefinedSymbol(Symbol)
 
-    /// A function was called with the wrong number of arguments (arity)
-    case arityMismatch(Symbol)
+    case noMatchingSignature
 
     case escaping
 
@@ -26,31 +25,17 @@ extension CalcExpression {
       switch self {
       case let .message(message),
            let .shortMessage(message):
-        return message
+        message
       case let .unexpectedToken(string):
-        return "Unexpected token: \(string)"
+        "Unexpected token: \(string)"
       case let .missingDelimiter(string):
-        return "Missing delimiter: \(string)"
+        "Missing delimiter: \(string)"
       case let .undefinedSymbol(symbol):
-        return "Undefined symbol: \(symbol)"
-      case let .arityMismatch(symbol):
-        let arity: Arity = switch symbol {
-        case let .function(_, requiredArity):
-          requiredArity
-        case let .method(_, requiredArity):
-          requiredArity
-        case .infix("?:"):
-          .exactly(3)
-        case .infix:
-          .exactly(2)
-        case .postfix, .prefix:
-          .exactly(1)
-        case .variable:
-          .exactly(0)
-        }
-        return "\(symbol.description) expects \(arity)"
+        "Undefined symbol: \(symbol)"
+      case .noMatchingSignature:
+        "No matching function."
       case .escaping:
-        return "Incorrect string escape"
+        "Incorrect string escape"
       }
     }
 
