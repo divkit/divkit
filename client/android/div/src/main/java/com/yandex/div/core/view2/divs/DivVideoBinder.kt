@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.yandex.div.core.DecodeBase64ImageTask
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
@@ -20,8 +21,10 @@ import com.yandex.div.core.player.DivVideoViewMapper
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
+import com.yandex.div.internal.KLog
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVideo
+import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 
 @DivScope
@@ -30,6 +33,7 @@ internal class DivVideoBinder @Inject constructor(
     private val variableBinder: TwoWayIntegerVariableBinder,
     private val divActionBinder: DivActionBinder,
     private val videoViewMapper: DivVideoViewMapper,
+    private val executorService: ExecutorService,
 ) : DivViewBinder<DivVideo, DivVideoView> {
     override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
         val oldDiv = view.div
@@ -70,19 +74,19 @@ internal class DivVideoBinder @Inject constructor(
             )
         }
 
-        val preview = div.createPreview(resolver)
         val previewImageView: ImageView = currentPreviewView ?: ImageView(view.context).apply {
             layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             scaleType = ImageView.ScaleType.FIT_CENTER
             setBackgroundColor(Color.TRANSPARENT)
+            visibility = View.INVISIBLE
         }
 
-        with(previewImageView) {
-            if (preview != null) {
-                visibility = View.VISIBLE
-                setImageBitmap(preview)
-            } else {
-                visibility = View.INVISIBLE
+        div.applyPreview(resolver) { preview ->
+            preview?.let {
+                with(previewImageView) {
+                    visibility = View.VISIBLE
+                    setImageBitmap(preview)
+                }
             }
         }
 
@@ -187,6 +191,14 @@ internal class DivVideoBinder @Inject constructor(
         )
     }
 
+    private fun DivVideo.applyPreview(
+        resolver: ExpressionResolver,
+        onPreviewDecoded:(Bitmap?) -> Unit,
+    ) {
+        val base64String = preview?.evaluate(resolver) ?: return
+        val decodeTask = DecodeBase64ImageTask(base64String, false, onPreviewDecoded)
+        executorService.submit(decodeTask)
+    }
 }
 
 fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
@@ -205,8 +217,14 @@ fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
     }
 }
 
+@Deprecated("Will be removed in future releases")
 fun DivVideo.createPreview(resolver: ExpressionResolver): Bitmap? {
     val base64String = preview?.evaluate(resolver) ?: return null
-    val imageBytes = Base64.decode(base64String, Base64.DEFAULT)
+    val imageBytes = try {
+        Base64.decode(base64String, Base64.DEFAULT)
+    } catch (e: IllegalArgumentException) {
+        KLog.d("Div") { "Bad base-64 image preview" }
+        return null
+    }
     return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }
