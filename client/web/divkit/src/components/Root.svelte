@@ -77,6 +77,7 @@
     import { arrayInsert, arrayRemove } from '../actions/array';
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
+    import TooltipView from './tooltip/Tooltip.svelte';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -1173,10 +1174,6 @@
 
                 componentContext.variables = mergeVars(res.variables, opts.variables);
 
-                if (opts.tooltips) {
-                    componentContext.tooltips = opts.tooltips;
-                }
-
                 if (opts.fake) {
                     componentContext.fakeElement = true;
                 }
@@ -1604,7 +1601,6 @@
             states[0].div;
 
         rootStateComponentContext = rootComponentContext.produceChildContext(rootStateDiv, {
-            tooltips,
             isRootState: true
         });
     }
@@ -1662,5 +1658,16 @@
         <Unknown
             componentContext={rootStateComponentContext}
         />
+
+        {#if tooltips}
+            {#each tooltips as item (item.internalId)}
+                <TooltipView
+                    ownerNode={item.ownerNode}
+                    data={item.desc}
+                    internalId={item.internalId}
+                    parentComponentContext={rootStateComponentContext}
+                />
+            {/each}
+        {/if}
     </div>
 {/if}

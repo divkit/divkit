@@ -17,7 +17,6 @@
     import { flattenTransition } from '../../utils/flattenTransition';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
-    import TooltipView from '../tooltip/Tooltip.svelte';
 
     export let componentContext: ComponentContext<DivStateData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -580,15 +579,4 @@
             {/each}
         </div>
     </Outer>
-
-    {#if componentContext?.tooltips}
-        {#each componentContext.tooltips as item (item.internalId)}
-            <TooltipView
-                ownerNode={item.ownerNode}
-                data={item.desc}
-                internalId={item.internalId}
-                parentComponentContext={componentContext}
-            />
-        {/each}
-    {/if}
 {/if}

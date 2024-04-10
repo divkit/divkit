@@ -14,12 +14,6 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     variables?: Map<string, Variable>;
     isRootState?: boolean;
     fakeElement?: boolean;
-    tooltips?: {
-        internalId: number;
-        ownerNode: HTMLElement;
-        desc: MaybeMissing<Tooltip>;
-        timeoutId: number | null;
-    }[];
     parentContext?: ComponentContext;
 
     logError(error: WrappedError): void;
