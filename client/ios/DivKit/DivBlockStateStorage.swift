@@ -70,7 +70,7 @@ public final class DivBlockStateStorage {
       if isFocused {
         focusedElement = nil
         focusedElementById = element
-      } else if self.isFocused(element: element) {
+      } else if self.isFocusedInternal(element: element) {
         focusedElement = nil
         focusedElementById = nil
       }
@@ -82,7 +82,7 @@ public final class DivBlockStateStorage {
       if isFocused {
         focusedElement = path
         focusedElementById = nil
-      } else if self.isFocused(path: path)  {
+      } else if self.isFocusedInternal(path: path) {
         focusedElement = nil
         focusedElementById = nil
       }
@@ -98,14 +98,22 @@ public final class DivBlockStateStorage {
 
   public func isFocused(element: IdAndCardId) -> Bool {
     lock.read {
-      getFocusedElement() == element
+      isFocusedInternal(element: element)
     }
   }
 
   public func isFocused(path: UIElementPath) -> Bool {
     lock.read {
-      focusedElement == path || focusedElementById == IdAndCardId(path: path)
+      isFocusedInternal(path: path)
     }
+  }
+
+  private func isFocusedInternal(element: IdAndCardId) -> Bool {
+    getFocusedElement() == element
+  }
+
+  private func isFocusedInternal(path: UIElementPath) -> Bool {
+    focusedElement == path || focusedElementById == IdAndCardId(path: path)
   }
 
   public func getFocusedElement() -> IdAndCardId? {
