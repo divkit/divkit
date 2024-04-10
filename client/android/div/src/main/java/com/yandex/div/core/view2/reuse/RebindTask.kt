@@ -16,6 +16,7 @@ internal class RebindTask(
     private val divBinder: DivBinder,
     private val resolver: ExpressionResolver,
     private val newResolver: ExpressionResolver,
+    private val reporter: ComplexRebindReporter,
 ) {
     private val bindingPoints: MutableSet<ExistingToken> = mutableSetOf()
     private val aloneExisting = mutableListOf<ExistingToken>()
@@ -56,13 +57,19 @@ internal class RebindTask(
         rootView: ViewGroup,
     ): Boolean {
         val existingToken = ExistingToken(
-            div = div2View.stateToBind(oldDivData)?.div ?: return false,
+            div = div2View.stateToBind(oldDivData)?.div ?: let {
+                reporter.onComplexRebindNoDivInState()
+                return false
+            },
             view = rootView,
             childIndex = 0,
             parentToken = null,
         )
         val newToken = NewToken(
-            div = div2View.stateToBind(newDivData)?.div ?: return false,
+            div = div2View.stateToBind(newDivData)?.div ?: let {
+                reporter.onComplexRebindNoDivInState()
+                return false
+            },
             childIndex = 0,
             parentToken = null,
             lastExistingParent = null,
@@ -76,7 +83,10 @@ internal class RebindTask(
         }
 
         aloneNew.forEach {
-            val lastReal = it.lastExistingParent ?: return false
+            val lastReal = it.lastExistingParent ?: let {
+                reporter.onComplexRebindNoExistingParent()
+                return false
+            }
 
             reusableList.remove(lastReal)
             bindingPoints.add(lastReal)
@@ -145,6 +155,7 @@ internal class RebindTask(
     @MainThread
     private fun rebind(path: DivStatePath): Boolean {
         if (bindingPoints.isEmpty() && reusableList.isEmpty()) {
+            reporter.onComplexRebindNothingToBind()
             return false
         }
 
@@ -160,6 +171,7 @@ internal class RebindTask(
         }
 
         clear()
+        reporter.onComplexRebindSuccess()
         return true
     }
 

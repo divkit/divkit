@@ -7,9 +7,11 @@ import androidx.annotation.Nullable;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.view2.Div2View;
 import com.yandex.div2.DivAction;
+import com.yandex.div2.DivData;
 import com.yandex.div2.DivDisappearAction;
 import com.yandex.div2.DivGallery;
 import com.yandex.div2.DivPager;
+import com.yandex.div2.DivPatch;
 import com.yandex.div2.DivVisibilityAction;
 
 /**
@@ -176,6 +178,25 @@ public interface Div2Logger {
      * Is called when trigger activates.
      */
     default void logTrigger(Div2View divView, DivAction action) {
+        //do nothing
+    }
+
+    default void logBindingResult(
+        @NonNull Div2View divView,
+        @Nullable DivData oldData,
+        @Nullable DivData newData,
+        @NonNull String result,
+        @Nullable String eventsMessage
+    ) {
+        //do nothing
+    }
+
+    default void logPatchResult(
+        @NonNull Div2View divView,
+        @NonNull DivPatch patch,
+        @NonNull String result,
+        @Nullable String eventsMessage
+    ) {
         //do nothing
     }
 }

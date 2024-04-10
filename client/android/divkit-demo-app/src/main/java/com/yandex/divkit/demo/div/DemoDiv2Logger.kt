@@ -5,9 +5,11 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivData
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivPatch
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.divkit.regression.ScenarioLogDelegate
 
@@ -122,6 +124,39 @@ class DemoDiv2Logger(
     override fun logTrigger(divView: Div2View, action: DivAction) {
         log(TAG) {
             "logTrigger(cardId = ${divView.logId}, id = ${action.logId})"
+        }
+    }
+
+    override fun logBindingResult(
+        divView: Div2View,
+        oldData: DivData?,
+        newData: DivData?,
+        result: String,
+        eventsMessage: String?,
+    ) {
+        log(TAG) {
+            val builder = StringBuilder("logBindingResult(cardId = ${divView.logId}, result = $result")
+            eventsMessage?.let {
+                builder.append(", events = $it")
+            }
+            builder.append(")")
+            builder.toString()
+        }
+    }
+
+    override fun logPatchResult(
+        divView: Div2View,
+        patch: DivPatch,
+        result: String,
+        eventsMessage: String?,
+    ) {
+        log(TAG) {
+            val builder = StringBuilder("logPatchResult(result = $result")
+            eventsMessage?.let {
+                builder.append(", events = $it")
+            }
+            builder.append(")")
+            builder.toString()
         }
     }
 

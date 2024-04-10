@@ -12,7 +12,7 @@ import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.Log
-import com.yandex.yatagan.Yatagan
+import com.yandex.div.logging.Severity
 
 @PublicApi
 class DivKit private constructor(
@@ -92,6 +92,16 @@ class DivKit private constructor(
         @AnyThread
         fun enableLogging(enabled: Boolean) {
             Log.setEnabled(enabled)
+        }
+
+        @JvmStatic
+        @AnyThread
+        fun getLoggingSeverity(): Severity = Log.getSeverity()
+
+        @JvmStatic
+        @AnyThread
+        fun setLoggingSeverity(severity: Severity) {
+            Log.setSeverity(severity)
         }
 
         @JvmStatic

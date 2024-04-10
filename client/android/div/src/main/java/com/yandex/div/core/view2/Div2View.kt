@@ -33,6 +33,9 @@ import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.core.view2.logging.bind.BindingEventReporterProvider
+import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
+import com.yandex.div.core.view2.logging.bind.SimpleRebindReporter
 import com.yandex.div.core.player.DivVideoActionHandler
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
@@ -51,8 +54,10 @@ import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.core.view2.reuse.ComplexRebindReporter
 import com.yandex.div.core.view2.reuse.RebindTask
 import com.yandex.div.core.view2.reuse.ReusableTokenList
+import com.yandex.div.core.view2.logging.bind.ForceRebindReporter
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
@@ -99,6 +104,9 @@ class Div2View private constructor(
     private val complexRebindEnabled = div2Component.isComplexRebindEnabled
 
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
+
+    private val bindingReporterProvider = BindingEventReporterProvider(this)
+    private val patchReporterProvider = PatchEventReporterProvider(this)
 
     private val divBuilder: Div2Builder = context.div2Component.div2Builder
     private val loadReferences = mutableListOf<LoadReference>()
@@ -253,7 +261,13 @@ class Div2View private constructor(
         oldDivData: DivData?,
         tag: DivDataTag
     ): Boolean = synchronized(monitor) {
-        if (data == null || divData === data) {
+        val reporter = bindingReporterProvider.get(oldDivData, data)
+
+        if (data == null) {
+            reporter.onBindingFatalNoData()
+            return false
+        } else if (divData === data) {
+            reporter.onBindingFatalSameData()
             return false
         }
 
@@ -271,24 +285,32 @@ class Div2View private constructor(
         }
 
         if (complexRebindEnabled && oldData != null && view.getChildAt(0) is ViewGroup) {
-            complexRebind(data, oldData)
+            complexRebind(data, oldData, reporter)
             return false
         }
 
-        if (!DivComparator.isDivDataReplaceable(oldData, data, stateId, oldExpressionResolver, expressionResolver)) {
+        if (!DivComparator.isDivDataReplaceable(
+                oldData,
+                data,
+                stateId,
+                oldExpressionResolver,
+                expressionResolver,
+                reporter
+            )
+        ) {
             oldData = null
         }
 
         val result = if (oldData != null) {
             if (data.allowsTransitionsOnDataChange(expressionResolver)) {
-                updateNow(data, tag)
+                updateNow(data, tag, reporter)
             } else {
-                rebind(data, false)
+                rebind(data, false, reporter)
             }
             div2Component.divBinder.attachIndicators()
             false
         } else {
-            updateNow(data, tag)
+            updateNow(data, tag, reporter)
         }
         sendCreationHistograms()
         oldExpressionsRuntime = _expressionsRuntime
@@ -302,7 +324,13 @@ class Div2View private constructor(
         paths: List<DivStatePath>,
         temporary: Boolean
     ): Boolean = synchronized(monitor) {
-        if (data == null || divData === data) {
+        val reporter = bindingReporterProvider.get(divData, data)
+
+        if (data == null) {
+            reporter.onBindingFatalNoData()
+            return false
+        } else if (divData === data) {
+            reporter.onBindingFatalSameData()
             return false
         }
         persistentDivDataObservers.forEach { it.onBeforeDivDataChanged() }
@@ -312,7 +340,15 @@ class Div2View private constructor(
 
         var oldData = divData
         updateExpressionsRuntime(data, tag)
-        if (!DivComparator.isDivDataReplaceable(oldData, data, stateId, oldExpressionResolver, expressionResolver)) {
+        if (!DivComparator.isDivDataReplaceable(
+                oldData,
+                data,
+                stateId,
+                oldExpressionResolver,
+                expressionResolver,
+                reporter
+            )
+        ) {
             oldData = null
         }
         dataTag = tag
@@ -324,10 +360,10 @@ class Div2View private constructor(
             div2Component.stateManager.updateStates(divTag.id, path, temporary)
         }
         val result = if (oldData != null) {
-            rebind(data, false)
+            rebind(data, false, reporter)
             true
         } else {
-            updateNow(data, tag)
+            updateNow(data, tag, reporter)
         }
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
@@ -340,21 +376,24 @@ class Div2View private constructor(
         val oldData: DivData = divData ?: return false
         val newDivData = div2Component.patchManager.createPatchedDivData(oldData, dataTag, patch, expressionResolver)
         val state = newDivData?.stateToBind
+        val reporter = patchReporterProvider.get(patch)
 
         if (state != null) {
             bindOnAttachRunnable?.cancel()
-            rebind(oldData, false)
+            rebind(oldData, false, reporter)
             divData = newDivData
             div2Component.divBinder.setDataWithoutBinding(getChildAt(0), state.div, expressionResolver)
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
+            reporter.onPatchSuccess()
             return true
         }
+        reporter.onPatchNoState()
         return false
     }
 
-    private fun updateNow(data: DivData, tag: DivDataTag): Boolean {
+    private fun updateNow(data: DivData, tag: DivDataTag, reporter: ForceRebindReporter): Boolean {
         val oldData = divData
         if (oldData == null) {
             histogramReporter.onBindingStarted()
@@ -367,7 +406,7 @@ class Div2View private constructor(
         dataTag = tag
         divData = data
 
-        val result = switchToDivData(oldData, data)
+        val result = switchToDivData(oldData, data, reporter)
 
         attachVariableTriggers()
 
@@ -624,13 +663,14 @@ class Div2View private constructor(
         switchToInitialState()
     }
 
-    private fun switchToDivData(oldData: DivData?, newData: DivData): Boolean {
+    private fun switchToDivData(oldData: DivData?, newData: DivData, reporter: ForceRebindReporter): Boolean {
         val oldState = oldData?.state()
         val newState = newData.state()
 
         this.stateId = newData.stateId()
 
         if (newState == null) {
+            reporter.onForceRebindFatalNoState()
             return false
         }
 
@@ -648,6 +688,12 @@ class Div2View private constructor(
             newData.allowsTransitionsOnDataChange(expressionResolver)
         addNewStateViewWithTransition(oldData, newData, oldState?.div, newState,
             newStateView, allowsTransition, bindBeforeViewAdded = false)
+
+        if (oldData != null) {
+            reporter.onForceRebindSuccess()
+        } else {
+            reporter.onFirstBindingCompleted()
+        }
 
         return true
     }
@@ -995,13 +1041,17 @@ class Div2View private constructor(
 
     internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)
 
-    private fun rebind(newData: DivData, isAutoanimations: Boolean) {
+    private fun rebind(newData: DivData, isAutoanimations: Boolean, reporter: SimpleRebindReporter) {
         try {
             if (childCount == 0) {
-                updateNow(newData, dataTag)
+                reporter.onSimpleRebindNoChild()
+                updateNow(newData, dataTag, reporter)
                 return
             }
-            val state = newData.stateToBind ?: return
+            val state = newData.stateToBind ?: let {
+                reporter.onSimpleRebindFatalNoState()
+                return
+            }
 
             histogramReporter.onRebindingStarted()
             viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
@@ -1017,14 +1067,20 @@ class Div2View private constructor(
             }
             attachVariableTriggers()
             histogramReporter.onRebindingFinished()
+
+            reporter.onSimpleRebindSuccess()
         } catch (error: Exception) {
-            updateNow(newData, dataTag)
+            reporter.onSimpleRebindException(error)
+            updateNow(newData, dataTag, reporter)
             KAssert.fail(error)
         }
     }
 
-    private fun complexRebind(newData: DivData, oldData: DivData) {
-        val stateToBind = newData.stateToBind ?: return
+    private fun complexRebind(newData: DivData, oldData: DivData, reporter: ComplexRebindReporter) {
+        val stateToBind = newData.stateToBind ?: let {
+            reporter.onComplexRebindFatalNoState()
+            return
+        }
         histogramReporter.onRebindingStarted()
         divData = newData
 
@@ -1032,12 +1088,16 @@ class Div2View private constructor(
             div2View = this,
             div2Component.divBinder,
             oldExpressionResolver,
-            expressionResolver
+            expressionResolver,
+            reporter
         ).also {
             this.rebindTask = it
         }
 
-        val state = newData.stateToBind ?: return
+        val state = newData.stateToBind ?: let {
+            reporter.onComplexRebindFatalNoState()
+            return
+        }
         val viewToRebind = (view.getChildAt(0) as ViewGroup).apply {
             bindLayoutParams(state.div.value(), expressionResolver)
         }
@@ -1050,7 +1110,7 @@ class Div2View private constructor(
             DivStatePath.fromState(newData.stateId())
         )
         if (!result) {
-            updateNow(newData, dataTag)
+            updateNow(newData, dataTag, reporter)
             return
         }
         requestLayout()
