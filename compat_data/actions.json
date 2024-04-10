@@ -1,6 +1,62 @@
 {
     "features": [{
-        "id": "actions_typed_clear_focus",
+        "id": "action_array_insert_remove",
+        "name": "Typed actions <code>array_insert_value</code> and <code>array_remove_value</code>",
+        "compat": {
+            "android": {
+                "version_added": "28.2.0"
+            },
+            "ios": {
+                "version_added": "28.5.0"
+            },
+            "web": {
+                "version_added": "28.9.0"
+            }
+        }
+    }, {
+        "id": "action_set_variable",
+        "name": "Typed action <code>set_variable</code>",
+        "compat": {
+            "android": {
+                "version_added": "28.2.0"
+            },
+            "ios": {
+                "version_added": "28.3.0"
+            },
+            "web": {
+                "version_added": "28.8.0"
+            }
+        }
+    }, {
+        "id": "action_copy_to_clipboard",
+        "name": "Typed action <code>copy_to_clipboard</code>",
+        "compat": {
+            "android": {
+                "version_added": "28.3.0"
+            },
+            "ios": {
+                "version_added": "28.5.0"
+            },
+            "web": {
+                "version_added": "28.10.0"
+            }
+        }
+    }, {
+        "id": "action_focus_element",
+        "name": "Typed action <code>focus_element</code>",
+        "compat": {
+            "android": {
+                "version_added": "28.2.0"
+            },
+            "ios": {
+                "version_added": "29.6.0"
+            },
+            "web": {
+                "version_added": "28.11.0"
+            }
+        }
+    }, {
+        "id": "action_typed_clear_focus",
         "name": "Typed action <code>clear_focus</code>",
         "compat": {
             "android": {
@@ -11,6 +67,20 @@
             },
             "web": {
                 "version_added": "29.12.0"
+            }
+        }
+    }, {
+        "id": "action_is_enabled",
+        "name": "Action <code>is_enabled</code> property",
+        "compat": {
+            "android": {
+                "version_added": "29.2.0"
+            },
+            "ios": {
+                "version_added": "29.2.0"
+            },
+            "web": {
+                "version_added": "29.2.0"
             }
         }
     }]
