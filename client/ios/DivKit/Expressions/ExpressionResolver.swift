@@ -176,12 +176,6 @@ public final class ExpressionResolver {
     case let .calcExpression(parsedExpression):
       do {
         return try validatedValue(value: evaluate(parsedExpression), link: link)
-      } catch let error as CalcExpression.Error {
-        let expression = parsedExpression.description
-        errorTracker(
-          ExpressionError(error.makeOutputMessage(for: expression), expression: link.rawValue)
-        )
-        return nil
       } catch {
         errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
         return nil
@@ -211,12 +205,6 @@ public final class ExpressionResolver {
       case let .calcExpression(parsedExpression):
         do {
           stringValue += try evaluate(parsedExpression)
-        } catch let error as CalcExpression.Error {
-          let expression = parsedExpression.description
-          errorTracker(
-            ExpressionError(error.makeOutputMessage(for: expression), expression: link.rawValue)
-          )
-          return nil
         } catch {
           errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
           return nil

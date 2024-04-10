@@ -78,7 +78,7 @@ struct AnyCalcExpression {
             }
           }
         default:
-          return { _ in throw Error.undefinedSymbol(symbol) }
+          return { _ in throw Error.message("Undefined symbol: \(symbol)") }
         }
       }
     )
@@ -217,9 +217,8 @@ extension AnyCalcExpression {
       case is Int, is UInt, is Int32, is UInt32, is Int64, is UInt64:
         if let intValue = value as? Int {
           return .integer(intValue)
-        } else {
-          throw CalcExpression.Value.integerOverflow()
         }
+        throw CalcExpression.Error.integerOverflow
       case let numberValue as NSNumber:
         // Hack to avoid losing type info for UIFont.Weight, etc
         if "\(value)".contains("rawValue") {
@@ -259,7 +258,7 @@ extension AnyCalcExpression {
         if CalcExpression.Value.minInteger <= value, value <= CalcExpression.Value.maxInteger {
           return value
         }
-        throw CalcExpression.Value.integerError(value)
+        throw CalcExpression.Error.integerOverflow
       case let .datetime(value):
         return value
       case let .boolean(value):

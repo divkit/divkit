@@ -136,10 +136,6 @@ final class CalcExpression: CustomStringConvertible {
     }
   }
 
-  /// Alternative constructor for advanced usage
-  /// Allows for dynamic symbol lookup or generation without any performance overhead
-  /// Note that both math and boolean symbols are enabled by default - to disable them
-  /// return `{ _ in throw CalcExpression.Error.undefinedSymbol(symbol) }` from your lookup function
   init(
     _ expression: ParsedCalcExpression,
     evaluators: @escaping (Symbol) -> SymbolEvaluator
@@ -667,7 +663,7 @@ extension UnicodeScalarView {
     switch number {
     case let .integer(value):
       guard let result = Int(value) else {
-        return .error(CalcExpression.Value.integerError(value), value)
+        return .error(.message("Value \(value) can't be converted to Integer type."), value)
       }
       return .literal(.integer(result))
     case let .number(value):
@@ -779,7 +775,7 @@ extension UnicodeScalarView {
         case "@" where scanCharacter("{"):
           string += "@{"
         default:
-          return .error(.escaping, string)
+          return .error(.message("Incorrect string escape"), string)
         }
         part = ""
       }

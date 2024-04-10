@@ -87,32 +87,34 @@ enum MathOperators: String, CaseIterable {
   }
 
   private func makeUnaryError(args: [Argument]) -> CalcExpression.Error {
-    Error.unaryUnsupportedType(symbol: symbol.name, symbolName: rawValue, arg: args[0]).message
+    .message(
+      "Failed to evaluate [\(symbol.name)\(args[0].formattedValue)]. A Number is expected after a unary \(rawValue)."
+    )
   }
 }
 
 private func _sumInt(lhs: Int, rhs: Int) throws -> Int {
-  try lhs.checkingOverflow(rhs, operation: lhs.addingReportingOverflow)
+  try lhs.checkingOverflow("+", rhs, operation: lhs.addingReportingOverflow)
 }
 
 private func _subInt(lhs: Int, rhs: Int) throws -> Int {
-  try lhs.checkingOverflow(rhs, operation: lhs.subtractingReportingOverflow)
+  try lhs.checkingOverflow("-", rhs, operation: lhs.subtractingReportingOverflow)
 }
 
 private func _mulInt(lhs: Int, rhs: Int) throws -> Int {
-  try lhs.checkingOverflow(rhs, operation: lhs.multipliedReportingOverflow)
+  try lhs.checkingOverflow("*", rhs, operation: lhs.multipliedReportingOverflow)
 }
 
 private func _divInt(lhs: Int, rhs: Int) throws -> Int {
   guard rhs != 0 else {
-    throw Error.divisionByZero("/", lhs, rhs).message
+    throw divisionByZeroError("/", lhs, rhs)
   }
   return lhs / rhs
 }
 
 private func _modInt(lhs: Int, rhs: Int) throws -> Int {
   guard rhs != 0 else {
-    throw Error.divisionByZero("%", lhs, rhs).message
+    throw divisionByZeroError("%", lhs, rhs)
   }
   return lhs % rhs
 }
@@ -131,14 +133,14 @@ private func _mulDouble(lhs: Double, rhs: Double) -> Double {
 
 private func _divDouble(lhs: Double, rhs: Double) throws -> Double {
   guard !rhs.isApproximatelyEqualTo(0) else {
-    throw Error.divisionByZero("/", lhs, rhs).message
+    throw divisionByZeroError("/", lhs, rhs)
   }
   return lhs / rhs
 }
 
 private func _modDouble(lhs: Double, rhs: Double) throws -> Double {
   guard !rhs.isApproximatelyEqualTo(0) else {
-    throw Error.divisionByZero("/", lhs, rhs).message
+    throw divisionByZeroError("/", lhs, rhs)
   }
   return fmod(lhs, rhs)
 }
@@ -148,33 +150,26 @@ private func _sumString(lhs: String, rhs: String) throws -> String {
 }
 
 extension Int {
-  func checkingOverflow(
+  fileprivate func checkingOverflow(
+    _ symbol: String,
     _ other: Int,
     operation: (Int) -> (partialValue: Int, overflow: Bool)
   ) throws -> Int {
     let result = operation(other)
     if !result.overflow {
       return result.partialValue
-    } else {
-      throw CalcExpression.Value.integerOverflow()
     }
+    throw CalcExpression.Error.message(
+      "Failed to evaluate [\(self) \(symbol) \(other)]. Integer overflow."
+    )
   }
 }
 
-private enum Error {
-  case divisionByZero(String, Any, Any)
-  case unaryUnsupportedType(symbol: String, symbolName: String, arg: Argument)
-
-  private var description: String {
-    switch self {
-    case let .divisionByZero(symbol, lhs, rhs):
+private func divisionByZeroError(
+  _ symbol: String,
+  _ lhs: Any,
+  _ rhs: Any) -> CalcExpression.Error {
+    .message(
       "Failed to evaluate [\(lhs) \(symbol) \(rhs)]. Division by zero is not supported."
-    case let .unaryUnsupportedType(symbol, symbolName, arg):
-      "Failed to evaluate [\(symbol)\(arg.formattedValue)]. A Number is expected after a unary \(symbolName)."
-    }
-  }
-
-  var message: CalcExpression.Error {
-    CalcExpression.Error.message(description)
-  }
+    )
 }

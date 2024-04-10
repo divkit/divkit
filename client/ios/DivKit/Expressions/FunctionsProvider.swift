@@ -100,7 +100,7 @@ private func makeEvaluator(
           "\(message) Function '\(name)' has no matching override for given argument types: \(formatTypes(args, isMethod))."
         )
       }
-      throw CalcExpression.Error.message("\(message) \(error.description)")
+      throw CalcExpression.Error.message("\(message) \(error.localizedDescription)")
     }
   }
 }
