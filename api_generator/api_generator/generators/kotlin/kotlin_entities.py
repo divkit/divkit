@@ -1,7 +1,7 @@
 from __future__ import annotations
 from functools import reduce
 import dataclasses
-from typing import List, Optional, cast, Dict
+from typing import List, Optional, cast
 
 from ..base import declaration_comment
 from ...schema.modeling.entities import (
@@ -253,49 +253,144 @@ class KotlinEntity(Entity):
         return static_decl
 
     @property
-    def copy_with_new_properties_declaration(self) -> Optional[Text]:
-        generator_properties = self.generator_properties
-        if not generator_properties:
-            return None
-
-        general_properties = generator_properties.general_properties
-        if not general_properties:
-            return None
-
-        kotlin_generator_properties = general_properties.get('kotlin')
-        if not isinstance(kotlin_generator_properties, Dict):
-            return None
-
-        new_properties = kotlin_generator_properties.get('properties_to_patch')
-        if not isinstance(new_properties, list):
-            return None
-
+    def copy_declaration(self) -> Text:
         result = EMPTY
-        result += '    fun copyWithNewProperties('
+        decl = '    fun copy('
 
         method_params: List[str] = []
         constructor_params: List[str] = []
 
-        def append_arg(name: str):
-            constructor_params.append(f'        {name},')
-
         for p in sorted(filter(lambda prop: not isinstance(prop.property_type, StaticString),
-                               self.properties), key=lambda prop: prop.name):
-            property_name = utils.lower_camel_case(p.name)
-            if p.name not in new_properties:
-                append_arg(property_name)
-                continue
+                               self.properties_kotlin), key=lambda prop: prop.name):
+            property_name = p.declaration_name
+            property_class = p.type_declaration
+            method_params.append(f'\n        {property_name}: {property_class} = this.{property_name},')
+            constructor_params.append(f'\n        {property_name} = {property_name},')
 
-            item = p.property_type.property_type.object
-            item_class = utils.capitalize_camel_case(item.prefixed_declaration)
-            method_params.append(f'        {property_name}: List<{item_class}>,')
-            constructor_params.append(f'        {property_name},')
-
-        result += '\n'.join(method_params)
-        result += f'    ) = {utils.capitalize_camel_case(self.name)}('
-        result += '\n'.join(constructor_params)
-        result += '    )'
+        decl += ''.join(method_params)
+        if len(method_params) > 0:
+            decl += '\n    '
+        decl += f') = {utils.capitalize_camel_case(self.name)}('
+        decl += ''.join(constructor_params)
+        if len(constructor_params) > 0:
+            decl += '\n    '
+        decl += ')'
+        result += decl
         return result
+
+    @property
+    def equality_declaration(self) -> Text:
+        result = EMPTY
+        if self.instance_properties:
+            result += '    override fun equals(other: Any?): Boolean {'
+            result += '        if (this === other) { return true }'
+            class_name = utils.capitalize_camel_case(self.name)
+            result += f'        if (other !is {class_name} || (this.isHashCalculated() && other.isHashCalculated()'
+            result += '                    && this.hash() != other.hash())) {'
+            result += '            return false'
+            result += '        }'
+            result += EMPTY
+            for prop in self.instance_properties_kotlin:
+                prefix = "return " if prop == self.instance_properties_kotlin[0] else "    "
+                postfix = "&&" if prop != self.instance_properties_kotlin[-1] else ""
+                result += f'         {prefix}this.{prop.declaration_name} == other.{prop.declaration_name} {postfix}'
+            result += '    }'
+            result += EMPTY
+            result += '    override fun hashCode() = hash()'
+        else:
+            result += self.__manual_equals_hash_code_declaration.indented(indent_width=4)
+        return result
+
+    @property
+    def __manual_equals_hash_code_declaration(self) -> Text:
+        result = Text('override fun equals(other: Any?) = javaClass == other?.javaClass')
+        result += EMPTY
+        result += 'override fun hashCode() = javaClass.hashCode()'
+        return result
+
+    def hash_declaration(self, with_calculation_flag: bool = False) -> Text:
+        prop_names = map(lambda prop_name: prop_name.declaration_name, self.instance_properties_kotlin)
+
+        prop_filter = ['items']
+        is_div_state = utils.capitalize_camel_case(self.name) == 'DivState'
+
+        if is_div_state:
+            prop_filter.append('states')
+
+        generate_properties = True if len(set(prop_filter).intersection(prop_names)) > 0 else False
+
+        result = EMPTY
+        if generate_properties:
+            result += '    private var _propertiesHash: Int? = null '
+        result += '    private var _hash: Int? = null '
+        if generate_properties:
+            result += EMPTY
+            result += '    override fun propertiesHash(): Int {'
+            result += '        _propertiesHash?.let {'
+            result += '            return it'
+            result += '        }'
+            if len(self.instance_properties_kotlin) > 1:
+                result += '        val propertiesHash = '
+                result += self.__generate_hash(list(filter(lambda it: it.declaration_name not in prop_filter,
+                                                           self.instance_properties_kotlin))).indented(indent_width=12)
+            else:
+                result += '        val propertiesHash = javaClass.hashCode()'
+            result += '        _propertiesHash = propertiesHash'
+            result += '        return propertiesHash'
+            result += '    }'
+        result += EMPTY
+        result += '    override fun hash(): Int {'
+        result += '        _hash?.let {'
+        result += '            return it'
+        result += '        }'
+
+        if self.instance_properties_kotlin:
+            result += '        val hash = '
+            if generate_properties:
+                hash_text = Text()
+                hash_text += 'propertiesHash() +'
+                hash_text += self.__generate_hash(
+                    list(filter(lambda it: it.declaration_name in prop_filter, self.instance_properties_kotlin)))
+
+                result += hash_text.indented(indent_width=12)
+            else:
+                result += self.__generate_hash(list(filter(
+                    lambda it: it.declaration_name not in prop_filter,
+                    self.instance_properties_kotlin))
+                ).indented(indent_width=12)
+        else:
+            result += '        val hash = javaClass.hashCode()'
+
+        result += '        _hash = hash'
+        result += '        return hash'
+        result += '    }'
+        if with_calculation_flag:
+            result += EMPTY
+            result += '    fun isHashCalculated() = _hash != null'
+        return result
+
+    @staticmethod
+    def __generate_hash(props: List[KotlinProperty]) -> Text:
+        hash_text = Text()
+        for prop in props:
+            hash_type = 'hash()' if prop.use_custom_hash else 'hashCode()'
+
+            prop_hash = ''
+            if prop.should_be_optional:
+                prop_hash += '('
+            prop_hash += prop.declaration_name
+            if prop.should_be_optional:
+                prop_hash += '?'
+            prop_hash += '.'
+            if isinstance(prop.property_type, Array) and prop.use_custom_hash:
+                prop_hash += f'sumOf {{ it.{hash_type} }}'
+            else:
+                prop_hash += hash_type
+            if prop.should_be_optional:
+                prop_hash += ' ?: 0)'
+            prop_hash += " +" if prop != props[-1] else ""
+            hash_text += prop_hash
+        return hash_text
 
 
 class KotlinProperty(Property):
@@ -613,7 +708,9 @@ class KotlinPropertyType(PropertyType):
             if len(values) != len(declarations):
                 return None
             joined = ', '.join(declarations)
-            return f'listOf<{item_type.declaration(GenerationMode.NORMAL_WITHOUT_TEMPLATES)}>({joined})'
+            return 'listOf<' +\
+                item_type.declaration(GenerationMode.NORMAL_WITHOUT_TEMPLATES, supports_expressions_flag) +\
+                f'>({joined})'
         elif isinstance(self, Object):
             if self.object is None:
                 return None

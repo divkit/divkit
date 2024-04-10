@@ -20,6 +20,12 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         return hash
     }
 
+    fun copy(
+        value: Expression<Value> = this.value,
+    ) = EntityWithStringEnumPropertyWithDefaultValue(
+        value = value,
+    )
+
     companion object {
         const val TYPE = "entity_with_string_enum_property_with_default_value"
 

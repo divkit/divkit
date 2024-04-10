@@ -9,6 +9,8 @@ import com.yandex.div2.DivPager
 
 fun DivContainer.buildItems(resolver: ExpressionResolver) = items ?: emptyList()
 
+val DivContainer.nonNullItems: List<Div> get() = items ?: emptyList()
+
 val DivGallery.nonNullItems: List<Div> get() = items ?: emptyList()
 
 val DivGrid.nonNullItems: List<Div> get() = items ?: emptyList()

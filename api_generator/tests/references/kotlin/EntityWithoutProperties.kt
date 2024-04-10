@@ -36,6 +36,8 @@ class EntityWithoutProperties() : JSONSerializable, Hashable {
         return json
     }
 
+    fun copy() = EntityWithoutProperties()
+
     companion object {
         const val TYPE = "entity_without_properties"
 

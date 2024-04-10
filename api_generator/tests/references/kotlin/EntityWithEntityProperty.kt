@@ -40,6 +40,12 @@ class EntityWithEntityProperty(
         return json
     }
 
+    fun copy(
+        entity: Entity = this.entity,
+    ) = EntityWithEntityProperty(
+        entity = entity,
+    )
+
     companion object {
         const val TYPE = "entity_with_entity_property"
 
