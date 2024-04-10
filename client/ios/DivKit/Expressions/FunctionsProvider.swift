@@ -15,7 +15,7 @@ final class FunctionsProvider {
     self.persistentValuesStorage = persistentValuesStorage
   }
 
-  init (
+  init(
     cardId: DivCardID,
     variablesStorage: DivVariablesStorage,
     variableTracker: @escaping ExpressionResolver.VariableTracker,
@@ -33,27 +33,21 @@ final class FunctionsProvider {
     self.persistentValuesStorage = persistentValuesStorage
   }
 
-  lazy var functions: [CalcExpression.Symbol: Function] =
+  lazy var functions: [String: Function] =
     lock.withLock {
       var functions = staticFunctions
-      GetValueFunctions.allCases.forEach {
-        functions.put(
-          $0.rawValue,
-          $0.getFunction(variableValueProvider)
-        )
+      for item in GetValueFunctions.allCases {
+        functions[item.rawValue] = item.getFunction(variableValueProvider)
       }
-      GetStoredValueFunctions.allCases.forEach {
-        functions.put(
-          $0.rawValue,
-          $0.getFunction(persistentValuesStorage.get)
-        )
+      for item in GetStoredValueFunctions.allCases {
+        functions[item.rawValue] = item.getFunction(persistentValuesStorage.get)
       }
       return functions
     }
 
   lazy var evaluators: ((CalcExpression.Symbol) -> AnyCalcExpression.SymbolEvaluator?) =
     lock.withLock {
-      return { [weak self] symbol in
+      { [weak self] symbol in
         switch symbol {
         case .variable("true"):
           return { _ in true }
@@ -67,35 +61,13 @@ final class FunctionsProvider {
           return self?.variableValueProvider(name).map { value in { _ in value } }
         case .infix, .prefix:
           return operators[symbol]?.invoke
-        case let .function(name), let .method(name):
+        case let .function(name):
           guard let self else {
             return nil
           }
-          return { args in
-            guard let function = self.functions[symbol] else {
-              throw CalcExpression.Error.message(
-                "Failed to evaluate [\(formatExpression(name, args))]. Unknown function name: \(name)."
-              )
-            }
-            do {
-              return try function.invoke(args: args)
-            } catch let error as CalcExpression.Error {
-              let message = "Failed to evaluate [\(formatExpression(name, args))]."
-              if error == .noMatchingSignature {
-                if args.count == 0 {
-                  throw CalcExpression.Error.message(
-                    "\(message) Non empty argument list is required for function '\(name)'."
-                  )
-                }
-                throw CalcExpression.Error.message(
-                  "\(message) Function '\(name)' has no matching override for given argument types: \(formatTypes(args))."
-                )
-              }
-              throw CalcExpression.Error.message(
-                "\(message) \(error.description)"
-              )
-            }
-          }
+          return makeEvaluator(name: name, functions: self.functions, isMethod: false)
+        case let .method(name):
+          return makeEvaluator(name: name, functions: methods, isMethod: true)
         case .postfix:
           return nil
         }
@@ -103,9 +75,45 @@ final class FunctionsProvider {
     }
 }
 
-private func formatExpression(_ name: String, _ args: [Any]) -> String {
+private func makeEvaluator(
+  name: String,
+  functions: [String: Function],
+  isMethod: Bool
+) -> AnyCalcExpression.SymbolEvaluator? {
+  { args in
+    guard let function = functions[name] else {
+      throw CalcExpression.Error.message(
+        "Failed to evaluate [\(formatExpression(name, args, isMethod))]. Unknown function name: \(name)."
+      )
+    }
+    do {
+      return try function.invoke(args: args)
+    } catch let error as CalcExpression.Error {
+      let message = "Failed to evaluate [\(formatExpression(name, args, isMethod))]."
+      if error == .noMatchingSignature {
+        if args.count == 0 {
+          throw CalcExpression.Error.message(
+            "\(message) Non empty argument list is required for function '\(name)'."
+          )
+        }
+        throw CalcExpression.Error.message(
+          "\(message) Function '\(name)' has no matching override for given argument types: \(formatTypes(args, isMethod))."
+        )
+      }
+      throw CalcExpression.Error.message("\(message) \(error.description)")
+    }
+  }
+}
+
+private func formatExpression(
+  _ name: String,
+  _ args: [Any],
+  _ isMethod: Bool
+) -> String {
   let argsString = args
-    .map { formatValue($0) }
+    .enumerated()
+    .filter { $0.offset > 0 || !isMethod }
+    .map { formatValue($0.element) }
     .joined(separator: ", ")
   return "\(name)(\(argsString))"
 }
@@ -113,40 +121,47 @@ private func formatExpression(_ name: String, _ args: [Any]) -> String {
 private func formatValue(_ value: Any) -> String {
   switch value {
   case is String:
-    return "'\(value)'".replacingOccurrences(of: "\\", with: "\\\\")
+    "'\(value)'".replacingOccurrences(of: "\\", with: "\\\\")
   case is [Any]:
-    return "<array>"
+    "<array>"
   case is [String: Any]:
-    return "<dict>"
+    "<dict>"
   default:
-    return AnyCalcExpression.stringify(value)
+    AnyCalcExpression.stringify(value)
   }
 }
 
-private func formatTypes(_ args: [Any]) -> String {
-  args.map {
-    switch $0 {
-    case is Double:
-      "Number"
-    case is Bool:
-      "Boolean"
-    default:
-      "\(type(of: $0))"
+private func formatTypes(
+  _ args: [Any],
+  _ isMethod: Bool
+) -> String {
+  args
+    .enumerated()
+    .filter { $0.offset > 0 || !isMethod }
+    .map {
+      switch $0.element {
+      case is Double:
+        "Number"
+      case is Bool:
+        "Boolean"
+      default:
+        "\(type(of: $0.element))"
+      }
     }
-  }.joined(separator: ", ")
+    .joined(separator: ", ")
 }
 
-private let staticFunctions: [CalcExpression.Symbol: Function] = {
-  var functions: [CalcExpression.Symbol: Function] = [:]
-  ArrayFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
-  CastFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
-  ColorFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
-  DatetimeFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
-  DictFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
-  IntervalFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
-  MathFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
-  StringFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
-  ToStringFunctions.all.forEach { functions[$0] = $1 }
+private let staticFunctions: [String: Function] = {
+  var functions: [String: Function] = [:]
+  CastFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
+  ColorFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
+  DatetimeFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
+  IntervalFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
+  MathFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
+  StringFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
+  functions.addArrayFunctions()
+  functions.addDictFunctions()
+  functions.addToStringFunctions()
   return functions
 }()
 
@@ -159,8 +174,9 @@ private let operators: [CalcExpression.Symbol: Function] = {
   return operators
 }()
 
-extension [CalcExpression.Symbol: Function] {
-  fileprivate mutating func put(_ name: String, _ function: Function) {
-    self[.function(name)] = function
-  }
-}
+private let methods: [String: Function] = {
+  var methods: [String: Function] = [:]
+  methods.addGetMethods()
+  methods.addToStringMethods()
+  return methods
+}()

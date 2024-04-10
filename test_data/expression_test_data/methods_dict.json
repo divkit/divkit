@@ -1,0 +1,316 @@
+{
+  "cases": [
+    {
+      "name": "dict_var.getArray('array_prop') => array",
+      "expression": "@{dict_var.getArray('array_prop')}",
+      "expected": {
+        "type": "array",
+        "value": [
+          "string",
+          12
+        ]
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "array_prop": [
+              "string",
+              12
+            ]
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getBoolean('boolean_prop') => true",
+      "expression": "@{dict_var.getBoolean('boolean_prop')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "boolean_prop": true
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getBoolean('integer_prop') => error",
+      "expression": "@{dict_var.getBoolean('integer_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getBoolean('integer_prop')]. Incorrect value type: expected \"boolean\", got \"number\"."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "integer_prop": 1
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getColor('color_prop') => #AABBCC",
+      "expression": "@{dict_var.getColor('color_prop')}",
+      "expected": {
+        "type": "color",
+        "value": "#AABBCC"
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "color_prop": "#AABBCC"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getDict('dict_prop') => dict",
+      "expression": "@{dict_var.getDict('dict_prop')}",
+      "expected": {
+        "type": "dict",
+        "value": {
+          "param1": "value1",
+          "param2": 12
+        }
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "dict_prop": {
+              "param1": "value1",
+              "param2": 12
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getInteger('integer_prop') => 123",
+      "expression": "@{dict_var.getInteger('integer_prop')}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "integer_prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getInteger('dict_prop', 'dict_prop', 'integer_prop') => 123",
+      "expression": "@{dict_var.getInteger('dict_prop', 'dict_prop', 'integer_prop')}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "dict_prop": {
+              "dict_prop": {
+                "integer_prop": 123
+              }
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getNumber('number_prop') => 123.45",
+      "expression": "@{dict_var.getNumber('number_prop')}",
+      "expected": {
+        "type": "number",
+        "value": 123.45
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "number_prop": 123.45
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getString('string_prop') => 'Hello!'",
+      "expression": "@{dict_var.getString('string_prop')}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "string_prop": "Hello!"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getString('dict_prop', 'string_prop') => 'Hello!'",
+      "expression": "@{dict_var.getString('dict_prop', 'string_prop')}",
+      "expected": {
+        "type": "string",
+        "value": "Hello!"
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "dict_prop": {
+              "string_prop": "Hello!"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getUrl('url_prop') => https://some.url",
+      "expression": "@{dict_var.getUrl('url_prop')}",
+      "expected": {
+        "type": "url",
+        "value": "https://some.url"
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "url_prop": "https://some.url"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getString('missing_prop') => error",
+      "expression": "@{dict_var.getString('missing_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getString('missing_prop')]. Missing property \"missing_prop\" in the dict."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getArray('missing_prop') => error",
+      "expression": "@{dict_var.getArray('missing_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArray('missing_prop')]. Missing property \"missing_prop\" in the dict."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getDict('missing_prop') => error",
+      "expression": "@{dict_var.getDict('missing_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDict('missing_prop')]. Missing property \"missing_prop\" in the dict."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.getString('integer_prop') => error",
+      "expression": "@{dict_var.getString('integer_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getString('integer_prop')]. Incorrect value type: expected \"string\", got \"number\"."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "integer_prop": 10
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    }
+  ]
+}

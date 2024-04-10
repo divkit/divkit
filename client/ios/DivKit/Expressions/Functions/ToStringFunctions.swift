@@ -2,28 +2,27 @@ import Foundation
 
 import CommonCorePublic
 
-enum ToStringFunctions {
-  static var all: [CalcExpression.Symbol: Function] = [
-    .function("toString"): OverloadedFunction(
-      functions: [
-        boolFunction,
-        intFunction,
-        doubleFunction,
-        colorFunction,
-        urlFunction,
-      ]
-    ),
-    .method("toString"): OverloadedFunction(
-      functions: [
-        stringFunction,
-        boolFunction,
-        intFunction,
-        doubleFunction,
-        colorFunction,
-        urlFunction,
-      ]
-    ),
-  ]
+extension [String: Function] {
+  mutating func addToStringFunctions() {
+    self["toString"] = OverloadedFunction(functions: [
+      boolFunction,
+      intFunction,
+      doubleFunction,
+      colorFunction,
+      urlFunction,
+    ])
+  }
+
+  mutating func addToStringMethods() {
+    self["toString"] = OverloadedFunction(functions: [
+      stringFunction,
+      boolFunction,
+      intFunction,
+      doubleFunction,
+      colorFunction,
+      urlFunction,
+    ])
+  }
 }
 
 private let stringFunction = FunctionUnary<String, String> { $0 }

@@ -909,7 +909,6 @@ extension UnicodeScalarView {
       parseIdentifier() ??
       parseOperator() ??
       parseEscapedIdentifier() {
-
       // Prepare for next iteration
       var followedByWhitespace = skipWhitespace() || isEmpty
 

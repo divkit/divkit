@@ -31,7 +31,7 @@ private func runTest(_ testCase: SignatureTestCase) {
   )
   let functionName = testCase.functionName
   let function = functionsProvider.functions
-    .first { symbol, _ in symbol.name == functionName }
+    .first { name, _ in name == functionName }
     .map { $1 }
   guard let function else {
     XCTFail("Function \(functionName) is not found")
