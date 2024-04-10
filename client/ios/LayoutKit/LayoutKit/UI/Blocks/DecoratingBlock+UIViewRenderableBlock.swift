@@ -222,29 +222,30 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   private func configureRecognizers() {
     guard model.shouldHandleTap else {
-      tapRecognizer = nil
-      doubleTapRecognizer = nil
-      longPressRecognizer = nil
+      tapRecognizer?.isEnabled = false
+      doubleTapRecognizer?.isEnabled = false
+      longPressRecognizer?.isEnabled = false
       return
     }
 
-    let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-    self.tapRecognizer = tapRecognizer
-
-    longPressRecognizer = if model.shouldHandleLongTap {
-      UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
-    } else {
-      nil
+    if tapRecognizer == nil {
+      tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
     }
 
-    if model.shouldHandleDoubleTap {
+    if model.shouldHandleDoubleTap, doubleTapRecognizer == nil {
       let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
       doubleTapRecognizer.numberOfTapsRequired = 2
       self.doubleTapRecognizer = doubleTapRecognizer
-      tapRecognizer.require(toFail: doubleTapRecognizer)
-    } else {
-      doubleTapRecognizer = nil
+      tapRecognizer?.require(toFail: doubleTapRecognizer)
     }
+
+    if model.shouldHandleLongTap, longPressRecognizer == nil {
+      longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+    }
+
+    tapRecognizer?.isEnabled = model.shouldHandleTap
+    doubleTapRecognizer?.isEnabled = model.shouldHandleDoubleTap
+    longPressRecognizer?.isEnabled = model.shouldHandleLongTap
   }
 
   @available(*, unavailable)
