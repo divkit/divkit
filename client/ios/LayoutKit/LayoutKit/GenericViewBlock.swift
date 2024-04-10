@@ -117,6 +117,25 @@ public final class GenericViewBlock: BlockWithTraits {
 extension GenericViewBlock: LayoutCachingDefaultImpl {}
 extension GenericViewBlock: ElementStateUpdatingDefaultImpl {}
 
+#if os(iOS)
+public extension GenericViewBlock {
+  static func makeIntrinsicSized(for view: ViewType) -> GenericViewBlock {
+    let calculator = ClosureIntrinsicCalculator(
+      widthGetter: { view.sizeThatFits(.infinite).width },
+      heightGetter: { width in
+        view.sizeThatFits(CGSize(width: width, height: .infinity)).height
+      }
+    )
+    let block = GenericViewBlock(
+      content: .view(view),
+      width: .intrinsic(calculator),
+      height: .intrinsic(calculator)
+    )
+    return block
+  }
+}
+#endif
+
 extension GenericViewBlock.Content {
   static func ===(lhs: GenericViewBlock.Content, rhs: GenericViewBlock.Content) -> Bool {
     switch (lhs, rhs) {
