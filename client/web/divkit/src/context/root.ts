@@ -53,6 +53,7 @@ export interface RootCtxValue {
     getBuiltinProtocols(): Set<string>;
     getExtension(id: string, params: object | undefined): DivExtension | undefined;
     getExtensionContext(): DivExtensionContext;
+    registerTimeout(timeout: number): void;
     isPointerFocus: Readable<boolean>;
     typefaceProvider: TypefaceProvider;
     isDesktop: Readable<boolean>;

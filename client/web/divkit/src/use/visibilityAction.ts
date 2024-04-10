@@ -18,6 +18,16 @@ interface IndexedCalcedAction extends CalcedAction {
     index: number;
 }
 
+interface VisibilityStatus {
+    type: 'visibility' | 'disappear';
+    index: number;
+    action: MaybeMissing<VisibilityAction | DisappearAction>;
+    visible: boolean;
+    count: number;
+    finished: boolean;
+    timer?: ReturnType<typeof setTimeout>;
+}
+
 function checkPercentage(isVisibility: boolean, val: number | undefined, defaultVal: number): number {
     if (typeof val === 'number') {
         if (
@@ -45,15 +55,7 @@ export function visibilityAction(node: HTMLElement, {
     rootCtx: RootCtxValue;
     componentContext: ComponentContext;
 }) {
-    const visibilityStatus: {
-        type: 'visibility' | 'disappear';
-        index: number;
-        action: MaybeMissing<VisibilityAction | DisappearAction>;
-        visible: boolean;
-        count: number;
-        finished: boolean;
-        timer?: ReturnType<typeof setTimeout>;
-    }[] = [];
+    const visibilityStatus: VisibilityStatus[] = [];
 
     if (visibilityActions) {
         visibilityActions.forEach(it => {
@@ -74,9 +76,9 @@ export function visibilityAction(node: HTMLElement, {
                 type: 'disappear',
                 index: visibilityStatus.length,
                 action: it,
+                // false, so disappear only works after the element becomes visible
                 visible: false,
                 count: 0,
-                // false, so disappear only works after the element becomes visible
                 finished: false
             });
         });
@@ -84,6 +86,7 @@ export function visibilityAction(node: HTMLElement, {
 
     const calcedList: Readable<CalcedAction>[] = visibilityStatus.map((it, index) => {
         const isVisibility = it.type === 'visibility';
+
         return componentContext.getDerivedFromVars({
             index,
             visibility_percentage: it.action.visibility_percentage,
@@ -109,9 +112,33 @@ export function visibilityAction(node: HTMLElement, {
     };
 
     const totalStore = derived(calcedList, values => values);
+    let filtered: IndexedCalcedAction[];
+
+    const callAction = (status: VisibilityStatus) => {
+        const isVisibility = status.type === 'visibility';
+        const calcedAction = componentContext.getJsonWithVars(status.action);
+        const actionUrl = calcedAction.url;
+        const actionTyped = calcedAction.typed;
+        if (actionUrl) {
+            const schema = getUrlSchema(actionUrl);
+            if (schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols())) {
+                if (schema === 'div-action') {
+                    rootCtx.execAction(calcedAction);
+                } else if (calcedAction.log_id) {
+                    rootCtx.execCustomAction(
+                        calcedAction as VisibilityAction & { url: string }
+                    );
+                }
+            }
+        } else if (actionTyped) {
+            rootCtx.execAction(calcedAction);
+        }
+
+        rootCtx.logStat(isVisibility ? 'visible' : 'disappear', calcedAction);
+    };
 
     const unsubscribe = totalStore.subscribe(values => {
-        const filtered = values.filter(filterActions);
+        filtered = values.filter(filterActions);
 
         const map: Record<number, IndexedCalcedAction> = {};
         filtered.forEach(it => {
@@ -169,25 +196,7 @@ export function visibilityAction(node: HTMLElement, {
                                     status.finished = true;
                                 }
 
-                                const calcedAction = componentContext.getJsonWithVars(status.action);
-                                const actionUrl = calcedAction.url;
-                                const actionTyped = calcedAction.typed;
-                                if (actionUrl) {
-                                    const schema = getUrlSchema(actionUrl);
-                                    if (schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols())) {
-                                        if (schema === 'div-action') {
-                                            rootCtx.execAction(calcedAction);
-                                        } else if (calcedAction.log_id) {
-                                            rootCtx.execCustomAction(
-                                                calcedAction as VisibilityAction & { url: string }
-                                            );
-                                        }
-                                    }
-                                } else if (actionTyped) {
-                                    rootCtx.execAction(calcedAction);
-                                }
-
-                                rootCtx.logStat(isVisibility ? 'visible' : 'disappear', calcedAction);
+                                callAction(status);
                             }, correctNonNegativeNumber(calcedParams.visibility_duration, 800));
                         }
                     } else if (shouldClear) {
@@ -209,6 +218,18 @@ export function visibilityAction(node: HTMLElement, {
 
     return {
         destroy() {
+            filtered?.forEach(calcedAction => {
+                const status = visibilityStatus[calcedAction.index];
+
+                if (!status || status.type !== 'disappear' || !status.visible || status.finished) {
+                    return;
+                }
+
+                rootCtx.registerTimeout(window.setTimeout(() => {
+                    callAction(status);
+                }, calcedAction.visibility_duration));
+            });
+
             cleanup();
 
             unsubscribe();

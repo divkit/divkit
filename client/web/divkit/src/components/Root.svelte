@@ -209,6 +209,8 @@
         timeoutId: number | null;
     }[] = [];
 
+    const timeouts: number[] = [];
+
     function mergeVars(
         variables0: Map<string, Variable>,
         variables1: Map<string, Variable> | undefined
@@ -1220,6 +1222,10 @@
         return res;
     }
 
+    function registerTimeout(timeout: number): void {
+        timeouts.push(timeout);
+    }
+
     setContext<RootCtxValue>(ROOT_CTX, {
         logStat,
         hasTemplate,
@@ -1248,6 +1254,7 @@
         getBuiltinProtocols,
         getExtension,
         getExtensionContext,
+        registerTimeout,
         typefaceProvider,
         isDesktop,
         isPointerFocus,
@@ -1643,6 +1650,10 @@
                 clearTimeout(info.timeoutId);
                 info.timeoutId = null;
             }
+        });
+
+        timeouts.forEach(timeout => {
+            clearTimeout(timeout);
         });
     });
 </script>
