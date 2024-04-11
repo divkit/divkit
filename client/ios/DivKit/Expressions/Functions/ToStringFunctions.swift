@@ -5,16 +5,6 @@ import CommonCorePublic
 extension [String: Function] {
   mutating func addToStringFunctions() {
     self["toString"] = OverloadedFunction(functions: [
-      boolFunction,
-      intFunction,
-      doubleFunction,
-      colorFunction,
-      urlFunction,
-    ])
-  }
-
-  mutating func addToStringMethods() {
-    self["toString"] = OverloadedFunction(functions: [
       stringFunction,
       boolFunction,
       intFunction,

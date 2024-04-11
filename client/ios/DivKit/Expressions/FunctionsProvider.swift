@@ -65,9 +65,9 @@ final class FunctionsProvider {
           guard let self else {
             return nil
           }
-          return makeEvaluator(name: name, functions: self.functions, isMethod: false)
+          return makeEvaluator(symbol, functions: self.functions)
         case let .method(name):
-          return makeEvaluator(name: name, functions: methods, isMethod: true)
+          return makeEvaluator(symbol, functions: methods)
         case .postfix:
           return nil
         }
@@ -76,28 +76,34 @@ final class FunctionsProvider {
 }
 
 private func makeEvaluator(
-  name: String,
-  functions: [String: Function],
-  isMethod: Bool
+  _ symbol: CalcExpression.Symbol,
+  functions: [String: Function]
 ) -> AnyCalcExpression.SymbolEvaluator? {
   { args in
+    let name = symbol.name
     guard let function = functions[name] else {
       throw CalcExpression.Error.message(
-        "Failed to evaluate [\(formatExpression(name, args, isMethod))]. Unknown function name: \(name)."
+        "Failed to evaluate [\(symbol.formatExpression(args))]. Unknown \(symbol.type) name: \(name)."
       )
     }
     do {
       return try function.invoke(args: args)
     } catch let error as CalcExpression.Error {
-      let message = "Failed to evaluate [\(formatExpression(name, args, isMethod))]."
+      let message = "Failed to evaluate [\(symbol.formatExpression(args))]."
+      let correctedArgs: [Any]
+      if case .method = symbol {
+        correctedArgs = Array(args.dropFirst())
+      } else {
+        correctedArgs = args
+      }
       if error == .noMatchingSignature {
-        if args.count == 0 {
+        if correctedArgs.count == 0 {
           throw CalcExpression.Error.message(
-            "\(message) Non empty argument list is required for function '\(name)'."
+            "\(message) Non empty argument list is required for \(symbol.type) '\(name)'."
           )
         }
         throw CalcExpression.Error.message(
-          "\(message) Function '\(name)' has no matching override for given argument types: \(formatTypes(args, isMethod))."
+          "\(message) \(symbol.type.capitalized) '\(name)' has no matching override for given argument types: \(formatTypes(correctedArgs))."
         )
       }
       throw CalcExpression.Error.message("\(message) \(error.localizedDescription)")
@@ -105,47 +111,16 @@ private func makeEvaluator(
   }
 }
 
-private func formatExpression(
-  _ name: String,
-  _ args: [Any],
-  _ isMethod: Bool
-) -> String {
-  let argsString = args
-    .enumerated()
-    .filter { $0.offset > 0 || !isMethod }
-    .map { formatValue($0.element) }
-    .joined(separator: ", ")
-  return "\(name)(\(argsString))"
-}
-
-private func formatValue(_ value: Any) -> String {
-  switch value {
-  case is String:
-    "'\(value)'".replacingOccurrences(of: "\\", with: "\\\\")
-  case is [Any]:
-    "<array>"
-  case is [String: Any]:
-    "<dict>"
-  default:
-    AnyCalcExpression.stringify(value)
-  }
-}
-
-private func formatTypes(
-  _ args: [Any],
-  _ isMethod: Bool
-) -> String {
+private func formatTypes(_ args: [Any]) -> String {
   args
-    .enumerated()
-    .filter { $0.offset > 0 || !isMethod }
     .map {
-      switch $0.element {
+      switch $0 {
       case is Double:
         "Number"
       case is Bool:
         "Boolean"
       default:
-        "\(type(of: $0.element))"
+        "\(type(of: $0))"
       }
     }
     .joined(separator: ", ")
@@ -177,6 +152,6 @@ private let operators: [CalcExpression.Symbol: Function] = {
 private let methods: [String: Function] = {
   var methods: [String: Function] = [:]
   methods.addGetMethods()
-  methods.addToStringMethods()
+  methods.addToStringFunctions()
   return methods
 }()

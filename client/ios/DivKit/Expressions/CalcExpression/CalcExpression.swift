@@ -45,97 +45,6 @@ final class CalcExpression: CustomStringConvertible {
   /// Evaluator for individual symbols
   typealias SymbolEvaluator = (_ args: [Value]) throws -> Value
 
-  /// Type representing the arity (number of arguments) accepted by a function
-  enum Arity {
-    /// An exact number of arguments
-    case exactly(Int)
-
-    /// A minimum number of arguments
-    case atLeast(Int)
-
-    /// No-op Hashable implementation
-    /// Required to support custom Equatable implementation
-    func hash(into _: inout Hasher) {}
-
-    /// Equatable implementation
-    /// Note: this works more like a contains() function if
-    /// one side a range and the other is an exact value
-    /// This allows foo(x) to match foo(...) in a symbols dictionary
-    static func ==(lhs: Arity, rhs: Arity) -> Bool {
-      lhs.matches(rhs)
-    }
-
-    func matches(_ arity: Arity) -> Bool {
-      switch (self, arity) {
-      case let (.exactly(lhs), .exactly(rhs)),
-           let (.atLeast(lhs), .atLeast(rhs)):
-        lhs == rhs
-      case let (.atLeast(min), .exactly(value)),
-           let (.exactly(value), .atLeast(min)):
-        value >= min
-      }
-    }
-  }
-
-  /// Symbols that make up an expression
-  enum Symbol: CustomStringConvertible, Hashable {
-    /// A named variable
-    case variable(String)
-
-    /// An infix operator
-    case infix(String)
-
-    /// A prefix operator
-    case prefix(String)
-
-    /// A postfix operator
-    case postfix(String)
-
-    /// A function
-    case function(String)
-
-    /// A method
-    case method(String)
-
-    /// The symbol name
-    var name: String {
-      switch self {
-      case let .variable(name),
-           let .infix(name),
-           let .prefix(name),
-           let .postfix(name),
-           let .function(name),
-           let .method(name):
-        name
-      }
-    }
-
-    /// Printable version of the symbol name
-    var escapedName: String {
-      UnicodeScalarView(name).escapedIdentifier()
-    }
-
-    /// The human-readable description of the symbol
-    var description: String {
-      switch self {
-      case .variable:
-        "Variable \(escapedName)"
-      case .infix("?:"):
-        "Ternary operator ?:"
-      case .infix:
-        "Infix operator \(escapedName)"
-      case .prefix:
-        "Prefix operator \(escapedName)"
-      case .postfix:
-        "Postfix operator \(escapedName)"
-      case .function:
-        "Function \(escapedName)()"
-      case .method:
-        "Method \(escapedName)()"
-      }
-    }
-  }
-
   init(
     _ expression: ParsedCalcExpression,
     evaluators: @escaping (Symbol) -> SymbolEvaluator
@@ -334,7 +243,7 @@ private enum Subexpression: CustomStringConvertible {
       return AnyCalcExpression.stringify(literal.value)
     case let .symbol(symbol, args):
       guard isOperand else {
-        return symbol.escapedName
+        return symbol.name
       }
       func needsSeparation(_ lhs: String, _ rhs: String) -> Bool {
         let lhs = lhs.unicodeScalars.last!, rhs = rhs.unicodeScalars.first!
@@ -347,9 +256,9 @@ private enum Subexpression: CustomStringConvertible {
         switch arg {
         case .symbol(.infix, _), .symbol(.postfix, _), .error,
              .symbol where needsSeparation(name, description):
-          return "\(symbol.escapedName)(\(description))" // Parens required
+          return "\(symbol.name)(\(description))" // Parens required
         case .symbol, .literal:
-          return "\(symbol.escapedName)\(description)" // No parens needed
+          return "\(symbol.name)\(description)" // No parens needed
         }
       case let .postfix(name):
         let arg = args[0]
@@ -357,9 +266,9 @@ private enum Subexpression: CustomStringConvertible {
         switch arg {
         case .symbol(.infix, _), .symbol(.postfix, _), .error,
              .symbol where needsSeparation(description, name):
-          return "(\(description))\(symbol.escapedName)" // Parens required
+          return "(\(description))\(symbol.name)" // Parens required
         case .symbol, .literal:
-          return "\(description)\(symbol.escapedName)" // No parens needed
+          return "\(description)\(symbol.name)" // No parens needed
         }
       case .infix("?:") where args.count == 3:
         return "\(args[0]) ? \(args[1]) : \(args[2])"
@@ -380,14 +289,14 @@ private enum Subexpression: CustomStringConvertible {
         default:
           "\(rhs)"
         }
-        return "\(lhsDescription) \(symbol.escapedName) \(rhsDescription)"
+        return "\(lhsDescription) \(symbol.name) \(rhsDescription)"
       case .variable:
-        return symbol.escapedName
+        return symbol.name
       case .function:
-        return "\(symbol.escapedName)(\(arguments(args)))"
+        return "\(symbol.name)(\(arguments(args)))"
       case .method:
         let thisArg = args.first?.description ?? ""
-        return "\(thisArg).\(symbol.escapedName)(\(arguments(args.dropFirst())))"
+        return "\(thisArg).\(symbol.name)(\(arguments(args.dropFirst())))"
       }
     case let .error(_, expression):
       return expression
@@ -411,7 +320,7 @@ private enum Subexpression: CustomStringConvertible {
 // MARK: Expression parsing
 
 // Workaround for horribly slow Substring.UnicodeScalarView perf
-private struct UnicodeScalarView {
+struct UnicodeScalarView {
   typealias Index = String.UnicodeScalarView.Index
 
   private let characters: String.UnicodeScalarView
@@ -693,36 +602,6 @@ extension UnicodeScalarView {
       identifier += tail
     }
     return makeVariable(identifier)
-  }
-
-  // Note: this is not actually part of the parser, but is colocated
-  // with `parseEscapedIdentifier()` because they should be updated together
-  fileprivate func escapedIdentifier() -> String {
-    guard let delimiter = first, "`'\"".unicodeScalars.contains(delimiter) else {
-      return String(self)
-    }
-    var result = String(delimiter)
-    var index = self.index(after: startIndex)
-    while index != endIndex {
-      let char = self[index]
-      switch char.value {
-      case 0:
-        result += "\\0"
-      case 9:
-        result += "\\t"
-      case 10:
-        result += "\\n"
-      case 13:
-        result += "\\r"
-      case 0x20..<0x7F,
-           _ where isOperator(char) || isIdentifier(char):
-        result.append(Character(char))
-      default:
-        result += "\\u{\(String(format: "%X", char.value))}"
-      }
-      index = self.index(after: index)
-    }
-    return result
   }
 
   fileprivate mutating func parseEscapedIdentifier() -> Subexpression? {

@@ -229,6 +229,18 @@
       ]
     },
     {
+      "name": "toString('abc') => 'abc'",
+      "expression": "@{toString('abc')}",
+      "expected": {
+        "type": "string",
+        "value":  "abc"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "empty argument list => error",
       "expression": "@{toString()}",
       "expected": {

@@ -311,6 +311,24 @@
       "platforms": [
         "ios"
       ]
+    },
+    {
+      "name": "dict_var.getString() => error",
+      "expression": "@{dict_var.getString()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getString()]. Non empty argument list is required for method 'getString'."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

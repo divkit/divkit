@@ -1,7 +1,7 @@
 {
   "cases": [
     {
-      "name": "'Hello!'.toString()",
+      "name": "'Hello!'.toString() => 'Hello!'",
       "expression": "@{'Hello!'.toString()}",
       "expected": {
         "type": "string",
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "name": "123.toString()",
+      "name": "123.toString() => '123'",
       "expression": "@{123.toString()}",
       "expected": {
         "type": "string",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "123.45.toString()",
+      "name": "123.45.toString() => '123.45'",
       "expression": "@{123.45.toString()}",
       "expected": {
         "type": "string",
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "name": "true.toString()",
+      "name": "true.toString() => 'true'",
       "expression": "@{true.toString()}",
       "expected": {
         "type": "string",
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "name": "color_var.toString()",
+      "name": "color_var.toString() => '#FFAABBCC'",
       "expression": "@{color_var.toString()}",
       "expected": {
         "type": "string",
@@ -67,7 +67,7 @@
       ]
     },
     {
-      "name": "url_var.toString()",
+      "name": "url_var.toString() => 'https://some.url'",
       "expression": "@{url_var.toString()}",
       "expected": {
         "type": "string",
@@ -85,7 +85,7 @@
       ]
     },
     {
-      "name": "dict_var.toString()",
+      "name": "dict_var.toString() => error",
       "expression": "@{dict_var.toString()}",
       "expected": {
         "type": "error",
@@ -105,7 +105,7 @@
       ]
     },
     {
-      "name": "'Hello!'.toString().toString()",
+      "name": "'Hello!'.toString().toString() => 'Hello!'",
       "expression": "@{'Hello!'.toString().toString()}",
       "expected": {
         "type": "string",
@@ -117,7 +117,7 @@
       ]
     },
     {
-      "name": "toString(123).toString()",
+      "name": "toString(123).toString() => '123'",
       "expression": "@{toString(123).toString()}",
       "expected": {
         "type": "string",
@@ -129,7 +129,7 @@
       ]
     },
     {
-      "name": "string.var.toString()",
+      "name": "string.var.toString() => 'Hello!'",
       "expression": "@{string.var.toString()}",
       "expected": {
         "type": "string",
@@ -147,7 +147,7 @@
       ]
     },
     {
-      "name": "'Hello!' .toString()",
+      "name": "'Hello!' .toString() => 'Hello!'",
       "expression": "@{'Hello!' .toString()}",
       "expected": {
         "type": "string",
@@ -158,7 +158,7 @@
       ]
     },
     {
-      "name": "'Hello!'. toString()",
+      "name": "'Hello!'. toString() => 'Hello!'",
       "expression": "@{'Hello!'. toString()}",
       "expected": {
         "type": "string",
@@ -169,7 +169,7 @@
       ]
     },
     {
-      "name": "'Hello!'.toString ()",
+      "name": "'Hello!'.toString () => 'Hello!'",
       "expression": "@{'Hello!'.toString ()}",
       "expected": {
         "type": "string",
@@ -180,11 +180,22 @@
       ]
     },
     {
-      "name": "'Hello!'.toString",
+      "name": "'Hello!'.toString => error",
       "expression": "@{'Hello!'.toString}",
       "expected": {
         "type": "error",
         "value": "Method expected after ."
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "'#FFAABBCCC'.getColorAlpha() => error",
+      "expression": "@{'#FFAABBCCC'.getColorAlpha()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getColorAlpha()]. Unknown method name: getColorAlpha."
       },
       "platforms": [
         "ios"
