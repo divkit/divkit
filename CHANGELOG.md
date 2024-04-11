@@ -1,3 +1,18 @@
+## 29.14.0
+
+# Android Client:
+* Added implicit cast from `integer` to `number` inside evaluable expressions.
+* Supported flag `is_enabled` for `input`.
+* Fixed `restrict_parent_scroll` to restrict both directions
+* Fixed reusing of view id in same Div2Context
+* Added support of signed numbers in numeric `div-input`
+
+# iOS Client:
+* Added `toString()` method support in expressions.
+* Fixed ternary operator parsing.
+* Added get methods for dictionaries and arrays in expressions.
+
+
 ## 29.13.0
 
 # Android Client:
