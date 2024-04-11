@@ -153,7 +153,7 @@ public struct GalleryViewModel: Equatable {
   }
 
   var infiniteCorrection: Int {
-    infiniteScroll ? 1 : 0
+    infiniteScroll && items.count > 0 ? 1 : 0
   }
 }
 

@@ -175,5 +175,5 @@ private func makeGalleryViewState(
     itemsCount: model.items.count,
     isScrolling: oldState?.isScrolling ?? false,
     scrollRange: oldState?.scrollRange
-  )
+  ).resetToModelIfInconsistent(model)
 }
