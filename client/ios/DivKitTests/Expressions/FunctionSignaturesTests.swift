@@ -49,7 +49,6 @@ private struct TestCases: Decodable {
 }
 
 private struct SignatureTestCase: Decodable {
-  let name: String
   let functionName: String
   let arguments: [ArgumentSignature]?
   let resultType: ArgumentType
@@ -62,8 +61,14 @@ private struct SignatureTestCase: Decodable {
     )
   }
 
+  var name: String {
+    let args = (arguments ?? [])
+      .map { $0.vararg == true ? "vararg \($0.type.rawValue)" : $0.type.rawValue }
+      .joined(separator: ", ")
+    return "\(functionName)(\(args)) -> \(resultType)"
+  }
+
   private enum CodingKeys: String, CodingKey {
-    case name
     case functionName = "function_name"
     case arguments
     case resultType = "result_type"

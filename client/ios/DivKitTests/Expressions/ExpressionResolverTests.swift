@@ -9,9 +9,10 @@ final class ExpressionResolverTests: XCTestCase {
 
   private lazy var expressionResolver = ExpressionResolver(
     variables: [
-      "array_var": .array([1]),
+      "array_var": .array(["value", true, [123, 123.45]]),
       "boolean_var": .bool(true),
       "color_var": .color(color("#AABBCC")),
+      "dict_var": .dict(["string": "value"]),
       "enum_var": .string("first"),
       "integer_var": .integer(123),
       "number_var": .number(12.9),
@@ -49,6 +50,20 @@ final class ExpressionResolverTests: XCTestCase {
     XCTAssertEqual(
       expressionResolver.resolveString(expression("@{'Value: @{string_var}'}")),
       "Value: string value"
+    )
+  }
+
+  func test_ResolveString_Array() {
+    XCTAssertEqual(
+      expressionResolver.resolveString(expression("@{array_var}")),
+      "[\"value\",true,[123,123.45]]"
+    )
+  }
+
+  func test_ResolveString_Dictionary() {
+    XCTAssertEqual(
+      expressionResolver.resolveString(expression("@{dict_var}")),
+      "{\"string\":\"value\"}"
     )
   }
 
@@ -158,7 +173,14 @@ final class ExpressionResolverTests: XCTestCase {
   func test_ResolveArray_WithVariable() throws {
     XCTAssertEqual(
       expressionResolver.resolveArray(expression("@{array_var}")) as! [AnyHashable],
-      [1]
+      ["value", true, [123, 123.45]]
+    )
+  }
+
+  func test_ResolveDict_WithVariable() throws {
+    XCTAssertEqual(
+      expressionResolver.resolveDict(expression("@{dict_var}")) as! [String: AnyHashable],
+      ["string": "value"]
     )
   }
 

@@ -240,7 +240,7 @@ private enum Subexpression: CustomStringConvertible {
     }
     switch self {
     case let .literal(literal):
-      return AnyCalcExpression.stringify(literal.value)
+      return CalcExpression.stringify(literal.value)
     case let .symbol(symbol, args):
       guard isOperand else {
         return symbol.name

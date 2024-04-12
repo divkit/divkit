@@ -111,7 +111,7 @@ struct AnyCalcExpression {
 
     switch T.self {
     case is _String.Type:
-      return (AnyCalcExpression.cast(AnyCalcExpression.stringify(value)) as T?)!
+      return (AnyCalcExpression.cast(CalcExpression.stringify(value)) as T?)!
     default:
       break
     }
@@ -120,9 +120,7 @@ struct AnyCalcExpression {
       "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
     )
   }
-}
 
-extension AnyCalcExpression {
   @usableFromInline
   static func cast<T>(_ anyValue: Any) -> T? {
     if let value = anyValue as? T {
@@ -145,46 +143,6 @@ extension AnyCalcExpression {
       return (anyValue as? _String)?.substring as! T?
     default:
       return nil
-    }
-  }
-
-  @usableFromInline
-  static func stringify(_ value: Any) -> String {
-    switch value {
-    case let number as NSNumber:
-      // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
-      switch UnicodeScalar(UInt8(number.objCType.pointee)) {
-      case "c", "B":
-        return number == 0 ? "false" : "true"
-      case "d":
-        let formatter = NumberFormatter()
-        let double = number.doubleValue
-        if double >= 1e7 || double <= -1e7 {
-          formatter.numberStyle = NumberFormatter.Style.scientific
-        }
-        formatter.minimumFractionDigits = 1
-        formatter.maximumFractionDigits = 15
-        formatter.locale = Locale(identifier: "en")
-        return formatter.string(from: number)!
-      default:
-        break
-      }
-      if let int = Int64(exactly: number) {
-        return "\(int)"
-      }
-      if let uint = UInt64(exactly: number) {
-        return "\(uint)"
-      }
-      return "\(number)"
-    case let color as RGBAColor:
-      return color.argbString
-    case let date as Date:
-      let dateFormatter = DateFormatter()
-      dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-      dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-      return dateFormatter.string(from: date)
-    default:
-      return "\(value)"
     }
   }
 }

@@ -119,8 +119,8 @@
       "name": "color with format #RGB to string => string",
       "expression": "@{toString(color)}",
       "expected": {
-          "type": "string",
-          "value": "#FFFFCCEE"
+        "type": "string",
+        "value": "#FFFFCCEE"
       },
       "variables": [
         {
@@ -130,89 +130,139 @@
         }
       ],
       "platforms": [
-          "android",
-          "ios",
-          "web"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
       "name": "color with format #ARGB to string => string",
       "expression": "@{toString(color)}",
       "expected": {
-          "type": "string",
-          "value": "#DDFFCCEE"
+        "type": "string",
+        "value": "#DDFFCCEE"
       },
       "variables": [
-          {
-              "type": "color",
-              "name": "color",
-              "value": "#dfce"
-          }
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#dfce"
+        }
       ],
       "platforms": [
-          "android",
-          "ios",
-          "web"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
       "name": "color with format #RRGGBB to string => string",
       "expression": "@{toString(color)}",
       "expected": {
-          "type": "string",
-          "value": "#FFFFCCEE"
+        "type": "string",
+        "value": "#FFFFCCEE"
       },
       "variables": [
-          {
-              "type": "color",
-              "name": "color",
-              "value": "#ffCCeE"
-          }
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#ffCCeE"
+        }
       ],
       "platforms": [
-          "android",
-          "ios",
-          "web"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
       "name": "color with format #AARRGGBB to string => string",
       "expression": "@{toString(color)}",
       "expected": {
-          "type": "string",
-          "value": "#DDFFCCEE"
+        "type": "string",
+        "value": "#DDFFCCEE"
       },
       "variables": [
-          {
-              "type": "color",
-              "name": "color",
-              "value": "#DdffCCeE"
-          }
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#DdffCCeE"
+        }
       ],
       "platforms": [
-          "android",
-          "ios",
-          "web"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
       "name": "url to string => string",
       "expression": "@{toString(url)}",
       "expected": {
-          "type": "string",
-          "value": "https://ya.ru/?hello=1"
+        "type": "string",
+        "value": "https://ya.ru/?hello=1"
       },
       "variables": [
-          {
-              "type": "url",
-              "name": "url",
-              "value": "https://ya.ru/?hello=1"
-          }
+        {
+          "type": "url",
+          "name": "url",
+          "value": "https://ya.ru/?hello=1"
+        }
       ],
       "platforms": [
-          "android",
-          "ios",
-          "web"
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toString(array) => string",
+      "expression": "@{toString(array)}",
+      "expected": {
+        "type": "string",
+        "value": "[\"string\",[123,123.45,true]]"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            [
+              123,
+              123.45,
+              true
+            ]
+          ]
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "toString(dict) => string",
+      "expression": "@{toString(dict)}",
+      "expected": {
+        "type": "string",
+        "value": "{\"boolean\":true,\"dict\":{\"integer\":123,\"number\":123.45},\"string\":\"value\"}"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "boolean": true,
+            "dict": {
+              "integer": 123,
+              "number": 123.45
+            },
+            "string": "value"
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
       ]
     },
     {
@@ -220,7 +270,7 @@
       "expression": "@{toString('abc')}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toString('abc')]. Function 'toString' has no matching override for given argument types: String."
+        "value": "Failed to evaluate [toString('abc')]. Function 'toString' has no matching override for given argument types: String."
       },
       "variables": [],
       "platforms": [
@@ -264,6 +314,7 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     }

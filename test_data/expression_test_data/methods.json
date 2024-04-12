@@ -85,11 +85,31 @@
       ]
     },
     {
-      "name": "dict_var.toString() => error",
+      "name": "array_var.toString() => string",
+      "expression": "@{array_var.toString()}",
+      "expected": {
+        "type": "string",
+        "value": "[\"value 1\"]"
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "value 1"
+          ]
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.toString() => string",
       "expression": "@{dict_var.toString()}",
       "expected": {
-        "type": "error",
-        "value": ""
+        "type": "string",
+        "value": "{\"param1\":\"value 1\"}"
       },
       "variables": [
         {

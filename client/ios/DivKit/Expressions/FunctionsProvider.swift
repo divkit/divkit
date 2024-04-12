@@ -115,10 +115,12 @@ private func formatTypes(_ args: [Any]) -> String {
   args
     .map {
       switch $0 {
-      case is Double:
-        "Number"
       case is Bool:
         "Boolean"
+      case is Int:
+        "Integer"
+      case is Double:
+        "Number"
       default:
         "\(type(of: $0))"
       }

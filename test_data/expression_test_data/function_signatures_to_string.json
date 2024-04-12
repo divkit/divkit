@@ -1,0 +1,134 @@
+{
+  "signatures": [
+    {
+      "name": "toString(array) string",
+      "function_name": "toString",
+      "doc": "Returns a string representation of given value.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "toString(boolean) string",
+      "function_name": "toString",
+      "doc": "Returns a string representation of given value.",
+      "arguments": [
+        {
+          "type": "boolean",
+          "doc": "Value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toString(color) string",
+      "function_name": "toString",
+      "doc": "Returns a string representation of given value.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toString(dict) string",
+      "function_name": "toString",
+      "doc": "Returns a string representation of given value.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "toString(integer) string",
+      "function_name": "toString",
+      "doc": "Returns a string representation of given value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toString(number) string",
+      "function_name": "toString",
+      "doc": "Returns a string representation of given value.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toString(string) string",
+      "function_name": "toString",
+      "doc": "Returns a string representation of given value.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "toString(url) string",
+      "function_name": "toString",
+      "doc": "Returns a string representation of given value.",
+      "arguments": [
+        {
+          "type": "url",
+          "doc": "Value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

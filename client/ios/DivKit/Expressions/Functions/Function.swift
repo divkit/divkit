@@ -281,7 +281,7 @@ struct Argument {
   let value: Any
 
   var formattedValue: String {
-    let value = AnyCalcExpression.stringify(value)
+    let value = CalcExpression.stringify(value)
     switch type {
     case .string:
       return "'\(value)'"
