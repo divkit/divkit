@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
@@ -8,6 +10,7 @@ android {
 
 dependencies {
     implementation project(path: ':assertion')
+    implementation project(path: ':div-core')
 
     implementation libs.javax
     implementation libs.androidx.annotations
@@ -16,5 +19,11 @@ dependencies {
     implementation libs.androidx.viewpager
     implementation(libs.androidx.appcompat)  {
         exclude group: "androidx.fragment", module: "fragment"
+    }
+}
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add('-Xexplicit-api=strict')
     }
 }

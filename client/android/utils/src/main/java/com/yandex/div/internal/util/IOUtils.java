@@ -4,6 +4,8 @@ import android.database.Cursor;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.yandex.div.core.annotations.InternalApi;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -13,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
+@InternalApi
 public final class IOUtils {
 
     private static final int BUFFER_SIZE = 2048;

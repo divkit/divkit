@@ -12,6 +12,8 @@ import androidx.collection.ArrayMap;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.yandex.div.core.annotations.InternalApi;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,6 +23,7 @@ import java.util.Set;
 /**
  * Contains utility methods to check and request permissions.
  */
+@InternalApi
 public class PermissionUtils {
 
     private static final String PREFS_NAME = "PermissionUtils.Prefs";

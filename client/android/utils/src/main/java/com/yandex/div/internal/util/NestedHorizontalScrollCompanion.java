@@ -9,9 +9,12 @@ import androidx.annotation.VisibleForTesting;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.yandex.div.core.annotations.InternalApi;
+
 /**
  * Helper class that enables nested-scrolling.
  */
+@InternalApi
 public class NestedHorizontalScrollCompanion {
     private static final int DX_UNCONSUMED = 1;
 

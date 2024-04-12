@@ -19,6 +19,8 @@ package com.yandex.div.internal.util;
 import android.animation.TypeEvaluator;
 import androidx.annotation.NonNull;
 
+import com.yandex.div.core.annotations.InternalApi;
+
 /**
  * Copypaste of com.google.android.material:material ArgbEvaluatorCompat.
  *
@@ -28,6 +30,7 @@ import androidx.annotation.NonNull;
  * <p>This compat version is copied from {@link android.animation.ArgbEvaluator} with critical bug
  * fixes for older versions of Android.
  */
+@InternalApi
 public class ArgbEvaluatorCompat implements TypeEvaluator<Integer> {
     private static final ArgbEvaluatorCompat instance = new ArgbEvaluatorCompat();
 

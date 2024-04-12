@@ -5,12 +5,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import com.yandex.div.core.annotations.InternalApi;
+
 import javax.inject.Inject;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Defines what clock we use, since Android has couple of them. Additionally it's a unit-test assemble point.
  */
+@InternalApi
 public class Clock {
     @NonNull
     private static Clock sDefault = new Clock();

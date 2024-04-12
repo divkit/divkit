@@ -1,6 +1,9 @@
 package com.yandex.div.internal.util
 
-fun Number.toBoolean(): Boolean? {
+import com.yandex.div.core.annotations.InternalApi
+
+@InternalApi
+public fun Number.toBoolean(): Boolean? {
     return when (toInt()) {
         0 -> false
         1 -> true
@@ -8,7 +11,8 @@ fun Number.toBoolean(): Boolean? {
     }
 }
 
-fun Int.toBoolean(): Boolean {
+@InternalApi
+public fun Int.toBoolean(): Boolean {
     return when (this) {
         0 -> false
         1 -> true

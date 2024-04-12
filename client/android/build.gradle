@@ -56,6 +56,7 @@ allprojects {
                     '-Xjvm-default=all',
                     '-opt-in=com.yandex.div.data.DivModelInternalApi',
                     '-opt-in=com.yandex.yatagan.ConditionsApi',
+                    '-opt-in=com.yandex.div.core.annotations.InternalApi'
             ]
             languageVersion = "1.5"
             apiVersion = "1.5"

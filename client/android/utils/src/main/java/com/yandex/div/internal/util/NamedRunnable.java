@@ -3,6 +3,9 @@ package com.yandex.div.internal.util;
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
+import com.yandex.div.core.annotations.InternalApi;
+
+@InternalApi
 public abstract class NamedRunnable implements Runnable {
     @NonNull
     private final String mThreadSuffix;

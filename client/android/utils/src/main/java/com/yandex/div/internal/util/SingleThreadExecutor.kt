@@ -1,6 +1,7 @@
 package com.yandex.div.internal.util
 
 import com.yandex.div.internal.Assert
+import com.yandex.div.core.annotations.InternalApi
 import java.util.concurrent.Callable
 import java.util.concurrent.Executor
 import java.util.concurrent.Future
@@ -20,7 +21,8 @@ import java.util.concurrent.FutureTask
  * any runtime exceptions in the local code are not handled, but there some safety section that preserves the main
  * invariants.
  */
-abstract class SingleThreadExecutor(
+@InternalApi
+public abstract class SingleThreadExecutor(
     private val executor: Executor,
     private val threadNameSuffix: String
 ) {
@@ -29,7 +31,7 @@ abstract class SingleThreadExecutor(
     private var currentWorker: Worker? = null
     private var passedTasks: MutableList<Runnable>? = null
 
-    fun post(task: Runnable) {
+    public fun post(task: Runnable) {
         var newWorker: Worker? = null
         synchronized(monitor) {
             addTaskLocked(task)
@@ -50,13 +52,13 @@ abstract class SingleThreadExecutor(
         passedTasks?.add(task)
     }
 
-    fun submit(task: Runnable): Future<*> {
+    public fun submit(task: Runnable): Future<*> {
         val future = FutureTask(task, null)
         post(future)
         return future
     }
 
-    fun <T> submit(callable: Callable<T>): Future<T> {
+    public fun <T> submit(callable: Callable<T>): Future<T> {
         val future = FutureTask(callable)
         post(future)
         return future

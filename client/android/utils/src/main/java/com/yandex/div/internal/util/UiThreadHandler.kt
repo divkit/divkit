@@ -2,11 +2,13 @@ package com.yandex.div.internal.util
 
 import android.os.Handler
 import android.os.Looper
+import com.yandex.div.core.annotations.InternalApi
 
 /**
  * Provides static access to the main thread handler.
  */
-object UiThreadHandler {
+@InternalApi
+public object UiThreadHandler {
 
     private val INSTANCE = Handler(Looper.getMainLooper())
 
@@ -14,33 +16,33 @@ object UiThreadHandler {
      * Returns main thread instance.
      */
     @JvmStatic
-    fun mainThread() = Looper.getMainLooper().thread
+    public fun mainThread(): Thread = Looper.getMainLooper().thread
 
     /**
      * Returns value indicating if current thread is main thread.
      */
     @JvmStatic
-    fun isMainThread() = Thread.currentThread() == mainThread()
+    public fun isMainThread(): Boolean = Thread.currentThread() == mainThread()
 
     /**
      * Returns main thread handler.
      */
     @JvmStatic
-    fun get(): Handler {
+    public fun get(): Handler {
         return INSTANCE
     }
 
     /**
      * Posts given function on the main thread.
      */
-    fun postOnMainThread(runnable: () -> Unit) = INSTANCE.post(runnable)
+    public fun postOnMainThread(runnable: () -> Unit): Boolean = INSTANCE.post(runnable)
 
     /**
      * Executes a given [Runnable] on main thread.
      * Executes runnable immediately if current thread is main thread, posts runnable to main thread handler otherwise.
      */
     @JvmStatic
-    fun executeOnMainThread(runnable: Runnable) {
+    public fun executeOnMainThread(runnable: Runnable) {
         if (isMainThread()) {
             runnable.run()
         } else {
@@ -52,7 +54,7 @@ object UiThreadHandler {
      * Executes a given [action] on main thread.
      * Executes runnable immediately if current thread is main thread, posts runnable to main thread handler otherwise.
      */
-    inline fun executeOnMainThread(crossinline action: () -> Unit) {
+    public inline fun executeOnMainThread(crossinline action: () -> Unit) {
         if (isMainThread()) {
             action()
         } else {
