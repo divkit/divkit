@@ -133,6 +133,21 @@ public extension GenericViewBlock {
     )
     return block
   }
+  
+  static func makeIntrinsicSized<T: ViewType>(for view: Lazy<T>) -> GenericViewBlock {
+    let calculator = ClosureIntrinsicCalculator(
+      widthGetter: { view.value.sizeThatFits(.infinite).width },
+      heightGetter: { width in
+        view.value.sizeThatFits(CGSize(width: width, height: .infinity)).height
+      }
+    )
+    let block = GenericViewBlock(
+      lazyContent: view.map { .view($0) },
+      width: .intrinsic(calculator),
+      height: .intrinsic(calculator)
+    )
+    return block
+  }
 }
 #endif
 
