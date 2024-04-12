@@ -16,7 +16,7 @@ import { MAX_INT, MIN_INT, toBigInt } from '../bigint';
 
 function toString(
     _ctx: EvalContext,
-    arg: IntegerValue | NumberValue | BooleanValue | ColorValue | UrlValue
+    arg: IntegerValue | NumberValue | BooleanValue | ColorValue | UrlValue | StringValue
 ): EvalValue {
     return {
         type: STRING,
@@ -190,6 +190,7 @@ export function registerStd(): void {
     registerFunc('toString', [BOOLEAN], toString);
     registerFunc('toString', [COLOR], toString);
     registerFunc('toString', [URL], toString);
+    registerFunc('toString', [STRING], toString);
 
     registerFunc('toNumber', [INTEGER], toNumber);
     registerFunc('toNumber', [STRING], toNumber);
