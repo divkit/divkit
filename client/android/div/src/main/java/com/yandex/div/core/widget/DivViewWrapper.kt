@@ -32,6 +32,7 @@ internal class DivViewWrapper @JvmOverloads constructor(
 
     init {
         makeFocusable()
+        importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
     }
 
     override fun addView(child: View?, index: Int, params: LayoutParams?) {

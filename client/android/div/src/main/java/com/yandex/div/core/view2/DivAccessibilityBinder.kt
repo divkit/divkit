@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2
 
 import android.view.View
-import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.yandex.div.core.annotations.Mockable
@@ -10,13 +9,12 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
+import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
-import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
@@ -163,7 +161,7 @@ internal class DivAccessibilityBinder @Inject constructor(
             DivAccessibility.Mode.EXCLUDE -> {
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
                 isFocusable = false
-                if (this is DivSliderView) isFocusableInTouchMode = true
+                if (this is DivInputView) isFocusableInTouchMode = true
             }
             DivAccessibility.Mode.DEFAULT -> {
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
