@@ -7,14 +7,16 @@ internal object Tokenizer {
 
     private const val EMPTY_CHAR = '\u0000'
 
-    fun tokenize(input: String): List<Token> {
+    fun tokenize(input: String): List<Token> = tokenize(input.toCharArray())
+
+    private fun tokenize(input: CharArray): List<Token> {
         val state = TokenizationState(input)
         try {
             processStringTemplate(state, state.tokens, false)
         } catch (exception: EvaluableException) {
             when (exception) {
                 is TokenizingException ->
-                    throw EvaluableException("Error tokenizing '$input'.", exception)
+                    throw EvaluableException("Error tokenizing '${input.concatToString()}'.", exception)
                 else -> throw exception
             }
         }
@@ -350,7 +352,7 @@ internal object Tokenizer {
         return !isOperator(tokens) && tokens.lastOrNull() !is Token.Operator.Unary
     }
 
-    private data class TokenizationState(private val source: String) {
+    private data class TokenizationState(private val source: CharArray) {
         var index: Int = 0
         val tokens = mutableListOf<Token>()
 
@@ -360,7 +362,7 @@ internal object Tokenizer {
             EMPTY_CHAR
         }
 
-        fun currentCharIsEscaped() = if (index >= source.length) {
+        fun currentCharIsEscaped() = if (index >= source.size) {
             false
         } else {
             var currentIndex = index - 1
@@ -373,7 +375,7 @@ internal object Tokenizer {
             isEscaped
         }
 
-        fun currentChar() = if (index >= source.length) {
+        fun currentChar() = if (index >= source.size) {
             EMPTY_CHAR
         } else {
             source[index]
@@ -385,9 +387,9 @@ internal object Tokenizer {
             EMPTY_CHAR
         }
 
-        fun part(from: Int, to: Int) = source.substring(from, to)
+        fun part(from: Int, to: Int) = source.concatToString(from, to)
 
-        fun nextChar(step: Int = 1) = if (index + step >= source.length) {
+        fun nextChar(step: Int = 1) = if (index + step >= source.size) {
             EMPTY_CHAR
         } else {
             source[index + step]
@@ -397,6 +399,19 @@ internal object Tokenizer {
             val value = index
             index += count
             return value
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as TokenizationState
+
+            return source.contentEquals(other.source)
+        }
+
+        override fun hashCode(): Int {
+            return source.contentHashCode()
         }
     }
 
