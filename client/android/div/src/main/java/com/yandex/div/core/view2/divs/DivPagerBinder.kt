@@ -21,7 +21,6 @@ import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.doOnActualLayout
-import com.yandex.div.core.util.doOnEveryDetach
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.makeFocusable
 import com.yandex.div.core.util.toIntSafely
@@ -531,7 +530,7 @@ internal class DivPagerBinder @Inject constructor(
             view.layoutParams =
                 ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
-            return PagerViewHolder(div2View, view, divBinder, viewCreator, accessibilityEnabled)
+            return PagerViewHolder(view, divBinder, viewCreator, accessibilityEnabled)
         }
 
         override fun getItemCount() = items.size
@@ -576,19 +575,11 @@ internal class DivPagerBinder @Inject constructor(
     }
 
     private class PagerViewHolder(
-        divView: Div2View,
         val frameLayout: PageLayout,
         private val divBinder: DivBinder,
         private val viewCreator: DivViewCreator,
         private val accessibilityEnabled: Boolean,
     ) : RecyclerView.ViewHolder(frameLayout) {
-
-        init {
-            itemView.doOnEveryDetach { view ->
-                val div = oldDiv ?: return@doOnEveryDetach
-                divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(divView, view, div)
-            }
-        }
 
         private var oldDiv: Div? = null
 

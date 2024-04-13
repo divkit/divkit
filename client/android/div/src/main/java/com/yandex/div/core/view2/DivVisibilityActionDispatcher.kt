@@ -39,7 +39,6 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
     fun dispatchAction(scope: Div2View, view: View, action: DivSightAction) {
         val compositeLogId = compositeLogIdOf(scope, action)
         val counter = actionLogCounters.getOrPut(compositeLogId) { 0 }
-        KLog.d(TAG) { "visibility action dispatched: id=$compositeLogId, counter=$counter" }
 
         val logLimit = action.logLimit.evaluate(scope.expressionResolver)
         if (logLimit == LIMITLESS_LOG || counter < logLimit) {

@@ -2,10 +2,8 @@ package com.yandex.div.core.util
 
 import android.os.Build
 import android.view.View
-import android.view.View.OnAttachStateChangeListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnNextLayout
-import com.yandex.div.core.Disposable
 
 // https://issuetracker.google.com/issues/189446951#comment8
 val View.isActuallyLaidOut: Boolean
@@ -19,15 +17,6 @@ internal fun View.isLayoutRtl() =
 
 internal fun View.getIndices(start: Int, count: Int) =
     if (isLayoutRtl()) start + count - 1 downTo start else start until start + count
-
-internal inline fun View.doOnEveryDetach(crossinline action: (view: View) -> Unit) : Disposable {
-    val listener = object : OnAttachStateChangeListener {
-        override fun onViewAttachedToWindow(view: View) = Unit
-        override fun onViewDetachedFromWindow(view: View) = action(view)
-    }
-    addOnAttachStateChangeListener(listener)
-    return Disposable { removeOnAttachStateChangeListener(listener) }
-}
 
 inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {
     if (isActuallyLaidOut && !isLayoutRequested) {
