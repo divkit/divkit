@@ -13,6 +13,12 @@ final class AnimationBlockView: BlockView {
     }
   }
 
+  var animationContentMode: UIView.ContentMode = .scaleAspectFit {
+    didSet {
+      animatableView?.contentMode = animationContentMode
+    }
+  }
+
   private var animationRequest: Cancellable?
   var animationHolder: AnimationHolder? {
     didSet {
@@ -27,6 +33,7 @@ final class AnimationBlockView: BlockView {
             return
           }
 
+          self.animatableView?.contentMode = animationContentMode
           self.animatableView?.setSource(animationSource)
           self.animatableView?.play()
         }

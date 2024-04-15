@@ -25,14 +25,17 @@ public final class LottieExtensionHandler: DivExtensionHandler {
   public func applyAfterBaseProperties(
     to block: Block,
     div: DivBase,
-    context _: DivBlockModelingContext
+    context: DivBlockModelingContext
   ) -> Block {
     let extensionData = div.extensions?.first { $0.id == id }
     guard let paramsDict = extensionData?.params,
           let params = LottieExtensionParams(params: paramsDict) else {
       return block
     }
-
+    var scale: DivImageScale = .fit
+    if let divGifImage = div as? DivGifImage {
+      scale = divGifImage.resolveScale(context.expressionResolver)
+    }
     let animationHolder: AnimationHolder = switch params.source {
     case let .url(url):
       RemoteAnimationHolder(
@@ -54,7 +57,8 @@ public final class LottieExtensionHandler: DivExtensionHandler {
         }
       ),
       animationHolder: animationHolder,
-      sizeProvider: block
+      sizeProvider: block,
+      scale: scale
     )
   }
 
