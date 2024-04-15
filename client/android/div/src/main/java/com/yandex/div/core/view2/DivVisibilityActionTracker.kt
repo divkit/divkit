@@ -9,6 +9,7 @@ import androidx.core.os.postDelayed
 import androidx.core.view.children
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.util.SynchronizedWeakHashMap
 import com.yandex.div.core.util.doOnHierarchyLayout
 import com.yandex.div.core.view2.divs.allSightActions
 import com.yandex.div.core.view2.divs.duration
@@ -46,7 +47,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
     private val enqueuedVisibilityActions = WeakHashMap<View, Div>()
     private val previousVisibilityIsFull = WeakHashMap<View, Boolean>()
 
-    private val divWithWaitingDisappearActions = WeakHashMap<View, Div>()
+    private val divWithWaitingDisappearActions = SynchronizedWeakHashMap<View, Div>()
     // Actions that was more visible than its disappear trigger percent, so they can be triggered for disappearing
     private val appearedForDisappearActions = WeakHashMap<View, MutableSet<DivDisappearAction>>()
 
@@ -56,7 +57,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         hasPostedUpdateVisibilityTask = false
     }
 
-    fun getDivWithWaitingDisappearActions() = divWithWaitingDisappearActions.toMap()
+    fun getDivWithWaitingDisappearActions() = divWithWaitingDisappearActions.createMap()
 
     @AnyThread
     fun updateVisibleViews(viewList: List<View>) {
