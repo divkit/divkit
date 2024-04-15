@@ -1127,6 +1127,14 @@
                 if (process.env.DEVTOOL) {
                     error.additional.json = res.json;
                     error.additional.origJson = res.origJson;
+
+                    const fullpath: ComponentContext[] = [];
+                    let temp = res;
+                    while (temp.parent) {
+                        fullpath.push(temp);
+                        temp = temp.parent;
+                    }
+                    error.additional.fullpath = fullpath;
                 }
                 logError(error);
             },
@@ -1207,6 +1215,7 @@
         };
 
         if (from) {
+            res.parent = from;
             res.path = from.path.slice();
 
             if (from.fakeElement) {

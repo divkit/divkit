@@ -7,6 +7,7 @@ import type { DivBaseData, Tooltip } from './base';
 
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     path: string[];
+    parent?: ComponentContext;
 
     json: MaybeMissing<T>;
     origJson?: MaybeMissing<DivBaseData> | undefined;
