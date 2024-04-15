@@ -6,29 +6,40 @@ private typealias Dict = [String: AnyHashable]
 
 extension [String: Function] {
   mutating func addDictFunctions() {
-    self["getArrayFromDict"] = DictFunctions.getArray()
-    self["getOptArrayFromDict"] = getOptArrayFunction()
+    addFunction("getArrayFromDict", _getArray)
+    addFunction("getOptArrayFromDict", _getOptArray)
 
-    self["getDictFromDict"] = DictFunctions.getDict()
-    self["getOptDictFromDict"] = getOptDictFunction()
+    addFunction("getDictFromDict", _getDict)
+    addFunction("getOptDictFromDict", _getOptDict)
 
-    addFunctions("Boolean", DictFunctions.getBoolean())
-    addFunctions("OptBoolean", getOptBooleanFunction())
+    addFunctions("Boolean", _getBoolean)
+    addFunctions("OptBoolean", _getOptBoolean)
 
-    addFunctions("Color", DictFunctions.getColor())
-    addFunctions("OptColor", getOptColorFunction())
+    addFunctions("Color", _getColor)
+    addFunctions("OptColor", _getOptColor)
 
-    addFunctions("Integer", DictFunctions.getInteger())
-    addFunctions("OptInteger", getOptIntegerFunction())
+    addFunctions("Integer", _getInteger)
+    addFunctions("OptInteger", _getOptInteger)
 
-    addFunctions("Number", DictFunctions.getNumber())
-    addFunctions("OptNumber", getOptNumberFunction())
+    addFunctions("Number", _getNumber)
+    addFunctions("OptNumber", _getOptNumber)
 
-    addFunctions("String", DictFunctions.getString())
-    addFunctions("OptString", getOptStringFunction())
+    addFunctions("String", _getString)
+    addFunctions("OptString", _getOptString)
 
-    addFunctions("Url", DictFunctions.getUrl())
-    addFunctions("OptUrl", getOptUrlFunction())
+    addFunctions("Url", _getUrl)
+    addFunctions("OptUrl", _getOptUrl)
+  }
+
+  mutating func addDictMethods() {
+    addFunction("getArray", _getArray)
+    addFunction("getBoolean", _getBoolean)
+    addFunction("getColor", _getColor)
+    addFunction("getDict", _getDict)
+    addFunction("getInteger", _getInteger)
+    addFunction("getNumber", _getNumber)
+    addFunction("getString", _getString)
+    addFunction("getUrl", _getUrl)
   }
 
   private mutating func addFunctions(
@@ -40,123 +51,85 @@ extension [String: Function] {
   }
 }
 
-enum DictFunctions {
-  static func getArray() -> SimpleFunction {
-    FunctionVarBinary<Dict, String, [AnyHashable]> {
-      try $0.getArray(path: $1)
+private var _getArray = FunctionVarBinary<Dict, String, [AnyHashable]> {
+  try $0.getArray(path: $1)
+}
+
+private var _getBoolean = FunctionVarBinary<Dict, String, Bool> {
+  try $0.getBoolean(path: $1)
+}
+
+private var _getColor = FunctionVarBinary<Dict, String, Color> {
+  try $0.getColor(path: $1)
+}
+
+private var _getDict = FunctionVarBinary<Dict, String, Dict> {
+  try $0.getDict(path: $1)
+}
+
+private var _getInteger = FunctionVarBinary<Dict, String, Int> {
+  try $0.getInteger(path: $1)
+}
+
+private var _getNumber = FunctionVarBinary<Dict, String, Double> {
+  try $0.getNumber(path: $1)
+}
+
+private var _getString = FunctionVarBinary<Dict, String, String> {
+  try $0.getString(path: $1)
+}
+
+private var _getUrl = FunctionVarBinary<Dict, String, URL> {
+  try $0.getUrl(path: $1)
+}
+
+private var _getOptArray = FunctionVarBinary<Dict, String, [AnyHashable]> {
+  (try? $0.getArray(path: $1)) ?? []
+}
+
+private var _getOptBoolean = FunctionVarTernary<Bool, Dict, String, Bool> {
+  (try? $1.getBoolean(path: $2)) ?? $0
+}
+
+private var _getOptColor = OverloadedFunction(functions: [
+  FunctionVarTernary<Color, Dict, String, Color> {
+    (try? $1.getColor(path: $2)) ?? $0
+  },
+  FunctionVarTernary<String, Dict, String, Color> {
+    if let value = try? $1.getColor(path: $2) {
+      return value
     }
-  }
+    return Color.color(withHexString: $0)!
+  },
+])
 
-  static func getBoolean() -> SimpleFunction {
-    FunctionVarBinary<Dict, String, Bool> {
-      try $0.getBoolean(path: $1)
+private var _getOptDict = FunctionVarBinary<Dict, String, Dict> {
+  (try? $0.getDict(path: $1)) ?? [:]
+}
+
+private var _getOptInteger = FunctionVarTernary<Int, Dict, String, Int> {
+  (try? $1.getInteger(path: $2)) ?? $0
+}
+
+private var _getOptNumber = FunctionVarTernary<Double, Dict, String, Double> {
+  (try? $1.getNumber(path: $2)) ?? $0
+}
+
+private var _getOptString = FunctionVarTernary<String, Dict, String, String> {
+  (try? $1.getString(path: $2)) ?? $0
+}
+
+private var _getOptUrl = OverloadedFunction(functions: [
+  FunctionVarTernary<URL, Dict, String, URL> {
+    (try? $1.getUrl(path: $2)) ?? $0
+  },
+  FunctionVarTernary<String, Dict, String, URL> {
+    if let value = try? $1.getUrl(path: $2) {
+      return value
     }
-  }
-
-  static func getColor() -> SimpleFunction {
-    FunctionVarBinary<Dict, String, Color> {
-      try $0.getColor(path: $1)
-    }
-  }
-
-  static func getDict() -> SimpleFunction {
-    FunctionVarBinary<Dict, String, Dict> {
-      try $0.getDict(path: $1)
-    }
-  }
-
-  static func getInteger() -> SimpleFunction {
-    FunctionVarBinary<Dict, String, Int> {
-      try $0.getInteger(path: $1)
-    }
-  }
-
-  static func getNumber() -> SimpleFunction {
-    FunctionVarBinary<Dict, String, Double> {
-      try $0.getNumber(path: $1)
-    }
-  }
-
-  static func getString() -> SimpleFunction {
-    FunctionVarBinary<Dict, String, String> {
-      try $0.getString(path: $1)
-    }
-  }
-
-  static func getUrl() -> SimpleFunction {
-    FunctionVarBinary<Dict, String, URL> {
-      try $0.getUrl(path: $1)
-    }
-  }
-}
-
-private func getOptArrayFunction() -> Function {
-  FunctionVarBinary<Dict, String, [AnyHashable]> { dict, path in
-    (try? dict.getArray(path: path)) ?? []
-  }
-}
-
-private func getOptBooleanFunction() -> Function {
-  FunctionVarTernary<Bool, Dict, String, Bool> { fallback, dict, path in
-    (try? dict.getBoolean(path: path)) ?? fallback
-  }
-}
-
-private func getOptColorFunction() -> Function {
-  OverloadedFunction(
-    functions: [
-      FunctionVarTernary<Color, Dict, String, Color> { fallback, dict, path in
-        (try? dict.getColor(path: path)) ?? fallback
-      },
-      FunctionVarTernary<String, Dict, String, Color> { fallback, dict, path in
-        if let value = try? dict.getColor(path: path) {
-          return value
-        }
-        return Color.color(withHexString: fallback)!
-      },
-    ]
-  )
-}
-
-private func getOptDictFunction() -> Function {
-  FunctionVarBinary<Dict, String, Dict> { dict, path in
-    (try? dict.getDict(path: path)) ?? [:]
-  }
-}
-
-private func getOptIntegerFunction() -> Function {
-  FunctionVarTernary<Int, Dict, String, Int> { fallback, dict, path in
-    (try? dict.getInteger(path: path)) ?? fallback
-  }
-}
-
-private func getOptNumberFunction() -> Function {
-  FunctionVarTernary<Double, Dict, String, Double> { fallback, dict, path in
-    (try? dict.getNumber(path: path)) ?? fallback
-  }
-}
-
-private func getOptStringFunction() -> Function {
-  FunctionVarTernary<String, Dict, String, String> { fallback, dict, path in
-    (try? dict.getString(path: path)) ?? fallback
-  }
-}
-
-private func getOptUrlFunction() -> Function {
-  OverloadedFunction(
-    functions: [
-      FunctionVarTernary<URL, Dict, String, URL> { fallback, dict, path in
-        (try? dict.getUrl(path: path)) ?? fallback
-      },
-      FunctionVarTernary<String, Dict, String, URL> { fallback, dict, path in
-        if let value = try? dict.getUrl(path: path) {
-          return value
-        }
-        return URL(string: fallback)!
-      },
-    ]
-  )
-}
+    return URL(string: $0)!
+  },
+])
 
 extension Dict {
   fileprivate func getArray(path: [String]) throws -> [AnyHashable] {

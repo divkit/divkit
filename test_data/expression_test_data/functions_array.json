@@ -885,7 +885,8 @@
       ],
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -906,7 +907,8 @@
       ],
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -929,7 +931,8 @@
       ],
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ]
     }
   ]

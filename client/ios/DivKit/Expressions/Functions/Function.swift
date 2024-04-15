@@ -232,7 +232,7 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
 }
 
 struct OverloadedFunction: Function {
-  private let functions: [SimpleFunction]
+  let functions: [SimpleFunction]
   private let makeError: ([Argument]) -> Error
 
   init(functions: [SimpleFunction], makeError: (([Argument]) -> Error)? = nil) {

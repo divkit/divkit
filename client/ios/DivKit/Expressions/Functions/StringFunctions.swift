@@ -1,68 +1,23 @@
 import Foundation
 
-enum StringFunctions: String, CaseIterable {
-  case len
-  case contains
-  case substring
-  case replaceAll
-  case index
-  case lastIndex
-  case trim
-  case trimLeft
-  case trimRight
-  case toUpperCase
-  case toLowerCase
-  case encodeUri
-  case decodeUri
-  case padStart
-  case padEnd
-  case testRegex
-
-  var function: Function {
-    switch self {
-    case .len:
-      FunctionUnary(impl: _len)
-    case .contains:
-      FunctionBinary(impl: _contains)
-    case .substring:
-      FunctionTernary(impl: _substring)
-    case .replaceAll:
-      FunctionTernary(impl: _replaceAll)
-    case .index:
-      FunctionBinary(impl: _index)
-    case .lastIndex:
-      FunctionBinary(impl: _lastIndex)
-    case .trim:
-      FunctionUnary(impl: _trim)
-    case .trimLeft:
-      FunctionUnary(impl: _trimLeft)
-    case .trimRight:
-      FunctionUnary(impl: _trimRight)
-    case .toUpperCase:
-      FunctionUnary(impl: _toUpperCase)
-    case .toLowerCase:
-      FunctionUnary(impl: _toLowerCase)
-    case .encodeUri:
-      FunctionUnary(impl: _encodeUri)
-    case .decodeUri:
-      FunctionUnary(impl: _decodeUri)
-    case .padStart:
-      OverloadedFunction(
-        functions: [
-          FunctionTernary(impl: _padStart),
-          FunctionTernary(impl: _padStartInt),
-        ]
-      )
-    case .padEnd:
-      OverloadedFunction(
-        functions: [
-          FunctionTernary(impl: _padEnd),
-          FunctionTernary(impl: _padEndInt),
-        ]
-      )
-    case .testRegex:
-      FunctionBinary(impl: _testRegex)
-    }
+extension [String: Function] {
+  mutating func addStringFunctions() {
+    addFunction("contains", _contains)
+    addFunction("decodeUri", _decodeUri)
+    addFunction("encodeUri", _encodeUri)
+    addFunction("index", _index)
+    addFunction("len", _len)
+    addFunction("lastIndex", _lastIndex)
+    addFunction("padEnd", _padEnd)
+    addFunction("padStart", _padStart)
+    addFunction("replaceAll", _replaceAll)
+    addFunction("substring", _substring)
+    addFunction("testRegex", _testRegex)
+    addFunction("trim", _trim)
+    addFunction("trimLeft", _trimLeft)
+    addFunction("trimRight", _trimRight)
+    addFunction("toUpperCase", _toUpperCase)
+    addFunction("toLowerCase", _toLowerCase)
   }
 }
 
@@ -71,46 +26,50 @@ private let dontNeedEncoding = CharacterSet(charactersIn: "a"..."z")
   .union(CharacterSet(charactersIn: "0"..."9"))
   .union(CharacterSet(charactersIn: "-_.*!~'()"))
 
-private func _len(value: String) -> Int {
-  value.count
+private var _len = FunctionUnary<String, Int> {
+  $0.count
 }
 
-private func _contains(first: String, second: String) -> Bool {
-  guard !second.isEmpty else { return true }
-  return first.range(of: second) != nil
+private var _contains = FunctionBinary<String, String, Bool> {
+  $1.isEmpty || $0.range(of: $1) != nil
 }
 
-private func _substring(first: String, second: Int, third: Int) throws -> String {
-  guard second <= third else {
+private var _substring = FunctionTernary<String, Int, Int, String> {
+  guard $1 <= $2 else {
     throw CalcExpression.Error.message("Indexes should be in ascending order.")
   }
-  guard second >= 0, third <= first.count else {
+  guard $1 >= 0, $2 <= $0.count else {
     throw CalcExpression.Error.message("Indexes are out of bounds.")
   }
-  return String(first[first.rangeOfCharsIn(second..<third)])
+  return String($0[$0.rangeOfCharsIn($1..<$2)])
 }
 
-private func _replaceAll(first: String, second: String, third: String) -> String {
-  first.replacingOccurrences(of: second, with: third)
+private var _replaceAll = FunctionTernary<String, String, String, String> {
+  $0.replacingOccurrences(of: $1, with: $2)
 }
 
-private func _index(first: String, second: String) -> Int {
-  guard !second.isEmpty else { return 0 }
-  guard let range = first.range(of: second) else { return -1 }
-  return first.distance(to: range.lowerBound)
+private var _index = FunctionBinary<String, String, Int> {
+  if $1.isEmpty {
+    return 0
+  }
+  guard let range = $0.range(of: $1) else {
+    return -1
+  }
+  return $0.distance(to: range.lowerBound)
 }
 
-private func _lastIndex(first: String, second: String) -> Int {
-  guard let range = first.range(of: second, options: .backwards)
-  else { return -1 }
-  return first.distance(to: range.lowerBound)
+private var _lastIndex = FunctionBinary<String, String, Int> {
+  guard let range = $0.range(of: $1, options: .backwards) else {
+    return -1
+  }
+  return $0.distance(to: range.lowerBound)
 }
 
-private func _trim(value: String) -> String {
-  value.trimmed
+private var _trim = FunctionUnary<String, String> {
+  $0.trimmed
 }
 
-private func _trimLeft(value: String) -> String {
+private var _trimLeft = FunctionUnary<String, String> { value in
   for index in value.indices {
     if !value[index].isWhitespace {
       return String(value[index...])
@@ -119,7 +78,7 @@ private func _trimLeft(value: String) -> String {
   return ""
 }
 
-private func _trimRight(value: String) -> String {
+private var _trimRight = FunctionUnary<String, String> { value in
   for index in value.indices.reversed() {
     if !value[index].isWhitespace {
       return String(value[...index])
@@ -128,45 +87,54 @@ private func _trimRight(value: String) -> String {
   return ""
 }
 
-private func _toUpperCase(value: String) -> String {
-  value.uppercased()
+private var _toUpperCase = FunctionUnary<String, String> {
+  $0.uppercased()
 }
 
-private func _toLowerCase(value: String) -> String {
-  value.lowercased()
+private var _toLowerCase = FunctionUnary<String, String> {
+  $0.lowercased()
 }
 
-private func _encodeUri(value: String) throws -> String {
-  guard let encodedValue = value.addingPercentEncoding(withAllowedCharacters: dontNeedEncoding)
-  else {
+private var _encodeUri = FunctionUnary<String, String> {
+  guard let value = $0.addingPercentEncoding(withAllowedCharacters: dontNeedEncoding) else {
     throw CalcExpression.Error.message("String is empty after encoding.")
   }
-  return encodedValue
+  return value
 }
 
-private func _decodeUri(value: String) throws -> String {
-  guard let decodedValue = value.removingPercentEncoding else {
+private var _decodeUri = FunctionUnary<String, String> {
+  guard let value = $0.removingPercentEncoding else {
     throw CalcExpression.Error.message("String is empty after decoding.")
   }
-  return decodedValue
+  return value
 }
 
-private func _padStart(value: String, len: Int, pad: String) throws -> String {
+private var _padStart = OverloadedFunction(functions: [
+  FunctionTernary<String, Int, String, String> {
+    padStart(value: $0, len: $1, pad: $2)
+  },
+  FunctionTernary<Int, Int, String, String> {
+    padStart(value: String($0), len: $1, pad: $2)
+  },
+])
+
+private var _padEnd = OverloadedFunction(functions: [
+  FunctionTernary<String, Int, String, String> {
+    padEnd(value: $0, len: $1, pad: $2)
+  },
+  FunctionTernary<Int, Int, String, String> {
+    padEnd(value: String($0), len: $1, pad: $2)
+  },
+])
+
+private func padStart(value: String, len: Int, pad: String) -> String {
   let prefix = calcPad(value: value, len: len, pad: pad)
   return prefix + value
 }
 
-private func _padStartInt(value: Int, len: Int, pad: String) throws -> String {
-  try _padStart(value: String(value), len: len, pad: pad)
-}
-
-private func _padEnd(value: String, len: Int, pad: String) throws -> String {
+private func padEnd(value: String, len: Int, pad: String) -> String {
   let suffix = calcPad(value: value, len: len, pad: pad)
   return value + suffix
-}
-
-private func _padEndInt(value: Int, len: Int, pad: String) throws -> String {
-  try _padEnd(value: String(value), len: len, pad: pad)
 }
 
 private func calcPad(value: String, len: Int, pad: String) -> String {
@@ -184,26 +152,18 @@ private func calcPad(value: String, len: Int, pad: String) -> String {
   return part
 }
 
-private func cast(_ value: Any) -> String? {
-  value as? String
-}
-
-private func castToInt(_ value: Any) -> Int? {
-  value as? Int
-}
-
-extension String {
-  fileprivate func distance(to index: Index) -> Int {
-    distance(from: startIndex, to: index)
-  }
-}
-
-private func _testRegex(text: String, regex: String) throws -> Bool {
+private var _testRegex = FunctionBinary<String, String, Bool> { text, regex in
   do {
     let regex = try NSRegularExpression(pattern: regex)
     let range = NSRange(text.startIndex..., in: text)
     return regex.firstMatch(in: text, range: range) != nil
   } catch {
     throw CalcExpression.Error.message("Invalid regular expression.")
+  }
+}
+
+extension String {
+  fileprivate func distance(to index: Index) -> Int {
+    distance(from: startIndex, to: index)
   }
 }

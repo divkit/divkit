@@ -749,7 +749,8 @@
       "result_type": "integer",
       "platforms": [
         "web",
-        "android"
+        "android",
+        "ios"
       ]
     }
   ]

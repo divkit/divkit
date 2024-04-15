@@ -7,7 +7,7 @@ extension CalcExpression {
   static func stringify(_ value: Any) -> String {
     switch value {
     case let bool as Bool:
-      return bool ? "true" : "false"
+      return bool.description
     case let int as Int:
       return String(int)
     case let double as Double:

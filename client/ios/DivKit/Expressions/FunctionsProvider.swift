@@ -90,11 +90,10 @@ private func makeEvaluator(
       return try function.invoke(args: args)
     } catch let error as CalcExpression.Error {
       let message = "Failed to evaluate [\(symbol.formatExpression(args))]."
-      let correctedArgs: [Any]
-      if case .method = symbol {
-        correctedArgs = Array(args.dropFirst())
+      let correctedArgs: [Any] = if case .method = symbol {
+        Array(args.dropFirst())
       } else {
-        correctedArgs = args
+        args
       }
       if error == .noMatchingSignature {
         if correctedArgs.count == 0 {
@@ -135,9 +134,9 @@ private let staticFunctions: [String: Function] = {
   DatetimeFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
   IntervalFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
   MathFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
-  StringFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
   functions.addArrayFunctions()
   functions.addDictFunctions()
+  functions.addStringFunctions()
   functions.addToStringFunctions()
   return functions
 }()
@@ -153,7 +152,33 @@ private let operators: [CalcExpression.Symbol: Function] = {
 
 private let methods: [String: Function] = {
   var methods: [String: Function] = [:]
-  methods.addGetMethods()
+  methods.addArrayMethods()
+  methods.addDictMethods()
   methods.addToStringFunctions()
   return methods
 }()
+
+extension [String: Function] {
+  mutating func addFunction(_ name: String, _ function: Function) {
+    var functions: [SimpleFunction] = []
+    if let existingFunction = self[name] {
+      functions.appendFunctions(existingFunction)
+    }
+    functions.appendFunctions(function)
+    if functions.count > 1 {
+      self[name] = OverloadedFunction(functions: functions)
+    } else if functions.count == 1 {
+      self[name] = functions[0]
+    }
+  }
+}
+
+extension [SimpleFunction] {
+  fileprivate mutating func appendFunctions(_ function: Function) {
+    if let overloadedFunction = function as? OverloadedFunction {
+      append(contentsOf: overloadedFunction.functions)
+    } else if let simpleFunction = function as? SimpleFunction {
+      append(simpleFunction)
+    }
+  }
+}

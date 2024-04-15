@@ -544,7 +544,7 @@ extension UnicodeScalarView {
         if scanCharacter(".") {
           guard let fraction = scanInteger() else {
             self = endOfInt
-            return .number(sign + integer)
+            return .integer(sign + integer)
           }
           number = .number("\(sign)\(integer).\(fraction)")
         } else {

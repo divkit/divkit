@@ -13,6 +13,25 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "unknownFunc(dict) => error",
+      "expression": "@{unknownFunc(dict)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [unknownFunc(<dict>)]. Unknown function name: unknownFunc."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
     }
   ]
 }

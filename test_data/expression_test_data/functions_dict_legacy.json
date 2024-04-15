@@ -1,26 +1,6 @@
 {
   "cases": [
     {
-      "name": "unknownDictFunc(dict) => error",
-      "expression": "@{unknownDictFunc(dict)}",
-      "expected": {
-        "type": "error",
-        "value": "Failed to evaluate [unknownDictFunc(<dict>)]. Unknown function name: unknownDictFunc."
-      },
-      "variables": [
-        {
-          "type": "dict",
-          "name": "dict",
-          "value": {
-            "prop": "val"
-          }
-        }
-      ],
-      "platforms": [
-        "web"
-      ]
-    },
-    {
       "name": "getDictString(dict, 'prop') => 'val'",
       "expression": "@{getDictString(dict, 'prop')}",
       "expected": {
