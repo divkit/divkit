@@ -794,20 +794,12 @@ extension UnicodeScalarView {
           guard let lastSymbol = stack.last else {
             throw CalcExpression.Error.unexpectedToken(".")
           }
-          switch lastSymbol {
-          case .literal,
-               .symbol(.variable(_), _),
-               .symbol(.function(_), _),
-               .symbol(.method(_), _):
-            guard let methodName = scanMethodName(), scanCharacter("(") else {
-              throw CalcExpression.Error.message("Method expected after .")
-            }
-            var args = try scanArguments()
-            args.insert(lastSymbol, at: 0)
-            stack[stack.count - 1] = makeMethod(methodName, args)
-          default:
-            throw CalcExpression.Error.unexpectedToken(".")
+          guard let methodName = scanMethodName(), scanCharacter("(") else {
+            throw CalcExpression.Error.message("Method expected after .")
           }
+          var args = try scanArguments()
+          args.insert(lastSymbol, at: 0)
+          stack[stack.count - 1] = makeMethod(methodName, args)
         case "(":
           switch stack.last {
           case let .symbol(.variable(name), _)?:

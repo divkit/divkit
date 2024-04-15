@@ -167,6 +167,42 @@
       ]
     },
     {
+      "name": "(2 + 3).toString() => '5'",
+      "expression": "@{(2 + 3).toString()}",
+      "expected": {
+        "type": "string",
+        "value": "5"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "(!false).toString() => 'true'",
+      "expression": "@{(!false).toString()}",
+      "expected": {
+        "type": "string",
+        "value": "true"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "!false.toString() => error",
+      "expression": "@{!false.toString()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [!'false']. A Boolean is expected after a unary not."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "'Hello!' .toString() => 'Hello!'",
       "expression": "@{'Hello!' .toString()}",
       "expected": {
