@@ -3,9 +3,14 @@
     "log_id": "input",
     "variables": [
       {
-        "name": "input_value",
+        "name": "multiline_input_value",
         "type": "string",
-        "value": "Text"
+        "value": "Multiline\ntext"
+      },
+      {
+        "name": "singleline_input_value",
+        "type": "string",
+        "value": "Singleline text"
       },
       {
         "name": "is_input_enabled",
@@ -43,7 +48,33 @@
               "border": {
                 "corner_radius": 8
               },
-              "text_variable": "input_value"
+              "text_variable": "multiline_input_value"
+            },
+            {
+              "type": "input",
+              "is_enabled": "@{is_input_enabled}",
+              "keyboard_type": "single_line_text",
+              "margins": {
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "text_variable": "singleline_input_value"
             },
             {
               "type": "text",

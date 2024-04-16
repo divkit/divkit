@@ -2583,7 +2583,9 @@
     {
       "title": "Disabled input",
       "platforms": [
-        "ios"
+        "ios",
+        "android",
+        "web"
       ],
       "tags": [
         "input"

@@ -137,11 +137,7 @@
         "is_enabled": {
           "$ref": "common.json#/boolean_int",
           "default_value": "true",
-          "$description": "translations.json#/div_input_is_enabled",
-          "platforms": [
-            "android",
-            "ios"
-          ]
+          "$description": "translations.json#/div_input_is_enabled"
         }
       }
     }

@@ -48,6 +48,7 @@
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
     import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
 
     export let componentContext: ComponentContext<DivInputData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -81,6 +82,7 @@
     let padding = '';
     let verticalPadding = '';
     let description = '';
+    let isEnabled = true;
 
     $: origJson = componentContext.origJson;
 
@@ -97,6 +99,7 @@
         keyboardType = 'multi_line_text';
         inputType = 'text';
         inputMode = undefined;
+        isEnabled = true;
     }
 
     $: if (origJson) {
@@ -126,6 +129,7 @@
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
     $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
     $: jsonSelectAll = componentContext.getDerivedFromVars(componentContext.json.select_all_on_focus);
+    $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
 
     $: if (variable) {
         hasError = false;
@@ -203,6 +207,10 @@
 
     $: {
         alignmentVertical = correctAlignmentVertical($jsonAlignmentVertical, alignmentVertical);
+    }
+
+    $: {
+        isEnabled = correctBooleanInt($jsonIsEnabled, isEnabled);
     }
 
     $: {
@@ -444,24 +452,42 @@
                     style={makeStyle(verticalPaddingStl)}
                 >​</span>
 
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <span
-                    bind:this={input}
-                    class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, multiline: true })}
-                    autocapitalize="off"
-                    contenteditable="true"
-                    aria-label={description}
-                    style={makeStyle(paddingStl)}
-                    bind:innerText={contentEditableValue}
-                    on:input={onInput}
-                    on:paste={onPaste}
-                    on:mousedown={$jsonSelectAll ? onMousedown : undefined}
-                    on:click={$jsonSelectAll ? onClick : undefined}
-                    on:focus={focusHandler}
-                    on:blur={blurHandler}
-                >
-                </span>
+                {#if isEnabled}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <span
+                        bind:this={input}
+                        class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, multiline: true })}
+                        autocapitalize="off"
+                        contenteditable="true"
+                        role="textbox"
+                        tabindex="0"
+                        aria-label={description}
+                        aria-multiline="true"
+                        style={makeStyle(paddingStl)}
+                        bind:innerText={contentEditableValue}
+                        on:input={onInput}
+                        on:paste={onPaste}
+                        on:mousedown={$jsonSelectAll ? onMousedown : undefined}
+                        on:click={$jsonSelectAll ? onClick : undefined}
+                        on:focus={focusHandler}
+                        on:blur={blurHandler}
+                    >
+                    </span>
+                {:else}
+                    <span
+                        bind:this={input}
+                        class={genClassName('input__input', css, { multiline: true })}
+                        autocapitalize="off"
+                        contenteditable="false"
+                        role="textbox"
+                        aria-label={description}
+                        aria-disabled="true"
+                        aria-multiline="true"
+                        style={makeStyle(paddingStl)}
+                        bind:innerText={contentEditableValue}
+                    >
+                    </span>
+                {/if}
             </span>
         {:else}
             <input
@@ -473,6 +499,7 @@
                 autocapitalize="off"
                 aria-label={description}
                 style={makeStyle(paddingStl)}
+                disabled={!isEnabled}
                 {placeholder}
                 {value}
                 on:input={onInput}

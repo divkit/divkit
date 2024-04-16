@@ -50,4 +50,5 @@ export interface DivInputData extends DivBaseData {
     keyboard_type?: KeyboardType;
     mask?: InputMask;
     select_all_on_focus?: BooleanInt;
+    is_enabled?: BooleanInt;
 }
