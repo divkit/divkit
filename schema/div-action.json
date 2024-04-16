@@ -37,11 +37,7 @@
           "items": {
             "$ref": "#/definitions/menu_item"
           },
-          "$description": "translations.json#/div_action_menu_items",
-          "platforms": [
-            "android",
-            "ios"
-          ]
+          "$description": "translations.json#/div_action_menu_items"
         },
         "log_url": {
           "$ref": "common.json#/url",

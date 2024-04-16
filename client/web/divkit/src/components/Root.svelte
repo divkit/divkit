@@ -39,7 +39,8 @@
         DisappearAction,
         FetchInit,
         DivVariable,
-        Direction
+        Direction,
+        ActionMenuItem
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -78,6 +79,7 @@
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
     import TooltipView from './tooltip/Tooltip.svelte';
+    import Menu from './menu/Menu.svelte';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -208,6 +210,10 @@
         desc: MaybeMissing<Tooltip>;
         timeoutId: number | null;
     }[] = [];
+    let menu: {
+        items: MaybeMissing<ActionMenuItem>[];
+        node: HTMLElement;
+    } | undefined;
 
     const timeouts: number[] = [];
 
@@ -909,6 +915,7 @@
         opts: {
             componentContext?: ComponentContext;
             processUrls?: boolean;
+            node?: HTMLElement;
         } = {}
     ): Promise<void> {
         if (!actions || !Array.isArray(actions)) {
@@ -947,6 +954,11 @@
                 }
             } else if (actionTyped) {
                 await execActionInternal(action, opts.componentContext);
+            } else if (opts.node && Array.isArray(action.menu_items) && action.menu_items.length) {
+                menu = {
+                    items: action.menu_items,
+                    node: opts.node
+                };
             }
         }
         filtered.forEach(action => {
@@ -1141,7 +1153,8 @@
             execAnyActions(actions, opts = {}) {
                 return execAnyActions(actions, {
                     componentContext: res,
-                    processUrls: opts.processUrls
+                    processUrls: opts.processUrls,
+                    node: opts.node
                 });
             },
             getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
@@ -1688,6 +1701,15 @@
                     parentComponentContext={rootStateComponentContext}
                 />
             {/each}
+        {/if}
+
+        {#if menu}
+            <Menu
+                ownerNode={menu.node}
+                items={menu.items}
+                parentComponentContext={rootStateComponentContext}
+                on:close={() => menu = undefined}
+            />
         {/if}
     </div>
 {/if}

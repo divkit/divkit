@@ -22,6 +22,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
         actions: MaybeMissing<Action[]> | undefined,
         opts?: {
             processUrls?: boolean;
+            node?: HTMLElement;
         }
     ): Promise<void>;
     getDerivedFromVars<T>(

@@ -47,6 +47,7 @@
     let startCoords: Coords | null = null;
     let isChanged = false;
     let hasJSAction = false;
+    let longtapTimer: number;
 
     $: {
         if (Array.isArray(actions) && actions?.length) {
@@ -77,7 +78,7 @@
             hasJSAction = true;
         } else if (!href && Array.isArray(actions) && actions?.length) {
             hasJSAction = true;
-            if (!actions.some(action => action.url || action.typed)) {
+            if (!actions.some(action => action.url || action.typed || action.menu_items)) {
                 componentContext.logError(wrapError(new Error('The component has a list of actions, but does not have a real action'), {
                     level: 'warn',
                     additional: {
@@ -131,6 +132,12 @@
             return;
         }
 
+        if (startTs > 0 && Date.now() > startTs + MIN_LONG_TAP_DURATION) {
+            // Long tap action
+            event.preventDefault();
+            return;
+        }
+
         const cancelled = customAction?.(event) === false;
 
         if (cancelled) {
@@ -153,7 +160,7 @@
             if (hasCustomAction) {
                 event.preventDefault();
             }
-            componentContext.execAnyActions(actions);
+            componentContext.execAnyActions(actions, { node });
         }
     }
 
@@ -166,7 +173,7 @@
             return;
         }
 
-        componentContext.execAnyActions(doubleTapActions, { processUrls: true });
+        componentContext.execAnyActions(doubleTapActions, { processUrls: true, node });
     }
 
     function onTouchStart(event: TouchEvent): void {
@@ -177,6 +184,7 @@
         startCoords = getTouchCoords(event);
         isChanged = false;
         startTs = Date.now();
+        clearTimeout(longtapTimer);
     }
 
     function onTouchMove(event: TouchEvent): void {
@@ -191,17 +199,21 @@
         }
     }
 
-    function onTouchEnd(): void {
+    function onTouchEnd(event: TouchEvent): void {
         if (!startCoords || startTs < 0) {
             return;
         }
 
         if (!isChanged && (Date.now() - startTs) >= MIN_LONG_TAP_DURATION) {
-            componentContext.execAnyActions(longTapActions, { processUrls: true });
+            event.stopPropagation();
+            componentContext.execAnyActions(longTapActions, { processUrls: true, node });
         }
 
-        startCoords = null;
-        startTs = -1;
+        clearTimeout(longtapTimer);
+        longtapTimer = window.setTimeout(() => {
+            startCoords = null;
+            startTs = -1;
+        }, 100);
     }
 
     function onKeydown(event: KeyboardEvent): void {
@@ -240,6 +252,7 @@
         if (id && !hasInnerFocusable) {
             rootCtx.unregisterFocusable(id);
         }
+        clearTimeout(longtapTimer);
     });
 </script>
 

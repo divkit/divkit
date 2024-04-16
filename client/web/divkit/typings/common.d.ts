@@ -199,7 +199,14 @@ export interface ActionBase {
     is_enabled?: BooleanInt;
 }
 
+export interface ActionMenuItem {
+    text: string;
+    action?: Action;
+    actions?: Action[];
+}
+
 export interface Action extends ActionBase {
+    menu_items?: ActionMenuItem[];
     log_url?: string;
     target?: string;
 }
@@ -268,6 +275,8 @@ export interface Customization {
     galleryRightClass?: string;
     pagerLeftClass?: string;
     pagerRightClass?: string;
+    menuPopupClass?: string;
+    menuItemClass?: string;
 }
 
 export interface DivExtensionContext {

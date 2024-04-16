@@ -313,6 +313,8 @@ Currently supported properties:
 * `galleryRightClass` — right scroll button class on desktop for the gallery
 * `pagerLeftClass` — left scroll button class on desktop for the pager
 * `pagerRightClass` — right scroll button class on desktop for the pager
+* `menuPopupClass` — class for the menu popup
+* `menuItemClass` — class for the menu item
 
 #### builtinProtocols
 
@@ -327,7 +329,7 @@ Components with an action containing a protocol from the list will be rendered a
 
 HTMLElement, optional.
 
-Allows to attach tooltips to the custom root, outside of `target`. Useful to avoid cropping.
+Allows to attach tooltips and menus to the custom root, outside of `target`. Useful to avoid cropping.
 
 ### extensions
 

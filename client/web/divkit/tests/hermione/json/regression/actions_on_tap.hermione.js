@@ -14,6 +14,9 @@ describe('regression', () => {
             logs.length.should.equal(1);
             logs.some(it => it.action.log_id === 'single_tap').should.equal(true);
 
+            // wait menu animation
+            await this.browser.pause(500);
+
             await this.browser.assertView('menu', '#root');
         });
 
@@ -24,6 +27,9 @@ describe('regression', () => {
             logs.length.should.equal(3);
             logs.some(it => it.action.log_id === 'doubletap_actions').should.equal(true);
 
+            // wait menu animation
+            await this.browser.pause(500);
+
             await this.browser.assertView('menu', '#root');
         });
 
@@ -32,8 +38,11 @@ describe('regression', () => {
             await this.browser.yaLongTap('span=With double and long taps', 500);
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(3);
+            logs.length.should.equal(1);
             logs.some(it => it.action.log_id === 'longtap_actions').should.equal(true);
+
+            // wait menu animation
+            await this.browser.pause(500);
 
             await this.browser.assertView('menu', '#root');
         });
@@ -45,6 +54,9 @@ describe('regression', () => {
             logs.length.should.equal(1);
             logs.some(it => it.action.log_id === 'single_tap').should.equal(true);
 
+            // wait menu animation
+            await this.browser.pause(500);
+
             await this.browser.assertView('menu', '#root');
         });
 
@@ -55,6 +67,9 @@ describe('regression', () => {
             logs.length.should.equal(2);
             logs.filter(it => it.action.log_id === 'single_tap').length.should.equal(2);
 
+            // wait menu animation
+            await this.browser.pause(500);
+
             await this.browser.assertView('menu', '#root');
         });
 
@@ -63,9 +78,12 @@ describe('regression', () => {
             await this.browser.yaLongTap('span=Without double tap', 500);
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(3);
-            logs.some(it => it.action.log_id === 'single_tap').should.equal(true);
+            logs.length.should.equal(1);
+            logs.some(it => it.action.log_id === 'single_tap').should.equal(false);
             logs.some(it => it.action.log_id === 'longtap_actions').should.equal(true);
+
+            // wait menu animation and long tap selection
+            await this.browser.pause(500);
 
             await this.browser.assertView('menu', '#root');
         });
