@@ -3,7 +3,7 @@ import BaseTinyPublic
 public struct VideoBlockViewModel: Equatable {
   public let videoData: VideoData
   public let playbackConfig: PlaybackConfig
-  public var elapsedTime: Binding<Int>
+  public var elapsedTime: Binding<Int>?
   public var duration: Binding<Int>?
   public let preview: Image?
   public let resumeActions: [UserInterfaceAction]
@@ -18,7 +18,7 @@ public struct VideoBlockViewModel: Equatable {
     videoData: VideoData,
     playbackConfig: PlaybackConfig,
     preview: Image? = nil,
-    elapsedTime: Binding<Int> = .zero,
+    elapsedTime: Binding<Int>? = nil,
     duration: Binding<Int>? = nil,
     resumeActions: [UserInterfaceAction] = [],
     pauseActions: [UserInterfaceAction] = [],
