@@ -9,7 +9,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -21,7 +22,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -33,7 +35,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -45,7 +48,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -63,7 +67,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -81,7 +86,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -133,7 +139,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -145,7 +152,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -163,7 +171,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -175,7 +184,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -187,7 +197,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -199,7 +210,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -210,7 +222,8 @@
         "value": "Hello!"
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -221,7 +234,8 @@
         "value": "Hello!"
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -232,7 +246,8 @@
         "value": "Hello!"
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -243,7 +258,8 @@
         "value": "Method expected after ."
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -254,7 +270,8 @@
         "value": "Failed to evaluate [getColorAlpha()]. Unknown method name: getColorAlpha."
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

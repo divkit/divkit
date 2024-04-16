@@ -1,17 +1,49 @@
 import { toBigInt } from '../bigint';
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
-import type { ArrayValue, BooleanValue, ColorValue, EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
-import { convertJsValueToDivKit, transformColorValue } from '../utils';
-import { registerFunc } from './funcs';
+import type { ArrayValue, BooleanValue, ColorValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
+import { checkIntegerOverflow, transformColorValue } from '../utils';
+import { registerFunc, registerMethod } from './funcs';
 
-function arrayGetter(evalType: EvalTypesWithoutDatetime) {
+function arrayGetter(jsType: string, runtimeType: string) {
     return (ctx: EvalContext, array: ArrayValue, index: IntegerValue): EvalValue => {
         if (index.value < 0 || index.value >= array.value.length) {
             throw new Error(`Requested index (${index.value}) out of bounds array size (${array.value.length}).`);
         }
-        const val = array.value[Number(index.value)];
+        let val = array.value[Number(index.value)];
 
-        return convertJsValueToDivKit(ctx, val, evalType);
+        let type: string = typeof val;
+        if (
+            jsType === 'array' && !Array.isArray(val) ||
+            jsType !== 'array' && type !== jsType ||
+            type === 'object' && val === null
+        ) {
+            if (type === 'object') {
+                if (Array.isArray(val)) {
+                    type = 'array';
+                } else if (val === null) {
+                    type = 'null';
+                } else {
+                    type = 'dict';
+                }
+            }
+            throw new Error(`Incorrect value type: expected "${runtimeType}", got "${type}".`);
+        }
+        if (jsType === 'number' && runtimeType === 'integer') {
+            checkIntegerOverflow(ctx, val as number);
+            try {
+                val = toBigInt(val as number);
+            } catch (_err) {
+                throw new Error('Cannot convert value to integer.');
+            }
+        }
+        if (jsType === 'string' && runtimeType === 'color') {
+            val = transformColorValue(val as string);
+        }
+
+        return {
+            type: runtimeType,
+            value: val
+        } as EvalValue;
     };
 }
 
@@ -37,21 +69,21 @@ function optWrapper<ValueType extends EvalValue>(
     };
 }
 
-const getArrayString = arrayGetter(STRING);
-const getArrayNumber = arrayGetter(NUMBER);
-const getArrayInteger = arrayGetter(INTEGER);
-const getArrayBoolean = arrayGetter(BOOLEAN);
-const getArrayColor = arrayGetter(COLOR);
-const getArrayUrl = arrayGetter(URL);
-const getArrayArray = arrayGetter(ARRAY);
-const getArrayDict = arrayGetter(DICT);
+const getArrayString = arrayGetter('string', 'string');
+const getArrayNumber = arrayGetter('number', 'number');
+const getArrayInteger = arrayGetter('number', 'integer');
+const getArrayBoolean = arrayGetter('boolean', 'boolean');
+const getArrayColor = arrayGetter('string', 'color');
+const getArrayUrl = arrayGetter('string', 'url');
+const getArrayArray = arrayGetter('array', 'array');
+const getArrayDict = arrayGetter('object', 'dict');
 
-const getArrayOptString = optWrapper<StringValue>(getArrayString, STRING);
-const getArrayOptNumber = optWrapper<NumberValue>(getArrayNumber, NUMBER);
-const getArrayOptInteger = optWrapper<IntegerValue>(getArrayInteger, INTEGER);
-const getArrayOptBoolean = optWrapper<BooleanValue>(getArrayBoolean, BOOLEAN);
-const getArrayOptColor = optWrapper<ColorValue>(getArrayColor, COLOR);
-const getArrayOptUrl = optWrapper<UrlValue>(getArrayUrl, URL);
+const getArrayOptString = optWrapper<StringValue>(getArrayString, 'string');
+const getArrayOptNumber = optWrapper<NumberValue>(getArrayNumber, 'number');
+const getArrayOptInteger = optWrapper<IntegerValue>(getArrayInteger, 'integer');
+const getArrayOptBoolean = optWrapper<BooleanValue>(getArrayBoolean, 'boolean');
+const getArrayOptColor = optWrapper<ColorValue>(getArrayColor, 'color');
+const getArrayOptUrl = optWrapper<UrlValue>(getArrayUrl, 'url');
 
 function getArrayOptArray(ctx: EvalContext, array: ArrayValue, index: IntegerValue): EvalValue {
     try {
@@ -248,4 +280,13 @@ export function registerArray(): void {
     registerFunc('len', [
         ARRAY
     ], len);
+
+    registerMethod('getString', [ARRAY, INTEGER], getArrayString);
+    registerMethod('getInteger', [ARRAY, INTEGER], getArrayInteger);
+    registerMethod('getNumber', [ARRAY, INTEGER], getArrayNumber);
+    registerMethod('getBoolean', [ARRAY, INTEGER], getArrayBoolean);
+    registerMethod('getUrl', [ARRAY, INTEGER], getArrayUrl);
+    registerMethod('getColor', [ARRAY, INTEGER], getArrayColor);
+    registerMethod('getArray', [ARRAY, INTEGER], getArrayArray);
+    registerMethod('getDict', [ARRAY, INTEGER], getArrayDict);
 }

@@ -4,13 +4,14 @@ import type {
     BinaryExpression, BooleanLiteral, CallExpression, CompareOperator,
     ConditionalExpression, EqualityOperator, FactorOperator, IntegerLiteral,
     LogicalExpression,
+    MethodExpression,
     Node, NumberLiteral, StringLiteral, SumOperator,
     TemplateLiteral,
     TryExpression,
     UnaryExpression, Variable
 } from './ast';
 import type { WrappedError } from '../utils/wrapError';
-import { convertArgs, findBestMatchedFunc, Func, funcByArgs } from './funcs/funcs';
+import { convertArgs, findBestMatchedFunc, Func, funcByArgs, methodByArgs } from './funcs/funcs';
 import {
     checkIntegerOverflow,
     evalError,
@@ -442,7 +443,7 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
     const funcKey = funcName + ':' + args.map(arg => arg.type).join('#');
 
     if (!funcByArgs.has(funcKey)) {
-        const findRes = findBestMatchedFunc(funcName, args);
+        const findRes = findBestMatchedFunc('function', funcName, args);
         if ('expected' in findRes || 'type' in findRes && findRes.type === 'missing') {
             const argsType = args.map(arg => typeToString(arg.type)).join(', ');
             const prefix = `${funcName}(${argsToStr(args)})`;
@@ -478,6 +479,53 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
     }
 }
 
+function evalMethodExpression(ctx: EvalContext, expr: MethodExpression): EvalValue {
+    const methodName = expr.method.name;
+
+    let func: Func | undefined;
+
+    expr.arguments.unshift(expr.object);
+
+    let args = expr.arguments.map(arg => evalAny(ctx, arg));
+    const methodKey = methodName + ':' + args.map(arg => arg.type).join('#');
+
+    if (!methodByArgs.has(methodKey)) {
+        const findRes = findBestMatchedFunc('method', methodName, args);
+        if ('expected' in findRes || 'type' in findRes && findRes.type === 'missing') {
+            const argsType = args.slice(1).map(arg => typeToString(arg.type)).join(', ');
+            const prefix = `${methodName}(${argsToStr(args.slice(1))})`;
+
+            if (findRes.type === 'few' && args.length === 1) {
+                evalError(prefix, `Non empty argument list is required for method '${methodName}'.`);
+            } else if (findRes.type === 'many') {
+                evalError(prefix, `Method '${methodName}' has no matching override for given argument types: ${argsType}.`);
+            } else if (findRes.type === 'few' || findRes.type === 'mismatch') {
+                evalError(prefix, `Method '${methodName}' has no matching override for given argument types: ${argsType}.`);
+            } else {
+                evalError(prefix, `Unknown method name: ${methodName}.`);
+            }
+        }
+        func = findRes.func;
+
+        if (findRes.conversions) {
+            args = convertArgs(func, args);
+        }
+    } else {
+        func = methodByArgs.get(methodKey);
+    }
+
+    if (!func) {
+        throw new Error('Method not found');
+    }
+
+    try {
+        return func.cb(ctx, ...args);
+    } catch (err: any) {
+        const prefix = `${methodName}(${argsToStr(args.slice(1))})`;
+        evalError(prefix, err.message);
+    }
+}
+
 function evalVariable(ctx: EvalContext, expr: Variable): EvalValue {
     const varName = expr.id.name;
     const variable = ctx.variables.get(varName);
@@ -501,6 +549,7 @@ const EVAL_MAP = {
     LogicalExpression: evalLogicalExpression,
     BinaryExpression: evalBinaryExpression,
     CallExpression: evalCallExpression,
+    MethodExpression: evalMethodExpression,
     Variable: evalVariable
 };
 

@@ -15,6 +15,8 @@ export interface Func {
 
 export const funcs: Map<string, Func[]> = new Map();
 export const funcByArgs: Map<string, Func> = new Map();
+export const methods: Map<string, Func[]> = new Map();
+export const methodByArgs: Map<string, Func> = new Map();
 
 type FuncMatchError = {
     type: 'mismatch';
@@ -107,17 +109,91 @@ export function registerFunc(
     funcByArgs.set(funcKey, desc);
 }
 
+// no args
+export function registerMethod(name: string, args: [], cb: (ctx?: EvalContext) => EvalValue): void;
+// one specific arg
+export function registerMethod<
+    A0 extends EvalTypes
+>(
+    name: string,
+    args: [A0],
+    cb: (
+        ctx: EvalContext,
+        arg0: Extract<EvalValue, { type: A0 }>
+    ) => EvalValue
+): void;
+// two specific args
+export function registerMethod<
+    A0 extends EvalTypes,
+    A1 extends EvalTypes
+>(
+    name: string,
+    args: [A0, A1],
+    cb: (
+        ctx: EvalContext,
+        arg0: Extract<EvalValue, { type: A0 }>,
+        arg1: Extract<EvalValue, { type: A1 }>
+    ) => EvalValue
+): void;
+// three specific args
+export function registerMethod<
+    A0 extends EvalTypes,
+    A1 extends EvalTypes,
+    A2 extends EvalTypes
+>(
+    name: string,
+    args: [A0, A1, A2],
+    cb: (
+        ctx: EvalContext,
+        arg0: Extract<EvalValue, { type: A0 }>,
+        arg1: Extract<EvalValue, { type: A1 }>,
+        arg2: Extract<EvalValue, { type: A2 }>
+    ) => EvalValue
+): void;
+// any args
+export function registerMethod(
+    name: string,
+    args: FuncArg[],
+    cb: (ctx: EvalContext, ...args: any[]) => EvalValue
+): void;
+
+export function registerMethod(
+    name: string,
+    args: FuncArg[],
+    cb: (ctx: EvalContext, ...args: EvalValue[]) => EvalValue
+): void {
+    const desc: Func = {
+        args,
+        cb
+    };
+
+    const arr = methods.get(name) || [];
+
+    if (!methods.has(name)) {
+        methods.set(name, arr);
+    }
+    arr.push(desc);
+
+    const funcKey = name + ':' + args.map(it => {
+        if (typeof it === 'object') {
+            return it.type;
+        }
+        return it;
+    }).join('#');
+
+    methodByArgs.set(funcKey, desc);
+}
+
 function matchFuncArgs(func: Func, args: EvalValue[]): {
     type: 'match';
     conversions: number;
 } | FuncMatchError {
-    let minArgs = func.args.length;
+    const minArgs = func.args.length;
     let maxArgs = func.args.length;
     let conversions = 0;
     const lastArg = func.args[func.args.length - 1];
 
     if (typeof lastArg === 'object' && lastArg.isVararg) {
-        --minArgs;
         maxArgs = Infinity;
     }
 
@@ -163,11 +239,11 @@ function matchFuncArgs(func: Func, args: EvalValue[]): {
     };
 }
 
-export function findBestMatchedFunc(funcName: string, args: EvalValue[]): {
+export function findBestMatchedFunc(type: 'function' | 'method', funcName: string, args: EvalValue[]): {
     func: Func;
     conversions: number;
 } | FuncMatchError {
-    const list = funcs.get(funcName);
+    const list = (type === 'function' ? funcs : methods).get(funcName);
     if (!list) {
         return {
             type: 'missing'

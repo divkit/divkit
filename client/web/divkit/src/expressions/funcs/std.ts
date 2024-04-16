@@ -9,7 +9,7 @@ import type {
     UrlValue
 } from '../eval';
 import type { VariableType, VariableValue } from '../variable';
-import { registerFunc } from './funcs';
+import { registerFunc, registerMethod } from './funcs';
 import { BOOLEAN, COLOR, INTEGER, NUMBER, STRING, URL } from '../const';
 import { transformColorValue, valToString } from '../utils';
 import { MAX_INT, MIN_INT, toBigInt } from '../bigint';
@@ -217,4 +217,11 @@ export function registerStd(): void {
     registerFunc('getColorValue', [STRING, STRING], getColorValue);
     registerFunc('getUrlValue', [STRING, URL], getUrlValue);
     registerFunc('getUrlValue', [STRING, STRING], getUrlValue);
+
+    registerMethod('toString', [INTEGER], toString);
+    registerMethod('toString', [NUMBER], toString);
+    registerMethod('toString', [BOOLEAN], toString);
+    registerMethod('toString', [COLOR], toString);
+    registerMethod('toString', [URL], toString);
+    registerMethod('toString', [STRING], toString);
 }

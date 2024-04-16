@@ -41,7 +41,7 @@ function runCase(item: any) {
     }
     let ast;
     try {
-        ast = parse(item.expression, {
+        ast = parse(item.expression /* '@{5 - + 3}' */, {
             startRule: 'JsonStringContents'
         });
     } catch (err: any) {
@@ -72,6 +72,10 @@ function runCase(item: any) {
 
 describe('expressions', () => {
     for (const file of tests) {
+        /* if (file !== 'methods_dict.json') {
+            continue;
+        } */
+
         const name = file.replace('.json', '');
         const contents = require(path.resolve(dir, file));
 

@@ -92,3 +92,10 @@ export interface CallExpression {
     callee: Identifier;
     arguments: Node[];
 }
+
+export interface MethodExpression {
+    type: 'MethodExpression';
+    object: Node;
+    method: Identifier;
+    arguments: Node[];
+}

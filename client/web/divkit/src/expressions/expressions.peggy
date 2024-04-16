@@ -3,6 +3,10 @@
     import { toBigInt } from './bigint';
 
     function buildBinaryExpression(head, tail) {
+        if (!tail.length) {
+            return head;
+        }
+
         return tail.reduce((result, element) => {
             return {
                 type: 'BinaryExpression',
@@ -14,6 +18,10 @@
     }
 
     function buildLogicalExpression(head, tail) {
+        if (!tail.length) {
+            return head;
+        }
+
         return tail.reduce((result, element) => {
             return {
                 type: 'LogicalExpression',
@@ -22,6 +30,32 @@
                 right: element[3]
             };
         }, head);
+    }
+
+    function buildMethodCall(head, tail) {
+        if (!tail.length) {
+            return head;
+        }
+
+        return tail.reduce((result, element) => {
+            if (!element[5]) {
+                throw new Error('Method expected after .');
+            }
+            return {
+                type: 'MethodExpression',
+                object: result,
+                method: element[3],
+                arguments: element[5][2]
+            };
+        }, head);
+    }
+
+    function buildVariableOrBoolean(txt) {
+        if (txt === 'true' || txt === 'false') {
+            return {type: 'BooleanLiteral', value: txt === 'true'};
+        }
+
+        return {type: 'Variable', id: {type: 'Identifier', name: txt}};
     }
 
     function buildString(list) {
@@ -121,20 +155,23 @@ Sum
         { return buildBinaryExpression(head, tail); }
 
 Factor
-    = head:Unary tail:( _ ( '/' / '*' / '%' ) _  Unary )*
+    = head:UnaryExpression tail:( _ ( '/' / '*' / '%' ) _  UnaryExpression )*
         { return buildBinaryExpression(head, tail); }
 
-Unary
-    = Number
-    / Integer
-    / op:( '!' / '+' / '-' ) _  expr:Unary
+UnaryExpression
+    = &('-') val:Number { return val; }
+    / &('-') val:Integer { return val; }
+    / op:( '!' / '+' / '-' ) _  expr:Method
         { return {type: 'UnaryExpression', operator: op, argument: expr}; }
-    / Call
+    / Method
+
+Method
+    = head:Call tail:(_ '.' _ StrictIdentifier _ ('(' _ Arguments _ ')')?)*
+        { return buildMethodCall(head, tail); }
 
 Call
-    = id:Identifier _ '(' _ args:Arguments _ ')'
+    = id:StrictIdentifier _ '(' _ args:Arguments _ ')'
         { return {type: 'CallExpression', callee: id, arguments: args}; }
-    / id:Identifier { return {type: 'Variable', id}; }
     / PrimaryExpression
 
 Arguments
@@ -142,10 +179,10 @@ Arguments
     / _
 
 PrimaryExpression
-    = String
+    = IdentifierOrBoolean
+    / String
     / Number
     / Integer
-    / Boolean
     / '(' _ expr:Expression _ ')' { return expr; }
 
 String "string"
@@ -171,15 +208,12 @@ Number "number"
     = '-'? [0-9]* '.' [0-9]+ ( ( 'e' / 'E' ) ( '+' / '-' )? [0-9]+ )? { return {type: 'NumberLiteral', value: parseFloat(text())}; }
     / '-'? [0-9]+ ( 'e' / 'E' ) ( '+' / '-' )? [0-9]+ { return {type: 'NumberLiteral', value: parseFloat(text())}; }
 
-Boolean "boolean"
-    = 'true' { return {type: 'BooleanLiteral', value: true}; }
-    / 'false' { return {type: 'BooleanLiteral', value: false}; }
+IdentifierOrBoolean
+    = [a-zA-Z_] ([a-zA-Z_0-9]+ / '.' !( _ StrictIdentifier _ '(') )*
+        { return buildVariableOrBoolean(text()); }
 
-ReservedWord
-    = ( 'true' / 'false' ) ![a-zA-Z_0-9.]
-
-Identifier "identifier"
-    = !ReservedWord [a-zA-Z_][a-zA-Z_0-9.]* { return {type: 'Identifier', name: text()}; }
+StrictIdentifier
+    = [a-zA-Z_][a-zA-Z_0-9]* { return {type: 'Identifier', name: text()}; }
 
 _ "whitespace"
     = [ \t\r\n]*

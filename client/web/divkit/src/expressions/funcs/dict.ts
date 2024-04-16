@@ -1,7 +1,7 @@
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import type { BooleanValue, DictValue, EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
 import { convertJsValueToDivKit, transformColorValue } from '../utils';
-import { registerFunc } from './funcs';
+import { registerFunc, registerMethod } from './funcs';
 
 function getProp(obj: object, path: string[]): unknown {
     let current: object = obj;
@@ -22,6 +22,10 @@ function getProp(obj: object, path: string[]): unknown {
 
 function dictGetter(evalType: EvalTypesWithoutDatetime) {
     return (ctx: EvalContext, dict: DictValue, ...path: StringValue[]): EvalValue => {
+        if (path.length === 0) {
+            throw new Error('Non empty argument list is required.');
+        }
+
         const val = getProp(dict.value, path.map(it => it.value));
 
         return convertJsValueToDivKit(ctx, val, evalType);
@@ -91,213 +95,67 @@ function getDictOptDict(ctx: EvalContext, dict: DictValue, ...path: StringValue[
 }
 
 export function registerDict(): void {
-    registerFunc('getDictString', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictString);
-    registerFunc('getStringFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictString);
+    const STRING_VARARG = {
+        type: STRING,
+        isVararg: true
+    } as const;
 
-    registerFunc('getDictNumber', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictNumber);
-    registerFunc('getNumberFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictNumber);
+    registerFunc('getDictString', [DICT, STRING_VARARG], getDictString);
+    registerFunc('getStringFromDict', [DICT, STRING_VARARG], getDictString);
 
-    registerFunc('getDictInteger', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictInteger);
-    registerFunc('getIntegerFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictInteger);
+    registerFunc('getDictNumber', [DICT, STRING_VARARG], getDictNumber);
+    registerFunc('getNumberFromDict', [DICT, STRING_VARARG], getDictNumber);
 
-    registerFunc('getDictBoolean', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictBoolean);
-    registerFunc('getBooleanFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictBoolean);
+    registerFunc('getDictInteger', [DICT, STRING_VARARG], getDictInteger);
+    registerFunc('getIntegerFromDict', [DICT, STRING_VARARG], getDictInteger);
 
-    registerFunc('getDictColor', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictColor);
-    registerFunc('getColorFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictColor);
+    registerFunc('getDictBoolean', [DICT, STRING_VARARG], getDictBoolean);
+    registerFunc('getBooleanFromDict', [DICT, STRING_VARARG], getDictBoolean);
 
-    registerFunc('getDictUrl', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictUrl);
-    registerFunc('getUrlFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictUrl);
+    registerFunc('getDictColor', [DICT, STRING_VARARG], getDictColor);
+    registerFunc('getColorFromDict', [DICT, STRING_VARARG], getDictColor);
 
-    registerFunc('getDictOptString', [
-        STRING, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptString);
-    registerFunc('getOptStringFromDict', [
-        STRING, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptString);
+    registerFunc('getDictUrl', [DICT, STRING_VARARG], getDictUrl);
+    registerFunc('getUrlFromDict', [DICT, STRING_VARARG], getDictUrl);
 
-    registerFunc('getDictOptNumber', [
-        NUMBER, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptNumber);
-    registerFunc('getOptNumberFromDict', [
-        NUMBER, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptNumber);
+    registerFunc('getDictOptString', [STRING, DICT, STRING_VARARG], getDictOptString);
+    registerFunc('getOptStringFromDict', [STRING, DICT, STRING_VARARG], getDictOptString);
 
-    registerFunc('getDictOptInteger', [
-        INTEGER, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptInteger);
-    registerFunc('getOptIntegerFromDict', [
-        INTEGER, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptInteger);
+    registerFunc('getDictOptNumber', [NUMBER, DICT, STRING_VARARG], getDictOptNumber);
+    registerFunc('getOptNumberFromDict', [NUMBER, DICT, STRING_VARARG], getDictOptNumber);
 
-    registerFunc('getDictOptBoolean', [
-        BOOLEAN, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptBoolean);
-    registerFunc('getOptBooleanFromDict', [
-        BOOLEAN, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptBoolean);
+    registerFunc('getDictOptInteger', [INTEGER, DICT, STRING_VARARG], getDictOptInteger);
+    registerFunc('getOptIntegerFromDict', [INTEGER, DICT, STRING_VARARG], getDictOptInteger);
 
-    registerFunc('getDictOptColor', [
-        COLOR, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptColor);
-    registerFunc('getOptColorFromDict', [
-        COLOR, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptColor);
+    registerFunc('getDictOptBoolean', [BOOLEAN, DICT, STRING_VARARG], getDictOptBoolean);
+    registerFunc('getOptBooleanFromDict', [BOOLEAN, DICT, STRING_VARARG], getDictOptBoolean);
 
-    registerFunc('getDictOptColor', [
-        STRING, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptColor);
-    registerFunc('getOptColorFromDict', [
-        STRING, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptColor);
+    registerFunc('getDictOptColor', [COLOR, DICT, STRING_VARARG], getDictOptColor);
+    registerFunc('getOptColorFromDict', [COLOR, DICT, STRING_VARARG], getDictOptColor);
 
-    registerFunc('getDictOptUrl', [
-        STRING, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptUrl);
-    registerFunc('getOptUrlFromDict', [
-        STRING, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptUrl);
+    registerFunc('getDictOptColor', [STRING, DICT, STRING_VARARG], getDictOptColor);
+    registerFunc('getOptColorFromDict', [STRING, DICT, STRING_VARARG], getDictOptColor);
 
-    registerFunc('getDictOptUrl', [
-        URL, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptUrl);
-    registerFunc('getOptUrlFromDict', [
-        URL, DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptUrl);
+    registerFunc('getDictOptUrl', [STRING, DICT, STRING_VARARG], getDictOptUrl);
+    registerFunc('getOptUrlFromDict', [STRING, DICT, STRING_VARARG], getDictOptUrl);
 
-    registerFunc('getDictFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictDict);
+    registerFunc('getDictOptUrl', [URL, DICT, STRING_VARARG], getDictOptUrl);
+    registerFunc('getOptUrlFromDict', [URL, DICT, STRING_VARARG], getDictOptUrl);
 
-    registerFunc('getArrayFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictArray);
+    registerFunc('getDictFromDict', [DICT, STRING_VARARG], getDictDict);
 
-    registerFunc('getOptArrayFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptArray);
+    registerFunc('getArrayFromDict', [DICT, STRING_VARARG], getDictArray);
 
-    registerFunc('getOptDictFromDict', [
-        DICT, {
-            type: STRING,
-            isVararg: true
-        }
-    ], getDictOptDict);
+    registerFunc('getOptArrayFromDict', [DICT, STRING_VARARG], getDictOptArray);
+
+    registerFunc('getOptDictFromDict', [DICT, STRING_VARARG], getDictOptDict);
+
+    registerMethod('getString', [DICT, STRING_VARARG], getDictString);
+    registerMethod('getBoolean', [DICT, STRING_VARARG], getDictBoolean);
+    registerMethod('getInteger', [DICT, STRING_VARARG], getDictInteger);
+    registerMethod('getNumber', [DICT, STRING_VARARG], getDictNumber);
+    registerMethod('getUrl', [DICT, STRING_VARARG], getDictUrl);
+    registerMethod('getColor', [DICT, STRING_VARARG], getDictColor);
+    registerMethod('getArray', [DICT, STRING_VARARG], getDictArray);
+    registerMethod('getDict', [DICT, STRING_VARARG], getDictDict);
 }
