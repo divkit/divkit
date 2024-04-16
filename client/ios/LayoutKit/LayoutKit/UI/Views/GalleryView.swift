@@ -129,7 +129,13 @@ public final class GalleryView: BlockView {
            .pending where frame.size == .zero:
         deferredStateSetting = .pending(self.state)
       case .idle, .pending, .firstLayoutPerformed:
-        updateContentOffset(to: self.state.contentPosition, animated: oldModel?.path == model.path)
+        if oldModel?.path == model.path {
+          updateContentOffset(to: self.state.contentPosition, animated: true)
+        } else {
+          collectionView.performWithDetachedDelegate {
+            updateContentOffset(to: self.state.contentPosition, animated: false)
+          }
+        }
       }
     }
   }
