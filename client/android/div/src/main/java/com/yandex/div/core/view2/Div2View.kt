@@ -187,6 +187,7 @@ class Div2View private constructor(
         data ?: return
         oldExpressionsRuntime = _expressionsRuntime
         _expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data, this)
+        _expressionsRuntime?.updateSubscriptions()
         if (oldExpressionsRuntime != _expressionsRuntime) {
             oldExpressionsRuntime?.clearBinding()
         }

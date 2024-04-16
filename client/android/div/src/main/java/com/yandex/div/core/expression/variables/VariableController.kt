@@ -116,12 +116,19 @@ internal class VariableController {
         return null
     }
 
-    internal fun cleanup() {
+    internal fun cleanupSubscriptions() {
         extraVariablesSources.forEach { variableSource ->
             variableSource.removeVariablesObserver(notifyVariableChangedCallback)
             variableSource.removeDeclarationObserver(declarationObserver)
         }
         onAnyVariableChangeCallback = null
+    }
+
+    internal fun restoreSubscriptions() {
+        extraVariablesSources.forEach { variableSource ->
+            variableSource.observeVariables(notifyVariableChangedCallback)
+            variableSource.observeDeclaration(declarationObserver)
+        }
     }
 
     @Throws(VariableDeclarationException::class)

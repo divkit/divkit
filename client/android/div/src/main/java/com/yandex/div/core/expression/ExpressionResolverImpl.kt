@@ -21,7 +21,7 @@ import com.yandex.div.json.resolveFailed
 import com.yandex.div.json.typeMismatch
 
 internal class ExpressionResolverImpl(
-    variableController: VariableController,
+    private val variableController: VariableController,
     private val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
 ) : ExpressionResolver {
@@ -29,18 +29,6 @@ internal class ExpressionResolverImpl(
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
 
     private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
-
-    init {
-        variableController.setOnAnyVariableChangeCallback { v ->
-            val capturedExpressions = varToExpressions[v.name]?.toList()
-            capturedExpressions?.forEach { expr: String ->
-                evaluationsCache.remove(expr)
-                expressionObservers[expr]?.forEach {
-                    it.invoke()
-                }
-            }
-        }
-    }
 
     override fun <R, T : Any> get(
         expressionKey: String,
@@ -208,5 +196,17 @@ internal class ExpressionResolverImpl(
         val observers = expressionObservers.getOrPut(rawExpression) { ObserverList() }
         observers.addObserver(callback)
         return Disposable { expressionObservers[rawExpression]?.removeObserver(callback) }
+    }
+
+    internal fun subscribeOnVariables() {
+        variableController.setOnAnyVariableChangeCallback { v ->
+            val capturedExpressions = varToExpressions[v.name]?.toList()
+            capturedExpressions?.forEach { expr: String ->
+                evaluationsCache.remove(expr)
+                expressionObservers[expr]?.forEach {
+                    it.invoke()
+                }
+            }
+        }
     }
 }

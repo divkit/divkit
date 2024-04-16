@@ -19,6 +19,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import java.util.*
+import org.junit.Before
 
 /**
  * Tests for [ExpressionResolverImpl].
@@ -92,6 +93,11 @@ class ExpressionResolverImplTest {
             ),
             mock()
         )
+    }
+
+    @Before
+    fun updateSubscriptions() {
+        underTest.subscribeOnVariables()
     }
 
     @Test

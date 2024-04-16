@@ -10,7 +10,9 @@ internal class ExpressionsRuntime(
     val variableController: VariableController,
     val triggersController: TriggersController,
 ) {
-
+    private var unsubscribed = true
+    private val expressionResolverImpl get() = expressionResolver as? ExpressionResolverImpl
+        ?: throw AssertionError("ExpressionRuntime must have ExpressionResolverImpl as expressionResolver.")
     fun clearBinding() {
         triggersController.clearBinding()
     }
@@ -19,8 +21,17 @@ internal class ExpressionsRuntime(
         triggersController.onAttachedToWindow(view)
     }
 
+    fun updateSubscriptions() {
+        if (unsubscribed) {
+            unsubscribed = false
+            variableController.restoreSubscriptions()
+            expressionResolverImpl.subscribeOnVariables()
+        }
+    }
+
     internal fun cleanup() {
-        variableController.cleanup()
+        unsubscribed = true
+        variableController.cleanupSubscriptions()
         triggersController.clearBinding()
     }
 }
