@@ -2,6 +2,7 @@ import type { Variable } from './expressions/variable';
 import type { Node } from './expressions/ast';
 import type { ComponentCallback, CustomActionCallback, Customization, DivExtensionClass, DivJson, ErrorCallback, FetchInit, Platform, StatCallback, Theme, TypefaceProvider, WrappedError } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
+import type { Store } from '../typings/store';
 import { parse } from './expressions/expressions';
 import { evalExpression as evalExpressionInner, EvalResult } from './expressions/eval';
 import { funcs } from './expressions/funcs/funcs';
@@ -29,6 +30,7 @@ export function render(opts: {
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
+    store?: Store;
 }): DivkitDebugInstance {
     const { target, hydrate, ...rest } = opts;
 
@@ -90,7 +92,7 @@ export function evalExpressionWithFullResult(expr: string, opts?: {
             warnings: []
         };
     }
-    return evalExpressionInner(opts?.variables || new Map(), ast);
+    return evalExpressionInner(opts?.variables || new Map(), undefined, ast);
 }
 
 export { valToString } from './expressions/utils';

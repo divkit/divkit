@@ -6,6 +6,7 @@ import { registerColors } from './colors';
 import { registerInterval } from './interval';
 import { registerDict } from './dict';
 import { registerArray } from './array';
+import { registerStored } from './stored';
 
 export function register(): void {
     registerStd();
@@ -16,4 +17,5 @@ export function register(): void {
     registerColors();
     registerDict();
     registerArray();
+    registerStored();
 }

@@ -49,7 +49,29 @@ window.root = new Root({
             ['new_custom_container_1', {
                 element: 'new-custom-container'
             }]
-        ])
+        ]),
+        store: {
+            getValue(name, type) {
+                try {
+                    const json = localStorage.getItem('divkit:' + name);
+                    if (json) {
+                        const parsed = JSON.parse(json);
+                        if (type === parsed.type && Date.now() < parsed.lifetime && parsed.value) {
+                            return parsed.value;
+                        }
+                    }
+                } catch (err) {
+                    //
+                }
+            },
+            setValue(name, type, value, lifetime) {
+                try {
+                    localStorage.setItem('divkit:' + name, JSON.stringify({value, type, lifetime: Date.now() + lifetime * 1000}));
+                } catch (err) {
+                    //
+                }
+            },
+        }
     }
 });
 

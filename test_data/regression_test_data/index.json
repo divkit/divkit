@@ -2145,7 +2145,8 @@
     {
       "title": "Persistent values storage",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "steps": [
         "Press 'Store value for 10 seconds'",

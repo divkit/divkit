@@ -26,10 +26,13 @@ import { register } from './funcs';
 import { Variable as VariableInstance, variableToValue } from './variable';
 import { toBigInt } from './bigint';
 import { wrapError } from '../utils/wrapError';
+import type { Store } from '../../typings/store';
 
 export type VariablesMap = Map<string, VariableInstance>;
 
 export type EvalTypes = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'datetime' | 'dict' | 'array';
+
+export type EvalTypesWithoutDatetime = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
 
 export interface EvalValueBase {
     type: string;
@@ -95,6 +98,7 @@ export interface EvalContext {
     variables: VariablesMap;
     warnings: WrappedError[];
     safeIntegerOverflow: boolean;
+    store?: Store;
 }
 
 register();
@@ -507,7 +511,7 @@ export function evalAny(ctx: EvalContext, expr: Node): EvalValue {
     throw new Error('Unsupported expression');
 }
 
-export function evalExpression(vars: VariablesMap, expr: Node): {
+export function evalExpression(vars: VariablesMap, store: Store | undefined, expr: Node): {
     result: EvalResult;
     warnings: WrappedError[];
 } {
@@ -515,7 +519,8 @@ export function evalExpression(vars: VariablesMap, expr: Node): {
         const ctx: EvalContext = {
             variables: vars,
             warnings: [],
-            safeIntegerOverflow: false
+            safeIntegerOverflow: false,
+            store
         };
 
         const result = evalAny(ctx, expr);

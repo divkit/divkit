@@ -12,6 +12,7 @@ import type {
     FetchInit
 } from './common';
 import type { CustomComponentDescription } from './custom';
+import type { Store } from './store';
 import type { GlobalVariablesController } from './variables';
 
 export function render(opts: {
@@ -34,6 +35,7 @@ export function render(opts: {
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
+    store?: Store;
 }): DivkitInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';

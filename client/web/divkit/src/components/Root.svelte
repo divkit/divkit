@@ -11,6 +11,8 @@
     function onWindowPointerDown() {
         isPointerFocus.set(true);
     }
+
+    const AVAIL_SET_STORED_TYPES = new Set(['string', 'integer', 'number', 'url', 'color', 'boolean']);
 </script>
 
 <script lang="ts">
@@ -49,6 +51,7 @@
     import type { VideoElements } from '../types/video';
     import type { Patch } from '../types/patch';
     import type { ComponentContext } from '../types/componentContext';
+    import type { Store, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { FocusableMethods, ParentMethods, ROOT_CTX, RootCtxValue, Running } from '../context/root';
@@ -99,6 +102,7 @@
     export let tooltipRoot: HTMLElement | undefined = undefined;
     export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
     export let direction: Direction = 'ltr';
+    export let store: Store | undefined = undefined;
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -256,7 +260,7 @@
 
         const vars = mergeVars(variables, additionalVars);
 
-        const prepared = prepareVars(jsonProp, logError);
+        const prepared = prepareVars(jsonProp, logError, store);
         if (!prepared.vars.length) {
             if (prepared.hasExpression) {
                 return constStore(prepared.applyVars(vars));
@@ -276,7 +280,7 @@
         additionalVars?: Map<string, Variable>,
         keepComplex = false
     ): MaybeMissing<T> {
-        const prepared = prepareVars(jsonProp, logError);
+        const prepared = prepareVars(jsonProp, logError, store);
 
         if (!prepared.hasExpression) {
             return jsonProp;
@@ -716,6 +720,39 @@
         });
     }
 
+    function callSetStoredValue(
+        componentContext: ComponentContext | undefined,
+        name: string | null,
+        value: string | null,
+        type: string | null,
+        lifetime: string | null
+    ): void {
+        const log = componentContext?.logError || logError;
+        if (!store) {
+            log(wrapError(new Error('Store is not configured')));
+            return;
+        }
+
+        let val: string | number | boolean | null = value;
+
+        if (!name || !val || !type || !lifetime) {
+            log(wrapError(new Error('Missing required params for set_stored_value')));
+            return;
+        }
+        if (!AVAIL_SET_STORED_TYPES.has(type)) {
+            log(wrapError(new Error('Incorrect stored type')));
+            return;
+        }
+
+        if (type === 'integer' || type === 'number') {
+            val = Number(val);
+        } else if (type === 'boolean') {
+            val = val === 'true';
+        }
+
+        store.setValue(name, type as StoreTypes, val, Number(lifetime));
+    }
+
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
         execActionInternal(getJsonWithVars(logError, action));
     }
@@ -819,6 +856,10 @@
                     case 'hide_tooltip':
                         callHideTooltip(params.get('id'), componentContext);
                         break;
+                    case 'set_stored_value': {
+                        callSetStoredValue(componentContext, params.get('name'), params.get('value'), params.get('type'), params.get('lifetime'));
+                        break;
+                    }
                     default:
                         log(wrapError(new Error('Unknown type of action'), {
                             additional: {
@@ -1548,7 +1589,7 @@
                         const stores = exprVars.map(name => variables.get(name) || awaitVariableChanges(name));
 
                         derived(stores, () => {
-                            const res = evalExpression(variables, ast);
+                            const res = evalExpression(variables, store, ast);
 
                             res.warnings.forEach(logError);
 

@@ -16,6 +16,7 @@ import type {
 } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 import type { CustomComponentDescription } from '../typings/custom';
+import type { Store } from '../typings/store';
 
 export function render(opts: {
     target: HTMLElement;
@@ -38,6 +39,7 @@ export function render(opts: {
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     direction?: Direction;
+    store?: Store;
 }): DivkitInstance {
     const { target, hydrate, ...rest } = opts;
 

@@ -55,7 +55,7 @@ function runCase(item: any) {
         }
         return;
     }
-    const res = evalExpression(vars, ast);
+    const res = evalExpression(vars, undefined, ast);
     expect(typeof res.result.value).toEqual('bigint');
 }
 

@@ -6,6 +6,7 @@ import type {
     TypefaceProvider
 } from './common';
 import type { CustomComponentDescription } from './custom';
+import type { Store } from './store';
 
 export function render(opts: {
     json: DivJson;
@@ -17,4 +18,5 @@ export function render(opts: {
     onError?: ErrorCallback;
     typefaceProvider?: TypefaceProvider;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
+    store?: Store;
 }): string;

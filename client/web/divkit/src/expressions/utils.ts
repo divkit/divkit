@@ -1,4 +1,4 @@
-import type { EvalContext, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
+import type { EvalContext, EvalTypesWithoutDatetime, EvalValue, EvalValueBase, IntegerValue, NumberValue } from './eval';
 import type { Node, Variable } from './ast';
 import type { EvalTypes } from './eval';
 import type { VariablesMap } from './eval';
@@ -170,4 +170,52 @@ export function integerToNumber(integerValue: IntegerValue): NumberValue {
         type: NUMBER,
         value: Number(integerValue.value)
     };
+}
+
+const EVAL_TYPE_TO_JS_TYPE = {
+    string: 'string',
+    number: 'number',
+    integer: 'number',
+    boolean: 'boolean',
+    color: 'string',
+    url: 'string',
+    array: 'array',
+    dict: 'object'
+};
+export function convertJsValueToDivKit(ctx: EvalContext, val: unknown, evalType: EvalTypesWithoutDatetime): EvalValue {
+    const jsType = EVAL_TYPE_TO_JS_TYPE[evalType];
+
+    let type: string = typeof val;
+    if (
+        jsType === 'array' && !Array.isArray(val) ||
+        jsType !== 'array' && type !== jsType ||
+        type === 'object' && val === null
+    ) {
+        if (type === 'object') {
+            if (Array.isArray(val)) {
+                type = 'array';
+            } else if (val === null) {
+                type = 'null';
+            } else {
+                type = 'dict';
+            }
+        }
+        throw new Error(`Incorrect value type: expected "${evalType}", got "${type}".`);
+    }
+    if (jsType === 'number' && evalType === 'integer') {
+        checkIntegerOverflow(ctx, val as number);
+        try {
+            val = toBigInt(val as number);
+        } catch (_err) {
+            throw new Error('Cannot convert value to integer.');
+        }
+    }
+    if (jsType === 'string' && evalType === 'color') {
+        val = transformColorValue(val as string);
+    }
+
+    return {
+        type: evalType,
+        value: val
+    } as EvalValue;
 }

@@ -1,7 +1,6 @@
-import { toBigInt } from '../bigint';
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
-import { ArrayValue, BooleanValue, DictValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
-import { checkIntegerOverflow, transformColorValue } from '../utils';
+import type { BooleanValue, DictValue, EvalContext, EvalTypes, EvalTypesWithoutDatetime, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
+import { convertJsValueToDivKit, transformColorValue } from '../utils';
 import { registerFunc } from './funcs';
 
 function getProp(obj: object, path: string[]): unknown {
@@ -21,43 +20,11 @@ function getProp(obj: object, path: string[]): unknown {
     return current;
 }
 
-function dictGetter(jsType: string, runtimeType: string) {
+function dictGetter(evalType: EvalTypesWithoutDatetime) {
     return (ctx: EvalContext, dict: DictValue, ...path: StringValue[]): EvalValue => {
-        let val = getProp(dict.value, path.map(it => it.value));
+        const val = getProp(dict.value, path.map(it => it.value));
 
-        let type: string = typeof val;
-        if (
-            jsType === 'array' && !Array.isArray(val) ||
-            jsType !== 'array' && type !== jsType ||
-            type === 'object' && val === null
-        ) {
-            if (type === 'object') {
-                if (Array.isArray(val)) {
-                    type = 'array';
-                } else if (val === null) {
-                    type = 'null';
-                } else {
-                    type = 'dict';
-                }
-            }
-            throw new Error(`Incorrect value type: expected "${runtimeType}", got "${type}".`);
-        }
-        if (jsType === 'number' && runtimeType === 'integer') {
-            checkIntegerOverflow(ctx, val as number);
-            try {
-                val = toBigInt(val as number);
-            } catch (_err) {
-                throw new Error('Cannot convert value to integer.');
-            }
-        }
-        if (jsType === 'string' && runtimeType === 'color') {
-            val = transformColorValue(val as string);
-        }
-
-        return {
-            type: runtimeType,
-            value: val
-        } as EvalValue;
+        return convertJsValueToDivKit(ctx, val, evalType);
     };
 }
 
@@ -83,21 +50,21 @@ function optWrapper<ValueType extends EvalValue>(
     };
 }
 
-const getDictString = dictGetter('string', 'string');
-const getDictNumber = dictGetter('number', 'number');
-const getDictInteger = dictGetter('number', 'integer');
-const getDictBoolean = dictGetter('boolean', 'boolean');
-const getDictColor = dictGetter('string', 'color');
-const getDictUrl = dictGetter('string', 'url');
-const getDictArray = dictGetter('array', 'array');
-const getDictDict = dictGetter('object', 'dict');
+const getDictString = dictGetter(STRING);
+const getDictNumber = dictGetter(NUMBER);
+const getDictInteger = dictGetter(INTEGER);
+const getDictBoolean = dictGetter(BOOLEAN);
+const getDictColor = dictGetter(COLOR);
+const getDictUrl = dictGetter(URL);
+const getDictArray = dictGetter(ARRAY);
+const getDictDict = dictGetter(DICT);
 
-const getDictOptString = optWrapper<StringValue>(getDictString, 'string');
-const getDictOptNumber = optWrapper<NumberValue>(getDictNumber, 'number');
-const getDictOptInteger = optWrapper<IntegerValue>(getDictInteger, 'integer');
-const getDictOptBoolean = optWrapper<BooleanValue>(getDictBoolean, 'boolean');
-const getDictOptColor = optWrapper<BooleanValue>(getDictColor, 'color');
-const getDictOptUrl = optWrapper<BooleanValue>(getDictUrl, 'url');
+const getDictOptString = optWrapper<StringValue>(getDictString, STRING);
+const getDictOptNumber = optWrapper<NumberValue>(getDictNumber, NUMBER);
+const getDictOptInteger = optWrapper<IntegerValue>(getDictInteger, INTEGER);
+const getDictOptBoolean = optWrapper<BooleanValue>(getDictBoolean, BOOLEAN);
+const getDictOptColor = optWrapper<BooleanValue>(getDictColor, COLOR);
+const getDictOptUrl = optWrapper<BooleanValue>(getDictUrl, URL);
 
 function getDictOptArray(ctx: EvalContext, dict: DictValue, ...path: StringValue[]): EvalValue {
     try {
