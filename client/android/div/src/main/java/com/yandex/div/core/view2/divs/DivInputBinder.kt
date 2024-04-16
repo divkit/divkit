@@ -4,8 +4,10 @@ import android.graphics.drawable.Drawable
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.dagger.DivScope
@@ -248,7 +250,10 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.observeIsEnabled(div: DivInput, resolver: ExpressionResolver) {
-        val callback = { isEnabled: Boolean -> enabled = isEnabled }
+        val callback = { isEnabled: Boolean ->
+            if (!isEnabled && isFocused) closeKeyboard(this)
+            enabled = isEnabled
+        }
         addSubscription(div.isEnabled.observeAndGet(resolver, callback))
     }
 
@@ -425,6 +430,11 @@ internal class DivInputBinder @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun closeKeyboard(view: View) {
+        val imm = ContextCompat.getSystemService(view.context, InputMethodManager::class.java)
+        imm?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun ValidatorItemData.validate(
