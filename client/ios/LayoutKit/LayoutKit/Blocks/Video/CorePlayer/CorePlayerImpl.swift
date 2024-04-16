@@ -68,10 +68,16 @@ final class CorePlayerImpl: CorePlayer {
   }
 
   func play() {
+    guard player.timeControlStatus != .playing else {
+      return
+    }
     player.play()
   }
 
   func pause() {
+    guard player.timeControlStatus != .paused else {
+      return
+    }
     player.pause()
   }
 
