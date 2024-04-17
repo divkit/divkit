@@ -72,6 +72,9 @@ internal class DivVideoBinder @Inject constructor(
                 view.context,
                 mapOf("scale" to scale)
             )
+        }.apply {
+            // We won't to show black video square before preview is rendered
+            visibility = View.INVISIBLE
         }
 
         val previewImageView: ImageView = currentPreviewView ?: ImageView(view.context).apply {
@@ -88,6 +91,7 @@ internal class DivVideoBinder @Inject constructor(
                     setImageBitmap(preview)
                 }
             }
+            playerView.visibility = View.VISIBLE
         }
 
         val playerListener = object : DivPlayer.Observer {
@@ -195,7 +199,13 @@ internal class DivVideoBinder @Inject constructor(
         resolver: ExpressionResolver,
         onPreviewDecoded:(Bitmap?) -> Unit,
     ) {
-        val base64String = preview?.evaluate(resolver) ?: return
+        val base64String = preview?.evaluate(resolver)
+
+        if (base64String == null) {
+            onPreviewDecoded(null)
+            return
+        }
+
         val decodeTask = DecodeBase64ImageTask(base64String, false, onPreviewDecoded)
         executorService.submit(decodeTask)
     }
