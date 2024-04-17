@@ -1,0 +1,14 @@
+{
+    "features": [{
+        "id": "asset_support",
+        "name": "Built-in <code>divkit-asset://</code> support",
+        "compat": {
+            "ios": {
+                "version_added": "29.11.0"
+            },
+            "web": {
+                "version_added": "29.13.0"
+            }
+        }
+    }]
+}

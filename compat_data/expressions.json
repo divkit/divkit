@@ -8,6 +8,9 @@
             },
             "web": {
                 "version_added": "29.10.0"
+            },
+            "android": {
+                "version_added": "29.14.0"
             }
         }
     }]

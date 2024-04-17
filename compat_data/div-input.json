@@ -10,5 +10,16 @@
                 "version_added": "29.9.0"
             }
         }
+    }, {
+        "id": "input_is_enabled",
+        "name": "Input property <code>is_enabled</code>",
+        "compat": {
+            "ios": {
+                "version_added": "29.13.0"
+            },
+            "web": {
+                "version_added": "29.14.0"
+            }
+        }
     }]
 }

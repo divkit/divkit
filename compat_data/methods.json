@@ -1,0 +1,37 @@
+{
+    "features": [{
+        "id": "methods",
+        "name": "Methods basic support",
+        "compat": {
+            "ios": {
+                "version_added": "29.14.0",
+                "notes": "It does not support methods for intermediate values, such as expressions in parentheses, for example <code>(1 + 2)</code>",
+                "partial_implementation": true
+            }
+        }
+    }, {
+        "id": "methods_to_string",
+        "name": "Method <code>toString</code> for the strings, integers, numbers, booleans, colors and urls",
+        "compat": {
+            "ios": {
+                "version_added": "29.14.0"
+            }
+        }
+    }, {
+        "id": "methods_dict_getters",
+        "name": "Methods-getters for the <code>dict</code>",
+        "compat": {
+            "ios": {
+                "version_added": "29.14.0"
+            }
+        }
+    }, {
+        "id": "methods_array_getters",
+        "name": "Methods-getters for the <code>array</code>",
+        "compat": {
+            "ios": {
+                "version_added": "29.14.0"
+            }
+        }
+    }]
+}
