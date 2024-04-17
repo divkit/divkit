@@ -1,3 +1,39 @@
+## 29.15.0
+
+# Android Client:
+* Added ability to set a specific logging level using DivKit#setLogLevel.
+* Replaced `String` with `CharArray` at expression tokenization process.
+* Recreating subscriptions to local variables in case Div2View is recreated after destroying its lifecyclerOwner in order to preserve the state of local variables.
+* Fixed that invalid base64 preview in `DivVideo` may cause `IllegalArgumentException`.
+* Fixed NoSuchElementException on handling disappear actions.
+* Fixed accessibility of gallery children when exclude a11y mode turned on.
+* Fixed that `video` screen could show up before `preview` was rendered.
+
+# iOS Client:
+* Removed mask from GalleryView to reduce offscreen rendering.
+* Added `toString` method/function for arrays and dictionaries.
+* Fixed arrays and dictionaries convertion to string.
+* Removed unnecessary re-creation of gestureRecognizers.
+* Fixed resetting inconsistent gallery state in pager.
+* Fixed allocated unfair lock in `DivBlockStateStorage`.
+* Added `toString(string)` function.
+* Added `scale` support in Lottie animation.
+* Added `len` function for arrays.
+* Fixed resetting video when `elapsed_time_variable` is not set.
+* Fixed pager state after reuse.
+* Fixed looping of video player events.
+
+# Web Client:
+* Persistent variable storage has been implemented, including the action `set_stored_value` along with the function `getStoredStringValue` and others.
+* Fixed an issue with calling `disappear_actions` when destroying a component (for example, when hiding a tooltip).
+* Supported flag `is_enabled` for `input`.
+* Fixed an issue with the patch changes after the tooltip action.
+* Added `toString(string)` function.
+* Added support for methods in expressions, including `toString`, `getString`, `getBoolean`, `getInteger`, `getNumber`, `getUrl`, `getColor`, `getDict`, `getArray`.
+* Added support for the `menu_items` property inside `action`s (with a additional `customization` properties `menuPopupClass` and `menuItemClass`).
+* Fixed an issue with the nested `longtap_actions` and simultaneous `actions` and `longtap_actions` processing.
+
+
 ## 29.14.0
 
 # Android Client:
@@ -143,7 +179,7 @@
 # Android Client:
 * Supported page switching inside `pager` using focus.
 * `separator` and `image` without any `action` or `accessibility` block are excluded from accessibility.
-* Fixed subscription in `video` to fields with `variables` 
+* Fixed subscription in `video` to fields with `variables`
 
 # iOS Client:
 * Added `focus_element` action support.

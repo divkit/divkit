@@ -1,3 +1,15 @@
+## 29.15.0 (April 22, 2024)
+
+* Persistent variable storage has been implemented, including the action `set_stored_value` along with the function `getStoredStringValue` and others.
+* Fixed an issue with calling `disappear_actions` when destroying a component (for example, when hiding a tooltip).
+* Supported flag `is_enabled` for `input`.
+* Fixed an issue with the patch changes after the tooltip action.
+* Added `toString(string)` function.
+* Added support for methods in expressions, including `toString`, `getString`, `getBoolean`, `getInteger`, `getNumber`, `getUrl`, `getColor`, `getDict`, `getArray`.
+* Added support for the `menu_items` property inside `action`s (with a additional `customization` properties `menuPopupClass` and `menuItemClass`).
+* Fixed an issue with the nested `longtap_actions` and simultaneous `actions` and `longtap_actions` processing.
+
+
 ## 29.12.0 (April 1, 2024)
 
 * Fixed an issue with deep `state` changes.
