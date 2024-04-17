@@ -35,167 +35,77 @@ import Foundation
 
 import CommonCorePublic
 
-/// Immutable wrapper for a parsed expression
-/// Reusing the same CalcExpression instance for multiple evaluations is more efficient
-/// than creating a new one each time you wish to evaluate an expression string
-final class CalcExpression: CustomStringConvertible {
-  private let root: Subexpression
-  private let evaluators: (Symbol) -> SymbolEvaluator
+struct CalcExpression {
+  typealias SymbolEvaluator = (_ args: [Any]) throws -> Any
 
-  /// Evaluator for individual symbols
-  typealias SymbolEvaluator = (_ args: [Value]) throws -> Value
-
-  init(
-    _ expression: ParsedCalcExpression,
-    evaluators: @escaping (Symbol) -> SymbolEvaluator
-  ) {
-    root = expression.root
-    self.evaluators = evaluators
-  }
-
-  /// Parse an expression.
-  /// Returns an opaque struct that cannot be evaluated but can be queried
-  /// for symbols or used to construct an executable CalcExpression instance
-  static func parse(_ expression: String) -> ParsedCalcExpression {
-    parse(UnicodeScalarView(expression.unicodeScalars))
-  }
-
-  /// Parse an expression directly from the provided UnicodeScalarView,
-  /// stopping when it reaches a token matching the `delimiter` string.
-  /// This is convenient if you wish to parse expressions that are nested
-  /// inside another string, e.g. for implementing string interpolation.
-  /// If no delimiter string is specified, the method will throw an error
-  /// if it encounters an unexpected token, but won't consume it
-  private static func parse(
-    _ input: UnicodeScalarView,
-    upTo delimiters: String...
-  ) -> ParsedCalcExpression {
-    var unicodeScalarView = input
+  static func parse(_ expression: String) -> CalcExpression {
+    var unicodeScalarView = UnicodeScalarView(expression.unicodeScalars)
     let start = unicodeScalarView
     var subexpression: Subexpression
     do {
-      subexpression = try unicodeScalarView.parseSubexpression(upTo: delimiters)
+      subexpression = try unicodeScalarView.parseSubexpression(upTo: [])
     } catch {
       let expression = String(start.prefix(upTo: unicodeScalarView.startIndex))
       subexpression = .error(error as! Error, expression)
     }
-    return ParsedCalcExpression(root: subexpression)
+    return CalcExpression(root: subexpression)
   }
 
-  /// Returns the optmized, pretty-printed expression if it was valid
-  /// Otherwise, returns the original (invalid) expression string
-  var description: String { root.description }
+  private let root: Subexpression
 
-  /// All symbols used in the expression
-  var symbols: Set<Symbol> { root.symbols }
-
-  /// Evaluate the expression
-  func evaluate() -> Value {
-    root.evaluate(evaluators)
-  }
-}
-
-// MARK: Private API
-
-extension CalcExpression {
-  // https://github.com/apple/swift-evolution/blob/master/proposals/0077-operator-precedence.md
-  fileprivate static let operatorPrecedence: [String: (
-    precedence: Int,
-    isRightAssociative: Bool
-  )] = {
-    var precedences = [
-      "[]": 100,
-      "*": 1, "/": 1, "%": 1, // multiplication
-      // +, -, |, ^, etc: 0 (also the default)
-      "!:": -3,
-      // comparison: -4
-      "&&": -5, // and
-      "||": -6, // or
-      ":": -8, // ternary
-    ].mapValues { ($0, false) }
-    precedences["?"] = (-7, true) // ternary
-    for op in ["<", "<=", ">=", ">", "==", "!="] { // comparison
-      precedences[op] = (-4, true)
-    }
-    return precedences
-  }()
-
-  fileprivate static func `operator`(_ lhs: String, takesPrecedenceOver rhs: String) -> Bool {
-    let (p1, rightAssociative) = operatorPrecedence[lhs] ?? (0, false)
-    let (p2, _) = operatorPrecedence[rhs] ?? (0, false)
-    if p1 == p2 {
-      return !rightAssociative
-    }
-    return p1 > p2
-  }
-}
-
-private func isOperator(_ char: UnicodeScalar) -> Bool {
-  // Strangely, this is faster than switching on value
-  "/=­+-!*%<>&|^~?:".unicodeScalars.contains(char)
-}
-
-private func isIdentifierHead(_ c: UnicodeScalar) -> Bool {
-  switch c.value {
-  case 0x5F, // _
-       0x41...0x5A, // A-Z
-       0x61...0x7A: // a-z
-    true
-  default:
-    false
-  }
-}
-
-private func isIdentifier(_ c: UnicodeScalar) -> Bool {
-  switch c.value {
-  case 0x2E, // .
-       0x30...0x39: // 0-9
-    true
-  default:
-    isIdentifierHead(c)
-  }
-}
-
-private func isIdentifierWithDot(_ c: UnicodeScalar) -> Bool {
-  switch c.value {
-  case 0x2E: // .
-    true
-  default:
-    isIdentifier(c)
-  }
-}
-
-/// An opaque wrapper for a parsed expression
-struct ParsedCalcExpression: CustomStringConvertible {
-  fileprivate let root: Subexpression
-
-  /// Returns the pretty-printed expression if it was valid
-  /// Otherwise, returns the original (invalid) expression string
-  var description: String { root.description }
-
-  /// All symbols used in the expression
-  var symbols: Set<CalcExpression.Symbol> { root.symbols }
-
-  /// Any error detected during parsing
-  var error: CalcExpression.Error? {
-    if case let .error(error, _) = root {
-      return error
-    }
-    return nil
-  }
-
-  var variablesNames: [String] {
-    symbols
-      .filter {
-        guard case .variable = $0 else { return false }
-        return true
+  var variableNames: [String] {
+    root.symbols.compactMap {
+      if case let .variable(name) = $0 {
+        return name
       }
-      .map(\.name)
+      return nil
+    }
+  }
+  
+  func evaluate<T>(
+    evaluators: @escaping (Symbol) -> SymbolEvaluator?
+  ) throws -> T {
+    let value = root.evaluate(evaluators)
+    if let castedValue: T = CalcExpression.cast(value) {
+      return castedValue
+    }
+
+    if let error = value as? Error {
+      throw error
+    }
+
+    if T.self is String.Type {
+      return CalcExpression.stringify(value) as! T
+    }
+
+    throw CalcExpression.Error.message(
+      "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
+    )
+  }
+  
+  private static func cast<T>(_ anyValue: Any) -> T? {
+    if let value = anyValue as? T {
+      return value
+    }
+
+    var type: Any.Type = T.self
+    if let optionalType = type as? _Optional.Type {
+      type = optionalType.wrappedType
+    }
+    switch type {
+    case let numericType as _Numeric.Type:
+      if anyValue is Bool {
+        return nil
+      }
+      return (anyValue as? NSNumber).map { numericType.init(truncating: $0) as! T }
+    default:
+      return nil
+    }
   }
 }
 
 private enum Subexpression: CustomStringConvertible {
-  case literal(CalcExpression.Value)
+  case literal(Any)
   case symbol(CalcExpression.Symbol, [Subexpression])
   case error(CalcExpression.Error, String)
 
@@ -216,20 +126,22 @@ private enum Subexpression: CustomStringConvertible {
   }
 
   func evaluate(
-    _ evaluators: (CalcExpression.Symbol) -> CalcExpression.SymbolEvaluator
-  ) -> CalcExpression.Value {
+    _ evaluators: (CalcExpression.Symbol) -> CalcExpression.SymbolEvaluator?
+  ) -> Any {
     switch self {
-    case let .literal(literal):
-      return literal
+    case let .literal(value):
+      return value
     case let .symbol(symbol, args):
-      let evaluator = evaluators(symbol)
+      guard let evaluator = evaluators(symbol) else {
+        return CalcExpression.Error.message("Undefined symbol: \(symbol)")
+      }
       do {
         return try evaluator(args.map { $0.evaluate(evaluators) })
       } catch {
-        return .error(error)
+        return error
       }
     case let .error(error, _):
-      return .error(error)
+      return error
     }
   }
 
@@ -239,8 +151,8 @@ private enum Subexpression: CustomStringConvertible {
         .joined(separator: ", ")
     }
     switch self {
-    case let .literal(literal):
-      return CalcExpression.stringify(literal.value)
+    case let .literal(value):
+      return CalcExpression.stringify(value)
     case let .symbol(symbol, args):
       guard isOperand else {
         return symbol.name
@@ -276,7 +188,7 @@ private enum Subexpression: CustomStringConvertible {
         let lhs = args[0]
         let lhsDescription = switch lhs {
         case let .symbol(.infix(opName), _)
-          where !CalcExpression.operator(opName, takesPrecedenceOver: name):
+          where !takesPrecedence(opName, over: name):
           "(\(lhs))"
         default:
           "\(lhs)"
@@ -284,7 +196,7 @@ private enum Subexpression: CustomStringConvertible {
         let rhs = args[1]
         let rhsDescription = switch rhs {
         case let .symbol(.infix(opName), _)
-          where CalcExpression.operator(name, takesPrecedenceOver: opName):
+          where takesPrecedence(name, over: opName):
           "(\(rhs))"
         default:
           "\(rhs)"
@@ -333,27 +245,19 @@ struct UnicodeScalarView {
     endIndex = characters.endIndex
   }
 
-  init(_ unicodeScalars: Substring.UnicodeScalarView) {
-    self.init(String.UnicodeScalarView(unicodeScalars))
-  }
-
-  init(_ string: String) {
-    self.init(string.unicodeScalars)
-  }
-
-  var first: UnicodeScalar? {
+  private var first: UnicodeScalar? {
     isEmpty ? nil : characters[startIndex]
   }
 
-  var isEmpty: Bool {
+  private var isEmpty: Bool {
     startIndex >= endIndex
   }
 
-  subscript(_ index: Index) -> UnicodeScalar {
+  private subscript(_ index: Index) -> UnicodeScalar {
     characters[index]
   }
 
-  func index(after index: Index) -> Index {
+  private func index(after index: Index) -> Index {
     characters.index(after: index)
   }
 
@@ -371,7 +275,7 @@ struct UnicodeScalarView {
     return view
   }
 
-  mutating func popFirst() -> UnicodeScalar? {
+  private mutating func popFirst() -> UnicodeScalar? {
     if isEmpty {
       return nil
     }
@@ -387,20 +291,15 @@ struct UnicodeScalarView {
 }
 
 private typealias _UnicodeScalarView = UnicodeScalarView
+
 extension String {
   fileprivate init(_ unicodeScalarView: _UnicodeScalarView) {
     self.init(unicodeScalarView.unicodeScalars)
   }
 }
 
-extension Substring.UnicodeScalarView {
-  fileprivate init(_ unicodeScalarView: _UnicodeScalarView) {
-    self.init(unicodeScalarView.unicodeScalars)
-  }
-}
-
 extension UnicodeScalarView {
-  fileprivate enum Number {
+  private enum Number {
     case number(String)
     case integer(String)
 
@@ -414,7 +313,7 @@ extension UnicodeScalarView {
     }
   }
 
-  fileprivate mutating func scanCharacters(_ matching: (UnicodeScalar) -> Bool) -> String? {
+  private mutating func scanCharacters(_ matching: (UnicodeScalar) -> Bool) -> String? {
     var index = startIndex
     while index < endIndex {
       if !matching(self[index]) {
@@ -430,7 +329,7 @@ extension UnicodeScalarView {
     return nil
   }
 
-  fileprivate mutating func scanCharacter(
+  private mutating func scanCharacter(
     _ matching: (UnicodeScalar) -> Bool = { _ in true }
   ) -> String? {
     if let c = first, matching(c) {
@@ -440,11 +339,11 @@ extension UnicodeScalarView {
     return nil
   }
 
-  fileprivate mutating func scanCharacter(_ character: UnicodeScalar) -> Bool {
+  private mutating func scanCharacter(_ character: UnicodeScalar) -> Bool {
     scanCharacter { $0 == character } != nil
   }
 
-  fileprivate mutating func scanToEndOfToken() -> String? {
+  private mutating func scanToEndOfToken() -> String? {
     scanCharacters {
       switch $0 {
       case " ", "\t", "\n", "\r", "(", ")":
@@ -455,7 +354,7 @@ extension UnicodeScalarView {
     }
   }
 
-  fileprivate mutating func skipWhitespace() -> Bool {
+  private mutating func skipWhitespace() -> Bool {
     if let _ = scanCharacters({
       switch $0 {
       case " ", "\t", "\n", "\r":
@@ -469,7 +368,7 @@ extension UnicodeScalarView {
     return false
   }
 
-  fileprivate mutating func scanMethodName() -> String? {
+  private mutating func scanMethodName() -> String? {
     _ = skipWhitespace()
     var name = ""
     if let head = scanCharacter(isIdentifierHead) {
@@ -484,7 +383,7 @@ extension UnicodeScalarView {
     return name
   }
 
-  fileprivate mutating func parseDelimiter(_ delimiters: [String]) -> Bool {
+  private mutating func parseDelimiter(_ delimiters: [String]) -> Bool {
     outer: for delimiter in delimiters {
       let start = self
       for char in delimiter.unicodeScalars {
@@ -499,7 +398,7 @@ extension UnicodeScalarView {
     return false
   }
 
-  fileprivate mutating func parseNumericLiteral() throws -> Subexpression? {
+  private mutating func parseNumericLiteral() throws -> Subexpression? {
     func scanInteger() -> String? {
       scanCharacters {
         if case "0"..."9" = $0 {
@@ -532,7 +431,7 @@ extension UnicodeScalarView {
       return nil
     }
 
-    func scanNumber() -> Number? {
+    func scanNumber() throws -> Number? {
       var number: Number
       var endOfInt = self
       let sign = scanCharacter { $0 == "-" } ?? ""
@@ -566,24 +465,24 @@ extension UnicodeScalarView {
       return number
     }
 
-    guard let number = scanNumber() else {
+    guard let number = try scanNumber() else {
       return nil
     }
     switch number {
     case let .integer(value):
-      guard let result = Int(value) else {
-        return .error(.message("Value \(value) can't be converted to Integer type."), value)
+      guard let intValue = Int(value) else {
+        throw CalcExpression.Error.message("Value \(value) can't be converted to Integer type.")
       }
-      return .literal(.integer(result))
+      return .literal(intValue)
     case let .number(value):
-      guard let result = Double(value) else {
-        return .error(.unexpectedToken(value), value)
+      guard let doubleValue = Double(value) else {
+        throw CalcExpression.Error.unexpectedToken(value)
       }
-      return .literal(.number(result))
+      return .literal(doubleValue)
     }
   }
 
-  fileprivate mutating func parseOperator() -> Subexpression? {
+  private mutating func parseOperator() -> Subexpression? {
     if let op = scanCharacters(isOperator)
       ?? scanCharacter({ "(.".unicodeScalars.contains($0) }) {
       return .symbol(.infix(op), [])
@@ -591,7 +490,7 @@ extension UnicodeScalarView {
     return nil
   }
 
-  fileprivate mutating func parseIdentifier() -> Subexpression? {
+  private mutating func parseIdentifier() -> Subexpression? {
     var identifier = ""
     if let head = scanCharacter(isIdentifierHead) {
       identifier = head
@@ -604,7 +503,7 @@ extension UnicodeScalarView {
     return makeVariable(identifier)
   }
 
-  fileprivate mutating func parseEscapedIdentifier() -> Subexpression? {
+  private mutating func parseEscapedIdentifier() -> Subexpression? {
     guard let delimiter = first,
           var string = scanCharacter({ "`'\"".unicodeScalars.contains($0) })
     else {
@@ -705,7 +604,7 @@ extension UnicodeScalarView {
                      let .symbol(.prefix(op2), _),
                      let .symbol(.postfix(op2), _):
                   guard stack.count > i + 4,
-                        CalcExpression.operator(symbol.name, takesPrecedenceOver: op2)
+                        takesPrecedence(symbol.name, over: op2)
                   else {
                     fallthrough
                   }
@@ -863,6 +762,86 @@ extension UnicodeScalarView {
     case nil:
       throw CalcExpression.Error.message("Empty expression")
     }
+  }
+}
+
+private protocol _Numeric {
+  init(truncating: NSNumber)
+}
+
+extension Int: _Numeric {}
+extension Double: _Numeric {}
+
+private protocol _Optional {
+  static var wrappedType: Any.Type { get }
+}
+
+extension Optional: _Optional {
+  fileprivate static var wrappedType: Any.Type { Wrapped.self }
+}
+
+private let operatorPrecedence: [String: (
+  precedence: Int,
+  isRightAssociative: Bool
+)] = {
+  var precedences = [
+    "[]": 100,
+    "*": 1, "/": 1, "%": 1, // multiplication
+    // +, -, |, ^, etc: 0 (also the default)
+    "!:": -3,
+    // comparison: -4
+    "&&": -5, // and
+    "||": -6, // or
+    ":": -8, // ternary
+  ].mapValues { ($0, false) }
+  precedences["?"] = (-7, true) // ternary
+  for op in ["<", "<=", ">=", ">", "==", "!="] { // comparison
+    precedences[op] = (-4, true)
+  }
+  return precedences
+}()
+
+private func takesPrecedence(_ lhs: String, over rhs: String) -> Bool {
+  let (p1, rightAssociative) = operatorPrecedence[lhs] ?? (0, false)
+  let (p2, _) = operatorPrecedence[rhs] ?? (0, false)
+  if p1 == p2 {
+    return !rightAssociative
+  }
+  return p1 > p2
+}
+
+private func isOperator(_ char: UnicodeScalar) -> Bool {
+  // Strangely, this is faster than switching on value
+  "/=­+-!*%<>&|^~?:".unicodeScalars.contains(char)
+}
+
+private func isIdentifierHead(_ c: UnicodeScalar) -> Bool {
+  switch c.value {
+  case 0x5F, // _
+       0x41...0x5A, // A-Z
+       0x61...0x7A: // a-z
+    true
+  default:
+    false
+  }
+}
+
+private func isIdentifier(_ c: UnicodeScalar) -> Bool {
+  switch c.value {
+  case 0x2E, // .
+       0x30...0x39: // 0-9
+    true
+  default:
+    isIdentifierHead(c)
+  }
+}
+
+private func isIdentifierWithDot(_ c: UnicodeScalar) -> Bool {
+  switch c.value {
+  case 0x2E: // .
+    true
+  default:
+    isIdentifier(c)
   }
 }
 

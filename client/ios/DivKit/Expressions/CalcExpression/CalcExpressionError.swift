@@ -31,9 +31,3 @@ extension CalcExpression {
     }
   }
 }
-
-extension String {
-  fileprivate var escaped: String {
-    replacingOccurrences(of: "\\", with: "\\\\")
-  }
-}

@@ -6,7 +6,7 @@ import Serialization
 public struct ExpressionLink<T> {
   enum Item {
     case string(String)
-    case calcExpression(ParsedCalcExpression)
+    case calcExpression(CalcExpression)
     case nestedCalcExpression(ExpressionLink<String>)
   }
 
@@ -55,9 +55,9 @@ public struct ExpressionLink<T> {
             items.append(.nestedCalcExpression(link))
             variablesNames.append(contentsOf: link.variablesNames)
           } else {
-            let parsedCalcExpression = CalcExpression.parse(value)
-            items.append(.calcExpression(parsedCalcExpression))
-            variablesNames.append(contentsOf: parsedCalcExpression.variablesNames)
+            let expression = CalcExpression.parse(value)
+            items.append(.calcExpression(expression))
+            variablesNames.append(contentsOf: expression.variableNames)
           }
         }
         index = currentValue.index(end, offsetBy: 2)
@@ -122,20 +122,5 @@ extension StringProtocol {
 extension ExpressionLink: Equatable {
   public static func ==(lhs: Self, rhs: Self) -> Bool {
     type(of: lhs) == type(of: rhs) && lhs.rawValue == rhs.rawValue
-  }
-}
-
-extension ExpressionLink.Item: Equatable {
-  static func ==(lhs: ExpressionLink.Item, rhs: ExpressionLink.Item) -> Bool {
-    switch (lhs, rhs) {
-    case let (.calcExpression(left), .calcExpression(right)):
-      left.description == right.description
-    case let (.string(left), .string(right)):
-      left == right
-    case let (.nestedCalcExpression(left), .nestedCalcExpression(right)):
-      left == right
-    case (.calcExpression, _), (.string, _), (.nestedCalcExpression, _):
-      false
-    }
   }
 }

@@ -285,7 +285,7 @@ struct Argument {
     switch type {
     case .string:
       return "'\(value)'"
-    case .integer, .number, .boolean, .datetime, .color, .url, .dict, .array, .any:
+    case .integer, .number, .boolean, .datetime, .color, .url, .dict, .array, .any, .error:
       return value
     }
   }
@@ -307,6 +307,7 @@ enum ArgumentType: String, Decodable, CaseIterable {
   case dict
   case array
   case any
+  case error
 
   var swiftType: Any.Type {
     switch self {
@@ -330,6 +331,8 @@ enum ArgumentType: String, Decodable, CaseIterable {
       [AnyHashable].self
     case .any:
       Any.self
+    case .error:
+      CalcExpression.Error.self
     }
   }
 

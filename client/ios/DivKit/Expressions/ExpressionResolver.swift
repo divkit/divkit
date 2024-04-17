@@ -236,11 +236,8 @@ public final class ExpressionResolver {
     return validatedValue(value: result, link: link)
   }
 
-  private func evaluate<T>(_ parsedExpression: ParsedCalcExpression) throws -> T {
-    try AnyCalcExpression(
-      parsedExpression,
-      evaluators: functionsProvider.evaluators
-    ).evaluate()
+  private func evaluate<T>(_ expression: CalcExpression) throws -> T {
+    try expression.evaluate(evaluators: functionsProvider.evaluators)
   }
 
   private func validatedValue<T>(

@@ -45,7 +45,7 @@ final class FunctionsProvider {
       return functions
     }
 
-  lazy var evaluators: ((CalcExpression.Symbol) -> AnyCalcExpression.SymbolEvaluator?) =
+  lazy var evaluators: ((CalcExpression.Symbol) -> CalcExpression.SymbolEvaluator?) =
     lock.withLock {
       { [weak self] symbol in
         switch symbol {
@@ -55,10 +55,14 @@ final class FunctionsProvider {
           return { _ in false }
         case let .variable(name):
           // CalcExpression stores string values as Symbol.variable
-          if name.starts(with: "'") {
-            return nil
+          if name.count >= 2, name.starts(with: "'") {
+            let value = String(name.dropFirst().dropLast())
+            return { _ in value }
           }
-          return self?.variableValueProvider(name).map { value in { _ in value } }
+          if let value = self?.variableValueProvider(name) {
+            return { _ in value }
+          }
+          return { _ in throw CalcExpression.Error.message("Variable '\(name)' is missing.") }
         case .infix, .prefix:
           return operators[symbol]?.invoke
         case let .function(name):
@@ -78,7 +82,7 @@ final class FunctionsProvider {
 private func makeEvaluator(
   _ symbol: CalcExpression.Symbol,
   functions: [String: Function]
-) -> AnyCalcExpression.SymbolEvaluator? {
+) -> CalcExpression.SymbolEvaluator? {
   { args in
     let name = symbol.name
     guard let function = functions[name] else {
@@ -147,6 +151,7 @@ private let operators: [CalcExpression.Symbol: Function] = {
   EqualityOperators.allCases.forEach { operators[.infix($0.rawValue)] = $0.function }
   BooleanOperators.allCases.forEach { operators[$0.symbol] = $0.function }
   MathOperators.allCases.forEach { operators[$0.symbol] = $0.function }
+  operators.addTryOperator()
   return operators
 }()
 
