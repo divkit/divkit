@@ -47,7 +47,7 @@ class FixedSize internal constructor(
          */
         val value: Property<Int>?,
         /**
-         * Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+         * Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `dp`.
          */
         val unit: Property<SizeUnit>?,
@@ -64,7 +64,7 @@ class FixedSize internal constructor(
 
 /**
  * @param value Element size.
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  */
 @Generated
 fun DivScope.fixedSize(
@@ -80,7 +80,7 @@ fun DivScope.fixedSize(
 
 /**
  * @param value Element size.
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  */
 @Generated
 fun DivScope.fixedSizeProps(
@@ -94,7 +94,7 @@ fun DivScope.fixedSizeProps(
 
 /**
  * @param value Element size.
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  */
 @Generated
 fun TemplateScope.fixedSizeRefs(
@@ -108,7 +108,7 @@ fun TemplateScope.fixedSizeRefs(
 
 /**
  * @param value Element size.
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  */
 @Generated
 fun FixedSize.override(
@@ -124,7 +124,7 @@ fun FixedSize.override(
 
 /**
  * @param value Element size.
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  */
 @Generated
 fun FixedSize.defer(
@@ -140,7 +140,7 @@ fun FixedSize.defer(
 
 /**
  * @param value Element size.
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  */
 @Generated
 fun FixedSize.evaluate(

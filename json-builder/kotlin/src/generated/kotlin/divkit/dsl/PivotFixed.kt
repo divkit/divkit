@@ -41,7 +41,7 @@ class PivotFixed internal constructor(
 
     class Properties internal constructor(
         /**
-         * Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+         * Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `dp`.
          */
         val unit: Property<SizeUnit>?,
@@ -61,7 +61,7 @@ class PivotFixed internal constructor(
 }
 
 /**
- * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -77,7 +77,7 @@ fun DivScope.pivotFixed(
 )
 
 /**
- * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -91,7 +91,7 @@ fun DivScope.pivotFixedProps(
 )
 
 /**
- * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -105,7 +105,7 @@ fun TemplateScope.pivotFixedRefs(
 )
 
 /**
- * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -121,7 +121,7 @@ fun PivotFixed.override(
 )
 
 /**
- * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -137,7 +137,7 @@ fun PivotFixed.defer(
 )
 
 /**
- * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated

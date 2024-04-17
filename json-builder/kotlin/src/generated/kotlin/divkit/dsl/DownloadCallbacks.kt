@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * Callbacks that are called after [data loading](../../interaction#loading-data).
  * 
  * Can be created using the method [downloadCallbacks].
  */

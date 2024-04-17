@@ -44,8 +44,8 @@
     "ru": "Удаляет значение из массива"
   },
   "div_action_base_download_callbacks": {
-    "en": "Callbacks that are called after [data loading](../../interaction.dita#loading-data).",
-    "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction.dita#loading-data)."
+    "en": "Callbacks that are called after [data loading](../../interaction#loading-data).",
+    "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction#loading-data)."
   },
   "div_action_base_is_enabled": {
     "en": "The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).",
@@ -64,8 +64,8 @@
     "ru": "Referer-ссылка для логирования."
   },
   "div_action_base_url": {
-    "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).",
-    "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction.dita)."
+    "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).",
+    "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction)."
   },
   "div_action_clear_focus": {
     "en": "Removes focus from focused item.",
@@ -248,16 +248,16 @@
     "ru": "Действия при исчезновении элемента с экрана."
   },
   "div_base_extensions": {
-    "en": "Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).",
-    "ru": "Расширения для дополнительной обработки элемента. Список расширений см. в разделе [Кастомизация](../../extensions.dita)."
+    "en": "Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).",
+    "ru": "Расширения для дополнительной обработки элемента. Список расширений см. в разделе [Кастомизация](../../extensions)."
   },
   "div_base_focus": {
     "en": "Parameters when focusing on an element or losing focus.",
     "ru": "Параметры при фокусировке на элементе или потере фокуса."
   },
   "div_base_height": {
-    "en": "Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).",
-    "ru": "Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.dita)."
+    "en": "Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).",
+    "ru": "Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout)."
   },
   "div_base_id": {
     "en": "Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.",
@@ -292,8 +292,8 @@
     "ru": "Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой верстке."
   },
   "div_base_transition_in": {
-    "en": "Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).",
-    "ru": "Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции переходов в разделе [Анимация перехода](../../interaction.dita#animation/transition-animation)."
+    "en": "Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).",
+    "ru": "Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции переходов в разделе [Анимация перехода](../../interaction#animation/transition-animation)."
   },
   "div_base_transition_out": {
     "en": "Disappearance animation. It is played when an element disappears in the new layout.",
@@ -580,8 +580,8 @@
     "ru": "Размер видимой части элемента в процентах, при котором срабатывает действие `disappear-action`."
   },
   "div_download_callbacks": {
-    "en": "Callbacks that are called after [data loading](../../interaction.dita#loading-data).",
-    "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction.dita#loading-data)."
+    "en": "Callbacks that are called after [data loading](../../interaction#loading-data).",
+    "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction#loading-data)."
   },
   "div_download_callbacks_on_fail_actions": {
     "en": "Actions in case of unsuccessful loading if the host reported it or the waiting time expired.",
@@ -660,8 +660,8 @@
     "ru": "Фиксированный размер элемента."
   },
   "div_fixed_size_unit": {
-    "en": "Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).",
-    "ru": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.dita)."
+    "en": "Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).",
+    "ru": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout)."
   },
   "div_fixed_size_value": {
     "en": "Element size.",
@@ -1100,12 +1100,12 @@
     "ru": "Определяет, является ли пустое значение поля корректным."
   },
   "div_input_validators_expression": {
-    "en": "[Calculated expression](../../expressions.dita) validator.",
-    "ru": "Валидатор на основе [вычисляемых выражений](../../expressions.dita)."
+    "en": "[Calculated expression](../../expressions) validator.",
+    "ru": "Валидатор на основе [вычисляемых выражений](../../expressions)."
   },
   "div_input_validators_expression_condition": {
-    "en": "[Calculated expression](../../expressions.dita) used as a value validity condition.",
-    "ru": "[Вычисляемое выражение](../../expressions.dita), которое используется как условие валидности значения."
+    "en": "[Calculated expression](../../expressions) used as a value validity condition.",
+    "ru": "[Вычисляемое выражение](../../expressions), которое используется как условие валидности значения."
   },
   "div_input_validators_label_id": {
     "en": "ID of the text element containing the error message. The message will also be used for providing access.",
@@ -1248,8 +1248,8 @@
     "ru": "Фиксированные координаты оси вращения."
   },
   "div_pivot_fixed_unit": {
-    "en": "Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).",
-    "ru": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.dita)."
+    "en": "Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout).",
+    "ru": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout)."
   },
   "div_pivot_fixed_value": {
     "en": "Coordinate value.",
@@ -1620,8 +1620,8 @@
     "ru": "Имя переменной, в которой хранится идентификатор текущего состояния. Если изменится значение переменной, то и активное состояние будет изменено. Переменная имеет приоритет над параметром `default_state_id`."
   },
   "div_state_states": {
-    "en": "States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.",
-    "ru": "Состояния. Каждый элемент может иметь несколько состояний с разной версткой. Переход между состояниями осуществляется с помощью [специальной схемы](../../interaction.dita) элемента [action](div-action.md)."
+    "en": "States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.",
+    "ru": "Состояния. Каждый элемент может иметь несколько состояний с разной версткой. Переход между состояниями осуществляется с помощью [специальной схемы](../../interaction) элемента [action](div-action.md)."
   },
   "div_state_transition_animation_selector": {
     "en": "It determines which events trigger transition animations.",
@@ -1640,8 +1640,8 @@
     "ru": "Толщина рамки."
   },
   "div_tabs": {
-    "en": "Tabs. Height of the first tab is determined by its contents, and height of the remaining [depends on the platform](../../location.dita#tabs).",
-    "ru": "Табы. Высота первого таба определяется его содержимым, а высота остальных [зависит от платформы](../../location.dita#tabs)."
+    "en": "Tabs. Height of the first tab is determined by its contents, and height of the remaining [depends on the platform](../../location#tabs).",
+    "ru": "Табы. Высота первого таба определяется его содержимым, а высота остальных [зависит от платформы](../../location#tabs)."
   },
   "div_tabs_dynamic_height": {
     "en": "Updating height when changing the active element. In the browser, the value is always `true`.",

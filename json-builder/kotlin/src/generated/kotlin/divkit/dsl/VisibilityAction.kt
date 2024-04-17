@@ -49,7 +49,7 @@ class VisibilityAction internal constructor(
 
     class Properties internal constructor(
         /**
-         * Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+         * Callbacks that are called after [data loading](../../interaction#loading-data).
          */
         val downloadCallbacks: Property<DownloadCallbacks>?,
         /**
@@ -76,7 +76,7 @@ class VisibilityAction internal constructor(
         val referer: Property<Url>?,
         val typed: Property<ActionTyped>?,
         /**
-         * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
+         * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
          */
         val url: Property<Url>?,
         /**
@@ -109,13 +109,13 @@ class VisibilityAction internal constructor(
 }
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
+ * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
  */
@@ -148,13 +148,13 @@ fun DivScope.visibilityAction(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
+ * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
  */
@@ -185,13 +185,13 @@ fun DivScope.visibilityActionProps(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
+ * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
  */
@@ -222,13 +222,13 @@ fun TemplateScope.visibilityActionRefs(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
+ * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
  */
@@ -261,13 +261,13 @@ fun VisibilityAction.override(
 )
 
 /**
- * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction#loading-data).
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
+ * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
  */
@@ -303,7 +303,7 @@ fun VisibilityAction.defer(
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
- * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
+ * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
  */

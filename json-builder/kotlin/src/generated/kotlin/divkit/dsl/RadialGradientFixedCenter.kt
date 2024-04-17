@@ -43,7 +43,7 @@ class RadialGradientFixedCenter internal constructor(
 
     class Properties internal constructor(
         /**
-         * Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+         * Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `dp`.
          */
         val unit: Property<SizeUnit>?,
@@ -63,7 +63,7 @@ class RadialGradientFixedCenter internal constructor(
 }
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -79,7 +79,7 @@ fun DivScope.radialGradientFixedCenter(
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -93,7 +93,7 @@ fun DivScope.radialGradientFixedCenterProps(
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -107,7 +107,7 @@ fun TemplateScope.radialGradientFixedCenterRefs(
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -123,7 +123,7 @@ fun RadialGradientFixedCenter.override(
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
@@ -139,7 +139,7 @@ fun RadialGradientFixedCenter.defer(
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param value Coordinate value.
  */
 @Generated
