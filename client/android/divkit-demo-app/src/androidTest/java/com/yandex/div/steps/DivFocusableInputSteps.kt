@@ -16,7 +16,6 @@ import com.yandex.divkit.demo.DummyActivity
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matchers.endsWith
-import org.hamcrest.Matchers.equalTo
 
 internal fun divFocusableInput(f: DivFocusableInputSteps.() -> Unit) = f(DivFocusableInputSteps())
 
@@ -27,7 +26,7 @@ private val buttonMatcher = withText(endsWith("able"))
 class DivFocusableInputSteps : DivTestAssetSteps() {
 
     fun ActivityTestRule<DummyActivity>.buildContainer() {
-        testAsset = "regression_test_data/input_is_enabled.json"
+        testAsset = "ui_test_data/input/div_input_is_enabled.json"
         buildContainer(MATCH_PARENT, MATCH_PARENT)
     }
 
