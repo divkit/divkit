@@ -75,3 +75,16 @@ private struct SignatureTestCase: Decodable {
     case platforms
   }
 }
+
+extension Function {
+  fileprivate func verify(signature: FunctionSignature) -> Bool {
+    switch self {
+    case let function as SimpleFunction:
+      (try? function.signature) == signature
+    case let function as OverloadedFunction:
+      function.functions.contains { $0.verify(signature: signature) }
+    default:
+      false
+    }
+  }
+}

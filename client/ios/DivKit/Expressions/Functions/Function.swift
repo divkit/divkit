@@ -4,21 +4,10 @@ import BasePublic
 
 protocol Function {
   func invoke(args: [Any]) throws -> Any
-  func verify(signature: FunctionSignature) -> Bool
 }
 
 protocol SimpleFunction: Function {
   var signature: FunctionSignature { get throws }
-}
-
-extension SimpleFunction {
-  func verify(signature: FunctionSignature) -> Bool {
-    if let selfSignature = try? self.signature {
-      signature.verify(selfSignature)
-    } else {
-      false
-    }
-  }
 }
 
 struct FunctionNullary<R>: SimpleFunction {
@@ -240,10 +229,6 @@ struct OverloadedFunction: Function {
     self.makeError = makeError ?? { _ in CalcExpression.Error.noMatchingSignature }
   }
 
-  func verify(signature: FunctionSignature) -> Bool {
-    functions.contains { $0.verify(signature: signature) }
-  }
-
   func invoke(args: [Any]) throws -> Any {
     let arguments = try args.map {
       try ArgumentSignature(type: .from(type: type(of: $0)))
@@ -367,7 +352,7 @@ enum ArgumentType: String, Decodable, CaseIterable {
   }
 }
 
-struct FunctionSignature: Decodable {
+struct FunctionSignature: Decodable, Equatable {
   let arguments: [ArgumentSignature]
   let resultType: ArgumentType
 
@@ -392,18 +377,6 @@ struct FunctionSignature: Decodable {
   private func argsMatch(_ args: [ArgumentSignature]) -> Bool {
     args.count == arguments.count ||
       (arguments.last?.vararg == true && args.count > arguments.count)
-  }
-
-  fileprivate func verify(_ signature: FunctionSignature) -> Bool {
-    guard argsMatch(signature.arguments) else {
-      return false
-    }
-    let argsMatch = zip(arguments, signature.arguments).enumerated().allSatisfy { _, args in
-      let expectedArg = args.0
-      let arg = args.1
-      return expectedArg == arg
-    }
-    return argsMatch && resultType == signature.resultType
   }
 }
 
