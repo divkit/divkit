@@ -4,6 +4,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewIdProvider
 import com.yandex.div.core.view2.ViewBindingProvider
+import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.errors.ErrorVisualMonitor
@@ -22,6 +23,7 @@ internal interface Div2ViewComponent {
     val transitionBuilder: DivTransitionBuilder
 
     val releaseViewVisitor: ReleaseViewVisitor
+    val mediaReleaseViewVisitor: MediaReleaseViewVisitor
 
     val stateSwitcher: DivStateSwitcher
 

@@ -33,9 +33,6 @@ import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.images.LoadReference
-import com.yandex.div.core.view2.logging.bind.BindingEventReporterProvider
-import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
-import com.yandex.div.core.view2.logging.bind.SimpleRebindReporter
 import com.yandex.div.core.player.DivVideoActionHandler
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
@@ -51,13 +48,18 @@ import com.yandex.div.core.view2.animations.doOnEnd
 import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
+import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
+import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseMedia
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.core.view2.logging.bind.BindingEventReporterProvider
+import com.yandex.div.core.view2.logging.bind.ForceRebindReporter
+import com.yandex.div.core.view2.logging.bind.SimpleRebindReporter
+import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
 import com.yandex.div.core.view2.reuse.ComplexRebindReporter
 import com.yandex.div.core.view2.reuse.RebindTask
 import com.yandex.div.core.view2.reuse.ReusableTokenList
-import com.yandex.div.core.view2.logging.bind.ForceRebindReporter
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
@@ -122,6 +124,8 @@ class Div2View private constructor(
         get() = div2Component.tooltipController
     internal val releaseViewVisitor: ReleaseViewVisitor
         get() = viewComponent.releaseViewVisitor
+    internal val mediaReleaseViewVisitor: MediaReleaseViewVisitor
+        get() = viewComponent.mediaReleaseViewVisitor
     private var _expressionsRuntime: ExpressionsRuntime? = null
     private var oldExpressionsRuntime: ExpressionsRuntime? = null
     private val variableController: VariableController?
@@ -532,6 +536,11 @@ class Div2View private constructor(
         }
 
         return canBeReplaced
+    }
+
+    fun releaseMedia() {
+        cancelImageLoads()
+        releaseMedia(this)
     }
 
     override fun cleanup() = synchronized(monitor) {
