@@ -1,0 +1,124 @@
+{
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "my_thumb_value",
+        "type": "integer",
+        "value": 80
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16,
+                "left": 12,
+                "right": 12
+              },
+              "max_value": 400,
+              "min_value": 0,
+              "thumb_value_variable": "my_thumb_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": "@{my_thumb_value}"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": "@{my_thumb_value}"
+                  },
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center"
+                },
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg",
+                  "width": {
+                    "type": "fixed",
+                    "value": "@{my_thumb_value}"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": "@{my_thumb_value}"
+                  },
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

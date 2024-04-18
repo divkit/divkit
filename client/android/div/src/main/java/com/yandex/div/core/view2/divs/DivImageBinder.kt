@@ -1,14 +1,17 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.drawable.PictureDrawable
 import android.widget.ImageView
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.util.toCachedBitmap
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
@@ -235,10 +238,18 @@ internal class DivImageBinder @Inject constructor(
             },
             onSetPreview = {
                 if (!isImageLoaded) {
-                    currentBitmapWithoutFilters = it
-                    applyFiltersAndSetBitmap(divView, div.filters)
-                    previewLoaded()
-                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    when (it) {
+                        is ImageRepresentation.Bitmap -> {
+                            currentBitmapWithoutFilters = it.value
+                            applyFiltersAndSetBitmap(divView, div.filters)
+                            previewLoaded()
+                            applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                        }
+                        is ImageRepresentation.PictureDrawable -> {
+                            previewLoaded()
+                            setImageDrawable(it.value)
+                        }
+                    }
                 }
             }
         )
@@ -316,6 +327,21 @@ internal class DivImageBinder @Inject constructor(
                     invalidate()
                 }
 
+                override fun onSuccess(pictureDrawable: PictureDrawable) {
+                    if (!div.isVectorCompatible()) {
+                        val bitmap = pictureDrawable.toCachedBitmap(imageUrl)
+                        onSuccess(bitmap)
+                        return
+                    }
+                    super.onSuccess(pictureDrawable)
+
+                    setImageDrawable(pictureDrawable)
+                    applyLoadingFade(div, resolver, null)
+
+                    imageLoaded()
+                    invalidate()
+                }
+
                 override fun onError() {
                     super.onError()
                     this@applyImage.imageUrl = null
@@ -325,6 +351,14 @@ internal class DivImageBinder @Inject constructor(
 
         divView.addLoadReference(reference, this)
         loadReference = reference
+    }
+
+    /**
+     * Vector format Image doesn't support color and filters.
+     * If color or filters are specified for Image, it should be rasterized.
+     */
+    private fun DivImage.isVectorCompatible() : Boolean {
+        return tintColor == null && filters.isNullOrEmpty()
     }
 
     private fun DivImageView.applyLoadingFade(

@@ -1,12 +1,12 @@
 package com.yandex.div.core.view2
 
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import androidx.annotation.MainThread
 import com.yandex.div.core.DecodeBase64ImageTask
 import com.yandex.div.core.Div2ImageStubProvider
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
 import com.yandex.div.core.view2.errors.ErrorCollector
 import java.util.concurrent.ExecutorService
@@ -30,15 +30,15 @@ internal class DivPlaceholderLoader @Inject constructor(
         currentPlaceholderColor: Int,
         synchronous: Boolean,
         onSetPlaceholder: (Drawable?) -> Unit,
-        onSetPreview: (Bitmap?) -> Unit
+        onSetPreview: (ImageRepresentation?) -> Unit
     ) {
         currentPreview?.let {
-            enqueueDecoding(it, imageView, synchronous) { bitmap ->
-                if (bitmap == null) {
+            enqueueDecoding(it, imageView, synchronous) { decoded ->
+                if (decoded == null) {
                     errorCollector.logWarning(Throwable(PREVIEW_IS_NOT_BASE_64_IMAGE))
                     onSetPlaceholder(imageStubProvider.getImageStubDrawable(currentPlaceholderColor))
                 } else {
-                    onSetPreview(bitmap)
+                    onSetPreview(decoded)
                 }
             }
         } ?: onSetPlaceholder(imageStubProvider.getImageStubDrawable(currentPlaceholderColor))
@@ -48,11 +48,11 @@ internal class DivPlaceholderLoader @Inject constructor(
         preview: String,
         loadableImage: LoadableImage,
         synchronous: Boolean,
-        onDecoded: (Bitmap?) -> Unit
+        onDecoded: (ImageRepresentation?) -> Unit
     ) {
         loadableImage.getLoadingTask()?.cancel(true)
 
-        val future = preview.decodeBase64ToBitmap(synchronous) {
+        val future = preview.decodeBase64(synchronous) {
             onDecoded(it)
             loadableImage.cleanLoadingTask()
         }
@@ -60,9 +60,9 @@ internal class DivPlaceholderLoader @Inject constructor(
         future?.let { loadableImage.saveLoadingTask(it) }
     }
 
-    private fun String.decodeBase64ToBitmap(
+    private fun String.decodeBase64(
         synchronous: Boolean,
-        onDecoded: (Bitmap?) -> Unit
+        onDecoded: (ImageRepresentation?) -> Unit
     ): Future<*>? {
         val decodeTask = DecodeBase64ImageTask(this, synchronous, onDecoded)
 

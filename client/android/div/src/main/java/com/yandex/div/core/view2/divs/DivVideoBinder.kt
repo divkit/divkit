@@ -18,6 +18,7 @@ import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.player.DivVideoViewMapper
+import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
@@ -88,7 +89,10 @@ internal class DivVideoBinder @Inject constructor(
             preview?.let {
                 with(previewImageView) {
                     visibility = View.VISIBLE
-                    setImageBitmap(preview)
+                    when (it) {
+                        is ImageRepresentation.PictureDrawable -> setImageDrawable(it.value)
+                        is ImageRepresentation.Bitmap ->  setImageBitmap(it.value)
+                    }
                 }
             }
             playerView.visibility = View.VISIBLE
@@ -197,7 +201,7 @@ internal class DivVideoBinder @Inject constructor(
 
     private fun DivVideo.applyPreview(
         resolver: ExpressionResolver,
-        onPreviewDecoded:(Bitmap?) -> Unit,
+        onPreviewDecoded:(ImageRepresentation?) -> Unit,
     ) {
         val base64String = preview?.evaluate(resolver)
 

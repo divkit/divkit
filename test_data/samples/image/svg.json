@@ -1,0 +1,166 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "my_thumb_value",
+        "type": "integer",
+        "value": 80
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Vector Images"
+            },
+            {
+              "type": "subtitle",
+              "text": "Vector images can be scaled without loss of quality.\n\nThe left picture is in scalar format, while the right one is a vector.",
+              "margins": {
+                "bottom": 16
+              }
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16,
+                "left": 12,
+                "right": 12
+              },
+              "max_value": 400,
+              "min_value": 0,
+              "thumb_value_variable": "my_thumb_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "subtitle",
+              "text": "Change image size",
+              "margins": {
+                "top": 8,
+                "bottom": 16
+              },
+              "text_alignment_horizontal": "center"
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": "@{my_thumb_value}"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": "@{my_thumb_value}"
+                  },
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center"
+                },
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg",
+                  "width": {
+                    "type": "fixed",
+                    "value": "@{my_thumb_value}"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": "@{my_thumb_value}"
+                  },
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

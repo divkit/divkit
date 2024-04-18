@@ -39,6 +39,7 @@ dependencies {
     api project(path: ':div-json')
     api project(path: ':div-states')
     api project(path: ':div-storage')
+    api project(path: ':div-svg')
 
     implementation libs.yatagan.api.compiled
     kapt libs.yatagan.processor.jap
