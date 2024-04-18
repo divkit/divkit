@@ -16,4 +16,10 @@ internal object ReleaseUtils {
             divView.releaseViewVisitor.visitViewTree(it)
         }
     }
+
+    internal fun ViewGroup.releaseMedia(divView: Div2View) {
+        children.forEach {
+            divView.mediaReleaseViewVisitor.visitViewTree(it)
+        }
+    }
 }
