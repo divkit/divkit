@@ -376,7 +376,7 @@ extension UnicodeScalarView {
     } else {
       return nil
     }
-    while let tail = scanCharacters(isIdentifier) {
+    if let tail = scanCharacters(isIdentifier) {
       name += tail
     }
     _ = skipWhitespace()
@@ -490,16 +490,35 @@ extension UnicodeScalarView {
     return nil
   }
 
-  private mutating func parseIdentifier() -> Subexpression? {
+  private mutating func parseIdentifier() throws -> Subexpression? {
     var identifier = ""
     if let head = scanCharacter(isIdentifierHead) {
       identifier = head
     } else {
       return nil
     }
-    while let tail = scanCharacters(isIdentifierWithDot) {
+    
+    var prevChar: UInt32 = 0
+    if let tail = scanCharacters({
+      let char = $0.value
+      if char == 0x2E, prevChar == 0x2E {
+        return false
+      }
+      prevChar = $0.value
+      switch char {
+      case 0x2E: // .
+        return true
+      default:
+        return isIdentifier($0)
+      }
+    }) {
       identifier += tail
     }
+
+    if prevChar == 0x2E {
+      throw CalcExpression.Error.unexpectedToken(".")
+    }
+
     return makeVariable(identifier)
   }
 

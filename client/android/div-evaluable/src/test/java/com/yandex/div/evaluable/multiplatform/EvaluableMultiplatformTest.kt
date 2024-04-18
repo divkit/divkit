@@ -174,9 +174,13 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                 cases.addAll(newCases)
             }.map { TestCaseOrError<ExpressionTestCase>(it) }
 
-            checkDuplicates(cases.asSequence() + errors.asSequence())
+            val allCases = errors + cases.filter {
+                it.error != null || isForAndroidPlatform(it.testCase?.platform)
+            }
 
-            return errors + cases.filter { it.error != null || isForAndroidPlatform(it.testCase?.platform) }
+            checkDuplicates(allCases.asSequence())
+
+            return allCases
         }
 
         private fun parseTestCase(file: File, json: JSONObject): TestCaseOrError<ExpressionTestCase> {
