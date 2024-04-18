@@ -9,6 +9,7 @@ import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.expression.variables.toVariable
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
@@ -110,7 +111,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
     private fun createRuntimeFor(data: DivData, tag: DivDataTag): ExpressionsRuntime {
         val errorCollector = errorCollectors.getOrCreate(tag, data)
-        val variableController = VariableController().apply {
+        val variableController = VariableControllerImpl().apply {
             data.variables?.forEach { divVariable: DivVariable ->
                 try {
                     declare(divVariable.toVariable())
@@ -124,9 +125,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         }
 
         val evaluationContext = EvaluationContext(
-            variableProvider = { variableName ->
-                variableController.getMutableVariable(variableName)?.getValue()
-            },
+            variableProvider = variableController,
             storedValueProvider = { storedValueName ->
                 storedValuesController.getStoredValue(storedValueName, errorCollector)?.getValue()
             },

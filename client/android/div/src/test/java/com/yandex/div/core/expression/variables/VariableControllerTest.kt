@@ -34,7 +34,7 @@ class VariableControllerTest {
     @Before
     fun initVariableController() {
         divVariableController = DivVariableController()
-        variableController = VariableController().apply {
+        variableController = VariableControllerImpl().apply {
             localVariables.forEach {
                 declare(it)
             }
