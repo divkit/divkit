@@ -10,6 +10,7 @@ interface DivPlayerFactory {
 
     fun makePlayerView(context: Context): DivPlayerView
 
+    @Deprecated("Will be removed in future releases", ReplaceWith("makePlayerView(context: Context)"))
     fun makePlayerView(context: Context, additional: Map<String, Any>): DivPlayerView = makePlayerView(context)
 
     companion object {
@@ -19,6 +20,7 @@ interface DivPlayerFactory {
 
             override fun makePlayerView(context: Context) = object : DivPlayerView(context) { }
 
+            @Deprecated("Will be removed in future releases", ReplaceWith("makePlayerView(context: Context)"))
             override fun makePlayerView(context: Context, additional: Map<String, Any>) = object : DivPlayerView(context) { }
         }
     }

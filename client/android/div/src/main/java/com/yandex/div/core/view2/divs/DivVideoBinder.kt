@@ -63,17 +63,7 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        val scale = div.scale.evaluate(resolver)
-        val playerView = if (currentPlayerView != null &&
-            currentPlayerView.isCompatibleWithNewParams(scale)
-        ) {
-            currentPlayerView
-        } else {
-            divView.div2Component.divVideoFactory.makePlayerView(
-                view.context,
-                mapOf("scale" to scale)
-            )
-        }.apply {
+        val playerView = currentPlayerView ?: divView.div2Component.divVideoFactory.makePlayerView(view.context).apply {
             // We won't to show black video square before preview is rendered
             visibility = View.INVISIBLE
         }
