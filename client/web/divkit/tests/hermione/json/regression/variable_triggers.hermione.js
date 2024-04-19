@@ -16,7 +16,7 @@ describe('regression', () => {
 
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(4);
+            logs.length.should.equal(7);
         })
 
         it('Tap on button right', async function() {
@@ -28,7 +28,7 @@ describe('regression', () => {
 
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(4);
+            logs.length.should.equal(7);
         })
 
         it('Tap on both button', async function() {
@@ -39,7 +39,7 @@ describe('regression', () => {
 
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(4);
+            logs.length.should.equal(7);
         })
     });
 });

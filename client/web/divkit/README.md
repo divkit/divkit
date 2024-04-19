@@ -230,7 +230,7 @@ Used for logging clicks (for elements with `action`) and visibility logging (for
 
 ```ts
 function onStat(details: {
-    type: 'click' | 'visible' | 'disappear';
+    type: 'click' | 'visible' | 'disappear' | 'trigger';
     action: Action | VisibilityAction | DisappearAction;
 }) {
 }

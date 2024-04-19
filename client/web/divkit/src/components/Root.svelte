@@ -1610,11 +1610,16 @@
                                 // and trigger mode matches
                                 (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                             ) {
+                                const actionsToLog: Action[] = [];
                                 for (const action of trigger.actions) {
                                     const resultAction = getJsonWithVars(logError, action);
                                     if (resultAction.log_id) {
                                         await execActionInternal(resultAction as Action);
+                                        actionsToLog.push(resultAction as Action);
                                     }
+                                }
+                                for (const action of actionsToLog) {
+                                    logStat('trigger', action);
                                 }
                             }
 
