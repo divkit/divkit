@@ -1,6 +1,7 @@
 package com.yandex.div.core
 
 import android.net.Uri
+import android.graphics.drawable.PictureDrawable
 import com.yandex.div.core.DivPreloader.Callback
 import com.yandex.div.core.DivPreloader.PreloadReference
 import com.yandex.div.core.annotations.Mockable
@@ -165,6 +166,10 @@ class DivPreloader internal constructor(
         }
 
         override fun onSuccess(cachedBitmap: CachedBitmap) {
+            done()
+        }
+
+        override fun onSuccess(pictureDrawable: PictureDrawable) {
             done()
         }
 

@@ -4,6 +4,7 @@ import android.widget.ImageView
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.svg.SvgLoadWrapper
 
 /**
  * Wraps implementation of DivImageLoader from DivConfiguration.
@@ -11,8 +12,10 @@ import com.yandex.div.core.images.LoadReference
  * Modifies image_url from layout before providing it to wrapped DivImageLoader.
  */
 internal class DivImageLoaderWrapper(
-    private val imageLoader: DivImageLoader,
+    providedImageLoader: DivImageLoader,
 ): DivImageLoader {
+    private val imageLoader = SvgLoadWrapper(providedImageLoader)
+
     private val modifiers: List<DivImageUrlModifier> = listOf(
         DivImageAssetUrlModifier(),
     )
