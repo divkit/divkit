@@ -2600,24 +2600,6 @@
         "Text became editable"
       ],
       "file": "input_is_enabled.json"
-    },
-    {
-      "title": "Vector scale",
-      "platforms": [
-        "android",
-        "web"
-      ],
-      "tags": [
-        "Vector"
-      ],
-      "steps": [
-        "Move slider"
-      ],
-      "expected_results": [
-        "The left image should be rasterized and blurry.",
-        "The right image should scale perfectly."
-      ],
-      "file": "svg_scale.json"
     }
   ]
 }

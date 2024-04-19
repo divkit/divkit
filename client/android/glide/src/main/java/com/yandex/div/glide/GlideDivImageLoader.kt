@@ -24,8 +24,6 @@ class GlideDivImageLoader(
     private val context: Context
 ) : DivImageLoader {
 
-    override fun hasSvgSupport() = false
-
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
         // create target to be able to cancel loading

@@ -5,13 +5,11 @@ import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.Matrix
 import android.graphics.Paint
-import android.graphics.Picture
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 
 /**
  * Drawable with different scale types anf alignments. Now you can use not only center_crop, but top_crop and others.
- * Can contain either bitmap (for raster images) or picture (for vector images).
  * Examples: Fill with alignment center like center_crop in android. Fit left and top - like fit_start in android.
  */
 internal class ScalingDrawable : Drawable() {
@@ -31,8 +29,7 @@ internal class ScalingDrawable : Drawable() {
     var customScaleType = ScaleType.NO_SCALE
     var alignmentHorizontal = AlignmentHorizontal.LEFT
     var alignmentVertical = AlignmentVertical.TOP
-    private var originalBitmap: Bitmap? = null
-    private var originalPicture: Picture? = null
+    var originalBitmap: Bitmap? = null
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private var thumbTransformMatrix: Matrix = Matrix()
@@ -51,22 +48,12 @@ internal class ScalingDrawable : Drawable() {
 
     fun setBitmap(bitmap: Bitmap) {
         originalBitmap = bitmap
-        originalPicture = null
-        reset()
-    }
-
-    fun setPicture(picture: Picture) {
-        originalPicture = picture
-        originalBitmap = null
-        reset()
+        isDirtyRect = true
+        invalidateSelf()
     }
 
     override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
-        reset()
-    }
-
-    private fun reset() {
         isDirtyRect = true
         invalidateSelf()
     }
@@ -77,15 +64,12 @@ internal class ScalingDrawable : Drawable() {
         canvas.save()
 
         // pre drawing
-        val drawableWidth = originalBitmap?.width ?: originalPicture?.width ?: 0
-        val drawableHeight = originalBitmap?.height ?: originalPicture?.height ?: 0
+        val drawableWidth = originalBitmap?.width ?: 0
+        val drawableHeight = originalBitmap?.height ?: 0
 
         if (drawableHeight <= 0 || drawableWidth <= 0) {
             originalBitmap?.let {
                 canvas.drawBitmap(it, thumbTransformMatrix, paint)
-            }
-            originalPicture?.let {
-                canvas.drawPicture(it)
             }
             canvas.restore()
             return
@@ -99,11 +83,11 @@ internal class ScalingDrawable : Drawable() {
             yScale = viewHeight / drawableHeight
             when (customScaleType) {
                 ScaleType.FILL -> {
-                    xScale = xScale.coerceAtLeast(yScale)
+                    xScale = Math.max(xScale, yScale)
                     yScale = xScale
                 }
                 ScaleType.FIT -> {
-                    xScale = xScale.coerceAtMost(yScale)
+                    xScale = Math.min(xScale, yScale)
                     yScale = xScale
                 }
                 ScaleType.NO_SCALE -> {
@@ -135,9 +119,6 @@ internal class ScalingDrawable : Drawable() {
         // draw original image
         originalBitmap?.let {
             canvas.drawBitmap(it, thumbTransformMatrix, paint)
-        }
-        originalPicture?.let {
-            canvas.drawPicture(it)
         }
         // restore frame and other
         canvas.restore()

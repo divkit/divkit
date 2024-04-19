@@ -1,7 +1,6 @@
 package com.yandex.div.core.images;
 
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PictureDrawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,16 +25,6 @@ public class DivImageDownloadCallback {
      */
     @UiThread
     public void onSuccess(@NonNull Drawable drawable) {
-        // no implementation
-    }
-
-    /**
-     * Called when image is successfully loaded in a form of picture drawable
-     * Use when you want to draw PictureDrawable object directly
-     * Ex.: Vector images in SVG Image Loader
-     */
-    @UiThread
-    public void onSuccess(@NonNull PictureDrawable pictureDrawable) {
         // no implementation
     }
 

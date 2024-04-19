@@ -1,6 +1,7 @@
 package com.yandex.div.core.images;
 
 import android.widget.ImageView;
+
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
@@ -21,16 +22,6 @@ public interface DivImageLoader {
     @MainThread
     @NonNull
     LoadReference loadImage(@NonNull String imageUrl, @NonNull DivImageDownloadCallback callback);
-
-    /**
-     * Property indicating if the image loader can handle svg.
-     * False if not overridden.
-     *
-     * @return true if image loader supports svg.
-     */
-    default Boolean hasSvgSupport() {
-        return false;
-    }
 
     /**
      * Starts image loading by given <code>imageUrl</code>. Download raw bytes in result.
