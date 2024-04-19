@@ -210,7 +210,7 @@ Number "number"
 
 IdentifierOrBoolean
     = [a-zA-Z_] ([a-zA-Z_0-9]+ / '.' !( _ StrictIdentifier _ '(') )*
-        { return buildVariableOrBoolean(text()); }
+        { const txt = text(); if (/\.\./.test(txt) || /\.$/.test(txt)) {throw new Error('Unexpected token: .')} return buildVariableOrBoolean(txt); }
 
 StrictIdentifier
     = [a-zA-Z_][a-zA-Z_0-9]* { return {type: 'Identifier', name: text()}; }
