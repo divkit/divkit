@@ -135,6 +135,7 @@ public final class DivTextTemplate: TemplateValue {
 
   public final class ImageTemplate: TemplateValue {
     public let height: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(20))
+    public let preloadRequired: Field<Expression<Bool>>? // default value: false
     public let start: Field<Expression<Int>>? // constraint: number >= 0
     public let tintColor: Field<Expression<Color>>?
     public let tintMode: Field<Expression<DivBlendMode>>? // default value: source_in
@@ -144,6 +145,7 @@ public final class DivTextTemplate: TemplateValue {
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
         height: dictionary.getOptionalField("height", templateToType: templateToType),
+        preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
         start: dictionary.getOptionalExpressionField("start"),
         tintColor: dictionary.getOptionalExpressionField("tint_color", transform: Color.color(withHexString:)),
         tintMode: dictionary.getOptionalExpressionField("tint_mode"),
@@ -154,6 +156,7 @@ public final class DivTextTemplate: TemplateValue {
 
     init(
       height: Field<DivFixedSizeTemplate>? = nil,
+      preloadRequired: Field<Expression<Bool>>? = nil,
       start: Field<Expression<Int>>? = nil,
       tintColor: Field<Expression<Color>>? = nil,
       tintMode: Field<Expression<DivBlendMode>>? = nil,
@@ -161,6 +164,7 @@ public final class DivTextTemplate: TemplateValue {
       width: Field<DivFixedSizeTemplate>? = nil
     ) {
       self.height = height
+      self.preloadRequired = preloadRequired
       self.start = start
       self.tintColor = tintColor
       self.tintMode = tintMode
@@ -170,6 +174,7 @@ public final class DivTextTemplate: TemplateValue {
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ImageTemplate?) -> DeserializationResult<DivText.Image> {
       let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+      let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue
       let startValue = parent?.start?.resolveValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
       let tintColorValue = parent?.tintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       let tintModeValue = parent?.tintMode?.resolveOptionalValue(context: context) ?? .noValue
@@ -177,6 +182,7 @@ public final class DivTextTemplate: TemplateValue {
       let widthValue = parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+        preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
         tintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_color", error: $0) },
         tintModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_mode", error: $0) },
@@ -197,6 +203,7 @@ public final class DivTextTemplate: TemplateValue {
       }
       let result = DivText.Image(
         height: heightValue.value,
+        preloadRequired: preloadRequiredValue.value,
         start: startNonNil,
         tintColor: tintColorValue.value,
         tintMode: tintModeValue.value,
@@ -211,6 +218,7 @@ public final class DivTextTemplate: TemplateValue {
         return resolveOnlyLinks(context: context, parent: parent)
       }
       var heightValue: DeserializationResult<DivFixedSize> = .noValue
+      var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?.value() ?? .noValue
       var startValue: DeserializationResult<Expression<Int>> = parent?.start?.value() ?? .noValue
       var tintColorValue: DeserializationResult<Expression<Color>> = parent?.tintColor?.value() ?? .noValue
       var tintModeValue: DeserializationResult<Expression<DivBlendMode>> = parent?.tintMode?.value() ?? .noValue
@@ -220,6 +228,8 @@ public final class DivTextTemplate: TemplateValue {
         switch key {
         case "height":
           heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: heightValue)
+        case "preload_required":
+          preloadRequiredValue = deserialize(__dictValue).merged(with: preloadRequiredValue)
         case "start":
           startValue = deserialize(__dictValue, validator: ResolvedValue.startValidator).merged(with: startValue)
         case "tint_color":
@@ -232,6 +242,8 @@ public final class DivTextTemplate: TemplateValue {
           widthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: widthValue)
         case parent?.height?.link:
           heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+        case parent?.preloadRequired?.link:
+          preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
         case parent?.start?.link:
           startValue = startValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startValidator) })
         case parent?.tintColor?.link:
@@ -251,6 +263,7 @@ public final class DivTextTemplate: TemplateValue {
       }
       var errors = mergeErrors(
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+        preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
         tintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_color", error: $0) },
         tintModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_mode", error: $0) },
@@ -271,6 +284,7 @@ public final class DivTextTemplate: TemplateValue {
       }
       let result = DivText.Image(
         height: heightValue.value,
+        preloadRequired: preloadRequiredValue.value,
         start: startNonNil,
         tintColor: tintColorValue.value,
         tintMode: tintModeValue.value,
@@ -289,6 +303,7 @@ public final class DivTextTemplate: TemplateValue {
 
       return ImageTemplate(
         height: merged.height?.tryResolveParent(templates: templates),
+        preloadRequired: merged.preloadRequired,
         start: merged.start,
         tintColor: merged.tintColor,
         tintMode: merged.tintMode,

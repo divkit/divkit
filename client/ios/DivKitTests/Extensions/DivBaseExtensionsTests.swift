@@ -112,11 +112,11 @@ final class DivBaseExtensionsTests: XCTestCase {
 
   func test_WithActions() throws {
     let actions = [
-      DivAction(
+      divAction(
         logId: "action1_log_id",
-        url: .value(url("https://some.url"))
+        url: "https://some.url"
       ),
-      DivAction(
+      divAction(
         logId: "action2_log_id",
         typed: .divActionSetVariable(DivActionSetVariable(
           value: .integerValue(IntegerValue(value: .value(10))),
@@ -146,9 +146,9 @@ final class DivBaseExtensionsTests: XCTestCase {
   }
 
   func test_MarginsOverActions() throws {
-    let action = DivAction(
+    let action = divAction(
       logId: "action_log_id",
-      url: .value(url("https://some.url"))
+      url: "https://some.url"
     )
     let block = makeBlock(
       divSeparator(

@@ -42,7 +42,7 @@ private let testData = divData(
     width: .divFixedSize(DivFixedSize(value: .value(100))),
     visibilityActions: [
       DivVisibilityAction(
-        logId: "action",
+        logId: .value("action"),
         logLimit: .value(10),
         visibilityDuration: .value(0)
       ),

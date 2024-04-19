@@ -13,6 +13,7 @@ public final class DivInput: DivBase {
     case number = "number"
     case email = "email"
     case uri = "uri"
+    case password = "password"
   }
 
   public final class NativeInterface {

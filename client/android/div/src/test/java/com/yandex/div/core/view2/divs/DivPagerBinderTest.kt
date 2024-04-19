@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import androidx.core.view.get
 import com.yandex.div.core.ScrollDirection
+import com.yandex.div.core.asExpression
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.util.AccessibilityStateProvider
@@ -121,7 +122,7 @@ class DivPagerBinderTest: DivBinderTest() {
         val pagerJson = divPager.writeToJSON()
         pagerJson.getJSONArray("items")
             .getJSONObject(DEFAULT_ITEM)
-            .put("visibility_action", DivVisibilityAction(logId = "test").writeToJSON())
+            .put("visibility_action", DivVisibilityAction(logId = "test".asExpression()).writeToJSON())
         val divPager = DivPager(DivParsingEnvironment(ParsingErrorLogger.ASSERT), pagerJson)
         underTest.bindView(divPagerView, divPager, divView, rootPath())
 

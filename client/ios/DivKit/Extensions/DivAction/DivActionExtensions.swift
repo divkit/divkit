@@ -5,7 +5,8 @@ extension DivAction: DivActionBase {}
 
 extension DivAction {
   public func uiAction(context: DivBlockModelingContext) -> UserInterfaceAction? {
-    guard resolveIsEnabled(context.expressionResolver) else {
+    let expressionResolver = context.expressionResolver
+    guard resolveIsEnabled(expressionResolver) else {
       return nil
     }
     let payload: UserInterfaceAction.Payload
@@ -20,6 +21,7 @@ extension DivAction {
       )
     }
 
+    let logId = resolveLogId(expressionResolver) ?? ""
     let path = if let cardLogId = context.cardLogId {
       UIElementPath(cardLogId) + logId
     } else {

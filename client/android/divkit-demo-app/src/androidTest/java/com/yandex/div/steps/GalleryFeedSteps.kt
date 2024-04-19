@@ -59,6 +59,6 @@ internal class GalleryFeedAssertions {
 
     fun checkTrackedVisibilityActionsForContent(visibilityActions: List<DivVisibilityAction>): Unit =
         step("check tracked visibility actions for content") {
-            Assert.assertTrue(visibilityActions.any { it.logId == "content_item_show:0" })
+            Assert.assertTrue(visibilityActions.any { it.logId.rawValue == "content_item_show:0" })
         }
 }

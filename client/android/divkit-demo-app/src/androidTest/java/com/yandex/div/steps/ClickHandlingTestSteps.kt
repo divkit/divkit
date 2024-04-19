@@ -73,21 +73,21 @@ internal class ClickHandlingAssertions {
     fun checkClickLogged(cardId: String, id: String) =
         step("Check click on cardId=$cardId logged") {
             val log = "logClick(cardId = $cardId, id = $id)"
-            val visibilityActions = DemoDiv2Logger.logActions
-            Assert.assertTrue(visibilityActions.any { it.contains(log) })
+            val actions = DemoDiv2Logger.logActions
+            Assert.assertTrue(actions.any { it.contains(log) })
         }
 
     fun checkLongClickLogged(cardId: String, id: String) =
         step("Check click on cardId=$cardId logged") {
             val log = "logLongClick(cardId = $cardId, id = $id)"
-            val visibilityActions = DemoDiv2Logger.logActions
-            Assert.assertTrue(visibilityActions.any { it.contains(log) })
+            val actions = DemoDiv2Logger.logActions
+            Assert.assertTrue(actions.any { it.contains(log) })
         }
 
     fun checkDoubleClickLogged(cardId: String, id: String) =
         step("Check click on cardId=$cardId logged") {
             val log = "logDoubleClick(cardId = $cardId, id = $id)"
-            val visibilityActions = DemoDiv2Logger.logActions
-            Assert.assertTrue(visibilityActions.any { it.contains(log) })
+            val actions = DemoDiv2Logger.logActions
+            Assert.assertTrue(actions.any { it.contains(log) })
         }
 }

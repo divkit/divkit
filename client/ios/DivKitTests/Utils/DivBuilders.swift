@@ -2,6 +2,22 @@
 
 import Foundation
 
+func divAction(
+  isEnabled: Bool = true,
+  logId: String,
+  payload: [String: Any]? = nil,
+  typed: DivActionTyped? = nil,
+  url: String? = nil
+) -> DivAction {
+  DivAction(
+    isEnabled: .value(isEnabled),
+    logId: .value(logId),
+    payload: payload,
+    typed: typed,
+    url: url.flatMap { .value(URL(string: $0)!) }
+  )
+}
+
 func divData(
   logId: String = DivKitTests.cardId.rawValue,
   states: [DivData.State]

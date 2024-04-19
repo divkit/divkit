@@ -12,7 +12,7 @@ final class DivSerializationTests: XCTestCase {
   }
 
   func test_Serialize_StringValue() {
-    let action = DivAction(
+    let action = divAction(
       logId: "action_log_id"
     )
     let dictionary = action.toDictionary()

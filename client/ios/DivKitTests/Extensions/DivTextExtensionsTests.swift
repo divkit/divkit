@@ -93,9 +93,9 @@ final class DivTextExtensionsTests: XCTestCase {
   func test_WithAction() {
     let block = makeBlock(
       divText(
-        actions: [DivAction(
+        actions: [divAction(
           logId: "action_log_id",
-          url: .value(url("https://some.url"))
+          url: "https://some.url"
         )],
         text: "Hello!"
       )

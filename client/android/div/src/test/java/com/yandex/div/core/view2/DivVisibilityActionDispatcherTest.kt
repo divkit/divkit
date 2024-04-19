@@ -52,7 +52,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatched to handler`() {
-        val action = DivVisibilityAction(logId = "action")
+        val action = DivVisibilityAction(logId = "action".asExpression())
 
         dispatcher.dispatchAction(divView, mock(), action)
 
@@ -61,7 +61,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatching is limited by action`() {
-        val action = DivVisibilityAction(logId = "action", logLimit = 2L.asExpression())
+        val action = DivVisibilityAction(logId = "action".asExpression(), logLimit = 2L.asExpression())
 
         repeat(4) {
             dispatcher.dispatchAction(divView, mock(), action)
@@ -72,7 +72,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatching restores after limit reset`() {
-        val action = DivVisibilityAction(logId = "action", logLimit = 2L.asExpression())
+        val action = DivVisibilityAction(logId = "action".asExpression(), logLimit = 2L.asExpression())
 
         repeat(4) {
             dispatcher.dispatchAction(divView, mock(), action)
@@ -85,7 +85,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatching is unlimited by action`() {
-        val action = DivVisibilityAction(logId = "action", logLimit = 0L.asExpression())
+        val action = DivVisibilityAction(logId = "action".asExpression(), logLimit = 0L.asExpression())
 
         repeat(10) {
             dispatcher.dispatchAction(divView, mock(), action)
@@ -96,7 +96,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action doesn't dispatched to context handler when view handler intercepts it`() {
-        val action = DivVisibilityAction(logId = "action")
+        val action = DivVisibilityAction(logId = "action".asExpression())
         whenever(divView.actionHandler) doReturn viewActionHandler
 
         dispatcher.dispatchAction(divView, mock(), action)
@@ -106,7 +106,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatched to context handler when view handler passes it`() {
-        val action = DivVisibilityAction(logId = "action")
+        val action = DivVisibilityAction(logId = "action".asExpression())
         whenever(divView.actionHandler) doReturn viewActionHandler
         whenever(viewActionHandler.handleAction(eq(action as DivSightAction), eq(divView))) doReturn false
 
@@ -117,7 +117,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action doesn't dispatched to logger when handler intercepts it`() {
-        val action = DivVisibilityAction(logId = "action")
+        val action = DivVisibilityAction(logId = "action".asExpression())
 
         dispatcher.dispatchAction(divView, mock(), action)
 
@@ -126,7 +126,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action doesn't dispatched to beacon sender when handler intercepts it`() {
-        val action = DivVisibilityAction(logId = "action")
+        val action = DivVisibilityAction(logId = "action".asExpression())
 
         dispatcher.dispatchAction(divView, mock(), action)
 
@@ -135,7 +135,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatched to logger when handler passes it`() {
-        val action = DivVisibilityAction(logId = "action")
+        val action = DivVisibilityAction(logId = "action".asExpression())
         whenever(contextActionHandler.handleAction(eq(action) as DivSightAction, eq(divView))) doReturn false
 
         dispatcher.dispatchAction(divView, mock(), action)
@@ -145,7 +145,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatched to beacon sender when handler passes it`() {
-        val action = DivVisibilityAction(logId = "action")
+        val action = DivVisibilityAction(logId = "action".asExpression())
         whenever(contextActionHandler.handleAction(eq(action as DivSightAction), eq(divView))) doReturn false
 
         dispatcher.dispatchAction(divView, mock(), action)
@@ -155,8 +155,11 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `dispatch actions runs as a bulk`() {
-        val actionArray: Array<DivSightAction> = arrayOf(DivVisibilityAction(logId = "action"), DivVisibilityAction(logId = "action2"))
-        dispatcher.dispatchActions(divView, mock(), actionArray)
+        val actions: Array<DivSightAction> = arrayOf(
+            DivVisibilityAction(logId = "action".asExpression()),
+            DivVisibilityAction(logId = "action2".asExpression())
+        )
+        dispatcher.dispatchActions(divView, mock(), actions)
         verify(divView, times(1)).bulkActions(any())
     }
 }

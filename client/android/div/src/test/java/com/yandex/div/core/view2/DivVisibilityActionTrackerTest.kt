@@ -47,9 +47,9 @@ class DivVisibilityActionTrackerTest {
     private val view2 = mockView()
     private val view3 = mockView()
     private val view4 = mockView()
-    private val action1 = DivVisibilityAction(logId = "visibility_action")
-    private val action2 = DivVisibilityAction(logId = "visibility_action2")
-    private val action3 = DivVisibilityAction(logId = "visibility_action3")
+    private val action1 = DivVisibilityAction(logId = "visibility_action".asExpression())
+    private val action2 = DivVisibilityAction(logId = "visibility_action2".asExpression())
+    private val action3 = DivVisibilityAction(logId = "visibility_action3".asExpression())
     private val lottaActions = listOf(action1, action2, action3)
     private val actionsWithThreeDifferentDelays = Array(6) {
         val delay: Long = when {
@@ -57,7 +57,10 @@ class DivVisibilityActionTrackerTest {
             it < 4 -> 200
             else -> 300
         }
-        return@Array DivVisibilityAction(logId = "visibility_action_$it", visibilityDuration = delay.asExpression())
+        return@Array DivVisibilityAction(
+            logId = "visibility_action_$it".asExpression(),
+            visibilityDuration = delay.asExpression()
+        )
     }.toList()
     private val divBase1 = DivText(text = "test1".asExpression(), visibilityActions = listOf(action1))
     private val divBase2 = DivText(text = "test2".asExpression(), visibilityActions = listOf(action2))

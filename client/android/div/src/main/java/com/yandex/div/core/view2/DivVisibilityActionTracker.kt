@@ -207,13 +207,14 @@ internal class DivVisibilityActionTracker @Inject constructor(
         action: DivSightAction,
         visibilityPercentage: Int
     ): Boolean {
+        val expressionResolver = scope.expressionResolver
         val trackable = when (action) {
             is DivVisibilityAction -> {
-                visibilityPercentage >= action.visibilityPercentage.evaluate(scope.expressionResolver)
+                visibilityPercentage >= action.visibilityPercentage.evaluate(expressionResolver)
             }
             is DivDisappearAction -> {
                 (appearedForDisappearActions[view]?.contains(action) ?: false) &&
-                    visibilityPercentage <= action.visibilityPercentage.evaluate(scope.expressionResolver)
+                    visibilityPercentage <= action.visibilityPercentage.evaluate(expressionResolver)
             }
             else -> {
                 KAssert.fail { "Trying to check visibility for class without known visibility range" }
@@ -221,7 +222,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
             }
         }
 
-        val compositeLogId = compositeLogIdOf(scope, action)
+        val compositeLogId = compositeLogIdOf(scope, action.logId.evaluate(expressionResolver))
         // We are using the original instance of compositeLogId that was placed in 'trackedActionIds' previously
         // so that it can pass reference equality check in handler message queue
         val originalLogId = trackedTokens.getLogId(compositeLogId)
@@ -244,7 +245,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         delayMs: Long
     ) {
         val logIds = actions.associateTo(HashMap(actions.size, 1f)) { action ->
-            val compositeLogId = compositeLogIdOf(scope, action)
+            val compositeLogId = compositeLogIdOf(scope, action.logId.evaluate(scope.expressionResolver))
             KLog.e(TAG) { "startTracking: id=$compositeLogId" }
             return@associateTo compositeLogId to action
         }.let { Collections.synchronizedMap(it) }

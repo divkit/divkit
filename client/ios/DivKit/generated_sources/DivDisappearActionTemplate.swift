@@ -8,7 +8,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
   public let disappearDuration: Field<Expression<Int>>? // constraint: number >= 0; default value: 800
   public let downloadCallbacks: Field<DivDownloadCallbacksTemplate>?
   public let isEnabled: Field<Expression<Bool>>? // default value: true
-  public let logId: Field<String>?
+  public let logId: Field<Expression<String>>?
   public let logLimit: Field<Expression<Int>>? // constraint: number >= 0; default value: 1
   public let payload: Field<[String: Any]>?
   public let referer: Field<Expression<URL>>?
@@ -21,7 +21,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
       disappearDuration: dictionary.getOptionalExpressionField("disappear_duration"),
       downloadCallbacks: dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
       isEnabled: dictionary.getOptionalExpressionField("is_enabled"),
-      logId: dictionary.getOptionalField("log_id"),
+      logId: dictionary.getOptionalExpressionField("log_id"),
       logLimit: dictionary.getOptionalExpressionField("log_limit"),
       payload: dictionary.getOptionalField("payload"),
       referer: dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
@@ -35,7 +35,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
     disappearDuration: Field<Expression<Int>>? = nil,
     downloadCallbacks: Field<DivDownloadCallbacksTemplate>? = nil,
     isEnabled: Field<Expression<Bool>>? = nil,
-    logId: Field<String>? = nil,
+    logId: Field<Expression<String>>? = nil,
     logLimit: Field<Expression<Int>>? = nil,
     payload: Field<[String: Any]>? = nil,
     referer: Field<Expression<URL>>? = nil,
@@ -108,7 +108,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
     var disappearDurationValue: DeserializationResult<Expression<Int>> = parent?.disappearDuration?.value() ?? .noValue
     var downloadCallbacksValue: DeserializationResult<DivDownloadCallbacks> = .noValue
     var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
-    var logIdValue: DeserializationResult<String> = parent?.logId?.value() ?? .noValue
+    var logIdValue: DeserializationResult<Expression<String>> = parent?.logId?.value() ?? .noValue
     var logLimitValue: DeserializationResult<Expression<Int>> = parent?.logLimit?.value() ?? .noValue
     var payloadValue: DeserializationResult<[String: Any]> = parent?.payload?.value() ?? .noValue
     var refererValue: DeserializationResult<Expression<URL>> = parent?.referer?.value() ?? .noValue

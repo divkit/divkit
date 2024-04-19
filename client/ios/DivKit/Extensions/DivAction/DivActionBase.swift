@@ -6,13 +6,11 @@ import Serialization
 
 public protocol DivActionBase: Serializable {
   var downloadCallbacks: DivDownloadCallbacks? { get }
-  var logId: String { get }
-  var logUrl: Expression<URL>? { get }
   var payload: [String: Any]? { get }
-  var referer: Expression<URL>? { get }
   var typed: DivActionTyped? { get }
   var url: Expression<URL>? { get }
 
+  func resolveLogId(_ resolver: ExpressionResolver) -> String?
   func resolveLogUrl(_ resolver: ExpressionResolver) -> URL?
   func resolveReferer(_ resolver: ExpressionResolver) -> URL?
   func resolveUrl(_ resolver: ExpressionResolver) -> URL?

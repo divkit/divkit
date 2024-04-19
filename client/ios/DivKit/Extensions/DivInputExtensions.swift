@@ -176,15 +176,18 @@ extension DivInput.KeyboardType {
   fileprivate var system: TextInputBlock.InputType {
     switch self {
     case .singleLineText, .multiLineText:
-      .default
+      return .default
     case .phone:
-      .keyboard(.phonePad)
+      return .keyboard(.phonePad)
     case .number:
-      .keyboard(.decimalPad)
+      return .keyboard(.decimalPad)
     case .email:
-      .keyboard(.emailAddress)
+      return .keyboard(.emailAddress)
     case .uri:
-      .keyboard(.URL)
+      return .keyboard(.URL)
+    case .password:
+      DivKitLogger.warning("Keyboard type '\(self.rawValue)' is not supported")
+      return .default
     }
   }
 }

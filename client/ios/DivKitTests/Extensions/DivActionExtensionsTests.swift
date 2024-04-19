@@ -7,25 +7,24 @@ import LayoutKit
 
 final class DivActionExtensionsTests: XCTestCase {
   func test_uiAction_AddsCardLogIdFromContext() {
-    let action = DivAction(
-      logId: "action_log_id"
-    ).uiAction(context: .default.modifying(cardLogId: "custom_card_log_id"))
+    let action = divAction(logId: "action_log_id")
+      .uiAction(context: .default.modifying(cardLogId: "custom_card_log_id"))
 
     XCTAssertEqual(action?.path, UIElementPath("custom_card_log_id") + "action_log_id")
   }
 
   func test_uiAction_ReturnsNull_IfActionIsDisabled() {
-    let action = DivAction(
-      isEnabled: .value(false),
+    let action = divAction(
+      isEnabled: false,
       logId: "action_log_id",
-      url: .value(url("https://some.url"))
+      url: "https://some.url"
     ).uiAction
 
     XCTAssertNil(action)
   }
 
   func test_WithLogIdOnly() {
-    let action = DivAction(logId: "action_log_id").uiAction
+    let action = divAction(logId: "action_log_id").uiAction
 
     let expectedAction = UserInterfaceAction(
       payload: divActionPayload([
@@ -39,9 +38,9 @@ final class DivActionExtensionsTests: XCTestCase {
   }
 
   func test_WithUrl() {
-    let action = DivAction(
+    let action = divAction(
       logId: "action_log_id",
-      url: .value(url("https://some.url"))
+      url: "https://some.url"
     ).uiAction
 
     let expectedAction = UserInterfaceAction(
@@ -60,7 +59,7 @@ final class DivActionExtensionsTests: XCTestCase {
   }
 
   func test_WithTyped() {
-    let action = DivAction(
+    let action = divAction(
       logId: "action_log_id",
       typed: .divActionSetVariable(DivActionSetVariable(
         value: .integerValue(IntegerValue(value: .value(10))),
@@ -89,12 +88,12 @@ final class DivActionExtensionsTests: XCTestCase {
 
   func test_WithMenu() {
     let action = DivAction(
-      logId: "action_log_id",
+      logId: .value("action_log_id"),
       menuItems: [
         DivAction.MenuItem(
-          action: DivAction(
+          action: divAction(
             logId: "menu_item_log_id",
-            url: .value(url("https://some.url"))
+            url: "https://some.url"
           ),
           text: .value("Menu Item")
         ),
@@ -118,7 +117,7 @@ final class DivActionExtensionsTests: XCTestCase {
   }
 
   func test_WithPayload() {
-    let action = DivAction(
+    let action = divAction(
       logId: "action_log_id",
       payload: [
         "string_key": "string_value",
@@ -142,13 +141,13 @@ final class DivActionExtensionsTests: XCTestCase {
   }
 
   func test_WithPayloadAndUrl() {
-    let action = DivAction(
+    let action = divAction(
       logId: "action_log_id",
       payload: [
         "string_key": "string_value",
         "number_key": 42,
       ],
-      url: .value(url("https://some.url"))
+      url: "https://some.url"
     ).uiAction
 
     let expectedAction = UserInterfaceAction(

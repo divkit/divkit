@@ -6,8 +6,8 @@ import XCTest
 import CommonCorePublic
 
 final class DivTimerControllerTests: XCTestCase {
-  private let tickActions = [DivAction(logId: "Tick action")]
-  private let endActions = [DivAction(logId: "End action")]
+  private let tickActions = [divAction(logId: "Tick action")]
+  private let endActions = [divAction(logId: "End action")]
   private var variableValue: String?
   private var tickActionsCount = 0
   private var endActionsCount = 0

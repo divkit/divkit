@@ -165,20 +165,22 @@ public final class DivActionHandler {
       logger.log(url: logUrl, referer: referer, payload: action.payload)
     }
 
+    let logId = action.resolveLogId(expressionResolver) ?? ""
+
     reporter.reportAction(
       cardId: cardId,
       info: DivActionInfo(
         cardId: cardId,
-        logId: action.logId,
+        logId: logId,
         source: source,
         payload: action.payload
       )
     )
 
     if source == .visibility {
-      trackVisibility(action.logId, cardId)
+      trackVisibility(logId, cardId)
     } else if source == .disappear {
-      trackDisappear(action.logId, cardId)
+      trackDisappear(logId, cardId)
     }
   }
 
@@ -228,7 +230,7 @@ public final class DivActionHandler {
           url,
           info: DivActionInfo(
             cardId: context.cardId,
-            logId: action.logId,
+            logId: action.resolveLogId(expressionResolver) ?? "",
             source: source,
             payload: action.payload
           ),

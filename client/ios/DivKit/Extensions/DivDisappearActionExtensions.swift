@@ -10,7 +10,7 @@ extension DivDisappearAction {
       return nil
     }
     let logLimitValue = resolveLogLimit(expressionResolver)
-    let path = context.parentPath + logId
+    let path = context.parentPath + (resolveLogId(expressionResolver) ?? "")
     return VisibilityAction(
       uiAction: UserInterfaceAction(
         payload: makeDivActionPayload(cardId: context.cardId, source: .disappear),

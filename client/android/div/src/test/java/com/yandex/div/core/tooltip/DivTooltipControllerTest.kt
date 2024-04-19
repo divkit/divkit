@@ -56,7 +56,7 @@ class DivTooltipControllerTest {
         on { displayMetrics } doReturn displayMetrics
     }
 
-    private val action = DivVisibilityAction(logId = "visibility_action")
+    private val action = DivVisibilityAction(logId = "visibility_action".asExpression())
     private val divBase = DivText(text = "test1".asExpression(), visibilityActions = listOf(action))
     private val div = Div.Text(divBase)
 

@@ -17,6 +17,10 @@ internal data class CompositeLogId(
     override fun toString() = compositeLogId
 }
 
-internal fun compositeLogIdOf(scope: Div2View, action: DivSightAction): CompositeLogId {
-    return CompositeLogId(dataTag = scope.dataTag.id, scopeLogId = scope.logId, actionLogId = action.logId)
+internal fun compositeLogIdOf(scope: Div2View, actionLogId: String): CompositeLogId {
+    return CompositeLogId(
+        dataTag = scope.dataTag.id,
+        scopeLogId = scope.logId,
+        actionLogId = actionLogId
+    )
 }

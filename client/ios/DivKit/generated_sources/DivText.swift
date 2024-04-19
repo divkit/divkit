@@ -30,11 +30,16 @@ public final class DivText: DivBase {
 
   public final class Image {
     public let height: DivFixedSize // default value: DivFixedSize(value: .value(20))
+    public let preloadRequired: Expression<Bool> // default value: false
     public let start: Expression<Int> // constraint: number >= 0
     public let tintColor: Expression<Color>?
     public let tintMode: Expression<DivBlendMode> // default value: source_in
     public let url: Expression<URL>
     public let width: DivFixedSize // default value: DivFixedSize(value: .value(20))
+
+    public func resolvePreloadRequired(_ resolver: ExpressionResolver) -> Bool {
+      resolver.resolveNumeric(preloadRequired) ?? false
+    }
 
     public func resolveStart(_ resolver: ExpressionResolver) -> Int? {
       resolver.resolveNumeric(start)
@@ -57,6 +62,7 @@ public final class DivText: DivBase {
 
     init(
       height: DivFixedSize? = nil,
+      preloadRequired: Expression<Bool>? = nil,
       start: Expression<Int>,
       tintColor: Expression<Color>? = nil,
       tintMode: Expression<DivBlendMode>? = nil,
@@ -64,6 +70,7 @@ public final class DivText: DivBase {
       width: DivFixedSize? = nil
     ) {
       self.height = height ?? DivFixedSize(value: .value(20))
+      self.preloadRequired = preloadRequired ?? .value(false)
       self.start = start
       self.tintColor = tintColor
       self.tintMode = tintMode ?? .value(.sourceIn)
@@ -691,14 +698,19 @@ extension DivText.Image: Equatable {
   public static func ==(lhs: DivText.Image, rhs: DivText.Image) -> Bool {
     guard
       lhs.height == rhs.height,
-      lhs.start == rhs.start,
-      lhs.tintColor == rhs.tintColor
+      lhs.preloadRequired == rhs.preloadRequired,
+      lhs.start == rhs.start
     else {
       return false
     }
     guard
+      lhs.tintColor == rhs.tintColor,
       lhs.tintMode == rhs.tintMode,
-      lhs.url == rhs.url,
+      lhs.url == rhs.url
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -771,6 +783,7 @@ extension DivText.Image: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["height"] = height.toDictionary()
+    result["preload_required"] = preloadRequired.toValidSerializationValue()
     result["start"] = start.toValidSerializationValue()
     result["tint_color"] = tintColor?.toValidSerializationValue()
     result["tint_mode"] = tintMode.toValidSerializationValue()

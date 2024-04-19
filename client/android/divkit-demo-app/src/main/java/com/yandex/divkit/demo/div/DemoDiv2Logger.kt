@@ -19,6 +19,7 @@ class DemoDiv2Logger(
 
     companion object {
         private const val TAG = "DemoDiv2Logger"
+
         private val capturedVisibilityActions = mutableListOf<DivVisibilityAction>()
         private var captureVisibilityActions = false
         private val capturedLogActions = mutableListOf<String>()
@@ -40,43 +41,47 @@ class DemoDiv2Logger(
     }
 
     override fun logClick(divView: Div2View, view: View, action: DivAction) {
-        log(TAG) {
-            "logClick(cardId = ${divView.logId}, id = ${action.logId})"
+        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+        log {
+            "logClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
     override fun logLongClick(divView: Div2View, view: View, action: DivAction) {
-        log(TAG) {
-            "logLongClick(cardId = ${divView.logId}, id = ${action.logId})"
+        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+        log {
+            "logLongClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
     override fun logDoubleClick(divView: Div2View, view: View, action: DivAction) {
-        log(TAG) {
-            "logDoubleClick(cardId = ${divView.logId}, id = ${action.logId})"
+        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+        log {
+            "logDoubleClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
     override fun logFocusChanged(divView: Div2View, view: View, action: DivAction, haveFocus: Boolean) {
-        log(TAG) {
-            "logFocusChanged(cardId = ${divView.logId}, id = ${action.logId}, haveFocus = $haveFocus)"
+        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+        log {
+            "logFocusChanged(cardId = ${divView.logId}, id = $actionLogId, haveFocus = $haveFocus)"
         }
     }
 
     override fun logTabPageChanged(divView: Div2View, selectedTab: Int) {
-        log(TAG) {
+        log {
             "logTabPageChanged(cardId = ${divView.logId}, selectedTab = $selectedTab)"
         }
     }
 
     override fun logTabTitlesScroll(divView: Div2View) {
-        log(TAG) {
+        log {
             "logTabTitlesScroll(cardId = ${divView.logId})"
         }
     }
 
     override fun logGalleryScroll(divView: Div2View) {
-        log(TAG) {
+        log {
             "logGalleryScroll(cardId = ${divView.logId})"
         }
     }
@@ -88,7 +93,7 @@ class DemoDiv2Logger(
         lastVisibleItem: Int,
         scrollDirection: String
     ) {
-        log(TAG) {
+        log {
             "logGalleryCompleteScroll(cardId = ${divView.logId}, firstVisibleItem = $firstVisibleItem, lastVisibleItem = $lastVisibleItem, scrollDirection = $scrollDirection)"
         }
     }
@@ -99,15 +104,16 @@ class DemoDiv2Logger(
         currentPageIndex: Int,
         scrollDirection: String
     ) {
-        log(TAG) {
+        log {
             "logPagerChangePage(cardId = ${divView.logId}, currentPageIndex = $currentPageIndex), scrollDirection = $scrollDirection)"
         }
     }
 
     override fun logViewShown(divView: Div2View, view: View, action: DivVisibilityAction) {
         val expressionResolver = divView.expressionResolver
-        log(TAG) {
-            "logViewShown(cardId = ${divView.logId}, id = ${action.logId}, url = ${action.url?.evaluate(expressionResolver)}), referer = ${action.referer?.evaluate(expressionResolver)})"
+        val actionLogId = action.logId.evaluate(expressionResolver)
+        log {
+            "logViewShown(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(expressionResolver)}), referer = ${action.referer?.evaluate(expressionResolver)})"
         }
         if (captureVisibilityActions) {
             capturedVisibilityActions += action
@@ -116,14 +122,16 @@ class DemoDiv2Logger(
 
     override fun logViewDisappeared(divView: Div2View, view: View, action: DivDisappearAction) {
         val expressionResolver = divView.expressionResolver
-        log(TAG) {
-            "logViewDisappeared(cardId = ${divView.logId}, id = ${action.logId}, url = ${action.url?.evaluate(expressionResolver)}), referer = ${action.referer?.evaluate(expressionResolver)})"
+        val actionLogId = action.logId.evaluate(expressionResolver)
+        log {
+            "logViewDisappeared(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(expressionResolver)}), referer = ${action.referer?.evaluate(expressionResolver)})"
         }
     }
 
     override fun logTrigger(divView: Div2View, action: DivAction) {
-        log(TAG) {
-            "logTrigger(cardId = ${divView.logId}, id = ${action.logId})"
+        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+        log {
+            "logTrigger(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
@@ -134,7 +142,7 @@ class DemoDiv2Logger(
         result: String,
         eventsMessage: String?,
     ) {
-        log(TAG) {
+        log {
             val builder = StringBuilder("logBindingResult(cardId = ${divView.logId}, result = $result")
             eventsMessage?.let {
                 builder.append(", events = $it")
@@ -150,7 +158,7 @@ class DemoDiv2Logger(
         result: String,
         eventsMessage: String?,
     ) {
-        log(TAG) {
+        log {
             val builder = StringBuilder("logPatchResult(result = $result")
             eventsMessage?.let {
                 builder.append(", events = $it")
@@ -160,8 +168,8 @@ class DemoDiv2Logger(
         }
     }
 
-    private inline fun log(tag: String, message : () -> String) {
-        KLog.d(tag, message)
+    private inline fun log(message : () -> String) {
+        KLog.d(TAG, message)
         capturedLogActions.add(message.invoke())
         scenarioLogDelegate.println(message.invoke())
     }

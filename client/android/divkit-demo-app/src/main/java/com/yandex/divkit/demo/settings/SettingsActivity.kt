@@ -111,7 +111,7 @@ class SettingsActivity : AppCompatActivity() {
         val url = "$ACTION_SET_SWITCHER_STATE$name/$state"
         div2View.handleActionWithResult(
             DivAction(
-                logId = "init preferences",
+                logId = Expression.constant("init preferences"),
                 url = Expression.constant(Uri.parse(url))
             )
         )

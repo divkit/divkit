@@ -47,7 +47,7 @@ final class DivDataExtensionsTests: XCTestCase {
   func test_ActionPathContainsCardId() throws {
     let block = try divData(
       divText(
-        actions: [DivAction(logId: "action_log_id")],
+        actions: [divAction(logId: "action_log_id")],
         text: "0"
       )
     )
@@ -62,7 +62,7 @@ final class DivDataExtensionsTests: XCTestCase {
       .modifying(cardLogId: "external_card_log_id")
     let block = try divData(
       divText(
-        actions: [DivAction(logId: "action_log_id")],
+        actions: [divAction(logId: "action_log_id")],
         text: "0"
       )
     )

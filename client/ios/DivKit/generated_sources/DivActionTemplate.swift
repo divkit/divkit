@@ -119,7 +119,7 @@ public final class DivActionTemplate: TemplateValue {
 
   public let downloadCallbacks: Field<DivDownloadCallbacksTemplate>?
   public let isEnabled: Field<Expression<Bool>>? // default value: true
-  public let logId: Field<String>?
+  public let logId: Field<Expression<String>>?
   public let logUrl: Field<Expression<URL>>?
   public let menuItems: Field<[MenuItemTemplate]>?
   public let payload: Field<[String: Any]>?
@@ -131,7 +131,7 @@ public final class DivActionTemplate: TemplateValue {
     self.init(
       downloadCallbacks: dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
       isEnabled: dictionary.getOptionalExpressionField("is_enabled"),
-      logId: dictionary.getOptionalField("log_id"),
+      logId: dictionary.getOptionalExpressionField("log_id"),
       logUrl: dictionary.getOptionalExpressionField("log_url", transform: URL.init(string:)),
       menuItems: dictionary.getOptionalArray("menu_items", templateToType: templateToType),
       payload: dictionary.getOptionalField("payload"),
@@ -144,7 +144,7 @@ public final class DivActionTemplate: TemplateValue {
   init(
     downloadCallbacks: Field<DivDownloadCallbacksTemplate>? = nil,
     isEnabled: Field<Expression<Bool>>? = nil,
-    logId: Field<String>? = nil,
+    logId: Field<Expression<String>>? = nil,
     logUrl: Field<Expression<URL>>? = nil,
     menuItems: Field<[MenuItemTemplate]>? = nil,
     payload: Field<[String: Any]>? = nil,
@@ -212,7 +212,7 @@ public final class DivActionTemplate: TemplateValue {
     }
     var downloadCallbacksValue: DeserializationResult<DivDownloadCallbacks> = .noValue
     var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
-    var logIdValue: DeserializationResult<String> = parent?.logId?.value() ?? .noValue
+    var logIdValue: DeserializationResult<Expression<String>> = parent?.logId?.value() ?? .noValue
     var logUrlValue: DeserializationResult<Expression<URL>> = parent?.logUrl?.value() ?? .noValue
     var menuItemsValue: DeserializationResult<[DivAction.MenuItem]> = .noValue
     var payloadValue: DeserializationResult<[String: Any]> = parent?.payload?.value() ?? .noValue

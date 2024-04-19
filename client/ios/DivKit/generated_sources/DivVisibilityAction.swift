@@ -7,7 +7,7 @@ import Serialization
 public final class DivVisibilityAction: DivSightAction {
   public let downloadCallbacks: DivDownloadCallbacks?
   public let isEnabled: Expression<Bool> // default value: true
-  public let logId: String
+  public let logId: Expression<String>
   public let logLimit: Expression<Int> // constraint: number >= 0; default value: 1
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
@@ -18,6 +18,10 @@ public final class DivVisibilityAction: DivSightAction {
 
   public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(isEnabled) ?? true
+  }
+
+  public func resolveLogId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(logId, initializer: { $0 })
   }
 
   public func resolveLogLimit(_ resolver: ExpressionResolver) -> Int {
@@ -52,7 +56,7 @@ public final class DivVisibilityAction: DivSightAction {
   init(
     downloadCallbacks: DivDownloadCallbacks? = nil,
     isEnabled: Expression<Bool>? = nil,
-    logId: String,
+    logId: Expression<String>,
     logLimit: Expression<Int>? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
@@ -109,7 +113,7 @@ extension DivVisibilityAction: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["download_callbacks"] = downloadCallbacks?.toDictionary()
     result["is_enabled"] = isEnabled.toValidSerializationValue()
-    result["log_id"] = logId
+    result["log_id"] = logId.toValidSerializationValue()
     result["log_limit"] = logLimit.toValidSerializationValue()
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()

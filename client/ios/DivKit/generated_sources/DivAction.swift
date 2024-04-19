@@ -27,7 +27,7 @@ public final class DivAction {
 
   public let downloadCallbacks: DivDownloadCallbacks?
   public let isEnabled: Expression<Bool> // default value: true
-  public let logId: String
+  public let logId: Expression<String>
   public let logUrl: Expression<URL>?
   public let menuItems: [MenuItem]?
   public let payload: [String: Any]?
@@ -37,6 +37,10 @@ public final class DivAction {
 
   public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(isEnabled) ?? true
+  }
+
+  public func resolveLogId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(logId, initializer: { $0 })
   }
 
   public func resolveLogUrl(_ resolver: ExpressionResolver) -> URL? {
@@ -54,7 +58,7 @@ public final class DivAction {
   init(
     downloadCallbacks: DivDownloadCallbacks? = nil,
     isEnabled: Expression<Bool>? = nil,
-    logId: String,
+    logId: Expression<String>,
     logUrl: Expression<URL>? = nil,
     menuItems: [MenuItem]? = nil,
     payload: [String: Any]? = nil,
@@ -108,7 +112,7 @@ extension DivAction: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["download_callbacks"] = downloadCallbacks?.toDictionary()
     result["is_enabled"] = isEnabled.toValidSerializationValue()
-    result["log_id"] = logId
+    result["log_id"] = logId.toValidSerializationValue()
     result["log_url"] = logUrl?.toValidSerializationValue()
     result["menu_items"] = menuItems?.map { $0.toDictionary() }
     result["payload"] = payload

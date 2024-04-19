@@ -24,9 +24,9 @@ final class DivActionHandlerTests: XCTestCase {
 
   func test_UrlPassedToUrlHandler() {
     handle(
-      DivAction(
+      divAction(
         logId: "test_log_id",
-        url: .value(url("https://some.url"))
+        url: "https://some.url"
       )
     )
 
@@ -35,7 +35,7 @@ final class DivActionHandlerTests: XCTestCase {
 
   func test_UrlNotPassedToUrlHandler_IfTypedActionHandled() {
     handle(
-      DivAction(
+      divAction(
         logId: "test_log_id",
         typed: .divActionSetVariable(
           DivActionSetVariable(
@@ -43,7 +43,7 @@ final class DivActionHandlerTests: XCTestCase {
             variableName: .value("string_var")
           )
         ),
-        url: .value(url("https://some.url"))
+        url: "https://some.url"
       )
     )
 
@@ -57,7 +57,7 @@ final class DivActionHandlerTests: XCTestCase {
     )
 
     handle(
-      DivAction(
+      divAction(
         logId: "test_log_id",
         typed: .divActionSetVariable(
           DivActionSetVariable(
@@ -78,7 +78,7 @@ final class DivActionHandlerTests: XCTestCase {
     )
 
     handle(
-      DivAction(
+      divAction(
         logId: "test_log_id",
         typed: .divActionSetVariable(
           DivActionSetVariable(
@@ -95,7 +95,7 @@ final class DivActionHandlerTests: XCTestCase {
   func test_LoggerIsCalled() {
     handle(
       DivAction(
-        logId: "test_log_id",
+        logId: .value("test_log_id"),
         logUrl: .value(url("https://some.log.url")),
         payload: ["key": "value"],
         referer: .value(url("https://some.referer.url")),
@@ -110,9 +110,9 @@ final class DivActionHandlerTests: XCTestCase {
 
   func test_ActionIsReported() {
     handle(
-      DivAction(
+      divAction(
         logId: "test_log_id",
-        url: .value(url("https://some.url"))
+        url: "https://some.url"
       )
     )
 
