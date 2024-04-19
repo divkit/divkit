@@ -71,3 +71,15 @@ extension DetachableAnimationBlock: Equatable {
 extension DetachableAnimationBlock: CustomDebugStringConvertible {
   public var debugDescription: String { "DetachableAnimationBlock" }
 }
+
+extension DetachableAnimationBlock: ElementStateUpdating {
+  public func updated(withStates states: BlocksState) throws -> Self {
+    Self(
+      child: child,
+      id: id,
+      animationIn: nil,
+      animationOut: animationOut,
+      animationChange: animationChange
+    )
+  }
+}
