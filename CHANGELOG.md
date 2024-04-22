@@ -2,12 +2,15 @@
 
 # Android Client:
 * Added ability to set a specific logging level using DivKit#setLogLevel.
+* Added ability to forcibly release video players by `releaseMedia()` method of `Div2View`.
+* TextureView is now a default view for DivVideo.
 * Replaced `String` with `CharArray` at expression tokenization process.
 * Recreating subscriptions to local variables in case Div2View is recreated after destroying its lifecyclerOwner in order to preserve the state of local variables.
 * Fixed that invalid base64 preview in `DivVideo` may cause `IllegalArgumentException`.
 * Fixed NoSuchElementException on handling disappear actions.
 * Fixed accessibility of gallery children when exclude a11y mode turned on.
 * Fixed that `video` screen could show up before `preview` was rendered.
+* Fixed state variable binding loop.
 
 # iOS Client:
 * Removed mask from GalleryView to reduce offscreen rendering.
