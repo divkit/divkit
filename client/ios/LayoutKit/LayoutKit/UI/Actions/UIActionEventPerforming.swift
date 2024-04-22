@@ -96,9 +96,7 @@ extension UserInterfaceAction.Payload {
         return leftPayload
       }
       return .composite(leftPayload, rightPayload)
-    case .empty,
-         .menu,
-         .json:
+    case .empty, .menu:
       return self
     }
   }

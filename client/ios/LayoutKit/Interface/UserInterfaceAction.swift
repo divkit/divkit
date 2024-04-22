@@ -9,7 +9,6 @@ public struct UserInterfaceAction: Equatable, Codable {
     case empty // means just analytics logging
     case url(URL)
     case menu(Menu)
-    case json(JSONObject) // deprecated
     indirect case composite(Payload, Payload)
     case divAction(params: DivActionParams)
   }
@@ -99,18 +98,6 @@ public struct UserInterfaceAction: Equatable, Codable {
   }
 
   public init(
-    json: JSONObject,
-    path: UIElementPath,
-    accessibilityElement: AccessibilityElement? = nil
-  ) {
-    self.init(
-      payload: .json(json),
-      path: path,
-      accessibilityElement: accessibilityElement
-    )
-  }
-
-  public init(
     payloads: [Payload],
     path: UIElementPath,
     accessibilityElement: AccessibilityElement? = nil
@@ -141,7 +128,6 @@ extension UserInterfaceAction.Payload: Codable {
     case empty
     case url
     case menu
-    case json
     case divAction
     case composite
   }
@@ -165,8 +151,6 @@ extension UserInterfaceAction.Payload: Codable {
       .url
     case .menu:
       .menu
-    case .json:
-      .json
     case .composite:
       .composite
     case .divAction:
@@ -193,9 +177,6 @@ extension UserInterfaceAction.Payload: Codable {
     case .menu?:
       let menu = try container.decode(Menu.self, forKey: .menu)
       self = .menu(menu)
-    case .json?:
-      let json = try container.decode(JSONObject.self, forKey: .json)
-      self = .json(json)
     case .composite?:
       let first = try container.decode(type(of: self).self, forKey: .firstPayload)
       let second = try container.decode(type(of: self).self, forKey: .secondPayload)
@@ -225,8 +206,6 @@ extension UserInterfaceAction.Payload: Codable {
       try container.encode(url, forKey: .url)
     case let .menu(menu):
       try container.encode(menu, forKey: .menu)
-    case let .json(json):
-      try container.encode(json, forKey: .json)
     case let .composite(first, second):
       try container.encode(first, forKey: .firstPayload)
       try container.encode(second, forKey: .secondPayload)
@@ -248,8 +227,6 @@ extension UserInterfaceAction.Payload: CustomDebugStringConvertible {
       "URL: \(value)"
     case let .menu(value):
       "Menu: \(value)"
-    case let .json(value):
-      "JSON: \(value))"
     case let .divAction(params):
       "DivAction: \(params.action)"
     case let .composite(lhs, rhs):
@@ -304,9 +281,7 @@ extension UserInterfaceAction.Payload {
         "Multiple URLs in payload are not supported"
       )
       return lhsURL ?? rhsURL
-    case .empty,
-         .menu,
-         .json:
+    case .empty, .menu:
       return nil
     }
   }
@@ -324,7 +299,7 @@ extension UserInterfaceAction.Payload {
       return try lPayload.getComposedURLs() + rPayload.getComposedURLs()
     case .empty:
       return []
-    case .menu, .json:
+    case .menu:
       throw Error.notAnURL
     }
   }

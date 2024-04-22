@@ -149,8 +149,4 @@ extension DivBlockStateStorage: ElementStateObserver {
   public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
     setFocused(isFocused: isFocused, path: path)
   }
-
-  func state(for path: UIElementPath) -> ElementState? {
-    getStateUntyped(path)
-  }
 }
