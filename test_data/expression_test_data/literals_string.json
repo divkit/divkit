@@ -15,6 +15,20 @@
             ]
         },
         {
+            "name": "string literal in escaping double quotes",
+            "expression": "@{\"abcd\"}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
             "name": "string literal with escaping symbol",
             "expression": "@{'This\\'s a string'}",
             "expected": {

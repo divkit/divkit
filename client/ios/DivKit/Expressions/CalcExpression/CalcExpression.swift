@@ -61,7 +61,7 @@ struct CalcExpression {
       return nil
     }
   }
-  
+
   func evaluate<T>(
     evaluators: @escaping (Symbol) -> SymbolEvaluator?
   ) throws -> T {
@@ -82,7 +82,7 @@ struct CalcExpression {
       "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
     )
   }
-  
+
   private static func cast<T>(_ anyValue: Any) -> T? {
     if let value = anyValue as? T {
       return value
@@ -497,7 +497,7 @@ extension UnicodeScalarView {
     } else {
       return nil
     }
-    
+
     var prevChar: UInt32 = 0
     if let tail = scanCharacters({
       let char = $0.value
@@ -524,7 +524,7 @@ extension UnicodeScalarView {
 
   private mutating func parseEscapedIdentifier() -> Subexpression? {
     guard let delimiter = first,
-          var string = scanCharacter({ "`'\"".unicodeScalars.contains($0) })
+          var string = scanCharacter({ $0 == "'" })
     else {
       return nil
     }
