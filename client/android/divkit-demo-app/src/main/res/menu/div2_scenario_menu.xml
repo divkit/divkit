@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/div2_perform_action"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        android:title="@string/perform_action" />
+
+    <item
         android:id="@+id/div2_variables"
         android:orderInCategory="200"
         app:showAsAction="never"

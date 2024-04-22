@@ -64,6 +64,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     private lateinit var editorStateKeeper: DivEditorActivityStateKeeper
     private lateinit var div2Adapter: DivEditorAdapter
     private lateinit var divContext: Div2Context
+    private val actionHandler = DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = this@Div2ScenarioActivity })
     private val globalVariableController = DemoGlobalVariablesController()
     private val preferences by lazy { getSharedPreferences("div2", Context.MODE_PRIVATE) }
     private var json: String? = null
@@ -105,6 +106,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                     DivPinchToZoomConfiguration.Builder(this).build()
                 )
             )
+            .actionHandler(actionHandler)
             .extension(DivLottieExtensionHandler())
             .extension(DivShimmerExtensionHandler())
             .extension(CheckBoundsExtensionHandler())
@@ -176,6 +178,10 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.div2_perform_action -> {
+                showActionDialog()
+                true
+            }
             R.id.div2_variables -> {
                 showVariablesDialog()
                 true
@@ -216,15 +222,29 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         }
     }
 
+    private fun showActionDialog() {
+        val editText = layoutInflater.inflate(R.layout.apply_patch_edit_text, null) as EditText
+        editText.setText("div-action://set_variable?name=var&value=1")
+        preferences.getString(KEY_DIV2_ACTION_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
+        val adb = SafeAlertDialogBuilder(this)
+            .setView(editText)
+            .setPositiveButton("Perform action") { _, _ ->
+                val action = editText.text.toString()
+                preferences.edit().putString(KEY_DIV2_ACTION_URL, action).apply()
+                actionHandler.handleActionUrl(Uri.parse(action), div2View)
+            }
+        adb.create().show()
+    }
+
     private fun showVariablesDialog() {
         val editText = layoutInflater.inflate(R.layout.apply_patch_edit_text, null) as EditText
         editText.setText("asset:///div2/expressions/theme_palette_light.json")
-        preferences.getString(DIV2_VARIABLES_KEY_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
+        preferences.getString(KEY_DIV2_VARIABLES_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
         val adb = SafeAlertDialogBuilder(this)
             .setView(editText)
             .setPositiveButton("Load variables") { _, _ ->
                 val data = editText.text.toString()
-                preferences.edit().putString(DIV2_VARIABLES_KEY_URL, data).apply()
+                preferences.edit().putString(KEY_DIV2_VARIABLES_URL, data).apply()
                 lifecycleScope.launch {
                     val json = if (data.trimStart().startsWith('{')) {
                         JSONObject(data)
@@ -240,12 +260,12 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
 
     private fun showDownloadDialog() {
         val editText = layoutInflater.inflate(R.layout.apply_patch_edit_text, null) as EditText
-        preferences.getString(DIV2_PATCH_KEY_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
+        preferences.getString(KEY_DIV2_PATCH_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
         val adb = SafeAlertDialogBuilder(this)
             .setView(editText)
             .setPositiveButton("Apply") { _, _ ->
                 val fieldValue = editText.text.toString()
-                preferences.edit().putString(DIV2_PATCH_KEY_URL, fieldValue).apply()
+                preferences.edit().putString(KEY_DIV2_PATCH_URL, fieldValue).apply()
 
                 lifecycleScope.launch {
                     val divPatch = try {
@@ -367,8 +387,9 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     }
 
     private companion object {
-        private const val DIV2_PATCH_KEY_URL = "patch_key_url"
-        private const val DIV2_VARIABLES_KEY_URL = "variables_url"
+        private const val KEY_DIV2_PATCH_URL = "patch_url"
+        private const val KEY_DIV2_VARIABLES_URL = "variables_url"
+        private const val KEY_DIV2_ACTION_URL = "action_url"
     }
 
     override val renderingTimeMessages: HashMap<String, LoggingHistogramBridge.TimeHistogram> = HashMap()
