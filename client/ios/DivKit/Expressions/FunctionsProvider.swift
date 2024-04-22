@@ -55,7 +55,7 @@ final class FunctionsProvider {
           return { _ in false }
         case let .variable(name):
           // CalcExpression stores string values as Symbol.variable
-          if name.count >= 2, name.starts(with: "'") {
+          if name.count >= 2, name.starts(with: "'") || name.starts(with: "\"") {
             let value = String(name.dropFirst().dropLast())
             return { _ in value }
           }
