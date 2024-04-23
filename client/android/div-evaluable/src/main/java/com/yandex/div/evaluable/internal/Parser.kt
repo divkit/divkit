@@ -16,7 +16,8 @@ import com.yandex.div.evaluable.EvaluableException
  *  sum -> factor ( ( "-" | "+" ) factor )*
  *  factor -> unary ( ( "/" | "*" | "%") unary )*
  *  unary -> ( "!" | "-" | "+" ) unary | exponent
- *  exponent -> call ( "^" unary )*
+ *  exponent -> method ( "^" unary )*
+ *  method -> calls call.method(args)
  *  call -> function | variable | number | boolean
  *
  *  The Mantra of Function
@@ -141,7 +142,7 @@ internal object Parser {
     }
 
     private fun exponent(state: ParsingState): Evaluable {
-        var call = call(state)
+        var call = method(state)
         if (state.isNotAtEnd() && state.currentToken() is Token.Operator.Binary.Power) {
             state.forward()
             call = Evaluable.Binary(Token.Operator.Binary.Power, call, unary(state), state.rawExpr)
@@ -149,27 +150,27 @@ internal object Parser {
         return call
     }
 
-    private fun call(state: ParsingState): Evaluable {
+    private fun method(state: ParsingState): Evaluable {
+        var call = call(state)
+        while (state.isNotAtEnd() && state.currentToken() is Token.Operator.Dot) {
+            state.forward()
+            call = call(state, call)
+        }
+        return call
+    }
+
+    private fun call(state: ParsingState, prefix: Evaluable? = null): Evaluable {
         if (state.isAtEnd()) {
             throw EvaluableException("Expression expected")
         }
-        return when (val token = state.next()) {
+        val token = state.next()
+        if (prefix != null && token !is Token.Function) {
+            throw EvaluableException("Method expected after .")
+        }
+        return when (token) {
             is Token.Operand.Literal -> Evaluable.Value(token, state.rawExpr)
             is Token.Operand.Variable -> Evaluable.Variable(token, state.rawExpr)
-            is Token.Function -> {
-                if (state.next() !is Token.Bracket.LeftRound) {
-                    throw EvaluableException("'(' expected after function call")
-                }
-                val arguments = mutableListOf<Evaluable>()
-                while (state.currentToken() !is Token.Bracket.RightRound) {
-                    arguments += expression(state)
-                    if (state.currentToken() is Token.Function.ArgumentDelimiter) state.forward()
-                }
-                if (state.next() !is Token.Bracket.RightRound) {
-                    throw EvaluableException("expected ')' after a function call")
-                }
-                Evaluable.FunctionCall(token, arguments, state.rawExpr)
-            }
+            is Token.Function -> parseFunction(token, state, prefix)
             is Token.Bracket.LeftRound -> {
                 val result = expression(state)
                 if (state.next() !is Token.Bracket.RightRound) {
@@ -193,6 +194,30 @@ internal object Parser {
                 Evaluable.StringTemplate(arguments, state.rawExpr)
             }
             else -> throw EvaluableException("Expression expected")
+        }
+    }
+
+    private fun parseFunction(
+        token: Token.Function, state: ParsingState, prefix: Evaluable?,
+    ): Evaluable {
+        if (state.next() !is Token.Bracket.LeftRound) {
+            throw EvaluableException("'(' expected after function call")
+        }
+        val arguments = mutableListOf<Evaluable>()
+        if (prefix != null) {
+            arguments += prefix
+        }
+        while (state.currentToken() !is Token.Bracket.RightRound) {
+            arguments += expression(state)
+            if (state.currentToken() is Token.Function.ArgumentDelimiter) state.forward()
+        }
+        if (state.next() !is Token.Bracket.RightRound) {
+            throw EvaluableException("expected ')' after a function call")
+        }
+        return if (prefix == null) {
+            Evaluable.FunctionCall(token, arguments, state.rawExpr)
+        } else {
+            Evaluable.MethodCall(token, arguments, state.rawExpr)
         }
     }
 

@@ -173,6 +173,27 @@ class Evaluator(val evaluationContext: EvaluationContext) {
         }
     }
 
+    internal fun evalMethodCall(methodCall: Evaluable.MethodCall): Any {
+        val arguments = mutableListOf<Any>()
+        for (arg in methodCall.arguments) {
+            arguments.add(eval(arg))
+            methodCall.updateIsCacheable(arg.checkIsCacheable())
+        }
+        val argTypes = arguments.map { arg ->
+            EvaluableType.of(arg)
+        }
+        val function = try {
+            evaluationContext.functionProvider.getMethod(methodCall.token.name, argTypes)
+        } catch (e: EvaluableException) {
+            throwExceptionOnMethodEvaluationFailed(methodCall.token.name, arguments, e.message ?: "", e)
+        }
+
+        val expressionContext = ExpressionContext(methodCall)
+
+        methodCall.updateIsCacheable(function.isPure)
+        return function.invoke(evaluationContext, expressionContext, castEvalArgumentsIfNeeded(function, arguments))
+    }
+
     internal fun evalFunctionCall(functionCall: Evaluable.FunctionCall): Any {
         val arguments = mutableListOf<Any>()
         for (arg in functionCall.arguments) {

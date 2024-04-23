@@ -101,6 +101,22 @@ abstract class Evaluable(val rawExpr: String) {
         override fun toString() = "($tryExpression $token $fallbackExpression)"
     }
 
+    internal data class MethodCall(
+        val token: Token.Function,
+        val arguments: List<Evaluable>,
+        val rawExpression: String,
+    ) : Evaluable(rawExpression) {
+        override val variables: List<String> =
+            arguments.map { it.variables }.reduceOrNull { acc, vars -> acc + vars } ?: emptyList()
+        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalMethodCall(this)
+        override fun toString(): String {
+            val argsString = if (arguments.size > 1) {
+                arguments.subList(1, arguments.size).joinToString(Token.Function.ArgumentDelimiter.toString())
+            } else ""
+            return "${arguments.first()}.${token.name}($argsString)"
+        }
+    }
+
     internal data class FunctionCall(
         val token: Token.Function,
         val arguments: List<Evaluable>,

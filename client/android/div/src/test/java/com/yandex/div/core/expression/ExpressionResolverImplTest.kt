@@ -4,8 +4,11 @@ import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
 import com.yandex.div.core.util.EnableAssertsRule
 import com.yandex.div.data.Variable
+import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
+import com.yandex.div.evaluable.Function
+import com.yandex.div.evaluable.FunctionProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.internal.parser.*
@@ -84,9 +87,16 @@ class ExpressionResolverImplTest {
                 EvaluationContext(
                     variableProvider = evaluationContext.variableProvider,
                     storedValueProvider = evaluationContext.storedValueProvider,
-                    functionProvider = { name, args ->
-                        callback()
-                        evaluationContext.functionProvider.get(name, args)
+                    functionProvider = object : FunctionProvider {
+                        override fun get(name: String, args: List<EvaluableType>): Function {
+                            callback()
+                            return evaluationContext.functionProvider.get(name, args)
+                        }
+
+                        override fun getMethod(name: String, args: List<EvaluableType>): Function {
+                            callback()
+                            return evaluationContext.functionProvider.getMethod(name, args)
+                        }
                     },
                     warningSender = evaluationContext.warningSender
                 )

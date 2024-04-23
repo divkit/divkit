@@ -244,6 +244,10 @@ internal object Tokenizer {
                         state.currentChar().isWhiteSpace() -> { state.forward() }
                         state.currentChar().isDecimal(state.prevChar(), state.nextChar()) -> processNumber(state, tokens)
                         state.currentChar().isAlphabetic() -> processIdentifier(state, tokens)
+                        state.currentChar().isDot() -> {
+                            state.forward()
+                            tokens.add(Token.Operator.Dot)
+                        }
                         else -> throw invalidToken(state)
                     }
                 }
@@ -300,27 +304,54 @@ internal object Tokenizer {
     }
 
     private fun processIdentifier(state: TokenizationState, tokens: MutableList<Token>) {
-        val start = state.index
-
-        while (state.currentChar().isValidIdentifier()) state.forward()
-        val name = state.part(start, state.index)
-        while (state.currentChar().isWhiteSpace()) state.forward()
-        when {
-            processKeyword(name, tokens) -> {
-                return
+        val parts = mutableListOf<String>()
+        var endsWithDot: Boolean
+        do {
+            val start = state.index
+            endsWithDot = false
+            while (state.currentChar().isValidIdentifier()) state.forward()
+            parts.add(state.part(start, state.index))
+            if (state.currentChar().isDot()) {
+                state.forward()
+                endsWithDot = true
             }
+        } while (state.currentChar().isValidIdentifier() || state.currentChar().isDot())
 
-            state.currentChar() == '(' -> {
-                if (name.contains('.')) {
-                    throw EvaluableException("Invalid function name '$name'")
+        var funcToken: Token.Function? = null
+        while(state.currentChar().isWhiteSpace()) state.forward()
+
+        while (parts.size > 0) {
+            when {
+                funcToken == null && state.currentChar() == '(' -> {
+                    funcToken = Token.Function(parts.last())
+                    parts.removeLast()
                 }
-                tokens.add(Token.Function(name))
-            }
 
-            else -> {
-                tokens.add(Token.Operand.Variable(name))
+                parts.size == 1 && processKeyword(parts.first(), tokens) -> {
+                    funcToken?.let {
+                        tokens.add(Token.Operator.Dot)
+                        tokens.add(it)
+                    }
+                    return
+                }
+
+                else -> {
+                    tokens.apply {
+                        val name = parts.joinToString(
+                            separator = ".",
+                            postfix = if (endsWithDot) "." else ""
+                        )
+                        add(Token.Operand.Variable(name))
+                        funcToken?.let {
+                            add(Token.Operator.Dot)
+                            add(it)
+                        }
+                    }
+                    return
+                }
             }
         }
+        funcToken?.let { tokens.add(it) }
     }
 
     private fun processKeyword(identifier: String, tokens: MutableList<Token>): Boolean {
@@ -427,7 +458,8 @@ internal object Tokenizer {
         else -> false
     }
     private fun Char.isWhiteSpace() = this == ' ' || this == '\t' || this == '\r' || this == '\n'
-    private fun Char.isValidIdentifier() = this.isAlphabetic() || this.isNumber() || this == '.'
+    private fun Char.isValidIdentifier() = this.isAlphabetic() || this.isNumber()
+    private fun Char.isDot() = this == '.'
     private fun Char.isAtEndOfStringLiteral(state: TokenizationState) =
         this == '\'' && !state.currentCharIsEscaped()
     private fun Char.isStartOfExpression(state: TokenizationState) =

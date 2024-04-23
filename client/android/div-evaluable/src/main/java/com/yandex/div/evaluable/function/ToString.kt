@@ -107,3 +107,22 @@ internal object UrlToString : Function() {
         return (args.first() as Url).toString()
     }
 }
+
+internal object StringToString : Function() {
+
+    override val name = FUNCTION_NAME
+
+    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.STRING))
+
+    override val resultType = EvaluableType.STRING
+
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        return (args.first() as String)
+    }
+}

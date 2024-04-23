@@ -21,6 +21,11 @@ object BuiltinFunctionProviderGenerator {
             name to functions.map { it::class.asClassName() }.sorted()
         }
         .sortedBy { (id, _) -> id }
+    private val nameAndMethods = BuiltinFunctionProvider.exposedMethods.entries
+        .map { (name, functions) ->
+            name to functions.map { it::class.asClassName() }.sorted()
+        }
+        .sortedBy { (id, _) -> id }
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -42,10 +47,11 @@ object BuiltinFunctionProviderGenerator {
     private fun prepareTypeSpec(): TypeSpec =
         TypeSpec.objectBuilder("GeneratedBuiltinFunctionProvider")
             .addSuperinterface(FunctionProvider::class)
-            .addFunctions(listOf(prepareGetFunction(), prepareWarmUpFunction()))
+            .addFunctions(listOf(prepareGetFunction(nameAndFunctions, "get"),
+                prepareGetFunction(nameAndMethods, "getMethod"), prepareWarmUpFunction()))
             .build()
 
-    private fun prepareGetFunction(): FunSpec {
+    private fun prepareGetFunction(namesAndFunctions: List<Pair<String, List<ClassName>>>, funcName: String): FunSpec {
         val nameParameterSpec = ParameterSpec.builder("name", String::class).build()
         val argsParameterSpec = ParameterSpec.builder(
             "args",
@@ -90,7 +96,7 @@ object BuiltinFunctionProviderGenerator {
                 }.endControlFlow()
             }
 
-            nameAndFunctions.forEach { (name, functions) ->
+            namesAndFunctions.forEach { (name, functions) ->
                 functions.singleOrNull()?.let { addSingleFunction(name, it) }
                     ?: addMultipleFunctions(name, functions)
             }
@@ -103,7 +109,7 @@ object BuiltinFunctionProviderGenerator {
             argsParameterSpec
         )
 
-        return FunSpec.builder("get")
+        return FunSpec.builder(funcName)
             .addModifiers(KModifier.OVERRIDE)
             .addParameter(nameParameterSpec)
             .addParameter(argsParameterSpec)

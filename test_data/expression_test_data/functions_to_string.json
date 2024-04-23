@@ -267,20 +267,6 @@
       ]
     },
     {
-      "name": "string to string => error",
-      "expression": "@{toString('abc')}",
-      "deprecated": true,
-      "description": "toString(string) should be implmented",
-      "expected": {
-        "type": "error",
-        "value": "Failed to evaluate [toString('abc')]. Function 'toString' has no matching override for given argument types: String."
-      },
-      "variables": [],
-      "platforms": [
-        "android"
-      ]
-    },
-    {
       "name": "toString('abc') => 'abc'",
       "expression": "@{toString('abc')}",
       "expected": {
@@ -289,6 +275,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

@@ -15,8 +15,12 @@ import com.yandex.div.evaluable.FunctionProvider
 object BuiltinFunctionProvider : FunctionProvider {
 
     private val registry = FunctionRegistry()
+
     internal val exposedFunctions
         get() = registry.exposedFunctions
+
+    internal val exposedMethods
+        get() = registry.exposedMethods
 
     init {
         // Arithmetic functions
@@ -150,8 +154,15 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(BooleanToString)
         registry.register(ColorToString)
         registry.register(UrlToString)
+        registry.register(StringToString)
         registry.register(StringToColor)
         registry.register(StringToUrl)
+        registry.registerMethod(IntegerToString)
+        registry.registerMethod(NumberToString)
+        registry.registerMethod(BooleanToString)
+        registry.registerMethod(ColorToString)
+        registry.registerMethod(UrlToString)
+        registry.registerMethod(StringToString)
 
         // Variable functions
         registry.register(GetIntegerValue)
@@ -249,6 +260,10 @@ object BuiltinFunctionProvider : FunctionProvider {
 
     override fun get(name: String, args: List<EvaluableType>): Function {
         return registry.get(name, args)
+    }
+
+    override fun getMethod(name: String, args: List<EvaluableType>): Function {
+        return registry.getMethod(name, args)
     }
 
     internal fun ensureFunctionRegistered(name: String, args: List<FunctionArgument>, resultType: EvaluableType) {

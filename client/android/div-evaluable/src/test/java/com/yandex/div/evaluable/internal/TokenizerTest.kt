@@ -465,11 +465,6 @@ class TokenizerTest {
     }
 
     @Test(expected = EvaluableException::class)
-    fun `unsupported # dot symbol is unsupported`() {
-        assertExpression(".")
-    }
-
-    @Test(expected = EvaluableException::class)
     fun `unsupported # simple curly brackets`() {
         assertExpression("{")
         assertExpression("}")
@@ -481,11 +476,6 @@ class TokenizerTest {
         assertExpression("[")
         assertExpression("]")
         assertExpression("[]")
-    }
-
-    @Test(expected = EvaluableException::class)
-    fun `unsupported # function name with dot`() {
-        assertExpression("_A.b()", f("_A.b()"), `(`, `)`)
     }
 
     @Test(expected = EvaluableException::class)

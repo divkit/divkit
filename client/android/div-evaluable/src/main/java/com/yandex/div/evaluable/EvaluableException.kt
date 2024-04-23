@@ -48,11 +48,24 @@ internal fun throwExceptionOnFunctionEvaluationFailed(
     cause: Exception? = null
 ): Nothing = throwExceptionOnEvaluationFailed(functionToMessageFormat(name, args), reason, cause)
 
+internal fun throwExceptionOnMethodEvaluationFailed(
+    name: String,
+    args: List<Any>,
+    reason: String,
+    cause: Exception? = null
+): Nothing = throwExceptionOnEvaluationFailed(methodToMessageFormat(name, args), reason, cause)
+
 
 internal fun functionToMessageFormat(name: String, args: List<Any>): String {
     return args.joinToString(prefix = "${name}(", postfix = ")") {
         it.toMessageFormat()
     }
+}
+
+internal fun methodToMessageFormat(name: String, args: List<Any>): String {
+    return if (args.size > 1) {
+        args.subList(1, args.size).joinToString(prefix = "${args.first()}.$name(", postfix = ")", separator = ",")
+    } else "$name()"
 }
 
 internal fun throwExceptionOnEvaluationFailed(

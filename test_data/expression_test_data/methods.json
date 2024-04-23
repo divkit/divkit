@@ -9,6 +9,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -22,6 +23,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -35,6 +37,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -48,6 +51,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -67,6 +71,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -86,6 +91,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -139,6 +145,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -152,6 +159,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -171,6 +179,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -184,6 +193,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -197,6 +207,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -222,6 +233,7 @@
         "value": "Hello!"
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -234,6 +246,7 @@
         "value": "Hello!"
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -246,6 +259,7 @@
         "value": "Hello!"
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -258,6 +272,7 @@
         "value": "Method expected after ."
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -270,6 +285,7 @@
         "value": "Failed to evaluate [getColorAlpha()]. Unknown method name: getColorAlpha."
       },
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
