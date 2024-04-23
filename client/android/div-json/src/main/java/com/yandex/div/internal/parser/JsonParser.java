@@ -193,6 +193,11 @@ public class JsonParser {
                 return null;
             }
 
+            if (!typeHelper.isTypeValid(value)) {
+                logger.logError(typeMismatch(jsonObject, key, intermediate));
+                return null;
+            }
+
             try {
                 if (!validator.isValid(value)) {
                     logger.logError(invalidValue(jsonObject, key, intermediate));
@@ -234,6 +239,10 @@ public class JsonParser {
             }
             if (value == null) {
                 throw invalidValue(jsonObject, key, intermediate);
+            }
+
+            if (!typeHelper.isTypeValid(value)) {
+                throw typeMismatch(jsonObject, key, intermediate);
             }
 
             try {
@@ -1036,6 +1045,11 @@ public class JsonParser {
                 }
 
                 if (item == null) {
+                    continue;
+                }
+
+                if (!typeHelper.isTypeValid(item)) {
+                    logger.logError(typeMismatch(optJSONArray, key, i, intermediate));
                     continue;
                 }
 
