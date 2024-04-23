@@ -27,14 +27,18 @@ public final class VideoBlockLegacy: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
+  let autoplayAllowed: ObservableVariable<Bool>
+
   public init(
     videoAssetHolder: VideoAssetHolder,
     widthTrait: LayoutTrait,
-    heightTrait: LayoutTrait
+    heightTrait: LayoutTrait,
+    autoplayAllowed: ObservableVariable<Bool>
   ) {
     self.videoAssetHolder = videoAssetHolder
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
+    self.autoplayAllowed = autoplayAllowed
   }
 
   public let intrinsicContentWidth: CGFloat = 0

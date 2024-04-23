@@ -20,6 +20,7 @@ extension VideoBlockLegacy {
     renderingDelegate _: RenderingDelegate?
   ) {
     let videoView = view as! VideoBlockLegacyView
+    videoView.autoplayAllowed.source = autoplayAllowed.newValues
     if videoView.videoAssetHolder?.url != videoAssetHolder.url {
       videoView.videoAssetHolder = videoAssetHolder
     }
@@ -38,8 +39,14 @@ private final class VideoBlockLegacyView: BlockView {
     }
   }
 
+  let autoplayAllowed: ObservableVariableConnection<Bool>
+
   init() {
+    autoplayAllowed = .init(initialValue: false)
     super.init(frame: .zero)
+    autoplayAllowed.target.newValues.addObserver { _ in
+      self.resumePlayer()
+    }.dispose(in: disposePool)
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(resumePlayer),
@@ -59,6 +66,7 @@ private final class VideoBlockLegacyView: BlockView {
     NotificationCenter.default.removeObserver(self)
   }
 
+  private let disposePool = AutodisposePool()
   private let avPlayer = AVQueuePlayer()
   private var playerLooper: AVPlayerLooper?
 
@@ -73,10 +81,12 @@ private final class VideoBlockLegacyView: BlockView {
   private func configurePlayer(with playerItem: AVPlayerItem) {
     avPlayer.removeAllItems()
     playerLooper = AVPlayerLooper(player: avPlayer, templateItem: playerItem)
-    avPlayer.play()
+    resumePlayer()
   }
 
   @objc private func resumePlayer() {
-    avPlayer.play()
+    if autoplayAllowed.value, playerLooper != nil {
+      avPlayer.play()
+    }
   }
 }
