@@ -69,9 +69,7 @@ internal class PagerSelectedActionsDispatcher(
     private fun dispatchSelectedActions(div: Div) {
         div.value().selectedActions?.let { actions ->
             divView.bulkActions {
-                actions.forEach { action ->
-                    divActionBinder.handleAction(divView, action, DivActionReason.SELECTION)
-                }
+                divActionBinder.handleActions(divView, actions, DivActionReason.SELECTION)
             }
         }
     }

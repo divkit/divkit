@@ -203,8 +203,7 @@ internal class DivStateBinder @Inject constructor(
         if (actions != null) {
             layout.swipeOutCallback = {
                 divView.bulkActions {
-                    actions.forEach {
-                        divActionBinder.handleAction(divView, it, DivActionReason.STATE_SWIPE_OUT)
+                    divActionBinder.handleActions(divView, actions, DivActionReason.STATE_SWIPE_OUT) {
                         div2Logger.logSwipedAway(divView, layout, it)
                         divActionBeaconSender.sendSwipeOutActionBeacon(it, resolver)
                     }

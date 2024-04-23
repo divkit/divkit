@@ -16,6 +16,7 @@ import com.yandex.div.core.view2.DivValidator
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.internal.viewpool.PseudoViewPool
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
+import com.yandex.div.json.expressions.ExpressionResolver
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
@@ -52,6 +53,7 @@ internal fun divView(
         on { this.logId } doReturn logId
         on { this.divTag } doReturn DivDataTag(divTag)
         on { this.config } doReturn DivViewConfig.DEFAULT
+        on { this.expressionResolver } doReturn ExpressionResolver.EMPTY
         on { handleUri(any()) }.thenCallRealMethod()
     }
 }

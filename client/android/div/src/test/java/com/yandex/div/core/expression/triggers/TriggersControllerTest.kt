@@ -19,6 +19,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.doReturn
@@ -108,7 +109,7 @@ class TriggersControllerTest {
 
     private fun verifyActionTriggered(logId: String, times: Int = 1) {
         val actions = argumentCaptor<List<DivAction>>()
-        verify(divActionBinder, atLeastOnce()).handleActions(any(), actions.capture(), any())
+        verify(divActionBinder, atLeastOnce()).handleActions(any(), actions.capture(), any(), anyOrNull())
 
         val actionsWithLogId = actions.allValues.flatten().filter { it.logId.rawValue == logId }
         Assert.assertEquals(times, actionsWithLogId.size)

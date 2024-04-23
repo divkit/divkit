@@ -25,7 +25,10 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class PagerSelectedActionsDispatcherTest {
 
-    private val divActionBinder = mock<DivActionBinder>()
+    private val divActionBinder = mock<DivActionBinder> {
+        on { handleActionWithoutEnableCheck(any(), any(), any(), anyOrNull(), anyOrNull()) }.thenReturn(true)
+        on { handleActions(any(), any(), anyOrNull(), anyOrNull())  }.thenCallRealMethod()
+    }
     private val divView = divView(logId = CARD_ID, divTag = CARD_ID)
     private val bulkActionsArgumentCaptor = argumentCaptor<() -> Unit>()
 
@@ -155,11 +158,13 @@ class PagerSelectedActionsDispatcherTest {
     }
 
     private fun verifyActionHandled(urlStr: String, times: Int = 1) {
-        verify(divActionBinder, times(times)).handleAction(eq(divView), urlEq(urlStr), any(), anyOrNull(), anyOrNull())
+        verify(divActionBinder, times(times)).handleActionWithoutEnableCheck(
+            eq(divView), urlEq(urlStr), any(), anyOrNull(), anyOrNull())
     }
 
     private fun InOrderOnType<DivActionBinder>.verifyActionHandled(div2View: Div2View, url: String) {
-        verify().handleAction(eq(div2View), urlEq(url), any(), anyOrNull(), anyOrNull())
+        verify().handleActionWithoutEnableCheck(
+            eq(div2View), urlEq(url), any(), anyOrNull(), anyOrNull())
     }
 
     private companion object {

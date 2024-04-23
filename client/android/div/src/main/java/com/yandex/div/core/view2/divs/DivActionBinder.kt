@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.StringDef
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
@@ -320,7 +321,7 @@ internal class DivActionBinder @Inject constructor(
                 }
                 divActionBeaconSender.sendTapActionBeacon(action,
                     divView.expressionResolver)
-                handleAction(divView, action, actionLogType.toDivActionReason(), uuid)
+                this.handleActionWithoutEnableCheck(divView, action, actionLogType.toDivActionReason(), uuid)
             }
         }
     }
@@ -334,10 +335,17 @@ internal class DivActionBinder @Inject constructor(
         else -> DivActionReason.EXTERNAL
     }
 
-    internal fun handleActions(divView: DivViewFacade, actions: List<DivAction>?, reason: String) {
+    internal fun handleActions(
+        divView: DivViewFacade,
+        actions: List<DivAction>?,
+        reason: String,
+        onEachEnabledAction: ((DivAction) -> Unit)? = null
+    ) {
         if (actions == null) return
-        val viewActionHandler = (divView as? Div2View)?.actionHandler
-        actions.forEach { handleAction(divView, it, reason, null, viewActionHandler) }
+        actions.onlyEnabled(divView.expressionResolver).forEach {
+            handleActionWithoutEnableCheck(divView, it, reason)
+            onEachEnabledAction?.invoke(it)
+        }
     }
 
     internal fun handleAction(
@@ -348,6 +356,17 @@ internal class DivActionBinder @Inject constructor(
         viewActionHandler: DivActionHandler? = (divView as? Div2View)?.actionHandler,
     ): Boolean {
         if (!action.isEnabled.evaluate(divView.expressionResolver)) return false
+        return this.handleActionWithoutEnableCheck(divView, action, reason, actionUid, viewActionHandler)
+    }
+
+    @VisibleForTesting
+    internal fun handleActionWithoutEnableCheck(
+        divView: DivViewFacade,
+        action: DivAction,
+        reason: String,
+        actionUid: String? = null,
+        viewActionHandler: DivActionHandler? = (divView as? Div2View)?.actionHandler,
+    ): Boolean {
         if (actionHandler.useActionUid && actionUid != null) {
             if (viewActionHandler?.handleActionWithReason(
                     action, divView, actionUid, reason) == true) {
@@ -432,7 +451,7 @@ internal class DivActionBinder @Inject constructor(
                             )
                             divActionBeaconSender.sendTapActionBeacon(action,
                                 divView.expressionResolver)
-                            handleAction(divView, action, DivActionReason.MENU)
+                            this@DivActionBinder.handleActionWithoutEnableCheck(divView, action, DivActionReason.MENU)
                         }
                         actionsHandled = true
                     }
