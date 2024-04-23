@@ -28,6 +28,7 @@
     <string name="settings">Settings</string>
     <string name="demo">Demo</string>
     <string name="refresh">Refresh</string>
-    <string name="variables">variables</string>
-    <string name="load_patch">load patch</string>
+    <string name="perform_action">Perform action</string>
+    <string name="variables">Load variables</string>
+    <string name="load_patch">Load patch</string>
 </resources>
