@@ -55,7 +55,6 @@ final class DivVariableStorageWithOuterStorageTest: XCTestCase {
     outerStorage.update(name: "outer_string_var", value: .string("new value"))
 
     XCTAssertEqual(["outer_string_var"], event?.changedVariables)
-    XCTAssertEqual(outerVariables + variables, event?.oldValues)
   }
 
   func test_clear_DoesNotClearOuterStorage() {

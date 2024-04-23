@@ -170,7 +170,6 @@ final class DivVariablesStorageTest: XCTestCase {
     storage.update(cardId: cardId, name: "string_var", value: "new value")
 
     XCTAssertEqual(.local(cardId, ["string_var"]), event?.kind)
-    XCTAssertEqual(variables, event?.oldValues.makeVariables(for: cardId))
     XCTAssertEqual(makeVariables(), event?.newValues.makeVariables(for: cardId))
   }
 
@@ -229,7 +228,6 @@ final class DivVariablesStorageTest: XCTestCase {
     storage.set(variables: globalVariables, triggerUpdate: true)
 
     XCTAssertEqual(.global(["global_var"]), event?.kind)
-    XCTAssertEqual([:], event?.oldValues.global)
     XCTAssertEqual(globalVariables, event?.newValues.global)
   }
 
@@ -242,7 +240,6 @@ final class DivVariablesStorageTest: XCTestCase {
     storage.set(variables: newVariables, triggerUpdate: true)
 
     XCTAssertEqual(.global(["string_var", "int_var"]), event?.kind)
-    XCTAssertEqual(variables, event?.oldValues.global)
     XCTAssertEqual(newVariables, event?.newValues.global)
   }
 

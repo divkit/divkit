@@ -189,7 +189,6 @@
 		8C7B1BFD2865C01C0036EF4C /* DivSeparatorExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B2F2865C01C0036EF4C /* DivSeparatorExtensionsTests.swift */; };
 		8C7B1BFE2865C01C0036EF4C /* DivSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B302865C01C0036EF4C /* DivSerializationTests.swift */; };
 		8C7B1BFF2865C01C0036EF4C /* DivActionIntentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B312865C01C0036EF4C /* DivActionIntentTests.swift */; };
-		8C7B1CA02865C01D0036EF4C /* DivVariablesStorageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1BE52865C01C0036EF4C /* DivVariablesStorageTest.swift */; };
 		8C7B1CA82865C01E0036EF4C /* DivBlockStateStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1BEF2865C01C0036EF4C /* DivBlockStateStorageTests.swift */; };
 		8C7B1CA92865C01E0036EF4C /* DivStateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */; };
 		8C7EE1CF28B777AE008A48E6 /* YSText-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CB28B777AE008A48E6 /* YSText-Bold.ttf */; };
@@ -212,11 +211,12 @@
 		8CAB089A2B39AC15009330F3 /* heavy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8CAB08992B39AC15009330F3 /* heavy.json */; };
 		8CB03C1F2A66A07300847A65 /* PlaygroundUrlHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */; };
 		8CB74F032B6D456D00397DCF /* DivInputExtentionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB74F022B6D456D00397DCF /* DivInputExtentionsTests.swift */; };
-		8CB960E428883B8300D16E47 /* DivTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E328883B8300D16E47 /* DivTriggerTests.swift */; };
 		8CB960E628883B8E00D16E47 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E528883B8E00D16E47 /* Platform.swift */; };
 		8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */; };
 		8CB9911B2B7EB74500577193 /* DivViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9911A2B7EB74500577193 /* DivViewTests.swift */; };
-		8CCA63D02ADD3B37002616A1 /* DivVariableStorageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCA63CF2ADD3B37002616A1 /* DivVariableStorageTest.swift */; };
+		8CBE33002BD699CC00CFFDF5 /* DivTriggersStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBE32FD2BD699CC00CFFDF5 /* DivTriggersStorageTests.swift */; };
+		8CBE33012BD699CC00CFFDF5 /* DivVariablesStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBE32FE2BD699CC00CFFDF5 /* DivVariablesStorageTests.swift */; };
+		8CBE33022BD699CC00CFFDF5 /* DivVariableStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBE32FF2BD699CC00CFFDF5 /* DivVariableStorageTests.swift */; };
 		8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */; };
 		8CD234922AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD234912AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift */; };
 		8CD907BB2A4C8AF3001C4B7B /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */; };
@@ -445,7 +445,6 @@
 		8C7B1B2F2865C01C0036EF4C /* DivSeparatorExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivSeparatorExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B302865C01C0036EF4C /* DivSerializationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivSerializationTests.swift; sourceTree = "<group>"; };
 		8C7B1B312865C01C0036EF4C /* DivActionIntentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivActionIntentTests.swift; sourceTree = "<group>"; };
-		8C7B1BE52865C01C0036EF4C /* DivVariablesStorageTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivVariablesStorageTest.swift; sourceTree = "<group>"; };
 		8C7B1BEF2865C01C0036EF4C /* DivBlockStateStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivBlockStateStorageTests.swift; sourceTree = "<group>"; };
 		8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivStateManagerTests.swift; sourceTree = "<group>"; };
 		8C7EE1CB28B777AE008A48E6 /* YSText-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Bold.ttf"; sourceTree = "<group>"; };
@@ -481,11 +480,12 @@
 		8CAB08992B39AC15009330F3 /* heavy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = heavy.json; sourceTree = "<group>"; };
 		8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundUrlHandler.swift; sourceTree = "<group>"; };
 		8CB74F022B6D456D00397DCF /* DivInputExtentionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivInputExtentionsTests.swift; sourceTree = "<group>"; };
-		8CB960E328883B8300D16E47 /* DivTriggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTriggerTests.swift; sourceTree = "<group>"; };
 		8CB960E528883B8E00D16E47 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionSignaturesTests.swift; sourceTree = "<group>"; };
 		8CB9911A2B7EB74500577193 /* DivViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivViewTests.swift; sourceTree = "<group>"; };
-		8CCA63CF2ADD3B37002616A1 /* DivVariableStorageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivVariableStorageTest.swift; sourceTree = "<group>"; };
+		8CBE32FD2BD699CC00CFFDF5 /* DivTriggersStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTriggersStorageTests.swift; sourceTree = "<group>"; };
+		8CBE32FE2BD699CC00CFFDF5 /* DivVariablesStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivVariablesStorageTests.swift; sourceTree = "<group>"; };
+		8CBE32FF2BD699CC00CFFDF5 /* DivVariableStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivVariableStorageTests.swift; sourceTree = "<group>"; };
 		8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionResolverTests.swift; sourceTree = "<group>"; };
 		8CD234912AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivVariableStorageWithOuterStorageTests.swift; sourceTree = "<group>"; };
 		8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
@@ -960,9 +960,9 @@
 		8C7B1BE42865C01C0036EF4C /* Variables */ = {
 			isa = PBXGroup;
 			children = (
-				8CB960E328883B8300D16E47 /* DivTriggerTests.swift */,
-				8C7B1BE52865C01C0036EF4C /* DivVariablesStorageTest.swift */,
-				8CCA63CF2ADD3B37002616A1 /* DivVariableStorageTest.swift */,
+				8CBE32FD2BD699CC00CFFDF5 /* DivTriggersStorageTests.swift */,
+				8CBE32FE2BD699CC00CFFDF5 /* DivVariablesStorageTests.swift */,
+				8CBE32FF2BD699CC00CFFDF5 /* DivVariableStorageTests.swift */,
 				8CD234912AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift */,
 				8C64FEE42A5D7373008B1909 /* DivVariableTrackerTests.swift */,
 			);
@@ -1612,6 +1612,7 @@
 				8C23F42829DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift in Sources */,
 				8C7B1BF52865C01C0036EF4C /* DivGalleryExtensionsTests.swift in Sources */,
 				8C7B1BFF2865C01C0036EF4C /* DivActionIntentTests.swift in Sources */,
+				8CBE33012BD699CC00CFFDF5 /* DivVariablesStorageTests.swift in Sources */,
 				8C23F42029DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift in Sources */,
 				8C7B1BF72865C01C0036EF4C /* DivContainerExtensionsTests.swift in Sources */,
 				8C23F43A29DDB3810069F3F7 /* ArrayOfNestedItemsTests.swift in Sources */,
@@ -1631,6 +1632,7 @@
 				5219194D297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift in Sources */,
 				8C22BBB82B037BA20076BAEB /* EnumWithDefaultTypeTemplate.swift in Sources */,
 				7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */,
+				8CBE33022BD699CC00CFFDF5 /* DivVariableStorageTests.swift in Sources */,
 				8C90A2122B975B9000BB8CFD /* FunctionTests.swift in Sources */,
 				8C40BA022ABB3B5C008405AD /* DivActionHandlerTests.swift in Sources */,
 				E945FC46293E1CA80066C3EA /* Utils.swift in Sources */,
@@ -1673,7 +1675,6 @@
 				8C23F41A29DDB3810069F3F7 /* EntityWithArrayTemplate.swift in Sources */,
 				8C23F41929DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift in Sources */,
 				8C23F41B29DDB3810069F3F7 /* EntityWithArrayWithTransform.swift in Sources */,
-				8CB960E428883B8300D16E47 /* DivTriggerTests.swift in Sources */,
 				8CF8BBE82B32660500569777 /* BlockModelingUtils.swift in Sources */,
 				8C23F42A29DDB3810069F3F7 /* EntityWithPropertyWithDefaultValueTemplate.swift in Sources */,
 				8C23F42929DDB3810069F3F7 /* EntityWithPropertyWithDefaultValue.swift in Sources */,
@@ -1696,11 +1697,11 @@
 				8C1DEBCE2A2F8277009237F1 /* DivStateManagementTests.swift in Sources */,
 				8C7B1BFA2865C01C0036EF4C /* DivDataExtensionsTests.swift in Sources */,
 				8C23F41429DDB3810069F3F7 /* EntityWithArrayOfEnums.swift in Sources */,
-				8C7B1CA02865C01D0036EF4C /* DivVariablesStorageTest.swift in Sources */,
 				8C0688652B347A1B00CD953E /* DivAccessibilityExtentionsTests.swift in Sources */,
 				8C23F42429DDB3810069F3F7 /* EntityWithOptionalComplexPropertyTemplate.swift in Sources */,
 				8C23F42129DDB3810069F3F7 /* EntityWithEntityProperty.swift in Sources */,
 				8C23F41129DDB3810069F3F7 /* Entity.swift in Sources */,
+				8CBE33002BD699CC00CFFDF5 /* DivTriggersStorageTests.swift in Sources */,
 				8C23F43929DDB3810069F3F7 /* ArrayOfEnums.swift in Sources */,
 				8C23F3C729DDB2120069F3F7 /* TemplateToTypeTests.swift in Sources */,
 				8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */,
@@ -1716,7 +1717,6 @@
 				8C23F42329DDB3810069F3F7 /* EntityWithOptionalComplexProperty.swift in Sources */,
 				8C23F42C29DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift in Sources */,
 				8C7B1BF42865C01C0036EF4C /* DivGridExtensionsTests.swift in Sources */,
-				8CCA63D02ADD3B37002616A1 /* DivVariableStorageTest.swift in Sources */,
 				8CB9911B2B7EB74500577193 /* DivViewTests.swift in Sources */,
 				8C23F43D29DDB3810069F3F7 /* ComplexPropertyTests.swift in Sources */,
 			);

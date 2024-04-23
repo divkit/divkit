@@ -17,14 +17,8 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     self.variablesStorage = variablesStorage
 
     variablesStorage.changeEvents.addObserver { [weak self] event in
-      let variableNames: Set<DivVariableName> = switch event.kind {
-      case let .global(names):
-        names
-      case let .local(_, names):
-        names
-      }
       if let updatedVariables = self?.updatedVariables,
-         !variableNames.isSubset(of: updatedVariables) {
+         !event.changedVariables.isSubset(of: updatedVariables) {
         // If any variables are updated externally (not by SizeProviderExtensionHandler) it must be
         // considered as new layout cycle.
         self?.updatedVariables = []

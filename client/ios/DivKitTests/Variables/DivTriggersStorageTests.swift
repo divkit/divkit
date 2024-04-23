@@ -102,6 +102,24 @@ final class DivTriggerTests: XCTestCase {
     XCTAssertEqual(triggersCount, 1)
   }
 
+  func test_DoesNotTrigger_WhenUnusedVariableIsChanged() {
+    setVariable("should_trigger", true)
+    setVariable("unused_variable", false)
+
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onVariable)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    XCTAssertEqual(triggersCount, 1)
+
+    setVariable("unused_variable", true)
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
   func test_TriggersMultipleTimes_WhenConditionsIsChangedMultipleTimes() {
     let trigger = DivTrigger(
       actions: [action],
@@ -161,11 +179,11 @@ final class DivTriggerTests: XCTestCase {
   }
 
   private func setVariable(_ name: DivVariableName, _ value: Bool) {
-    variablesStorage.set(variables: [name: .bool(value)], triggerUpdate: true)
+    variablesStorage.append(variables: [name: .bool(value)], triggerUpdate: true)
   }
 
   private func setVariable(_ name: DivVariableName, _ value: String) {
-    variablesStorage.set(variables: [name: .string(value)], triggerUpdate: true)
+    variablesStorage.append(variables: [name: .string(value)], triggerUpdate: true)
   }
 }
 

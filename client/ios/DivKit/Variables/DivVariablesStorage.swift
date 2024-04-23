@@ -20,13 +20,20 @@ public final class DivVariablesStorage {
     }
 
     public let kind: Kind
-    public let oldValues: Values
     public let newValues: Values
 
-    init(kind: Kind, oldValues: Values, newValues: Values) {
+    init(kind: Kind, newValues: Values) {
       self.kind = kind
-      self.oldValues = oldValues
       self.newValues = newValues
+    }
+
+    public var changedVariables: Set<DivVariableName> {
+      switch kind {
+      case let .global(names):
+        names
+      case let .local(_, names):
+        names
+      }
     }
   }
 
@@ -58,10 +65,6 @@ public final class DivVariablesStorage {
       }
       return ChangeEvent(
         kind: .global($0.changedVariables),
-        oldValues: Values(
-          global: $0.oldValues,
-          local: self.cardVariables
-        ),
         newValues: self.allValues
       )
     }
@@ -101,7 +104,6 @@ public final class DivVariablesStorage {
       }
       changeEvent = ChangeEvent(
         kind: .local(cardId, changedVariables),
-        oldValues: oldValues,
         newValues: allValues
       )
     }
@@ -203,12 +205,10 @@ extension DivVariablesStorage: DivVariableUpdater {
         guard let newValue = valueFactory(oldValue), newValue != oldValue else {
           return
         }
-        let oldValues = allValues
         variables?[name] = newValue
         cardVariables[cardId] = variables
         changeEvent = ChangeEvent(
           kind: .local(cardId, [name]),
-          oldValues: oldValues,
           newValues: allValues
         )
       } else {

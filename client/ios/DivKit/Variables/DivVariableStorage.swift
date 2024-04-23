@@ -8,7 +8,6 @@ import BasePublic
 public final class DivVariableStorage {
   public struct ChangeEvent {
     public let changedVariables: Set<DivVariableName>
-    public let oldValues: DivVariables
   }
 
   private let outerStorage: DivVariableStorage?
@@ -40,18 +39,7 @@ public final class DivVariableStorage {
     self.outerStorage = outerStorage
 
     if let outerStorage {
-      weak var weakSelf: DivVariableStorage?
-      let outerStorageEvents: Signal<ChangeEvent> = outerStorage.changeEvents.compactMap {
-        guard let self = weakSelf else {
-          return nil
-        }
-        return ChangeEvent(
-          changedVariables: $0.changedVariables,
-          oldValues: $0.oldValues + self.values
-        )
-      }
-      changeEvents = Signal.merge(outerStorageEvents, changeEventsPipe.signal)
-      weakSelf = self
+      changeEvents = Signal.merge(outerStorage.changeEvents, changeEventsPipe.signal)
     } else {
       changeEvents = changeEventsPipe.signal
     }
@@ -79,7 +67,7 @@ public final class DivVariableStorage {
       values[name] = value
     }
     if oldValues[name] != value {
-      notify(ChangeEvent(changedVariables: [name], oldValues: oldValues))
+      notify(ChangeEvent(changedVariables: [name]))
     }
   }
 
@@ -90,9 +78,9 @@ public final class DivVariableStorage {
     _ variables: DivVariables,
     notifyObservers: Bool = true
   ) {
-    let oldValues = allValues
     var changedVariables = Set<DivVariableName>()
     lock.write {
+      let oldValues = _allValues
       values = values + variables
       if notifyObservers {
         for (name, value) in variables {
@@ -103,7 +91,7 @@ public final class DivVariableStorage {
       }
     }
     if !changedVariables.isEmpty {
-      notify(ChangeEvent(changedVariables: changedVariables, oldValues: oldValues))
+      notify(ChangeEvent(changedVariables: changedVariables))
     }
   }
 
@@ -113,16 +101,16 @@ public final class DivVariableStorage {
     _ variables: DivVariables,
     notifyObservers: Bool = true
   ) {
+    var changedVariables = Set<DivVariableName>()
     lock.write {
-      let oldValues = allValues
+      let oldValues = _allValues
       values = variables
       if notifyObservers {
-        let changedVariables = makeChangedVariables(old: oldValues, new: variables)
-        if changedVariables.isEmpty {
-          return
-        }
-        notify(ChangeEvent(changedVariables: changedVariables, oldValues: oldValues))
+        changedVariables = makeChangedVariables(old: oldValues, new: variables)
       }
+    }
+    if !changedVariables.isEmpty {
+      notify(ChangeEvent(changedVariables: changedVariables))
     }
   }
 
@@ -144,22 +132,23 @@ public final class DivVariableStorage {
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
   ) {
-    var oldValues: DivVariables?
-    let hasLocalValue = lock.write {
+    var isUpdated = false
+    var hasLocalValue = false
+    lock.write {
       guard let oldValue = values[name] else {
-        return false
+        return
       }
+
+      hasLocalValue = true
 
       if let value = valueFactory(oldValue), value != oldValue {
-        oldValues = _allValues
+        isUpdated = true
         values[name] = value
       }
-
-      return true
     }
 
-    if let oldValues {
-      notify(ChangeEvent(changedVariables: [name], oldValues: oldValues))
+    if isUpdated {
+      notify(ChangeEvent(changedVariables: [name]))
     }
 
     if hasLocalValue {

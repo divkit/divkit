@@ -92,7 +92,6 @@ final class DivVariableSorageTest: XCTestCase {
     storage.put(name: "string_var", value: .string("string value"))
 
     XCTAssertEqual(["string_var"], event?.changedVariables)
-    XCTAssertEqual([:], event?.oldValues)
   }
 
   func test_putVaraible_SendsUpdateEvent_WhenVariableChanged() {
@@ -102,7 +101,6 @@ final class DivVariableSorageTest: XCTestCase {
     storage.put(name: "string_var", value: .string("new value"))
 
     XCTAssertEqual(["string_var"], event?.changedVariables)
-    XCTAssertEqual(variables, event?.oldValues)
   }
 
   func test_putVaraible_DoesNotSendUpdateEvent_WhenVariableWasNotChanged() {
@@ -118,7 +116,6 @@ final class DivVariableSorageTest: XCTestCase {
     storage.put(variables)
 
     XCTAssertEqual(Set(variables.keys), event?.changedVariables)
-    XCTAssertEqual([:], event?.oldValues)
   }
 
   func test_putVaraible_SendsUpdateEvent_ForChangedVariablesOnly() {
@@ -131,7 +128,6 @@ final class DivVariableSorageTest: XCTestCase {
     ])
 
     XCTAssertEqual(["int_var"], event?.changedVariables)
-    XCTAssertEqual(variables, event?.oldValues)
   }
 
   func test_putVaraibles_DoesNotSendUpdateEvent_WhenVariablesWasNotChanged() {
@@ -152,7 +148,6 @@ final class DivVariableSorageTest: XCTestCase {
     storage.update(name: "string_var", value: .string("new value"))
 
     XCTAssertEqual(["string_var"], event?.changedVariables)
-    XCTAssertEqual(variables, event?.oldValues)
   }
 
   func test_update_DoesNotSendUpdateEventForSameValue() {
@@ -190,7 +185,6 @@ final class DivVariableSorageTest: XCTestCase {
       ["string_var", "int_var", "number_var", "bool_var", "url_var", "new_var"],
       event?.changedVariables
     )
-    XCTAssertEqual(variables, event?.oldValues)
   }
 
   func test_replaceAll_SendsUpdateEvent_ForChangedVariablesOnly() {
@@ -208,7 +202,6 @@ final class DivVariableSorageTest: XCTestCase {
       ["int_var", "bool_var", "url_var", "new_var"],
       event?.changedVariables
     )
-    XCTAssertEqual(variables, event?.oldValues)
   }
 
   func test_replaceAll_DoesNotSendUpdateEvent_WhenVariablesWasNotChanged() {
