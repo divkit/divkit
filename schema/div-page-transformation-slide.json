@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_pager_page_transformation_slide",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "slide"
+      ]
+    },
+    "next_page_alpha": {
+      "type": "number",
+      "default_value": "1.0",
+      "constraint": "number >= 0.0 && number <= 1.0",
+      "$description": "translations.json#/div_pager_next_page_alpha"
+    },
+    "previous_page_alpha": {
+      "type": "number",
+      "default_value": "1.0",
+      "constraint": "number >= 0.0 && number <= 1.0",
+      "$description": "translations.json#/div_pager_previous_page_alpha"
+    },
+    "next_page_scale": {
+      "type": "number",
+      "default_value": "1.0",
+      "constraint": "number >= 0.0",
+      "$description": "translations.json#/div_pager_next_page_scale"
+    },
+    "previous_page_scale": {
+      "type": "number",
+      "default_value": "1.0",
+      "constraint": "number >= 0.0",
+      "$description": "translations.json#/div_pager_previous_page_scale"
+    },
+    "interpolator": {
+      "$ref": "div-animation-interpolator.json",
+      "default_value": "ease_in_out",
+      "$description": "translations.json#/div_pager_page_transformation_interpolator"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

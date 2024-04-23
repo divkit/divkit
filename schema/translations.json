@@ -1203,6 +1203,42 @@
     "en": "Pager orientation.",
     "ru": "Ориентация пейджера."
   },
+  "div_pager_page_transformation": {
+    "en": "Page transformation during movement.",
+    "ru": "Преобразование страницы пейджера во время движения."
+  },
+  "div_pager_page_transformation_overlap": {
+    "en": "The pages are stacked when the pager is scrolled overlapping each other.",
+    "ru": "Страницы собираются в стопку при анимации, перекрывая друг друга."
+  },
+  "div_pager_page_transformation_overlap_reversed_stacking_order": {
+    "en": "If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "ru": "При значении false следующие страницы будут собираться в стопку над предыдущими. При значении true - наоборот. Следующая страница - это всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
+  },
+  "div_pager_page_transformation_slide": {
+    "en": "The pages are moving when the pager is flipping without overlaping each other.",
+    "ru": "Страницы двигаются во время листания пейджера, не перекрывая друг друга."
+  },
+  "div_pager_page_transformation_interpolator": {
+    "en": "Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>",
+    "ru": "Transformation скорости анимации. При значении `spring` — обрезанная до 0.7 анимация затухающих колебаний с параметром `damping=1`. Остальные варианты соответствует кривой Безье:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
+  },
+  "div_pager_next_page_alpha": {
+    "en": "Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "ru": "Минимальная прозрачность следующей страницы во время листания пейджера в границах [0, 1]. Следующая страница - это всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
+  },
+  "div_pager_previous_page_alpha": {
+    "en": "Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "ru": "Минимальная прозрачность предыдущей страницы во время листания пейджера в границах [0, 1]. Предыдущая страница - это всегда страница с меньшим порядковым номером с списке `items`, независимо от направления листания."
+  },
+  "div_pager_next_page_scale": {
+    "en": "Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "ru": "Маштабирование следующей страницы во время листания пейджера. Следующая страница - это всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
+  },
+  "div_pager_previous_page_scale": {
+    "en": "Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "ru": "Маштабирование предыдущей страницы во время листания пейджера. Предыдущая страница - это всегда страница с меньшим порядковым номером с списке `items`, независимо от направления листания."
+  },
   "div_pager_restrict_parent_scroll": {
     "en": "If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.",
     "ru": "При включенном параметре пейджер не будет передавать жест скролла родительскому элементу."
