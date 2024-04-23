@@ -32,10 +32,10 @@ extension LottieAnimationBlock {
 extension DivImageScale {
   fileprivate var contentMode: UIView.ContentMode {
     switch self {
-    case .fit: return .scaleAspectFit
-    case .fill: return .scaleAspectFill
-    case .noScale: return .center
-    case .stretch: return .scaleToFill
+    case .fit: .scaleAspectFit
+    case .fill: .scaleAspectFill
+    case .noScale: .center
+    case .stretch: .scaleToFill
     }
   }
 }

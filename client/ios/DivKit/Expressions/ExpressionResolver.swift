@@ -66,11 +66,11 @@ public final class ExpressionResolver {
   ) -> T? {
     switch expression {
     case let .value(value):
-      return resolveEscaping(value)
+      resolveEscaping(value)
     case let .link(link):
-      return evaluateString(link: link, initializer: initializer)
+      evaluateString(link: link, initializer: initializer)
     case .none:
-      return nil
+      nil
     }
   }
 
@@ -97,11 +97,11 @@ public final class ExpressionResolver {
   ) -> T? {
     switch expression {
     case let .value(value):
-      return value
+      value
     case let .link(link):
-      return evaluateSingleItem(link: link)
+      evaluateSingleItem(link: link)
     case .none:
-      return nil
+      nil
     }
   }
 
@@ -110,11 +110,11 @@ public final class ExpressionResolver {
   ) -> [Any]? {
     switch expression {
     case let .value(value):
-      return value
+      value
     case let .link(link):
-      return evaluateSingleItem(link: link)
+      evaluateSingleItem(link: link)
     case .none:
-      return nil
+      nil
     }
   }
 
@@ -123,11 +123,11 @@ public final class ExpressionResolver {
   ) -> [String: Any]? {
     switch expression {
     case let .value(value):
-      return value
+      value
     case let .link(link):
-      return evaluateSingleItem(link: link)
+      evaluateSingleItem(link: link)
     case .none:
-      return nil
+      nil
     }
   }
 
@@ -183,9 +183,9 @@ public final class ExpressionResolver {
     case let .nestedCalcExpression(link):
       if let expression = evaluateString(link: link),
          let link = ExpressionLink<T>(
-          rawValue: "@{\(expression)}",
-          errorTracker: errorTracker,
-          resolveNested: false
+           rawValue: "@{\(expression)}",
+           errorTracker: errorTracker,
+           resolveNested: false
          ) {
         return evaluateSingleItem(link: link)
       }

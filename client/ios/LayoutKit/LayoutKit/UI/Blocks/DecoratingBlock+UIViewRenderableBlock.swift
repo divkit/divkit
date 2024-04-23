@@ -17,7 +17,7 @@ extension DecoratingBlock {
     }
     return view.model.source.value as? DecoratingBlock == self
   }
-  
+
   func canConfigureBlockView(_ view: BlockView) -> Bool {
     guard let view = view as? DecoratingView else { return false }
     return view.childView.map(child.canConfigureBlockView) ?? false
@@ -240,7 +240,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
 
     if model.shouldHandleLongTap, longPressRecognizer == nil {
-      longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+      longPressRecognizer = UILongPressGestureRecognizer(
+        target: self,
+        action: #selector(handleLongPress)
+      )
     }
 
     tapRecognizer?.isEnabled = model.shouldHandleTap
@@ -559,11 +562,11 @@ extension ContextMenu {
     sender: UIResponder
   ) -> UIAlertController {
     let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
-    items.forEach {
-      let action = $0.action
-      let style: UIAlertAction.Style = $0.isDestructive ? .destructive : .default
+    for item in items {
+      let action = item.action
+      let style: UIAlertAction.Style = item.isDestructive ? .destructive : .default
       alert.addAction(UIAlertAction(
-        title: $0.text,
+        title: item.text,
         style: style,
         handler: { [action] _ in
           action.perform(sendingFrom: sender)

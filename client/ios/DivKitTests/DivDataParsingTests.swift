@@ -59,7 +59,7 @@ private struct TestData {
   let templates: [String: Any]
   let expectedCard: [String: Any]
   let expectedErrorCount: Int
-  
+
   init(json: [String: Any]) {
     card = json["card"] as! [String: Any]
     templates = json["templates"] as? [String: Any] ?? [:]

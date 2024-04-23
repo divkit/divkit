@@ -45,7 +45,7 @@ final class FunctionTests: XCTestCase {
         FunctionBinary<Double, Double, Bool> { _, _ in
           success = true
           return true
-        }
+        },
       ]
     )
 
@@ -66,7 +66,7 @@ final class FunctionTests: XCTestCase {
         FunctionBinary<Double, Double, Bool> { _, _ in
           success = true
           return true
-        }
+        },
       ]
     )
 
@@ -85,7 +85,7 @@ final class FunctionTests: XCTestCase {
         FunctionBinary<Double, Double, Bool> { _, _ in
           XCTFail("Function must not be called")
           return true
-        }
+        },
       ]
     )
 
@@ -99,7 +99,7 @@ final class FunctionTests: XCTestCase {
     let function = OverloadedFunction(
       functions: [
         FunctionBinary<Int, Double, Bool> { _, _ in true },
-        FunctionBinary<Double, Int, Bool> { _, _ in true }
+        FunctionBinary<Double, Int, Bool> { _, _ in true },
       ]
     )
 

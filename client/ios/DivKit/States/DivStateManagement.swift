@@ -94,8 +94,8 @@ public class DefaultDivStateManagement: DivStateManagement {
   }
 
   public func reset() {
-    stateManagersForCards.values.forEach {
-      $0.reset()
+    for value in stateManagersForCards.values {
+      value.reset()
     }
   }
 

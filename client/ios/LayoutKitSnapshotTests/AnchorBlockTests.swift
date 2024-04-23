@@ -67,7 +67,7 @@ final class AnchorBlockTests: LayoutKitSnapshotTest {
   }
 
   private func perform(_ configuration: Configuration, name: String = #function) {
-    ContainerBlock.LayoutDirection.allCases.forEach { direction in
+    for direction in ContainerBlock.LayoutDirection.allCases {
       let size: CGSize = switch direction {
       case .horizontal:
         .init(width: axialSize, height: crossSize)

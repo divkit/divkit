@@ -34,7 +34,7 @@ public struct DivTooltipViewFactory {
   }
 
   #else
-  func makeView(div: Div, tooltipId: String) -> ViewType {
+  func makeView(div _: Div, tooltipId _: String) -> ViewType {
     self as AnyObject
   }
   #endif

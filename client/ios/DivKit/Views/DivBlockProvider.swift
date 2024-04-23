@@ -153,8 +153,8 @@ final class DivBlockProvider {
         )
       }
       debugParams.processMeasurements((cardId: cardId, measurements: measurements))
-      context.errorsStorage.errors.forEach {
-        divKitComponents.reporter.reportError(cardId: cardId, error: $0)
+      for error in context.errorsStorage.errors {
+        divKitComponents.reporter.reportError(cardId: cardId, error: error)
       }
     } catch {
       divKitComponents.reporter.reportError(
@@ -225,8 +225,8 @@ final class DivBlockProvider {
       errors.append(DivUnknownError(error, path: UIElementPath(cardId.rawValue)))
     }
     errors.append(contentsOf: context?.errorsStorage.errors ?? dataErrors)
-    errors.forEach {
-      divKitComponents.reporter.reportError(cardId: cardId, error: $0)
+    for item in errors {
+      divKitComponents.reporter.reportError(cardId: cardId, error: item)
     }
 
     if debugParams.isDebugInfoEnabled {

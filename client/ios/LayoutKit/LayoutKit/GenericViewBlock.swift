@@ -118,8 +118,8 @@ extension GenericViewBlock: LayoutCachingDefaultImpl {}
 extension GenericViewBlock: ElementStateUpdatingDefaultImpl {}
 
 #if os(iOS)
-public extension GenericViewBlock {
-  static func makeIntrinsicSized(for view: ViewType) -> GenericViewBlock {
+extension GenericViewBlock {
+  public static func makeIntrinsicSized(for view: ViewType) -> GenericViewBlock {
     let calculator = ClosureIntrinsicCalculator(
       widthGetter: { view.sizeThatFits(.infinite).width },
       heightGetter: { width in
@@ -133,8 +133,8 @@ public extension GenericViewBlock {
     )
     return block
   }
-  
-  static func makeIntrinsicSized<T: ViewType>(for view: Lazy<T>) -> GenericViewBlock {
+
+  public static func makeIntrinsicSized(for view: Lazy<some ViewType>) -> GenericViewBlock {
     let calculator = ClosureIntrinsicCalculator(
       widthGetter: { view.value.sizeThatFits(.infinite).width },
       heightGetter: { width in

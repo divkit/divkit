@@ -33,7 +33,7 @@ final class Array_UIViewRenderableTests: XCTestCase {
     let viewsBlocks = (views as! [TestView]).compactMap(\.block)
     XCTAssertTrue(viewsBlocks.elementsEqual(blocks, by: ===))
   }
-  
+
   func test_ReusesSuitableViews() {
     let oldView0 = TestView(frame: .zero)
     let oldView1 = TestView(frame: .zero)
@@ -50,7 +50,7 @@ final class Array_UIViewRenderableTests: XCTestCase {
     XCTAssertEqual(oldView0, views[0])
     XCTAssertEqual(oldView1, views[2])
   }
-  
+
   func test_NotReusesUnsuitableViews() {
     let oldView0 = OtherTestView(frame: .zero)
     let oldView1 = TestView(frame: .zero)
@@ -142,7 +142,7 @@ private final class TestBlock: UIViewRenderable {
 
   func configureBlockView(
     _ view: BlockView,
-    observer: ElementStateObserver?,
+    observer _: ElementStateObserver?,
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {
@@ -165,8 +165,8 @@ private final class OtherTestBlock: UIViewRenderable {
   }
 
   func configureBlockView(
-    _ view: BlockView,
-    observer: ElementStateObserver?,
+    _: BlockView,
+    observer _: ElementStateObserver?,
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {}

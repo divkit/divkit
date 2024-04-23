@@ -38,7 +38,9 @@ public struct UIElementPath: CustomStringConvertible, Hashable, ExpressibleByStr
 
   public var root: String {
     var current = address
-    while let next = current.next { current = next }
+    while let next = current.next {
+      current = next
+    }
     return current.value
   }
 

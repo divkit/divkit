@@ -91,14 +91,14 @@ final class DivTimerStorage {
   }
 
   public func reset() {
-    timerControllers.forEach { _, timer in
+    for (_, timer) in timerControllers {
       timer.cancel()
     }
     timerControllers.removeAll()
   }
 
   public func reset(cardId: DivCardID) {
-    timerControllers.forEach { key, timer in
+    for (key, timer) in timerControllers {
       if key.starts(with: cardId.rawValue) {
         timer.cancel()
       }
@@ -149,9 +149,9 @@ final class DivTimerStorage {
   }
 
   private func runActions(cardId: DivCardID, actions: [DivAction]) {
-    actions.forEach {
+    for action in actions {
       actionHandler.handle(
-        $0,
+        action,
         cardId: cardId,
         source: .timer,
         sender: nil

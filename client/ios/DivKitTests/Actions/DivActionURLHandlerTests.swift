@@ -214,8 +214,8 @@ final class DivActionURLHandlerTests: XCTestCase {
     afterState: [ElementState],
     mode: SetItemAction.Mode
   ) {
-    zip(beforeStates, afterState).forEach {
-      switch $0 {
+    for states in zip(beforeStates, afterState) {
+      switch states {
       case let (before as GalleryViewState, after as GalleryViewState):
         setItemTestCase(beforeState: before, afterState: after, mode: mode)
       case let (before as PagerViewState, after as PagerViewState):
@@ -281,20 +281,45 @@ private enum SetItemAction {
   ]
 
   static let firstElementStateWithOffset: [ElementState] = [
-    GalleryViewState(contentPosition: .offset(0), itemsCount: 3, isScrolling: false, scrollRange: 20)
+    GalleryViewState(
+      contentPosition: .offset(0),
+      itemsCount: 3,
+      isScrolling: false,
+      scrollRange: 20
+    ),
   ]
 
   static let secondElementStateWithOffset: [ElementState] = [
-    GalleryViewState(contentPosition: .offset(10), itemsCount: 3, isScrolling: false, scrollRange: 20)
+    GalleryViewState(
+      contentPosition: .offset(10),
+      itemsCount: 3,
+      isScrolling: false,
+      scrollRange: 20
+    ),
   ]
 
   static let endStateWithOffset: [ElementState] = [
-    GalleryViewState(contentPosition: .offset(20), itemsCount: 3, isScrolling: false, scrollRange: 20)
+    GalleryViewState(
+      contentPosition: .offset(20),
+      itemsCount: 3,
+      isScrolling: false,
+      scrollRange: 20
+    ),
   ]
 
   static let emptyStatesWithOffset: [ElementState] = [
-    GalleryViewState(contentPosition: .offset(0), itemsCount: 0, isScrolling: false, scrollRange: 0),
-    GalleryViewState(contentPosition: .offset(0), itemsCount: 0, isScrolling: false, scrollRange: nil),
+    GalleryViewState(
+      contentPosition: .offset(0),
+      itemsCount: 0,
+      isScrolling: false,
+      scrollRange: 0
+    ),
+    GalleryViewState(
+      contentPosition: .offset(0),
+      itemsCount: 0,
+      isScrolling: false,
+      scrollRange: nil
+    ),
   ]
 
   static func makeURL(mode: Mode) -> URL {

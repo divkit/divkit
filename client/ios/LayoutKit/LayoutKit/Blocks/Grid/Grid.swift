@@ -7,8 +7,7 @@ struct Grid {
   var rowCount: Int { itemsIndices.count }
   var columnCount: Int { itemsIndices[0].count }
 
-  // swiftformat:disable:next redundantParens
-  func forEach(_ block: ((row: Int, column: Int)) -> Void) {
+  func forEachCell(_ block: ((row: Int, column: Int)) -> Void) {
     for row in itemsIndices.indices {
       for column in itemsIndices[0].indices {
         block((row, column))

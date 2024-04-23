@@ -9,12 +9,11 @@ extension DivAction {
     guard resolveIsEnabled(expressionResolver) else {
       return nil
     }
-    let payload: UserInterfaceAction.Payload
-    if let menuPayload = makeMenuPayload(context: context) {
-      payload = menuPayload
+    let payload = if let menuPayload = makeMenuPayload(context: context) {
+      menuPayload
     } else {
       // don't make .divAction payloads for menu actions until DivActionHandler could handle it
-      payload = makeDivActionPayload(
+      makeDivActionPayload(
         cardId: context.cardId,
         source: .tap,
         prototypeVariables: context.prototypesStorage

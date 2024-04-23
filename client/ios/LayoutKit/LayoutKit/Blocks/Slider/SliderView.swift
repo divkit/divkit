@@ -313,7 +313,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     in parentView: UIView,
     isActive: Bool
   ) {
-    zip(rangeViews, models).forEach { view, model in
+    for (view, model) in zip(rangeViews, models) {
       let rangeOfValues = CGFloat(model.end - model.start) / CGFloat(sliderModel.valueRange)
       let rangeWidth = parentView.frame
         .width * rangeOfValues - (model.margins.left + model.margins.right)

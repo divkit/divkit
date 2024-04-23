@@ -38,10 +38,10 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
     self.center = center
     self.trailing = trailing
 
-    contents.forEach {
+    for content in contents {
       switch direction {
-      case .vertical: precondition(!$0.isVerticallyResizable)
-      case .horizontal: precondition(!$0.isHorizontallyResizable)
+      case .vertical: precondition(!content.isVerticallyResizable)
+      case .horizontal: precondition(!content.isHorizontallyResizable)
       }
     }
   }

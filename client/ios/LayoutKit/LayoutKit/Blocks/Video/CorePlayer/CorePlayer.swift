@@ -26,7 +26,7 @@ extension CorePlayer {
   var staticScope: Self.Type {
     Self.self
   }
-  
+
   func seek(to position: CMTime) {
     seek(to: position, completion: {})
   }

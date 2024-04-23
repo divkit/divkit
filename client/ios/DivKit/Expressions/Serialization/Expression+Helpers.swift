@@ -15,9 +15,9 @@ func expressionTransform<T, U>(
 
   if let rawValue = value as? String, !rawValue.isEmpty {
     if let link = ExpressionLink<T>(
-     rawValue: rawValue,
-     validator: validator,
-     errorTracker: { DivKitLogger.error($0.description) }
+      rawValue: rawValue,
+      validator: validator,
+      errorTracker: { DivKitLogger.error($0.description) }
     ) {
       return .link(link)
     }

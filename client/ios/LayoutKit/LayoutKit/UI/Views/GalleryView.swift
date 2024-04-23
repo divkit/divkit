@@ -142,16 +142,15 @@ public final class GalleryView: BlockView {
 
   private func configureVisibleCells(_ blocks: [Block]) {
     let cells = collectionView.visibleCells.map { $0 as! CellType }
-    zip(cells, collectionView.indexPathsForVisibleItems)
-      .forEach { cell, indexPath in
-        cell.configure(
-          model: blocks[indexPath.row],
-          observer: observer,
-          overscrollDelegate: overscrollDelegate,
-          renderingDelegate: renderingDelegate,
-          accessibilityElement: blocks[indexPath.row].accessibilityElement
-        )
-      }
+    for (cell, indexPath) in zip(cells, collectionView.indexPathsForVisibleItems) {
+      cell.configure(
+        model: blocks[indexPath.row],
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate,
+        accessibilityElement: blocks[indexPath.row].accessibilityElement
+      )
+    }
   }
 
   private func setState(_ state: GalleryViewState, notifyingObservers: Bool) {

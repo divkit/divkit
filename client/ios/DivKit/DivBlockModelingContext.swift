@@ -75,22 +75,22 @@ public struct DivBlockModelingContext {
       variableTracker?.onVariablesUsed(id: viewId, variables: variables)
     }
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
-    extensionHandlers.forEach {
-      let id = $0.id
+    for extensionHandler in extensionHandlers {
+      let id = extensionHandler.id
       if extensionsHandlersDictionary[id] != nil {
         DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
-        return
+        continue
       }
-      extensionsHandlersDictionary[id] = $0
+      extensionsHandlersDictionary[id] = extensionHandler
     }
     var stateInterceptorsDictionary = [String: DivStateInterceptor]()
-    stateInterceptors.forEach {
-      let id = $0.id
+    for stateInterceptor in stateInterceptors {
+      let id = stateInterceptor.id
       if stateInterceptorsDictionary[id] != nil {
         DivKitLogger.failure("Duplicate DivStateInterceptor for: \(id)")
-        return
+        continue
       }
-      stateInterceptorsDictionary[id] = $0
+      stateInterceptorsDictionary[id] = stateInterceptor
     }
     self.init(
       viewId: viewId,
@@ -192,7 +192,7 @@ public struct DivBlockModelingContext {
   public var cardId: DivCardID {
     viewId.cardId
   }
-  
+
   public func getExtensionHandlers(for div: DivBase) -> [DivExtensionHandler] {
     guard let extensions = div.extensions else {
       return []

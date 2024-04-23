@@ -171,10 +171,10 @@ private final class FakeMaskFormatter: MaskFormatter {
   func formatted(rawText _: String, rawCursorPosition: CursorData?) -> InputData {
     var text = String(repeating: " ", count: Self.length)
     var rawData = [InputData.RawCharacter]()
-    Self.data.forEach {
-      let indexInNewString = text.index(text.startIndex, offsetBy: $0.indexInFormatted)
-      text.replaceSubrange(indexInNewString...indexInNewString, with: [$0.ch])
-      rawData.append(.init(char: $0.ch, index: indexInNewString))
+    for data in Self.data {
+      let indexInNewString = text.index(text.startIndex, offsetBy: data.indexInFormatted)
+      text.replaceSubrange(indexInNewString...indexInNewString, with: [data.ch])
+      rawData.append(.init(char: data.ch, index: indexInNewString))
     }
     return InputData(
       text: text,

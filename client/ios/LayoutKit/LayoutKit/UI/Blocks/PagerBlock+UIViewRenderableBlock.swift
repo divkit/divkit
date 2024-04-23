@@ -163,11 +163,10 @@ private func makeGalleryViewState(
   state: PagerViewState
 ) -> GalleryViewState {
   let pagerPosition = state.currentPage + CGFloat(model.infiniteCorrection)
-  let position: GalleryViewState.Position
-  if let oldState, oldState.isScrolling {
-    position = oldState.contentPosition
+  let position: GalleryViewState.Position = if let oldState, oldState.isScrolling {
+    oldState.contentPosition
   } else {
-    position = .paging(index: CGFloat(pagerPosition))
+    .paging(index: CGFloat(pagerPosition))
   }
 
   return GalleryViewState(

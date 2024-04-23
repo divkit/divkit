@@ -11,8 +11,8 @@ extension [BlockView] {
     renderingDelegate: RenderingDelegate?
   ) -> [BlockView] {
     let reuseResult = calculateReusability(self, blocks: blocks)
-    let newViews: [BlockView] = reuseResult.reusability.map { (block, view) in
-      if let view = view {
+    let newViews: [BlockView] = reuseResult.reusability.map { block, view in
+      if let view {
         block.configureBlockView(
           view,
           observer: observer,
@@ -54,8 +54,8 @@ private func calculateReusability(
   blocks: [UIViewRenderable]
 ) -> ReuseResult {
   var orphanViews = views
-  var reusableViews = Dictionary<Int, BlockView>(minimumCapacity: blocks.count)
-  blocks.enumerated().forEach { (blockIndex, block) in
+  var reusableViews = [Int: BlockView](minimumCapacity: blocks.count)
+  for (blockIndex, block) in blocks.enumerated() {
     let reusableView = orphanViews
       .enumerated()
       .first { block.isBestViewForReuse($0.element) }
@@ -67,7 +67,7 @@ private func calculateReusability(
 
   let reusability: [(UIViewRenderable, BlockView?)] = blocks
     .enumerated()
-    .map { (blockIndex, block) in
+    .map { blockIndex, block in
       if let view = reusableViews[blockIndex] {
         return (block, view)
       }

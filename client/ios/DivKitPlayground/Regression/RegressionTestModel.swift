@@ -77,8 +77,8 @@ struct RegressionTestModel: Decodable, Hashable {
     var description = ""
     if !steps.isEmpty {
       description += "Steps:"
-      steps.forEach {
-        description += "\n • \($0)"
+      for step in steps {
+        description += "\n • \(step)"
       }
     }
 
@@ -87,8 +87,8 @@ struct RegressionTestModel: Decodable, Hashable {
         description += "\n\n"
       }
       description += "Expected results:"
-      expectedResults.forEach {
-        description += "\n • \($0)"
+      for result in expectedResults {
+        description += "\n • \(result)"
       }
     }
 

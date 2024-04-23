@@ -99,12 +99,11 @@ extension DivContainer: DivBlockModeling {
       uiLayoutDirection: context.layoutDirection
     )
 
-    let defaultCrossAlignment: ContainerBlock.CrossAlignment
-    switch layoutMode {
+    let defaultCrossAlignment = switch layoutMode {
     case .noWrap:
-      defaultCrossAlignment = crossAlignment
+      crossAlignment
     case .wrap:
-      defaultCrossAlignment = ContainerBlock.CrossAlignment.leading
+      ContainerBlock.CrossAlignment.leading
     }
     let children: [ContainerBlock.Child] = try makeChildren(
       context: context,

@@ -44,7 +44,7 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
       [.variable(.specific(["cardId"]))],
     ]
 
-    reasonBatches.forEach { reasons in
+    for reasons in reasonBatches {
       reasons.forEach(aggregator.aggregate(_:))
 
       mainThreadBlock!()

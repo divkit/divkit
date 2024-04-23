@@ -73,7 +73,7 @@ extension DetachableAnimationBlock: CustomDebugStringConvertible {
 }
 
 extension DetachableAnimationBlock: ElementStateUpdating {
-  public func updated(withStates states: BlocksState) throws -> Self {
+  public func updated(withStates _: BlocksState) throws -> Self {
     Self(
       child: child,
       id: id,

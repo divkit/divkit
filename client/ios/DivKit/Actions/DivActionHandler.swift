@@ -208,9 +208,9 @@ public final class DivActionHandler {
         case .failure:
           action.downloadCallbacks?.onFailActions ?? []
         }
-        callbackActions.forEach {
+        for action in callbackActions {
           self.handle(
-            $0,
+            action,
             cardId: context.cardId,
             source: source,
             sender: sender

@@ -16,8 +16,8 @@ extension DivBase {
   ) throws -> Block {
     let extensionHandlers = context.getExtensionHandlers(for: self)
 
-    extensionHandlers.forEach {
-      $0.accept(div: self, context: context)
+    for extensionHandler in extensionHandlers {
+      extensionHandler.accept(div: self, context: context)
     }
 
     let expressionResolver = context.expressionResolver
@@ -32,8 +32,8 @@ extension DivBase {
 
     var block = try block()
 
-    extensionHandlers.forEach {
-      block = $0.applyBeforeBaseProperties(to: block, div: self, context: context)
+    for extensionHandler in extensionHandlers {
+      block = extensionHandler.applyBeforeBaseProperties(to: block, div: self, context: context)
     }
 
     let internalInsets = options.contains(.noPaddings)
@@ -264,8 +264,8 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> Block {
     var block = block
-    extensionHandlers.forEach {
-      block = $0.applyAfterBaseProperties(to: block, div: self, context: context)
+    for extensionHandler in extensionHandlers {
+      block = extensionHandler.applyAfterBaseProperties(to: block, div: self, context: context)
     }
     return block
   }

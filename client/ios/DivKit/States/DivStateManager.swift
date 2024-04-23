@@ -150,7 +150,7 @@ public class DivStateManager {
   public func getVisibleIds(statePath: DivStatePath) -> Set<String> {
     rwLock.read {
       var ids = _blockIds[statePath] ?? Set<String>()
-      _blockVisibility.forEach { blockPath, isVisible in
+      for (blockPath, isVisible) in _blockVisibility {
         if blockPath.statePath == statePath {
           if isVisible {
             ids.insert(blockPath.blockId)
@@ -204,8 +204,8 @@ extension Div {
     if case .divState = self {
       return Set(items)
     }
-    children.forEach {
-      items.append(contentsOf: $0.idsWithStateChangeTransitionInCurrentState)
+    for child in children {
+      items.append(contentsOf: child.idsWithStateChangeTransitionInCurrentState)
     }
     return Set(items)
   }

@@ -94,8 +94,8 @@ public func mergeErrors(
   _ errors: NonEmptyArray<DeserializationError>?...
 ) -> [DeserializationError] {
   var resultingErrors: [DeserializationError] = []
-  errors.forEach {
-    if let item = $0 {
+  for error in errors {
+    if let item = error {
       resultingErrors.append(contentsOf: item)
     }
   }

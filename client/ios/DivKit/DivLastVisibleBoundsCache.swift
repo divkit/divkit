@@ -25,9 +25,9 @@ public final class DivLastVisibleBoundsCache {
   func dropVisibleBounds(forMatchingPrefix prefix: UIElementPath) {
     let prefix = prefix.description + "/"
     rwLock.write {
-      storage.forEach {
-        if ($0.key.description + "/").starts(with: prefix) {
-          storage[$0.key] = nil
+      for item in storage {
+        if (item.key.description + "/").starts(with: prefix) {
+          storage[item.key] = nil
         }
       }
     }

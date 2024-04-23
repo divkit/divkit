@@ -285,9 +285,9 @@ private final class TextBlockView: UIView {
       return
     }
     let tapLocation = gesture.location(in: gesture.view)
-    textLayout.runsWithAction.forEach {
-      if $0.rect.contains(tapLocation) {
-        $0.action.actions.perform(sendingFrom: self)
+    for run in textLayout.runsWithAction {
+      if run.rect.contains(tapLocation) {
+        run.action.actions.perform(sendingFrom: self)
       }
     }
   }

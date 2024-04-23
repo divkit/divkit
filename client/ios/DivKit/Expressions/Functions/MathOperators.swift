@@ -168,8 +168,9 @@ extension Int {
 private func divisionByZeroError(
   _ symbol: String,
   _ lhs: Any,
-  _ rhs: Any) -> CalcExpression.Error {
-    .message(
-      "Failed to evaluate [\(lhs) \(symbol) \(rhs)]. Division by zero is not supported."
-    )
+  _ rhs: Any
+) -> CalcExpression.Error {
+  .message(
+    "Failed to evaluate [\(lhs) \(symbol) \(rhs)]. Division by zero is not supported."
+  )
 }

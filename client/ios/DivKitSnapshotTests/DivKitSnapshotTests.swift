@@ -1,8 +1,8 @@
 import BasePublic
-import DivKitExtensions
 import DivKit
-import Testing
+import DivKitExtensions
 @testable import LayoutKit
+import Testing
 
 import UIKit
 import class XCTest.XCTestCase
@@ -86,7 +86,7 @@ private class LabelImagePreviewProvider: ViewProvider {
   }
 
   func equals(other: BasePublic.ViewProvider) -> Bool {
-    return loadView() == other.loadView()
+    loadView() == other.loadView()
   }
 }
 

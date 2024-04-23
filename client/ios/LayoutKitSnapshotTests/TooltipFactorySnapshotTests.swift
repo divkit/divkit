@@ -5,8 +5,8 @@ import LayoutKit
 
 final class TooltipFactorySnapshotTests: LayoutKitSnapshotTest {
   func test_Orientations() {
-    BlockTooltip.Position.allCases.forEach {
-      perform(text: "Тултип", position: $0, width: nil)
+    for item in BlockTooltip.Position.allCases {
+      perform(text: "Тултип", position: item, width: nil)
     }
   }
 

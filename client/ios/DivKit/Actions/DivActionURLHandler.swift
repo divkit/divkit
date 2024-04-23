@@ -168,9 +168,17 @@ public final class DivActionURLHandler {
     }
     switch mode {
     case let .forward(step, overflow):
-      return getOffset(offset: state.currentOffset + step, scrollRange: scrollRange, overflow: overflow)
+      return getOffset(
+        offset: state.currentOffset + step,
+        scrollRange: scrollRange,
+        overflow: overflow
+      )
     case let .backward(step, overflow):
-      return getOffset(offset: state.currentOffset - step, scrollRange: scrollRange, overflow: overflow)
+      return getOffset(
+        offset: state.currentOffset - step,
+        scrollRange: scrollRange,
+        overflow: overflow
+      )
     case let .position(step):
       return getOffset(offset: step, scrollRange: scrollRange, overflow: .clamp)
     case .start:
@@ -187,9 +195,9 @@ public final class DivActionURLHandler {
   ) -> CGFloat {
     switch overflow {
     case .ring:
-      return (offset + scrollRange).truncatingRemainder(dividingBy: scrollRange)
+      (offset + scrollRange).truncatingRemainder(dividingBy: scrollRange)
     case .clamp:
-      return offset.clamp(0...scrollRange)
+      offset.clamp(0...scrollRange)
     }
   }
 

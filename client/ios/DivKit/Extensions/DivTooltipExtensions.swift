@@ -13,15 +13,15 @@ extension DivTooltip {
     }
 
     let tooltipViewFactory: TooltipViewFactory = Variable { [weak self] in
-      guard let self = self, let tooltipViewFactory = context.tooltipViewFactory else {
+      guard let self, let tooltipViewFactory = context.tooltipViewFactory else {
         return nil
       }
       return tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
     }
 
-    return BlockTooltip(
+    return try BlockTooltip(
       id: id,
-      block: try div.value.makeBlock(context: context),
+      block: div.value.makeBlock(context: context),
       duration: Duration(milliseconds: resolveDuration(expressionResolver)),
       offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,

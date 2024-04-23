@@ -90,7 +90,7 @@ extension ContainerBlock: CustomDebugStringConvertible {
 
     description += "\n  Children: ["
     let lastGap = gaps.last!
-    zip(children, gaps).enumerated().forEach { offset, tuple in
+    for (offset, tuple) in zip(children, gaps).enumerated() {
       let gap = tuple.1
       if !gap.isApproximatelyEqualTo(0) {
         description += "\n    Gap: \(gap),"
@@ -223,7 +223,7 @@ extension GalleryBlock: CustomDebugStringConvertible {
     Gallery \(widthTrait) x \(heightTrait) {
     """
 
-    zip(model.metrics.spacings, model.items).forEach { tuple in
+    for tuple in zip(model.metrics.spacings, model.items) {
       let item = tuple.1
       description += "\n" + item.debugDescription.indented() + ","
       let spacing = tuple.0
@@ -282,14 +282,14 @@ extension TabsBlock: CustomDebugStringConvertible {
 
     result += "\n  Tabs:"
     result += "\n  ["
-    zip(model.listModel.tabTitles, model.contentsModel.pages).forEach {
-      let title = $0.0
+    for item in zip(model.listModel.tabTitles, model.contentsModel.pages) {
+      let title = item.0
       result += "\n    Title: \(title.text), path: \(title.path)"
       if let url = title.url {
         result += "\n    Title url: \(url)"
       }
 
-      let page = $0.1
+      let page = item.1
       result += "\n" + page.debugDescription.indented(level: 2)
     }
     result += "\n  ]"
@@ -308,9 +308,9 @@ extension LayeredBlock.Child {
 extension LayeredBlock: CustomDebugStringConvertible {
   public var debugDescription: String {
     var result = "Layers \(widthTrait) x \(heightTrait) {"
-    children.forEach {
-      result += "\n  Alignment: \($0.alignment)"
-      result += "\n" + $0.content.debugDescription.indented()
+    for child in children {
+      result += "\n  Alignment: \(child.alignment)"
+      result += "\n" + child.content.debugDescription.indented()
     }
     result += "\n}"
     return result

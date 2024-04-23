@@ -317,9 +317,9 @@ final class DivTimerControllerTests: XCTestCase {
   }
 
   private func fireTimer(with interval: TimeInterval) {
-    timerScheduler.timers.forEach {
-      if $0.isValid, $0.timeInterval == interval {
-        $0.fire()
+    for timer in timerScheduler.timers {
+      if timer.isValid, timer.timeInterval == interval {
+        timer.fire()
       }
     }
   }

@@ -244,7 +244,7 @@ extension UIViewController {
     actionPerformer: UIActionEventPerforming
   ) {
     let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-    menu.items.forEach { item in
+    for item in menu.items {
       let action = UIAlertAction(title: item.text, style: .default) { _ in
         let events = item.actions.map {
           UIActionEvent(uiAction: $0, originalSender: self)

@@ -93,7 +93,7 @@ private final class LayeredBlockView: BlockView, VisibleBoundsTrackingContainer 
 
     let childrenFrames = model.layout ?? model.block.makeChildrenFrames(size: bounds.size)
 
-    zip(blockViews, childrenFrames).forEach { view, frame in
+    for (view, frame) in zip(blockViews, childrenFrames) {
       let currentTransform = view.transform
       view.transform = .identity
       view.frame = frame

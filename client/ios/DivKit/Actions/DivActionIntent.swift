@@ -197,7 +197,7 @@ extension URL {
       return .clamp
     }
   }
-  
+
   fileprivate var step: CGFloat? {
     queryParamValue(forName: "step").flatMap(Int.init).flatMap(CGFloat.init)
   }

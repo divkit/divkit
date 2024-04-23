@@ -17,7 +17,7 @@ private func loadJsonFiles() -> [JsonFile] {
   }
 
   return paths.compactMap { path -> JsonFile? in
-    return JsonFile(
+    JsonFile(
       absolutePath: snapshotsPath + "/" + path,
       relativePath: path
     )

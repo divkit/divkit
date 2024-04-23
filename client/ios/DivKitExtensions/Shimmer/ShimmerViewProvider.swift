@@ -4,7 +4,6 @@ import UIKit
 import BasePublic
 
 final class ShimmerViewProvider: ViewProvider {
-
   private var view: UIView?
   private let effectBeginTime: CFTimeInterval
   private let style: ShimmerStyle
@@ -22,7 +21,7 @@ final class ShimmerViewProvider: ViewProvider {
     self.view = view
     return view
   }
-  
+
   func equals(other: ViewProvider) -> Bool {
     guard let other = other as? ShimmerViewProvider else {
       return false

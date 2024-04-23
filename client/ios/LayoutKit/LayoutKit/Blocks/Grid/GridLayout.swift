@@ -126,7 +126,7 @@ extension GridBlock.Layout {
 extension Grid {
   fileprivate func calculateItemIndexToCoord() -> [Int: (row: Int, column: Int)] {
     var itemIndexToCoord: [Int: (row: Int, column: Int)] = [:]
-    forEach {
+    forEachCell {
       let idx = itemsIndices[$0]
       itemIndexToCoord[idx] = itemIndexToCoord[idx] ?? $0
     }
@@ -274,8 +274,8 @@ private func calculateSizes(
           ? nonResizableIndices
           : notYetSizedIndices
         let remainginWidthPerIndex = remainingSize / CGFloat(indicesToDistributeSize.count)
-        indicesToDistributeSize.forEach {
-          sizes[$0] += remainginWidthPerIndex
+        for item in indicesToDistributeSize {
+          sizes[item] += remainginWidthPerIndex
         }
       }
     }
@@ -293,7 +293,7 @@ private func calculateWeights(
   let resultCount =
     direction.selectDimension(from: (row: grid.rowCount, column: grid.columnCount))
   var result = [LayoutTrait.Weight?](repeating: nil, times: try! UInt(value: resultCount))
-  grid.forEach { coord in
+  grid.forEachCell { coord in
     if let item = weightedItems[grid.itemsIndices[coord]] {
       let resultIndex = direction.selectDimension(from: coord)
       let weightPerSpan = item.weight.rawValue / CGFloat(item.span)
@@ -367,7 +367,7 @@ private func calculateWeightToIntrinsicSize(
     direction: direction
   )
 
-  grid.forEach { coord in
+  grid.forEachCell { coord in
     let idx = grid.itemsIndices[coord]
     guard !checkedItems.contains(idx) else {
       return

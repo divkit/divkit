@@ -6,7 +6,7 @@ extension XCTestCase {
     test: @escaping (TestData) -> Void
   ) -> XCTestSuite {
     let suite = XCTestSuite(forTestCaseClass: self)
-    input.forEach { name, data in
+    for (name, data) in input {
       let block: @convention(block) (XCTestCase) -> Void = { _ in test(data) }
       let implementation = imp_implementationWithBlock(block)
       let selector = NSSelectorFromString(name)

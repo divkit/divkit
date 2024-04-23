@@ -128,9 +128,9 @@ private final class StateBlockView: BlockView {
     renderingDelegate: RenderingDelegate?
   ) {
     // remove views with unfinished animations
-    subviews.forEach {
-      if $0 !== childView {
-        $0.removeFromSuperview()
+    for subview in subviews {
+      if subview !== childView {
+        subview.removeFromSuperview()
       }
     }
 
@@ -139,9 +139,9 @@ private final class StateBlockView: BlockView {
       container: self
     )
 
-    subviewStorage.getViewsToRemove(newIds: ids).forEach {
-      $0.cancelAnimations()
-      $0.removeWithAnimation(in: self)
+    for view in subviewStorage.getViewsToRemove(newIds: ids) {
+      view.cancelAnimations()
+      view.removeWithAnimation(in: self)
     }
 
     subviewStorage = SubviewStorage(
@@ -163,11 +163,11 @@ private final class StateBlockView: BlockView {
     } else {
       forceLayout()
 
-      viewsToAdd.forEach {
-        $0.addWithAnimation(in: self)
+      for view in viewsToAdd {
+        view.addWithAnimation(in: self)
       }
 
-      viewsToTransition.forEach { id, frame in
+      for (id, frame) in viewsToTransition {
         if let view = subviewStorage.getView(id) {
           view.changeBoundsWithAnimation(in: self, startFrame: frame)
         }

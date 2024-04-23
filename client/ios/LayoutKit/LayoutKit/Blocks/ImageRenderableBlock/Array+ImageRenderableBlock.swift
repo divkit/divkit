@@ -7,7 +7,7 @@ extension [ImageRenderableBlock] {
     frames: [CGRect]
   ) {
     assert(count == frames.count)
-    zip(self, frames).forEach { block, frame in
+    for (block, frame) in zip(self, frames) {
       let blockRect = frame.offset(by: offset)
       block.drawInRect(blockRect, context: context)
     }
