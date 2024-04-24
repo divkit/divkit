@@ -1,0 +1,219 @@
+{
+  "cases": [
+    {
+      "name": "+123 => 123",
+      "expression": "@{+123}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+integer_var => 123",
+      "expression": "@{+integer_var}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+ integer_var => 123",
+      "expression": "@{+ integer_var}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-integer_var => -123",
+      "expression": "@{-integer_var}",
+      "expected": {
+        "type": "integer",
+        "value": -123
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "- integer_var => -123",
+      "expression": "@{- integer_var}",
+      "expected": {
+        "type": "integer",
+        "value": -123
+      },
+      "variables": [
+        {
+          "name": "integer_var",
+          "type": "integer",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+number_var => 123.45",
+      "expression": "@{+number_var}",
+      "expected": {
+        "type": "number",
+        "value": 123.45
+      },
+      "variables": [
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": 123.45
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-number_var => -123.45",
+      "expression": "@{-number_var}",
+      "expected": {
+        "type": "number",
+        "value": 123.45
+      },
+      "variables": [
+        {
+          "name": "number_var",
+          "type": "number",
+          "value": -123.45
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+boolean_var => error",
+      "expression": "@{+boolean_var}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [+true]. A Number is expected after a unary plus."
+      },
+      "variables": [
+        {
+          "name": "boolean_var",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-boolean_var => error",
+      "expression": "@{-boolean_var}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [-true]. A Number is expected after a unary minus."
+      },
+      "variables": [
+        {
+          "name": "boolean_var",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-(+(-123)) => 123",
+      "expression": "@{-(+(-123))}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "++123 => error",
+      "expression": "@{++123}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+-123 => error",
+      "expression": "@{+-123}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  ]
+}

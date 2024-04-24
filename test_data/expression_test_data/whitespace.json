@@ -61,6 +61,34 @@
       ]
     },
     {
+      "name": "5-2 => 3",
+      "expression": "@{5-2}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "len('12345')-2 => 3",
+      "expression": "@{len('12345')-2}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
       "name": "5 + - 3 => 2",
       "expression": "@{5 + - 3}",
       "expected": {

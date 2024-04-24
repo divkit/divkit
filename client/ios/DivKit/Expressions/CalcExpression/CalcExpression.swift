@@ -133,7 +133,7 @@ private enum Subexpression: CustomStringConvertible {
       return value
     case let .symbol(symbol, args):
       guard let evaluator = evaluators(symbol) else {
-        return CalcExpression.Error.message("Undefined symbol: \(symbol)")
+        return CalcExpression.Error.message("Undefined symbol: \(symbol.name)")
       }
       do {
         return try evaluator(args.map { $0.evaluate(evaluators) })
@@ -396,6 +396,19 @@ extension UnicodeScalarView {
       return true
     }
     return false
+  }
+
+  private mutating func parseToken(isOperandExpected: Bool) throws -> Subexpression? {
+    if !isOperandExpected, let op = parseOperator() {
+      return op
+    }
+    if let identifier = try parseNumericLiteral() ?? parseIdentifier() ?? parseEscapedIdentifier() {
+      return identifier
+    }
+    if isOperandExpected {
+      return parseOperator()
+    }
+    return nil
   }
 
   private mutating func parseNumericLiteral() throws -> Subexpression? {
@@ -678,11 +691,8 @@ extension UnicodeScalarView {
     _ = skipWhitespace()
     var operandPosition = true
     var precededByWhitespace = true
-    while !parseDelimiter(delimiters), let expression =
-      try parseNumericLiteral() ??
-      parseIdentifier() ??
-      parseOperator() ??
-      parseEscapedIdentifier() {
+    while !parseDelimiter(delimiters),
+          let expression = try parseToken(isOperandExpected: operandPosition) {
       // Prepare for next iteration
       var followedByWhitespace = skipWhitespace() || isEmpty
 
