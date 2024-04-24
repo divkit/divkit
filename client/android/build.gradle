@@ -111,6 +111,7 @@ apiValidation {
         "unit-test-common"
     ]
     ignoredPackages += ["com.yandex.div.internal"]
+    nonPublicMarkers += ["com.yandex.yatagan.internal.YataganGenerated"]
 }
 
 task reportVersion {
