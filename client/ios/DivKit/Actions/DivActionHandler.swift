@@ -62,7 +62,7 @@ public final class DivActionHandler {
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
-    logger: DivActionLogger = EmptyDivActionLogger(),
+    logger: DivActionLogger? = nil,
     trackVisibility: @escaping TrackVisibility = { _, _ in },
     trackDisappear: @escaping TrackVisibility = { _, _ in },
     performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in },
@@ -83,7 +83,7 @@ public final class DivActionHandler {
         persistentValuesStorage: persistentValuesStorage
       ),
       urlHandler: urlHandler,
-      logger: logger,
+      logger: logger ?? EmptyDivActionLogger(),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       variablesStorage: variablesStorage,
