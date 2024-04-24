@@ -21,7 +21,7 @@ extension GenericViewBlock {
   }
 }
 
-private final class GenericView: UIStackView, BlockViewProtocol, VisibleBoundsTrackingLeaf {
+private final class GenericView: UIView, BlockViewProtocol, VisibleBoundsTrackingLeaf {
   var content: GenericViewBlock.Content? {
     didSet {
       guard oldValue !== content else {
