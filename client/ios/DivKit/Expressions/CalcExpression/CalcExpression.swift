@@ -40,13 +40,11 @@ struct CalcExpression {
 
   static func parse(_ expression: String) -> CalcExpression {
     var unicodeScalarView = UnicodeScalarView(expression.unicodeScalars)
-    let start = unicodeScalarView
     var subexpression: Subexpression
     do {
       subexpression = try unicodeScalarView.parseSubexpression(upTo: [])
     } catch {
-      let expression = String(start.prefix(upTo: unicodeScalarView.startIndex))
-      subexpression = .error(error as! Error, expression)
+      subexpression = .error(error as! Error)
     }
     return CalcExpression(root: subexpression)
   }
@@ -104,10 +102,10 @@ struct CalcExpression {
   }
 }
 
-private enum Subexpression: CustomStringConvertible {
+private enum Subexpression {
   case literal(Any)
   case symbol(CalcExpression.Symbol, [Subexpression])
-  case error(CalcExpression.Error, String)
+  case error(CalcExpression.Error)
 
   var isOperand: Bool {
     switch self {
@@ -140,78 +138,8 @@ private enum Subexpression: CustomStringConvertible {
       } catch {
         return error
       }
-    case let .error(error, _):
+    case let .error(error):
       return error
-    }
-  }
-
-  var description: String {
-    func arguments(_ args: any Sequence<Subexpression>) -> String {
-      args.map(\.description)
-        .joined(separator: ", ")
-    }
-    switch self {
-    case let .literal(value):
-      return CalcExpression.stringify(value)
-    case let .symbol(symbol, args):
-      guard isOperand else {
-        return symbol.name
-      }
-      func needsSeparation(_ lhs: String, _ rhs: String) -> Bool {
-        let lhs = lhs.unicodeScalars.last!, rhs = rhs.unicodeScalars.first!
-        return isOperator(lhs) == isOperator(rhs)
-      }
-      switch symbol {
-      case let .prefix(name):
-        let arg = args[0]
-        let description = "\(arg)"
-        switch arg {
-        case .symbol(.infix, _), .symbol(.postfix, _), .error,
-             .symbol where needsSeparation(name, description):
-          return "\(symbol.name)(\(description))" // Parens required
-        case .symbol, .literal:
-          return "\(symbol.name)\(description)" // No parens needed
-        }
-      case let .postfix(name):
-        let arg = args[0]
-        let description = "\(arg)"
-        switch arg {
-        case .symbol(.infix, _), .symbol(.postfix, _), .error,
-             .symbol where needsSeparation(description, name):
-          return "(\(description))\(symbol.name)" // Parens required
-        case .symbol, .literal:
-          return "\(description)\(symbol.name)" // No parens needed
-        }
-      case .infix("?:") where args.count == 3:
-        return "\(args[0]) ? \(args[1]) : \(args[2])"
-      case let .infix(name):
-        let lhs = args[0]
-        let lhsDescription = switch lhs {
-        case let .symbol(.infix(opName), _)
-          where !takesPrecedence(opName, over: name):
-          "(\(lhs))"
-        default:
-          "\(lhs)"
-        }
-        let rhs = args[1]
-        let rhsDescription = switch rhs {
-        case let .symbol(.infix(opName), _)
-          where takesPrecedence(name, over: opName):
-          "(\(rhs))"
-        default:
-          "\(rhs)"
-        }
-        return "\(lhsDescription) \(symbol.name) \(rhsDescription)"
-      case .variable:
-        return symbol.name
-      case .function:
-        return "\(symbol.name)(\(arguments(args)))"
-      case .method:
-        let thisArg = args.first?.description ?? ""
-        return "\(thisArg).\(symbol.name)(\(arguments(args.dropFirst())))"
-      }
-    case let .error(_, expression):
-      return expression
     }
   }
 
@@ -553,18 +481,18 @@ extension UnicodeScalarView {
           } ?? ""
           guard scanCharacter("}") else {
             guard let junk = scanToEndOfToken() else {
-              return .error(.missingDelimiter("}"), string)
+              return .error(.missingDelimiter("}"))
             }
-            return .error(.unexpectedToken(junk), string)
+            return .error(.unexpectedToken(junk))
           }
           guard !hex.isEmpty else {
-            return .error(.unexpectedToken("}"), string)
+            return .error(.unexpectedToken("}"))
           }
           guard let codepoint = Int(hex, safeRadix: .hex),
                 let c = UnicodeScalar(codepoint)
           else {
             // TODO: better error for invalid codepoint?
-            return .error(.unexpectedToken(hex), string)
+            return .error(.unexpectedToken(hex))
           }
           string.append(Character(c))
         case "'", "\\":
@@ -572,17 +500,14 @@ extension UnicodeScalarView {
         case "@" where scanCharacter("{"):
           string += "@{"
         default:
-          return .error(.message("Incorrect string escape"), string)
+          return .error(.message("Incorrect string escape"))
         }
         part = ""
       }
     } while part != nil
     guard scanCharacter(delimiter) else {
-      return .error(
-        string == String(delimiter) ?
-          .unexpectedToken(string) : .missingDelimiter(String(delimiter)),
-        string
-      )
+      let delimiter = String(delimiter)
+      return .error(string == delimiter ? .unexpectedToken(string) : .missingDelimiter(delimiter))
     }
     string.append(Character(delimiter))
     return makeVariable(string)
@@ -650,11 +575,11 @@ extension UnicodeScalarView {
                 stack[i + 1] = .symbol(.postfix(symbol.name), [])
                 try collapseStack(from: i)
               }
-            } else if case let .error(error, _) = rhs {
+            } else if case let .error(error) = rhs {
               throw error
             }
           }
-        } else if case let .error(error, _) = rhs {
+        } else if case let .error(error) = rhs {
           throw error
         }
       } else if case let .symbol(symbol, _) = lhs {
@@ -665,10 +590,10 @@ extension UnicodeScalarView {
         } else if case .symbol = rhs {
           // Nested prefix operator?
           try collapseStack(from: i + 1)
-        } else if case let .error(error, _) = rhs {
+        } else if case let .error(error) = rhs {
           throw error
         }
-      } else if case let .error(error, _) = lhs {
+      } else if case let .error(error) = lhs {
         throw error
       }
     }
@@ -771,13 +696,13 @@ extension UnicodeScalarView {
     }
     try collapseStack(from: 0)
     switch stack.first {
-    case let .error(error, _)?:
+    case let .error(error)?:
       throw error
     case let result?:
       if result.isOperand {
         return result
       }
-      throw CalcExpression.Error.unexpectedToken(result.description)
+      throw CalcExpression.Error.message("Operand expected")
     case nil:
       throw CalcExpression.Error.message("Empty expression")
     }
