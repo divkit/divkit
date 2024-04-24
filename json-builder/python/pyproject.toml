@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydivkit"
-version = "29.15.0"
+version = "29.15.1"
 description = "DivKit python library"
 readme = "README.md"
 repository = "https://github.com/divkit/divkit/tree/main/json-builder/python"
