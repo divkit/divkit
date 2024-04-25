@@ -135,8 +135,8 @@ class TokenizerTest {
     @Test
     fun `operands # crazy variable name`() {
         assertVariableName("_a.__A", "_a.__A")
-        assertVariableName("isAt.._2__..E3nd", "isAt.._2__..E3nd")
-        assertVariableName("_..._S6tarOf.___.Expres2ion", "_..._S6tarOf.___.Expres2ion")
+        assertVariableName("isAt._2__.E3nd", "isAt._2__.E3nd")
+        assertVariableName("_._S6tarOf.___.Expres2ion", "_._S6tarOf.___.Expres2ion")
     }
 
     @Test

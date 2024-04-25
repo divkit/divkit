@@ -184,24 +184,6 @@
             "name": "variable name ends with dot symbol",
             "expression": "@{var.}",
             "expected": {
-                "type": "string",
-                "value": "ok"
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "ok",
-                    "name": "var."
-                }
-            ],
-            "platforms": [
-                "android"
-            ]
-        },
-        {
-            "name": "variable name ends with dot symbol",
-            "expression": "@{var.}",
-            "expected": {
                 "type": "error",
                 "value": "Unexpected token: ."
             },
@@ -213,26 +195,9 @@
                 }
             ],
             "platforms": [
+                "android",
                 "ios",
                 "web"
-            ]
-        },
-        {
-            "name": "variable name with several dot symbols",
-            "expression": "@{st1...t2}",
-            "expected": {
-                "type": "string",
-                "value": "ok"
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "ok",
-                    "name": "st1...t2"
-                }
-            ],
-            "platforms": [
-                "android"
             ]
         },
         {
@@ -250,6 +215,7 @@
                 }
             ],
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]

@@ -304,54 +304,43 @@ internal object Tokenizer {
     }
 
     private fun processIdentifier(state: TokenizationState, tokens: MutableList<Token>) {
-        val parts = mutableListOf<String>()
-        var endsWithDot: Boolean
+        val startPosition = state.index
+        var lastDotPosition: Int? = null
         do {
             val start = state.index
-            endsWithDot = false
             while (state.currentChar().isValidIdentifier()) state.forward()
-            parts.add(state.part(start, state.index))
             if (state.currentChar().isDot()) {
+                lastDotPosition = state.index + 1
                 state.forward()
-                endsWithDot = true
+                if (lastDotPosition - start <= 1) throw EvaluableException("Unexpected token: .")
             }
         } while (state.currentChar().isValidIdentifier() || state.currentChar().isDot())
 
         var funcToken: Token.Function? = null
-        while(state.currentChar().isWhiteSpace()) state.forward()
+        var endPosition = state.index
+        while (state.currentChar().isWhiteSpace()) state.forward()
 
-        while (parts.size > 0) {
-            when {
-                funcToken == null && state.currentChar() == '(' -> {
-                    funcToken = Token.Function(parts.last())
-                    parts.removeLast()
-                }
-
-                parts.size == 1 && processKeyword(parts.first(), tokens) -> {
-                    funcToken?.let {
-                        tokens.add(Token.Operator.Dot)
-                        tokens.add(it)
-                    }
-                    return
-                }
-
-                else -> {
-                    tokens.apply {
-                        val name = parts.joinToString(
-                            separator = ".",
-                            postfix = if (endsWithDot) "." else ""
-                        )
-                        add(Token.Operand.Variable(name))
-                        funcToken?.let {
-                            add(Token.Operator.Dot)
-                            add(it)
-                        }
-                    }
-                    return
-                }
+        if (state.currentChar() == '(') {
+            funcToken = Token.Function(state.part(lastDotPosition ?: startPosition, endPosition))
+            if (lastDotPosition == null) {
+                tokens.add(funcToken)
+                return
+            } else {
+                endPosition = lastDotPosition - 1
             }
         }
-        funcToken?.let { tokens.add(it) }
+
+        state.part(startPosition, endPosition).also {
+            if (!processKeyword(it, tokens)) {
+                if (state.charAt(endPosition - 1).isDot()) throw EvaluableException("Unexpected token: .")
+                tokens.add(Token.Operand.Variable(it))
+            }
+        }
+
+        funcToken?.let {
+            tokens.add(Token.Operator.Dot)
+            tokens.add(it)
+        }
     }
 
     private fun processKeyword(identifier: String, tokens: MutableList<Token>): Boolean {
