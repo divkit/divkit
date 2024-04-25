@@ -12,6 +12,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
@@ -41,18 +42,26 @@ internal class DivGifImageBinder @Inject constructor(
     private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivGifImage, DivGifImageView> {
 
-    override fun bindView(view: DivGifImageView, div: DivGifImage, divView: Div2View) {
+    override fun bindView(context: BindingContext, view: DivGifImageView, div: DivGifImage) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
+        val divView = context.divView
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
-        val expressionResolver = divView.expressionResolver
+        val expressionResolver = context.expressionResolver
 
-        baseBinder.bindView(view, div, oldDiv, divView)
+        baseBinder.bindView(context, view, div, oldDiv)
 
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions,
-            div.doubletapActions, div.actionAnimation, div.accessibility)
+        view.applyDivActions(
+            context,
+            div.action,
+            div.actions,
+            div.longtapActions,
+            div.doubletapActions,
+            div.actionAnimation,
+            div.accessibility,
+        )
 
         view.bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
 
@@ -61,7 +70,9 @@ internal class DivGifImageBinder @Inject constructor(
         )
         view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
         view.addSubscription(
-            div.gifUrl.observeAndGet(expressionResolver) { view.applyGifImage(divView, expressionResolver, div, errorCollector) }
+            div.gifUrl.observeAndGet(expressionResolver) {
+                view.applyGifImage(divView, expressionResolver, div, errorCollector)
+            }
         )
     }
 

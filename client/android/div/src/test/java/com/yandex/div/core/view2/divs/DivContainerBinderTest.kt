@@ -35,9 +35,9 @@ class DivContainerBinderTest : DivBinderTest() {
         val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivLinearLayout
         view.layoutParams = defaultLayoutParams()
 
-        binder.bindView(view, divContainer, divView, rootPath())
+        binder.bindView(bindingContext, view, divContainer, rootPath())
 
-        assertActionApplied(divView, view, Expected.ACTION_URI)
+        assertActionApplied(bindingContext, view, Expected.ACTION_URI)
     }
 
     @Test
@@ -47,9 +47,9 @@ class DivContainerBinderTest : DivBinderTest() {
         val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivLinearLayout
         view.layoutParams = defaultLayoutParams()
 
-        binder.bindView(view, divContainer, divView, rootPath())
+        binder.bindView(bindingContext, view, divContainer, rootPath())
 
-        assertActionApplied(divView, view, Expected.STATE_ACTION_URI)
+        assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
     }
 
     @Test
@@ -60,13 +60,13 @@ class DivContainerBinderTest : DivBinderTest() {
         val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivLinearLayout
         view.layoutParams = defaultLayoutParams()
 
-        binder.bindView(view, divContainer, divView, rootPath())
+        binder.bindView(bindingContext, view, divContainer, rootPath())
 
         verify(visitor, never()).release(any())
 
         val children: List<View> = view.childrenToFlatList()
 
-        binder.bindView(view, otherDiv.value() as DivContainer, divView, rootPath())
+        binder.bindView(bindingContext, view, otherDiv.value() as DivContainer, rootPath())
 
         verify(visitor, times(children.size)).release(any())
         children.forEach { child: View ->
@@ -83,9 +83,9 @@ class DivContainerBinderTest : DivBinderTest() {
         view.layoutParams = defaultLayoutParams()
         view.layout(0, 0, 100, 100)
 
-        binder.bindView(view, divContainer, divView, rootPath())
+        binder.bindView(bindingContext, view, divContainer, rootPath())
 
-        binder.bindView(view, newData.value() as DivContainer, divView, rootPath())
+        binder.bindView(bindingContext, view, newData.value() as DivContainer, rootPath())
 
         verify(visitor, atLeast(1)).release(any())
     }

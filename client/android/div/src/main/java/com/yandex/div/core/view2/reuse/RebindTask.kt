@@ -5,6 +5,7 @@ import androidx.annotation.MainThread
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.reuse.util.combineTokens
 import com.yandex.div.core.view2.reuse.util.logRebindDiff
 import com.yandex.div.internal.Log
@@ -167,7 +168,8 @@ internal class RebindTask(
         bindingPoints.forEach {
             if (bindingPoints.contains(it.parentToken)) return@forEach
 
-            divBinder.bind(it.view, it.div, div2View, path)
+            val bindingContext = it.view.bindingContext ?: div2View.bindingContext
+            divBinder.bind(bindingContext, it.view, it.div, path)
         }
 
         clear()

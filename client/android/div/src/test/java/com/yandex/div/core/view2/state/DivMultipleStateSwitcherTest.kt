@@ -57,7 +57,7 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
-        verify(viewBinder).bind(any(), eq(div), any(), eq(activeState.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
     }
 
     @Test
@@ -67,17 +67,14 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
-        verify(viewBinder).bind(any(), eq(div), any(), eq(activeState.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(div), eq(activeState.parentState()))
     }
 
     @Test
     fun `switch to single state of missing state layout binds root div`() {
         val inactiveState = "0/state_container/second/second_state/hidden".path
-        val div = rootDiv.findDivState(inactiveState.parentState(), resolver)!!
-
         stateSwitcher.switchStates(divDataState, listOf(inactiveState), resolver)
-
-        verify(viewBinder).bind(any(), eq(rootDiv), any(), eq(DivStatePath.fromState(0)))
+        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(0)))
     }
 
     @Test
@@ -90,8 +87,8 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), eq(firstDiv), any(), eq(firstPath.parentState()))
-        verify(viewBinder).bind(any(), eq(secondDiv), any(), eq(secondPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(secondDiv), eq(secondPath.parentState()))
     }
 
     @Test
@@ -103,7 +100,7 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), eq(firstDiv), any(), eq(firstPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
     }
 
     @Test
@@ -115,7 +112,7 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), eq(firstDiv), any(), eq(firstPath.parentState()))
+        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
     }
 
     @Test
@@ -128,8 +125,8 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), eq(firstDiv), any(), eq(firstPath.parentState()))
-        verify(viewBinder, never()).bind(any(), eq(secondDiv), any(), any())
+        verify(viewBinder).bind(any(), any(), eq(firstDiv), eq(firstPath.parentState()))
+        verify(viewBinder, never()).bind(any(), any(), eq(secondDiv), any())
     }
 
     @Test
@@ -140,6 +137,6 @@ class DivMultipleStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, paths, resolver)
 
-        verify(viewBinder).bind(any(), eq(rootDiv), any(), eq(DivStatePath.fromState(0)))
+        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(DivStatePath.fromState(0)))
     }
 }

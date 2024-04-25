@@ -4,7 +4,7 @@ import android.view.View
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.util.allIsNullOrEmpty
@@ -19,8 +19,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
 
     fun bindDivBorder(
         view: View,
-        divView: Div2View,
-        resolver: ExpressionResolver,
+        context: BindingContext,
         focusedBorder: DivBorder?,
         blurredBorder: DivBorder?
     ): Unit = view.run {
@@ -30,7 +29,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
             isFocused -> focusedBorder
             else -> blurredBorder
         }
-        applyBorder(border, resolver)
+        applyBorder(border, context.expressionResolver)
 
         val focusListener = onFocusChangeListener as? FocusChangeListener
         if (focusListener == null && focusedBorder.isConstantlyEmpty()) {
@@ -46,7 +45,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
             return
         }
 
-        onFocusChangeListener = FocusChangeListener(divView, resolver).apply {
+        onFocusChangeListener = FocusChangeListener(context).apply {
             setBorders(focusedBorder, blurredBorder)
             focusListener?.let { setActions(it.focusActions, it.blurActions) }
         }
@@ -69,8 +68,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
 
     fun bindDivFocusActions(
         target: View,
-        divView: Div2View,
-        resolver: ExpressionResolver,
+        context: BindingContext,
         onFocusActions: List<DivAction>?,
         onBlurActions: List<DivAction>?
     ) = target.run {
@@ -88,15 +86,14 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
             return
         }
 
-        onFocusChangeListener = FocusChangeListener(divView, resolver).apply {
+        onFocusChangeListener = FocusChangeListener(context).apply {
             focusListener?.let { setBorders(it.focusedBorder, it.blurredBorder) }
             setActions(onFocusActions, onBlurActions)
         }
     }
 
     private inner class FocusChangeListener(
-        private val divView: Div2View,
-        private val resolver: ExpressionResolver
+        private val context: BindingContext,
     ): View.OnFocusChangeListener {
 
         var focusedBorder: DivBorder? = null
@@ -129,9 +126,9 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
             }
         }
 
-        private fun DivBorder.applyToView(v: View) = v.applyBorder(this, resolver)
+        private fun DivBorder.applyToView(v: View) = v.applyBorder(this, context.expressionResolver)
 
         private fun List<DivAction>.handle(target: View, actionLogType: String) =
-            actionBinder.handleBulkActions(divView, target, this, actionLogType)
+            actionBinder.handleBulkActions(context, target, this, actionLogType)
     }
 }

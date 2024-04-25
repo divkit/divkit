@@ -5,6 +5,7 @@ import com.yandex.div.core.state.DivPathUtils.tryFindStateDivAndLayout
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import javax.inject.Inject
@@ -37,7 +38,9 @@ internal class DivJoinedStateSwitcher @Inject constructor(
                 path = commonPath
             }
         }
-        divBinder.bind(view, div, divView, path.parentState())
+
+        val bindingContext = view.bindingContext ?: divView.bindingContext
+        divBinder.bind(bindingContext, view, div, path.parentState())
 
         divBinder.attachIndicators()
     }

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
 import com.yandex.div.core.util.doOnActualLayout
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.widget.makeAtMostSpec
 import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div.core.widget.makeUnspecifiedSpec
@@ -24,7 +24,7 @@ import com.yandex.div2.DivGallery
 import kotlin.math.min
 
 internal interface DivGalleryItemHelper {
-    val divView: Div2View
+    val bindingContext: BindingContext
     val view: RecyclerView
     val div: DivGallery
     val divItems: List<Div>
@@ -55,7 +55,7 @@ internal interface DivGalleryItemHelper {
     ) {
         val childDiv = runCatching { divItems[child.getTag(R.id.div_gallery_item_index) as Int].value() }.getOrNull()
 
-        val resolver = divView.expressionResolver
+        val resolver = bindingContext.expressionResolver
         val parentAlignment = div.crossContentAlignment
         val orientation = getLayoutManagerOrientation()
 
@@ -226,11 +226,12 @@ internal interface DivGalleryItemHelper {
         val itemView = container.children.firstOrNull() ?: return
         val div = divItems[position]
 
+        val divView = bindingContext.divView
         if (clear) {
-            divView.div2Component.visibilityActionTracker.cancelTrackingViewsHierarchy(divView, itemView, div)
+            divView.div2Component.visibilityActionTracker.cancelTrackingViewsHierarchy(bindingContext, itemView, div)
             divView.unbindViewFromDiv(itemView)
         } else {
-            divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(divView, itemView, div)
+            divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(bindingContext, itemView, div)
             divView.bindViewToDiv(itemView, div)
         }
     }

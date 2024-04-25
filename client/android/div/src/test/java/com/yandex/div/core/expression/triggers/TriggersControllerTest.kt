@@ -42,7 +42,9 @@ class TriggersControllerTest {
     }
     private val errorCollector = mock<ErrorCollector>()
     private val logger = mock<Div2Logger>()
-    private val view = mock<DivViewFacade>()
+    private val view = mock<DivViewFacade> {
+        on { expressionResolver } doReturn mock()
+    }
 
     private val env = object : ParsingEnvironment {
         override val templates: TemplateProvider<JsonTemplate<*>> = TemplateProvider.empty()
@@ -109,7 +111,7 @@ class TriggersControllerTest {
 
     private fun verifyActionTriggered(logId: String, times: Int = 1) {
         val actions = argumentCaptor<List<DivAction>>()
-        verify(divActionBinder, atLeastOnce()).handleActions(any(), actions.capture(), any(), anyOrNull())
+        verify(divActionBinder, atLeastOnce()).handleActions(any(), any(), actions.capture(), any(), anyOrNull())
 
         val actionsWithLogId = actions.allValues.flatten().filter { it.logId.rawValue == logId }
         Assert.assertEquals(times, actionsWithLogId.size)

@@ -13,6 +13,7 @@ import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
@@ -21,7 +22,6 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import com.yandex.div2.DivDimension
 import com.yandex.div2.DivPoint
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTooltip
@@ -86,8 +86,8 @@ class DivTooltipControllerTest {
         }
         on { getChildAt(0) } doReturn anchor
         on { childCount } doReturn 1
-        on { expressionResolver } doReturn expressionResolver
     }
+    private val bindingContext = BindingContext(div2View, expressionResolver)
 
     private val tooltipView = mock<View> {
         on { width } doReturn 100
@@ -142,7 +142,7 @@ class DivTooltipControllerTest {
     fun `tooltip is shown`() {
         prepareDiv()
 
-        underTest.showTooltip("tooltip_id", div2View)
+        underTest.showTooltip("tooltip_id", bindingContext)
 
         verify(popupWindow).showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
         verify(popupWindow).update(400, 225, 100, 50)
@@ -153,9 +153,9 @@ class DivTooltipControllerTest {
     fun `visibility tracking is started on show`() {
         prepareDiv()
 
-        underTest.showTooltip("tooltip_id", div2View)
+        underTest.showTooltip("tooltip_id", bindingContext)
 
-        verify(visibilityActionTracker).trackVisibilityActionsOf(div2View, tooltipView, div)
+        verify(visibilityActionTracker).trackVisibilityActionsOf(div2View, expressionResolver, tooltipView, div)
     }
 
     @Test
@@ -164,7 +164,7 @@ class DivTooltipControllerTest {
         whenever(tooltipView.height).doReturn(div2ViewHeight.inc())
         prepareDiv()
 
-        underTest.showTooltip("tooltip_id", div2View)
+        underTest.showTooltip("tooltip_id", bindingContext)
 
         verify(tooltipShownCallback, times(1)).onDivTooltipShown(div2View, anchor, tooltips[0])
         verify(errorCollector, times(2)).logWarning(any())
@@ -173,7 +173,7 @@ class DivTooltipControllerTest {
     @Test
     fun `tooltip is dismissed after timeout`() {
         prepareDiv(duration = 1000)
-        underTest.showTooltip("tooltip_id", div2View)
+        underTest.showTooltip("tooltip_id", bindingContext)
         verify(tooltipShownCallback, never()).onDivTooltipDismissed(div2View, anchor, tooltips[0])
 
         ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
@@ -184,7 +184,7 @@ class DivTooltipControllerTest {
     @Test
     fun `tooltip is dismissed on hideTooltip`() {
         prepareDiv()
-        underTest.showTooltip("tooltip_id", div2View)
+        underTest.showTooltip("tooltip_id", bindingContext)
         verify(tooltipShownCallback, never()).onDivTooltipDismissed(div2View, anchor, tooltips[0])
 
         underTest.hideTooltip("tooltip_id", div2View)
@@ -195,18 +195,18 @@ class DivTooltipControllerTest {
     @Test
     fun `visibility tracking is stopped on dismiss`() {
         prepareDiv()
-        underTest.showTooltip("tooltip_id", div2View)
+        underTest.showTooltip("tooltip_id", bindingContext)
         reset(visibilityActionTracker)
 
         underTest.hideTooltip("tooltip_id", div2View)
 
-        verify(visibilityActionTracker).trackVisibilityActionsOf(div2View, null, div)
+        verify(visibilityActionTracker).trackVisibilityActionsOf(div2View, expressionResolver, null, div)
     }
 
     @Test
     fun `tooltip is dismissed on cleanup`() {
         prepareDiv()
-        underTest.showTooltip("tooltip_id", div2View)
+        underTest.showTooltip("tooltip_id", bindingContext)
         verify(tooltipShownCallback, never()).onDivTooltipDismissed(div2View, anchor, tooltips[0])
 
         underTest.clear()
@@ -217,7 +217,7 @@ class DivTooltipControllerTest {
     @Test
     fun `dismiss is canceled on cleanup`() {
         prepareDiv()
-        underTest.showTooltip("tooltip_id", div2View)
+        underTest.showTooltip("tooltip_id", bindingContext)
         underTest.clear()
         reset(tooltipRestrictor.tooltipShownCallback)
 
@@ -268,6 +268,3 @@ class DivTooltipControllerTest {
         Assert.assertEquals(expected.second, actual.y)
     }
 }
-
-@Suppress("SameParameterValue")
-private fun divPoint(x: Int, y: Int) = DivPoint(DivDimension(value = x.toDouble().asExpression()), DivDimension(value = y.toDouble().asExpression()))

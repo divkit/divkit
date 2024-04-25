@@ -57,24 +57,24 @@ class DivPagerBinderTest: DivBinderTest() {
 
     @Test
     fun `set default item`() {
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         Assert.assertEquals(DEFAULT_ITEM, divPagerView.currentItem)
     }
 
     @Test
     fun `keep selected item on rebind`() {
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         divPagerView.currentItem = DEFAULT_ITEM + 1
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         Assert.assertEquals(DEFAULT_ITEM + 1, divPagerView.viewPager.currentItem)
     }
 
     @Test
     fun `set default item when has current state without current page index`() {
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         Assert.assertEquals(DEFAULT_ITEM, divPagerView.currentItem)
     }
@@ -83,14 +83,14 @@ class DivPagerBinderTest: DivBinderTest() {
     fun `restore previously selected page`() {
         whenever(divViewState.getBlockState<PagerState>(any())).thenReturn(PagerState(DEFAULT_ITEM + 1))
 
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         Assert.assertEquals(DEFAULT_ITEM + 1, divPagerView.currentItem)
     }
 
     @Test
     fun `do not log page change when selected page for the first time`() {
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
 
@@ -104,7 +104,7 @@ class DivPagerBinderTest: DivBinderTest() {
 
     @Test
     fun `log page change when selected next page`() {
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
@@ -124,21 +124,21 @@ class DivPagerBinderTest: DivBinderTest() {
             .getJSONObject(DEFAULT_ITEM)
             .put("visibility_action", DivVisibilityAction(logId = "test".asExpression()).writeToJSON())
         val divPager = DivPager(DivParsingEnvironment(ParsingErrorLogger.ASSERT), pagerJson)
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
 
-        verify(divView).bindViewToDiv(divPagerView.viewPager[0], divPager.nonNullItems[DEFAULT_ITEM])
+        verify(divView).bindViewToDiv(divPagerView, divPager.nonNullItems[DEFAULT_ITEM])
     }
 
     @Test
     fun `unbind view from div on previously selected page`() {
-        underTest.bindView(divPagerView, divPager, divView, rootPath())
+        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
 
-        verify(divView).unbindViewFromDiv(divPagerView.viewPager[0])
+        verify(divView).unbindViewFromDiv(divPagerView)
     }
 
     private fun div() = UnitTestData(PAGER_DIR, "pager_default_item.json").div

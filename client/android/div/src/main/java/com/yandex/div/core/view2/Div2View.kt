@@ -46,6 +46,7 @@ import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
 import com.yandex.div.core.view2.divs.bindLayoutParams
+import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
@@ -133,6 +134,8 @@ class Div2View private constructor(
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
 
+    internal var bindingContext: BindingContext = BindingContext(this, expressionResolver)
+
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
 
     private val monitor = Any()
@@ -194,6 +197,7 @@ class Div2View private constructor(
         if (oldExpressionsRuntime != _expressionsRuntime) {
             oldExpressionsRuntime?.clearBinding()
         }
+        bindingContext = BindingContext(this, expressionResolver)
     }
 
     private fun attachVariableTriggers() {
@@ -386,7 +390,7 @@ class Div2View private constructor(
             bindOnAttachRunnable?.cancel()
             rebind(oldData, false, reporter)
             divData = newDivData
-            div2Component.divBinder.setDataWithoutBinding(getChildAt(0), state.div, expressionResolver)
+            div2Component.divBinder.setDataWithoutBinding(bindingContext, getChildAt(0), state.div)
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
@@ -441,18 +445,25 @@ class Div2View private constructor(
     }
 
     private fun trackStateVisibility(state: DivData.State) {
-        div2Component.visibilityActionTracker.trackVisibilityActionsOf(this, view, state.div)
+        div2Component.visibilityActionTracker.trackVisibilityActionsOf(this, expressionResolver, view, state.div)
     }
 
     private fun discardStateVisibility(state: DivData.State) {
-        div2Component.visibilityActionTracker.trackVisibilityActionsOf(this, null, state.div)
+        div2Component.visibilityActionTracker.trackVisibilityActionsOf(
+            scope = this,
+            resolver = expressionResolver,
+            view = null,
+            div = state.div
+        )
     }
 
     fun trackChildrenVisibility() {
         val visibilityActionTracker = div2Component.visibilityActionTracker
         viewToDivBindings.forEach { (view, div) ->
             if (ViewCompat.isAttachedToWindow(view)) {
-                visibilityActionTracker.trackVisibilityActionsOf(this, view, div)
+                view.bindingContext?.expressionResolver?.let {
+                    visibilityActionTracker.trackVisibilityActionsOf(this, it, view, div)
+                }
             }
         }
     }
@@ -765,7 +776,12 @@ class Div2View private constructor(
         }
 
         if (bindBeforeViewAdded) {
-            div2Component.divBinder.bind(newStateView, newState.div, this, DivStatePath.fromState(newState.stateId))
+            div2Component.divBinder.bind(
+                bindingContext,
+                newStateView,
+                newState.div,
+                DivStatePath.fromState(newState.stateId)
+            )
         }
 
         if (transition != null) {
@@ -794,7 +810,7 @@ class Div2View private constructor(
         isUpdateTemporary: Boolean = true
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
-        return divBuilder.buildView(newState.div, this, DivStatePath.fromState(newState.stateId)).also {
+        return divBuilder.buildView(newState.div, bindingContext, DivStatePath.fromState(newState.stateId)).also {
             div2Component.divBinder.attachIndicators()
         }
     }
@@ -806,16 +822,16 @@ class Div2View private constructor(
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
         val path = DivStatePath.fromState(newState.stateId)
-        val view = divBuilder.createView(newState.div, this, path)
+        val view = divBuilder.createView(newState.div, bindingContext, path)
         if (bindOnAttachEnabled) {
             bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
                 suppressExpressionErrors {
-                    div2Component.divBinder.bind(view, newState.div, this, path)
+                    div2Component.divBinder.bind(bindingContext, view, newState.div, path)
                 }
                 div2Component.divBinder.attachIndicators()
             }
         } else {
-            div2Component.divBinder.bind(view, newState.div, this, path)
+            div2Component.divBinder.bind(bindingContext, view, newState.div, path)
             doOnAttach {
                 div2Component.divBinder.attachIndicators()
             }
@@ -885,10 +901,12 @@ class Div2View private constructor(
     fun handleActionWithResult(action: DivAction, reason: String = DivActionReason.EXTERNAL): Boolean {
         return div2Component.actionBinder.handleAction(
             divView = this,
+            expressionResolver,
             action = action,
             reason = reason,
             actionUid = null,
-            viewActionHandler = actionHandler)
+            viewActionHandler = actionHandler
+        )
     }
 
     override fun handleUri(uri: Uri) {
@@ -947,11 +965,11 @@ class Div2View private constructor(
     }
 
     override fun showTooltip(tooltipId: String) {
-        tooltipController.showTooltip(tooltipId, this)
+        tooltipController.showTooltip(tooltipId, bindingContext)
     }
 
     override fun showTooltip(tooltipId: String, multiple: Boolean) {
-        tooltipController.showTooltip(tooltipId, this, multiple)
+        tooltipController.showTooltip(tooltipId, bindingContext, multiple)
     }
 
     override fun hideTooltip(tooltipId: String) {
@@ -959,7 +977,7 @@ class Div2View private constructor(
     }
 
     override fun cancelTooltips() {
-        tooltipController.cancelTooltips(this)
+        tooltipController.cancelTooltips(bindingContext)
     }
 
     override fun dispatchDraw(canvas: Canvas) {
@@ -1067,7 +1085,7 @@ class Div2View private constructor(
             }
             divData = newData
             div2Component.stateManager.updateState(dataTag, state.stateId, true)
-            div2Component.divBinder.bind(rootDivView, state.div, this, DivStatePath.fromState(stateId))
+            div2Component.divBinder.bind(bindingContext, rootDivView, state.div, DivStatePath.fromState(stateId))
             requestLayout()
             if (isAutoanimations) {
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
