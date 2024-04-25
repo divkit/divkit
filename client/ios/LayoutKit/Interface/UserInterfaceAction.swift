@@ -9,7 +9,6 @@ public struct UserInterfaceAction: Equatable, Codable {
     case empty // means just analytics logging
     case url(URL)
     case menu(Menu)
-    indirect case composite(Payload, Payload)
     case divAction(params: DivActionParams)
   }
 
@@ -97,27 +96,6 @@ public struct UserInterfaceAction: Equatable, Codable {
     )
   }
 
-  public init(
-    payloads: [Payload],
-    path: UIElementPath,
-    accessibilityElement: AccessibilityElement? = nil
-  ) {
-    let payload: Payload = payloads.reduce(.empty) {
-      if $0 == .empty {
-        return $1
-      } else if $1 == .empty {
-        return $0
-      }
-
-      return .composite($0, $1)
-    }
-    self.init(
-      payload: payload,
-      path: path,
-      accessibilityElement: accessibilityElement
-    )
-  }
-
   public init(path: UIElementPath, accessibilityElement: AccessibilityElement? = nil) {
     self.init(payload: .empty, path: path, accessibilityElement: accessibilityElement)
   }
@@ -129,7 +107,6 @@ extension UserInterfaceAction.Payload: Codable {
     case url
     case menu
     case divAction
-    case composite
   }
 
   private enum CodingKeys: String, CodingKey {
@@ -138,8 +115,6 @@ extension UserInterfaceAction.Payload: Codable {
     case menu
     case json
     case cardId
-    case firstPayload
-    case secondPayload
     case divActionSource
   }
 
@@ -151,8 +126,6 @@ extension UserInterfaceAction.Payload: Codable {
       .url
     case .menu:
       .menu
-    case .composite:
-      .composite
     case .divAction:
       .divAction
     }
@@ -177,10 +150,6 @@ extension UserInterfaceAction.Payload: Codable {
     case .menu?:
       let menu = try container.decode(Menu.self, forKey: .menu)
       self = .menu(menu)
-    case .composite?:
-      let first = try container.decode(type(of: self).self, forKey: .firstPayload)
-      let second = try container.decode(type(of: self).self, forKey: .secondPayload)
-      self = .composite(first, second)
     case .divAction?:
       let source = try container.decodeIfPresent(String.self, forKey: .divActionSource)
       let params = try UserInterfaceAction.DivActionParams(
@@ -206,9 +175,6 @@ extension UserInterfaceAction.Payload: Codable {
       try container.encode(url, forKey: .url)
     case let .menu(menu):
       try container.encode(menu, forKey: .menu)
-    case let .composite(first, second):
-      try container.encode(first, forKey: .firstPayload)
-      try container.encode(second, forKey: .secondPayload)
     case let .divAction(params):
       try container.encode(params.action, forKey: .json)
       try container.encode(params.cardId, forKey: .cardId)
@@ -229,13 +195,6 @@ extension UserInterfaceAction.Payload: CustomDebugStringConvertible {
       "Menu: \(value)"
     case let .divAction(params):
       "DivAction: \(params.action)"
-    case let .composite(lhs, rhs):
-      """
-      Composite [
-      \(lhs.debugDescription.indented())
-      \(rhs.debugDescription.indented())
-      ]
-      """
     }
   }
 }
@@ -273,14 +232,6 @@ extension UserInterfaceAction.Payload {
       return value
     case let .divAction(params):
       return params.source == .visibility ? nil : params.url
-    case let .composite(lhs, rhs):
-      let lhsURL = lhs.url
-      let rhsURL = rhs.url
-      assert(
-        lhsURL == nil || rhsURL == nil,
-        "Multiple URLs in payload are not supported"
-      )
-      return lhsURL ?? rhsURL
     case .empty, .menu:
       return nil
     }
@@ -295,8 +246,6 @@ extension UserInterfaceAction.Payload {
         throw Error.notAnURL
       }
       return [url]
-    case let .composite(lPayload, rPayload):
-      return try lPayload.getComposedURLs() + rPayload.getComposedURLs()
     case .empty:
       return []
     case .menu:

@@ -205,7 +205,7 @@ extension DivView: ElementStateObserver {
 extension DivView: UIActionEventPerforming {
   public func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
     switch event.payload {
-    case .composite, .empty, .url:
+    case .empty, .url:
       break
     case let .menu(menu):
       nearestViewController?.showMenu(menu, actionPerformer: self)

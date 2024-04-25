@@ -64,14 +64,14 @@ extension [UIActionEvent] {
 }
 
 extension UIActionEvent {
-  public func removingURLPayload() -> UIActionEvent? {
+  fileprivate func removingURLPayload() -> UIActionEvent? {
     guard let uiAction = uiAction.removingURLPayload() else { return nil }
     return UIActionEvent(uiAction: uiAction, originalSender: originalSender)
   }
 }
 
 extension UserInterfaceAction {
-  public func removingURLPayload() -> UserInterfaceAction? {
+  fileprivate func removingURLPayload() -> UserInterfaceAction? {
     guard let payload = payload.removingURLPayload() else { return nil }
     return UserInterfaceAction(
       payload: payload,
@@ -82,20 +82,12 @@ extension UserInterfaceAction {
 }
 
 extension UserInterfaceAction.Payload {
-  public func removingURLPayload() -> UserInterfaceAction.Payload? {
+  fileprivate func removingURLPayload() -> UserInterfaceAction.Payload? {
     switch self {
     case .url:
       return nil
     case .divAction:
       return nil
-    case let .composite(lhs, rhs):
-      guard let leftPayload = lhs.removingURLPayload() else {
-        return rhs.removingURLPayload()
-      }
-      guard let rightPayload = rhs.removingURLPayload() else {
-        return leftPayload
-      }
-      return .composite(leftPayload, rightPayload)
     case .empty, .menu:
       return self
     }
