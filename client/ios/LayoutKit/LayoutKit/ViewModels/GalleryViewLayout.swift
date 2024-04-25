@@ -53,13 +53,15 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
 
     let page = blockPages[integralIndex]
     let fractionalIndex = pageIndex.truncatingRemainder(dividingBy: 1)
+    let inset = model.metrics.axialInsetMode
+      .insets(forSize: boundsSize.dimension(in: model.direction)).leading
     let maxOffset: CGFloat = switch model.direction {
     case .horizontal:
       max(0, contentSize.width - boundsSize.width)
     case .vertical:
       max(0, contentSize.height - boundsSize.height)
     }
-    return min(maxOffset, page.origin + page.size * fractionalIndex)
+    return min(maxOffset, page.origin - inset + page.size * fractionalIndex)
   }
 
   public func pageIndex(forContentOffset contentOffset: CGFloat) -> CGFloat {

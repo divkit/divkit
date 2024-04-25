@@ -242,7 +242,7 @@ final class GalleryViewLayoutTests: XCTestCase {
     let page = layout.blockPages[2]
     let offset = page.origin + page.size / 2
     let pageIndex = layout.pageIndex(forContentOffset: offset)
-    let foundOffset = layout.contentOffset(pageIndex: pageIndex)
+    let foundOffset = layout.contentOffset(pageIndex: pageIndex) + Blocks.gapSize
 
     XCTAssertEqual(offset, foundOffset, accuracy: accuracy)
   }
@@ -252,7 +252,7 @@ final class GalleryViewLayoutTests: XCTestCase {
     let page = layout.blockPages[2]
     let offset = page.origin + page.size / 2
     let pageIndex = layout.pageIndex(forContentOffset: offset)
-    let foundOffset = layout.contentOffset(pageIndex: pageIndex)
+    let foundOffset = layout.contentOffset(pageIndex: pageIndex) + Blocks.gapSize
 
     XCTAssertEqual(offset, foundOffset, accuracy: accuracy)
   }
