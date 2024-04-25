@@ -19,7 +19,7 @@ import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.internal.KAssert
 
-class ExoDivPlayer(
+internal class ExoDivPlayer(
     private val context: Context,
     private var src: List<DivVideoSource>,
     config: DivPlayerPlaybackConfig

@@ -12,10 +12,10 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.internal.KLog
-import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.File
 
 private const val VIDEO_CACHE_DIR = "divKit_video_cache"
 private const val TAG = "DivExoPlayerCacheManager"
@@ -24,7 +24,7 @@ private const val CACHE_SIZE = 90L * 1024 * 1024
 /**
  * This class will preload videos for ExoDivPlayer
  */
-class ExoPlayerVideoPreloader(private val context: Context): DivPlayerPreloader {
+public class ExoPlayerVideoPreloader(private val context: Context): DivPlayerPreloader {
     private val httpDataSourceFactory = DefaultHttpDataSource.Factory()
         .setAllowCrossProtocolRedirects(true)
     private var cacheDataSourceFactory = CacheDataSource.Factory()

@@ -17,7 +17,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.util.Util
 import com.yandex.div.internal.KAssert
 
-class ExoDivMediaSourceAbstractFactory(
+internal class ExoDivMediaSourceAbstractFactory(
     context: Context
 ) {
     private val mediaDataSourceFactory by lazy {

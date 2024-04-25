@@ -7,7 +7,7 @@ import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoSource
 
-class ExoDivPlayerFactory(
+public class ExoDivPlayerFactory(
     private val context: Context
 ) : DivPlayerFactory {
     override fun makePlayer(src: List<DivVideoSource>, config: DivPlayerPlaybackConfig): DivPlayer {
@@ -15,7 +15,4 @@ class ExoDivPlayerFactory(
     }
 
     override fun makePlayerView(context: Context): DivPlayerView = ExoDivPlayerView(context)
-
-    @Deprecated("Will be removed in future releases", ReplaceWith("makePlayerView(context: Context)"))
-    override fun makePlayerView(context: Context, additional: Map<String, Any>): DivPlayerView = makePlayerView(context)
 }

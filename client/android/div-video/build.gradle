@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
@@ -13,4 +15,10 @@ dependencies {
 
     implementation libs.kotlin.corountines.core
     implementation project(path: ':logging')
+}
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add('-Xexplicit-api=strict')
+    }
 }

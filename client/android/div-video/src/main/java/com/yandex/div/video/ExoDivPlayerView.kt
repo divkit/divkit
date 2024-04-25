@@ -13,24 +13,22 @@ import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.internal.KLog
 import com.yandex.div2.DivVideoScale
 
-open class ExoDivPlayerView(context: Context) : DivPlayerView(context) {
-    private var _playerView = setupPlayerView { StyledPlayerView(context, getAttributeSet()) }
-    protected open val playerView
-        get() = _playerView
+internal class ExoDivPlayerView(context: Context) : DivPlayerView(context) {
+    private var playerView = setupPlayerView { StyledPlayerView(context, getAttributeSet()) }
 
     private var attachedPlayer: DivPlayer? = null
     private var didFallbackToSurfaceView: Boolean = false
 
     override fun attach(player: DivPlayer) {
         detach()
-        _playerView.player = (player as ExoDivPlayer).player
+        playerView.player = (player as ExoDivPlayer).player
         attachedPlayer = player
         player.setTargetResolution(this.width, this.height)
     }
 
     override fun detach() {
-        _playerView.player?.release()
-        _playerView.player = null
+        playerView.player?.release()
+        playerView.player = null
         attachedPlayer = null
     }
 
@@ -44,7 +42,7 @@ open class ExoDivPlayerView(context: Context) : DivPlayerView(context) {
             }
         }
 
-        _playerView.resizeMode = when (videoScale) {
+        playerView.resizeMode = when (videoScale) {
             DivVideoScale.NO_SCALE -> AspectRatioFrameLayout.RESIZE_MODE_FIT // there is no "no scale" type
             DivVideoScale.FIT -> AspectRatioFrameLayout.RESIZE_MODE_FIT
             DivVideoScale.FILL -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
@@ -63,15 +61,15 @@ open class ExoDivPlayerView(context: Context) : DivPlayerView(context) {
             }
 
             val player = getAttachedPlayer() as? ExoDivPlayer ?: return
-            _playerView.player = null
-            _playerView = setupPlayerView { StyledPlayerView(context) }
-            _playerView.player = player.player
+            playerView.player = null
+            playerView = setupPlayerView { StyledPlayerView(context) }
+            playerView.player = player.player
         }
 
         super.onAttachedToWindow()
     }
 
-    protected inline fun setupPlayerView(viewCreator: () -> StyledPlayerView): StyledPlayerView {
+    private inline fun setupPlayerView(viewCreator: () -> StyledPlayerView): StyledPlayerView {
         return viewCreator().apply {
             useController = false
             setShutterBackgroundColor(Color.TRANSPARENT)
@@ -120,16 +118,9 @@ open class ExoDivPlayerView(context: Context) : DivPlayerView(context) {
         return attrs
     }
 
-    @Deprecated("Will be removed in future releases")
-    protected open fun checkScale(videoScale: DivVideoScale) = Unit
-
-    @Deprecated("Will be removed in future releases")
-    override fun isCompatibleWithNewParams(scale: DivVideoScale): Boolean = true
-
     companion object {
         private const val TYPE_STYLED_PLAYER_VIEW = "com.google.android.exoplayer2.ui.StyledPlayerView"
-        @JvmStatic
-        protected val TAG = "ExoPlayerView"
+        private const val TAG = "ExoPlayerView"
 
         private val lock = Any()
         private var definitelyNoHardwareAcceleration: Boolean = false
