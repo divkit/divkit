@@ -1,7 +1,7 @@
 package tech.divkit.sample
 
 import android.content.Context
-import com.yandex.div.core.utils.IOUtils
+import com.yandex.div.internal.util.IOUtils
 import org.json.JSONObject
 
 class AssetReader(private val context: Context) {
