@@ -262,7 +262,7 @@ class Input internal constructor(
         /**
          * Animation starting triggers. Default value: `[state_change, visibility_change]`.
          */
-        val transitionTriggers: Property<List<TransitionTrigger>>?,
+        val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
          * Validator that checks that the field value meets the specified conditions.
          */
@@ -476,7 +476,7 @@ fun DivScope.input(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -624,7 +624,7 @@ fun DivScope.inputProps(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -770,7 +770,7 @@ fun TemplateScope.inputRefs(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -916,7 +916,7 @@ fun Input.override(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1064,7 +1064,7 @@ fun Input.defer(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1312,7 +1312,7 @@ fun Component<Input>.override(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1461,7 +1461,7 @@ fun Component<Input>.defer(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,

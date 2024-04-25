@@ -43,7 +43,7 @@ class WithStringArrayProperty internal constructor(
     )
 
     class Properties internal constructor(
-        val array: Property<List<String>>?,
+        val array: Property<List<ArrayElement<String>>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -57,7 +57,7 @@ class WithStringArrayProperty internal constructor(
 @Generated
 fun DivScope.withStringArrayProperty(
     `use named arguments`: Guard = Guard.instance,
-    array: List<String>? = null,
+    array: List<ArrayElement<String>>? = null,
 ): WithStringArrayProperty = WithStringArrayProperty(
     WithStringArrayProperty.Properties(
         array = valueOrNull(array),
@@ -67,7 +67,7 @@ fun DivScope.withStringArrayProperty(
 @Generated
 fun DivScope.withStringArrayPropertyProps(
     `use named arguments`: Guard = Guard.instance,
-    array: List<String>? = null,
+    array: List<ArrayElement<String>>? = null,
 ) = WithStringArrayProperty.Properties(
     array = valueOrNull(array),
 )
@@ -75,7 +75,7 @@ fun DivScope.withStringArrayPropertyProps(
 @Generated
 fun TemplateScope.withStringArrayPropertyRefs(
     `use named arguments`: Guard = Guard.instance,
-    array: ReferenceProperty<List<String>>? = null,
+    array: ReferenceProperty<List<ArrayElement<String>>>? = null,
 ) = WithStringArrayProperty.Properties(
     array = array,
 )
@@ -83,7 +83,7 @@ fun TemplateScope.withStringArrayPropertyRefs(
 @Generated
 fun WithStringArrayProperty.override(
     `use named arguments`: Guard = Guard.instance,
-    array: List<String>? = null,
+    array: List<ArrayElement<String>>? = null,
 ): WithStringArrayProperty = WithStringArrayProperty(
     WithStringArrayProperty.Properties(
         array = valueOrNull(array) ?: properties.array,
@@ -93,7 +93,7 @@ fun WithStringArrayProperty.override(
 @Generated
 fun WithStringArrayProperty.defer(
     `use named arguments`: Guard = Guard.instance,
-    array: ReferenceProperty<List<String>>? = null,
+    array: ReferenceProperty<List<ArrayElement<String>>>? = null,
 ): WithStringArrayProperty = WithStringArrayProperty(
     WithStringArrayProperty.Properties(
         array = array ?: properties.array,
@@ -103,7 +103,7 @@ fun WithStringArrayProperty.defer(
 @Generated
 fun Component<WithStringArrayProperty>.override(
     `use named arguments`: Guard = Guard.instance,
-    array: List<String>? = null,
+    array: List<ArrayElement<String>>? = null,
 ): Component<WithStringArrayProperty> = Component(
     template = template,
     properties = WithStringArrayProperty.Properties(
@@ -114,7 +114,7 @@ fun Component<WithStringArrayProperty>.override(
 @Generated
 fun Component<WithStringArrayProperty>.defer(
     `use named arguments`: Guard = Guard.instance,
-    array: ReferenceProperty<List<String>>? = null,
+    array: ReferenceProperty<List<ArrayElement<String>>>? = null,
 ): Component<WithStringArrayProperty> = Component(
     template = template,
     properties = WithStringArrayProperty.Properties(

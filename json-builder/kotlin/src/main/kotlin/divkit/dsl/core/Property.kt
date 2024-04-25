@@ -36,11 +36,18 @@ internal fun MutableMap<String, Any>.tryPutProperty(name: String, property: Prop
             is LiteralProperty -> if (property.value is Boolean) {
                 put(name, if (property.value) 1 else 0)
             } else {
-                put(name, property.value)
+                put(name, resolveValue(property.value))
             }
 
             is ReferenceProperty -> put("$$name", property.name)
             is ExpressionProperty -> put(name, property.expression)
         }
     }
+}
+
+internal fun resolveValue(value: Any) = if (value is List<*>) {
+    @Suppress("UNCHECKED_CAST")
+    value.map { (it as? ArrayElement<out Any>)?.serialize() ?: it }
+} else {
+    value
 }

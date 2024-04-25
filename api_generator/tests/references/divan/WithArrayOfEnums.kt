@@ -43,7 +43,7 @@ class WithArrayOfEnums internal constructor(
     )
 
     class Properties internal constructor(
-        val items: Property<List<Item>>?,
+        val items: Property<List<ArrayElement<Item>>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -63,7 +63,7 @@ class WithArrayOfEnums internal constructor(
 @Generated
 fun DivScope.withArrayOfEnums(
     `use named arguments`: Guard = Guard.instance,
-    items: List<WithArrayOfEnums.Item>? = null,
+    items: List<ArrayElement<WithArrayOfEnums.Item>>? = null,
 ): WithArrayOfEnums = WithArrayOfEnums(
     WithArrayOfEnums.Properties(
         items = valueOrNull(items),
@@ -73,7 +73,7 @@ fun DivScope.withArrayOfEnums(
 @Generated
 fun DivScope.withArrayOfEnumsProps(
     `use named arguments`: Guard = Guard.instance,
-    items: List<WithArrayOfEnums.Item>? = null,
+    items: List<ArrayElement<WithArrayOfEnums.Item>>? = null,
 ) = WithArrayOfEnums.Properties(
     items = valueOrNull(items),
 )
@@ -81,7 +81,7 @@ fun DivScope.withArrayOfEnumsProps(
 @Generated
 fun TemplateScope.withArrayOfEnumsRefs(
     `use named arguments`: Guard = Guard.instance,
-    items: ReferenceProperty<List<WithArrayOfEnums.Item>>? = null,
+    items: ReferenceProperty<List<ArrayElement<WithArrayOfEnums.Item>>>? = null,
 ) = WithArrayOfEnums.Properties(
     items = items,
 )
@@ -89,7 +89,7 @@ fun TemplateScope.withArrayOfEnumsRefs(
 @Generated
 fun WithArrayOfEnums.override(
     `use named arguments`: Guard = Guard.instance,
-    items: List<WithArrayOfEnums.Item>? = null,
+    items: List<ArrayElement<WithArrayOfEnums.Item>>? = null,
 ): WithArrayOfEnums = WithArrayOfEnums(
     WithArrayOfEnums.Properties(
         items = valueOrNull(items) ?: properties.items,
@@ -99,7 +99,7 @@ fun WithArrayOfEnums.override(
 @Generated
 fun WithArrayOfEnums.defer(
     `use named arguments`: Guard = Guard.instance,
-    items: ReferenceProperty<List<WithArrayOfEnums.Item>>? = null,
+    items: ReferenceProperty<List<ArrayElement<WithArrayOfEnums.Item>>>? = null,
 ): WithArrayOfEnums = WithArrayOfEnums(
     WithArrayOfEnums.Properties(
         items = items ?: properties.items,
@@ -109,7 +109,7 @@ fun WithArrayOfEnums.defer(
 @Generated
 fun Component<WithArrayOfEnums>.override(
     `use named arguments`: Guard = Guard.instance,
-    items: List<WithArrayOfEnums.Item>? = null,
+    items: List<ArrayElement<WithArrayOfEnums.Item>>? = null,
 ): Component<WithArrayOfEnums> = Component(
     template = template,
     properties = WithArrayOfEnums.Properties(
@@ -120,7 +120,7 @@ fun Component<WithArrayOfEnums>.override(
 @Generated
 fun Component<WithArrayOfEnums>.defer(
     `use named arguments`: Guard = Guard.instance,
-    items: ReferenceProperty<List<WithArrayOfEnums.Item>>? = null,
+    items: ReferenceProperty<List<ArrayElement<WithArrayOfEnums.Item>>>? = null,
 ): Component<WithArrayOfEnums> = Component(
     template = template,
     properties = WithArrayOfEnums.Properties(

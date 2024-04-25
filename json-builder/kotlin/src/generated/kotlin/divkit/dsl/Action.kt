@@ -353,6 +353,7 @@ fun Action.defer(
 
 /**
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
+ * @param logId Logging ID.
  * @param logUrl URL for logging.
  * @param referer Referer URL for logging.
  * @param target The tab in which the URL must be opened.
@@ -362,6 +363,7 @@ fun Action.defer(
 fun Action.evaluate(
     `use named arguments`: Guard = Guard.instance,
     isEnabled: ExpressionProperty<Boolean>? = null,
+    logId: ExpressionProperty<String>? = null,
     logUrl: ExpressionProperty<Url>? = null,
     referer: ExpressionProperty<Url>? = null,
     target: ExpressionProperty<Action.Target>? = null,
@@ -370,7 +372,7 @@ fun Action.evaluate(
     Action.Properties(
         downloadCallbacks = properties.downloadCallbacks,
         isEnabled = isEnabled ?: properties.isEnabled,
-        logId = properties.logId,
+        logId = logId ?: properties.logId,
         logUrl = logUrl ?: properties.logUrl,
         menuItems = properties.menuItems,
         payload = properties.payload,

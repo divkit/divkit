@@ -209,7 +209,7 @@ class Select internal constructor(
         /**
          * Animation starting triggers. Default value: `[state_change, visibility_change]`.
          */
-        val transitionTriggers: Property<List<TransitionTrigger>>?,
+        val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
          * Name of the variable that stores the selected option value (`value`).
          */
@@ -393,7 +393,7 @@ fun DivScope.select(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -513,7 +513,7 @@ fun DivScope.selectProps(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -631,7 +631,7 @@ fun TemplateScope.selectRefs(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -749,7 +749,7 @@ fun Select.override(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -869,7 +869,7 @@ fun Select.defer(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1066,7 +1066,7 @@ fun Component<Select>.override(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1187,7 +1187,7 @@ fun Component<Select>.defer(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,

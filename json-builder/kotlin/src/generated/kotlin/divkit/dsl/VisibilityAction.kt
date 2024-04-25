@@ -301,6 +301,7 @@ fun VisibilityAction.defer(
 
 /**
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
+ * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
@@ -311,6 +312,7 @@ fun VisibilityAction.defer(
 fun VisibilityAction.evaluate(
     `use named arguments`: Guard = Guard.instance,
     isEnabled: ExpressionProperty<Boolean>? = null,
+    logId: ExpressionProperty<String>? = null,
     logLimit: ExpressionProperty<Int>? = null,
     referer: ExpressionProperty<Url>? = null,
     url: ExpressionProperty<Url>? = null,
@@ -320,7 +322,7 @@ fun VisibilityAction.evaluate(
     VisibilityAction.Properties(
         downloadCallbacks = properties.downloadCallbacks,
         isEnabled = isEnabled ?: properties.isEnabled,
-        logId = properties.logId,
+        logId = logId ?: properties.logId,
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,
         referer = referer ?: properties.referer,

@@ -296,7 +296,7 @@ class Text internal constructor(
         /**
          * Animation starting triggers. Default value: `[state_change, visibility_change]`.
          */
-        val transitionTriggers: Property<List<TransitionTrigger>>?,
+        val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
          * Text cropping method. Use `ellipsis` instead.
          * Default value: `end`.
@@ -762,7 +762,7 @@ fun DivScope.text(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
     visibility: Visibility? = null,
@@ -933,7 +933,7 @@ fun DivScope.textProps(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
     visibility: Visibility? = null,
@@ -1102,7 +1102,7 @@ fun TemplateScope.textRefs(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
@@ -1271,7 +1271,7 @@ fun Text.override(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
     visibility: Visibility? = null,
@@ -1442,7 +1442,7 @@ fun Text.defer(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
@@ -1724,7 +1724,7 @@ fun Component<Text>.override(
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
+    transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
     visibility: Visibility? = null,
@@ -1896,7 +1896,7 @@ fun Component<Text>.defer(
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
     visibility: ReferenceProperty<Visibility>? = null,

@@ -43,7 +43,7 @@ class WithArrayOfExpressions internal constructor(
     )
 
     class Properties internal constructor(
-        val items: Property<List<String>>?,
+        val items: Property<List<ArrayElement<String>>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -57,7 +57,7 @@ class WithArrayOfExpressions internal constructor(
 @Generated
 fun DivScope.withArrayOfExpressions(
     `use named arguments`: Guard = Guard.instance,
-    items: List<String>? = null,
+    items: List<ArrayElement<String>>? = null,
 ): WithArrayOfExpressions = WithArrayOfExpressions(
     WithArrayOfExpressions.Properties(
         items = valueOrNull(items),
@@ -67,7 +67,7 @@ fun DivScope.withArrayOfExpressions(
 @Generated
 fun DivScope.withArrayOfExpressionsProps(
     `use named arguments`: Guard = Guard.instance,
-    items: List<String>? = null,
+    items: List<ArrayElement<String>>? = null,
 ) = WithArrayOfExpressions.Properties(
     items = valueOrNull(items),
 )
@@ -75,7 +75,7 @@ fun DivScope.withArrayOfExpressionsProps(
 @Generated
 fun TemplateScope.withArrayOfExpressionsRefs(
     `use named arguments`: Guard = Guard.instance,
-    items: ReferenceProperty<List<String>>? = null,
+    items: ReferenceProperty<List<ArrayElement<String>>>? = null,
 ) = WithArrayOfExpressions.Properties(
     items = items,
 )
@@ -83,7 +83,7 @@ fun TemplateScope.withArrayOfExpressionsRefs(
 @Generated
 fun WithArrayOfExpressions.override(
     `use named arguments`: Guard = Guard.instance,
-    items: List<String>? = null,
+    items: List<ArrayElement<String>>? = null,
 ): WithArrayOfExpressions = WithArrayOfExpressions(
     WithArrayOfExpressions.Properties(
         items = valueOrNull(items) ?: properties.items,
@@ -93,7 +93,7 @@ fun WithArrayOfExpressions.override(
 @Generated
 fun WithArrayOfExpressions.defer(
     `use named arguments`: Guard = Guard.instance,
-    items: ReferenceProperty<List<String>>? = null,
+    items: ReferenceProperty<List<ArrayElement<String>>>? = null,
 ): WithArrayOfExpressions = WithArrayOfExpressions(
     WithArrayOfExpressions.Properties(
         items = items ?: properties.items,
@@ -103,7 +103,7 @@ fun WithArrayOfExpressions.defer(
 @Generated
 fun Component<WithArrayOfExpressions>.override(
     `use named arguments`: Guard = Guard.instance,
-    items: List<String>? = null,
+    items: List<ArrayElement<String>>? = null,
 ): Component<WithArrayOfExpressions> = Component(
     template = template,
     properties = WithArrayOfExpressions.Properties(
@@ -114,7 +114,7 @@ fun Component<WithArrayOfExpressions>.override(
 @Generated
 fun Component<WithArrayOfExpressions>.defer(
     `use named arguments`: Guard = Guard.instance,
-    items: ReferenceProperty<List<String>>? = null,
+    items: ReferenceProperty<List<ArrayElement<String>>>? = null,
 ): Component<WithArrayOfExpressions> = Component(
     template = template,
     properties = WithArrayOfExpressions.Properties(

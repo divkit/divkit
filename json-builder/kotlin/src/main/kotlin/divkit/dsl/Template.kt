@@ -66,7 +66,7 @@ private fun <T : Div> DivScope.internalRenderDiv(
     for (resolution in resolutions) {
         when (resolution) {
             is FinalResolution -> {
-                properties[resolution.reference.name] = resolution.value
+                properties[resolution.reference.name] = resolveValue(resolution.value)
             }
 
             is ProxyResolution -> {
@@ -90,7 +90,7 @@ private fun <T : Div> DivScope.internalRenderComponent(
     for (resolution in resolutions) {
         when (resolution) {
             is FinalResolution -> {
-                properties[resolution.reference.name] = resolution.value
+                properties[resolution.reference.name] = resolveValue(resolution.value)
             }
 
             is ProxyResolution -> {

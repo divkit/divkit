@@ -302,6 +302,7 @@ fun DisappearAction.defer(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
+ * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
@@ -312,6 +313,7 @@ fun DisappearAction.evaluate(
     `use named arguments`: Guard = Guard.instance,
     disappearDuration: ExpressionProperty<Int>? = null,
     isEnabled: ExpressionProperty<Boolean>? = null,
+    logId: ExpressionProperty<String>? = null,
     logLimit: ExpressionProperty<Int>? = null,
     referer: ExpressionProperty<Url>? = null,
     url: ExpressionProperty<Url>? = null,
@@ -321,7 +323,7 @@ fun DisappearAction.evaluate(
         disappearDuration = disappearDuration ?: properties.disappearDuration,
         downloadCallbacks = properties.downloadCallbacks,
         isEnabled = isEnabled ?: properties.isEnabled,
-        logId = properties.logId,
+        logId = logId ?: properties.logId,
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,
         referer = referer ?: properties.referer,

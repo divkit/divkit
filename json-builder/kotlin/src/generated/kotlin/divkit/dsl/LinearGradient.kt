@@ -50,7 +50,7 @@ class LinearGradient internal constructor(
         /**
          * Colors. Gradient points are located at an equal distance from each other.
          */
-        val colors: Property<List<Color>>?,
+        val colors: Property<List<ArrayElement<Color>>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -70,7 +70,7 @@ class LinearGradient internal constructor(
 fun DivScope.linearGradient(
     `use named arguments`: Guard = Guard.instance,
     angle: Int? = null,
-    colors: List<Color>? = null,
+    colors: List<ArrayElement<Color>>? = null,
 ): LinearGradient = LinearGradient(
     LinearGradient.Properties(
         angle = valueOrNull(angle),
@@ -86,7 +86,7 @@ fun DivScope.linearGradient(
 fun DivScope.linearGradientProps(
     `use named arguments`: Guard = Guard.instance,
     angle: Int? = null,
-    colors: List<Color>? = null,
+    colors: List<ArrayElement<Color>>? = null,
 ) = LinearGradient.Properties(
     angle = valueOrNull(angle),
     colors = valueOrNull(colors),
@@ -100,7 +100,7 @@ fun DivScope.linearGradientProps(
 fun TemplateScope.linearGradientRefs(
     `use named arguments`: Guard = Guard.instance,
     angle: ReferenceProperty<Int>? = null,
-    colors: ReferenceProperty<List<Color>>? = null,
+    colors: ReferenceProperty<List<ArrayElement<Color>>>? = null,
 ) = LinearGradient.Properties(
     angle = angle,
     colors = colors,
@@ -114,7 +114,7 @@ fun TemplateScope.linearGradientRefs(
 fun LinearGradient.override(
     `use named arguments`: Guard = Guard.instance,
     angle: Int? = null,
-    colors: List<Color>? = null,
+    colors: List<ArrayElement<Color>>? = null,
 ): LinearGradient = LinearGradient(
     LinearGradient.Properties(
         angle = valueOrNull(angle) ?: properties.angle,
@@ -130,7 +130,7 @@ fun LinearGradient.override(
 fun LinearGradient.defer(
     `use named arguments`: Guard = Guard.instance,
     angle: ReferenceProperty<Int>? = null,
-    colors: ReferenceProperty<List<Color>>? = null,
+    colors: ReferenceProperty<List<ArrayElement<Color>>>? = null,
 ): LinearGradient = LinearGradient(
     LinearGradient.Properties(
         angle = angle ?: properties.angle,

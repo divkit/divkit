@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 from typing import List, cast, Dict
 
+from ... import utils
 from ...schema.modeling.entities import (
     Entity,
     EntityEnumeration,
@@ -22,7 +24,6 @@ from ...schema.modeling.entities import (
     RawArray,
     DivanGeneratorProperties,
 )
-from ... import utils
 from ...schema.modeling.text import Text
 
 GUARD_INSTANCE_PARAM = '`use named arguments`: Guard = Guard.instance,'
@@ -214,7 +215,7 @@ class DivanEntity(Entity):
             )))
         return result
 
-    def params_comment_block(self,  exclude_params: List[str] = None) -> Text:
+    def params_comment_block(self, exclude_params: List[str] = None) -> Text:
         if exclude_params is None:
             exclude_params = []
         params = [
@@ -632,8 +633,11 @@ class DivanPropertyType(PropertyType):
         elif isinstance(self, RawArray):
             return 'List<Any>'
         elif isinstance(self, Array):
-            element_type = cast(DivanPropertyType, self.property_type).declaration(prefixed, remove_prefix)
-            return f'List<{element_type}>'
+            element_type = cast(DivanPropertyType, self.property_type)
+            element_declaration = element_type.declaration(prefixed, remove_prefix)
+            result_element_declaration = (element_declaration if not element_type.is_primitive
+                                          else f'ArrayElement<{element_declaration}>')
+            return f'List<{result_element_declaration}>'
         elif isinstance(self, Object):
             if self.name.startswith('$predefined_'):
                 return self.name.replace('$predefined_', '')

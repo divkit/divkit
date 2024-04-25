@@ -57,7 +57,7 @@ class RadialGradient internal constructor(
         /**
          * Colors. Gradient points are located at an equal distance from each other.
          */
-        val colors: Property<List<Color>>?,
+        val colors: Property<List<ArrayElement<Color>>>?,
         /**
          * Radius of the gradient transition.
          * Default value: `{"type": "relative", "value": "farthest_corner" }`.
@@ -87,7 +87,7 @@ fun DivScope.radialGradient(
     `use named arguments`: Guard = Guard.instance,
     centerX: RadialGradientCenter? = null,
     centerY: RadialGradientCenter? = null,
-    colors: List<Color>? = null,
+    colors: List<ArrayElement<Color>>? = null,
     radius: RadialGradientRadius? = null,
 ): RadialGradient = RadialGradient(
     RadialGradient.Properties(
@@ -109,7 +109,7 @@ fun DivScope.radialGradientProps(
     `use named arguments`: Guard = Guard.instance,
     centerX: RadialGradientCenter? = null,
     centerY: RadialGradientCenter? = null,
-    colors: List<Color>? = null,
+    colors: List<ArrayElement<Color>>? = null,
     radius: RadialGradientRadius? = null,
 ) = RadialGradient.Properties(
     centerX = valueOrNull(centerX),
@@ -129,7 +129,7 @@ fun TemplateScope.radialGradientRefs(
     `use named arguments`: Guard = Guard.instance,
     centerX: ReferenceProperty<RadialGradientCenter>? = null,
     centerY: ReferenceProperty<RadialGradientCenter>? = null,
-    colors: ReferenceProperty<List<Color>>? = null,
+    colors: ReferenceProperty<List<ArrayElement<Color>>>? = null,
     radius: ReferenceProperty<RadialGradientRadius>? = null,
 ) = RadialGradient.Properties(
     centerX = centerX,
@@ -149,7 +149,7 @@ fun RadialGradient.override(
     `use named arguments`: Guard = Guard.instance,
     centerX: RadialGradientCenter? = null,
     centerY: RadialGradientCenter? = null,
-    colors: List<Color>? = null,
+    colors: List<ArrayElement<Color>>? = null,
     radius: RadialGradientRadius? = null,
 ): RadialGradient = RadialGradient(
     RadialGradient.Properties(
@@ -171,7 +171,7 @@ fun RadialGradient.defer(
     `use named arguments`: Guard = Guard.instance,
     centerX: ReferenceProperty<RadialGradientCenter>? = null,
     centerY: ReferenceProperty<RadialGradientCenter>? = null,
-    colors: ReferenceProperty<List<Color>>? = null,
+    colors: ReferenceProperty<List<ArrayElement<Color>>>? = null,
     radius: ReferenceProperty<RadialGradientRadius>? = null,
 ): RadialGradient = RadialGradient(
     RadialGradient.Properties(
