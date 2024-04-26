@@ -910,8 +910,7 @@ class Div2View private constructor(
     }
 
     override fun handleUri(uri: Uri) {
-        actionHandler?.let {
-            it.handleUri(uri, this)
+        if (actionHandler?.handleUri(uri, this) == true) {
             return
         }
 
