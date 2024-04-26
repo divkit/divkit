@@ -7,11 +7,9 @@ import LayoutKit
 
 public final class ShimmerImagePreviewExtension: DivExtensionHandler {
   public let id: String = extensionID
-  private let viewFactory: (ShimmerStyle) -> ViewProvider
+  private let effectBeginTime = CACurrentMediaTime()
 
-  public init(viewFactory: ((ShimmerStyle) -> ViewProvider)? = nil) {
-    self.viewFactory = viewFactory ?? DefaultShimmerViewFactory().makeViewProvider(style:)
-  }
+  public init() {}
 
   public func applyBeforeBaseProperties(
     to block: Block,
@@ -26,12 +24,14 @@ public final class ShimmerImagePreviewExtension: DivExtensionHandler {
     }
 
     let expressionResolver = context.expressionResolver
-    let placeholderView = viewFactory(
-      div.resolveShimmerStyle(expressionResolver) ?? .default
+    let shimmerViewProvider = ShimmerViewProvider(
+      style: div.resolveShimmerStyle(expressionResolver) ?? .default,
+      effectBeginTime: effectBeginTime,
+      path: context.parentPath
     )
     let imageHolder = context.imageHolderFactory.make(
       div.resolveImageUrl(expressionResolver),
-      .view(placeholderView)
+      .view(shimmerViewProvider)
     )
     return block.makeCopy(with: imageHolder)
   }
