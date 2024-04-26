@@ -78,6 +78,12 @@ private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleB
 }
 
 private class AnimatableImageView: UIImageView {
+  override class var layerClass: AnyClass { AnimatableImageLayer.self }
+
+  var animatableImageLayer: AnimatableImageLayer? {
+    return layer as? AnimatableImageLayer
+  }
+
   public override init(frame: CGRect) {
     super.init(frame: frame)
     layer.masksToBounds = true
@@ -98,8 +104,12 @@ private class AnimatableImageView: UIImageView {
   }
 
   override var image: UIImage? {
+    willSet {
+      animatableImageLayer?.updateAllowed = true
+    }
     didSet {
       updateGravity()
+      animatableImageLayer?.updateAllowed = false
     }
   }
 
@@ -131,6 +141,16 @@ private class AnimatableImageView: UIImageView {
       layer.frame = layout.frame
       layer.contentsRect = layout.contentRect
       layer.contentsCenter = layout.contentCenter
+    }
+  }
+}
+
+private class AnimatableImageLayer: CALayer {
+  var updateAllowed = false
+
+  override func removeAllAnimations() {
+    if updateAllowed {
+      super.removeAllAnimations()
     }
   }
 }
