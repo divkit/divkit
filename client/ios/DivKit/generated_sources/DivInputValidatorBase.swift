@@ -14,7 +14,7 @@ public final class DivInputValidatorBase {
   }
 
   public func resolveLabelId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(labelId, initializer: { $0 })
+    resolver.resolveString(labelId)
   }
 
   init(

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Optional, cast, Tuple
+from typing import List, Optional, cast
 from enum import Enum
 from .utils import fixing_keywords
 from ..base import declaration_comment
@@ -443,44 +443,36 @@ class SwiftProperty(Property):
         result = Text(f'{self.expression_resolving_method_declaration(access_level)} {{')
         if isinstance(self.property_type, Array):
             item_type = cast(SwiftPropertyType, self.property_type.property_type)
-            method, initializer = self.expression_resolving_method_parts(item_type)
-            map_text = f'resolver.{method}($0{initializer})'
+            method = self.expression_resolving_method_name(item_type)
+            map_text = f'resolver.{method}($0)'
             result += Text(f'{self.declaration_name}.map {{ {map_text} }}.compactMap {{ $0 }}').indented()
         else:
             prop_type = cast(SwiftPropertyType, self.property_type)
-            method, initializer = self.expression_resolving_method_parts(prop_type)
+            method = self.expression_resolving_method_name(prop_type)
             default_value = self.expression_resolving_method_default_value(prop_type)
-            expression_str = f'{self.declaration_name}{initializer}'
+            expression_str = f'{self.declaration_name}'
             result += Text(f'resolver.{method}({expression_str}){default_value}').indented()
         result += '}'
         result += EMPTY
         return result
 
-    def expression_resolving_method_parts(self, property_type: SwiftPropertyType) -> Tuple[str, str]:
-        initializer_prefix = ', initializer: '
+    def expression_resolving_method_name(self, property_type: SwiftPropertyType) -> str:
         if isinstance(property_type, Color):
-            method = 'resolveColor'
-            initializer = ''
+            return 'resolveColor'
         elif isinstance(property_type, String):
-            method = 'resolveString'
-            initializer = f'{initializer_prefix}{{ $0 }}'
+            return 'resolveString'
         elif isinstance(property_type, Url):
-            method = 'resolveUrl'
-            initializer = ''
+            return 'resolveUrl'
         elif isinstance(property_type, (Int, Double, Bool, BoolInt)):
-            method = 'resolveNumeric'
-            initializer = ''
+            return 'resolveNumeric'
         elif isinstance(property_type, Object) and isinstance(property_type.object, StringEnumeration):
-            method = 'resolveEnum'
-            initializer = ''
+            return 'resolveEnum'
         elif isinstance(property_type, RawArray):
-            method = 'resolveArray'
-            initializer = ''
+            return 'resolveArray'
         elif isinstance(property_type, Array):
-            return self.expression_resolving_method_parts(cast(SwiftPropertyType, property_type.property_type))
+            return self.expression_resolving_method_name(cast(SwiftPropertyType, property_type.property_type))
         else:
             raise NotImplementedError
-        return method, initializer
 
     @property
     def type_declaration(self) -> str:

@@ -11,7 +11,7 @@ public final class DivTabs: DivBase {
     public let titleClickAction: DivAction?
 
     public func resolveTitle(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(title, initializer: { $0 })
+      resolver.resolveString(title)
     }
 
     init(
@@ -77,7 +77,7 @@ public final class DivTabs: DivBase {
     }
 
     public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(fontFamily, initializer: { $0 })
+      resolver.resolveString(fontFamily)
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {

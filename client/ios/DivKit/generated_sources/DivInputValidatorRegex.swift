@@ -16,11 +16,11 @@ public final class DivInputValidatorRegex {
   }
 
   public func resolveLabelId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(labelId, initializer: { $0 })
+    resolver.resolveString(labelId)
   }
 
   public func resolvePattern(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(pattern, initializer: { $0 })
+    resolver.resolveString(pattern)
   }
 
   init(

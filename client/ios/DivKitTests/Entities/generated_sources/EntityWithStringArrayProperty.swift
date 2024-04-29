@@ -11,7 +11,7 @@ public final class EntityWithStringArrayProperty {
   public let array: [Expression<String>] // at least 1 elements
 
   public func resolveArray(_ resolver: ExpressionResolver) -> [String]? {
-    array.map { resolver.resolveString($0, initializer: { $0 }) }.compactMap { $0 }
+    array.map { resolver.resolveString($0) }.compactMap { $0 }
   }
 
   static let arrayValidator: AnyArrayValueValidator<Expression<String>> =

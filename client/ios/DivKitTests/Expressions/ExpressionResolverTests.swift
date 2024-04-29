@@ -3,9 +3,11 @@ import XCTest
 @testable import DivKit
 
 import CommonCorePublic
+import Serialization
 
 final class ExpressionResolverTests: XCTestCase {
   private var isErrorExpected = false
+  private var error: String? = nil
 
   private lazy var expressionResolver = ExpressionResolver(
     variables: [
@@ -21,6 +23,7 @@ final class ExpressionResolverTests: XCTestCase {
     ],
     persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
+      error = $0.message
       if !self.isErrorExpected {
         XCTFail($0.message)
       }
@@ -226,6 +229,75 @@ final class ExpressionResolverTests: XCTestCase {
     )
 
     XCTAssertEqual(value, "fallback value")
+  }
+
+  func test_resolveString_WithValidatorValid() {
+    XCTAssertEqual(
+      expressionResolver.resolveString(
+        .link(ExpressionLink(
+          rawValue: "@{string_var}",
+          validator: AnyValueValidator<String> { _ in true }
+        )!)
+      ),
+      "string value"
+    )
+  }
+
+  func test_resolveString_WithValidatorInvalid() {
+    isErrorExpected = true
+
+    XCTAssertNil(
+      expressionResolver.resolveString(
+        .link(ExpressionLink(
+          rawValue: "@{string_var}",
+          validator: AnyValueValidator<String> { _ in false }
+        )!)
+      )
+    )
+
+    XCTAssertEqual(error, "Failed to validate value: string value")
+  }
+
+  func test_resolveNumeric_WithValidatorValid() {
+    XCTAssertEqual(
+      expressionResolver.resolveNumeric(
+        .link(ExpressionLink(
+          rawValue: "@{number_var}",
+          validator: AnyValueValidator<Double> { _ in true }
+        )!)
+      ),
+      12.9
+    )
+  }
+
+  func test_resolveNumeric_WithValidatorInvalid() {
+    isErrorExpected = true
+
+    XCTAssertNil(
+      expressionResolver.resolveNumeric(
+        .link(ExpressionLink(
+          rawValue: "@{number_var}",
+          validator: AnyValueValidator<Double> { _ in false }
+        )!)
+      )
+    )
+
+    XCTAssertEqual(error, "Failed to validate value: 12.9")
+  }
+
+  func test_resolveNumeric_WithNestedExpressionAndValidatorInvalid() {
+    isErrorExpected = true
+
+    XCTAssertNil(
+      expressionResolver.resolveNumeric(
+        .link(ExpressionLink(
+          rawValue: "@{'@{string_var}' == string_var}",
+          validator: AnyValueValidator<Bool> { _ in false }
+        )!)
+      )
+    )
+
+    XCTAssertEqual(error, "Failed to validate value: true")
   }
 }
 

@@ -266,7 +266,7 @@ struct Argument {
   let value: Any
 
   var formattedValue: String {
-    let value = CalcExpression.stringify(value)
+    let value = ExpressionValueConverter.stringify(value)
     switch type {
     case .string:
       return "'\(value)'"

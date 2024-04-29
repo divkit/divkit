@@ -239,6 +239,7 @@ extension DivPager {
       margins: margins,
       orientation: orientation,
       paddings: paddings,
+      pageTransformation: pageTransformation,
       restrictParentScroll: restrictParentScroll,
       rowSpan: rowSpan,
       selectedActions: selectedActions,

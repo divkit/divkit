@@ -10,7 +10,7 @@ public final class DivCurrencyInputMask: DivInputMaskBase {
   public let rawTextVariable: String
 
   public func resolveLocale(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(locale, initializer: { $0 })
+    resolver.resolveString(locale)
   }
 
   init(

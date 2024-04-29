@@ -14,7 +14,7 @@ public final class DivActionArrayRemoveValue {
   }
 
   public func resolveVariableName(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(variableName, initializer: { $0 })
+    resolver.resolveString(variableName)
   }
 
   init(

@@ -43,7 +43,7 @@ public final class EntityWithSimpleProperties: EntityProtocol {
   }
 
   public func resolveString(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(string, initializer: { $0 })
+    resolver.resolveString(string)
   }
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {

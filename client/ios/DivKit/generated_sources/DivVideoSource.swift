@@ -44,7 +44,7 @@ public final class DivVideoSource {
   }
 
   public func resolveMimeType(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(mimeType, initializer: { $0 })
+    resolver.resolveString(mimeType)
   }
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {

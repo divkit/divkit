@@ -77,7 +77,7 @@ public final class DivVideo: DivBase {
   }
 
   public func resolvePreview(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(preview, initializer: { $0 })
+    resolver.resolveString(preview)
   }
 
   public func resolveRepeatable(_ resolver: ExpressionResolver) -> Bool {

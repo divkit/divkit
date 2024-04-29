@@ -11,7 +11,7 @@ public final class EntityWithRequiredProperty {
   public let property: Expression<String> // at least 1 char
 
   public func resolveProperty(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(property, initializer: { $0 })
+    resolver.resolveString(property)
   }
 
   static let propertyValidator: AnyValueValidator<String> =

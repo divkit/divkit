@@ -11,7 +11,7 @@ public final class DivAction {
     public let text: Expression<String>
 
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(text, initializer: { $0 })
+      resolver.resolveString(text)
     }
 
     init(
@@ -40,7 +40,7 @@ public final class DivAction {
   }
 
   public func resolveLogId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(logId, initializer: { $0 })
+    resolver.resolveString(logId)
   }
 
   public func resolveLogUrl(_ resolver: ExpressionResolver) -> URL? {

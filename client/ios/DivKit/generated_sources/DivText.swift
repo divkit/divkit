@@ -12,7 +12,7 @@ public final class DivText: DivBase {
     public let text: Expression<String>
 
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(text, initializer: { $0 })
+      resolver.resolveString(text)
     }
 
     init(
@@ -102,7 +102,7 @@ public final class DivText: DivBase {
     }
 
     public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(fontFamily, initializer: { $0 })
+      resolver.resolveString(fontFamily)
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int? {
@@ -277,7 +277,7 @@ public final class DivText: DivBase {
   }
 
   public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(fontFamily, initializer: { $0 })
+    resolver.resolveString(fontFamily)
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -321,7 +321,7 @@ public final class DivText: DivBase {
   }
 
   public func resolveText(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(text, initializer: { $0 })
+    resolver.resolveString(text)
   }
 
   public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {

@@ -65,6 +65,6 @@ private func formatValue(_ value: Any) -> String {
   case is [String: Any]:
     "<dict>"
   default:
-    CalcExpression.stringify(value)
+    ExpressionValueConverter.stringify(value)
   }
 }

@@ -21,7 +21,7 @@ public final class DivVisibilityAction: DivSightAction {
   }
 
   public func resolveLogId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(logId, initializer: { $0 })
+    resolver.resolveString(logId)
   }
 
   public func resolveLogLimit(_ resolver: ExpressionResolver) -> Int {

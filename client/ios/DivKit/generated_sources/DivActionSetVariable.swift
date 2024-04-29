@@ -10,7 +10,7 @@ public final class DivActionSetVariable {
   public let variableName: Expression<String>
 
   public func resolveVariableName(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(variableName, initializer: { $0 })
+    resolver.resolveString(variableName)
   }
 
   init(

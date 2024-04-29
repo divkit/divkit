@@ -15,7 +15,7 @@ public final class DivActionArrayInsertValue {
   }
 
   public func resolveVariableName(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(variableName, initializer: { $0 })
+    resolver.resolveString(variableName)
   }
 
   init(

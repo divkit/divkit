@@ -77,8 +77,8 @@ extension DivImage {
       return nil
     }
 
-    let preview = expressionResolver.resolveString(previewExpression)
-    if let data = Data(base64Encoded: preview),
+    if let preview = expressionResolver.resolveString(previewExpression),
+       let data = Data(base64Encoded: preview),
        let image = Image(data: data) {
       return .image(image)
     }

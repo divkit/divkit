@@ -15,7 +15,7 @@ public final class EntityWithPropertyWithDefaultValue {
     }
 
     public func resolveNonOptional(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(nonOptional, initializer: { $0 })
+      resolver.resolveString(nonOptional)
     }
 
     public func resolveUrl(_ resolver: ExpressionResolver) -> URL {

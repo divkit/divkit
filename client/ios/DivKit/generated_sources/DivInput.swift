@@ -95,7 +95,7 @@ public final class DivInput: DivBase {
   }
 
   public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(fontFamily, initializer: { $0 })
+    resolver.resolveString(fontFamily)
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -119,7 +119,7 @@ public final class DivInput: DivBase {
   }
 
   public func resolveHintText(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(hintText, initializer: { $0 })
+    resolver.resolveString(hintText)
   }
 
   public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {

@@ -35,8 +35,8 @@ public final class ExpressionResolver {
     self.errorTracker = { errorTracker?($0) }
   }
 
-  public func resolveString(_ expression: String) -> String {
-    resolveString(expression, initializer: { $0 }) ?? expression
+  public func resolveString(_ expression: String) -> String? {
+    resolveString(expression, initializer: { $0 })
   }
 
   public func resolveColor(_ expression: String) -> Color? {
@@ -165,33 +165,32 @@ public final class ExpressionResolver {
   }
 
   private func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
-    func incorrectExpression() -> T? {
-      errorTracker(ExpressionError("Incorrect single item expression", expression: link.rawValue))
+    guard link.items.count == 1, let item = link.items.first else {
+      errorTracker(ExpressionError("Single expression expected", expression: link.rawValue))
       return nil
     }
-    guard link.items.count == 1, let item = link.items.first else {
-      return incorrectExpression()
-    }
     switch item {
-    case let .calcExpression(parsedExpression):
+    case let .calcExpression(expression):
       do {
-        return try validatedValue(value: evaluate(parsedExpression), link: link)
+        return try validatedValue(value: evaluate(expression), link: link)
       } catch {
         errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
         return nil
       }
-    case let .nestedCalcExpression(link):
-      if let expression = evaluateString(link: link),
+    case let .nestedExpression(nestedLink):
+      if let expressionString = evaluateString(link: nestedLink),
          let link = ExpressionLink<T>(
-           rawValue: "@{\(expression)}",
+           rawValue: "@{\(expressionString)}",
+           validator: link.validator,
            errorTracker: errorTracker,
            resolveNested: false
          ) {
         return evaluateSingleItem(link: link)
       }
-      return incorrectExpression()
+      return nil
     case .string:
-      return incorrectExpression()
+      errorTracker(ExpressionError("Expression expected", expression: link.rawValue))
+      return nil
     }
   }
 
@@ -202,19 +201,19 @@ public final class ExpressionResolver {
     var stringValue = ""
     for item in link.items {
       switch item {
-      case let .calcExpression(parsedExpression):
+      case let .calcExpression(expression):
         do {
-          stringValue += try evaluate(parsedExpression)
+          stringValue += try evaluate(expression)
         } catch {
           errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
           return nil
         }
       case let .string(value):
         stringValue += value
-      case let .nestedCalcExpression(link):
-        if let expression = evaluateString(link: link) {
+      case let .nestedExpression(nestedLink):
+        if let expressionString = evaluateString(link: nestedLink) {
           let link = ExpressionLink<String>(
-            rawValue: "@{\(expression)}",
+            rawValue: "@{\(expressionString)}",
             errorTracker: errorTracker,
             resolveNested: false
           )
@@ -237,7 +236,13 @@ public final class ExpressionResolver {
   }
 
   private func evaluate<T>(_ expression: CalcExpression) throws -> T {
-    try expression.evaluate(evaluators: functionsProvider.evaluators)
+    let value = try expression.evaluate(evaluators: functionsProvider.evaluators)
+    if let castedValue: T = ExpressionValueConverter.cast(value) {
+      return castedValue
+    }
+    throw CalcExpression.Error.message(
+      "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
+    )
   }
 
   private func validatedValue<T>(
@@ -262,7 +267,7 @@ public final class ExpressionResolver {
     initializer: (String) -> T?
   ) -> T? {
     if let link = ExpressionLink<T>(rawValue: expression) {
-      return resolveString(.link(link), initializer: initializer)
+      return evaluateString(link: link, initializer: initializer)
     }
     return initializer(expression)
   }

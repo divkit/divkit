@@ -10,11 +10,11 @@ public final class DivSelect: DivBase {
     public let value: Expression<String>
 
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(text, initializer: { $0 })
+      resolver.resolveString(text)
     }
 
     public func resolveValue(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(value, initializer: { $0 })
+      resolver.resolveString(value)
     }
 
     init(
@@ -82,7 +82,7 @@ public final class DivSelect: DivBase {
   }
 
   public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(fontFamily, initializer: { $0 })
+    resolver.resolveString(fontFamily)
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -102,7 +102,7 @@ public final class DivSelect: DivBase {
   }
 
   public func resolveHintText(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(hintText, initializer: { $0 })
+    resolver.resolveString(hintText)
   }
 
   public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double {

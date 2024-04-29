@@ -60,45 +60,14 @@ struct CalcExpression {
     }
   }
 
-  func evaluate<T>(
+  func evaluate(
     evaluators: @escaping (Symbol) -> SymbolEvaluator?
-  ) throws -> T {
+  ) throws -> Any {
     let value = root.evaluate(evaluators)
-    if let castedValue: T = CalcExpression.cast(value) {
-      return castedValue
-    }
-
     if let error = value as? Error {
       throw error
     }
-
-    if T.self is String.Type {
-      return CalcExpression.stringify(value) as! T
-    }
-
-    throw CalcExpression.Error.message(
-      "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
-    )
-  }
-
-  private static func cast<T>(_ anyValue: Any) -> T? {
-    if let value = anyValue as? T {
-      return value
-    }
-
-    var type: Any.Type = T.self
-    if let optionalType = type as? _Optional.Type {
-      type = optionalType.wrappedType
-    }
-    switch type {
-    case let numericType as _Numeric.Type:
-      if anyValue is Bool {
-        return nil
-      }
-      return (anyValue as? NSNumber).map { numericType.init(truncating: $0) as! T }
-    default:
-      return nil
-    }
+    return value
   }
 }
 
@@ -717,21 +686,6 @@ extension UnicodeScalarView {
       throw CalcExpression.Error.message("Empty expression")
     }
   }
-}
-
-private protocol _Numeric {
-  init(truncating: NSNumber)
-}
-
-extension Int: _Numeric {}
-extension Double: _Numeric {}
-
-private protocol _Optional {
-  static var wrappedType: Any.Type { get }
-}
-
-extension Optional: _Optional {
-  fileprivate static var wrappedType: Any.Type { Wrapped.self }
 }
 
 private let operatorPrecedence: [String: (

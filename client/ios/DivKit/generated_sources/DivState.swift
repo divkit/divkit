@@ -77,7 +77,7 @@ public final class DivState: DivBase {
   }
 
   public func resolveDefaultStateId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(defaultStateId, initializer: { $0 })
+    resolver.resolveString(defaultStateId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {

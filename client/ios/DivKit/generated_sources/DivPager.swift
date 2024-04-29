@@ -32,6 +32,7 @@ public final class DivPager: DivBase {
   public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: horizontal
   public let paddings: DivEdgeInsets?
+  public let pageTransformation: DivPageTransformation?
   public let restrictParentScroll: Expression<Bool> // default value: false
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
@@ -122,6 +123,7 @@ public final class DivPager: DivBase {
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
+    pageTransformation: DivPageTransformation?,
     restrictParentScroll: Expression<Bool>?,
     rowSpan: Expression<Int>?,
     selectedActions: [DivAction]?,
@@ -156,6 +158,7 @@ public final class DivPager: DivBase {
     self.margins = margins
     self.orientation = orientation ?? .value(.horizontal)
     self.paddings = paddings
+    self.pageTransformation = pageTransformation
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
@@ -220,34 +223,39 @@ extension DivPager: Equatable {
     guard
       lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.pageTransformation == rhs.pageTransformation
     else {
       return false
     }
     guard
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -281,6 +289,7 @@ extension DivPager: Serializable {
     result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
+    result["page_transformation"] = pageTransformation?.toDictionary()
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }

@@ -296,6 +296,7 @@ func divPager(
     margins: nil,
     orientation: nil,
     paddings: nil,
+    pageTransformation: nil,
     restrictParentScroll: nil,
     rowSpan: nil,
     selectedActions: nil,

@@ -83,7 +83,7 @@ public final class DivGifImage: DivBase {
   }
 
   public func resolvePreview(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(preview, initializer: { $0 })
+    resolver.resolveString(preview)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {

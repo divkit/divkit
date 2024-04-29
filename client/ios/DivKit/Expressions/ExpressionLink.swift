@@ -7,7 +7,7 @@ public struct ExpressionLink<T> {
   enum Item {
     case string(String)
     case calcExpression(CalcExpression)
-    case nestedCalcExpression(ExpressionLink<String>)
+    case nestedExpression(ExpressionLink<String>)
   }
 
   let items: [Item]
@@ -52,7 +52,7 @@ public struct ExpressionLink<T> {
             rawValue: value,
             errorTracker: errorTracker
           ) {
-            items.append(.nestedCalcExpression(link))
+            items.append(.nestedExpression(link))
             variablesNames.append(contentsOf: link.variablesNames)
           } else {
             let expression = CalcExpression.parse(value)

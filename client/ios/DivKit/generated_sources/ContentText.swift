@@ -9,7 +9,7 @@ public final class ContentText {
   public let value: Expression<String>
 
   public func resolveValue(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(value, initializer: { $0 })
+    resolver.resolveString(value)
   }
 
   init(

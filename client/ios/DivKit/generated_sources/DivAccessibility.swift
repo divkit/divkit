@@ -34,11 +34,11 @@ public final class DivAccessibility {
   public let type: Kind // default value: auto
 
   public func resolveDescription(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(description, initializer: { $0 })
+    resolver.resolveString(description)
   }
 
   public func resolveHint(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(hint, initializer: { $0 })
+    resolver.resolveString(hint)
   }
 
   public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
@@ -50,7 +50,7 @@ public final class DivAccessibility {
   }
 
   public func resolveStateDescription(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(stateDescription, initializer: { $0 })
+    resolver.resolveString(stateDescription)
   }
 
   init(
