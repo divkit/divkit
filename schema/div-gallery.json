@@ -58,6 +58,12 @@
           },
           "$description": "translations.json#/div_gallery_items"
         },
+        "item_builder": {
+          "$ref": "div-collection-item-builder.json",
+          "$description": "translations.json#/div_collection_item_builder",
+          "platforms": [
+          ]
+        },
         "orientation": {
           "type": "string",
           "default_value": "horizontal",
