@@ -10,9 +10,10 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.picasso.PicassoDivImageLoader
-import tech.divkit.sample.databinding.ActivityMainPageBinding
 import com.yandex.div2.DivAction
+import tech.divkit.sample.databinding.ActivityMainPageBinding
 
 class MainPageActivity : AppCompatActivity() {
 
@@ -69,8 +70,8 @@ class MainPageActivity : AppCompatActivity() {
     }
 
     class DemoDivActionHandler: DivActionHandler() {
-        override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-            return super.handleAction(action, view)
+        override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
+            return super.handleAction(action, view, resolver)
         }
     }
 }

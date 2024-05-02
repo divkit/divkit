@@ -20,7 +20,7 @@ private const val PARAM_TYPE = "type"
 internal object StoredValuesActionHandler {
 
     @JvmStatic
-    fun canHandle(authority: String): Boolean = authority == AUTHORITY_SET_STORED_VALUE
+    fun canHandle(authority: String?): Boolean = authority == AUTHORITY_SET_STORED_VALUE
 
     @JvmStatic
     fun handleAction(uri: Uri, view: DivViewFacade): Boolean {

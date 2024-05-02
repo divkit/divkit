@@ -465,6 +465,7 @@ internal class DivPagerBinder @Inject constructor(
                     if (position > prevPosition) ScrollDirection.NEXT else ScrollDirection.BACK
                 divView.div2Component.div2Logger.logPagerChangePage(
                     divView,
+                    bindingContext.expressionResolver,
                     divPager,
                     position,
                     direction

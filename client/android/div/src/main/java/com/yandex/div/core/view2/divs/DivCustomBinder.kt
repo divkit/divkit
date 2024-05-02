@@ -33,14 +33,17 @@ internal class DivCustomBinder @Inject constructor(
         val customView = view.customView
         val oldDiv = view.div
         val divView = context.divView
+        val resolver = context.expressionResolver
 
         if (oldDiv === div) {
-            view.bindStates(divView.rootDiv(), context, context.expressionResolver, divBinder.get())
+            view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
             return
         }
 
         if (customView != null && oldDiv != null) {
-            extensionController.unbindView(divView, customView, oldDiv)
+            view.bindingContext?.expressionResolver?.let {
+                extensionController.unbindView(divView, it, customView, oldDiv)
+            }
         }
 
         baseBinder.bindView(context, view, div, null)
@@ -48,8 +51,8 @@ internal class DivCustomBinder @Inject constructor(
 
         if (divCustomContainerViewAdapter.isCustomTypeSupported(div.customType)) {
             bind(view, customView, div, context,
-                { divCustomContainerViewAdapter.createView(div, divView, path) },
-                { divCustomContainerViewAdapter.bindView(it, div, divView, path) }
+                { divCustomContainerViewAdapter.createView(div, divView, resolver, path) },
+                { divCustomContainerViewAdapter.bindView(it, div, divView, resolver, path) }
             )
         } else if (divCustomViewAdapter.isCustomTypeSupported(div.customType)) {
             bind(view, customView, div, context,
@@ -57,7 +60,7 @@ internal class DivCustomBinder @Inject constructor(
                 { divCustomViewAdapter.bindView(it, div, divView) }
             )
         } else {
-            oldBind(div, divView, view, customView)
+            oldBind(div, divView, context, view, customView)
         }
     }
 
@@ -84,13 +87,14 @@ internal class DivCustomBinder @Inject constructor(
         if (oldCustomView != customView) {
             replaceInParent(previousWrapper, customView, divView)
         }
-        extensionController.bindView(divView, customView, div)
+        extensionController.bindView(divView, context.expressionResolver, customView, div)
     }
 
     @Deprecated(message = "for backward compat only", replaceWith = ReplaceWith("DivCustomViewAdapter.newBind"))
     private fun oldBind(
         div: DivCustom,
         divView: Div2View,
+        context: BindingContext,
         previousViewGroup: ViewGroup,
         previousCustomView: View?
     ) {
@@ -98,7 +102,7 @@ internal class DivCustomBinder @Inject constructor(
             baseBinder.bindId(divView, newCustomView, div.id)
             if (newCustomView != previousCustomView) {
                 replaceInParent(previousViewGroup, newCustomView, divView)
-                extensionController.bindView(divView, newCustomView, div)
+                extensionController.bindView(divView, context.expressionResolver, newCustomView, div)
             }
         }
     }

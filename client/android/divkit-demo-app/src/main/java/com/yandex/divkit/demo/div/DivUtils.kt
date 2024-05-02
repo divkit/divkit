@@ -18,6 +18,7 @@ import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
@@ -110,9 +111,9 @@ open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandl
         return uriHandlerDivkit.handleUri(uri)
     }
 
-    override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-        return super.handleAction(action, view) || action.url != null &&
-                handleUri(action.url!!.evaluate(view.expressionResolver), view)
+    override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
+        return super.handleAction(action, view, resolver) || action.url != null &&
+                handleUri(action.url!!.evaluate(resolver), view)
     }
 
     private companion object {

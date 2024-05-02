@@ -11,9 +11,9 @@ interface DivExtensionHandler {
 
     fun preprocess(div: DivBase, expressionResolver: ExpressionResolver) = Unit
 
-    fun beforeBindView(divView: Div2View, view: View, div: DivBase) = Unit
+    fun beforeBindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) = Unit
 
-    fun bindView(divView: Div2View, view: View, div: DivBase)
+    fun bindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase)
 
-    fun unbindView(divView: Div2View, view: View, div: DivBase)
+    fun unbindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase)
 }

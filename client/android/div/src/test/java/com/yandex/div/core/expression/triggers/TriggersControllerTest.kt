@@ -2,8 +2,8 @@ package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.Evaluator
@@ -42,7 +42,7 @@ class TriggersControllerTest {
     }
     private val errorCollector = mock<ErrorCollector>()
     private val logger = mock<Div2Logger>()
-    private val view = mock<DivViewFacade> {
+    private val view = mock<Div2View> {
         on { expressionResolver } doReturn mock()
     }
 

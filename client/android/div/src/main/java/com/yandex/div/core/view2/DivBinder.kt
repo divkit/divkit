@@ -89,19 +89,20 @@ internal class DivBinder @Inject constructor(
     @MainThread
     fun bind(context: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
         val divView = context.divView
+        val resolver = context.expressionResolver
         divView.currentRebindReusableList?.pop(div)?.let {
             return@suppressExpressionErrors
         }
 
-        if (!validator.validate(div, context.expressionResolver)) {
-            bindLayoutParams(view, div.value(), context.expressionResolver)
+        if (!validator.validate(div, resolver)) {
+            bindLayoutParams(view, div.value(), resolver)
             return
         }
 
-        extensionController.beforeBindView(divView, view, div.value())
+        extensionController.beforeBindView(divView, resolver, view, div.value())
 
         if (div !is Div.Custom) {
-            (view as DivHolderView<*>).div?.let { extensionController.unbindView(divView, view, it) }
+            (view as DivHolderView<*>).div?.let { extensionController.unbindView(divView, resolver, view, it) }
         }
 
         return when (div) {
@@ -124,7 +125,7 @@ internal class DivBinder @Inject constructor(
         }.also {
             // extensionController bound new CustomView in DivCustomBinder after replacing in parent
             if (div !is Div.Custom) {
-                extensionController.bindView(divView, view, div.value())
+                extensionController.bindView(divView, resolver, view, div.value())
             }
         }
     }

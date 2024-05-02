@@ -15,6 +15,7 @@ import com.yandex.div.core.view2.Div2View;
 import com.yandex.div.core.view2.items.DivItemChangeActionHandler;
 import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
+import com.yandex.div.json.expressions.ExpressionResolver;
 import com.yandex.div2.DivAction;
 import com.yandex.div2.DivDisappearAction;
 import com.yandex.div2.DivSightAction;
@@ -75,7 +76,7 @@ public class DivActionHandler {
     @CallSuper
     @Deprecated
     public boolean handleUri(@NonNull Uri uri, @NonNull DivViewFacade view) {
-        return handleActionUrl(uri, view);
+        return handleActionUrl(uri, view, view.getExpressionResolver());
     }
 
     /**
@@ -84,18 +85,23 @@ public class DivActionHandler {
      *
      * @param action full div action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @return TRUE if uri was handled
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivAction action, @NonNull DivViewFacade view) {
-        if (DivActionTypedHandlerProxy.handleAction(action, view)) {
+    public boolean handleAction(
+            @NonNull DivAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
+        if (DivActionTypedHandlerProxy.handleAction(action, view, resolver)) {
             return true;
         }
-        Uri url = action.url != null ? action.url.evaluate(view.getExpressionResolver()) : null;
+        Uri url = action.url != null ? action.url.evaluate(resolver) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
-            return DivDownloadActionHandler.handleAction(action, (Div2View) view);
+            return DivDownloadActionHandler.handleAction(action, (Div2View) view, resolver);
         }
-        return handleActionUrl(url, view);
+        return handleActionUrl(url, view, resolver);
     }
 
     /**
@@ -104,12 +110,19 @@ public class DivActionHandler {
      *
      * @param action full div action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @param actionUid action UUID string
      * @return TRUE if uri was handled
+     * @noinspection unused
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
-        return handleAction(action, view);
+    public boolean handleAction(
+            @NonNull DivAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
+            @NonNull String actionUid
+    ) {
+        return handleAction(action, view, resolver);
     }
 
     /**
@@ -118,16 +131,19 @@ public class DivActionHandler {
      *
      * @param action full div action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @param reason reason of div action call
      * @return TRUE if uri was handled
+     * @noinspection unused
      */
     @CallSuper
     public boolean handleActionWithReason(
             @NonNull DivAction action,
             @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
             @NonNull String reason
     ) {
-        return handleAction(action, view);
+        return handleAction(action, view, resolver);
     }
 
     /**
@@ -136,17 +152,20 @@ public class DivActionHandler {
      *
      * @param action full div action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @param actionUid action UUID string
      * @param reason reason of div action call
      * @return TRUE if uri was handled
+     * @noinspection unused
      */
     @CallSuper
     public boolean handleActionWithReason(
             @NonNull DivAction action,
             @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
             @NonNull String actionUid,
             @NonNull String reason) {
-        return handleAction(action, view, actionUid);
+        return handleAction(action, view, resolver, actionUid);
     }
 
     /**
@@ -155,11 +174,16 @@ public class DivActionHandler {
      *
      * @param action full div visibility action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @return TRUE if uri was handled
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivVisibilityAction action, @NonNull DivViewFacade view) {
-        return handleAction((DivSightAction) action, view);
+    public boolean handleAction(
+            @NonNull DivVisibilityAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
+        return handleAction((DivSightAction) action, view, resolver);
     }
 
     /**
@@ -168,11 +192,16 @@ public class DivActionHandler {
      *
      * @param action full div disappear action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @return TRUE if uri was handled
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivDisappearAction action, @NonNull DivViewFacade view) {
-        return handleAction((DivSightAction) action, view);
+    public boolean handleAction(
+            @NonNull DivDisappearAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
+        return handleAction((DivSightAction) action, view, resolver);
     }
 
     /**
@@ -181,18 +210,23 @@ public class DivActionHandler {
      *
      * @param action full div sight action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @return TRUE if uri was handled
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivSightAction action, @NonNull DivViewFacade view) {
-        if (DivActionTypedHandlerProxy.handleVisibilityAction(action, view)) {
+    public boolean handleAction(
+            @NonNull DivSightAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
+        if (DivActionTypedHandlerProxy.handleVisibilityAction(action, view, resolver)) {
             return true;
         }
-        Uri url = action.getUrl() != null ? action.getUrl().evaluate(view.getExpressionResolver()) : null;
+        Uri url = action.getUrl() != null ? action.getUrl().evaluate(resolver) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
-            return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view);
+            return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view, resolver);
         }
-        return handleActionUrl(url, view);
+        return handleActionUrl(url, view, resolver);
     }
 
     /**
@@ -201,12 +235,19 @@ public class DivActionHandler {
      *
      * @param action full div visibility action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @param actionUid action UUID string
      * @return TRUE if uri was handled
+     * @noinspection unused
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivVisibilityAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
-        return handleAction(action, view);
+    public boolean handleAction(
+            @NonNull DivVisibilityAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
+            @NonNull String actionUid
+    ) {
+        return handleAction(action, view, resolver);
     }
 
     /**
@@ -215,12 +256,19 @@ public class DivActionHandler {
      *
      * @param action full div disappear action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @param actionUid action UUID string
      * @return TRUE if uri was handled
+     * @noinspection unused
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivDisappearAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
-        return handleAction(action, view);
+    public boolean handleAction(
+            @NonNull DivDisappearAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
+            @NonNull String actionUid
+    ) {
+        return handleAction(action, view, resolver);
     }
 
     /**
@@ -229,18 +277,27 @@ public class DivActionHandler {
      *
      * @param action full div disappear action to handle
      * @param view calling DivView
+     * @param resolver resolver for current action
      * @param actionUid action UUID string
      * @return TRUE if uri was handled
+     * @noinspection unused
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivSightAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
-        return handleAction(action, view);
+    public boolean handleAction(
+            @NonNull DivSightAction action,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver,
+            @NonNull String actionUid
+    ) {
+        return handleAction(action, view, resolver);
     }
 
     /**
      * Handles the given json.
      *
      * @param payload json to handle
+     *
+     * @noinspection unused
      */
     public void handlePayload(@NonNull JSONObject payload) { /* not implemented */ }
 
@@ -252,19 +309,35 @@ public class DivActionHandler {
      * @return TRUE if uri was handled
      */
     public final boolean handleActionUrl(@Nullable Uri uri, @NonNull DivViewFacade view) {
+        return handleActionUrl(uri, view, view.getExpressionResolver());
+    }
+
+    /**
+     * Handles the URI with {@code div-action} scheme.
+     *
+     * @param uri  URI to handle
+     * @param view calling DivView
+     * @param resolver resolver for current action
+     * @return TRUE if uri was handled
+     */
+    public final boolean handleActionUrl(
+            @Nullable Uri uri,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
         if (uri == null) {
             return false;
         }
 
         //noinspection SimplifiableIfStatement
         if (SCHEME_DIV_ACTION.equals(uri.getScheme())) {
-            return handleAction(uri, view);
+            return handleAction(uri, view, resolver);
         }
 
         return false;
     }
 
-    private boolean handleAction(@NonNull Uri uri, @NonNull DivViewFacade view) {
+    private boolean handleAction(@NonNull Uri uri, @NonNull DivViewFacade view, @NonNull ExpressionResolver resolver) {
         String action = uri.getAuthority();
         if (AUTHORITY_SWITCH_STATE.equals(action)) {
             String stateId = uri.getQueryParameter(PARAM_STATE_ID);
@@ -366,7 +439,7 @@ public class DivActionHandler {
 
             return div2View.applyVideoCommand(id, command);
         } else if (DivItemChangeActionHandler.canHandle(action)) {
-            return DivItemChangeActionHandler.handleAction(uri, view);
+            return DivItemChangeActionHandler.handleAction(uri, view, resolver);
         } else if (StoredValuesActionHandler.canHandle(action)) {
             return StoredValuesActionHandler.handleAction(uri, view);
         }

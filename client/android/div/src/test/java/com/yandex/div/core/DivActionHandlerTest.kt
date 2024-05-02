@@ -45,6 +45,7 @@ class DivActionHandlerTest {
     fun `uri without path is not handled`() {
         val result = underTest.handleUri("div-action://?state_id=1".uri, divView)
 
+        verify(divView).expressionResolver
         verifyNoMoreInteractions(divView)
         Assert.assertFalse(result)
     }

@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.view.View
 import android.view.ViewTreeObserver
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivExtension
@@ -35,6 +36,7 @@ private const val WIDTH_VARIABLE = "width_variable"
 class DivSizeProviderExtensionHandlerTest {
 
     private val div = mock<DivBase>()
+    private val resolver = mock<ExpressionResolver>()
     private val listener = argumentCaptor<View.OnLayoutChangeListener>()
     private val view = mock<View> {
         on { addOnLayoutChangeListener(listener.capture()) } doAnswer {}
@@ -47,7 +49,6 @@ class DivSizeProviderExtensionHandlerTest {
     }
     private val divView = mock<Div2View> {
         on { divData } doReturn data
-        on { expressionResolver } doReturn mock()
         on { viewTreeObserver } doReturn viewTreeObserver
     }
     private val underTest = DivSizeProviderExtensionHandler()
@@ -163,9 +164,9 @@ class DivSizeProviderExtensionHandlerTest {
     @Test
     fun `stop listen to layout changes on unbind`() {
         setExtension(WIDTH_VARIABLE)
-        underTest.bindView(divView, view, div)
+        underTest.bindView(divView, resolver, view, div)
 
-        underTest.unbindView(divView, view, div)
+        underTest.unbindView(divView, resolver, view, div)
 
         verify(view).removeOnLayoutChangeListener(anyOrNull())
     }
@@ -178,7 +179,7 @@ class DivSizeProviderExtensionHandlerTest {
             })
         ))
 
-    private fun bindExtension() = underTest.bindView(divView, view, div)
+    private fun bindExtension() = underTest.bindView(divView, resolver, view, div)
 
     companion object {
         private val changedVariables = mutableListOf<String>()

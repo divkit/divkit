@@ -4,6 +4,7 @@ import android.view.View
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivCustom
 
 @PublicApi
@@ -18,6 +19,7 @@ interface DivCustomContainerViewAdapter {
     fun createView(
         div: DivCustom,
         divView: Div2View,
+        expressionResolver: ExpressionResolver,
         path: DivStatePath
     ): View
 
@@ -31,6 +33,7 @@ interface DivCustomContainerViewAdapter {
         view: View,
         div: DivCustom,
         divView: Div2View,
+        expressionResolver: ExpressionResolver,
         path: DivStatePath
     )
 
@@ -56,11 +59,22 @@ interface DivCustomContainerViewAdapter {
 
         @JvmField
         val STUB = object : DivCustomContainerViewAdapter {
-            override fun createView(div: DivCustom, divView: Div2View, path: DivStatePath): View {
+            override fun createView(
+                div: DivCustom,
+                divView: Div2View,
+                expressionResolver: ExpressionResolver,
+                path: DivStatePath
+            ): View {
                 throw UnsupportedOperationException()
             }
 
-            override fun bindView(view: View, div: DivCustom, divView: Div2View, path: DivStatePath) = Unit
+            override fun bindView(
+                view: View,
+                div: DivCustom,
+                divView: Div2View,
+                expressionResolver: ExpressionResolver,
+                path: DivStatePath
+            ) = Unit
 
             override fun isCustomTypeSupported(type: String): Boolean {
                 return false

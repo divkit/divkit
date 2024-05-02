@@ -4,10 +4,10 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.rive.OkHttpDivRiveNetworkDelegate
 import com.yandex.div.rive.RiveCustomViewAdapter
 import com.yandex.div.video.custom.VideoCustomAdapter
@@ -39,18 +39,29 @@ class DemoDivCustomViewAdapter(
         return DivPreloader.PreloadReference.EMPTY
     }
 
-    override fun createView(div: DivCustom, divView: Div2View, path: DivStatePath): View {
+    override fun createView(
+        div: DivCustom,
+        divView: Div2View,
+        expressionResolver: ExpressionResolver,
+        path: DivStatePath
+    ): View {
         for (adapter in adapters) {
             if (adapter.isCustomTypeSupported(div.customType)) {
-                return adapter.createView(div, divView, path)
+                return adapter.createView(div, divView, expressionResolver, path)
             }
         }
-        return demoCustomContainerAdapter.createView(div, divView, path)
+        return demoCustomContainerAdapter.createView(div, divView, expressionResolver, path)
     }
 
-    override fun bindView(view: View, div: DivCustom, divView: Div2View, path: DivStatePath) {
+    override fun bindView(
+        view: View,
+        div: DivCustom,
+        divView: Div2View,
+        expressionResolver: ExpressionResolver,
+        path: DivStatePath
+    ) {
         Log.d(TAG, "binding view ${div.id} of type ${div.customType}")
-        dispatch(div) { bindView(view, div, divView, path) }
+        dispatch(div) { bindView(view, div, divView, expressionResolver, path) }
     }
 
     override fun isCustomTypeSupported(type: String): Boolean = adapters.any { it.isCustomTypeSupported(type) }

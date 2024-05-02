@@ -198,7 +198,7 @@ internal class DivActionBinder @Inject constructor(
         if (menuAction != null) {
             prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
                 setTapListener {
-                    logger.logClick(context.divView, target, menuAction)
+                    logger.logClick(context.divView, context.expressionResolver, target, menuAction)
                     divActionBeaconSender.sendTapActionBeacon(menuAction, context.expressionResolver)
                     overflowMenuWrapper.onMenuClickListener.onClick(target)
                 }
@@ -232,7 +232,9 @@ internal class DivActionBinder @Inject constructor(
 
                     divActionBeaconSender.sendTapActionBeacon(menuAction, context.expressionResolver)
                     overflowMenuWrapper.onMenuClickListener.onClick(target)
-                    actions.forEach { action -> logger.logLongClick(context.divView, target, action, uuid) }
+                    actions.forEach { action ->
+                        logger.logLongClick(context.divView, context.expressionResolver, target, action, uuid)
+                    }
 
                     return@setOnLongClickListener true
                 }
@@ -287,7 +289,7 @@ internal class DivActionBinder @Inject constructor(
         if (menuAction != null) {
             prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
                 divGestureListener.onDoubleTapListener = {
-                    logger.logDoubleClick(context.divView, target, menuAction)
+                    logger.logDoubleClick(context.divView, context.expressionResolver, target, menuAction)
                     divActionBeaconSender.sendTapActionBeacon(menuAction, context.expressionResolver)
                     overflowMenuWrapper.onMenuClickListener.onClick(target)
                 }
@@ -312,11 +314,11 @@ internal class DivActionBinder @Inject constructor(
 
             actions.onlyEnabled(resolver).forEach { action ->
                 when(actionLogType) {
-                    LOG_CLICK -> logger.logClick(divView, target, action, uuid)
-                    LOG_LONG_CLICK -> logger.logLongClick(divView, target, action, uuid)
-                    LOG_DOUBLE_CLICK -> logger.logDoubleClick(divView, target, action, uuid)
-                    LOG_FOCUS -> logger.logFocusChanged(divView, target, action, true)
-                    LOG_BLUR -> logger.logFocusChanged(divView, target, action, false)
+                    LOG_CLICK -> logger.logClick(divView, resolver, target, action, uuid)
+                    LOG_LONG_CLICK -> logger.logLongClick(divView, resolver, target, action, uuid)
+                    LOG_DOUBLE_CLICK -> logger.logDoubleClick(divView, resolver, target, action, uuid)
+                    LOG_FOCUS -> logger.logFocusChanged(divView, resolver, target, action, true)
+                    LOG_BLUR -> logger.logFocusChanged(divView, resolver, target, action, false)
                     else -> Assert.fail("Please, add new logType")
                 }
                 divActionBeaconSender.sendTapActionBeacon(action, resolver)
@@ -370,26 +372,26 @@ internal class DivActionBinder @Inject constructor(
         viewActionHandler: DivActionHandler? = (divView as? Div2View)?.actionHandler,
     ): Boolean {
         if (actionHandler.useActionUid && actionUid != null) {
-            if (viewActionHandler?.handleActionWithReason(
-                    action, divView, actionUid, reason) == true) {
+            if (viewActionHandler?.handleActionWithReason(action, divView, resolver, actionUid, reason) == true) {
                 return true
             }
-            return actionHandler.handleActionWithReason(action, divView, actionUid, reason)
+            return actionHandler.handleActionWithReason(action, divView, resolver, actionUid, reason)
         } else {
-            if (viewActionHandler?.handleActionWithReason(action, divView, reason) == true) {
+            if (viewActionHandler?.handleActionWithReason(action, divView, resolver, reason) == true) {
                 return true
             }
-            return actionHandler.handleActionWithReason(action, divView, reason)
+            return actionHandler.handleActionWithReason(action, divView, resolver, reason)
         }
     }
 
     internal fun handleTapClick(context: BindingContext, target: View, actions: List<DivAction>) {
-        val enabledActions = actions.onlyEnabled(context.expressionResolver)
+        val resolver = context.expressionResolver
+        val enabledActions = actions.onlyEnabled(resolver)
         val menuAction = enabledActions.firstOrNull { action -> !action.menuItems.isNullOrEmpty() }
         if (menuAction != null) {
             prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
-                logger.logClick(context.divView, target, menuAction)
-                divActionBeaconSender.sendTapActionBeacon(menuAction, context.expressionResolver)
+                logger.logClick(context.divView, resolver, target, menuAction)
+                divActionBeaconSender.sendTapActionBeacon(menuAction, resolver)
                 overflowMenuWrapper.onMenuClickListener.onClick(target)
             }
         } else {
@@ -447,6 +449,7 @@ internal class DivActionBinder @Inject constructor(
                         actions.onlyEnabled(expressionResolver).forEach { action ->
                             logger.logPopupMenuItemClick(
                                 divView,
+                                expressionResolver,
                                 itemPosition,
                                 itemData.text.evaluate(expressionResolver),
                                 action

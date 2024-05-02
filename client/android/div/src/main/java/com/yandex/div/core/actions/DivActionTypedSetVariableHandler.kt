@@ -4,6 +4,7 @@ import android.net.Uri
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionTyped
 import org.json.JSONArray
 import org.json.JSONObject
@@ -16,11 +17,12 @@ internal class DivActionTypedSetVariableHandler @Inject constructor()
 
     override fun handleAction(
         action: DivActionTyped,
-        view: Div2View
+        view: Div2View,
+        resolver: ExpressionResolver,
     ): Boolean = when (action) {
 
         is DivActionTyped.SetVariable -> {
-            handleSetVariable(action, view)
+            handleSetVariable(action, view, resolver)
             true
         }
 
@@ -29,10 +31,11 @@ internal class DivActionTypedSetVariableHandler @Inject constructor()
 
     private fun handleSetVariable(
         action: DivActionTyped.SetVariable,
-        view: Div2View
+        view: Div2View,
+        resolver: ExpressionResolver,
     ) {
-        val variableName = action.value.variableName.evaluate(view.expressionResolver)
-        val newValue = action.value.value.evaluate(view.expressionResolver)
+        val variableName = action.value.variableName.evaluate(resolver)
+        val newValue = action.value.value.evaluate(resolver)
         view.setVariable(variableName) { variable: Variable ->
             variable.apply {
                 when (this) {

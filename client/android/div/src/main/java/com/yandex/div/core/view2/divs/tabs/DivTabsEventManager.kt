@@ -57,7 +57,7 @@ internal class DivTabsEventManager(
             // TODO(MORDAANDROID-90): handle case with menuItems != null
             KLog.w(TAG) { "non-null menuItems ignored in title click action" }
         }
-        div2Logger.logActiveTabTitleClick(context.divView, tabPosition, action)
+        div2Logger.logActiveTabTitleClick(context.divView, context.expressionResolver, tabPosition, action)
         actionBinder.handleAction(context.divView, context.expressionResolver, action, DivActionReason.CLICK)
     }
 

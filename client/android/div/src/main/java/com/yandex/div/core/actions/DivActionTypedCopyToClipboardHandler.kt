@@ -18,18 +18,23 @@ internal class DivActionTypedCopyToClipboardHandler @Inject constructor()
 
     override fun handleAction(
         action: DivActionTyped,
-        view: Div2View
+        view: Div2View,
+        resolver: ExpressionResolver,
     ): Boolean = when (action) {
 
         is DivActionTyped.CopyToClipboard -> {
-            handleCopyToClipboard(action.value.content, view)
+            handleCopyToClipboard(action.value.content, view, resolver)
             true
         }
 
         else -> false
     }
 
-    private fun handleCopyToClipboard(content: DivActionCopyToClipboardContent, view: Div2View) {
+    private fun handleCopyToClipboard(
+        content: DivActionCopyToClipboardContent,
+        view: Div2View,
+        resolver: ExpressionResolver,
+    ) {
         val clipboardManager =
             view.context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
                 ?: run {
@@ -37,7 +42,7 @@ internal class DivActionTypedCopyToClipboardHandler @Inject constructor()
                     return
                 }
 
-        val clipData = content.getClipData(view.expressionResolver)
+        val clipData = content.getClipData(resolver)
         clipboardManager.setPrimaryClip(clipData)
     }
 

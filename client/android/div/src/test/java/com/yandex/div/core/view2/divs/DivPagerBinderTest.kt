@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.divs
 
-import androidx.core.view.get
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.state.DivViewState
@@ -98,6 +97,7 @@ class DivPagerBinderTest: DivBinderTest() {
             any(),
             any(),
             any(),
+            any(),
             any()
         )
     }
@@ -110,6 +110,7 @@ class DivPagerBinderTest: DivBinderTest() {
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
 
         verify(divView.div2Component.div2Logger).logPagerChangePage(
+            any(),
             any(),
             any(),
             any(),

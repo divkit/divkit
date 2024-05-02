@@ -3,6 +3,7 @@ package com.yandex.div.core.actions
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.util.asList
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionTyped
 import org.json.JSONArray
 import javax.inject.Inject
@@ -14,26 +15,27 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
 
     override fun handleAction(
         action: DivActionTyped,
-        view: Div2View
+        view: Div2View,
+        resolver: ExpressionResolver,
     ): Boolean = when (action) {
 
         is DivActionTyped.ArrayInsertValue -> {
-            handleInsert(action, view)
+            handleInsert(action, view, resolver)
             true
         }
 
         is DivActionTyped.ArrayRemoveValue -> {
-            handleRemove(action, view)
+            handleRemove(action, view, resolver)
             true
         }
 
         else -> false
     }
 
-    private fun handleInsert(action: DivActionTyped.ArrayInsertValue, view: Div2View) {
-        val variableName = action.value.variableName.evaluate(view.expressionResolver)
-        val index = action.value.index?.evaluate(view.expressionResolver)?.toInt()
-        val newValue = action.value.value.evaluate(view.expressionResolver)
+    private fun handleInsert(action: DivActionTyped.ArrayInsertValue, view: Div2View, resolver: ExpressionResolver) {
+        val variableName = action.value.variableName.evaluate(resolver)
+        val index = action.value.index?.evaluate(resolver)?.toInt()
+        val newValue = action.value.value.evaluate(resolver)
         view.setVariable(variableName) { variable: Variable.ArrayVariable ->
             variable.apply {
                 when (val indexToInsert = index ?: variable.length()) {
@@ -44,9 +46,9 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
         }
     }
 
-    private fun handleRemove(action: DivActionTyped.ArrayRemoveValue, view: Div2View) {
-        val variableName = action.value.variableName.evaluate(view.expressionResolver)
-        val index = action.value.index.evaluate(view.expressionResolver).toInt()
+    private fun handleRemove(action: DivActionTyped.ArrayRemoveValue, view: Div2View, resolver: ExpressionResolver) {
+        val variableName = action.value.variableName.evaluate(resolver)
+        val index = action.value.index.evaluate(resolver).toInt()
         view.setVariable(variableName) { variable: Variable.ArrayVariable ->
             variable.apply {
                 when (index) {

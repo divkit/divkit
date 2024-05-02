@@ -5,6 +5,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.internal.KAssert
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivSizeUnit
 
 private const val AUTHORITY_SET_CURRENT_ITEM = "set_current_item"
@@ -27,7 +28,7 @@ private const val PARAM_OVERFLOW = "overflow"
 internal object DivItemChangeActionHandler {
 
     @JvmStatic
-    fun canHandle(authority: String): Boolean {
+    fun canHandle(authority: String?): Boolean {
         return when (authority) {
             AUTHORITY_SET_CURRENT_ITEM,
             AUTHORITY_NEXT_ITEM,
@@ -42,7 +43,7 @@ internal object DivItemChangeActionHandler {
     }
 
     @JvmStatic
-    fun handleAction(uri: Uri, view: DivViewFacade): Boolean {
+    fun handleAction(uri: Uri, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
         val id = uri.getQueryParameter(PARAM_ID)
         if (id == null) {
             KAssert.fail { "$PARAM_ID param is required to set item" }
@@ -50,7 +51,7 @@ internal object DivItemChangeActionHandler {
         }
         val targetView = view.view.findViewWithTag<View>(id) ?: return false
         val authority = uri.authority
-        val viewWithItems = DivViewWithItems.create(targetView, view.expressionResolver) { direction(authority) } ?: return false
+        val viewWithItems = DivViewWithItems.create(targetView, resolver) { direction(authority) } ?: return false
         return when (authority) {
             AUTHORITY_SET_CURRENT_ITEM ->
                 handleSetCurrentItem(uri, viewWithItems)

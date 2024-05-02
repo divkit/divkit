@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.items
 import android.net.Uri
 import android.view.View
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.json.expressions.ExpressionResolver
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -23,6 +24,7 @@ class DivItemChangeActionHandlerTest {
     private val targetView = mock<View> {
         on { findViewWithTag<View>(ID) } doReturn mock
     }
+    val resolver = mock<ExpressionResolver>()
     private val view = mock<DivViewFacade> {
         on { view } doReturn targetView
         on { expressionResolver } doReturn mock()
@@ -61,7 +63,8 @@ class DivItemChangeActionHandlerTest {
     fun `handle set current item`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID&item=3"),
-            view
+            view,
+            resolver,
         )
 
         assertTrue(result)
@@ -72,7 +75,8 @@ class DivItemChangeActionHandlerTest {
     fun `handle set next item`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID"),
-            view
+            view,
+            resolver,
         )
 
         assertTrue(result)
@@ -83,7 +87,8 @@ class DivItemChangeActionHandlerTest {
     fun `handle set previous item`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_previous_item?id=$ID"),
-            view
+            view,
+            resolver,
         )
 
         assertTrue(result)
@@ -94,7 +99,8 @@ class DivItemChangeActionHandlerTest {
     fun `not handled when id param missing`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item"),
-            view
+            view,
+            resolver,
         )
 
         assertFalse(result)
@@ -106,7 +112,8 @@ class DivItemChangeActionHandlerTest {
 
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID"),
-            view
+            view,
+            resolver,
         )
 
         assertFalse(result)
@@ -118,7 +125,8 @@ class DivItemChangeActionHandlerTest {
 
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_next_item?id=$ID"),
-            view
+            view,
+            resolver,
         )
 
         assertFalse(result)
@@ -128,7 +136,8 @@ class DivItemChangeActionHandlerTest {
     fun `not handled when item param missing`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID"),
-            view
+            view,
+            resolver,
         )
 
         assertFalse(result)
@@ -138,7 +147,8 @@ class DivItemChangeActionHandlerTest {
     fun `not handled when item param not a number`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_current_item?id=$ID&item=bar"),
-            view
+            view,
+            resolver,
         )
 
         assertFalse(result)
@@ -149,7 +159,7 @@ class DivItemChangeActionHandlerTest {
         whenever(divItemsView.itemCount).thenReturn(CURRENT_ITEM + 1)
 
         val result = DivItemChangeActionHandler.handleAction(
-            Uri.parse("div-action://set_next_item?id=$ID&overflow=ring"), view
+            Uri.parse("div-action://set_next_item?id=$ID&overflow=ring"), view, resolver
         )
 
         assertTrue(result)
@@ -162,7 +172,8 @@ class DivItemChangeActionHandlerTest {
 
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://set_previous_item?id=$ID&overflow=ring"),
-            view
+            view,
+            resolver,
         )
 
         assertTrue(result)

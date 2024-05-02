@@ -6,6 +6,7 @@ import android.view.ViewTreeObserver
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.pxToDp
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 
@@ -26,7 +27,7 @@ class DivSizeProviderExtensionHandler(
 
     private val DivBase.sizeProviderExtension get() = extensions?.find { it.id == SIZE_PROVIDER_EXTENSION_ID }
 
-    override fun bindView(divView: Div2View, view: View, div: DivBase) {
+    override fun bindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
         val params = div.sizeProviderExtension?.params ?: run {
             errorLogger.logError(Throwable("Failed to get extension params from extension $SIZE_PROVIDER_EXTENSION_ID"))
             return
@@ -41,7 +42,7 @@ class DivSizeProviderExtensionHandler(
         val data = divView.divData ?: return
 
         val variablesHolder = variablesHolders[data] ?: DivSizeProviderVariablesHolder()
-            .apply { observeDivData(data, divView.expressionResolver) }
+            .apply { observeDivData(data, expressionResolver) }
             .also { variablesHolders[data] = it }
         divDataCounters[data] = (divDataCounters[data] ?: 0) + 1
         view.setTag(R.id.div_size_provider_data, data)
@@ -90,7 +91,7 @@ class DivSizeProviderExtensionHandler(
         sizes[variableName] = size.pxToDp(metrics)
     }
 
-    override fun unbindView(divView: Div2View, view: View, div: DivBase) {
+    override fun unbindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
         view.removeOnLayoutChangeListener(view.getTag(R.id.div_size_provider_listener) as? View.OnLayoutChangeListener)
         val data = view.getTag(R.id.div_size_provider_data) as? DivData ?: return
         val currentCount = divDataCounters[data] ?: return

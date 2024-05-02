@@ -48,14 +48,14 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
                 val uuid = UUID.randomUUID().toString()
 
                 // try to handle scheme if it is known, otherwise log
-                val handled = scope.actionHandler?.handleAction(action, scope, uuid) ?: false
-                if (!handled && !divActionHandler.handleAction(action, scope, uuid)) {
+                val handled = scope.actionHandler?.handleAction(action, scope, resolver, uuid) ?: false
+                if (!handled && !divActionHandler.handleAction(action, scope, resolver, uuid)) {
                     logAction(scope, resolver, view, action, uuid)
                 }
             } else {
                 // try to handle scheme if it is known, otherwise log
-                val handled = scope.actionHandler?.handleAction(action, scope) ?: false
-                if (!handled && !divActionHandler.handleAction(action, scope)) {
+                val handled = scope.actionHandler?.handleAction(action, scope, resolver) ?: false
+                if (!handled && !divActionHandler.handleAction(action, scope, resolver)) {
                     logAction(scope, resolver, view, action)
                 }
             }
@@ -67,9 +67,9 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
 
     private fun logAction(scope: Div2View, resolver: ExpressionResolver, view: View, action: DivSightAction) {
         if (action is DivVisibilityAction) {
-            logger.logViewShown(scope, view, action)
+            logger.logViewShown(scope, resolver, view, action)
         } else {
-            logger.logViewDisappeared(scope, view, action as DivDisappearAction)
+            logger.logViewDisappeared(scope, resolver, view, action as DivDisappearAction)
         }
         divActionBeaconSender.sendVisibilityActionBeacon(action, resolver)
     }
@@ -82,9 +82,9 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
         actionUid: String
     ) {
         if (action is DivVisibilityAction) {
-            logger.logViewShown(scope, view, action, actionUid)
+            logger.logViewShown(scope, resolver, view, action, actionUid)
         } else {
-            logger.logViewDisappeared(scope, view, action as DivDisappearAction, actionUid)
+            logger.logViewDisappeared(scope, resolver, view, action as DivDisappearAction, actionUid)
         }
         divActionBeaconSender.sendVisibilityActionBeacon(action, resolver)
     }

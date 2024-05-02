@@ -4,6 +4,7 @@ import android.view.View
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivDisappearAction
@@ -40,29 +41,29 @@ class DemoDiv2Logger(
         fun clearLogActions() = capturedLogActions.clear()
     }
 
-    override fun logClick(divView: Div2View, view: View, action: DivAction) {
-        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+    override fun logClick(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction) {
+        val actionLogId = action.logId.evaluate(resolver)
         log {
             "logClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
-    override fun logLongClick(divView: Div2View, view: View, action: DivAction) {
-        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+    override fun logLongClick(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction) {
+        val actionLogId = action.logId.evaluate(resolver)
         log {
             "logLongClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
-    override fun logDoubleClick(divView: Div2View, view: View, action: DivAction) {
-        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+    override fun logDoubleClick(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction) {
+        val actionLogId = action.logId.evaluate(resolver)
         log {
             "logDoubleClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
-    override fun logFocusChanged(divView: Div2View, view: View, action: DivAction, haveFocus: Boolean) {
-        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+    override fun logFocusChanged(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction, haveFocus: Boolean) {
+        val actionLogId = action.logId.evaluate(resolver)
         log {
             "logFocusChanged(cardId = ${divView.logId}, id = $actionLogId, haveFocus = $haveFocus)"
         }
@@ -88,6 +89,7 @@ class DemoDiv2Logger(
 
     override fun logGalleryCompleteScroll(
         divView: Div2View,
+        resolver: ExpressionResolver,
         divGallery: DivGallery,
         firstVisibleItem: Int,
         lastVisibleItem: Int,
@@ -100,6 +102,7 @@ class DemoDiv2Logger(
 
     override fun logPagerChangePage(
         divView: Div2View,
+        resolver: ExpressionResolver,
         divPager: DivPager,
         currentPageIndex: Int,
         scrollDirection: String
@@ -109,22 +112,30 @@ class DemoDiv2Logger(
         }
     }
 
-    override fun logViewShown(divView: Div2View, view: View, action: DivVisibilityAction) {
-        val expressionResolver = divView.expressionResolver
-        val actionLogId = action.logId.evaluate(expressionResolver)
+    override fun logViewShown(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        view: View,
+        action: DivVisibilityAction,
+    ) {
+        val actionLogId = action.logId.evaluate(resolver)
         log {
-            "logViewShown(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(expressionResolver)}), referer = ${action.referer?.evaluate(expressionResolver)})"
+            "logViewShown(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(resolver)}), referer = ${action.referer?.evaluate(resolver)})"
         }
         if (captureVisibilityActions) {
             capturedVisibilityActions += action
         }
     }
 
-    override fun logViewDisappeared(divView: Div2View, view: View, action: DivDisappearAction) {
-        val expressionResolver = divView.expressionResolver
-        val actionLogId = action.logId.evaluate(expressionResolver)
+    override fun logViewDisappeared(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        view: View,
+        action: DivDisappearAction,
+    ) {
+        val actionLogId = action.logId.evaluate(resolver)
         log {
-            "logViewDisappeared(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(expressionResolver)}), referer = ${action.referer?.evaluate(expressionResolver)})"
+            "logViewDisappeared(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(resolver)}), referer = ${action.referer?.evaluate(resolver)})"
         }
     }
 

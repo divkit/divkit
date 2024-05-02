@@ -47,7 +47,7 @@ open class DivLottieExtensionHandler(
         repo.preloadLottieComposition(lottieUrl)
     }
 
-    override fun beforeBindView(divView: Div2View, view: View, div: DivBase) {
+    override fun beforeBindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
         val divGifImageView = view as? LoadableImageView ?: return
         if (divGifImageView.delegate !is LottieController) {
             divGifImageView.delegate = LottieController(divGifImageView).apply {
@@ -69,7 +69,7 @@ open class DivLottieExtensionHandler(
         } ?: false
     }
 
-    override fun bindView(divView: Div2View, view: View, div: DivBase) {
+    override fun bindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
         val params: JSONObject = div.extensions?.find { extension ->
             return@find extension.id == EXTENSION_ID
         }?.params ?: return logger.fail("failed to get extension params from extension $EXTENSION_ID")
@@ -159,7 +159,7 @@ open class DivLottieExtensionHandler(
             }
     }
 
-    override fun unbindView(divView: Div2View, view: View, div: DivBase) {
+    override fun unbindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
         val lottieView = view as? LoadableImageView
             ?: return logger.fail("view is not instance of DivGifImageView")
         val lottieController = lottieView.delegate as? LottieController

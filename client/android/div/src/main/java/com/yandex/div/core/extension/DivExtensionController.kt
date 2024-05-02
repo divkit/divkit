@@ -25,35 +25,35 @@ internal class DivExtensionController @Inject constructor(
         }
     }
 
-    fun beforeBindView(divView: Div2View, view: View, div: DivBase) {
+    fun beforeBindView(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
         if (!hasExtensions(div)) {
             return
         }
         extensionHandlers.forEach { handler ->
             if (handler.matches(div)) {
-                handler.beforeBindView(divView, view, div)
+                handler.beforeBindView(divView, resolver, view, div)
             }
         }
     }
 
-    fun bindView(divView: Div2View, view: View, div: DivBase) {
+    fun bindView(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
         if (!hasExtensions(div)) {
             return
         }
         extensionHandlers.forEach { handler ->
             if (handler.matches(div)) {
-                handler.bindView(divView, view, div)
+                handler.bindView(divView, resolver, view, div)
             }
         }
     }
 
-    fun unbindView(divView: Div2View, view: View, div: DivBase) {
+    fun unbindView(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
         if (!hasExtensions(div)) {
             return
         }
         extensionHandlers.forEach { handler ->
             if (handler.matches(div)) {
-                handler.unbindView(divView, view, div)
+                handler.unbindView(divView, resolver, view, div)
             }
         }
     }

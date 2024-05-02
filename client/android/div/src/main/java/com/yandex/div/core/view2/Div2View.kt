@@ -893,15 +893,23 @@ class Div2View private constructor(
     }
 
     @JvmOverloads
-    fun handleAction(action: DivAction, reason: String = DivActionReason.EXTERNAL) {
-        handleActionWithResult(action, reason)
+    fun handleAction(
+        action: DivAction,
+        reason: String = DivActionReason.EXTERNAL,
+        resolver: ExpressionResolver = expressionResolver
+    ) {
+        handleActionWithResult(action, reason, resolver)
     }
 
     @JvmOverloads
-    fun handleActionWithResult(action: DivAction, reason: String = DivActionReason.EXTERNAL): Boolean {
+    fun handleActionWithResult(
+        action: DivAction,
+        reason: String = DivActionReason.EXTERNAL,
+        resolver: ExpressionResolver = expressionResolver
+    ): Boolean {
         return div2Component.actionBinder.handleAction(
             divView = this,
-            expressionResolver,
+            resolver,
             action = action,
             reason = reason,
             actionUid = null,

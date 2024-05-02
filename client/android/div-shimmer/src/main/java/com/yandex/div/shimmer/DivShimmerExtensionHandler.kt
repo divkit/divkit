@@ -35,7 +35,7 @@ open class DivShimmerExtensionHandler(
         } ?: false
     }
 
-    override fun bindView(divView: Div2View, view: View, div: DivBase) {
+    override fun bindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
         val params: JSONObject? = div.extensions?.find { extension ->
             return@find extension.id == EXTENSION_ID
         }?.params
@@ -49,15 +49,15 @@ open class DivShimmerExtensionHandler(
             animationStartTime = SystemClock.uptimeMillis()
         }
         val drawable = ShimmerDrawable(
-                data.createShimmer(divView.expressionResolver),
+                data.createShimmer(expressionResolver),
                 animationStartTime
         )
-        data.observeTo(drawable, divView.expressionResolver)
+        data.observeTo(drawable, expressionResolver)
         imageView.setImage(drawable)
         view.setTag(R.id.div_shimmer_drawable, drawable)
     }
 
-    override fun unbindView(divView: Div2View, view: View, div: DivBase) {
+    override fun unbindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
         (view.getTag(R.id.div_shimmer_drawable) as? ShimmerDrawable)?.stop()
     }
 

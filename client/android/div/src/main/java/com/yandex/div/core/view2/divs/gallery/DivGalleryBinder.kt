@@ -239,11 +239,14 @@ internal class DivGalleryBinder @Inject constructor(
                 alreadyLogged = false
             }
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                divView.div2Component.div2Logger.logGalleryCompleteScroll(divView,
-                                                                          galleryDiv,
-                                                                          galleryItemHelper.firstVisibleItemPosition(),
-                                                                          galleryItemHelper.lastVisibleItemPosition(),
-                                                                          direction)
+                divView.div2Component.div2Logger.logGalleryCompleteScroll(
+                    divView,
+                    bindingContext.expressionResolver,
+                    galleryDiv,
+                    galleryItemHelper.firstVisibleItemPosition(),
+                    galleryItemHelper.lastVisibleItemPosition(),
+                    direction
+                )
             }
         }
 

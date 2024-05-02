@@ -26,6 +26,7 @@ import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
@@ -368,15 +369,15 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         uriHandler: DivkitDemoUriHandler
     ) : DemoDivActionHandler(uriHandler) {
 
-        override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-            val url = action.url?.evaluate(view.expressionResolver)
-                ?: return super.handleAction(action, view)
+        override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
+            val url = action.url?.evaluate(resolver)
+                ?: return super.handleAction(action, view, resolver)
             if (url.scheme == "div-demo-action" && url.host == "set_data") {
                 val assetName = url.getQueryParameter("path")
                 editorPresenter.readAsset("asset:///regression_test_data/$assetName")
                 return true
             }
-            return super.handleAction(action, view)
+            return super.handleAction(action, view, resolver)
         }
     }
 

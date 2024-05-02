@@ -5,6 +5,7 @@ import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.Assert
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivDownloadCallbacks
 import com.yandex.div2.DivPatch
@@ -34,32 +35,41 @@ internal object DivDownloadActionHandler {
     }
 
     @JvmStatic
-    fun handleAction(action: DivAction, view: Div2View): Boolean {
-        val uri = action.url?.evaluate(view.expressionResolver) ?: return false
-        return handleAction(uri, action.downloadCallbacks, view)
+    fun handleAction(action: DivAction, view: Div2View, resolver: ExpressionResolver): Boolean {
+        val uri = action.url?.evaluate(resolver) ?: return false
+        return handleAction(uri, action.downloadCallbacks, view, resolver)
     }
 
     @JvmStatic
-    fun handleVisibilityAction(action: DivSightAction, view: Div2View): Boolean {
-        val uri = action.url?.evaluate(view.expressionResolver) ?: return false
-        return handleAction(uri, action.downloadCallbacks, view)
+    fun handleVisibilityAction(action: DivSightAction, view: Div2View, resolver: ExpressionResolver): Boolean {
+        val uri = action.url?.evaluate(resolver) ?: return false
+        return handleAction(uri, action.downloadCallbacks, view, resolver)
     }
 
-    private fun handleAction(uri: Uri, downloadCallbacks: DivDownloadCallbacks?, view: Div2View): Boolean {
+    private fun handleAction(
+        uri: Uri,
+        downloadCallbacks: DivDownloadCallbacks?,
+        view: Div2View,
+        resolver: ExpressionResolver,
+    ): Boolean {
         val downloadUrl = uri.getQueryParameter(PARAM_URL) ?: return false
         val callback = object : DivPatchDownloadCallback {
             override fun onSuccess(patch: DivPatch) {
                 val success = view.applyPatch(patch)
                 if (success) {
                     view.bulkActions {
-                        downloadCallbacks?.onSuccessActions?.forEach { view.handleAction(it, DivActionReason.PATCH) }
+                        downloadCallbacks?.onSuccessActions?.forEach {
+                            view.handleAction(it, DivActionReason.PATCH, resolver)
+                        }
                     }
                 }
             }
 
             override fun onFail() {
                 view.bulkActions {
-                    downloadCallbacks?.onFailActions?.forEach { view.handleAction(it, DivActionReason.PATCH) }
+                    downloadCallbacks?.onFailActions?.forEach {
+                        view.handleAction(it, DivActionReason.PATCH, resolver)
+                    }
                 }
             }
         }
