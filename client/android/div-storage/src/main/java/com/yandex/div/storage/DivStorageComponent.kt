@@ -21,6 +21,7 @@ interface DivStorageComponent {
 
     companion object {
 
+        @JvmOverloads
         fun create(
                 context: Context,
                 histogramReporter: HistogramReporterDelegate = HistogramReporterDelegate.NoOp,
@@ -29,7 +30,6 @@ interface DivStorageComponent {
                 cardErrorTransformer: Provider<out CardErrorTransformer>? = null,
                 parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
                     LazyProvider { DivParsingHistogramReporter.DEFAULT },
-                experimentalUseNewDatabaseManagerToPreventConcurrencyIssuesDoNotOverride: Boolean = true,
                 databaseNamePrefix: String = "",
         ): DivStorageComponent = createInternal(
                 context,
