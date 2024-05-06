@@ -23,7 +23,6 @@ extension DivState: DivBlockModeling {
       context.addWarning(message: "DivState has no id")
     }
 
-    let stateInterceptor = context.getStateInterceptor(for: self)
     let divStatePath = context.parentDivStatePath + id
     let defaultStateId = resolveDefaultStateId(context.expressionResolver)
     let stateManager = context.stateManager
@@ -39,8 +38,7 @@ extension DivState: DivBlockModeling {
     let stateManagerItem = stateManager.get(stateBlockPath: divStatePath)
 
     let expressionResolver = context.expressionResolver
-    let activeState = stateInterceptor?.getAppropriateState(divState: self, context: context)
-      ?? states.first { $0.stateId == stateManagerItem?.currentStateID.rawValue }
+    let activeState = states.first { $0.stateId == stateManagerItem?.currentStateID.rawValue }
       ?? states.first { $0.stateId == defaultStateId }
       ?? states[0]
     let activeStateID = DivStateID(rawValue: activeState.stateId)

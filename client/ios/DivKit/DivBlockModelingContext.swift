@@ -25,7 +25,6 @@ public struct DivBlockModelingContext {
   let fontProvider: DivFontProvider
   let flagsInfo: DivFlagsInfo
   let extensionHandlers: [String: DivExtensionHandler]
-  let stateInterceptors: [String: DivStateInterceptor]
   let layoutDirection: UserInterfaceLayoutDirection
   let debugParams: DebugParams
   let scheduler: Scheduling
@@ -58,7 +57,6 @@ public struct DivBlockModelingContext {
     fontProvider: DivFontProvider? = nil,
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
-    stateInterceptors: [DivStateInterceptor] = [],
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     playerFactory: PlayerFactory? = nil,
     debugParams: DebugParams = DebugParams(),
@@ -83,15 +81,6 @@ public struct DivBlockModelingContext {
       }
       extensionsHandlersDictionary[id] = extensionHandler
     }
-    var stateInterceptorsDictionary = [String: DivStateInterceptor]()
-    for stateInterceptor in stateInterceptors {
-      let id = stateInterceptor.id
-      if stateInterceptorsDictionary[id] != nil {
-        DivKitLogger.failure("Duplicate DivStateInterceptor for: \(id)")
-        continue
-      }
-      stateInterceptorsDictionary[id] = stateInterceptor
-    }
     self.init(
       viewId: viewId,
       cardLogId: cardLogId,
@@ -107,7 +96,6 @@ public struct DivBlockModelingContext {
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
       extensionHandlers: extensionsHandlersDictionary,
-      stateInterceptors: stateInterceptorsDictionary,
       variablesStorage: variablesStorage,
       playerFactory: playerFactory,
       debugParams: debugParams,
@@ -136,7 +124,6 @@ public struct DivBlockModelingContext {
     fontProvider: DivFontProvider?,
     flagsInfo: DivFlagsInfo,
     extensionHandlers: [String: DivExtensionHandler],
-    stateInterceptors: [String: DivStateInterceptor],
     variablesStorage: DivVariablesStorage,
     playerFactory: PlayerFactory?,
     debugParams: DebugParams,
@@ -175,7 +162,6 @@ public struct DivBlockModelingContext {
     self.tooltipViewFactory = tooltipViewFactory
     self.variablesStorage = variablesStorage
     self.extensionHandlers = extensionHandlers
-    self.stateInterceptors = stateInterceptors
     functionsProvider = FunctionsProvider(
       cardId: cardId,
       variablesStorage: variablesStorage,
@@ -199,15 +185,11 @@ public struct DivBlockModelingContext {
     }
     return extensions.compactMap {
       let id = $0.id
-      if !extensionHandlers.keys.contains(id), !stateInterceptors.keys.contains(id) {
+      if !extensionHandlers.keys.contains(id) {
         addError(message: "No DivExtensionHandler for: \(id)")
       }
       return extensionHandlers[id]
     }
-  }
-
-  public func getStateInterceptor(for divState: DivState) -> DivStateInterceptor? {
-    divState.extensions?.compactMap { stateInterceptors[$0.id] }.first
   }
 
   public func addError(message: String) {
