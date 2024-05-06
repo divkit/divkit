@@ -33,7 +33,7 @@ Client side libraries for rendering UI on Android, iOS and Web.
 
 Server side libraries for building JSON in DivKit format.
 
-[TypeScript](json-builder/typescript/), [Kotlin](json-builder/kotlin/)
+[TypeScript](json-builder/typescript/), [Kotlin](json-builder/kotlin/), [Python](json-builder/python/)
 
 ### Schema
 
