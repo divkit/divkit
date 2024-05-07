@@ -11,7 +11,7 @@ class EntityWithArrayWithTransform with EquatableMixin {
 
   static const type = "entity_with_array_with_transform";
   // at least 1 elements
-  final Expression<List<int>> array;
+  final Expression<List<Color>> array;
 
   @override
   List<Object?> get props => [

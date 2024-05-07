@@ -23,7 +23,7 @@ class EntityWithSimpleProperties with EquatableMixin {
 
   final Expression<bool>? booleanInt;
 
-  final Expression<int>? color;
+  final Expression<Color>? color;
 
   final Expression<double>? dNum;
   // default value: 0

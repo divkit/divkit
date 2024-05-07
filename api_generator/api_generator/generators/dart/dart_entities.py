@@ -190,9 +190,9 @@ class DartProperty(Property):
         elif isinstance(prop_type, (String, StaticString)):
             return f"safeParseStr{expr}(json['{self.name}']?.toString(),{fallback}){required}"
         elif isinstance(prop_type, Dictionary):
-            return f"safeParseObj{expr}(json,{fallback}){required}"
+            return f"safeParseMap{expr}(json,{fallback}){required}"
         elif isinstance(prop_type, RawArray):
-            return f"safeParseObj{expr}(json['{self.name}'],{fallback}){required}"
+            return f"safeParseList{expr}(json['{self.name}'],{fallback}){required}"
         elif isinstance(prop_type, Url):
             return f"safeParseUri{expr}(json['{self.name}']){required}"
         elif prop_type.is_string_enumeration():
@@ -214,9 +214,9 @@ class DartProperty(Property):
             elif isinstance(list_item_type, (String, StaticString)):
                 strategy = "safeParseStr(v?.toString(),)!"
             elif isinstance(list_item_type, Dictionary):
-                strategy = "safeParseObj(json,)!"
+                strategy = "safeParseMap(json,)!"
             elif isinstance(list_item_type, RawArray):
-                strategy = "safeParseObj(v,)!"
+                strategy = "safeParseList(v,)!"
             elif isinstance(list_item_type, Url):
                 strategy = "safeParseUri(v)!"
             elif list_item_type.is_string_enumeration():
@@ -302,7 +302,7 @@ class DartPropertyType(PropertyType):
         return isinstance(self, (Array, DartArray))
 
     def declaration(self) -> str:
-        if isinstance(self, (Int, Color)):
+        if isinstance(self, Int):
             return 'int'
         elif isinstance(self, Double):
             return 'double'
@@ -310,6 +310,8 @@ class DartPropertyType(PropertyType):
             return 'bool'
         elif isinstance(self, (String, StaticString)):
             return 'String'
+        elif isinstance(self, Color):
+            return 'Color'
         elif isinstance(self, Dictionary):
             return 'Map<String, dynamic>'
         elif isinstance(self, RawArray):
@@ -333,7 +335,7 @@ class DartPropertyType(PropertyType):
             value_with_escaping_quotes = default_value.replace('"', '\"')
             return f'"{value_with_escaping_quotes}"'
         elif isinstance(self, Url):
-            return f'const Uri.parse("{default_value}")'
+            return f'const Uri.parse("{default_value.replace("+", "%2B")}")'
         elif isinstance(self, Color):
             color_value = default_value[1::].upper()
             if len(color_value) == 3:
@@ -347,7 +349,7 @@ class DartPropertyType(PropertyType):
                 color_argb_hex = color_value
             else:
                 raise ValueError
-            return f'0x{color_argb_hex}'
+            return f'const Color(0x{color_argb_hex})'
         elif isinstance(self, Array):
             without_whitespaces = default_value.replace(' ', '').replace('\n', '')
             if not without_whitespaces.startswith('[') or not without_whitespaces.endswith(']'):
