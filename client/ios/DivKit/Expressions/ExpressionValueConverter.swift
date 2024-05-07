@@ -23,19 +23,23 @@ enum ExpressionValueConverter {
 
   static func stringify(_ value: Any) -> String {
     switch value {
-    case let bool as Bool:
-      return bool.description
-    case let int as Int:
-      return String(int)
-    case let double as Double:
-      let formatter = NumberFormatter()
-      if double >= 1e7 || double <= -1e7 {
-        formatter.numberStyle = NumberFormatter.Style.scientific
+    case let number as NSNumber:
+      switch UnicodeScalar(UInt8(number.objCType.pointee)) {
+      case "c":
+        return number == 0 ? "false" : "true"
+      case "d":
+        let formatter = NumberFormatter()
+        let double = number.doubleValue
+        if double >= 1e7 || double <= -1e7 {
+          formatter.numberStyle = NumberFormatter.Style.scientific
+        }
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 15
+        formatter.locale = Locale(identifier: "en")
+        return formatter.string(from: number)!
+      default:
+        return "\(value)"
       }
-      formatter.minimumFractionDigits = 1
-      formatter.maximumFractionDigits = 15
-      formatter.locale = Locale(identifier: "en")
-      return formatter.string(from: NSNumber(value: double))!
     case let color as RGBAColor:
       return color.argbString
     case let date as Date:
@@ -59,8 +63,8 @@ enum ExpressionValueConverter {
 
 private func formatValue(_ value: Any) -> String {
   switch value {
-  case let string as String:
-    "\"\(string)\""
+  case is String:
+    "\"\(value)\""
   default:
     ExpressionValueConverter.stringify(value)
   }
