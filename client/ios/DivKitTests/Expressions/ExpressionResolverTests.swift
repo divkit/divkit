@@ -90,6 +90,8 @@ final class ExpressionResolverTests: XCTestCase {
     XCTAssertNil(
       expressionResolver.resolveColor(expression("@{'invalid'}"))
     )
+
+    XCTAssertEqual(error, "Failed to initialize RGBAColor from string: invalid")
   }
 
   func test_ResolveUrl_Constant() {
@@ -157,6 +159,8 @@ final class ExpressionResolverTests: XCTestCase {
 
     let value: TestEnum? = expressionResolver.resolveEnum(expression("@{'invalid'}"))
     XCTAssertNil(value)
+
+    XCTAssertEqual(error, "Failed to initialize TestEnum from string: invalid")
   }
 
   func test_ResolveEnum_WithConstant() {
@@ -184,6 +188,69 @@ final class ExpressionResolverTests: XCTestCase {
     XCTAssertEqual(
       expressionResolver.resolveDict(expression("@{dict_var}")) as! [String: AnyHashable],
       ["string": "value"]
+    )
+  }
+
+  func test_resolveString_FromString_Constant() {
+    XCTAssertEqual(
+      expressionResolver.resolveString("Some string"),
+      "Some string"
+    )
+  }
+
+  func test_resolveString_FromString_Expression() {
+    XCTAssertEqual(
+      expressionResolver.resolveString("@{string_var}"),
+      "string value"
+    )
+  }
+
+  func test_resolveString_FromString_InvalidExpression() {
+    isErrorExpected = true
+
+    XCTAssertNil(
+      expressionResolver.resolveString("@{invalid_expression}")
+    )
+  }
+
+  func test_resolveColor_FromString_Constant() {
+    XCTAssertEqual(
+      expressionResolver.resolveColor("#CCBBAA"),
+      color("#CCBBAA")
+    )
+  }
+
+  func test_resolveColor_FromString_Expression() {
+    XCTAssertEqual(
+      expressionResolver.resolveColor("@{'#CCBBAA'}"),
+      color("#CCBBAA")
+    )
+  }
+
+  func test_resolveColor_FromString_InvalidValue() {
+    isErrorExpected = true
+
+    XCTAssertNil(
+      expressionResolver.resolveColor("@{'invalid'}")
+    )
+
+    XCTAssertEqual(error, "Failed to initialize RGBAColor from string: invalid")
+  }
+
+  func test_resolveNumeric_FromString_NumberExpression() {
+    let value: Double? = expressionResolver.resolveNumeric("@{number_var}")
+    XCTAssertEqual(value, 12.9)
+  }
+
+  func test_resolveNumeric_FromString_InvalidValueType() {
+    isErrorExpected = true
+
+    let value: Double? = expressionResolver.resolveNumeric("@{'invalid'}")
+    XCTAssertNil(value)
+
+    XCTAssertEqual(
+      error,
+      "Result type String is not compatible with expected type Double"
     )
   }
 
@@ -234,10 +301,7 @@ final class ExpressionResolverTests: XCTestCase {
   func test_resolveString_WithValidatorValid() {
     XCTAssertEqual(
       expressionResolver.resolveString(
-        .link(ExpressionLink(
-          rawValue: "@{string_var}",
-          validator: AnyValueValidator<String> { _ in true }
-        )!)
+        expressionWithValidator("@{string_var}", isValid: true)
       ),
       "string value"
     )
@@ -248,10 +312,7 @@ final class ExpressionResolverTests: XCTestCase {
 
     XCTAssertNil(
       expressionResolver.resolveString(
-        .link(ExpressionLink(
-          rawValue: "@{string_var}",
-          validator: AnyValueValidator<String> { _ in false }
-        )!)
+        expressionWithValidator("@{string_var}", isValid: false)
       )
     )
 
@@ -261,10 +322,7 @@ final class ExpressionResolverTests: XCTestCase {
   func test_resolveNumeric_WithValidatorValid() {
     XCTAssertEqual(
       expressionResolver.resolveNumeric(
-        .link(ExpressionLink(
-          rawValue: "@{number_var}",
-          validator: AnyValueValidator<Double> { _ in true }
-        )!)
+        expressionWithValidator("@{number_var}", isValid: true)
       ),
       12.9
     )
@@ -275,10 +333,7 @@ final class ExpressionResolverTests: XCTestCase {
 
     XCTAssertNil(
       expressionResolver.resolveNumeric(
-        .link(ExpressionLink(
-          rawValue: "@{number_var}",
-          validator: AnyValueValidator<Double> { _ in false }
-        )!)
+        expressionWithValidator("@{number_var}", isValid: false)
       )
     )
 
@@ -290,15 +345,16 @@ final class ExpressionResolverTests: XCTestCase {
 
     XCTAssertNil(
       expressionResolver.resolveNumeric(
-        .link(ExpressionLink(
-          rawValue: "@{'@{string_var}' == string_var}",
-          validator: AnyValueValidator<Bool> { _ in false }
-        )!)
+        expressionWithValidator("@{'@{string_var}' == string_var}", isValid: false)
       )
     )
 
     XCTAssertEqual(error, "Failed to validate value: true")
   }
+}
+
+private func expressionWithValidator<T>(_ expression: String, isValid: Bool) -> Expression<T> {
+  .link(ExpressionLink(rawValue: expression, validator: AnyValueValidator { _ in isValid })!)
 }
 
 private enum TestEnum: String {

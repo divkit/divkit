@@ -8,11 +8,7 @@ enum ExpressionValueConverter {
       return value
     }
 
-    var type: Any.Type = T.self
-    if let optionalType = type as? _Optional.Type {
-      type = optionalType.wrappedType
-    }
-    switch type {
+    switch T.self {
     case is String.Type:
       return stringify(anyValue) as? T
     case let numericType as _Numeric.Type:
@@ -76,11 +72,3 @@ private protocol _Numeric {
 
 extension Int: _Numeric {}
 extension Double: _Numeric {}
-
-private protocol _Optional {
-  static var wrappedType: Any.Type { get }
-}
-
-extension Optional: _Optional {
-  fileprivate static var wrappedType: Any.Type { Wrapped.self }
-}
