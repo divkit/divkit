@@ -1,0 +1,46 @@
+{
+  "description": "Line height of multi-line text with text size spans",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "line_height_with_size_range",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "width": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "left": 4,
+            "top": 4,
+            "right": 4,
+            "bottom": 4
+          },
+          "font_size": 14,
+          "line_height": 18,
+          "text": "Lorem ipsum dolor sit amet, consectetur\nadipiscing elit, sed do eiusmod tempor\nincididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud\nexercitation ullamco laboris nisi ut\naliquip ex ea commodo consequat.",
+          "ranges": [
+            {
+              "start": 64,
+              "end": 71,
+              "font_size": 24,
+              "font_weight": "bold",
+              "line_height": 28
+            },
+            {
+              "start": 135,
+              "end": 140,
+              "font_size": 24,
+              "font_weight": "medium"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

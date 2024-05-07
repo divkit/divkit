@@ -1,0 +1,43 @@
+{
+  "description": "Line height of multi-line text with image span",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "line_height_with_image",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "width": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "left": 4,
+            "top": 4,
+            "right": 4,
+            "bottom": 4
+          },
+          "font_size": 14,
+          "line_height": 16,
+          "text": "Lorem ipsum dolor sit amet, consectetur\nadipiscing elit, sed do eiusmod  tempor\nincididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud\nexercitation ullamco laboris nisi ut\naliquip ex ea commodo consequat.",
+          "images": [
+            {
+              "start": 72,
+              "width": {
+                "value": 24
+              },
+              "height": {
+                "value": 24
+              },
+              "url": "https://yastatic.net/s3/home/test/omni_icon.png"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

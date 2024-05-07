@@ -48,6 +48,11 @@ internal open class SuperLineHeightEditText @JvmOverloads constructor(
         }
     }
 
+    override fun setTextSize(unit: Int, size: Float) {
+        super.setTextSize(unit, size)
+        fixedLineHeightHelper.onFontSizeChanged()
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         fixedLineHeightHelper.measureWithFixedLineHeight(heightMeasureSpec, visibleLineCount) {

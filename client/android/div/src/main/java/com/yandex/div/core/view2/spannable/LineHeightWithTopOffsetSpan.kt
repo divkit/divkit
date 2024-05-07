@@ -39,7 +39,7 @@ internal class LineHeightWithTopOffsetSpan(
             fontMetricsSaved = true
             saveFontMetrics(fm)
         }
-        if (start >= spanStart && end <= spanEnd) {
+        if (start <= spanEnd && spanStart <= end) {
             applyLineHeight(fm)
         }
         if (spanStart in start..end) {

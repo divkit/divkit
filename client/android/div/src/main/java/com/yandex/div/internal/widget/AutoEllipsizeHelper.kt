@@ -1,8 +1,6 @@
 package com.yandex.div.internal.widget
 
 import android.view.ViewTreeObserver
-import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
-import kotlin.math.min
 
 /**
  * Helper to calculate and update max lines for given [textView].
@@ -21,7 +19,7 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
      */
     fun onViewAttachedToWindow() {
         if (isEnabled) {
-            addPreDrawListener()
+            addListener()
         }
     }
 
@@ -29,10 +27,10 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
      * Called when [textView] detached from window.
      */
     fun onViewDetachedFromWindow() {
-        removePreDrawListener()
+        removeListener()
     }
 
-    private fun addPreDrawListener() {
+    private fun addListener() {
         if (preDrawListener != null) {
             return
         }
@@ -40,22 +38,23 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
             if (!isEnabled) {
                 return@OnPreDrawListener true
             }
-            val maxLines = textView.run {
-                val lineHeight = if (fixedLineHeight != UNDEFINED_LINE_HEIGHT) fixedLineHeight else lineHeight
-                min(lineCount, height / lineHeight)
+            val visibleLineCount = textView.run {
+                val textHeight = height - compoundPaddingTop - compoundPaddingBottom
+                val lastVisibleLine = lineAt(textHeight)
+                if (textHeight >= textHeight(lastVisibleLine + 1)) lastVisibleLine + 1 else lastVisibleLine
             }
-            if (maxLines != textView.maxLines) {
-                textView.maxLines = maxLines
+            if (visibleLineCount < textView.lineCount) {
+                textView.maxLines = visibleLineCount
                 false
             } else {
-                removePreDrawListener()
+                removeListener()
                 true
             }
         }
         textView.viewTreeObserver.addOnPreDrawListener(preDrawListener)
     }
 
-    private fun removePreDrawListener() {
+    private fun removeListener() {
         if (preDrawListener != null) {
             textView.viewTreeObserver.removeOnPreDrawListener(preDrawListener)
             preDrawListener = null

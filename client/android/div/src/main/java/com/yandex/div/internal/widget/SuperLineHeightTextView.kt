@@ -20,6 +20,11 @@ open class SuperLineHeightTextView @JvmOverloads constructor(
 
     override var fixedLineHeight by fixedLineHeightHelper::lineHeight
 
+    override fun setTextSize(unit: Int, size: Float) {
+        super.setTextSize(unit, size)
+        fixedLineHeightHelper.onFontSizeChanged()
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         fixedLineHeightHelper.measureWithFixedLineHeight(heightMeasureSpec, visibleLineCount) {

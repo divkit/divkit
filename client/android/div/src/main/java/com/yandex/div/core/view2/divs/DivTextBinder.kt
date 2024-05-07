@@ -10,7 +10,6 @@ import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
-import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
@@ -33,6 +32,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
+import com.yandex.div.core.view2.spannable.FontSizeSpan
 import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
 import com.yandex.div.core.view2.spannable.ShadowSpan
 import com.yandex.div.core.view2.spannable.ShadowSpan.ShadowParams
@@ -47,8 +47,8 @@ import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
 import com.yandex.div.internal.spannable.TextColorSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
-import com.yandex.div.internal.util.checkHyphenationSupported
 import com.yandex.div.internal.widget.EllipsizedTextView
+import com.yandex.div.internal.widget.checkHyphenationSupported
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
@@ -70,6 +70,7 @@ import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
 import javax.inject.Inject
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 private const val SOFT_HYPHEN = '\u00AD'
 private const val WORD_JOINER = "\u2060"
@@ -105,7 +106,7 @@ internal class DivTextBinder @Inject constructor(
         view.bindTypeface(div, oldDiv, expressionResolver)
         view.bindTextAlignment(div, oldDiv, expressionResolver)
         view.bindFontSize(div, oldDiv, expressionResolver)
-        view.bindLineHeight(div, oldDiv, expressionResolver)
+        view.bindLineHeight(context, div, oldDiv, expressionResolver)
         view.bindTextColor(div, oldDiv, expressionResolver)
         view.bindUnderline(div, oldDiv, expressionResolver)
         view.bindStrikethrough(div, oldDiv, expressionResolver)
@@ -294,6 +295,7 @@ internal class DivTextBinder @Inject constructor(
     //region Line Height
 
     private fun DivLineHeightTextView.bindLineHeight(
+        context: BindingContext,
         newDiv: DivText,
         oldDiv: DivText?,
         resolver: ExpressionResolver,
@@ -311,6 +313,9 @@ internal class DivTextBinder @Inject constructor(
 
         val callback = { _: Any ->
             applyLineHeight(newDiv.lineHeight?.evaluate(resolver), newDiv.fontSizeUnit.evaluate(resolver))
+            if (newDiv.ranges != null || newDiv.images != null) {
+                applyRichText(context, newDiv)
+            }
         }
         addSubscription(newDiv.lineHeight?.observe(resolver, callback))
         addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
@@ -671,7 +676,9 @@ internal class DivTextBinder @Inject constructor(
             this,
             div.text.evaluate(resolver),
             div.fontSize.evaluate(resolver),
+            div.fontSizeUnit.evaluate(resolver),
             div.fontFamily?.evaluate(resolver),
+            div.lineHeight?.evaluate(resolver),
             div.ranges,
             null,
             div.images
@@ -834,7 +841,9 @@ internal class DivTextBinder @Inject constructor(
             this,
             ellipsis.text.evaluate(resolver),
             newDiv.fontSize.evaluate(resolver),
+            newDiv.fontSizeUnit.evaluate(resolver),
             newDiv.fontFamily?.evaluate(resolver),
+            newDiv.lineHeight?.evaluate(resolver),
             ellipsis.ranges,
             ellipsis.actions,
             ellipsis.images
@@ -939,7 +948,9 @@ internal class DivTextBinder @Inject constructor(
         private val textView: TextView,
         private val text: String,
         private val fontSize: Long,
+        private val fontSizeUnit: DivSizeUnit,
         private val fontFamily: String?,
+        private val lineHeight: Long?,
         private val ranges: List<DivText.Range>?,
         private val actions: List<DivAction>?,
         images: List<DivText.Image>?
@@ -992,25 +1003,10 @@ internal class DivTextBinder @Inject constructor(
             images.forEachIndexed { index, image ->
                 val width = image.width.toPx(metrics, resolver)
                 val height = image.height.toPx(metrics, resolver)
-
-                val offsetY = if (sb.isNotEmpty()) {
-                    val start = image.start.evaluate(resolver).toIntSafely()
-                    val charIndex = if (start == 0) 0 else start - 1
-                    val sizeSpans = sb.getSpans(charIndex, charIndex + 1, AbsoluteSizeSpan::class.java)
-                    val paint = textView.paint
-                    val scale = if (sizeSpans != null && sizeSpans.isNotEmpty()) {
-                        sizeSpans[0].size / textView.textSize
-                    } else 1.0F
-                    val textMidY = (paint.ascent() + paint.descent()) / 2 * scale
-                    val desiredMidY = -height.toFloat() / 2
-
-                    textMidY - desiredMidY
-                } else 0.0F
-
-                val span = ImagePlaceholderSpan(width, height, offsetY)
-
                 val start = image.start.evaluate(resolver).toIntSafely() + index +
                         additionalCharsBeforeImage.getOrZero(index)
+                val fontSize = sb.getFontSizeAt(start)
+                val span = ImagePlaceholderSpan(width, height, lineHeight.unitToPx(metrics, fontSizeUnit), fontSize)
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
 
@@ -1034,9 +1030,14 @@ internal class DivTextBinder @Inject constructor(
             val end = range.end.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
             if (start > end) return
 
-            range.fontSize?.evaluate(resolver)?.let {
-                setSpan(AbsoluteSizeSpan(it.unitToPx(metrics, range.fontSizeUnit.evaluate(resolver))), start, end,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            range.fontSize?.evaluate(resolver)?.let { fontSize ->
+                val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
+                setSpan(
+                    FontSizeSpan(
+                        fontSize.unitToPx(metrics, fontSizeUnit),
+                        lineHeight.unitToPx(metrics, fontSizeUnit)
+                    ),
+                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
             range.textColor?.evaluate(resolver)?.let {
                 setSpan(TextColorSpan(it), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
@@ -1100,26 +1101,17 @@ internal class DivTextBinder @Inject constructor(
 
         private fun SpannableStringBuilder.makeImageSpan(
             range: DivText.Image,
-            bitmap: Bitmap
+            bitmap: Bitmap,
+            lineHeight: Int
         ): BitmapImageSpan {
             val imageHeight = range.height.toPx(metrics, resolver)
-            val offsetY = if (isNotEmpty()) {
-                val start = range.start.evaluate(resolver).toIntSafely()
-                val charIndex = if (start == 0) 0 else start - 1
-                val sizeSpans = getSpans(charIndex, charIndex + 1, AbsoluteSizeSpan::class.java)
-                val paint = textView.paint
-                val scale = if (sizeSpans != null && sizeSpans.isNotEmpty()) {
-                    sizeSpans[0].size / textView.textSize
-                } else 1.0F
-                val textMidY = (paint.ascent() + paint.descent()) / 2 * scale
-                val desiredMidY = -imageHeight.toFloat() / 2
-                textMidY - desiredMidY
-            } else 0.0F
-
+            val start = range.start.evaluate(resolver).toIntSafely()
+            val fontSize = getFontSizeAt(start)
             return BitmapImageSpan(
                 context,
                 bitmap,
-                offsetY,
+                lineHeight,
+                fontSize,
                 range.width.toPx(metrics, resolver),
                 imageHeight,
                 range.tintColor?.evaluate(resolver),
@@ -1129,12 +1121,22 @@ internal class DivTextBinder @Inject constructor(
             )
         }
 
+        private fun Spannable.getFontSizeAt(position: Int): Int {
+            val index = if (position == 0) 0 else position - 1
+            val fontSizeSpans = getSpans(index, index + 1, FontSizeSpan::class.java)
+            return if (fontSizeSpans != null && fontSizeSpans.isNotEmpty()) {
+                fontSizeSpans.last().fontSize
+            } else {
+                textView.textSize.roundToInt()
+            }
+        }
+
         private inner class ImageCallback(private val index: Int) : DivIdLoggingImageDownloadCallback(divView) {
 
             override fun onSuccess(cachedBitmap: CachedBitmap) {
                 super.onSuccess(cachedBitmap)
                 val image = images[index]
-                val span = sb.makeImageSpan(image, cachedBitmap.bitmap)
+                val span = sb.makeImageSpan(image, cachedBitmap.bitmap, lineHeight.unitToPx(metrics, fontSizeUnit))
                 val start = image.start.evaluate(resolver).toIntSafely() + index +
                         additionalCharsBeforeImage.getOrZero(index)
                 sb.getSpans<ImagePlaceholderSpan>(start, start + 1).forEach { sb.removeSpan(it) }

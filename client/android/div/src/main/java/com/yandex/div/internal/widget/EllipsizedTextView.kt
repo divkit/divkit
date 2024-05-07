@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.R
-import com.yandex.div.internal.util.isHyphenationEnabled
 
 open class EllipsizedTextView @JvmOverloads constructor(
     context: Context,
@@ -110,6 +109,8 @@ open class EllipsizedTextView @JvmOverloads constructor(
     }
 
     override fun setMaxLines(maxLines: Int) {
+        if (maxLines == this.maxLines) return
+
         super.setMaxLines(maxLines)
         onEllipsisChanged(ellipsis)
         requestEllipsize()

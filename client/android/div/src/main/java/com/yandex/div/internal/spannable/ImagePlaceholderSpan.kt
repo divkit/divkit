@@ -2,8 +2,7 @@ package com.yandex.div.internal.spannable
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.os.Build
-import android.text.style.ReplacementSpan
+import androidx.annotation.CallSuper
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
@@ -11,31 +10,38 @@ import kotlin.math.min
 /**
  * Placeholder image span for reserving space
  */
-internal class ImagePlaceholderSpan constructor(
+internal class ImagePlaceholderSpan(
     private val width: Int,
     private val height: Int,
-    private val yOffset: Float = 0f
-) : ReplacementSpan() {
-    override fun getSize(paint: Paint, text: CharSequence, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
-        fm?.apply {
-            if (start == 0 && Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                top = 0
-                ascent = 0
-                bottom = 0
-                descent = 0
-                leading = 0
-            }
+    private val lineHeight: Int = 0,
+    private val fontSize: Int = 0
+) : PositionAwareReplacementSpan() {
 
-            val desiredFmTop = ceil(height - yOffset).toInt()
+    @CallSuper
+    override fun adjustSize(paint: Paint, text: CharSequence, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
+        if (lineHeight <= 0) {
+            return width
+        }
+
+        fm?.apply {
+            val offset = getImageOffset(height, paint)
+            val desiredFmTop = ceil(height - offset).toInt()
             fm.ascent = min(-desiredFmTop, fm.ascent)
             fm.top = min(-desiredFmTop, fm.top)
-            val desiredFmBottom = ceil(yOffset).toInt()
+            val desiredFmBottom = ceil(offset).toInt()
             fm.descent = max(desiredFmBottom, fm.descent)
             fm.bottom = max(desiredFmBottom, fm.bottom)
             fm.leading = fm.descent - fm.ascent
         }
 
         return width
+    }
+
+    private fun getImageOffset(imageHeight: Int, paint: Paint): Float {
+        val textScale = if (fontSize > 0) fontSize / paint.textSize else 1.0f
+        val textCenter = (paint.ascent() + paint.descent()) / 2.0f * textScale
+        val imageCenter = -imageHeight.toFloat() / 2.0f
+        return textCenter - imageCenter
     }
 
     override fun draw(

@@ -11,10 +11,10 @@ import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
 import com.yandex.div.internal.widget.EllipsizedTextView
+import com.yandex.div.internal.widget.textHeight
 import com.yandex.div.utils.CharSequences
 import com.yandex.div.utils.contentView
 import com.yandex.div.utils.runOnView
-import com.yandex.div.view.lineSpacingAdd
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
@@ -114,19 +114,23 @@ private fun withHeight(lines: Int) = object : TypeSafeMatcher<View>() {
     }
 
     override fun describeMismatchSafely(item: View?, mismatchDescription: Description?) {
-        val tv = item as? TextView
-        mismatchDescription?.appendText(
-            "viewHeight=${item?.height}, spacing=${tv?.lineSpacingAdd}, " +
-                    "lineHeight = ${tv?.lineHeight}"
+        val textView = item as? TextView
+        val description = mismatchDescription?.appendText(
+            "viewHeight=${textView?.height}, " +
+                "textHeight=${textView?.textHeight(lines)}, " +
+                "paddingTop = ${textView?.paddingTop}, " +
+                "paddingBottom = ${textView?.paddingBottom}"
         )
-        super.describeMismatchSafely(item, mismatchDescription)
+        super.describeMismatchSafely(item, description)
     }
 
     override fun matchesSafely(item: View?): Boolean {
         if (item !is TextView) {
             return false
         }
-        return item.height == lines * item.lineHeight
+        return with(item) {
+            height == textHeight(lines) + compoundPaddingBottom + compoundPaddingBottom
+        }
     }
 }
 
