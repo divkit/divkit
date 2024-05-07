@@ -1,3 +1,52 @@
+## 30.0.0
+
+# Android Client:
+* Breaking change: Removed method `makePlayerView(context: Context, additional: Map<String, Any>)` from `DivPlayerFactory`
+* Breaking change: Removed method `isCompatibleWithNewParams(scale: DivVideoScale)` from `DivPlayerView`
+* Breaking change: Classes `StandardExoDivPlayerView` and `ZoomExoDivPlayerView` replaced with common `ExoDivPlayerView`
+* Breaking change: Classes removed from public API: `ExoDivMediaSourceAbstractFactory`, `ExoDivPlayer` (accessible by interface `DivPlayer`), `ExoDivPlayerView` (accessible by interface `DivPlayerView`)
+* Add 'gesture' extension that allows to perform div-actions when swipe gesture happens at specified div.
+* Fixed text height calculation when line height specified explicitly.
+* Restricted variable names with consecutive dots and with a trailing dot.
+* Do not set new border or background when it has no changes.
+* Supported methods in evaluable expressions, such as `123.toString()`.
+* Added Jeptack Compose interoperability for `Div2View`
+* Added ability to forcibly release video players by `releaseMedia()` method of `Div2View`.
+* Use explicitly passed `ExpressionResolver` in `DivActionHandler`, `Div2Logger`, `DivExtensionHandler` and `custom` classes.
+* Fixes for complex rebind algorithm
+* Added `svg` support to all `DivImageLoaders`
+* Calculate `is_enabled` in `actions` before executing the entire list of actions, not in the process.
+* TextureView is now a default view for DivVideo.
+* Old visibility actions are no longer logged after Div2View was rebound.
+
+# iOS Client:
+* Breaking change: Removed `urlOpener` argument from `DivKitComponents` initializer. Use `urlHandler` instead.
+* Breaking change: Removed `UserInterfaceAction.Payload.json`.
+* Breaking change: Removed `UserInterfaceAction.Payload.composite`.
+* Breaking change: Protocol `DivStateInterceptor` and corresponding implementation `DivStateInterceptorImpl` was removed. Please use `DivExtensionHandler` instead.
+* Breaking change: Removed `DivVariablesStorage.ChangeEvent.oldValues` due to performance issues.
+* Breaking change: Removed `DefaultShimmerViewFactory`.
+* Breaking change: Removed `DefaultDivActionLogger` (replaced with `EmptyDivActionLogger`). `DivActionLogger` became deprecated, use `DivReporter` for actions tracking.
+* Breaking change: Changed method signature in `ExpressionResolver` from `resolveString(_ expression: String) -> String` to `resolveString(_ expression: String) -> String?`.
+* Disallowed variable names with consecutive dots or with trailing dot.
+* Double quotes are no longer supported in string literals.
+* Fixed position of gallery element after scrolling with action.
+* Fixed animation in gallery.
+* Fixed unary minus operator parsing.
+* Fixed view reuse in `ShimmerImagePreviewExtension`.
+* Fixed validation in expressions.
+
+# Web Client:
+* Breaking change: actions from `variable_triggers` lead to execution of a callback `onStat` with type = `trigger`.
+* Disallowed variable names with consecutive dots or with trailing dot.
+
+# Kotlin JSON Builder:
+* Changed the way of how primitive array elements are added.
+
+This change supports usage of expressions in array elements. As for now, primitive array elements  (e.g., transition triggers, gradient backgrounds) must be
+wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expressionArrayElement`.
+
+
 ## 29.15.0
 
 # Android Client:

@@ -1,3 +1,9 @@
+## 30.0.0 (May 13, 2024)
+
+* Breaking change: actions from `variable_triggers` lead to execution of a callback `onStat` with type = `trigger`.
+* Disallowed variable names with consecutive dots or with trailing dot.
+
+
 ## 29.15.0 (April 22, 2024)
 
 * Persistent variable storage has been implemented, including the action `set_stored_value` along with the function `getStoredStringValue` and others.
