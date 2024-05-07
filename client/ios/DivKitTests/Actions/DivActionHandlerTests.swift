@@ -110,14 +110,20 @@ final class DivActionHandlerTests: XCTestCase {
 
   func test_ActionIsReported() {
     handle(
-      divAction(
-        logId: "test_log_id",
-        url: "https://some.url"
+      DivAction(
+        logId: .value("test_log_id"),
+        logUrl: .value(url("https://some.log.url")),
+        payload: ["key": "value"],
+        referer: .value(url("https://some.referer.url")),
+        url: .value(url("https://some.url"))
       )
     )
 
     XCTAssertEqual(cardId, reporter.lastCardId)
     XCTAssertEqual("test_log_id", reporter.lastActionInfo?.logId)
+    XCTAssertEqual(url("https://some.log.url"), reporter.lastActionInfo?.logUrl)
+    XCTAssertEqual(url("https://some.referer.url"), reporter.lastActionInfo?.referer)
+    XCTAssertEqual(["key": "value"], reporter.lastActionInfo?.payload as! [String: AnyHashable])
   }
 
   private func handle(_ action: DivActionBase) {
