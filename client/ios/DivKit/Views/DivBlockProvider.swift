@@ -131,13 +131,14 @@ final class DivBlockProvider {
       return
     }
 
-    guard needUpdateBlock(reasons: reasons) else { return }
+    guard needUpdateBlock(reasons: reasons) else {
+      return
+    }
 
     reasons.compactMap { $0.patch(for: self.cardId) }.forEach {
       divData = divData.applyPatch($0)
     }
     self.divData = divData
-
     let context = divKitComponents.makeContext(
       cardId: cardId,
       additionalId: id.additionalId,
@@ -176,10 +177,10 @@ final class DivBlockProvider {
         cardId = divCardID
       case let .state(divCardID):
         cardId = divCardID
-      case .variable(.all):
+      case .external:
         return true
-      case let .variable(.specific(cardIds)):
-        if cardIds.contains(self.cardId) {
+      case let .variable(cardIds):
+        if cardIds.keys.contains(self.cardId) {
           return true
         }
         continue
@@ -272,7 +273,7 @@ extension DivActionURLHandler.UpdateReason {
     switch self {
     case let .patch(cardId, patch):
       cardId == divCardId ? patch : nil
-    case .timer, .variable, .state:
+    case .timer, .variable, .state, .external:
       nil
     }
   }

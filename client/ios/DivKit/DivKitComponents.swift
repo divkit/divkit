@@ -335,12 +335,12 @@ public final class DivKitComponents {
   private func onVariablesChanged(event: DivVariablesStorage.ChangeEvent) {
     switch event.kind {
     case let .global(variables):
-      let cardIds = variableTracker.getAffectedCards(variables: variables)
-      if !cardIds.isEmpty {
-        updateCard(.variable(.specific(cardIds)))
+      let affectedCards = variableTracker.getAffectedCards(variables: variables)
+      if !affectedCards.isEmpty {
+        updateCard(.variable(affectedCards))
       }
-    case let .local(cardId, _):
-      updateCard(.variable(.specific([cardId])))
+    case let .local(cardId, variables):
+      updateCard(.variable([cardId: variables]))
     }
   }
 }

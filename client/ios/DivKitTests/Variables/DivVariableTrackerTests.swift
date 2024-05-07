@@ -8,8 +8,8 @@ final class DivVariableTrackerTests: XCTestCase {
   func test_onVariablesUsed_UpdatesAffectedCards() {
     variableTracker.onVariablesUsed(id: id1, variables: ["Var1", "Var2"])
 
-    let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
-    XCTAssertEqual(affectedCards, ["card1"])
+    let affectedCards = variableTracker.getAffectedCards(variables: ["Var1", "Var2"])
+    XCTAssertEqual(affectedCards, ["card1": ["Var1", "Var2"]])
   }
 
   func test_onVariablesUsed_WithSameCardId_UpdatesAffectedCards() {
@@ -17,15 +17,15 @@ final class DivVariableTrackerTests: XCTestCase {
     variableTracker.onVariablesUsed(id: id1, variables: ["Var3", "Var4"])
 
     let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
-    XCTAssertEqual(affectedCards, ["card1"])
+    XCTAssertEqual(affectedCards, ["card1": ["Var1"]])
   }
 
   func test_onVariablesUsed_WithDifferentCardId_UpdatesAffectedCards() {
     variableTracker.onVariablesUsed(id: id1, variables: ["Var1", "Var2"])
     variableTracker.onVariablesUsed(id: id2, variables: ["Var1", "Var3"])
 
-    let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
-    XCTAssertEqual(affectedCards, ["card1", "card2"])
+    let affectedCards = variableTracker.getAffectedCards(variables: ["Var1", "Var2"])
+    XCTAssertEqual(affectedCards, ["card1": ["Var1", "Var2"], "card2": ["Var1"]])
   }
 
   func test_onModelingStarted_ResetsAffectedCards() {
@@ -41,7 +41,7 @@ final class DivVariableTrackerTests: XCTestCase {
     variableTracker.onVariablesUsed(id: id1a1, variables: ["Var1"])
 
     let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
-    XCTAssertEqual(affectedCards, ["card1"])
+    XCTAssertEqual(affectedCards, ["card1": ["Var1"]])
   }
 
   func test_onModelingStarted_WithAdditionalId_DoesNotResetAffectedCards() {
@@ -50,7 +50,7 @@ final class DivVariableTrackerTests: XCTestCase {
     variableTracker.onModelingStarted(id: id1a1)
 
     let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
-    XCTAssertEqual(affectedCards, ["card1"])
+    XCTAssertEqual(affectedCards, ["card1": ["Var1"]])
   }
 }
 

@@ -15,15 +15,11 @@ public final class DivActionURLHandler {
 
   @frozen
   public enum UpdateReason {
-    public enum AffectedCards: Equatable {
-      case all
-      case specific(Set<DivCardID>)
-    }
-
     case patch(DivCardID, DivPatch)
     case timer(DivCardID)
     case state(DivCardID)
-    case variable(AffectedCards)
+    case variable([DivCardID: Set<DivVariableName>])
+    case external
   }
 
   private let stateUpdater: DivStateUpdater

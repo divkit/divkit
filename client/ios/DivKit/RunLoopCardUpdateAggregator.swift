@@ -44,32 +44,27 @@ final class RunLoopCardUpdateAggregator {
   }
 
   func forceUpdate() {
-    batch.append(.variable(.all))
+    batch.append(.external)
     flushUpdateActions()
   }
 }
 
 extension [DivActionURLHandler.UpdateReason] {
   fileprivate func merge() -> [DivActionURLHandler.UpdateReason] {
-    var variables: DivActionURLHandler.UpdateReason.AffectedCards = .specific([])
+    var cards: [DivCardID: Set<DivVariableName>] = [:]
 
     let reasons: [DivActionURLHandler.UpdateReason] = compactMap {
       switch $0 {
       case let .variable(affectedCards):
-        switch (variables, affectedCards) {
-        case let (.specific(lhs), .specific(rhs)):
-          variables = .specific(lhs.union(rhs))
-        case (_, .all):
-          variables = .all
-        case (.all, _):
-          break
+        for (key, value) in affectedCards {
+          cards[key] = cards[key]?.union(value) ?? value
         }
         return nil
-      case .patch, .timer, .state:
+      case .patch, .timer, .state, .external:
         return $0
       }
     }
 
-    return reasons + (variables == .specific([]) ? [] : [.variable(variables)])
+    return reasons + (cards.isEmpty ? [] : [.variable(cards)])
   }
 }
