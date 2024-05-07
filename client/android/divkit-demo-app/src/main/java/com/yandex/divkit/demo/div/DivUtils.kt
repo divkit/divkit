@@ -23,6 +23,8 @@ import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
+import com.yandex.div.gesture.DivGestureExtensionHandler
+import com.yandex.div.gesture.ParsingErrorLoggerFactory
 import com.yandex.div.video.ExoDivPlayerFactory
 import com.yandex.div.video.ExoPlayerVideoPreloader
 import com.yandex.div2.DivAction
@@ -75,8 +77,17 @@ fun divConfiguration(
         .supportHyphenation(true)
         .visualErrorsEnabled(true)
         .extension(DivSizeProviderExtensionHandler())
+        .extension(createDivSwipeGestureExtensionHandler())
         .divPlayerFactory(ExoDivPlayerFactory(activity))
         .divPlayerPreloader(ExoPlayerVideoPreloader(activity))
+}
+
+fun createDivSwipeGestureExtensionHandler(): DivGestureExtensionHandler {
+    return DivGestureExtensionHandler(
+        parsingErrorLoggerFactory = object : ParsingErrorLoggerFactory {
+            override fun create(key: String) = ParsingErrorLogger.ASSERT
+        }
+    )
 }
 
 fun divContext(

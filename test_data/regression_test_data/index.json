@@ -2414,7 +2414,11 @@
       "file": "slider_scroll_horizontal.json"
     },
     {
-      "title": "Gesture",
+      "title": "Gesture (extension)",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "extensions"
       ],

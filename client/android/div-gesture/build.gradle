@@ -1,0 +1,24 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    namespace 'com.yandex.div.gesture'
+}
+
+dependencies {
+    implementation project(path: ':div')
+    implementation project(path: ':div-json')
+    implementation project(path: ':utils')
+
+    testImplementation project(path: ':div-data')
+    testImplementation libs.androidx.test.coreKtx
+}
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add('-Xexplicit-api=strict')
+    }
+}

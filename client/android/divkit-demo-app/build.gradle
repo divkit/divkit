@@ -72,6 +72,7 @@ android {
 dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div')
+    implementation project(path: ':div-gesture')
     implementation project(path: ':div-json')
     implementation project(path: ':div-lottie')
     implementation project(path: ':div-pinch-to-zoom')
