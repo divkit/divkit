@@ -52,6 +52,7 @@ class Gallery internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
             itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
             items = additive.items ?: properties.items,
             margins = additive.margins ?: properties.margins,
@@ -144,6 +145,10 @@ class Gallery internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Sets collection elements dynamically using `data` and `prototypes`.
+         */
+        val itemBuilder: Property<CollectionItemBuilder>?,
         /**
          * Spacing between elements.
          * Default value: `8`.
@@ -251,6 +256,7 @@ class Gallery internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("item_builder", itemBuilder)
             result.tryPutProperty("item_spacing", itemSpacing)
             result.tryPutProperty("items", items)
             result.tryPutProperty("margins", margins)
@@ -325,6 +331,7 @@ class Gallery internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param margins External margins from the element stroke.
@@ -365,6 +372,7 @@ fun DivScope.gallery(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: Int? = null,
     items: List<Div>? = null,
     margins: EdgeInsets? = null,
@@ -403,6 +411,7 @@ fun DivScope.gallery(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        itemBuilder = valueOrNull(itemBuilder),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         margins = valueOrNull(margins),
@@ -443,6 +452,7 @@ fun DivScope.gallery(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param margins External margins from the element stroke.
@@ -483,6 +493,7 @@ fun DivScope.galleryProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: Int? = null,
     items: List<Div>? = null,
     margins: EdgeInsets? = null,
@@ -520,6 +531,7 @@ fun DivScope.galleryProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    itemBuilder = valueOrNull(itemBuilder),
     itemSpacing = valueOrNull(itemSpacing),
     items = valueOrNull(items),
     margins = valueOrNull(margins),
@@ -559,6 +571,7 @@ fun DivScope.galleryProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param margins External margins from the element stroke.
@@ -599,6 +612,7 @@ fun TemplateScope.galleryRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -636,6 +650,7 @@ fun TemplateScope.galleryRefs(
     focus = focus,
     height = height,
     id = id,
+    itemBuilder = itemBuilder,
     itemSpacing = itemSpacing,
     items = items,
     margins = margins,
@@ -675,6 +690,7 @@ fun TemplateScope.galleryRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param margins External margins from the element stroke.
@@ -715,6 +731,7 @@ fun Gallery.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: Int? = null,
     items: List<Div>? = null,
     margins: EdgeInsets? = null,
@@ -753,6 +770,7 @@ fun Gallery.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
         itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
         items = valueOrNull(items) ?: properties.items,
         margins = valueOrNull(margins) ?: properties.margins,
@@ -793,6 +811,7 @@ fun Gallery.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param margins External margins from the element stroke.
@@ -833,6 +852,7 @@ fun Gallery.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -871,6 +891,7 @@ fun Gallery.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        itemBuilder = itemBuilder ?: properties.itemBuilder,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
         margins = margins ?: properties.margins,
@@ -947,6 +968,7 @@ fun Gallery.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        itemBuilder = properties.itemBuilder,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = properties.items,
         margins = properties.margins,
@@ -987,6 +1009,7 @@ fun Gallery.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param margins External margins from the element stroke.
@@ -1027,6 +1050,7 @@ fun Component<Gallery>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: Int? = null,
     items: List<Div>? = null,
     margins: EdgeInsets? = null,
@@ -1066,6 +1090,7 @@ fun Component<Gallery>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        itemBuilder = valueOrNull(itemBuilder),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         margins = valueOrNull(margins),
@@ -1106,6 +1131,7 @@ fun Component<Gallery>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param margins External margins from the element stroke.
@@ -1146,6 +1172,7 @@ fun Component<Gallery>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1185,6 +1212,7 @@ fun Component<Gallery>.defer(
         focus = focus,
         height = height,
         id = id,
+        itemBuilder = itemBuilder,
         itemSpacing = itemSpacing,
         items = items,
         margins = margins,
@@ -1262,6 +1290,7 @@ fun Component<Gallery>.evaluate(
         focus = null,
         height = null,
         id = null,
+        itemBuilder = null,
         itemSpacing = itemSpacing,
         items = null,
         margins = null,

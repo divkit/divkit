@@ -50,12 +50,14 @@ class Pager internal constructor(
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             infiniteScroll = additive.infiniteScroll ?: properties.infiniteScroll,
+            itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
             itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
             items = additive.items ?: properties.items,
             layoutMode = additive.layoutMode ?: properties.layoutMode,
             margins = additive.margins ?: properties.margins,
             orientation = additive.orientation ?: properties.orientation,
             paddings = additive.paddings ?: properties.paddings,
+            pageTransformation = additive.pageTransformation ?: properties.pageTransformation,
             restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -134,6 +136,10 @@ class Pager internal constructor(
          */
         val infiniteScroll: Property<Boolean>?,
         /**
+         * Sets collection elements dynamically using `data` and `prototypes`.
+         */
+        val itemBuilder: Property<CollectionItemBuilder>?,
+        /**
          * Spacing between elements.
          * Default value: `{"type": "fixed","value":0}`.
          */
@@ -159,6 +165,10 @@ class Pager internal constructor(
          * Internal margins from the element stroke.
          */
         val paddings: Property<EdgeInsets>?,
+        /**
+         * Page transformation during movement.
+         */
+        val pageTransformation: Property<PageTransformation>?,
         /**
          * If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
          * Default value: `false`.
@@ -232,12 +242,14 @@ class Pager internal constructor(
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("infinite_scroll", infiniteScroll)
+            result.tryPutProperty("item_builder", itemBuilder)
             result.tryPutProperty("item_spacing", itemSpacing)
             result.tryPutProperty("items", items)
             result.tryPutProperty("layout_mode", layoutMode)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("orientation", orientation)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("page_transformation", pageTransformation)
             result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -279,12 +291,14 @@ class Pager internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
+ * @param pageTransformation Page transformation during movement.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -316,12 +330,14 @@ fun DivScope.pager(
     height: Size? = null,
     id: String? = null,
     infiniteScroll: Boolean? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
+    pageTransformation: PageTransformation? = null,
     restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -351,12 +367,14 @@ fun DivScope.pager(
         height = valueOrNull(height),
         id = valueOrNull(id),
         infiniteScroll = valueOrNull(infiniteScroll),
+        itemBuilder = valueOrNull(itemBuilder),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
         margins = valueOrNull(margins),
         orientation = valueOrNull(orientation),
         paddings = valueOrNull(paddings),
+        pageTransformation = valueOrNull(pageTransformation),
         restrictParentScroll = valueOrNull(restrictParentScroll),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
@@ -388,12 +406,14 @@ fun DivScope.pager(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
+ * @param pageTransformation Page transformation during movement.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -425,12 +445,14 @@ fun DivScope.pagerProps(
     height: Size? = null,
     id: String? = null,
     infiniteScroll: Boolean? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
+    pageTransformation: PageTransformation? = null,
     restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -459,12 +481,14 @@ fun DivScope.pagerProps(
     height = valueOrNull(height),
     id = valueOrNull(id),
     infiniteScroll = valueOrNull(infiniteScroll),
+    itemBuilder = valueOrNull(itemBuilder),
     itemSpacing = valueOrNull(itemSpacing),
     items = valueOrNull(items),
     layoutMode = valueOrNull(layoutMode),
     margins = valueOrNull(margins),
     orientation = valueOrNull(orientation),
     paddings = valueOrNull(paddings),
+    pageTransformation = valueOrNull(pageTransformation),
     restrictParentScroll = valueOrNull(restrictParentScroll),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
@@ -495,12 +519,14 @@ fun DivScope.pagerProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
+ * @param pageTransformation Page transformation during movement.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -532,12 +558,14 @@ fun TemplateScope.pagerRefs(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     infiniteScroll: ReferenceProperty<Boolean>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     orientation: ReferenceProperty<Pager.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pageTransformation: ReferenceProperty<PageTransformation>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -566,12 +594,14 @@ fun TemplateScope.pagerRefs(
     height = height,
     id = id,
     infiniteScroll = infiniteScroll,
+    itemBuilder = itemBuilder,
     itemSpacing = itemSpacing,
     items = items,
     layoutMode = layoutMode,
     margins = margins,
     orientation = orientation,
     paddings = paddings,
+    pageTransformation = pageTransformation,
     restrictParentScroll = restrictParentScroll,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
@@ -602,12 +632,14 @@ fun TemplateScope.pagerRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
+ * @param pageTransformation Page transformation during movement.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -639,12 +671,14 @@ fun Pager.override(
     height: Size? = null,
     id: String? = null,
     infiniteScroll: Boolean? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
+    pageTransformation: PageTransformation? = null,
     restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -674,12 +708,14 @@ fun Pager.override(
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         infiniteScroll = valueOrNull(infiniteScroll) ?: properties.infiniteScroll,
+        itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
         itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
         items = valueOrNull(items) ?: properties.items,
         layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
         margins = valueOrNull(margins) ?: properties.margins,
         orientation = valueOrNull(orientation) ?: properties.orientation,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        pageTransformation = valueOrNull(pageTransformation) ?: properties.pageTransformation,
         restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -711,12 +747,14 @@ fun Pager.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
+ * @param pageTransformation Page transformation during movement.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -748,12 +786,14 @@ fun Pager.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     infiniteScroll: ReferenceProperty<Boolean>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     orientation: ReferenceProperty<Pager.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pageTransformation: ReferenceProperty<PageTransformation>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -783,12 +823,14 @@ fun Pager.defer(
         height = height ?: properties.height,
         id = id ?: properties.id,
         infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
+        itemBuilder = itemBuilder ?: properties.itemBuilder,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
         margins = margins ?: properties.margins,
         orientation = orientation ?: properties.orientation,
         paddings = paddings ?: properties.paddings,
+        pageTransformation = pageTransformation ?: properties.pageTransformation,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -846,12 +888,14 @@ fun Pager.evaluate(
         height = properties.height,
         id = properties.id,
         infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
+        itemBuilder = properties.itemBuilder,
         itemSpacing = properties.itemSpacing,
         items = properties.items,
         layoutMode = properties.layoutMode,
         margins = properties.margins,
         orientation = orientation ?: properties.orientation,
         paddings = properties.paddings,
+        pageTransformation = properties.pageTransformation,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
@@ -883,12 +927,14 @@ fun Pager.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
+ * @param pageTransformation Page transformation during movement.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -920,12 +966,14 @@ fun Component<Pager>.override(
     height: Size? = null,
     id: String? = null,
     infiniteScroll: Boolean? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
+    pageTransformation: PageTransformation? = null,
     restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -956,12 +1004,14 @@ fun Component<Pager>.override(
         height = valueOrNull(height),
         id = valueOrNull(id),
         infiniteScroll = valueOrNull(infiniteScroll),
+        itemBuilder = valueOrNull(itemBuilder),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
         margins = valueOrNull(margins),
         orientation = valueOrNull(orientation),
         paddings = valueOrNull(paddings),
+        pageTransformation = valueOrNull(pageTransformation),
         restrictParentScroll = valueOrNull(restrictParentScroll),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
@@ -993,12 +1043,14 @@ fun Component<Pager>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
+ * @param pageTransformation Page transformation during movement.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1030,12 +1082,14 @@ fun Component<Pager>.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     infiniteScroll: ReferenceProperty<Boolean>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     orientation: ReferenceProperty<Pager.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    pageTransformation: ReferenceProperty<PageTransformation>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1066,12 +1120,14 @@ fun Component<Pager>.defer(
         height = height,
         id = id,
         infiniteScroll = infiniteScroll,
+        itemBuilder = itemBuilder,
         itemSpacing = itemSpacing,
         items = items,
         layoutMode = layoutMode,
         margins = margins,
         orientation = orientation,
         paddings = paddings,
+        pageTransformation = pageTransformation,
         restrictParentScroll = restrictParentScroll,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
@@ -1130,12 +1186,14 @@ fun Component<Pager>.evaluate(
         height = null,
         id = null,
         infiniteScroll = infiniteScroll,
+        itemBuilder = null,
         itemSpacing = null,
         items = null,
         layoutMode = null,
         margins = null,
         orientation = orientation,
         paddings = null,
+        pageTransformation = null,
         restrictParentScroll = restrictParentScroll,
         rowSpan = rowSpan,
         selectedActions = null,
