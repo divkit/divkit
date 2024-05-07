@@ -9,18 +9,20 @@ final class ExpressionResolverTests: XCTestCase {
   private var isErrorExpected = false
   private var error: String? = nil
 
+  private var variables: DivVariables =  [
+    "array_var": .array(["value", [true, 123, 123.45] as [AnyHashable]]),
+    "boolean_var": .bool(true),
+    "color_var": .color(color("#AABBCC")),
+    "dict_var": .dict(["boolean": true, "integer": 1, "number": 1.0, "string": "value"]),
+    "enum_var": .string("first"),
+    "integer_var": .integer(123),
+    "number_var": .number(12.9),
+    "string_var": .string("string value"),
+    "url_var": .url(url("https://some.url")),
+  ]
+
   private lazy var expressionResolver = ExpressionResolver(
-    variables: [
-      "array_var": .array(["value", true, [123, 123.45]]),
-      "boolean_var": .bool(true),
-      "color_var": .color(color("#AABBCC")),
-      "dict_var": .dict(["string": "value"]),
-      "enum_var": .string("first"),
-      "integer_var": .integer(123),
-      "number_var": .number(12.9),
-      "string_var": .string("string value"),
-      "url_var": .url(url("https://some.url")),
-    ],
+    variables: variables,
     persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
       error = $0.message
@@ -56,17 +58,56 @@ final class ExpressionResolverTests: XCTestCase {
     )
   }
 
+  func test_ResolveString_Boolean() {
+    XCTAssertEqual(
+      expressionResolver.resolveString(expression("@{boolean_var}")),
+      "true"
+    )
+  }
+
+  func test_ResolveString_Integer() {
+    XCTAssertEqual(
+      expressionResolver.resolveString(expression("@{integer_var}")),
+      "123"
+    )
+  }
+
+  func test_ResolveString_Number() {
+    XCTAssertEqual(
+      expressionResolver.resolveString(expression("@{number_var}")),
+      "12.9"
+    )
+  }
+
   func test_ResolveString_Array() {
     XCTAssertEqual(
       expressionResolver.resolveString(expression("@{array_var}")),
-      "[\"value\",true,[123,123.45]]"
+      "[\"value\",[true,123,123.45]]"
+    )
+  }
+
+  func test_ResolveString_Array_WithNumbers_0_1() {
+    variables["var"] = .array([0, 1, 0.0, 1.0])
+
+    XCTAssertEqual(
+      expressionResolver.resolveString(expression("@{var}")),
+      "[0,1,0.0,1.0]"
+    )
+  }
+
+  func test_ResolveString_Array_WithBooleans() {
+    variables["var"] = .array([true, false])
+
+    XCTAssertEqual(
+      expressionResolver.resolveString(expression("@{var}")),
+      "[true,false]"
     )
   }
 
   func test_ResolveString_Dictionary() {
     XCTAssertEqual(
       expressionResolver.resolveString(expression("@{dict_var}")),
-      "{\"string\":\"value\"}"
+      "{\"boolean\":true,\"integer\":1,\"number\":1.0,\"string\":\"value\"}"
     )
   }
 
@@ -180,14 +221,14 @@ final class ExpressionResolverTests: XCTestCase {
   func test_ResolveArray_WithVariable() throws {
     XCTAssertEqual(
       expressionResolver.resolveArray(expression("@{array_var}")) as! [AnyHashable],
-      ["value", true, [123, 123.45]]
+      ["value", [true, 123, 123.45] as [AnyHashable]]
     )
   }
 
   func test_ResolveDict_WithVariable() throws {
     XCTAssertEqual(
       expressionResolver.resolveDict(expression("@{dict_var}")) as! [String: AnyHashable],
-      ["string": "value"]
+      ["boolean": true, "integer": 1, "number": 1.0, "string": "value"]
     )
   }
 
