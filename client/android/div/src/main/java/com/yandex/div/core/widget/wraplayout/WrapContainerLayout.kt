@@ -550,7 +550,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
         }
     }
 
-    override fun onDraw(canvas: Canvas) {
+    override fun dispatchDraw(canvas: Canvas) {
+        super.dispatchDraw(canvas)
         separatorDrawable ?: lineSeparatorDrawable ?: return
         if (showSeparators == ShowSeparatorsMode.NONE && showLineSeparators == ShowSeparatorsMode.NONE) {
             return

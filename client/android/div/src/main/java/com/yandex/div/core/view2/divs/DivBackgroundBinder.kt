@@ -18,6 +18,8 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeBackground
 import com.yandex.div.core.util.toCachedBitmap
 import com.yandex.div.core.util.toIntSafely
@@ -28,6 +30,7 @@ import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
+import com.yandex.div.internal.util.compareWith
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -46,85 +49,189 @@ internal class DivBackgroundBinder @Inject constructor(
     private val imageLoader: DivImageLoader
 ) {
 
-    @Suppress("UNCHECKED_CAST")
     fun bindBackground(
-        view: View,
         context: BindingContext,
-        defaultBackgroundList: List<DivBackground>?,
-        focusedBackgroundList: List<DivBackground>?,
+        view: View,
+        newDefaultBackgroundList: List<DivBackground>?,
+        oldDefaultBackgroundList: List<DivBackground>? = null,
+        newFocusedBackgroundList: List<DivBackground>?,
+        oldFocusedBackgroundList: List<DivBackground>? = null,
         subscriber: ExpressionSubscriber,
         additionalLayer: Drawable? = null
-    ): Unit = view.run {
+    ) {
+        if (newFocusedBackgroundList == null) {
+            bindDefaultBackground(
+                context,
+                view,
+                additionalLayer,
+                newDefaultBackgroundList,
+                oldDefaultBackgroundList,
+                subscriber
+            )
+        } else {
+            bindFocusBackground(
+                context,
+                view,
+                additionalLayer,
+                newDefaultBackgroundList,
+                oldDefaultBackgroundList,
+                newFocusedBackgroundList,
+                oldFocusedBackgroundList,
+                subscriber
+            )
+        }
+    }
+
+    private fun bindDefaultBackground(
+        context: BindingContext,
+        view: View,
+        newAdditionalLayer: Drawable?,
+        newDefaultBackgroundList: List<DivBackground>?,
+        oldDefaultBackgroundList: List<DivBackground>?,
+        subscriber: ExpressionSubscriber
+    ) {
+        val newBackground = newDefaultBackgroundList ?: emptyList()
+        val oldBackground = oldDefaultBackgroundList ?: emptyList()
+        val oldAdditionalLayer = view.additionalLayer
+
+        if (newBackground.compareWith(oldBackground) { left, right -> left.equalsToConstant(right) }
+            && newAdditionalLayer == oldAdditionalLayer) {
+            return
+        }
+
+        view.applyDefaultBackground(
+            context,
+            newAdditionalLayer,
+            newDefaultBackgroundList
+        )
+
+        if (newBackground.all { it.isConstant() }) {
+            return
+        }
+
+        val callback = { _: Any ->
+            view.applyDefaultBackground(
+                context,
+                newAdditionalLayer,
+                newDefaultBackgroundList
+            )
+        }
+        addBackgroundSubscriptions(newDefaultBackgroundList, context.expressionResolver, subscriber, callback)
+    }
+
+    private fun View.applyDefaultBackground(
+        context: BindingContext,
+        additionalLayer: Drawable?,
+        defaultBackgroundList: List<DivBackground>?
+    ) {
         val metrics = resources.displayMetrics
         val resolver = context.expressionResolver
 
-        if (focusedBackgroundList == null) {
-            val callback = { _: Any ->
-                val newDefaultDivBackground =
-                    defaultBackgroundList?.map { it.toBackgroundState(metrics, resolver) }
-                        ?: emptyList()
+        val newDefaultDivBackground =
+            defaultBackgroundList?.map { it.toBackgroundState(metrics, resolver) }
+                ?: emptyList()
 
-                val currentDefaultDivBackground =
-                    getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
-                val currentAdditionalLayer = getTag(R.id.div_additional_background_layer_tag) as? Drawable?
+        val oldDefaultDivBackground = this.defaultBackgroundList
+        val oldAdditionalLayer = this.additionalLayer
 
-                val backgroundChanged = (currentDefaultDivBackground != newDefaultDivBackground) ||
-                    (currentAdditionalLayer != additionalLayer)
+        val backgroundChanged = (oldDefaultDivBackground != newDefaultDivBackground) ||
+            (oldAdditionalLayer != additionalLayer)
 
-                if (backgroundChanged) {
-                    updateBackground(newDefaultDivBackground.toDrawable(this, context, additionalLayer))
+        if (backgroundChanged) {
+            updateBackground(newDefaultDivBackground.toDrawable(context, this, additionalLayer))
 
-                    setTag(R.id.div_default_background_list_tag, newDefaultDivBackground)
-                    setTag(R.id.div_focused_background_list_tag, null)
-                    setTag(R.id.div_additional_background_layer_tag, additionalLayer)
-                }
+            this.defaultBackgroundList = newDefaultDivBackground
+            this.focusedBackgroundList = null
+            this.additionalLayer = additionalLayer
+        }
+    }
+
+    private fun bindFocusBackground(
+        context: BindingContext,
+        view: View,
+        newAdditionalLayer: Drawable?,
+        newDefaultBackgroundList: List<DivBackground>?,
+        oldDefaultBackgroundList: List<DivBackground>?,
+        newFocusedBackgroundList: List<DivBackground>,
+        oldFocusedBackgroundList: List<DivBackground>?,
+        subscriber: ExpressionSubscriber
+    ) {
+        val newBackground = newDefaultBackgroundList ?: emptyList()
+        val oldBackground = oldDefaultBackgroundList ?: emptyList()
+        val newFocusedBackground = newFocusedBackgroundList
+        val oldFocusedBackground = oldFocusedBackgroundList ?: emptyList()
+        val oldAdditionalLayer = view.additionalLayer
+
+        if (newBackground.compareWith(oldBackground) { left, right -> left.equalsToConstant(right) }
+            && newFocusedBackground.compareWith(oldFocusedBackground) { left, right -> left.equalsToConstant(right) }
+            && newAdditionalLayer == oldAdditionalLayer) {
+            return
+        }
+
+        view.applyFocusedBackground(
+            context,
+            newAdditionalLayer,
+            newDefaultBackgroundList,
+            newFocusedBackgroundList
+        )
+
+        if (newBackground.all { it.isConstant() } && newFocusedBackground.all { it.isConstant() }) {
+            return
+        }
+
+        val callback = { _: Any ->
+            view.applyFocusedBackground(
+                context,
+                newAdditionalLayer,
+                newDefaultBackgroundList,
+                newFocusedBackgroundList
+            )
+        }
+        val resolver = context.expressionResolver
+        addBackgroundSubscriptions(newDefaultBackgroundList, resolver, subscriber, callback)
+        addBackgroundSubscriptions(newFocusedBackgroundList, resolver, subscriber, callback)
+    }
+
+    private fun View.applyFocusedBackground(
+        context: BindingContext,
+        additionalLayer: Drawable?,
+        defaultBackgroundList: List<DivBackground>?,
+        focusedBackgroundList: List<DivBackground>
+    ) {
+        val metrics = resources.displayMetrics
+        val resolver = context.expressionResolver
+
+        val newDefaultDivBackground =
+            defaultBackgroundList?.map { it.toBackgroundState(metrics, resolver) } ?: emptyList()
+        val newFocusedDivBackground = focusedBackgroundList.map { it.toBackgroundState(metrics, resolver) }
+
+        val oldDefaultDivBackground = this.defaultBackgroundList
+        val oldFocusedDivBackground = this.focusedBackgroundList
+        val oldAdditionalLayer = this.additionalLayer
+
+        val backgroundChanged = (oldDefaultDivBackground != newDefaultDivBackground) ||
+            (oldFocusedDivBackground != newFocusedDivBackground) ||
+            (oldAdditionalLayer != additionalLayer)
+
+        if (backgroundChanged) {
+            val stateList = StateListDrawable()
+
+            stateList.addState(
+                intArrayOf(android.R.attr.state_focused),
+                newFocusedDivBackground.toDrawable(context, this, additionalLayer)
+            )
+
+            if (defaultBackgroundList != null || additionalLayer != null) {
+                stateList.addState(
+                    StateSet.WILD_CARD,
+                    newDefaultDivBackground.toDrawable(context, this, additionalLayer))
             }
 
-            callback(Unit)
+            updateBackground(stateList)
 
-            addBackgroundSubscriptions(defaultBackgroundList, resolver, subscriber, callback)
-        } else {
-            val callback = { _: Any ->
-                val newDefaultDivBackground =
-                    defaultBackgroundList?.map { it.toBackgroundState(metrics, resolver) } ?: emptyList()
-                val newFocusedDivBackground = focusedBackgroundList.map { it.toBackgroundState(metrics, resolver) }
-
-                val currentDefaultDivBackground =
-                    getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
-                val currentFocusedDivBackground =
-                    getTag(R.id.div_focused_background_list_tag) as? List<DivBackgroundState>
-                val currentAdditionalLayer = getTag(R.id.div_additional_background_layer_tag) as? Drawable?
-
-                val backgroundChanged = (currentDefaultDivBackground != newDefaultDivBackground) ||
-                    (currentFocusedDivBackground != newFocusedDivBackground) ||
-                    (currentAdditionalLayer != additionalLayer)
-
-                if (backgroundChanged) {
-                    val stateList = StateListDrawable()
-
-                    stateList.addState(
-                        intArrayOf(android.R.attr.state_focused),
-                        newFocusedDivBackground.toDrawable(this, context, additionalLayer)
-                    )
-
-                    if (defaultBackgroundList != null || additionalLayer != null) {
-                        stateList.addState(
-                            StateSet.WILD_CARD,
-                            newDefaultDivBackground.toDrawable(this, context, additionalLayer))
-                    }
-
-                    updateBackground(stateList)
-
-                    setTag(R.id.div_default_background_list_tag, newDefaultDivBackground)
-                    setTag(R.id.div_focused_background_list_tag, newFocusedDivBackground)
-                    setTag(R.id.div_additional_background_layer_tag, additionalLayer)
-                }
-            }
-
-            callback(Unit)
-
-            addBackgroundSubscriptions(focusedBackgroundList, resolver, subscriber, callback)
-            addBackgroundSubscriptions(defaultBackgroundList, resolver, subscriber, callback)
+            this.defaultBackgroundList = newDefaultDivBackground
+            this.focusedBackgroundList = newFocusedDivBackground
+            this.additionalLayer = additionalLayer
         }
     }
 
@@ -162,8 +269,8 @@ internal class DivBackgroundBinder @Inject constructor(
     }
 
     private fun List<DivBackgroundState>?.toDrawable(
-        view: View,
         context: BindingContext,
+        view: View,
         additionalLayer: Drawable?
     ): Drawable? {
         additionalLayer?.mutate()
@@ -252,6 +359,26 @@ internal class DivBackgroundBinder @Inject constructor(
         is DivFilter.Blur -> DivBackgroundState.Image.Filter.Blur(value.radius.evaluate(resolver).toIntSafely(), this)
         is DivFilter.RtlMirror -> DivBackgroundState.Image.Filter.RtlMirror(this)
     }
+
+    @Suppress("UNCHECKED_CAST")
+    private var View.defaultBackgroundList: List<DivBackgroundState>?
+        get() = getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>?
+        set(value) {
+            setTag(R.id.div_default_background_list_tag, value)
+        }
+
+    @Suppress("UNCHECKED_CAST")
+    private var View.focusedBackgroundList: List<DivBackgroundState>?
+        get() = getTag(R.id.div_focused_background_list_tag) as? List<DivBackgroundState>?
+        set(value) {
+            setTag(R.id.div_focused_background_list_tag, value)
+        }
+
+    private var View.additionalLayer: Drawable?
+        get() = getTag(R.id.div_additional_background_layer_tag) as? Drawable?
+        set(value) {
+            setTag(R.id.div_additional_background_layer_tag, value)
+        }
 
     private sealed class DivBackgroundState {
         data class LinearGradient(

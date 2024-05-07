@@ -16,7 +16,9 @@ import androidx.core.graphics.withSave
 import androidx.core.graphics.withTranslation
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.getCornerRadii
+import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.ShadowCache
 import com.yandex.div.core.view2.divs.dpToPx
@@ -28,6 +30,7 @@ import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.isInTransientHierarchy
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
+import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
 import kotlin.math.max
@@ -36,20 +39,21 @@ import kotlin.math.min
 private const val STROKE_OFFSET_PERCENTAGE = 0.1f
 
 internal class DivBorderDrawer(
-    private val metrics: DisplayMetrics,
-    private val view: View,
-    private var expressionResolver: ExpressionResolver,
-    divBorder: DivBorder
+    private val view: View
 ) : ExpressionSubscriber {
-    var border = divBorder
+
+    var border: DivBorder? = null
         private set
+
+    private val displayMetrics: DisplayMetrics
+        get() = view.resources.displayMetrics
 
     private val clipParams = ClipParams()
     private val borderParams by lazy { BorderParams() }
     private val shadowParams by lazy { ShadowParams() }
 
-    private var strokeWidth = 0f
-    private lateinit var cornerRadii: FloatArray
+    private var strokeWidth = DEFAULT_STROKE_WIDTH
+    private var cornerRadii: FloatArray? = null
     private var hasDifferentCornerRadii = false
     private var hasBorder = false
     private var hasCustomShadow = false
@@ -64,19 +68,25 @@ internal class DivBorderDrawer(
 
     override val subscriptions = mutableListOf<Disposable>()
 
-    init {
-        observeBorder(expressionResolver, border)
-    }
+    fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
+        if (border.equalsToConstant(this.border)) {
+            return
+        }
 
-    fun setBorder(resolver: ExpressionResolver, divBorder: DivBorder) {
         release()
-        expressionResolver = resolver
-        border = divBorder
-        observeBorder(resolver, divBorder)
+        this.border = border
+        bindBorder(border, resolver)
     }
 
-    private fun observeBorder(resolver: ExpressionResolver, border: DivBorder) {
+    private fun bindBorder(border: DivBorder?, resolver: ExpressionResolver) {
         applyBorder(border, resolver)
+        observeBorder(border, resolver)
+    }
+
+    private fun observeBorder(border: DivBorder?, resolver: ExpressionResolver) {
+        if (border == null || border.isConstant()) {
+            return
+        }
 
         val callback = { _: Any ->
             applyBorder(border, resolver)
@@ -101,31 +111,37 @@ internal class DivBorderDrawer(
         addSubscription(border.shadow?.offset?.y?.value?.observe(resolver, callback))
     }
 
-    private fun applyBorder(border: DivBorder, resolver: ExpressionResolver) {
-        strokeWidth = border.stroke.widthPx(resolver, metrics).toFloat()
+    private fun applyBorder(border: DivBorder?, resolver: ExpressionResolver) {
+        val metrics = displayMetrics
+
+        strokeWidth = border?.stroke?.widthPx(resolver, metrics)?.toFloat() ?: DEFAULT_STROKE_WIDTH
         hasBorder = strokeWidth > 0
         if (hasBorder) {
-            val borderColor = border.stroke?.color?.evaluate(resolver)
+            val borderColor = border?.stroke?.color?.evaluate(resolver)
                 ?: Color.TRANSPARENT
             borderParams.setPaintParams(strokeWidth, borderColor)
         }
 
-        cornerRadii = border.getCornerRadii(view.width.dpToPx(metrics).toFloat(),
+        cornerRadii = border?.getCornerRadii(view.width.dpToPx(metrics).toFloat(),
                 view.height.dpToPx(metrics).toFloat(),
                 metrics, resolver)
-        hasDifferentCornerRadii = cornerRadii.let { radii ->
+        hasDifferentCornerRadii = cornerRadii?.let { radii ->
             val firstCorner = radii.first()
             !radii.all { it.equals(firstCorner) }
-        }
+        } ?: false
 
         val hadCustomShadow = hasCustomShadow
-        hasShadow = border.hasShadow.evaluate(resolver)
-        hasCustomShadow = hasShadow && (border.shadow != null || view.parent is DivFrameLayout)
+        hasShadow = border?.hasShadow?.evaluate(resolver) ?: false
+        hasCustomShadow = hasShadow && (border?.shadow != null || view.parent is DivFrameLayout)
 
         view.elevation = when {
             !hasShadow -> NO_ELEVATION
             hasCustomShadow -> NO_ELEVATION
             else -> view.context.resources.getDimension(R.dimen.div_shadow_elevation)
+        }
+
+        if (hasCustomShadow) {
+            shadowParams.set(border?.shadow, resolver)
         }
 
         invalidatePaths()
@@ -143,7 +159,7 @@ internal class DivBorderDrawer(
     }
 
     private fun invalidatePaths() {
-        val radii = cornerRadii.clone()
+        val radii = cornerRadii?.clone() ?: return
 
         clipParams.invalidatePath(radii)
 
@@ -165,7 +181,14 @@ internal class DivBorderDrawer(
     }
 
     private fun invalidateOutline() {
-        if (isNeedUseCanvasClipping()) {
+        if (shouldUseCanvasClipping()) {
+            view.clipToOutline = false
+            view.outlineProvider = ViewOutlineProvider.BACKGROUND
+            return
+        }
+
+        val cornerRadius = cornerRadii?.first() ?: DEFAULT_CORNER_RADIUS
+        if (cornerRadius == DEFAULT_CORNER_RADIUS) {
             view.clipToOutline = false
             view.outlineProvider = ViewOutlineProvider.BACKGROUND
             return
@@ -176,17 +199,14 @@ internal class DivBorderDrawer(
                 if (view == null || outline == null) return
                 outline.setRoundRect(
                     0, 0, view.width, view.height,
-                    clampCornerRadius(
-                        cornerRadii.first(),
-                        view.width.toFloat(), view.height.toFloat()
-                    )
+                    clampCornerRadius(cornerRadius, view.width.toFloat(), view.height.toFloat())
                 )
             }
         }
         view.clipToOutline = needClipping
     }
 
-    private fun isNeedUseCanvasClipping(): Boolean {
+    private fun shouldUseCanvasClipping(): Boolean {
         return needClipping && (hasCustomShadow ||
             (!hasShadow && (hasDifferentCornerRadii || hasBorder || view.isInTransientHierarchy())))
     }
@@ -203,7 +223,7 @@ internal class DivBorderDrawer(
     }
 
     fun clipCorners(canvas: Canvas) {
-        if (!isNeedUseCanvasClipping()) {
+        if (!shouldUseCanvasClipping()) {
             return
         }
         canvas.clipPath(clipParams.path)
@@ -230,19 +250,21 @@ internal class DivBorderDrawer(
         val path = Path()
         private val rect = RectF()
 
-        fun invalidatePath(radii: FloatArray) {
+        fun invalidatePath(radii: FloatArray?) {
             rect.set(0f, 0f, view.width.toFloat(), view.height.toFloat())
 
             path.reset()
-            path.addRoundRect(rect, radii.clone(), Path.Direction.CW)
-            path.close()
+            if (radii != null) {
+                path.addRoundRect(rect, radii.clone(), Path.Direction.CW)
+                path.close()
+            }
         }
     }
 
     private inner class BorderParams {
         val paint = Paint()
         val path = Path()
-        private val halfDp = 0.5.dpToPxF(metrics)
+        private val halfDp = 0.5.dpToPxF(displayMetrics)
         private val strokeOffset // magic formula to avoid border artifacts
             get() = min(halfDp, max(1f, strokeWidth * STROKE_OFFSET_PERCENTAGE))
         private val rect = RectF()
@@ -272,6 +294,7 @@ internal class DivBorderDrawer(
             view.context.resources.getDimension(R.dimen.div_shadow_elevation)
         private var radius = defaultRadius
         private var color = DEFAULT_SHADOW_COLOR
+        private var alpha = DEFAULT_SHADOW_ALPHA
 
         val paint = Paint()
         val rect = Rect()
@@ -281,23 +304,25 @@ internal class DivBorderDrawer(
         var offsetX = DEFAULT_DX
         var offsetY = DEFAULT_DY
 
+        fun set(shadow: DivShadow?, resolver: ExpressionResolver) {
+            val metrics = displayMetrics
+
+            radius = shadow?.blur?.evaluate(resolver)?.dpToPxF(metrics) ?: defaultRadius
+            color = shadow?.color?.evaluate(resolver) ?: DEFAULT_SHADOW_COLOR
+            alpha = shadow?.alpha?.evaluate(resolver)?.toFloat()
+                ?: DEFAULT_SHADOW_ALPHA
+
+            offsetX = (shadow?.offset?.x?.toPx(metrics, resolver)
+                ?: DEFAULT_DX.dpToPx(metrics)).toFloat() - radius
+            offsetY = (shadow?.offset?.y?.toPx(metrics, resolver)
+                ?: DEFAULT_DY.dpToPx(metrics)).toFloat() - radius
+        }
+
         fun invalidateShadow(radii: FloatArray) {
             rect.set(0, 0, (view.width + radius * 2).toInt(), (view.height + radius * 2).toInt())
 
-            val shadow = border.shadow
-
-            radius = shadow?.blur?.evaluate(expressionResolver)?.dpToPxF(metrics) ?: defaultRadius
-            color = shadow?.color?.evaluate(expressionResolver) ?: DEFAULT_SHADOW_COLOR
-            val shadowAlpha = shadow?.alpha?.evaluate(expressionResolver)?.toFloat()
-                ?: DEFAULT_SHADOW_ALPHA
-
-            offsetX = (shadow?.offset?.x?.toPx(metrics, expressionResolver)
-                ?: DEFAULT_DX.dpToPx(metrics)).toFloat() - radius
-            offsetY = (shadow?.offset?.y?.toPx(metrics, expressionResolver)
-                ?: DEFAULT_DY.dpToPx(metrics)).toFloat() - radius
-
             paint.color = color
-            paint.alpha = (shadowAlpha * 255).toInt()
+            paint.alpha = (alpha * 255).toInt()
 
             cachedShadow = ShadowCache.getShadow(view.context, radii, radius)
         }
@@ -305,6 +330,8 @@ internal class DivBorderDrawer(
 
     companion object {
         const val NO_ELEVATION = 0f
+        private const val DEFAULT_STROKE_WIDTH = 0.0f
+        private const val DEFAULT_CORNER_RADIUS = 0.0f
         private const val DEFAULT_DX = 0f
         private const val DEFAULT_DY = 0.5f
         private const val DEFAULT_SHADOW_COLOR = Color.BLACK

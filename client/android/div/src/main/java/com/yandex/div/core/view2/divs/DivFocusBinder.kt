@@ -21,13 +21,13 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
         view: View,
         context: BindingContext,
         focusedBorder: DivBorder?,
-        blurredBorder: DivBorder?
+        defaultBorder: DivBorder?
     ): Unit = view.run {
         val border = when {
-            focusedBorder == null -> blurredBorder
-            focusedBorder.isConstantlyEmpty() -> blurredBorder
+            focusedBorder == null -> defaultBorder
+            focusedBorder.isConstantlyEmpty() -> defaultBorder
             isFocused -> focusedBorder
-            else -> blurredBorder
+            else -> defaultBorder
         }
         applyBorder(border, context.expressionResolver)
 
@@ -46,7 +46,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
         }
 
         onFocusChangeListener = FocusChangeListener(context).apply {
-            setBorders(focusedBorder, blurredBorder)
+            setBorders(focusedBorder, defaultBorder)
             focusListener?.let { setActions(it.focusActions, it.blurActions) }
         }
     }

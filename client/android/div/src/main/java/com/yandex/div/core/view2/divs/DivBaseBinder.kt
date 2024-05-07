@@ -67,7 +67,7 @@ internal class DivBaseBinder @Inject constructor(
         view.bindAccessibility(divView, div, oldDiv, resolver, subscriber)
         view.bindAlpha(div, oldDiv, resolver, subscriber)
 
-        view.bindBackground(context, div, subscriber)
+        view.bindBackground(context, div, oldDiv, subscriber)
         view.bindBorder(context, div)
         view.bindPaddings(div, oldDiv, resolver, subscriber)
 
@@ -441,21 +441,24 @@ internal class DivBaseBinder @Inject constructor(
         subscriber: ExpressionSubscriber,
         additionalLayer: Drawable? = null
     ) {
-        target.bindBackground(context, newDiv, subscriber, additionalLayer)
+        target.bindBackground(context, newDiv, oldDiv, subscriber, additionalLayer)
         target.bindPaddings(newDiv, oldDiv, context.expressionResolver, subscriber)
     }
 
     private fun View.bindBackground(
         context: BindingContext,
         newDiv: DivBase,
+        oldDiv: DivBase?,
         subscriber: ExpressionSubscriber,
         additionalLayer: Drawable? = null
     ) {
         divBackgroundBinder.bindBackground(
-            this,
             context,
+            this,
             newDiv.background,
+            oldDiv?.background,
             newDiv.focus?.background,
+            oldDiv?.focus?.background,
             subscriber,
             additionalLayer
         )

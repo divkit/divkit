@@ -1,6 +1,6 @@
 package com.yandex.div.core.view2.divs
 
-import android.graphics.drawable.Drawable
+import android.graphics.Color
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
@@ -13,7 +13,9 @@ import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.AccessibilityStateProvider
+import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.mask.BaseInputMask
 import com.yandex.div.core.util.mask.CurrencyInputMask
 import com.yandex.div.core.util.mask.DEFAULT_MASK_DATA
@@ -128,24 +130,36 @@ internal class DivInputBinder @Inject constructor(
         oldDiv: DivInput?,
         resolver: ExpressionResolver
     ) {
-        val nativeBackgroundColorVariable = newDiv.nativeInterface?.color ?: return
-        val drawable = nativeBackground ?: return
-
-        val callback = { color: Int ->
-            applyNativeBackgroundColor(color, newDiv, oldDiv, bindingContext, drawable)
+        if (newDiv.nativeInterface.equalsToConstant(oldDiv?.nativeInterface)) {
+            return
         }
-        addSubscription(nativeBackgroundColorVariable.observeAndGet(resolver, callback))
+
+        applyNativeBackgroundColor(bindingContext, newDiv, oldDiv)
+
+        if (newDiv.nativeInterface.isConstant()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.nativeInterface?.color?.observeAndGet(resolver) {
+                applyNativeBackgroundColor(bindingContext, newDiv, oldDiv)
+            }
+        )
     }
 
-    private fun View.applyNativeBackgroundColor(
-        color: Int,
-        newDiv: DivInput,
-        oldDiv: DivInput?,
+    private fun DivInputView.applyNativeBackgroundColor(
         bindingContext: BindingContext,
-        nativeBackground: Drawable
+        newDiv: DivInput,
+        oldDiv: DivInput?
     ) {
-        nativeBackground.setTint(color)
-        baseBinder.bindBackground(bindingContext, this, newDiv, oldDiv, expressionSubscriber, nativeBackground)
+        val resolver = bindingContext.expressionResolver
+        val nativeBackgroundColor = newDiv.nativeInterface?.color?.evaluate(resolver) ?: Color.TRANSPARENT
+        val background = if (nativeBackgroundColor == Color.TRANSPARENT) {
+            null
+        } else {
+            nativeBackground?.apply { setTint(nativeBackgroundColor) }
+        }
+        baseBinder.bindBackground(bindingContext, this, newDiv, oldDiv, expressionSubscriber, background)
     }
 
     private fun DivInputView.observeFontSize(div: DivInput, resolver: ExpressionResolver) {

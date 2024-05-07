@@ -38,3 +38,15 @@ public fun allIsNullOrEmpty(vararg items: List<*>?): Boolean = items.all { it.is
 public fun <K, V> Map<out K, V>.getOrThrow(key: K, message: String? = null): V {
     return get(key) ?: throw NoSuchElementException(message)
 }
+
+@InternalApi
+public inline fun <T> List<T>.compareWith(other: List<T>, comparator: (T, T) -> Boolean): Boolean {
+    if (this.size != other.size) {
+        return false
+    }
+
+    this.forEachIndexed { index, item ->
+        if (!comparator(item, other[index])) return false
+    }
+    return true
+}

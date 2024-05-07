@@ -10,10 +10,10 @@ import com.yandex.div.core.widget.FixedLineHeightView
  * For some reason line height is ignored on one-line TextViews in Android.
  */
 open class SuperLineHeightTextView @JvmOverloads constructor(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
-) : AppCompatTextView(context!!, attrs, defStyle), FixedLineHeightView {
+) : AppCompatTextView(context, attrs, defStyle), FixedLineHeightView {
 
     private inline val visibleLineCount get() = minOf(lineCount, maxLines)
     private val fixedLineHeightHelper = FixedLineHeightHelper(this)

@@ -7,7 +7,8 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
-import org.junit.Assert.*
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -18,7 +19,6 @@ import org.robolectric.RobolectricTestRunner
 class DivViewWrapperTest {
     private val context: Context = Robolectric.buildActivity(Activity::class.java).get()
     private val divBorder = DivBorder()
-    private val divBorderDrawer = DivBorderDrawer(context.resources.displayMetrics, mock(), mock(), divBorder)
     private val viewWithBorder = object : DivBorderSupports, View(context) {
         override var isDrawing: Boolean
             get() = false
@@ -31,6 +31,9 @@ class DivViewWrapperTest {
         override fun getDivBorderDrawer(): DivBorderDrawer = divBorderDrawer
 
         override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) { }
+    }
+    private val divBorderDrawer: DivBorderDrawer = DivBorderDrawer(viewWithBorder).apply {
+        setBorder(divBorder, mock())
     }
 
     @Test

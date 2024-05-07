@@ -26,6 +26,7 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
+import com.yandex.div.core.view2.drawable.NoOpDrawable
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
@@ -103,7 +104,9 @@ internal class DivViewCreator @Inject constructor(
 
     fun create(div: Div, resolver: ExpressionResolver): View {
         return if (validator.validate(div, resolver)) {
-            visit(div, resolver)
+            visit(div, resolver).apply {
+                background = NoOpDrawable
+            }
         } else {
             Space(context)
         }

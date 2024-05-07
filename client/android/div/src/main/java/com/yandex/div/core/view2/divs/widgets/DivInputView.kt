@@ -3,10 +3,12 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
-import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.TypedValue
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.reuse.InputFocusTracker
@@ -21,7 +23,16 @@ internal class DivInputView @JvmOverloads constructor(
     DivHolderView<DivInput> by DivHolderViewMixin(),
     DivAnimator {
 
-    internal val nativeBackground: Drawable? = background
+    @get:DrawableRes
+    private val nativeBackgroundResId: Int
+        get() {
+            return TypedValue().let { value ->
+                context.theme.resolveAttribute(android.R.attr.editTextBackground, value, true)
+                value.resourceId
+            }
+        }
+
+    internal val nativeBackground = ContextCompat.getDrawable(context, nativeBackgroundResId)
 
     internal var focusTracker: InputFocusTracker? = null
 
@@ -44,10 +55,6 @@ internal class DivInputView @JvmOverloads constructor(
             field = value
             setInputHint(_hint)
         }
-
-    init {
-        setPadding(0, 0, 0, 0)
-    }
 
     fun setInputHint(hint: String?) {
         _hint = hint

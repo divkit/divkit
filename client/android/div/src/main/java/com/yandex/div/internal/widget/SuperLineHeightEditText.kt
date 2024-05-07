@@ -13,7 +13,7 @@ import com.yandex.div.core.widget.FixedLineHeightView
 internal open class SuperLineHeightEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = androidx.appcompat.R.attr.editTextStyle
+    defStyleAttr: Int = 0
 ) : AppCompatEditText(context, attrs, defStyleAttr), FixedLineHeightView {
 
     private var verticallyScrolling = true
