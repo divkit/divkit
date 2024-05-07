@@ -16,6 +16,7 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div2.DivCustom
 import javax.inject.Inject
 import javax.inject.Provider
@@ -50,12 +51,12 @@ internal class DivCustomBinder @Inject constructor(
         baseBinder.bindId(divView, view, null)
 
         if (divCustomContainerViewAdapter.isCustomTypeSupported(div.customType)) {
-            bind(view, customView, div, context,
+            bind(view, customView, oldDiv, div, context,
                 { divCustomContainerViewAdapter.createView(div, divView, resolver, path) },
                 { divCustomContainerViewAdapter.bindView(it, div, divView, resolver, path) }
             )
         } else if (divCustomViewAdapter.isCustomTypeSupported(div.customType)) {
-            bind(view, customView, div, context,
+            bind(view, customView, oldDiv, div, context,
                 { divCustomViewAdapter.createView(div, divView) },
                 { divCustomViewAdapter.bindView(it, div, divView) }
             )
@@ -67,12 +68,15 @@ internal class DivCustomBinder @Inject constructor(
     private fun bind(
         previousWrapper: DivCustomWrapper,
         oldCustomView: View?,
+        oldDiv: DivCustom?,
         div: DivCustom,
         context: BindingContext,
         createView: () -> View,
         bindView: (View) -> Unit
     ) {
-        val customView = if (oldCustomView != null && previousWrapper.div?.customType == div.customType) {
+        val customView = if (oldCustomView != null && previousWrapper.div?.customType == div.customType
+                && oldDiv?.nonNullItems?.size == div.nonNullItems.size
+        ) {
             oldCustomView
         } else {
             createView().apply {

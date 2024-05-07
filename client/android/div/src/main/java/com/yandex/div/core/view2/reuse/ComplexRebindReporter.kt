@@ -11,5 +11,7 @@ internal interface ComplexRebindReporter: ForceRebindReporter {
 
     fun onComplexRebindNoExistingParent() = Unit
 
+    fun onComplexRebindUnsupportedElementException(e: RebindTask.UnsupportedElementException) = Unit
+
     fun onComplexRebindFatalNoState() = Unit
 }

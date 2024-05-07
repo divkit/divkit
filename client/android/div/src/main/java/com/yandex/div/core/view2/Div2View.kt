@@ -285,7 +285,7 @@ class Div2View private constructor(
 
         histogramReporter.onRenderStarted()
 
-        var oldData = divData ?: oldDivData
+        val oldData = divData ?: oldDivData
         updateExpressionsRuntime(data, tag)
         dataTag = tag
 
@@ -293,34 +293,34 @@ class Div2View private constructor(
             div2Component.preloader.preload(it.div, expressionResolver)
         }
 
-        if (complexRebindEnabled && oldData != null && view.getChildAt(0) is ViewGroup) {
-            complexRebind(data, oldData, reporter)
-            return false
-        }
+        val isDataReplaceable = DivComparator.isDivDataReplaceable(
+            oldData,
+            data,
+            stateId,
+            oldExpressionResolver,
+            expressionResolver,
+            reporter
+        )
 
-        if (!DivComparator.isDivDataReplaceable(
-                oldData,
-                data,
-                stateId,
-                oldExpressionResolver,
-                expressionResolver,
-                reporter
-            )
-        ) {
-            oldData = null
-        }
-
-        val result = if (oldData != null) {
-            if (data.allowsTransitionsOnDataChange(expressionResolver)) {
+        val result = when {
+            oldData == null || data.allowsTransitionsOnDataChange(expressionResolver) -> {
                 updateNow(data, tag, reporter)
-            } else {
-                rebind(data, false, reporter)
             }
-            div2Component.divBinder.attachIndicators()
-            false
-        } else {
-            updateNow(data, tag, reporter)
+            !isDataReplaceable
+                && complexRebindEnabled
+                && view.getChildAt(0) is ViewGroup
+                && complexRebind(data, oldData, reporter)
+            -> {
+                false
+            }
+            isDataReplaceable -> {
+                rebind(data, false, reporter)
+                false
+            }
+            else -> updateNow(data, tag, reporter)
         }
+        div2Component.divBinder.attachIndicators()
+
         sendCreationHistograms()
         oldExpressionsRuntime = _expressionsRuntime
         persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
@@ -347,19 +347,16 @@ class Div2View private constructor(
 
         histogramReporter.onRenderStarted()
 
-        var oldData = divData
+        val oldData = divData
         updateExpressionsRuntime(data, tag)
-        if (!DivComparator.isDivDataReplaceable(
-                oldData,
-                data,
-                stateId,
-                oldExpressionResolver,
-                expressionResolver,
-                reporter
-            )
-        ) {
-            oldData = null
-        }
+        val isDataReplaceable = DivComparator.isDivDataReplaceable(
+            oldData,
+            data,
+            stateId,
+            oldExpressionResolver,
+            expressionResolver,
+            reporter
+        )
         dataTag = tag
 
         data.states.forEach {
@@ -368,11 +365,20 @@ class Div2View private constructor(
         paths.forEach { path ->
             div2Component.stateManager.updateStates(divTag.id, path, temporary)
         }
-        val result = if (oldData != null) {
-            rebind(data, false, reporter)
-            true
-        } else {
-            updateNow(data, tag, reporter)
+        val result = when {
+            oldData == null -> updateNow(data, tag, reporter)
+            !isDataReplaceable
+                && complexRebindEnabled
+                && view.getChildAt(0) is ViewGroup
+                && complexRebind(data, oldData, reporter)
+            -> {
+                true
+            }
+            isDataReplaceable -> {
+                rebind(data, false, reporter)
+                true
+            }
+            else -> updateNow(data, tag, reporter)
         }
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
@@ -1113,10 +1119,10 @@ class Div2View private constructor(
         }
     }
 
-    private fun complexRebind(newData: DivData, oldData: DivData, reporter: ComplexRebindReporter) {
+    private fun complexRebind(newData: DivData, oldData: DivData, reporter: ComplexRebindReporter): Boolean {
         val stateToBind = newData.stateToBind ?: let {
             reporter.onComplexRebindFatalNoState()
-            return
+            return false
         }
         histogramReporter.onRebindingStarted()
         divData = newData
@@ -1133,7 +1139,7 @@ class Div2View private constructor(
 
         val state = newData.stateToBind ?: let {
             reporter.onComplexRebindFatalNoState()
-            return
+            return false
         }
         val viewToRebind = (view.getChildAt(0) as ViewGroup).apply {
             bindLayoutParams(state.div.value(), expressionResolver)
@@ -1147,14 +1153,12 @@ class Div2View private constructor(
             DivStatePath.fromState(newData.stateId())
         )
         if (!result) {
-            updateNow(newData, dataTag, reporter)
-            return
+            return false
         }
         requestLayout()
 
         histogramReporter.onRebindingFinished()
-        div2Component.divBinder.attachIndicators()
-        sendCreationHistograms()
+        return true
     }
 
     private val DivData.stateToBind get() = states.find { it.stateId == stateId } ?: states.firstOrNull()

@@ -34,5 +34,3 @@ internal fun ViewGroup.tryRebindPlainContainerChildren(
 
     return true
 }
-
-

@@ -1,28 +1,32 @@
 package com.yandex.div.core.view2.reuse
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.MainThread
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.reuse.util.combineTokens
-import com.yandex.div.core.view2.reuse.util.logRebindDiff
-import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivData
 
 internal class RebindTask(
     private val div2View: Div2View,
     private val divBinder: DivBinder,
-    private val resolver: ExpressionResolver,
+    private val oldResolver: ExpressionResolver,
     private val newResolver: ExpressionResolver,
     private val reporter: ComplexRebindReporter,
 ) {
-    private val bindingPoints: MutableSet<ExistingToken> = mutableSetOf()
+    private val bindingPoints = mutableSetOf<ExistingToken>()
+    private val idsToBind = mutableListOf<ExistingToken>()
+
     private val aloneExisting = mutableListOf<ExistingToken>()
     private val aloneNew = mutableListOf<NewToken>()
+    private val aloneIds = mutableMapOf<String, ExistingToken>()
 
     var rebindInProgress = false
     val reusableList = ReusableTokenList()
@@ -36,12 +40,15 @@ internal class RebindTask(
         clear()
         rebindInProgress = true
 
-        if (!calculateDiff(oldDivData, newDivData, rootView)) {
-            return false
+        val result = try {
+            calculateDiff(oldDivData, newDivData, rootView)
+        } catch (e: UnsupportedElementException) {
+            reporter.onComplexRebindUnsupportedElementException(e)
+            false
         }
-        if (Log.isEnabled()) {
-            logRebindDiff(reusableList, bindingPoints, aloneExisting, aloneNew)
-        }
+
+        if (!result) return false
+
         return rebind(path)
     }
 
@@ -63,7 +70,7 @@ internal class RebindTask(
             return false
         }
         val existingToken = ExistingToken(
-            item = DivItemBuilderResult(existingItem, resolver),
+            item = DivItemBuilderResult(existingItem, oldResolver),
             view = rootView,
             childIndex = 0,
             parentToken = null,
@@ -75,7 +82,6 @@ internal class RebindTask(
         val newToken = NewToken(
             item = DivItemBuilderResult(newItem, newResolver),
             childIndex = 0,
-            parentToken = null,
             lastExistingParent = null,
         )
 
@@ -109,7 +115,7 @@ internal class RebindTask(
         val aloneNewChild = newToken.getChildrenTokens().toMutableList()
         val aloneExistingChild = mutableListOf<ExistingToken>()
 
-        existingToken.getChildrenTokens().forEach { existingChild ->
+        existingToken.getChildrenTokens(combinedToken).forEach { existingChild ->
             val newChildWithSameHash = aloneNewChild.find { it.divHash == existingChild.divHash }
 
             if (newChildWithSameHash != null) {
@@ -136,21 +142,44 @@ internal class RebindTask(
     }
 
     private fun doNodeInExistingMode(token: ExistingToken) {
-        aloneExisting.add(token)
+        val id = token.div.value().id
+        if (id != null) {
+            aloneIds[id] = token
+        } else {
+            aloneExisting.add(token)
+        }
+
         token.getChildrenTokens().forEach {
             doNodeInExistingMode(it)
         }
     }
 
-    private fun doNodeInNewMode(token: NewToken) {
-        val existingWithSameHash = aloneExisting.find { it.divHash == token.divHash }
+    private fun doNodeInNewMode(newToken: NewToken) {
+        val existingWithSameHash = aloneExisting.find { it.divHash == newToken.divHash }
 
         if (existingWithSameHash != null) {
             aloneExisting.remove(existingWithSameHash)
-            doNodeInSameMode(existingWithSameHash, token)
+            doNodeInSameMode(existingWithSameHash, newToken)
         } else {
-            aloneNew.add(token)
-            token.getChildrenTokens().forEach {
+            val id = newToken.div.value().id
+            val existingIdToken = if (id != null) aloneIds[id] else null
+
+            if (id != null && existingIdToken != null
+                && existingIdToken.div.javaClass == newToken.div.javaClass
+                && DivComparator.areValuesReplaceable(
+                    existingIdToken.div.value(),
+                    newToken.div.value(),
+                    oldResolver,
+                    newResolver
+                )
+            ) {
+                aloneIds.remove(id)
+                val combinedToken = combineTokens(existingIdToken, newToken)
+                idsToBind.add(combinedToken)
+            } else {
+                aloneNew.add(newToken)
+            }
+            newToken.getChildrenTokens().forEach {
                 doNodeInNewMode(it)
             }
         }
@@ -164,7 +193,12 @@ internal class RebindTask(
         }
 
         aloneExisting.forEach {
-            div2View.releaseViewVisitor.visit(it.view)
+            releaseIfNecessary(it.div, it.view)
+            div2View.unbindViewFromDiv(it.view)
+        }
+
+        aloneIds.values.forEach {
+            releaseIfNecessary(it.div, it.view)
             div2View.unbindViewFromDiv(it.view)
         }
 
@@ -175,9 +209,28 @@ internal class RebindTask(
             divBinder.bind(bindingContext, it.view, it.item.div, path)
         }
 
+        idsToBind.forEach {
+            if (bindingPoints.contains(it.parentToken)) return@forEach
+
+            val bindingContext = it.view.bindingContext ?: div2View.bindingContext
+            divBinder.bind(bindingContext, it.view, it.item.div, path)
+        }
+
         clear()
         reporter.onComplexRebindSuccess()
         return true
+    }
+
+    private fun releaseIfNecessary(div: Div, view: View) {
+        when (div) {
+            is Div.Custom,
+            is Div.Video -> div2View.releaseViewVisitor.visit(view)
+            else -> Unit
+        }
+    }
+
+    internal class UnsupportedElementException(type: Class<*>): IllegalArgumentException() {
+        override val message: String = "$type is unsupported by complex rebind"
     }
 
     companion object {

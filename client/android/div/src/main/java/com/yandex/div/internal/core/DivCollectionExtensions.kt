@@ -8,6 +8,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivCustom
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGrid
 import com.yandex.div2.DivPager
@@ -63,6 +64,8 @@ private fun Div.copy(): Div {
 }
 
 val DivContainer.nonNullItems: List<Div> get() = items ?: emptyList()
+
+val DivCustom.nonNullItems: List<Div> get() = items ?: emptyList()
 
 val DivGallery.nonNullItems: List<Div> get() = items ?: emptyList()
 

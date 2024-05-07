@@ -2622,6 +2622,27 @@
         "The right image should scale perfectly."
       ],
       "file": "svg_scale.json"
+    },
+    {
+      "title": "Rebind custom",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Next\" several times to check that forward and backward rebind works correctly"
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/custom/custom-container.json"
     }
   ]
 }

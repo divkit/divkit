@@ -111,7 +111,7 @@ internal class DivStateBinder @Inject constructor(
         val outgoing = if (layout.childCount > 0) layout.getChildAt(0) else null
         val incoming: View?
         val reusableIncomingView = newStateDiv?.let {
-            divView.currentRebindReusableList?.get(newStateDiv)?.view
+            divView.currentRebindReusableList?.getUniqueViewForDiv(newStateDiv)
         }
 
         if (layout.stateId != newState.stateId) {

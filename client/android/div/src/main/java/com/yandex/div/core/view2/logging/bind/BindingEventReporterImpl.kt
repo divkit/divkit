@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.logging.bind
 
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.logging.EventMessageBuilder
+import com.yandex.div.core.view2.reuse.RebindTask
 import com.yandex.div2.DivData
 
 internal class BindingEventReporterImpl(
@@ -74,6 +75,13 @@ internal class BindingEventReporterImpl(
         appendEventMessage(
             EVENT_COMPLEX_REBIND_FAILED,
             "Cannot find any difference to bind"
+        )
+    }
+
+    override fun onComplexRebindUnsupportedElementException(e: RebindTask.UnsupportedElementException) {
+        appendEventMessage(
+            "$EVENT_COMPLEX_REBIND_FAILED with exception",
+            "${e::class} (${e.message})"
         )
     }
 
