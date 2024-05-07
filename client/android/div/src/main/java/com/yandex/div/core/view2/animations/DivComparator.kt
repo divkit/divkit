@@ -1,8 +1,9 @@
 package com.yandex.div.core.view2.animations
 
 import com.yandex.div.core.view2.divs.isWrapContainer
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.internal.core.itemsToDivItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -51,13 +52,8 @@ internal object DivComparator {
         if (old == null || new == null || old === new) {
             return true
         }
-        return areValuesReplaceable(old.value(), new.value(), oldResolver, newResolver, reporter) && areChildrenReplaceable(
-            extractChildren(old, oldResolver),
-            extractChildren(new, newResolver),
-            oldResolver,
-            newResolver,
-            reporter
-        )
+        return areValuesReplaceable(old.value(), new.value(), oldResolver, newResolver, reporter) &&
+            areChildrenReplaceable(extractChildren(old, oldResolver), extractChildren(new, newResolver), reporter)
     }
 
     fun areValuesReplaceable(
@@ -89,10 +85,8 @@ internal object DivComparator {
     }
 
     fun areChildrenReplaceable(
-        oldChildren: List<Div>,
-        newChildren: List<Div>,
-        oldResolver: ExpressionResolver,
-        newResolver: ExpressionResolver,
+        oldChildren: List<DivItemBuilderResult>,
+        newChildren: List<DivItemBuilderResult>,
         reporter: DivComparatorReporter? = null,
     ): Boolean {
         if (oldChildren.size != newChildren.size) {
@@ -101,14 +95,20 @@ internal object DivComparator {
         }
 
         return oldChildren.zip(newChildren).all {
-            areDivsReplaceable(it.first, it.second, oldResolver, newResolver, reporter)
+            areDivsReplaceable(
+                it.first.div,
+                it.second.div,
+                it.first.expressionResolver,
+                it.second.expressionResolver,
+                reporter
+            )
         }
     }
 
-    private fun extractChildren(div: Div, resolver: ExpressionResolver): List<Div> {
+    private fun extractChildren(div: Div, resolver: ExpressionResolver): List<DivItemBuilderResult> {
         return when (div) {
             is Div.Container -> div.value.buildItems(resolver)
-            is Div.Grid -> div.value.nonNullItems
+            is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver)
             is Div.Image -> emptyList()
             is Div.GifImage -> emptyList()
             is Div.Text -> emptyList()

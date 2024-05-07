@@ -1,14 +1,13 @@
 package com.yandex.div.core.view2.reuse
 
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
+import com.yandex.div.internal.core.DivItemBuilderResult
 
 internal abstract class Token(
-    val div: Div,
+    val item: DivItemBuilderResult,
     open val parentToken: Token?,
     val childIndex: Int,
 ) {
-    val divHash: Int = div.propertiesHash()
+    val divHash: Int = item.div.propertiesHash()
 
-    abstract fun getChildrenTokens(resolver: ExpressionResolver): List<Token>
+    abstract fun getChildrenTokens(): List<Token>
 }

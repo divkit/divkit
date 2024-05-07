@@ -67,6 +67,7 @@ import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -845,8 +846,8 @@ class Div2View private constructor(
         }
 
         val transition = viewComponent.transitionBuilder.buildTransitions(
-            from = oldDiv?.let { divSequenceForTransition(oldData, it, oldExpressionResolver) },
-            to = newDiv?.let { divSequenceForTransition(newData, it, expressionResolver) },
+            from = oldDiv?.let { itemSequenceForTransition(oldData, it, oldExpressionResolver) },
+            to = newDiv?.let { itemSequenceForTransition(newData, it, expressionResolver) },
             fromResolver = oldExpressionResolver,
             toResolver = expressionResolver
         )
@@ -864,7 +865,11 @@ class Div2View private constructor(
         return transition
     }
 
-    private fun divSequenceForTransition(divData: DivData?, div: Div, resolver: ExpressionResolver): Sequence<Div> {
+    private fun itemSequenceForTransition(
+        divData: DivData?,
+        div: Div,
+        resolver: ExpressionResolver
+    ): Sequence<DivItemBuilderResult> {
         val selectors = ArrayDeque<DivTransitionSelector>().apply {
             addLast(divData?.transitionAnimationSelector?.evaluate(resolver) ?: DivTransitionSelector.NONE)
         }
@@ -877,8 +882,8 @@ class Div2View private constructor(
             .onLeave { div ->
                 if (div is Div.State) selectors.removeLast()
             }
-            .filter { div ->
-                div.value().transitionTriggers?.allowsTransitionsOnDataChange()
+            .filter { item ->
+                item.div.value().transitionTriggers?.allowsTransitionsOnDataChange()
                     ?: selectors.lastOrNull()?.allowsTransitionsOnDataChange()
                     ?: false
             }

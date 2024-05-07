@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -102,14 +103,11 @@ internal object DivPathUtils {
     private fun Div.findByPath(divId: String, resolver: ExpressionResolver): Div? {
         return when (this) {
             is Div.State -> {
-                if (value.getId() == divId) {
-                    this
-                } else {
-                    value.states.mapNotNull { it.div }.findRecursively(divId, resolver)
-                }
+                takeIf { value.getId() == divId }
+                    ?: value.states.findRecursively(divId, resolver) { it.div }
             }
-            is Div.Tabs -> value.items.map { it.div }.findRecursively(divId, resolver)
-            is Div.Container -> value.buildItems(resolver).findRecursively(divId, resolver)
+            is Div.Tabs -> value.items.findRecursively(divId, resolver) { it.div }
+            is Div.Container -> value.buildItems(resolver).findRecursively(divId)
             is Div.Grid -> value.nonNullItems.findRecursively(divId, resolver)
             is Div.Gallery -> value.nonNullItems.findRecursively(divId, resolver)
             is Div.Pager -> value.nonNullItems.findRecursively(divId, resolver)
@@ -126,15 +124,14 @@ internal object DivPathUtils {
         }
     }
 
-    private fun Iterable<Div>.findRecursively(divId: String, resolver: ExpressionResolver): Div? {
-        forEach { div: Div ->
-            val state = div.findByPath(divId, resolver)
-            if (state != null) {
-                return state
-            }
-        }
-        return null
-    }
+    private fun <T> Iterable<T>.findRecursively(
+        divId: String,
+        resolver: ExpressionResolver,
+        getDiv: (T) -> Div? = { it as Div? },
+    ): Div? = firstNotNullOfOrNull { getDiv(it)?.findByPath(divId, resolver) }
+
+    private fun Iterable<DivItemBuilderResult>.findRecursively(divId: String): Div? =
+        firstNotNullOfOrNull { (div, resolver) -> div.findByPath(divId, resolver) }
 
     internal fun DivState.getId(errorCallback: (() -> Unit)? = null): String = divId ?: id ?: run {
         errorCallback?.invoke()

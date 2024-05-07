@@ -327,13 +327,13 @@ internal class DivStateBinder @Inject constructor(
         val transition = transitionBuilder.buildTransitions(
             from = outgoingState?.div?.walk(outgoingResolver)
                 ?.onEnter { div -> div !is Div.State }
-                ?.filter { div ->
-                    div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
+                ?.filter { item ->
+                    item.div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
                 },
             to = incomingState.div?.walk(incomingResolver)
                 ?.onEnter { div -> div !is Div.State }
-                ?.filter { div ->
-                    div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
+                ?.filter { item ->
+                    item.div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
                 },
             fromResolver = outgoingResolver,
             toResolver = incomingResolver

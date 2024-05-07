@@ -1,6 +1,7 @@
 {
   "description": "Inner data_element_name should override outer one.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

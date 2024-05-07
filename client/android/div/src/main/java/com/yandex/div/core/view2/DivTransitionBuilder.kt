@@ -17,6 +17,7 @@ import com.yandex.div.core.view2.animations.Scale
 import com.yandex.div.core.view2.animations.Slide
 import com.yandex.div.core.view2.animations.plusAssign
 import com.yandex.div.core.view2.divs.toPx
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAppearanceTransition
@@ -51,8 +52,8 @@ internal class DivTransitionBuilder @Inject constructor(
     }
 
     fun buildTransitions(
-        from: Sequence<Div>?,
-        to: Sequence<Div>?,
+        from: Sequence<DivItemBuilderResult>?,
+        to: Sequence<DivItemBuilderResult>?,
         fromResolver: ExpressionResolver,
         toResolver: ExpressionResolver,
     ): TransitionSet {
@@ -76,14 +77,14 @@ internal class DivTransitionBuilder @Inject constructor(
     }
 
     private fun buildOutgoingTransitions(
-        divSequence: Sequence<Div>,
+        itemSequence: Sequence<DivItemBuilderResult>,
         resolver: ExpressionResolver
     ): List<Transition> {
         val transitions = mutableListOf<Transition>()
 
-        divSequence.forEach { div ->
-            val id = div.value().id
-            val outgoingTransition = div.value().transitionOut
+        itemSequence.forEach { item ->
+            val id = item.div.value().id
+            val outgoingTransition = item.div.value().transitionOut
             if (id != null && outgoingTransition != null) {
                 val transition = outgoingTransition.toAndroidTransition(Visibility.MODE_OUT, resolver).apply {
                     addTarget(viewIdProvider.getViewId(id))
@@ -96,14 +97,14 @@ internal class DivTransitionBuilder @Inject constructor(
     }
 
     private fun buildChangeTransitions(
-        divSequence: Sequence<Div>,
+        itemSequence: Sequence<DivItemBuilderResult>,
         resolver: ExpressionResolver
     ): List<Transition> {
         val transitions = mutableListOf<Transition>()
 
-        divSequence.forEach { div ->
-            val id = div.value().id
-            val changeTransition = div.value().transitionChange
+        itemSequence.forEach { item ->
+            val id = item.div.value().id
+            val changeTransition = item.div.value().transitionChange
             if (id != null && changeTransition != null) {
                 val transition = changeTransition.toAndroidTransition(resolver).apply {
                     addTarget(viewIdProvider.getViewId(id))
@@ -116,14 +117,14 @@ internal class DivTransitionBuilder @Inject constructor(
     }
 
     private fun buildIncomingTransitions(
-        divSequence: Sequence<Div>,
+        itemSequence: Sequence<DivItemBuilderResult>,
         resolver: ExpressionResolver
     ): List<Transition> {
         val transitions = mutableListOf<Transition>()
 
-        divSequence.forEach { div ->
-            val id = div.value().id
-            val incomingTransition = div.value().transitionIn
+        itemSequence.forEach { item ->
+            val id = item.div.value().id
+            val incomingTransition = item.div.value().transitionIn
             if (id != null && incomingTransition != null) {
                 val transition = incomingTransition.toAndroidTransition(Visibility.MODE_IN, resolver).apply {
                     addTarget(viewIdProvider.getViewId(id))

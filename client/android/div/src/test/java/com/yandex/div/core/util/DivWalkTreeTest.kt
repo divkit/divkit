@@ -24,7 +24,7 @@ class DivWalkTreeTest {
         val rootDiv = divText("lorem ipsum")
 
         val divWalk = rootDiv.walk(resolver)
-            .map { div -> div.type }
+            .map { item -> item.div.type }
 
         assertEquals(listOf("text"), divWalk.toList())
     }
@@ -39,7 +39,7 @@ class DivWalkTreeTest {
         )
 
         val divWalk = rootDiv.walk(resolver)
-            .map { div -> div.type }
+            .map { item -> item.div.type }
 
         assertEquals(listOf("container", "text", "image"), divWalk.toList())
     }
@@ -59,7 +59,7 @@ class DivWalkTreeTest {
         )
 
         val divWalk = rootDiv.walk(resolver)
-            .map { div -> div.type }
+            .map { item -> item.div.type }
 
         assertEquals(listOf("container", "container", "text", "image", "text"), divWalk.toList())
     }
@@ -80,7 +80,7 @@ class DivWalkTreeTest {
 
         val divWalk = rootDiv.walk(resolver)
             .onEnter { div -> div !is Div.Gallery }
-            .map { div -> div.type }
+            .map { item -> item.div.type }
 
         assertEquals(listOf("container", "text"), divWalk.toList())
     }
@@ -101,7 +101,7 @@ class DivWalkTreeTest {
 
         val divWalk = rootDiv.walk(resolver)
             .maxDepth(1)
-            .map { div -> div.type }
+            .map { item -> item.div.type }
 
         assertEquals(listOf("container", "text", "container"), divWalk.toList())
     }

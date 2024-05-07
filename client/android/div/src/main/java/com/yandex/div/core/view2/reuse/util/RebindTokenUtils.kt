@@ -7,7 +7,7 @@ internal fun combineTokens(
     existingToken: ExistingToken,
     newToken: NewToken,
 ) = ExistingToken(
-    div = newToken.div,
+    item = newToken.item,
     view = existingToken.view,
     parentToken = existingToken.parentToken,
     childIndex = newToken.childIndex,

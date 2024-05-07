@@ -15,11 +15,13 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
@@ -67,7 +69,7 @@ internal class DivGridBinder @Inject constructor(
 
         val items = div.nonNullItems
 
-        view.tryRebindPlainContainerChildren(context, items, divViewCreator)
+        view.tryRebindPlainContainerChildren(divView, items.toDivItemBuilderResults(resolver), divViewCreator)
 
         var viewsPositionDiff = 0
         for (gridIndex in items.indices) {
@@ -104,7 +106,11 @@ internal class DivGridBinder @Inject constructor(
             }
         }
 
-        view.trackVisibilityActions(context, items, oldDiv?.items, oldChildren)
+        view.trackVisibilityActions(
+            divView,
+            items.toDivItemBuilderResults(resolver),
+            oldDiv?.items?.toDivItemBuilderResults(resolver),
+        )
     }
 
     private fun DivGridLayout.observeContentAlignment(
@@ -164,4 +170,7 @@ internal class DivGridBinder @Inject constructor(
             divBinder.get().setDataWithoutBinding(context, childView, items[gridIndex])
         }
     }
+
+    private fun List<Div>.toDivItemBuilderResults(resolver: ExpressionResolver) =
+        map { DivItemBuilderResult(it, resolver) }
 }

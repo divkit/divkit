@@ -27,6 +27,7 @@ import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivGestureListener
 import com.yandex.div.core.view2.animations.asTouchListener
@@ -37,6 +38,7 @@ import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.FixedLineHeightView
 import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
 import com.yandex.div.internal.Log
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
@@ -644,36 +646,34 @@ internal fun DivImageScale.toImageScale(): AspectImageView.Scale {
 
 @MainThread
 internal fun ViewGroup.trackVisibilityActions(
-    context: BindingContext,
-    newDivs: List<Div>,
-    oldDivs: List<Div>?,
-    oldViews: Sequence<View>?,
+    divView: Div2View,
+    newItems: List<DivItemBuilderResult>,
+    oldItems: List<DivItemBuilderResult>?,
 ) {
-    val divView = context.divView
     val visibilityActionTracker = divView.div2Component.visibilityActionTracker
-    if (!oldDivs.isNullOrEmpty() && oldViews != null) {
-        val newLogIds = newDivs.flatMap {it.value().allSightActions }.mapTo(HashSet()) { it.logId }
+    if (!oldItems.isNullOrEmpty()) {
+        val newLogIds = newItems.flatMap { it.div.value().allSightActions }.mapTo(HashSet()) { it.logId }
 
-        for ((oldView, oldDiv) in oldViews zip oldDivs.asSequence()) {
-            val actionsToRemove = oldDiv.value().allSightActions.filter { it.logId !in newLogIds }
+        for (oldItem in oldItems) {
+            val actionsToRemove = oldItem.div.value().allSightActions.filter { it.logId !in newLogIds }
             visibilityActionTracker.trackVisibilityActionsOf(
                 divView,
-                oldView.bindingContext?.expressionResolver ?: context.expressionResolver,
+                oldItem.expressionResolver,
                 null,
-                oldDiv,
+                oldItem.div,
                 actionsToRemove
             )
         }
     }
 
-    if (newDivs.isNotEmpty()) {
+    if (newItems.isNotEmpty()) {
         doOnNextLayout {  // Shortcut to check children are laid out at once
-            for ((view, div) in children zip newDivs.asSequence()) {
+            for ((view, item) in children zip newItems.asSequence()) {
                 visibilityActionTracker.trackVisibilityActionsOf(
                     divView,
-                    view.bindingContext?.expressionResolver ?: context.expressionResolver,
+                    item.expressionResolver,
                     view,
-                    div
+                    item.div
                 )
             }
         }
