@@ -6,11 +6,15 @@ final class DivHostView: UICollectionView {
   private let components: DivKitComponents
   private let preloader: DivViewPreloader
 
-  var items: [DivData] = []
+  var items: [DivCardID] = [] {
+    didSet {
+      reloadData()
+    }
+  }
 
-  init(components: DivKitComponents) {
+  init(components: DivKitComponents, preloader: DivViewPreloader) {
     self.components = components
-    self.preloader = DivViewPreloader(divKitComponents: components)
+    self.preloader = preloader
 
     super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
@@ -41,7 +45,7 @@ final class DivHostView: UICollectionView {
     func configureCell(
       divKitComponents: DivKitComponents,
       preloader: DivViewPreloader,
-      divData: DivData
+      cardID: DivCardID
     ) {
       if divView == nil {
         self.divView = DivView(
@@ -50,7 +54,7 @@ final class DivHostView: UICollectionView {
         )
       }
 
-      divView?.showCardId(divData.cardId)
+      divView?.showCardId(cardID)
     }
 
     override func layoutSubviews() {
@@ -87,7 +91,7 @@ extension DivHostView: UICollectionViewDataSource {
     cell.configureCell(
       divKitComponents: components,
       preloader: preloader,
-      divData: items[indexPath.row]
+      cardID: items[indexPath.row]
     )
     return cell
   }
@@ -99,15 +103,13 @@ extension DivHostView: UICollectionViewDelegateFlowLayout {
     layout _: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    let divData = items[indexPath.row]
-    let cardId = divData.cardId
-    preloader.setSource(.init(kind: .divData(divData), cardId: cardId))
+    let cardId = items[indexPath.row]
     return preloader.expectedSize(for: cardId)?.sizeFor(parentViewSize: bounds.size) ?? .zero
   }
 }
 
 extension DivData {
-  fileprivate var cardId: DivCardID {
+  var cardId: DivCardID {
     DivCardID(rawValue: logId)
   }
 }

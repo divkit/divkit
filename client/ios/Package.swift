@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 
 import Foundation
 import PackageDescription
@@ -16,7 +16,7 @@ let swiftSettings: [SwiftSetting] = [.unsafeFlags(["-warnings-as-errors"])]
 let package = Package(
   name: "DivKit",
   platforms: [
-    .iOS(.v11),
+    .iOS(.v13),
   ],
   products: [
     .library(name: "DivKit", targets: ["DivKit"]),

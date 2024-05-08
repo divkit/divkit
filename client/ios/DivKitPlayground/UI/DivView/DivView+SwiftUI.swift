@@ -11,9 +11,11 @@ struct DivViewSwiftUIAdapter: UIViewRepresentable {
   }
 
   func updateUIView(_ view: UIView, context _: Context) {
-    (view as? DivView)?.setSource(
-      DivViewSource(kind: .data(jsonData), cardId: cardId),
-      shouldResetPreviousCardData: true
-    )
+    Task {
+      await (view as? DivView)?.setSource(
+        DivViewSource(kind: .data(jsonData), cardId: cardId),
+        shouldResetPreviousCardData: true
+      )
+    }
   }
 }

@@ -26,6 +26,7 @@ open class DivViewController: UIViewController {
 
     jsonPublisher
       .sink { [weak self] in
+        guard !$0.isEmpty else { return }
         self?.divKitComponents.reset(cardId: cardId)
         self?.setData($0)
       }
@@ -61,14 +62,16 @@ open class DivViewController: UIViewController {
   open func onViewUpdated() {}
 
   private func setData(_ data: [String: Any]) {
-    divView.setSource(
-      DivViewSource(
-        kind: .json(data),
-        cardId: cardId
-      ),
-      debugParams: debugParams,
-      shouldResetPreviousCardData: true
-    )
+    Task {
+      await divView.setSource(
+        DivViewSource(
+          kind: .json(data),
+          cardId: cardId
+        ),
+        debugParams: debugParams,
+        shouldResetPreviousCardData: true
+      )
+    }
   }
 }
 

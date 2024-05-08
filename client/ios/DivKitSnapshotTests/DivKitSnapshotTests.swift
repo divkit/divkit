@@ -13,7 +13,9 @@ final class AllTests: XCTestCase {
   }
 }
 
-@Suite struct DivKitSnapshotTests {
+@MainActor
+@Suite
+struct DivKitSnapshotTests {
   @Test(arguments: snapshotTestsFiles)
   func snapshotTest(jsonFile: JsonFile) async throws {
     if exclusions.contains(where: { $0 == jsonFile.relativePath }) {
@@ -28,27 +30,25 @@ final class AllTests: XCTestCase {
     try await doTest(jsonFile)
   }
 
-  @MainActor
-  func doTest(_ file: JsonFile) throws {
+  func doTest(_ file: JsonFile) async throws {
     let test = SnapshotTestRunner(file: file)
 
-    try test.run(
+    try await test.run(
       caseName: file.name.removingFileExtension,
       blocksState: defaultPagerViewState,
       extensions: [labelImagePreviewExtension]
     )
   }
 
-  @MainActor
   func doTestForDifferentStates(
     _ file: JsonFile
-  ) throws {
+  ) async throws {
     for state in testPagerViewStates {
       let blocksState = [
         pagerId: state,
       ]
       let test = SnapshotTestRunner(file: file)
-      try test.run(
+      try await test.run(
         caseName: "\(state.currentPage)_" + file.name.removingFileExtension,
         blocksState: blocksState
       )

@@ -8,10 +8,11 @@ import Serialization
 import VGSL_Fundamentals_Tiny
 
 final class DivViewTests: XCTestCase {
-  func test_visibilityActions_afterZeroFrame() {
+  @MainActor
+  func test_visibilityActions_afterZeroFrame() async {
     let components = DivKitComponents()
     let divView = DivView(divKitComponents: components)
-    divView.setSource(.init(kind: .divData(testData), cardId: "card"))
+    await divView.setSource(.init(kind: .divData(testData), cardId: "card"))
     divView.frame = testFrame
 
     divView.onVisibleBoundsChanged(to: testFrame)
