@@ -11,22 +11,13 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
     mainThreadAsyncRunner: { self.mainThreadBlock = $0 }
   )
 
-  func test_WhenHasLocalAndGlobalVariablesChanges_ReturnsAllAffectedCards() {
-    aggregator.aggregate(.variable(.specific(["cardId"])))
-    aggregator.aggregate(.variable(.all))
-
-    mainThreadBlock!()
-
-    XCTAssertEqual([.variable(.all)], updateReasons)
-  }
-
   func test_WhenHasMultipleLocalVariablesChanges_MergesCardIds() {
-    aggregator.aggregate(.variable(.specific(["first"])))
-    aggregator.aggregate(.variable(.specific(["second"])))
+    aggregator.aggregate(.variable(["first": []]))
+    aggregator.aggregate(.variable(["second": []]))
 
     mainThreadBlock!()
 
-    XCTAssertEqual([.variable(.specific(["first", "second"]))], updateReasons)
+    XCTAssertEqual([.variable(["first": [], "second": []])], updateReasons)
   }
 
   func test_WhenHasNoVariableChanges_DoesNotEmitVariableChange() {
@@ -41,7 +32,7 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
   func test_WhenAggregateInMultipleRunLoops_SeparatesUpdateReasons() {
     let reasonBatches: [[DivActionURLHandler.UpdateReason]] = [
       [.state("cardId")],
-      [.variable(.specific(["cardId"]))],
+      [.variable(["cardId": []])],
     ]
 
     for reasons in reasonBatches {
@@ -54,16 +45,16 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
   }
 
   func test_FlushUpdateActions_RunActionsSynchronously() {
-    aggregator.aggregate(.variable(.specific(["first"])))
-    aggregator.aggregate(.variable(.specific(["second"])))
+    aggregator.aggregate(.variable(["first": []]))
+    aggregator.aggregate(.variable(["second": []]))
 
     aggregator.flushUpdateActions()
 
-    XCTAssertEqual([.variable(.specific(["first", "second"]))], updateReasons)
+    XCTAssertEqual([.variable(["first": [], "second": []])], updateReasons)
   }
 
   func test_FlushUpdateActions_DoesNotRunActionsRepeatedly() {
-    aggregator.aggregate(.variable(.specific(["cardId"])))
+    aggregator.aggregate(.variable(["cardId": []]))
     aggregator.flushUpdateActions()
     updateReasons = []
 
@@ -75,7 +66,7 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
   func test_ForceUpdate_CallsUpdateCardAction() {
     updateReasons = []
     aggregator.forceUpdate()
-    XCTAssertEqual([.variable(.all)], updateReasons)
+    XCTAssertEqual([.external], updateReasons)
   }
 }
 
@@ -93,7 +84,9 @@ extension DivActionURLHandler.UpdateReason: Equatable {
       lhsCardId == rhsCardId
     case let (.patch(lhsCardId, lhsPatch), .patch(rhsCardId, rhsPatch)):
       lhsCardId == rhsCardId && lhsPatch == rhsPatch
-    case (.timer, _), (variable, _), (.state, _), (.patch, _):
+    case (.external, .external):
+      true
+    case (.timer, _), (variable, _), (.state, _), (.patch, _), (.external, _):
       false
     }
   }

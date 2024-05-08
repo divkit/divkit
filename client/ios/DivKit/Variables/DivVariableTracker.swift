@@ -19,15 +19,16 @@ public final class DivVariableTracker {
     }
   }
 
-  func getAffectedCards(variables: Set<DivVariableName>) -> Set<DivCardID> {
-    var cardIds = Set<DivCardID>()
+  func getAffectedCards(variables: Set<DivVariableName>) -> [DivCardID: Set<DivVariableName>] {
+    var affectedCards = [DivCardID: Set<DivVariableName>]()
     usedVariables.accessRead { value in
       for (id, usedVariables) in value {
-        if !usedVariables.isDisjoint(with: variables) {
-          cardIds.insert(id.cardId)
+        let intersection = usedVariables.intersection(variables)
+        if !intersection.isEmpty {
+          affectedCards[id.cardId] = intersection
         }
       }
     }
-    return cardIds
+    return affectedCards
   }
 }
