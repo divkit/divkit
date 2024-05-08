@@ -36,11 +36,19 @@
     },
     "animation_in" : {
       "$ref": "div-animation.json",
-      "$description": "translations.json#/div_tooltip_animation_in"
+      "$description": "translations.json#/div_tooltip_animation_in",
+      "platforms": [
+        "android",
+        "web"
+      ]
     },
     "animation_out" : {
       "$ref": "div-animation.json",
-      "$description": "translations.json#/div_tooltip_animation_out"
+      "$description": "translations.json#/div_tooltip_animation_out",
+      "platforms": [
+        "android",
+        "web"
+      ]
     }
   },
   "required": [
