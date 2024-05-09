@@ -15,20 +15,20 @@ final class FunctionTests: XCTestCase {
   }
 
   func test_invoke_FunctionBinary_WithoutCast() throws {
-    _ = try binaryFunction.invoke(args: [1.2, 3.4])
+    _ = try binaryFunction.invoke([1.2, 3.4])
 
     checLastArgs([1.2, 3.4])
   }
 
   func test_invoke_FunctionBinary_WithCast() throws {
-    _ = try binaryFunction.invoke(args: [2, 3.4])
+    _ = try binaryFunction.invoke([2, 3.4])
 
     checLastArgs([2.0, 3.4])
   }
 
   func test_invoke_FunctionBinary_WithInvalidArguments() throws {
     XCTAssertThrowsError(
-      _ = try binaryFunction.invoke(args: [1.2, true]),
+      _ = try binaryFunction.invoke([1.2, true]),
       CalcExpression.Error.message("Argument couldn't be casted to Double")
     )
   }
@@ -49,7 +49,7 @@ final class FunctionTests: XCTestCase {
       ]
     )
 
-    _ = try function.invoke(args: [1.2, 3.4])
+    _ = try function.invoke([1.2, 3.4])
 
     XCTAssertTrue(success)
   }
@@ -70,7 +70,7 @@ final class FunctionTests: XCTestCase {
       ]
     )
 
-    _ = try function.invoke(args: [2, 3.4])
+    _ = try function.invoke([2, 3.4])
 
     XCTAssertTrue(success)
   }
@@ -90,7 +90,7 @@ final class FunctionTests: XCTestCase {
     )
 
     XCTAssertThrowsError(
-      _ = try function.invoke(args: [1.2, true]),
+      _ = try function.invoke([1.2, true]),
       CalcExpression.Error.noMatchingSignature
     )
   }
@@ -104,7 +104,7 @@ final class FunctionTests: XCTestCase {
     )
 
     XCTAssertThrowsError(
-      _ = try function.invoke(args: [2, 3]),
+      _ = try function.invoke([2, 3]),
       CalcExpression.Error.message("Multiple matching overloads")
     )
   }

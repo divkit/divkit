@@ -57,13 +57,13 @@ enum MathFunctions: String, CaseIterable {
         ]
       )
     case .maxInteger:
-      FunctionNullary(impl: _maxInteger)
+      ConstantFunction(Int.max)
     case .minInteger:
-      FunctionNullary(impl: _minInteger)
+      ConstantFunction(Int.min)
     case .maxNumber:
-      FunctionNullary(impl: _maxNumber)
+      ConstantFunction(Double.greatestFiniteMagnitude)
     case .minNumber:
-      FunctionNullary(impl: _minNumber)
+      ConstantFunction(Double.leastNonzeroMagnitude)
     case .max:
       OverloadedFunction(
         functions: [
@@ -147,7 +147,7 @@ private func _mulInt(args: [Int]) throws -> Int {
 }
 
 private func _mulDouble(args: [Double]) throws -> Double {
-  args.reduce(1) { $0 * $1 }
+  args.reduce(1, *)
 }
 
 private func _subInt(args: [Int]) throws -> Int {
@@ -160,7 +160,7 @@ private func _subInt(args: [Int]) throws -> Int {
 }
 
 private func _subDouble(args: [Double]) throws -> Double {
-  args.dropFirst().reduce(args[0]) { $0 - $1 }
+  args.dropFirst().reduce(args[0], -)
 }
 
 private func _sumInt(args: [Int]) throws -> Int {
@@ -173,39 +173,23 @@ private func _sumInt(args: [Int]) throws -> Int {
 }
 
 private func _sumDouble(args: [Double]) throws -> Double {
-  args.reduce(0) { $0 + $1 }
-}
-
-private func _maxInteger() -> Int {
-  Int.max
-}
-
-private func _minInteger() -> Int {
-  Int.min
-}
-
-private func _maxNumber() -> Double {
-  Double.greatestFiniteMagnitude
-}
-
-private func _minNumber() -> Double {
-  Double.leastNonzeroMagnitude
+  args.reduce(0, +)
 }
 
 private func _maxInt(args: [Int]) -> Int {
-  args.reduce(args[0]) { max($0, $1) }
+  args.reduce(args[0], max)
 }
 
 private func _maxDouble(args: [Double]) -> Double {
-  args.reduce(args[0]) { max($0, $1) }
+  args.reduce(args[0], max)
 }
 
 private func _minInt(args: [Int]) -> Int {
-  args.reduce(args[0]) { min($0, $1) }
+  args.reduce(args[0], min)
 }
 
 private func _minDouble(args: [Double]) -> Double {
-  args.reduce(args[0]) { min($0, $1) }
+  args.reduce(args[0], min)
 }
 
 private func _absInt(value: Int) throws -> Int {

@@ -15,7 +15,7 @@ enum ComparisonOperators: String, CaseIterable {
         makeFunction() as FunctionBinary<Date, Date, Bool>,
       ],
       makeError: {
-        OperatorsError.unsupportedType(symbol: rawValue, args: $0).message
+        OperatorsError.unsupportedType(symbol: rawValue, args: $0)
       }
     )
   }

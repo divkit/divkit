@@ -2,8 +2,12 @@ import Foundation
 
 extension [CalcExpression.Symbol: Function] {
   mutating func addTryOperator() {
-    self[.infix("!:")] = FunctionBinary<Any, Any, Any> {
-      $0 is Error ? $1 : $0
+    self[.infix("!:")] = LazyFunction { args, evaluators in
+      do {
+        return try args[0].evaluate(evaluators)
+      } catch {
+        return try args[1].evaluate(evaluators)
+      }
     }
   }
 }

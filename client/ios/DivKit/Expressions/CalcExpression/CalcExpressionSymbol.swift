@@ -38,7 +38,9 @@ extension CalcExpression {
 
     func formatExpression(_ args: [Any]) -> String {
       switch self {
-      case .prefix, .infix, .postfix, .variable:
+      case .prefix:
+        "\(name)\(formatArgForError(args[0]))"
+      case .infix, .postfix, .variable:
         name
       case .function:
         formatFunction(args)
@@ -49,22 +51,9 @@ extension CalcExpression {
 
     private func formatFunction(_ args: [Any]) -> String {
       let argsString = args
-        .map { formatValue($0) }
+        .map { formatArgForError($0) }
         .joined(separator: ", ")
       return "\(name)(\(argsString))"
     }
-  }
-}
-
-private func formatValue(_ value: Any) -> String {
-  switch value {
-  case is String:
-    "'\(value)'".replacingOccurrences(of: "\\", with: "\\\\")
-  case is [Any]:
-    "<array>"
-  case is [String: Any]:
-    "<dict>"
-  default:
-    ExpressionValueConverter.stringify(value)
   }
 }

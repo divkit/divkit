@@ -1,59 +1,70 @@
 import Foundation
 
-enum BooleanOperators: String, CaseIterable {
-  case and = "&&"
-  case or = "||"
-  case not = "!"
-  case ternary = "?:"
-
-  var symbol: CalcExpression.Symbol {
-    switch self {
-    case .and, .or, .ternary:
-      .infix(rawValue)
-    case .not:
-      .prefix(rawValue)
-    }
-  }
-
-  var function: Function {
-    OverloadedFunction(
-      functions: [
-        makeFunction(),
-      ],
-      makeError: makeError
-    )
-  }
-
-  private func makeFunction() -> SimpleFunction {
-    switch self {
-    case .and:
-      return FunctionBinary { $0 && $1 }
-    case .or:
-      return FunctionBinary { $0 || $1 }
-    case .not:
-      return FunctionUnary { !$0 }
-    case .ternary:
-      return FunctionTernary<Bool, Any, Any, Any> { $0 ? $1 : $2 }
-    }
-  }
-
-  private func makeError(args: [Argument]) -> CalcExpression.Error {
-    switch self {
-    case .and, .or:
-      if args[0].type == .boolean {
-        return OperatorsError.unsupportedType(symbol: rawValue, args: args).message
+extension [CalcExpression.Symbol: Function] {
+  mutating func addBooleanOperators() {
+    let notSymbol = CalcExpression.Symbol.prefix("!")
+    self[notSymbol] = FunctionUnary<Any, Bool> {
+      if let value = $0 as? Bool {
+        return !value
       }
-      return .message(
-        "Failed to evaluate [\(args[0].formattedValue) \(rawValue) ...]. '\(rawValue)' must be called with boolean operands."
-      )
-    case .not:
-      return .message(
-        "Failed to evaluate [!\(args[0].formattedValue)]. A Boolean is expected after a unary not."
-      )
-    case .ternary:
-      return .message(
-        "Failed to evaluate [\(args[0].formattedValue) ? \(args[1].formattedValue) : \(args[2].formattedValue)]. Ternary must be called with a Boolean value as a condition."
+      throw CalcExpression.Error.message(
+        "Failed to evaluate [\(notSymbol.formatExpression([$0]))]. A Boolean is expected after a unary not."
       )
     }
+
+    self[.infix("&&")] = andOperator
+    self[.infix("||")] = orOperator
+    self[.infix("?:")] = ternaryOperator
   }
+}
+
+private let andOperator = LazyFunction { args, evaluators in
+  let arg0 = try args[0].evaluate(evaluators)
+  guard let lhs = arg0 as? Bool else {
+    throw invalidArgsError(lhs: arg0, op: "&&")
+  }
+  if !lhs {
+    return false
+  }
+
+  let arg1 = try args[1].evaluate(evaluators)
+  guard let rhs = arg1 as? Bool else {
+    throw invalidArgsError(lhs: arg0, op: "&&")
+  }
+  return rhs
+}
+
+private let orOperator = LazyFunction { args, evaluators in
+  let arg0 = try args[0].evaluate(evaluators)
+  guard let lhs = arg0 as? Bool else {
+    throw invalidArgsError(lhs: arg0, op: "||")
+  }
+  if lhs {
+    return true
+  }
+
+  let arg1 = try args[1].evaluate(evaluators)
+  guard let rhs = arg1 as? Bool else {
+    throw invalidArgsError(lhs: arg0, op: "||")
+  }
+  return rhs
+}
+
+private let ternaryOperator = LazyFunction { args, evaluators in
+  let arg0 = try args[0].evaluate(evaluators)
+  if let condition = arg0 as? Bool {
+    return condition ? try args[1].evaluate(evaluators) : try args[2].evaluate(evaluators)
+  }
+
+  let arg1 = try args[1].evaluate(evaluators)
+  let arg2 = try args[2].evaluate(evaluators)
+  throw CalcExpression.Error.message(
+    "Failed to evaluate [\(formatArgForError(arg0)) ? \(formatArgForError(arg1)) : \(formatArgForError(arg2))]. Ternary must be called with a Boolean value as a condition."
+  )
+}
+
+private func invalidArgsError(lhs: Any, op: String) -> CalcExpression.Error {
+  .message(
+    "Failed to evaluate [\(formatArgForError(lhs)) \(op) ...]. '\(op)' must be called with boolean operands."
+  )
 }

@@ -61,6 +61,34 @@ enum ExpressionValueConverter {
   }
 }
 
+func formatArgForError(_ value: Any) -> String {
+  switch value {
+  case is String:
+    "'\(value)'".replacingOccurrences(of: "\\", with: "\\\\")
+  case is [Any]:
+    "<array>"
+  case is [String: Any]:
+    "<dict>"
+  default:
+    ExpressionValueConverter.stringify(value)
+  }
+}
+
+func formatTypeForError(_ value: Any) -> String {
+  switch value {
+  case is Bool:
+    "Boolean"
+  case is Int:
+    "Integer"
+  case is Double:
+    "Number"
+  case is Date:
+    "DateTime"
+  default:
+    "\(type(of: value))"
+  }
+}
+
 private func formatValue(_ value: Any) -> String {
   switch value {
   case is String:

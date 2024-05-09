@@ -82,13 +82,13 @@ enum MathOperators: String, CaseIterable {
     }
   }
 
-  private func makeError(args: [Argument]) -> CalcExpression.Error {
-    OperatorsError.unsupportedType(symbol: symbol.name, args: args).message
+  private func makeError(args: [Any]) -> CalcExpression.Error {
+    OperatorsError.unsupportedType(symbol: symbol.name, args: args)
   }
 
-  private func makeUnaryError(args: [Argument]) -> CalcExpression.Error {
+  private func makeUnaryError(args: [Any]) -> CalcExpression.Error {
     .message(
-      "Failed to evaluate [\(symbol.name)\(args[0].formattedValue)]. A Number is expected after a unary \(rawValue)."
+      "Failed to evaluate [\(symbol.formatExpression(args))]. A Number is expected after a unary \(rawValue)."
     )
   }
 }

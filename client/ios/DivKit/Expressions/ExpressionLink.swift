@@ -36,8 +36,7 @@ public struct ExpressionLink<T> {
       let currentValue = rawValue[index..<endIndex]
       if rawValue.hasExpression(at: index) {
         guard let (start, end) = currentValue.makeLinkIndices() else {
-          let error = ExpressionError("Error tokenizing '\(rawValue)'.", expression: rawValue)
-          errorTracker?(error)
+          errorTracker?(ExpressionError("Error tokenizing '\(rawValue)'.", expression: rawValue))
           return nil
         }
         if !currentString.isEmpty {
@@ -55,9 +54,14 @@ public struct ExpressionLink<T> {
             items.append(.nestedExpression(link))
             variablesNames.append(contentsOf: link.variablesNames)
           } else {
-            let expression = CalcExpression.parse(value)
-            items.append(.calcExpression(expression))
-            variablesNames.append(contentsOf: expression.variableNames)
+            do {
+              let expression = try CalcExpression.parse(value)
+              items.append(.calcExpression(expression))
+              variablesNames.append(contentsOf: expression.variableNames)
+            } catch {
+              errorTracker?(ExpressionError(error.localizedDescription, expression: rawValue))
+              return nil
+            }
           }
         }
         index = currentValue.index(end, offsetBy: 2)

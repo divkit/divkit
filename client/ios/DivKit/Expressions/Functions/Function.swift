@@ -2,12 +2,65 @@ import Foundation
 
 import BasePublic
 
+typealias EvaluatorProvider = (CalcExpression.Symbol) -> Function?
+
 protocol Function {
-  func invoke(args: [Any]) throws -> Any
+  func invoke(_ args: [Any]) throws -> Any
+
+  func invoke(
+    args: [Subexpression],
+    evaluators: EvaluatorProvider
+  ) throws -> Any
+}
+
+extension Function {
+  func invoke(
+    args: [Subexpression],
+    evaluators: EvaluatorProvider
+  ) throws -> Any {
+    try invoke(args.map { try $0.evaluate(evaluators) })
+  }
 }
 
 protocol SimpleFunction: Function {
   var signature: FunctionSignature { get throws }
+}
+
+struct ConstantFunction<R>: SimpleFunction {
+  private let value: R
+
+  init(_ value: R) {
+    self.value = value
+  }
+
+  var signature: FunctionSignature {
+    get throws {
+      try .init(
+        arguments: [],
+        resultType: .from(type: R.self)
+      )
+    }
+  }
+
+  func invoke(_: [Any]) throws -> Any {
+    value
+  }
+}
+
+struct LazyFunction: Function {
+  private let impl: ([Subexpression], EvaluatorProvider) throws -> Any
+
+  init(_ impl: @escaping ([Subexpression], EvaluatorProvider) throws -> Any) {
+    self.impl = impl
+  }
+
+  func invoke(_: [Any]) throws -> Any {
+    throw CalcExpression.Error.message("Lazy function must be called with lazy args")
+  }
+
+  func invoke(args: [Subexpression], evaluators: EvaluatorProvider) throws -> Any {
+    try impl(args, evaluators)
+  }
 }
 
 struct FunctionNullary<R>: SimpleFunction {
@@ -26,7 +79,7 @@ struct FunctionNullary<R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(args _: [Any]) throws -> Any {
+  func invoke(_: [Any]) throws -> Any {
     try impl()
   }
 }
@@ -49,7 +102,7 @@ struct FunctionUnary<T1, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(args: [Any]) throws -> Any {
+  func invoke(_ args: [Any]) throws -> Any {
     try impl(castArg(args[0]))
   }
 }
@@ -73,7 +126,7 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(args: [Any]) throws -> Any {
+  func invoke(_ args: [Any]) throws -> Any {
     try impl(
       castArg(args[0]),
       castArg(args[1])
@@ -101,7 +154,7 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(args: [Any]) throws -> Any {
+  func invoke(_ args: [Any]) throws -> Any {
     try impl(
       castArg(args[0]),
       castArg(args[1]),
@@ -131,7 +184,7 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(args: [Any]) throws -> Any {
+  func invoke(_ args: [Any]) throws -> Any {
     try impl(
       castArg(args[0]),
       castArg(args[1]),
@@ -159,7 +212,7 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(args: [Any]) throws -> Any {
+  func invoke(_ args: [Any]) throws -> Any {
     try impl(args.map { try castArg($0) })
   }
 }
@@ -183,7 +236,7 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(args: [Any]) throws -> Any {
+  func invoke(_ args: [Any]) throws -> Any {
     try impl(
       castArg(args[0]),
       args.dropFirst().map { try castArg($0) }
@@ -211,7 +264,7 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(args: [Any]) throws -> Any {
+  func invoke(_ args: [Any]) throws -> Any {
     try impl(
       castArg(args[0]),
       castArg(args[1]),
@@ -222,14 +275,14 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
 
 struct OverloadedFunction: Function {
   let functions: [SimpleFunction]
-  private let makeError: ([Argument]) -> Error
+  private let makeError: ([Any]) -> Error
 
-  init(functions: [SimpleFunction], makeError: (([Argument]) -> Error)? = nil) {
+  init(functions: [SimpleFunction], makeError: (([Any]) -> Error)? = nil) {
     self.functions = functions
     self.makeError = makeError ?? { _ in CalcExpression.Error.noMatchingSignature }
   }
 
-  func invoke(args: [Any]) throws -> Any {
+  func invoke(_ args: [Any]) throws -> Any {
     let arguments = try args.map {
       try ArgumentSignature(type: .from(type: type(of: $0)))
     }
@@ -242,9 +295,9 @@ struct OverloadedFunction: Function {
       }
     }
     if let function {
-      return try function.invoke(args: args)
+      return try function.invoke(args)
     }
-    throw makeError(zip(args, arguments).map { Argument(type: $1.type, value: $0) })
+    throw makeError(args)
   }
 
   private func getFunction(
@@ -258,21 +311,6 @@ struct OverloadedFunction: Function {
       throw CalcExpression.Error.message("Multiple matching overloads")
     }
     return sutableFunctions.first
-  }
-}
-
-struct Argument {
-  let type: ArgumentType
-  let value: Any
-
-  var formattedValue: String {
-    let value = ExpressionValueConverter.stringify(value)
-    switch type {
-    case .string:
-      return "'\(value)'"
-    case .integer, .number, .boolean, .datetime, .color, .url, .dict, .array, .any, .error:
-      return value
-    }
   }
 }
 
@@ -292,7 +330,6 @@ enum ArgumentType: String, Decodable, CaseIterable {
   case dict
   case array
   case any
-  case error
 
   var swiftType: Any.Type {
     switch self {
@@ -316,17 +353,6 @@ enum ArgumentType: String, Decodable, CaseIterable {
       [AnyHashable].self
     case .any:
       Any.self
-    case .error:
-      CalcExpression.Error.self
-    }
-  }
-
-  var name: String {
-    switch self {
-    case .datetime:
-      "DateTime"
-    default:
-      rawValue.stringWithFirstCharCapitalized()
     }
   }
 
