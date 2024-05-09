@@ -9,7 +9,7 @@ final class ExpressionResolverTests: XCTestCase {
   private var isErrorExpected = false
   private var error: String? = nil
 
-  private var variables: DivVariables =  [
+  private var variables: DivVariables = [
     "array_var": .array(["value", [true, 123, 123.45] as [AnyHashable]]),
     "boolean_var": .bool(true),
     "color_var": .color(color("#AABBCC")),

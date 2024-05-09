@@ -153,6 +153,7 @@
 		8C2BFA5428C10EA000A16E9B /* RegressionTestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5328C10EA000A16E9B /* RegressionTestModel.swift */; };
 		8C2BFA5628C10F2200A16E9B /* RegressionTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5528C10F2200A16E9B /* RegressionTestView.swift */; };
 		8C2BFA5828C10F5B00A16E9B /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5728C10F5B00A16E9B /* TestData.swift */; };
+		8C37AE3D2BEA9E220027E11C /* ExpressionResolverAnyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */; };
 		8C38262B2AB46BB700264C17 /* DivReporterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262A2AB46BB700264C17 /* DivReporterDelegate.swift */; };
 		8C38262D2AB46BF400264C17 /* PlaygroundPatchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */; };
 		8C40BA022ABB3B5C008405AD /* DivActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */; };
@@ -406,6 +407,7 @@
 		8C2BFA5328C10EA000A16E9B /* RegressionTestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegressionTestModel.swift; sourceTree = "<group>"; };
 		8C2BFA5528C10F2200A16E9B /* RegressionTestView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegressionTestView.swift; sourceTree = "<group>"; };
 		8C2BFA5728C10F5B00A16E9B /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionResolverAnyTests.swift; sourceTree = "<group>"; };
 		8C38262A2AB46BB700264C17 /* DivReporterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivReporterDelegate.swift; sourceTree = "<group>"; };
 		8C38262C2AB46BF400264C17 /* PlaygroundPatchProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundPatchProvider.swift; sourceTree = "<group>"; };
 		8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionHandlerTests.swift; sourceTree = "<group>"; };
@@ -925,6 +927,7 @@
 		8C7B1B212865C01C0036EF4C /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
+				8C37AE3C2BEA9E210027E11C /* ExpressionResolverAnyTests.swift */,
 				8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */,
 				8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */,
 				8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */,
@@ -1719,6 +1722,7 @@
 				8C7B1BF42865C01C0036EF4C /* DivGridExtensionsTests.swift in Sources */,
 				8CB9911B2B7EB74500577193 /* DivViewTests.swift in Sources */,
 				8C23F43D29DDB3810069F3F7 /* ComplexPropertyTests.swift in Sources */,
+				8C37AE3D2BEA9E220027E11C /* ExpressionResolverAnyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
