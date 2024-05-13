@@ -30,6 +30,7 @@
 * Breaking change: Removed `UserInterfaceAction.Payload.composite`.
 * Breaking change: Removed `UserInterfaceAction.Payload.json`.
 * Breaking change: The signatures of the setSource functions have been changed: they are now marked as async to reduce main thread locks.
+* The minimum version of the DivKit has been increased to iOS 13.
 * Disallowed variable names with consecutive dots or with trailing dot.
 * Double quotes are no longer supported in string literals.
 * Fixed animation in gallery.
