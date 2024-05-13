@@ -1,40 +1,44 @@
 ## 30.0.0
 
 # Android Client:
-* Breaking change: Removed method `makePlayerView(context: Context, additional: Map<String, Any>)` from `DivPlayerFactory`
-* Breaking change: Removed method `isCompatibleWithNewParams(scale: DivVideoScale)` from `DivPlayerView`
 * Breaking change: Classes `StandardExoDivPlayerView` and `ZoomExoDivPlayerView` replaced with common `ExoDivPlayerView`
 * Breaking change: Classes removed from public API: `ExoDivMediaSourceAbstractFactory`, `ExoDivPlayer` (accessible by interface `DivPlayer`), `ExoDivPlayerView` (accessible by interface `DivPlayerView`)
+* Breaking change: Removed method `isCompatibleWithNewParams(scale: DivVideoScale)` from `DivPlayerView`
+* Breaking change: Removed method `makePlayerView(context: Context, additional: Map<String, Any>)` from `DivPlayerFactory`
 * Add 'gesture' extension that allows to perform div-actions when swipe gesture happens at specified div.
-* Fixed text height calculation when line height specified explicitly.
-* Restricted variable names with consecutive dots and with a trailing dot.
-* Do not set new border or background when it has no changes.
-* Supported methods in evaluable expressions, such as `123.toString()`.
-* Added Jeptack Compose interoperability for `Div2View`
-* Added ability to forcibly release video players by `releaseMedia()` method of `Div2View`.
-* Use explicitly passed `ExpressionResolver` in `DivActionHandler`, `Div2Logger`, `DivExtensionHandler` and `custom` classes.
-* Fixes for complex rebind algorithm
 * Added `svg` support to all `DivImageLoaders`
+* Added ability to forcibly release video players by `releaseMedia()` method of `Div2View`.
+* Added Jeptack Compose interoperability for `Div2View`
 * Calculate `is_enabled` in `actions` before executing the entire list of actions, not in the process.
-* TextureView is now a default view for DivVideo.
+* Do not set new border or background when it has no changes.
+* Fixed text height calculation when line height specified explicitly.
+* Fixes for complex rebind algorithm
 * Old visibility actions are no longer logged after Div2View was rebound.
+* Restricted variable names with consecutive dots and with a trailing dot.
+* Supported methods in evaluable expressions, such as `123.toString()`.
+* TextureView is now a default view for DivVideo.
+* Use explicitly passed `ExpressionResolver` in `DivActionHandler`, `Div2Logger`, `DivExtensionHandler` and `custom` classes.
 
 # iOS Client:
-* Breaking change: Removed `urlOpener` argument from `DivKitComponents` initializer. Use `urlHandler` instead.
-* Breaking change: Removed `UserInterfaceAction.Payload.json`.
-* Breaking change: Removed `UserInterfaceAction.Payload.composite`.
-* Breaking change: Protocol `DivStateInterceptor` and corresponding implementation `DivStateInterceptorImpl` was removed. Please use `DivExtensionHandler` instead.
-* Breaking change: Removed `DivVariablesStorage.ChangeEvent.oldValues` due to performance issues.
-* Breaking change: Removed `DefaultShimmerViewFactory`.
-* Breaking change: Removed `DefaultDivActionLogger` (replaced with `EmptyDivActionLogger`). `DivActionLogger` became deprecated, use `DivReporter` for actions tracking.
 * Breaking change: Changed method signature in `ExpressionResolver` from `resolveString(_ expression: String) -> String` to `resolveString(_ expression: String) -> String?`.
+* Breaking change: Protocol `DivStateInterceptor` and corresponding implementation `DivStateInterceptorImpl` was removed. Please use `DivExtensionHandler` instead.
+* Breaking change: public API for `DivActionURLHandler.updateReason` has been changed.
+* Breaking change: Removed `DefaultDivActionLogger` (replaced with `EmptyDivActionLogger`). `DivActionLogger` became deprecated, use `DivReporter` for actions tracking.
+* Breaking change: Removed `DefaultShimmerViewFactory`.
+* Breaking change: Removed `DivVariablesStorage.ChangeEvent.oldValues` due to performance issues.
+* Breaking change: Removed `urlOpener` argument from `DivKitComponents` initializer. Use `urlHandler` instead.
+* Breaking change: Removed `UserInterfaceAction.Payload.composite`.
+* Breaking change: Removed `UserInterfaceAction.Payload.json`.
+* Breaking change: The signatures of the setSource functions have been changed: they are now marked as async to reduce main thread locks.
+* The minimum version of the DivKit has been increased to iOS 13.
 * Disallowed variable names with consecutive dots or with trailing dot.
 * Double quotes are no longer supported in string literals.
-* Fixed position of gallery element after scrolling with action.
 * Fixed animation in gallery.
+* Fixed numbers to string casting in expressions.
+* Fixed position of gallery element after scrolling with action.
 * Fixed unary minus operator parsing.
-* Fixed view reuse in `ShimmerImagePreviewExtension`.
 * Fixed validation in expressions.
+* Fixed view reuse in `ShimmerImagePreviewExtension`.
 
 # Web Client:
 * Breaking change: actions from `variable_triggers` lead to execution of a callback `onStat` with type = `trigger`.
