@@ -82,12 +82,12 @@ enum MathOperators: String, CaseIterable {
     }
   }
 
-  private func makeError(args: [Any]) -> CalcExpression.Error {
-    OperatorsError.unsupportedType(symbol: symbol.name, args: args)
+  private func makeError(args: [Any]) -> Error {
+    ExpressionError.unsupportedType(op: symbol.name, args: args)
   }
 
-  private func makeUnaryError(args: [Any]) -> CalcExpression.Error {
-    .message(
+  private func makeUnaryError(args: [Any]) -> Error {
+    ExpressionError(
       "Failed to evaluate [\(symbol.formatExpression(args))]. A Number is expected after a unary \(rawValue)."
     )
   }
@@ -159,7 +159,7 @@ extension Int {
     if !result.overflow {
       return result.partialValue
     }
-    throw CalcExpression.Error.message(
+    throw ExpressionError(
       "Failed to evaluate [\(self) \(symbol) \(other)]. Integer overflow."
     )
   }
@@ -169,8 +169,8 @@ private func divisionByZeroError(
   _ symbol: String,
   _ lhs: Any,
   _ rhs: Any
-) -> CalcExpression.Error {
-  .message(
+) -> Error {
+  ExpressionError(
     "Failed to evaluate [\(lhs) \(symbol) \(rhs)]. Division by zero is not supported."
   )
 }

@@ -48,7 +48,7 @@ private func _stringToBoolean(value: String) throws -> Bool {
   case "false":
     return false
   default:
-    throw CalcExpression.Error.message("Unable to convert value to Boolean.")
+    throw ExpressionError("Unable to convert value to Boolean.")
   }
 }
 
@@ -59,7 +59,7 @@ private func _intToBoolean(value: Int) throws -> Bool {
   case 0:
     return false
   default:
-    throw CalcExpression.Error.message("Unable to convert value to Boolean.")
+    throw ExpressionError("Unable to convert value to Boolean.")
   }
 }
 
@@ -69,7 +69,7 @@ private func _intToNumber(value: Int) throws -> Double {
 
 private func _stringToNumber(value: String) throws -> Double {
   guard let number = Double(value), number.isFinite else {
-    throw CalcExpression.Error.message("Unable to convert value to Number.")
+    throw ExpressionError("Unable to convert value to Number.")
   }
   return number
 }
@@ -80,30 +80,28 @@ private func _boolToInteger(value: Bool) throws -> Int {
 
 private func _stringToInteger(value: String) throws -> Int {
   guard let number = Int(value) else {
-    throw CalcExpression.Error.message("Unable to convert value to Integer.")
+    throw ExpressionError("Unable to convert value to Integer.")
   }
   return number
 }
 
 private func _doubleToInteger(value: Double) throws -> Int {
   guard Double(Int.min) <= value, value <= Double(Int.max) else {
-    throw CalcExpression.Error.message("Unable to convert value to Integer.")
+    throw ExpressionError("Unable to convert value to Integer.")
   }
   return Int(value)
 }
 
 private func _stringToColor(value: String) throws -> Color {
   guard let color = Color.color(withHexString: value) else {
-    throw CalcExpression.Error.message(
-      "Unable to convert value to Color, expected format #AARRGGBB."
-    )
+    throw ExpressionError("Unable to convert value to Color, expected format #AARRGGBB.")
   }
   return color
 }
 
 private func _stringToUrl(value: String) throws -> URL {
   guard let url = URL(string: value) else {
-    throw CalcExpression.Error.message("Unable to convert value to URL.")
+    throw ExpressionError("Unable to convert value to URL.")
   }
   return url
 }

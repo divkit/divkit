@@ -23,7 +23,7 @@ public struct ExpressionLink<T> {
     resolveNested: Bool = true
   ) {
     guard !rawValue.isEmpty else {
-      errorTracker?(ExpressionError("Empty expression", expression: nil))
+      errorTracker?(ExpressionError("Empty expression"))
       return nil
     }
     guard rawValue.contains(expressionPrefix) else { return nil }

@@ -151,10 +151,10 @@ private func isNormalized(_ value: Double) -> Bool {
   return true
 }
 
-private func valueOutOfRangeError() -> CalcExpression.Error {
-  .message("Value out of range 0..1.")
+private func valueOutOfRangeError() -> Error {
+  ExpressionError("Value out of range 0..1.")
 }
 
-private func invalidValueFormatError() -> CalcExpression.Error {
-  .message("Unable to convert value to Color, expected format #AARRGGBB.")
+private func invalidValueFormatError() -> Error {
+  ExpressionError("Unable to convert value to Color, expected format #AARRGGBB.")
 }

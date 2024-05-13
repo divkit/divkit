@@ -142,7 +142,7 @@ private func _mulInt(args: [Int]) throws -> Int {
     if case let (result, overflow) = $0.multipliedReportingOverflow(by: $1), !overflow {
       return result
     }
-    throw CalcExpression.Error.integerOverflow
+    throw ExpressionError.integerOverflow()
   }
 }
 
@@ -155,7 +155,7 @@ private func _subInt(args: [Int]) throws -> Int {
     if case let (result, overflow) = $0.subtractingReportingOverflow($1), !overflow {
       return result
     }
-    throw CalcExpression.Error.integerOverflow
+    throw ExpressionError.integerOverflow()
   }
 }
 
@@ -168,7 +168,7 @@ private func _sumInt(args: [Int]) throws -> Int {
     if case let (result, overflow) = $0.addingReportingOverflow($1), !overflow {
       return result
     }
-    throw CalcExpression.Error.integerOverflow
+    throw ExpressionError.integerOverflow()
   }
 }
 
@@ -194,7 +194,7 @@ private func _minDouble(args: [Double]) -> Double {
 
 private func _absInt(value: Int) throws -> Int {
   guard value >= -Int.max else {
-    throw CalcExpression.Error.integerOverflow
+    throw ExpressionError.integerOverflow()
   }
   return abs(value)
 }
@@ -225,7 +225,7 @@ private func _ceil(value: Double) -> Double {
 
 private func _copySignInt(lhs: Int, rhs: Int) throws -> Int {
   guard lhs >= -Int.max && rhs >= 0 || lhs >= Int.min && rhs < 0 else {
-    throw CalcExpression.Error.integerOverflow
+    throw ExpressionError.integerOverflow()
   }
   guard rhs != 0 else {
     return lhs
@@ -237,6 +237,6 @@ private func _copySignDouble(lhs: Double, rhs: Double) -> Double {
   copysign(lhs, rhs)
 }
 
-private func divisionByZeroError() -> CalcExpression.Error {
-  .message("Division by zero is not supported.")
+private func divisionByZeroError() -> Error {
+  ExpressionError("Division by zero is not supported.")
 }

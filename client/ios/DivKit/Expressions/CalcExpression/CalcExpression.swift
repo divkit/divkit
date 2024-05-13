@@ -85,7 +85,7 @@ enum Subexpression {
       if let evaluator = evaluators(symbol) {
         return try evaluator.invoke(args: args, evaluators: evaluators)
       }
-      throw CalcExpression.Error.message("Undefined symbol: \(symbol.name)")
+      throw ExpressionError("Undefined symbol: \(symbol.name).")
     }
   }
 
@@ -358,12 +358,12 @@ extension UnicodeScalarView {
     switch number {
     case let .integer(value):
       guard let intValue = Int(value) else {
-        throw CalcExpression.Error.message("Value \(value) can't be converted to Integer type.")
+        throw ExpressionError("Value \(value) can't be converted to Integer type.")
       }
       return .literal(intValue)
     case let .number(value):
       guard let doubleValue = Double(value) else {
-        throw CalcExpression.Error.unexpectedToken(value)
+        throw ExpressionError.unexpectedToken(value)
       }
       return .literal(doubleValue)
     }
@@ -403,7 +403,7 @@ extension UnicodeScalarView {
     }
 
     if prevChar == 0x2E {
-      throw CalcExpression.Error.unexpectedToken(".")
+      throw ExpressionError.unexpectedToken(".")
     }
 
     return makeVariable(identifier)
@@ -425,7 +425,7 @@ extension UnicodeScalarView {
         case "@" where scanCharacter("{"):
           string += "@{"
         default:
-          throw CalcExpression.Error.message("Incorrect string escape")
+          throw ExpressionError("Incorrect string escape.")
         }
         part = ""
       }
@@ -433,7 +433,7 @@ extension UnicodeScalarView {
     if scanCharacter("'") {
       return .literal(string)
     }
-    throw CalcExpression.Error.missingDelimiter("'")
+    throw ExpressionError("Closing ' expected.")
   }
 
   fileprivate mutating func parseSubexpression(
@@ -451,7 +451,7 @@ extension UnicodeScalarView {
         if rhs.isOperand {
           guard case let .symbol(.postfix(op), args) = lhs else {
             // Cannot follow an operand
-            throw CalcExpression.Error.unexpectedToken("\(rhs)")
+            throw ExpressionError.unexpectedToken("\(rhs)")
           }
           // Assume postfix operator was actually an infix operator
           stack[i] = args[0]
@@ -519,17 +519,11 @@ extension UnicodeScalarView {
       if first != delimiter {
         let delimiters = [",", String(delimiter)]
         repeat {
-          do {
-            try args.append(parseSubexpression(upTo: delimiters))
-          } catch CalcExpression.Error.unexpectedToken("") {
-            if let token = scanCharacter() {
-              throw CalcExpression.Error.unexpectedToken(token)
-            }
-          }
+          try args.append(parseSubexpression(upTo: delimiters))
         } while scanCharacter(",")
       }
       guard scanCharacter(delimiter) else {
-        throw CalcExpression.Error.missingDelimiter(String(delimiter))
+        throw ExpressionError("Closing ) expected.")
       }
       return args
     }
@@ -547,10 +541,10 @@ extension UnicodeScalarView {
         switch name {
         case ".":
           guard let lastSymbol = stack.last else {
-            throw CalcExpression.Error.unexpectedToken(".")
+            throw ExpressionError.unexpectedToken(".")
           }
           guard let methodName = scanMethodName(), scanCharacter("(") else {
-            throw CalcExpression.Error.message("Method expected after .")
+            throw ExpressionError("Method expected after .")
           }
           var args = try scanArguments()
           args.insert(lastSymbol, at: 0)
@@ -573,7 +567,7 @@ extension UnicodeScalarView {
             let subexpression = try parseSubexpression(upTo: [")"])
             stack.append(subexpression)
             guard scanCharacter(")") else {
-              throw CalcExpression.Error.missingDelimiter(")")
+              throw ExpressionError("Closing ) expected.")
             }
           }
           operandPosition = false
@@ -604,7 +598,7 @@ extension UnicodeScalarView {
     let start = self
     if !parseDelimiter(delimiters), let junk = scanToEndOfToken() {
       self = start
-      throw CalcExpression.Error.unexpectedToken(junk)
+      throw ExpressionError.unexpectedToken(junk)
     }
     try collapseStack(from: 0)
     switch stack.first {
@@ -612,9 +606,9 @@ extension UnicodeScalarView {
       if result.isOperand {
         return result
       }
-      throw CalcExpression.Error.message("Operand expected")
+      throw ExpressionError("Operand expected")
     case nil:
-      throw CalcExpression.Error.message("Empty expression")
+      throw ExpressionError("Empty expression")
     }
   }
 }

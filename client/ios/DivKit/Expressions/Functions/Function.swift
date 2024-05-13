@@ -26,6 +26,8 @@ protocol SimpleFunction: Function {
   var signature: FunctionSignature { get throws }
 }
 
+struct NoMatchingSignatureError: Error {}
+
 struct ConstantFunction<R>: SimpleFunction {
   private let value: R
 
@@ -55,7 +57,7 @@ struct LazyFunction: Function {
   }
 
   func invoke(_: [Any]) throws -> Any {
-    throw CalcExpression.Error.message("Lazy function must be called with lazy args")
+    throw ExpressionError("Lazy function must be called with lazy args")
   }
 
   func invoke(args: [Subexpression], evaluators: EvaluatorProvider) throws -> Any {
@@ -279,7 +281,7 @@ struct OverloadedFunction: Function {
 
   init(functions: [SimpleFunction], makeError: (([Any]) -> Error)? = nil) {
     self.functions = functions
-    self.makeError = makeError ?? { _ in CalcExpression.Error.noMatchingSignature }
+    self.makeError = makeError ?? { _ in NoMatchingSignatureError() }
   }
 
   func invoke(_ args: [Any]) throws -> Any {
@@ -308,7 +310,7 @@ struct OverloadedFunction: Function {
       try $0.signature.isApplicable(args: args, predicate: predicate)
     }
     if sutableFunctions.count > 1 {
-      throw CalcExpression.Error.message("Multiple matching overloads")
+      throw ExpressionError("Multiple matching overloads")
     }
     return sutableFunctions.first
   }
@@ -372,7 +374,7 @@ enum ArgumentType: String, Decodable, CaseIterable {
 
   static func from(type: Any.Type) throws -> ArgumentType {
     guard let type = allCases.first(where: { $0.swiftType == type }) else {
-      throw CalcExpression.Error.message("Type is not supported")
+      throw ExpressionError("Type is not supported")
     }
     return type
   }
@@ -415,5 +417,5 @@ private func castArg<T>(_ value: Any) throws -> T {
     return Double(intValue) as! T
   }
 
-  throw CalcExpression.Error.message("Argument couldn't be casted to \(T.self)")
+  throw ExpressionError("Argument couldn't be casted to \(T.self)")
 }

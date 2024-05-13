@@ -241,7 +241,7 @@ public final class ExpressionResolver {
     }
 
     errorTracker(ExpressionError(
-      "Failed to initialize \(T.self) from string: \(stringValue)",
+      "Failed to initialize \(T.self) from string: \(stringValue).",
       expression: link.rawValue
     ))
     return nil
@@ -263,8 +263,8 @@ public final class ExpressionResolver {
     if let castedValue: T = ExpressionValueConverter.cast(value) {
       return castedValue
     }
-    throw CalcExpression.Error.message(
-      "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)"
+    throw ExpressionError(
+      "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)."
     )
   }
 
@@ -277,7 +277,7 @@ public final class ExpressionResolver {
       return value
     }
 
-    errorTracker(ExpressionError("Failed to validate value: \(value)", expression: link.rawValue))
+    errorTracker(ExpressionError("Failed to validate value: \(value).", expression: link.rawValue))
     return nil
   }
 

@@ -137,7 +137,7 @@ extension [AnyHashable] {
   fileprivate func getArray(index: Int) throws -> [AnyHashable] {
     let value = try getValue(index: index)
     guard let arrayValue = value as? [AnyHashable] else {
-      throw incorrectTypeError("array", value)
+      throw ExpressionError.incorrectType("array", value)
     }
     return arrayValue
   }
@@ -145,18 +145,15 @@ extension [AnyHashable] {
   fileprivate func getDict(index: Int) throws -> Dict {
     let value = try getValue(index: index)
     guard let dictValue = value as? Dict else {
-      throw incorrectTypeError("dict", value)
+      throw ExpressionError.incorrectType("dict", value)
     }
     return dictValue
   }
 
   fileprivate func getBoolean(index: Int) throws -> Bool {
     let value = try getValue(index: index)
-    guard value.isBool else {
-      throw incorrectTypeError("boolean", value)
-    }
-    guard let boolValue = value as? Bool else {
-      throw incorrectTypeError("boolean", value)
+    guard value.isBool, let boolValue = value as? Bool else {
+      throw ExpressionError.incorrectType("boolean", value)
     }
     return boolValue
   }
@@ -164,12 +161,10 @@ extension [AnyHashable] {
   fileprivate func getColor(index: Int) throws -> Color {
     let value = try getValue(index: index)
     guard let stringValue = value as? String else {
-      throw incorrectTypeError("color", value)
+      throw ExpressionError.incorrectType("color", value)
     }
     guard let color = Color.color(withHexString: stringValue) else {
-      throw CalcExpression.Error.message(
-        "Unable to convert value to Color, expected format #AARRGGBB."
-      )
+      throw ExpressionError("Unable to convert value to Color, expected format #AARRGGBB.")
     }
     return color
   }
@@ -177,16 +172,16 @@ extension [AnyHashable] {
   fileprivate func getInteger(index: Int) throws -> Int {
     let value = try getValue(index: index)
     if value.isBool {
-      throw incorrectTypeError("integer", value)
+      throw ExpressionError.incorrectType("integer", value)
     }
     guard let intValue = value as? Int else {
       if let doubleValue = value as? Double {
         if doubleValue < Double(Int.min) || doubleValue > Double(Int.max) {
-          throw CalcExpression.Error.message("Integer overflow.")
+          throw ExpressionError.integerOverflow()
         }
-        throw CalcExpression.Error.message("Cannot convert value to integer.")
+        throw ExpressionError("Cannot convert value to integer.")
       }
-      throw incorrectTypeError("integer", value)
+      throw ExpressionError.incorrectType("integer", value)
     }
     return intValue
   }
@@ -194,7 +189,7 @@ extension [AnyHashable] {
   fileprivate func getNumber(index: Int) throws -> Double {
     let value = try getValue(index: index)
     if value.isBool {
-      throw incorrectTypeError("number", value)
+      throw ExpressionError.incorrectType("number", value)
     }
     if let numberValue = value as? Double {
       return numberValue
@@ -202,24 +197,24 @@ extension [AnyHashable] {
     if let intValue = value as? Int {
       return Double(intValue)
     }
-    throw incorrectTypeError("number", value)
+    throw ExpressionError.incorrectType("number", value)
   }
 
   fileprivate func getString(index: Int) throws -> String {
     let value = try getValue(index: index)
     guard let stringValue = value as? String else {
-      throw incorrectTypeError("string", value)
+      throw ExpressionError.incorrectType("string", value)
     }
     return stringValue
   }
 
   fileprivate func getUrl(index: Int) throws -> URL {
     let value = try getValue(index: index)
-    guard let stringValue = value as? String else {
-      throw incorrectTypeError("url", value)
-    }
-    guard let url = URL(string: stringValue) else {
-      throw incorrectTypeError("url", value)
+    guard
+      let stringValue = value as? String,
+      let url = URL(string: stringValue)
+    else {
+      throw ExpressionError.incorrectType("url", value)
     }
     return url
   }
@@ -228,15 +223,6 @@ extension [AnyHashable] {
     if index >= 0, index < count {
       return self[index]
     }
-    throw CalcExpression.Error.message(
-      "Requested index (\(index)) out of bounds array size (\(count))."
-    )
+    throw ExpressionError("Requested index (\(index)) out of bounds array size (\(count)).")
   }
-}
-
-private func incorrectTypeError(
-  _ expectedType: String,
-  _ value: AnyHashable
-) -> CalcExpression.Error {
-  .message("Incorrect value type: expected \"\(expectedType)\", got \"\(value.actualType)\".")
 }

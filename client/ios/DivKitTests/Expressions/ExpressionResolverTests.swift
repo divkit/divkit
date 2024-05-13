@@ -25,9 +25,9 @@ final class ExpressionResolverTests: XCTestCase {
     variables: variables,
     persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
-      error = $0.message
+      error = $0.description
       if !self.isErrorExpected {
-        XCTFail($0.message)
+        XCTFail($0.description)
       }
     },
     variableTracker: { [unowned self] in
@@ -132,7 +132,10 @@ final class ExpressionResolverTests: XCTestCase {
       expressionResolver.resolveColor(expression("@{'invalid'}"))
     )
 
-    XCTAssertEqual(error, "Failed to initialize RGBAColor from string: invalid")
+    XCTAssertEqual(
+      error,
+      "Failed to initialize RGBAColor from string: invalid. Expression: @{'invalid'}"
+    )
   }
 
   func test_ResolveUrl_Constant() {
@@ -201,7 +204,10 @@ final class ExpressionResolverTests: XCTestCase {
     let value: TestEnum? = expressionResolver.resolveEnum(expression("@{'invalid'}"))
     XCTAssertNil(value)
 
-    XCTAssertEqual(error, "Failed to initialize TestEnum from string: invalid")
+    XCTAssertEqual(
+      error,
+      "Failed to initialize TestEnum from string: invalid. Expression: @{'invalid'}"
+    )
   }
 
   func test_ResolveEnum_WithConstant() {
@@ -252,6 +258,11 @@ final class ExpressionResolverTests: XCTestCase {
     XCTAssertNil(
       expressionResolver.resolveString("@{invalid_expression}")
     )
+
+    XCTAssertEqual(
+      error,
+      "Variable 'invalid_expression' is missing. Expression: @{invalid_expression}"
+    )
   }
 
   func test_resolveColor_FromString_Constant() {
@@ -275,7 +286,10 @@ final class ExpressionResolverTests: XCTestCase {
       expressionResolver.resolveColor("@{'invalid'}")
     )
 
-    XCTAssertEqual(error, "Failed to initialize RGBAColor from string: invalid")
+    XCTAssertEqual(
+      error,
+      "Failed to initialize RGBAColor from string: invalid. Expression: @{'invalid'}"
+    )
   }
 
   func test_resolveNumeric_FromString_NumberExpression() {
@@ -291,7 +305,7 @@ final class ExpressionResolverTests: XCTestCase {
 
     XCTAssertEqual(
       error,
-      "Result type String is not compatible with expected type Double"
+      "Result type String is not compatible with expected type Double. Expression: @{'invalid'}"
     )
   }
 
@@ -357,7 +371,7 @@ final class ExpressionResolverTests: XCTestCase {
       )
     )
 
-    XCTAssertEqual(error, "Failed to validate value: string value")
+    XCTAssertEqual(error, "Failed to validate value: string value. Expression: @{string_var}")
   }
 
   func test_resolveNumeric_WithValidatorValid() {
@@ -378,7 +392,7 @@ final class ExpressionResolverTests: XCTestCase {
       )
     )
 
-    XCTAssertEqual(error, "Failed to validate value: 12.9")
+    XCTAssertEqual(error, "Failed to validate value: 12.9. Expression: @{number_var}")
   }
 
   func test_resolveNumeric_WithNestedExpressionAndValidatorInvalid() {
@@ -390,7 +404,10 @@ final class ExpressionResolverTests: XCTestCase {
       )
     )
 
-    XCTAssertEqual(error, "Failed to validate value: true")
+    XCTAssertEqual(
+      error,
+      "Failed to validate value: true. Expression: @{'@{string_var}' == string_var}"
+    )
   }
 }
 

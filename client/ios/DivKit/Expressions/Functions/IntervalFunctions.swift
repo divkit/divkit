@@ -81,7 +81,7 @@ enum IntervalFunctions: String, CaseIterable {
     whole: Int? = nil
   ) throws -> Int {
     guard milliseconds >= 0 else {
-      throw CalcExpression.Error.message("Expecting non-negative number of milliseconds.")
+      throw ExpressionError("Expecting non-negative number of milliseconds.")
     }
     var val = milliseconds / divider
     if let whole {

@@ -107,7 +107,7 @@ private func _setYear(date: Date, newYear: Int) throws -> Date {
 
 private func _setMonth(date: Date, newMonth: Int) throws -> Date {
   guard newMonth >= 1, newMonth <= 12 else {
-    throw CalcExpression.Error.message("Expecting month in [1..12], instead got \(newMonth).")
+    throw ExpressionError("Expecting month in [1..12], instead got \(newMonth).")
   }
   var components = date.components
   components.month = newMonth
@@ -128,9 +128,7 @@ private func _setDay(date: Date, newDay: Int) throws -> Date {
   case -1:
     components.day = 0
   default:
-    throw CalcExpression.Error.message(
-      "Unable to set day \(newDay) for date \(date.formatString)."
-    )
+    throw ExpressionError("Unable to set day \(newDay) for date \(date.formatString).")
   }
   guard let result = calendar.date(from: components) else {
     throw componentsError()
@@ -140,7 +138,7 @@ private func _setDay(date: Date, newDay: Int) throws -> Date {
 
 private func _setHours(date: Date, newHour: Int) throws -> Date {
   guard newHour >= 0, newHour <= 23 else {
-    throw CalcExpression.Error.message("Expecting hours in [0..23], instead got \(newHour).")
+    throw ExpressionError("Expecting hours in [0..23], instead got \(newHour).")
   }
   var components = date.components
   components.hour = newHour
@@ -152,7 +150,7 @@ private func _setHours(date: Date, newHour: Int) throws -> Date {
 
 private func _setMinutes(date: Date, newMinutes: Int) throws -> Date {
   guard newMinutes >= 0, newMinutes <= 59 else {
-    throw CalcExpression.Error.message("Expecting minutes in [0..59], instead got \(newMinutes).")
+    throw ExpressionError("Expecting minutes in [0..59], instead got \(newMinutes).")
   }
   var components = date.components
   components.minute = newMinutes
@@ -164,7 +162,7 @@ private func _setMinutes(date: Date, newMinutes: Int) throws -> Date {
 
 private func _setSeconds(date: Date, newSeconds: Int) throws -> Date {
   guard newSeconds >= 0, newSeconds <= 59 else {
-    throw CalcExpression.Error.message("Expecting seconds in [0..59], instead got \(newSeconds).")
+    throw ExpressionError("Expecting seconds in [0..59], instead got \(newSeconds).")
   }
   var components = date.components
   components.second = newSeconds
@@ -176,7 +174,7 @@ private func _setSeconds(date: Date, newSeconds: Int) throws -> Date {
 
 private func _setMillis(date: Date, newMillis: Int) throws -> Date {
   guard newMillis >= 0, newMillis <= 999 else {
-    throw CalcExpression.Error.message("Expecting millis in [0..999], instead got \(newMillis).")
+    throw ExpressionError("Expecting millis in [0..999], instead got \(newMillis).")
   }
   let newTimeInterval = round(date.timeIntervalSince1970) + newMillis.toSeconds
   return Date(timeIntervalSince1970: newTimeInterval)
@@ -266,7 +264,7 @@ private func formatDate(
   locale: String? = nil
 ) throws -> String {
   guard !format.contains("Z"), !format.contains("z") else {
-    throw CalcExpression.Error.message("z/Z not supported in [\(format)].")
+    throw ExpressionError("z/Z not supported in [\(format)].")
   }
   return makeDateFormatter(format, isUTC: isUTC, locale: locale).string(from: value)
 }
@@ -333,10 +331,10 @@ private func makeDateFormatter(
   return dateFormatter
 }
 
-private func componentsError() -> CalcExpression.Error {
-  .message("Date components not found.")
+private func componentsError() -> Error {
+  ExpressionError("Date components not found.")
 }
 
-private func componentError(_ name: String) -> CalcExpression.Error {
-  .message("Component '\(name)' not found.")
+private func componentError(_ name: String) -> Error {
+  ExpressionError("Component '\(name)' not found.")
 }

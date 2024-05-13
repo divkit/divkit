@@ -1,4 +1,3 @@
-
 import Foundation
 
 enum ComparisonOperators: String, CaseIterable {
@@ -15,7 +14,7 @@ enum ComparisonOperators: String, CaseIterable {
         makeFunction() as FunctionBinary<Date, Date, Bool>,
       ],
       makeError: {
-        OperatorsError.unsupportedType(symbol: rawValue, args: $0)
+        ExpressionError.unsupportedType(op: rawValue, args: $0)
       }
     )
   }

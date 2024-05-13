@@ -24,7 +24,7 @@ enum GetStoredValueFunctions: String, CaseIterable {
       let fromStringFunction: FunctionBinary<String, String, URL> =
         makeFunction(valueProvider) {
           guard let url = URL(string: $0) else {
-            throw CalcExpression.Error.message(
+            throw ExpressionError(
               "Failed to get URL from (\($0)). Unable to convert value to URL."
             )
           }
@@ -36,7 +36,7 @@ enum GetStoredValueFunctions: String, CaseIterable {
       let fromStringFunction: FunctionBinary<String, String, Color> =
         makeFunction(valueProvider) {
           guard let color = Color.color(withHexString: $0) else {
-            throw CalcExpression.Error.message(
+            throw ExpressionError(
               "Failed to get Color from (\($0)). Unable to convert value to Color."
             )
           }

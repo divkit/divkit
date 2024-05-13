@@ -7,7 +7,7 @@ extension [CalcExpression.Symbol: Function] {
       if let value = $0 as? Bool {
         return !value
       }
-      throw CalcExpression.Error.message(
+      throw ExpressionError(
         "Failed to evaluate [\(notSymbol.formatExpression([$0]))]. A Boolean is expected after a unary not."
       )
     }
@@ -58,13 +58,13 @@ private let ternaryOperator = LazyFunction { args, evaluators in
 
   let arg1 = try args[1].evaluate(evaluators)
   let arg2 = try args[2].evaluate(evaluators)
-  throw CalcExpression.Error.message(
+  throw ExpressionError(
     "Failed to evaluate [\(formatArgForError(arg0)) ? \(formatArgForError(arg1)) : \(formatArgForError(arg2))]. Ternary must be called with a Boolean value as a condition."
   )
 }
 
-private func invalidArgsError(lhs: Any, op: String) -> CalcExpression.Error {
-  .message(
+private func invalidArgsError(lhs: Any, op: String) -> Error {
+  ExpressionError(
     "Failed to evaluate [\(formatArgForError(lhs)) \(op) ...]. '\(op)' must be called with boolean operands."
   )
 }

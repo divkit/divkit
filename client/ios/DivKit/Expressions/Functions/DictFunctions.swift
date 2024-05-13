@@ -135,18 +135,15 @@ extension Dict {
   fileprivate func getArray(path: [String]) throws -> [AnyHashable] {
     let value = try getValue(path: path)
     guard let dictValue = value as? [AnyHashable] else {
-      throw incorrectTypeError("array", value)
+      throw ExpressionError.incorrectType("array", value)
     }
     return dictValue
   }
 
   fileprivate func getBoolean(path: [String]) throws -> Bool {
     let value = try getValue(path: path)
-    guard value.isBool else {
-      throw incorrectTypeError("boolean", value)
-    }
-    guard let boolValue = value as? Bool else {
-      throw incorrectTypeError("boolean", value)
+    guard value.isBool, let boolValue = value as? Bool else {
+      throw ExpressionError.incorrectType("boolean", value)
     }
     return boolValue
   }
@@ -154,12 +151,10 @@ extension Dict {
   fileprivate func getColor(path: [String]) throws -> Color {
     let value = try getValue(path: path)
     guard let stringValue = value as? String else {
-      throw incorrectTypeError("color", value)
+      throw ExpressionError.incorrectType("color", value)
     }
     guard let color = Color.color(withHexString: stringValue) else {
-      throw CalcExpression.Error.message(
-        "Unable to convert value to Color, expected format #AARRGGBB."
-      )
+      throw ExpressionError("Unable to convert value to Color, expected format #AARRGGBB.")
     }
     return color
   }
@@ -167,7 +162,7 @@ extension Dict {
   fileprivate func getDict(path: [String]) throws -> Dict {
     let value = try getValue(path: path)
     guard let dictValue = value as? Dict else {
-      throw incorrectTypeError("dict", value)
+      throw ExpressionError.incorrectType("dict", value)
     }
     return dictValue
   }
@@ -175,16 +170,16 @@ extension Dict {
   fileprivate func getInteger(path: [String]) throws -> Int {
     let value = try getValue(path: path)
     if value.isBool {
-      throw incorrectTypeError("integer", value)
+      throw ExpressionError.incorrectType("integer", value)
     }
     guard let intValue = value as? Int else {
       if let doubleValue = value as? Double {
         if doubleValue < Double(Int.min) || doubleValue > Double(Int.max) {
-          throw CalcExpression.Error.message("Integer overflow.")
+          throw ExpressionError.integerOverflow()
         }
-        throw CalcExpression.Error.message("Cannot convert value to integer.")
+        throw ExpressionError("Cannot convert value to integer.")
       }
-      throw incorrectTypeError("integer", value)
+      throw ExpressionError.incorrectType("integer", value)
     }
     return intValue
   }
@@ -192,7 +187,7 @@ extension Dict {
   fileprivate func getNumber(path: [String]) throws -> Double {
     let value = try getValue(path: path)
     if value.isBool {
-      throw incorrectTypeError("number", value)
+      throw ExpressionError.incorrectType("number", value)
     }
     if let numberValue = value as? Double {
       return numberValue
@@ -200,24 +195,24 @@ extension Dict {
     if let intValue = value as? Int {
       return Double(intValue)
     }
-    throw incorrectTypeError("number", value)
+    throw ExpressionError.incorrectType("number", value)
   }
 
   fileprivate func getString(path: [String]) throws -> String {
     let value = try getValue(path: path)
     guard let stringValue = value as? String else {
-      throw incorrectTypeError("string", value)
+      throw ExpressionError.incorrectType("string", value)
     }
     return stringValue
   }
 
   fileprivate func getUrl(path: [String]) throws -> URL {
     let value = try getValue(path: path)
-    guard let stringValue = value as? String else {
-      throw incorrectTypeError("url", value)
-    }
-    guard let url = URL(string: stringValue) else {
-      throw incorrectTypeError("url", value)
+    guard
+      let stringValue = value as? String,
+      let url = URL(string: stringValue)
+    else {
+      throw ExpressionError.incorrectType("url", value)
     }
     return url
   }
@@ -235,7 +230,7 @@ extension Dict {
       i += 1
     }
     guard let key = path.last else {
-      throw CalcExpression.Error.message("Path is wrong.")
+      throw ExpressionError("Path is wrong.")
     }
     if let result = dictionary?[key] {
       return result
@@ -244,13 +239,6 @@ extension Dict {
   }
 }
 
-private func incorrectTypeError(
-  _ expectedType: String,
-  _ value: AnyHashable
-) -> CalcExpression.Error {
-  .message("Incorrect value type: expected \"\(expectedType)\", got \"\(value.actualType)\".")
-}
-
-private func missingPropertyError(_ property: String) -> CalcExpression.Error {
-  .message("Missing property \"\(property)\" in the dict.")
+private func missingPropertyError(_ property: String) -> Error {
+  ExpressionError("Missing property \"\(property)\" in the dict.")
 }

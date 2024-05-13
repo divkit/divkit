@@ -1,6 +1,6 @@
 import XCTest
 
-@testable import DivKit
+import DivKit
 
 final class ExpressionResolverAnyTests: XCTestCase {
   private var isErrorExpected = false
@@ -12,9 +12,9 @@ final class ExpressionResolverAnyTests: XCTestCase {
     variables: variables,
     persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
-      error = $0.message
+      error = $0.description
       if !self.isErrorExpected {
-        XCTFail($0.message)
+        XCTFail($0.description)
       }
     }
   )
@@ -161,6 +161,6 @@ final class ExpressionResolverAnyTests: XCTestCase {
     isErrorExpected = true
 
     XCTAssertNil(expressionResolver.resolve("@{unknown_var}"))
-    XCTAssertEqual(error, "Variable 'unknown_var' is missing.")
+    XCTAssertEqual(error, "Variable 'unknown_var' is missing. Expression: @{unknown_var}")
   }
 }

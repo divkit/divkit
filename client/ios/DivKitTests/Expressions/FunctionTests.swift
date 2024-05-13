@@ -29,7 +29,7 @@ final class FunctionTests: XCTestCase {
   func test_invoke_FunctionBinary_WithInvalidArguments() throws {
     XCTAssertThrowsError(
       _ = try binaryFunction.invoke([1.2, true]),
-      CalcExpression.Error.message("Argument couldn't be casted to Double")
+      ExpressionError("Argument couldn't be casted to Double")
     )
   }
 
@@ -89,10 +89,9 @@ final class FunctionTests: XCTestCase {
       ]
     )
 
-    XCTAssertThrowsError(
-      _ = try function.invoke([1.2, true]),
-      CalcExpression.Error.noMatchingSignature
-    )
+    XCTAssertThrowsError(try function.invoke([1.2, true])) {
+      XCTAssertTrue($0 is NoMatchingSignatureError)
+    }
   }
 
   func test_invoke_OverloadedFunction_WithCast_MultipleMatches() throws {
@@ -105,11 +104,17 @@ final class FunctionTests: XCTestCase {
 
     XCTAssertThrowsError(
       _ = try function.invoke([2, 3]),
-      CalcExpression.Error.message("Multiple matching overloads")
+      ExpressionError("Multiple matching overloads")
     )
   }
 
   private func checLastArgs(_ args: [AnyHashable]) {
     XCTAssertEqual(args, lastArgs as! [AnyHashable])
+  }
+}
+
+extension ExpressionError: Equatable {
+  public static func ==(lhs: ExpressionError, rhs: ExpressionError) -> Bool {
+    lhs.description == rhs.description
   }
 }

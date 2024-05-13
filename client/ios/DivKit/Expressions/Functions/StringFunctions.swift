@@ -36,10 +36,10 @@ private var _contains = FunctionBinary<String, String, Bool> {
 
 private var _substring = FunctionTernary<String, Int, Int, String> {
   guard $1 <= $2 else {
-    throw CalcExpression.Error.message("Indexes should be in ascending order.")
+    throw ExpressionError("Indexes should be in ascending order.")
   }
   guard $1 >= 0, $2 <= $0.count else {
-    throw CalcExpression.Error.message("Indexes are out of bounds.")
+    throw ExpressionError("Indexes are out of bounds.")
   }
   return String($0[$0.rangeOfCharsIn($1..<$2)])
 }
@@ -97,14 +97,14 @@ private var _toLowerCase = FunctionUnary<String, String> {
 
 private var _encodeUri = FunctionUnary<String, String> {
   guard let value = $0.addingPercentEncoding(withAllowedCharacters: dontNeedEncoding) else {
-    throw CalcExpression.Error.message("String is empty after encoding.")
+    throw ExpressionError("String is empty after encoding.")
   }
   return value
 }
 
 private var _decodeUri = FunctionUnary<String, String> {
   guard let value = $0.removingPercentEncoding else {
-    throw CalcExpression.Error.message("String is empty after decoding.")
+    throw ExpressionError("String is empty after decoding.")
   }
   return value
 }
@@ -158,7 +158,7 @@ private var _testRegex = FunctionBinary<String, String, Bool> { text, regex in
     let range = NSRange(text.startIndex..., in: text)
     return regex.firstMatch(in: text, range: range) != nil
   } catch {
-    throw CalcExpression.Error.message("Invalid regular expression.")
+    throw ExpressionError("Invalid regular expression.")
   }
 }
 

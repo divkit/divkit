@@ -127,7 +127,7 @@ private struct ExpressionTestCase: Decodable {
     ExpressionResolver(
       variables: variables,
       persistentValuesStorage: DivPersistentValuesStorage(),
-      errorTracker: errorTracker ?? { XCTFail($0.message) }
+      errorTracker: errorTracker ?? { XCTFail($0.description) }
     )
   }
 
@@ -135,7 +135,7 @@ private struct ExpressionTestCase: Decodable {
     .link(
       ExpressionLink<T>(
         rawValue: expression,
-        errorTracker: { XCTFail($0.message) }
+        errorTracker: { XCTFail($0.description) }
       )!
     )
   }

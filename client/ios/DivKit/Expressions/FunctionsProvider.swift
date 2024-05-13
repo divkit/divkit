@@ -58,7 +58,7 @@ final class FunctionsProvider {
             return ConstantFunction(value)
           }
           return FunctionNullary {
-            throw CalcExpression.Error.message("Variable '\(name)' is missing.")
+            throw ExpressionError("Variable '\(name)' is missing.")
           }
         case .infix, .prefix:
           return operators[symbol]
@@ -88,33 +88,33 @@ private struct FunctionEvaluator: Function {
   func invoke(_ args: [Any]) throws -> Any {
     let name = symbol.name
     guard let function = functions[name] else {
-      throw CalcExpression.Error.message(
+      throw ExpressionError(
         "Failed to evaluate [\(symbol.formatExpression(args))]. Unknown \(symbol.type) name: \(name)."
       )
     }
     do {
       return try function.invoke(args)
-    } catch let error as CalcExpression.Error {
+    } catch {
       let message = "Failed to evaluate [\(symbol.formatExpression(args))]."
       let correctedArgs: [Any] = if case .method = symbol {
         Array(args.dropFirst())
       } else {
         args
       }
-      if error == .noMatchingSignature {
+      if error is NoMatchingSignatureError {
         if correctedArgs.count == 0 {
-          throw CalcExpression.Error.message(
+          throw ExpressionError(
             "\(message) Non empty argument list is required for \(symbol.type) '\(name)'."
           )
         }
         let argTypes = args
           .map { formatTypeForError($0) }
           .joined(separator: ", ")
-        throw CalcExpression.Error.message(
+        throw ExpressionError(
           "\(message) \(symbol.type.capitalized) '\(name)' has no matching override for given argument types: \(argTypes)."
         )
       }
-      throw CalcExpression.Error.message("\(message) \(error.localizedDescription)")
+      throw ExpressionError("\(message) \(error.localizedDescription)")
     }
   }
 }
