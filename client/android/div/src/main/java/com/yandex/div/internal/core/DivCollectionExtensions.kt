@@ -1,5 +1,6 @@
 package com.yandex.div.internal.core
 
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.variables.VariableSource
 import com.yandex.div.data.Variable
@@ -16,6 +17,7 @@ import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import org.json.JSONObject
 
+@InternalApi
 fun DivContainer.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
     items?.map { DivItemBuilderResult(it, resolver) } ?: itemBuilder?.build(resolver) ?: emptyList()
 
