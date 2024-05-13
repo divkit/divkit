@@ -23,13 +23,15 @@ public struct DivTooltipViewFactory {
       variableTriggers: nil,
       variables: nil
     )
-    view.setSource(
-      DivViewSource(
-        kind: .divData(divData),
-        cardId: cardId,
-        additionalId: tooltipId
+    Task {
+      await view.setSource(
+        DivViewSource(
+          kind: .divData(divData),
+          cardId: cardId,
+          additionalId: tooltipId
+        )
       )
-    )
+    }
     return view
   }
 

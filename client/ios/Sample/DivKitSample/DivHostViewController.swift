@@ -11,11 +11,16 @@ final class DivHostViewController: UIViewController {
     components = DivKitComponents(
       urlHandler: DivUrlHandlerDelegate { UIApplication.shared.open($0) }
     )
-    divHostView = DivHostView(components: components)
+    let preloader = DivViewPreloader(divKitComponents: components)
+    divHostView = DivHostView(components: components, preloader: preloader)
 
     if let cards = try? DivJson.loadCards() {
       view.addSubview(divHostView)
-      divHostView.items = cards
+      Task {
+        await preloader
+          .setSources(cards.map { DivViewSource(kind: .divData($0), cardId: $0.cardId) })
+        divHostView.items = cards.map(\.cardId)
+      }
     }
   }
 

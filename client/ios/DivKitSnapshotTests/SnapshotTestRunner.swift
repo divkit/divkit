@@ -11,6 +11,7 @@ import NetworkingPublic
 let testCardId = "test_card_id"
 let testDivCardId = DivCardID(rawValue: testCardId)
 
+@MainActor
 final class SnapshotTestRunner {
   #if UPDATE_SNAPSHOTS
   let mode = TestMode.update
@@ -28,7 +29,7 @@ final class SnapshotTestRunner {
     caseName: String,
     blocksState: [IdAndCardId: ElementState] = [:],
     extensions: [DivExtensionHandler] = []
-  ) throws {
+  ) async throws {
     let jsonDict = try #require(makeJsonDict(from: file.absolutePath))
 
     let divKitComponents = DivKitComponents(
@@ -42,7 +43,7 @@ final class SnapshotTestRunner {
     }
 
     let view = DivView(divKitComponents: divKitComponents)
-    try view.setSource(DivViewSource(
+    try await view.setSource(DivViewSource(
       kind: .json(jsonDict.getOptionalField("div_data") ?? jsonDict),
       cardId: testDivCardId
     ))

@@ -6,6 +6,7 @@ import Foundation
 ///
 /// ``DivViewPreloader`` can be useful when it is important to calculate layout before building
 /// ``DivView``, for example in `UICollectionView`.
+@MainActor
 public final class DivViewPreloader {
   /// Represents a change in estimated size for a specific ``DivView``.
   public struct DivViewSizeChange {
@@ -28,29 +29,52 @@ public final class DivViewPreloader {
     self.divKitComponents = divKitComponents
   }
 
-  func blockProvider(for cardId: DivCardID) -> DivBlockProvider? {
-    blockProviders[cardId]
+  func blockProvider(for cardId: DivCardID) -> DivBlockProvider {
+    if let blockProvider = blockProviders[cardId] {
+      return blockProvider
+    } else {
+      let blockProvider = DivBlockProvider(divKitComponents: divKitComponents) { [weak self] in
+        self?.changeEventsPipe.send(DivViewSizeChange(cardId: $0, estimatedSize: $1))
+      }
+      blockProviders[cardId] = blockProvider
+      return blockProvider
+    }
   }
 
   /// Sets the source for  ``DivViewPreloader`` and updates the layout.
   /// - Parameters:
   /// - source: The source of the ``DivView``.
   /// - debugParams: Optional debug configurations for the ``DivView``.
-  /// - shouldResetPreviousCardData: Specifies whether to clear the data of the previous card when
-  /// updating the ``DivView`` with new content.
   public func setSource(
     _ source: DivViewSource,
     debugParams: DebugParams = DebugParams()
-  ) {
-    let blockProvider = blockProviders[source.id.cardId] ??
-      DivBlockProvider(divKitComponents: divKitComponents) { [weak self] in
-        self?.changeEventsPipe.send(DivViewSizeChange(cardId: $0, estimatedSize: $1))
-      }
-    blockProvider.setSource(
+  ) async {
+    let blockProvider: DivBlockProvider = blockProvider(for: source.id.cardId)
+
+    await blockProvider.setSource(
       source,
       debugParams: debugParams
     )
+
     blockProviders[source.id.cardId] = blockProvider
+  }
+
+  /// Sets the sources for  ``DivViewPreloader`` and updates the layout.
+  /// - Parameters:
+  /// - sources: The sources of the ``DivView``.
+  /// - debugParams: Optional debug configurations for the ``DivView``.
+  public func setSources(
+    _ sources: [DivViewSource],
+    debugParams: DebugParams = DebugParams()
+  ) async {
+    let blockProviders = sources.map { blockProvider(for: $0.id.cardId) }
+    await withTaskGroup(of: Void.self) { group in
+      zip(blockProviders, sources).forEach { blockProvider, source in
+        group.addTask {
+          await blockProvider.setSource(source, debugParams: debugParams)
+        }
+      }
+    }
   }
 
   /// Fetches the expected size for a ``DivView`` with a specific identifier.
@@ -58,10 +82,11 @@ public final class DivViewPreloader {
   /// - Parameters:
   /// - cardId: The unique identifier of the desired ``DivView``.
   ///
-  /// - Returns: An optional `DivCardSize` representing the expected size if available, otherwise
+  /// - Returns: An optional `DivViewSize` representing the expected size if available, otherwise
   /// nil.
+  @MainActor
   public func expectedSize(for cardId: DivCardID) -> DivViewSize? {
-    blockProvider(for: cardId)?.cardSize
+    blockProvider(for: cardId).cardSize
   }
 
   /// Adds an observer to listen for any ``DivView`` estimated size changes.
