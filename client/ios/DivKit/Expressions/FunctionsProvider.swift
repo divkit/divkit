@@ -54,11 +54,6 @@ final class FunctionsProvider {
         case .variable("false"):
           return ConstantFunction(false)
         case let .variable(name):
-          // CalcExpression stores string values as Symbol.variable
-          if name.count >= 2, name.starts(with: "'") {
-            let value = String(name.dropFirst().dropLast())
-            return ConstantFunction(value)
-          }
           if let value = self?.variableValueProvider(name) {
             return ConstantFunction(value)
           }

@@ -276,7 +276,7 @@ extension UnicodeScalarView {
     if !isOperandExpected, let op = parseOperator() {
       return op
     }
-    if let identifier = try parseNumericLiteral() ?? parseIdentifier() ?? parseEscapedIdentifier() {
+    if let identifier = try parseNumericLiteral() ?? parseIdentifier() ?? parseStringLiteral() {
       return identifier
     }
     if isOperandExpected {
@@ -409,50 +409,17 @@ extension UnicodeScalarView {
     return makeVariable(identifier)
   }
 
-  private mutating func parseEscapedIdentifier() throws -> Subexpression? {
-    guard let delimiter = first,
-          var string = scanCharacter({ $0 == "'" })
-    else {
+  private mutating func parseStringLiteral() throws -> Subexpression? {
+    if !scanCharacter("'") {
       return nil
     }
+    var string = ""
     var part: String?
     repeat {
-      part = scanCharacters { $0 != delimiter && $0 != "\\" }
+      part = scanCharacters { $0 != "'" && $0 != "\\" }
       string += part ?? ""
       if scanCharacter("\\"), let c = popFirst() {
         switch c {
-        case "0":
-          string += "\0"
-        case "t":
-          string += "\t"
-        case "n":
-          string += "\n"
-        case "r":
-          string += "\r"
-        case "u" where scanCharacter("{"):
-          let hex = scanCharacters {
-            switch $0 {
-            case "0"..."9", "A"..."F", "a"..."f":
-              true
-            default:
-              false
-            }
-          } ?? ""
-          guard scanCharacter("}") else {
-            guard let junk = scanToEndOfToken() else {
-              throw CalcExpression.Error.missingDelimiter("}")
-            }
-            throw CalcExpression.Error.unexpectedToken(junk)
-          }
-          guard !hex.isEmpty else {
-            throw CalcExpression.Error.unexpectedToken("}")
-          }
-          guard let codepoint = Int(hex, safeRadix: .hex),
-                let c = UnicodeScalar(codepoint)
-          else {
-            throw CalcExpression.Error.unexpectedToken(hex)
-          }
-          string.append(Character(c))
         case "'", "\\":
           string.append(Character(c))
         case "@" where scanCharacter("{"):
@@ -463,15 +430,10 @@ extension UnicodeScalarView {
         part = ""
       }
     } while part != nil
-    guard scanCharacter(delimiter) else {
-      let delimiter = String(delimiter)
-      if string == delimiter {
-        throw CalcExpression.Error.unexpectedToken(string)
-      }
-      throw CalcExpression.Error.missingDelimiter(delimiter)
+    if scanCharacter("'") {
+      return .literal(string)
     }
-    string.append(Character(delimiter))
-    return makeVariable(string)
+    throw CalcExpression.Error.missingDelimiter("'")
   }
 
   fileprivate mutating func parseSubexpression(
