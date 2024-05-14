@@ -20,6 +20,11 @@
       }
     }
   ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "log_id"
   ]

@@ -12,6 +12,11 @@
       "$ref": "div-action-copy-to-clipboard-content.json"
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "type",
     "content"

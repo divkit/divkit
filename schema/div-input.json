@@ -39,7 +39,12 @@
         },
         "font_family": {
           "type": "string",
-          "$description": "translations.json#/div_font_family"
+          "$description": "translations.json#/div_font_family",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "font_weight": {
           "$ref": "div-font-weight.json",
@@ -58,20 +63,12 @@
         "text_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",
           "default_value": "start",
-          "$description": "translations.json#/div_text_text_alignment_horizontal",
-          "platforms": [
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_text_alignment_horizontal"
         },
         "text_alignment_vertical": {
           "$ref": "div-alignment-vertical.json",
           "default_value": "center",
-          "$description": "translations.json#/div_text_text_alignment_vertical",
-          "platforms": [
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_text_alignment_vertical"
         },
         "line_height": {
           "$ref": "common.json#/non_negative_integer",
@@ -84,7 +81,12 @@
         "letter_spacing": {
           "type": "number",
           "default_value": "0",
-          "$description": "translations.json#/div_input_letter_spacing"
+          "$description": "translations.json#/div_input_letter_spacing",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "hint_text": {
           "type": "string",
@@ -97,7 +99,12 @@
         },
         "highlight_color": {
           "$ref": "common.json#/color",
-          "$description": "translations.json#/div_input_highlight_color"
+          "$description": "translations.json#/div_input_highlight_color",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "native_interface": {
           "$ref": "#/definitions/native_interface",
@@ -117,11 +124,21 @@
         "select_all_on_focus": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_input_select_all_on_focus"
+          "$description": "translations.json#/div_input_select_all_on_focus",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "mask": {
           "$ref": "div-input-mask.json",
-          "$description": "translations.json#/div_input_mask"
+          "$description": "translations.json#/div_input_mask",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "validators": {
           "type": "array",

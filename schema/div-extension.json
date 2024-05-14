@@ -1,6 +1,11 @@
 {
   "type": "object",
   "$description": "translations.json#/div_extension",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "properties": {
     "id": {
       "$ref": "common.json#/id",

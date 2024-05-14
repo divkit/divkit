@@ -44,5 +44,10 @@
     {
       "$ref": "#/definitions/content_url"
     }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
   ]
 }

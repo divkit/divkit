@@ -17,6 +17,11 @@
       ]
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "image_url",
     "type",

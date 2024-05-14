@@ -18,6 +18,11 @@
       "$ref": "div-typed-value.json"
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "type",
     "variable_name",

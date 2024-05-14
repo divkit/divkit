@@ -47,6 +47,11 @@
       "$description": "translations.json#/div_patch_changes"
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "changes"
   ]

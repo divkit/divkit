@@ -11,6 +11,11 @@
       "$description": "translations.json#/div_point_y"
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "x",
     "y"

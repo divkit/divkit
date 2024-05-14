@@ -10,7 +10,11 @@
     },
     "referer": {
       "$ref": "common.json#/url",
-      "$description": "translations.json#/div_action_base_referer"
+      "$description": "translations.json#/div_action_base_referer",
+      "platforms": [
+        "android",
+        "ios"
+      ]
     },
     "payload": {
       "type": "object",
@@ -19,7 +23,12 @@
     },
     "download_callbacks": {
       "$ref": "div-download-callbacks.json",
-      "$description": "translations.json#/div_action_base_download_callbacks"
+      "$description": "translations.json#/div_action_base_download_callbacks",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "typed": {
       "$ref": "div-action-typed.json"

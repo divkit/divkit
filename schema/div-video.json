@@ -109,6 +109,11 @@
       }
     }
   ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "type",
     "video_sources"

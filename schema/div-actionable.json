@@ -16,19 +16,34 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_actionable_longtap_actions"
+      "$description": "translations.json#/div_actionable_longtap_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "doubletap_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_actionable_doubletap_actions"
+      "$description": "translations.json#/div_actionable_doubletap_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "action_animation": {
       "$ref": "div-animation.json",
       "default_value": "{\"name\": \"fade\", \"start_value\": 1, \"end_value\": 0.6, \"duration\": 100 }",
-      "$description": "translations.json#/div_actionable_action_animation"
+      "$description": "translations.json#/div_actionable_action_animation",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     }
   }
 }

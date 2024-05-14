@@ -21,11 +21,11 @@
       }
     }
   ],
-  "required": [
-    "type"
-  ],
   "platforms": [
     "android",
     "web"
+  ],
+  "required": [
+    "type"
   ]
 }

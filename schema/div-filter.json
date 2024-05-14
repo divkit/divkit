@@ -9,7 +9,8 @@
       "$description": "translations.json#/div_filter_rtl_mirror",
       "platforms": [
         "android",
-        "web"
+        "web",
+        "flutter"
       ]
     }
   ]

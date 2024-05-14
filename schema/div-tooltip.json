@@ -1,6 +1,11 @@
 {
   "type": "object",
   "$description": "translations.json#/div_tooltip",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "properties": {
     "id": {
       "$ref": "common.json#/id",

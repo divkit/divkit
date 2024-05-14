@@ -23,6 +23,11 @@
       ]
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "type", "shape", "color"
   ]

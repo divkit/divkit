@@ -11,6 +11,11 @@
   "definitions": {
     "range": {
       "type": "object",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "properties": {
         "start": {
           "$ref": "common.json#/non_negative_integer",
@@ -97,6 +102,11 @@
     },
     "image": {
       "type": "object",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "properties": {
         "start": {
           "$ref": "common.json#/non_negative_integer",
@@ -156,21 +166,36 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "$description": "translations.json#/div_text_ellipsis_actions"
+          "$description": "translations.json#/div_text_ellipsis_actions",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "ranges": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/range"
           },
-          "$description": "translations.json#/div_text_ellipsis_ranges"
+          "$description": "translations.json#/div_text_ellipsis_ranges",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "images": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/image"
           },
-          "$description": "translations.json#/div_text_ellipsis_images"
+          "$description": "translations.json#/div_text_ellipsis_images",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         }
       },
       "required": [
@@ -205,7 +230,12 @@
         },
         "font_family": {
           "type": "string",
-          "$description": "translations.json#/div_font_family"
+          "$description": "translations.json#/div_font_family",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "font_size_unit": {
           "$ref": "div-size-unit.json",
@@ -236,13 +266,19 @@
           "$description": "translations.json#/div_text_auto_ellipsize",
           "platforms": [
             "android",
-            "web"
+            "web",
+            "flutter"
           ]
         },
         "letter_spacing": {
           "type": "number",
           "default_value": "0",
-          "$description": "translations.json#/div_text_letter_spacing"
+          "$description": "translations.json#/div_text_letter_spacing",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "font_weight": {
           "$ref": "div-font-weight.json",
@@ -274,7 +310,12 @@
         },
         "text_gradient": {
           "$ref": "div-text-gradient.json",
-          "$description": "translations.json#/div_text_text_gradient"
+          "$description": "translations.json#/div_text_text_gradient",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "text": {
           "type": "string",
@@ -295,14 +336,24 @@
           "items": {
             "$ref": "#/definitions/range"
           },
-          "$description": "translations.json#/div_text_ranges"
+          "$description": "translations.json#/div_text_ranges",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "images": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/image"
           },
-          "$description": "translations.json#/div_text_images"
+          "$description": "translations.json#/div_text_images",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "ellipsis": {
           "$ref": "#/definitions/ellipsis"
@@ -310,7 +361,12 @@
         "selectable": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_text_selectable"
+          "$description": "translations.json#/div_text_selectable",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "truncate": {
           "type": "string",
@@ -321,7 +377,11 @@
           "$description": "translations.json#/div_text_truncate",
           "deprecated": true,
           "code_generation_disabled_kotlin": true,
-          "code_generation_disabled_swift": true
+          "code_generation_disabled_swift": true,
+          "platforms": [
+            "android",
+            "ios"
+          ]
         },
         "text_shadow": {
           "$ref": "div-shadow.json",

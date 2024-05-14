@@ -76,6 +76,11 @@
       }
     }
   ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "type",
     "layout_mode"

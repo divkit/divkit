@@ -22,5 +22,10 @@
       "default_value": "ease_in_out",
       "$description": "translations.json#/div_transition_base_interpolator"
     }
-  }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
 }

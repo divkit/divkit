@@ -26,6 +26,11 @@
       }
     }
   ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "gif_url",
     "type"

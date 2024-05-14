@@ -59,47 +59,87 @@
     },
     "row_span": {
       "$ref": "common.json#/non_negative_integer",
-      "$description": "translations.json#/div_base_row_span"
+      "$description": "translations.json#/div_base_row_span",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "column_span": {
       "$ref": "common.json#/non_negative_integer",
-      "$description": "translations.json#/div_base_column_span"
+      "$description": "translations.json#/div_base_column_span",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "visibility_action": {
       "$ref": "div-visibility-action.json",
-      "$description": "translations.json#/div_base_visibility_action"
+      "$description": "translations.json#/div_base_visibility_action",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "visibility_actions": {
       "type": "array",
       "items": {
         "$ref": "div-visibility-action.json"
       },
-      "$description": "translations.json#/div_base_visibility_actions"
+      "$description": "translations.json#/div_base_visibility_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "disappear_actions": {
       "type": "array",
       "items": {
         "$ref": "div-disappear-action.json"
       },
-      "$description": "translations.json#/div_base_disappear_actions"
+      "$description": "translations.json#/div_base_disappear_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "tooltips": {
       "type": "array",
       "items": {
         "$ref": "div-tooltip.json"
       },
-      "$description": "translations.json#/div_base_tooltips"
+      "$description": "translations.json#/div_base_tooltips",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "accessibility": {
       "$ref": "div-accessibility.json",
-      "$description": "translations.json#/div_base_accessibility"
+      "$description": "translations.json#/div_base_accessibility",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "extensions": {
       "type": "array",
       "items": {
         "$ref": "div-extension.json"
       },
-      "$description": "translations.json#/div_base_extensions"
+      "$description": "translations.json#/div_base_extensions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "transition_triggers": {
       "type": "array",
@@ -108,26 +148,51 @@
       },
       "minItems": 1,
       "supports_expressions": false,
-      "$description": "translations.json#/div_base_transition_triggers"
+      "$description": "translations.json#/div_base_transition_triggers",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "transition_in": {
       "$ref": "div-appearance-transition.json",
-      "$description": "translations.json#/div_base_transition_in"
+      "$description": "translations.json#/div_base_transition_in",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "transition_change": {
       "$ref": "div-change-transition.json",
-      "$description": "translations.json#/div_base_transition_change"
+      "$description": "translations.json#/div_base_transition_change",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "transition_out": {
       "$ref": "div-appearance-transition.json",
-      "$description": "translations.json#/div_base_transition_out"
+      "$description": "translations.json#/div_base_transition_out",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "selected_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_base_selected_actions"
+      "$description": "translations.json#/div_base_selected_actions",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "focus": {
       "$ref": "div-focus.json",
@@ -140,7 +205,12 @@
     },
     "transform": {
       "$ref": "div-transform.json",
-      "$description": "translations.json#/div_base_transform"
+      "$description": "translations.json#/div_base_transform",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     }
   }
 }

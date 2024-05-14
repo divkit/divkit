@@ -145,6 +145,11 @@
       }
     }
   ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "type",
     "thumb_style",

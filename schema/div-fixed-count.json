@@ -13,6 +13,11 @@
       ]
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "value",
     "type"

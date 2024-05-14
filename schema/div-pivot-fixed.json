@@ -17,5 +17,10 @@
         "pivot-fixed"
       ]
     }
-  }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
 }

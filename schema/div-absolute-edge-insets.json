@@ -22,5 +22,10 @@
       "default_value": "0",
       "$description": "translations.json#/div_edge_insets_bottom"
     }
-  }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
 }

@@ -17,6 +17,11 @@
       "$description": "translations.json#/div_change_set_transition_items"
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "type",
     "items"

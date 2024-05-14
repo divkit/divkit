@@ -51,6 +51,11 @@
       "$description": "translations.json#/div_animation_items"
     }
   },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "required": [
     "name"
   ]

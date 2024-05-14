@@ -14,5 +14,10 @@
       "$ref": "div-variable-name.json",
       "$description": "translations.json#/div_input_validators_variable"
     }
-  }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
 }

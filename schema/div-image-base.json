@@ -3,7 +3,12 @@
     "placeholder_color": {
       "$ref": "common.json#/color",
       "default_value": "#14000000",
-      "$description": "translations.json#/div_image_base_placeholder_color"
+      "$description": "translations.json#/div_image_base_placeholder_color",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "scale": {
       "$ref": "div-image-scale.json",
@@ -22,7 +27,12 @@
     },
     "preview": {
       "type": "string",
-      "$description": "translations.json#/div_image_base_preview"
+      "$description": "translations.json#/div_image_base_preview",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     "preload_required": {
       "$ref": "common.json#/boolean_int",

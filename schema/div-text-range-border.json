@@ -10,5 +10,10 @@
       "$ref": "common.json#/non_negative_integer",
       "$description": "translations.json#/div_border_corner_radius"
     }
-  }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
 }

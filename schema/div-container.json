@@ -44,6 +44,11 @@
   "definitions": {
     "separator": {
       "type": "object",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
       "properties": {
         "show_at_start": {
           "$ref": "common.json#/boolean_int",
@@ -120,11 +125,21 @@
         },
         "separator": {
           "$ref": "#/definitions/separator",
-          "$description": "translations.json#/div_container_separator"
+          "$description": "translations.json#/div_container_separator",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "line_separator": {
           "$ref": "#/definitions/separator",
-          "$description": "translations.json#/div_container_line_separator"
+          "$description": "translations.json#/div_container_line_separator",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "items": {
           "type": "array",
@@ -148,7 +163,12 @@
         "clip_to_bounds": {
           "$ref": "common.json#/boolean_int",
           "default_value": "true",
-          "$description": "translations.json#/div_clip_to_bounds"
+          "$description": "translations.json#/div_clip_to_bounds",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         }
       }
     }

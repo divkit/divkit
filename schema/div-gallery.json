@@ -31,7 +31,12 @@
         },
         "column_count": {
           "$ref": "common.json#/positive_integer",
-          "$description": "translations.json#/div_gallery_column_count"
+          "$description": "translations.json#/div_gallery_column_count",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "item_spacing": {
           "$ref": "common.json#/non_negative_integer",
@@ -40,7 +45,12 @@
         },
         "cross_spacing": {
           "$ref": "common.json#/non_negative_integer",
-          "$description": "translations.json#/div_gallery_cross_spacing"
+          "$description": "translations.json#/div_gallery_cross_spacing",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "scroll_mode": {
           "type": "string",
@@ -49,7 +59,12 @@
             "paging",
             "default"
           ],
-          "$description": "translations.json#/div_gallery_scroll_mode"
+          "$description": "translations.json#/div_gallery_scroll_mode",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "items": {
           "type": "array",
@@ -85,7 +100,12 @@
         "default_item": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "0",
-          "$description": "translations.json#/div_gallery_default_item"
+          "$description": "translations.json#/div_gallery_default_item",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
         },
         "scrollbar": {
           "type": "string",

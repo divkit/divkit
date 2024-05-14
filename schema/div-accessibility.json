@@ -64,5 +64,10 @@
       "$description": "translations.json#/div_accessibility_mute_after_action",
       "platforms": [ "ios" ]
     }
-  }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
 }

@@ -16,5 +16,10 @@
       },
       "$description": "translations.json#/div_download_callbacks_on_success_actions"
     }
-  }
+  },
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ]
 }
