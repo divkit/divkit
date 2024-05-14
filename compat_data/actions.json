@@ -83,5 +83,19 @@
                 "version_added": "29.2.0"
             }
         }
+    }, {
+        "id": "action_menu_items",
+        "name": "Action <code>menu_items</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "29.15.0"
+            }
+        }
     }]
 }

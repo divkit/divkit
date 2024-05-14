@@ -13,5 +13,38 @@
                 "version_added": "29.14.0"
             }
         }
+    }, {
+        "id": "fn_to_string_dict_array",
+        "name": "Function <code>toString</code> for the dicts and arrays",
+        "compat": {
+            "ios": {
+                "version_added": "29.15.0"
+            }
+        }
+    }, {
+        "id": "fn_to_string_string",
+        "name": "Function <code>toString</code> for the strings (returns argument as is)",
+        "compat": {
+            "ios": {
+                "version_added": "29.15.0"
+            },
+            "web": {
+                "version_added": "29.15.0"
+            }
+        }
+    }, {
+        "id": "fn_len_array",
+        "name": "Function <code>len</code> for arrays",
+        "compat": {
+            "ios": {
+                "version_added": "29.15.0"
+            },
+            "android": {
+                "version_added": "29.2.0"
+            },
+            "web": {
+                "version_added": "29.0.0"
+            }
+        }
     }]
 }

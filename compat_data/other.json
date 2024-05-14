@@ -6,8 +6,22 @@
             "ios": {
                 "version_added": "29.11.0"
             },
-            "web": {
+            "android": {
                 "version_added": "29.13.0"
+            }
+        }
+    }, {
+        "id": "persistent_variable_storage",
+        "name": "Persistent variable storage (including <code>set_stored_value</code> action and getter functions, such as <code>getStoredStringValue</code>)",
+        "compat": {
+            "web": {
+                "version_added": "29.15.0"
+            },
+            "ios": {
+                "version_added": "27.0.0"
+            },
+            "android": {
+                "version_added": "28.2.0"
             }
         }
     }]

@@ -3,10 +3,15 @@
         "id": "methods",
         "name": "Methods basic support",
         "compat": {
-            "ios": {
+            "ios": [{
                 "version_added": "29.14.0",
                 "notes": "It does not support methods for intermediate values, such as expressions in parentheses, for example <code>(1 + 2)</code>",
                 "partial_implementation": true
+            }, {
+                "version_added": "29.15.0"
+            }],
+            "web": {
+                "version_added": "29.15.0"
             }
         }
     }, {
@@ -15,6 +20,20 @@
         "compat": {
             "ios": {
                 "version_added": "29.14.0"
+            },
+            "web": {
+                "version_added": "29.15.0"
+            }
+        }
+    }, {
+        "id": "methods_to_string_dict_array",
+        "name": "Method <code>toString</code> for the dicts and arrays",
+        "compat": {
+            "ios": {
+                "version_added": "29.15.0"
+            },
+            "web": {
+                "version_added": "29.15.0"
             }
         }
     }, {
@@ -23,6 +42,9 @@
         "compat": {
             "ios": {
                 "version_added": "29.14.0"
+            },
+            "web": {
+                "version_added": "29.15.0"
             }
         }
     }, {
@@ -31,6 +53,9 @@
         "compat": {
             "ios": {
                 "version_added": "29.14.0"
+            },
+            "web": {
+                "version_added": "29.15.0"
             }
         }
     }]
