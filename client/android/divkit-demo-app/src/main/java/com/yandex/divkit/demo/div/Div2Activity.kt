@@ -19,8 +19,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
-import com.google.zxing.integration.android.IntentIntegrator
-import com.google.zxing.integration.android.IntentResult
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivDataChangeListener
 import com.yandex.div.core.DivViewFacade
@@ -47,6 +47,7 @@ import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.QRCaptureActivity
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
@@ -65,6 +66,7 @@ const val DIV2_KEY_URL = "key_url"
 
 private const val DIV2_TEXT_INPUT_VARIABLE = "div2activity_text"
 private const val OPEN_FILE_ACTIVITY_REQUEST_CODE = 102
+private const val SCAN_QR_CODE_REQUEST_CODE = 103
 
 class Div2Activity : AppCompatActivity() {
     private val preferences by lazy { getSharedPreferences("div2", Context.MODE_PRIVATE) }
@@ -74,7 +76,7 @@ class Div2Activity : AppCompatActivity() {
     private lateinit var div: Div2View
 
     private lateinit var div2Adapter: DivEditorAdapter
-    private lateinit var qrScan: IntentIntegrator
+    private lateinit var qrScanContract: ScanContract
     private lateinit var variable: Variable.StringVariable
     private val fileStorage by lazy { DivFileStorage() }
 
@@ -132,8 +134,7 @@ class Div2Activity : AppCompatActivity() {
         div.layoutParams.width = MATCH_PARENT
         div.layoutParams.height = MATCH_PARENT
 
-        qrScan = IntentIntegrator(this)
-        qrScan.setOrientationLocked(false)
+        qrScanContract = ScanContract()
 
         bindLink()
     }
@@ -145,24 +146,17 @@ class Div2Activity : AppCompatActivity() {
         checkInputAndShowIfCorrect()
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result: IntentResult = IntentIntegrator.parseActivityResult(
-            requestCode,
-            resultCode,
-            data
-        ) ?: return super.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+
         when (requestCode) {
             OPEN_FILE_ACTIVITY_REQUEST_CODE -> {
                 data?.data?.path?.let { loadDivJsonPath(it) } ?: showToast("No json path data")
             }
-            else -> {
-                result.contents?.let {
-                    variable.setValue(Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, result.contents))
-                }
-                if (result.contents.isNullOrEmpty()) {
-                    variable.setValue(Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, "sorry, fail =("))
-                }
+            SCAN_QR_CODE_REQUEST_CODE -> {
+                val result = qrScanContract.parseResult(resultCode, data).contents ?: "sorry, fail =("
+
+                variable.setValue(Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, result))
             }
         }
     }
@@ -182,7 +176,7 @@ class Div2Activity : AppCompatActivity() {
 
             when (uri.getQueryParameter(PARAM_ACTION)) {
                 OPEN_FILE -> loadDivJson()
-                QR_CODE -> qrScan.initiateScan()
+                QR_CODE -> scanQrCode()
                 PASTE -> pasteFromClipboard()
                 SHOW_RESULT -> checkInputAndShowIfCorrect()
                 else -> return false
@@ -257,6 +251,18 @@ class Div2Activity : AppCompatActivity() {
                     showToast("No one can handle open json intent, use Google Play to install File Manager")
                 }
             }
+
+    private fun scanQrCode() {
+        val scanOptions = ScanOptions().apply {
+            setBeepEnabled(false)
+            setPrompt("")
+            setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+            setCaptureActivity(QRCaptureActivity::class.java)
+        }
+        val intent = qrScanContract.createIntent(this, scanOptions)
+
+        startActivityForResult(intent, SCAN_QR_CODE_REQUEST_CODE)
+    }
 
     private fun loadDivJsonPath(path: String) =
         {

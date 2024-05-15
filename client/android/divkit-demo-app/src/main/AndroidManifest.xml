@@ -106,5 +106,9 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".utils.QRCaptureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.QrScan"/>
+
     </application>
 </manifest>

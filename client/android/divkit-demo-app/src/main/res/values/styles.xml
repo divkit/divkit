@@ -128,4 +128,8 @@
 
     <style name="Div.Image.Demo"/>
 
+    <style name="AppTheme.NoActionBar.QrScan">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
 </resources>
