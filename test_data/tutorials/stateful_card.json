@@ -1,0 +1,237 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "logo": {
+      "type": "image",
+      "alignment_horizontal": "center",
+      "width": {
+        "type": "fixed",
+        "value": 172
+      },
+      "height": {
+        "type": "fixed",
+        "value": 44
+      },
+      "placeholder_color": "#00000000"
+    },
+    "description": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "margins": {
+        "top": 24,
+        "left": 8,
+        "right": 8
+      }
+    },
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "block": {
+      "type": "container",
+      "content_alignment_vertical": "center",
+      "height": {
+        "type": "fixed",
+        "value": 240
+      },
+      "margins": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ]
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "name": "change_state",
+        "type": "string",
+        "value": "none"
+      },
+      {
+        "name": "block_state",
+        "type": "string",
+        "value": "divkit"
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{change_state == 'block' && block_state == 'divkit'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update block_state",
+            "url": "div-action://set_variable?name=block_state&value=flutter"
+          },
+          {
+            "log_id": "update state",
+            "url": "div-action://set_state?state_id=0/sample/flutter"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state == 'block' && block_state == 'flutter'}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state",
+            "url": "div-action://set_variable?name=change_state&value=none"
+          },
+          {
+            "log_id": "update block_state",
+            "url": "div-action://set_variable?name=block_state&value=divkit"
+          },
+          {
+            "log_id": "update state",
+            "url": "div-action://set_state?state_id=0/sample/divkit"
+          }
+        ]
+      }
+    ],
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "State and Triggers"
+            },
+            {
+              "type": "subtitle",
+              "text": "Here description!"
+            },
+            {
+              "type": "state",
+              "div_id": "sample",
+              "states": [
+                {
+                  "state_id": "divkit",
+                  "div": {
+                    "type": "block",
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#3Eff7b00"
+                      }
+                    ],
+                    "items": [
+                      {
+                        "type": "logo",
+                        "image_url": "https://raw.githubusercontent.com/divkit/divkit/f69a934fffb17abe2b7d4113860a777586586839/client/android/divkit-demo-app/src/main/assets/application/images/DivKit.png"
+                      },
+                      {
+                        "type": "description",
+                        "text": "Modern SDUI layout technology"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "flutter",
+                  "div": {
+                    "type": "block",
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#0E0000ff"
+                      }
+                    ],
+                    "items": [
+                      {
+                        "type": "logo",
+                        "image_url": "https://storage.googleapis.com/cms-storage-bucket/c823e53b3a1a7b0d36a9.png"
+                      },
+                      {
+                        "type": "description",
+                        "text": "Now also on Flutter 😎"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Change state",
+              "actions": [
+                {
+                  "log_id": "set_state",
+                  "url": "div-action://set_variable?name=change_state&value=block"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

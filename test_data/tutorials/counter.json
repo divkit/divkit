@@ -1,0 +1,138 @@
+{
+  "templates": {
+    "circle_button": {
+      "type": "text",
+      "font_size": 40,
+      "text_color": "#fff",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "border": {
+        "corner_radius": 50
+      },
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "bg_color"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "main_screen",
+    "variables": [
+      {
+        "type": "integer",
+        "name": "count",
+        "value": 0
+      },
+      {
+        "type": "number",
+        "name": "alpha",
+        "value": 0.5
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "container",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "font_size": 100,
+                  "alpha": "@{min(1.0, max(alpha, 0.0))}",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  },
+                  "text_alignment_horizontal": "center",
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center",
+                  "text": "@{count}"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "alignment_horizontal": "left",
+              "alignment_vertical": "bottom",
+              "items": [
+                {
+                  "type": "circle_button",
+                  "text": "−",
+                  "bg_color": "#8c0000",
+                  "actions": [
+                    {
+                      "log_id": "action_id",
+                      "url": "div-action://set_variable?name=count&value=@{count - 1}"
+                    },
+                    {
+                      "log_id": "action_id",
+                      "url": "div-action://set_variable?name=alpha&value=@{alpha - 0.1}"
+                    }
+                  ]
+                },
+                {
+                  "type": "container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 32
+                  }
+                },
+                {
+                  "type": "circle_button",
+                  "text": "+",
+                  "bg_color": "#038c00",
+                  "actions": [
+                    {
+                      "log_id": "action_id",
+                      "url": "div-action://set_variable?name=count&value=@{count + 1}"
+                    },
+                    {
+                      "log_id": "action_id",
+                      "url": "div-action://set_variable?name=alpha&value=@{alpha + 0.1}"
+                    }
+                  ]
+                }
+              ],
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "center"
+            }
+          ],
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center"
+        }
+      }
+    ]
+  }
+}
