@@ -1,0 +1,27 @@
+name: div_expressions_resolver
+description: Executes expressions
+homepage: https://github.com/divkit/divkit
+repository: https://github.com/divkit/divkit
+publish_to: 'none'
+version: 0.4.0
+
+environment:
+  sdk: '>=2.17.0 <4.0.0'
+  flutter: ">=3.0.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: tech.divkit.flutter.div_expressions_resolver
+        pluginClass: DivExpressionsResolverPlugin
+      ios:
+        pluginClass: DivExpressionsResolverPlugin

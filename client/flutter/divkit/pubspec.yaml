@@ -1,0 +1,35 @@
+name: divkit
+description: Provides the ability to use the Backend-Driven UI in style DivKit on Flutter.
+homepage: https://github.com/divkit/divkit
+repository: https://github.com/divkit/divkit
+publish_to: 'none'
+version: 0.1.3
+
+environment:
+  sdk: '>=2.17.0 <4.0.0'
+  flutter: ">=3.0.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  meta: ^1.8.0
+  rxdart: ^0.27.7
+  equatable: ^2.0.5
+  logging: ^1.1.1
+  clock: ^1.1.1
+  collection: ^1.17.0
+  div_expressions_resolver: ^0.4.0
+
+  cached_network_image: ^3.2.3
+  flutter_cache_manager: ^3.3.1
+  flutter_svg: ">=1.0.0 <3.0.0"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+  path: ^1.8.2
+  golden_toolkit: ^0.12.0
+  fake_async: ^1.3.1

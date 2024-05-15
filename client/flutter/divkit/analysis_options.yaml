@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+analyzer:
+  exclude:
+    - lib/src/generated_sources/**
+    - test/**
+
+linter:
+  rules:
+    - always_declare_return_types
+    - always_use_package_imports
+    - prefer_expression_function_bodies
+    - require_trailing_commas
+    - prefer_const_constructors

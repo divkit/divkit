@@ -1,0 +1,3 @@
+dependency_overrides:
+  div_expressions_resolver:
+    path: ../div_expressions_resolver

@@ -1,0 +1,321 @@
+{
+  "log_id": "div_simple",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "orientation": "horizontal",
+        "items": [
+          {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "font_size": 4,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 5,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 6,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 7,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 8,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 9,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 10,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 11,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 12,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 13,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 14,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 15,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 16,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 17,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 18,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 19,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 20,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 21,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 22,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 23,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 24,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 25,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 26,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 27,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 28,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 29,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "font_size": 30,
+                "text": "DivKit"
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 4,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 5,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 6,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 7,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 8,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 9,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 10,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 11,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 12,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 13,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 14,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 15,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 16,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 17,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 18,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 19,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 20,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 21,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 22,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 23,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 24,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 25,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 26,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 27,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 28,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 29,
+                "text": "DivKit"
+              },
+              {
+                "type": "text",
+                "text_color": "#FFF",
+                "font_size": 30,
+                "text": "DivKit"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
