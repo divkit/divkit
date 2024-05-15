@@ -45,9 +45,7 @@ extension DecoratingBlock {
       blurEffect: blurEffect,
       paddings: paddings,
       source: Variable { [weak self] in self },
-      scheduler: scheduler,
-      visibilityActions: visibilityActions,
-      lastVisibleArea: lastVisibleArea,
+      visibilityParams: visibilityParams,
       tooltips: tooltips,
       accessibility: accessibilityElement
     )
@@ -110,9 +108,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let blurEffect: BlurEffect?
     let paddings: EdgeInsets
     let source: Variable<AnyObject?>
-    let scheduler: Scheduling?
-    let visibilityActions: [VisibilityAction]
-    let lastVisibleArea: Property<Int>?
+    let visibilityParams: VisibilityParams?
     let tooltips: [BlockTooltip]
     let accessibility: AccessibilityElement?
 
@@ -364,27 +360,15 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
 
-    if oldModel?.visibilityActions != model.visibilityActions {
-      visibilityActionPerformers = model.visibilityActions.isEmpty
-        ? nil
-        : VisibilityActionPerformers(
-          visibilityCheckParams: model.visibilityActions.map { visibilityAction in
-            VisibilityCheckParam(
-              requiredDuration: visibilityAction.requiredDuration,
-              targetPercentage: visibilityAction.targetPercentage,
-              limiter: visibilityAction.limiter,
-              action: { [unowned self] in
-                UIActionEvent(
-                  uiAction: visibilityAction.uiAction,
-                  originalSender: self
-                ).sendFrom(self)
-              },
-              type: visibilityAction.actionType
-            )
-          },
-          lastVisibleArea: model.lastVisibleArea ?? Property(initialValue: 0),
-          scheduling: model.scheduler ?? TimerScheduler()
+    if oldModel?.visibilityParams != model.visibilityParams {
+      if let visibilityParams = model.visibilityParams {
+        visibilityActionPerformers = VisibilityActionPerformers(
+          visibilityParams: visibilityParams,
+          actionSender: self
         )
+      } else {
+        visibilityActionPerformers = nil
+      }
     }
 
     configureRecognizers()
@@ -452,7 +436,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
     passVisibleBoundsChanged(from: from, to: to)
 
-    if !model.visibilityActions.isEmpty {
+    if model.visibilityParams != nil {
       visibilityActionPerformers?.onVisibleBoundsChanged(to: to, bounds: bounds)
     }
   }

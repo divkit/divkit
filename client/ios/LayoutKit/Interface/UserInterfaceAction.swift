@@ -229,11 +229,11 @@ extension UserInterfaceAction.Payload {
   public var url: URL? {
     switch self {
     case let .url(value):
-      return value
+      value
     case let .divAction(params):
-      return params.source == .visibility ? nil : params.url
+      params.source == .visibility ? nil : params.url
     case .empty, .menu:
-      return nil
+      nil
     }
   }
 

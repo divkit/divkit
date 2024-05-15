@@ -230,7 +230,7 @@
 		8CF3294C2875D5C8003F799A /* ScrollableContentPagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329342875D5C8003F799A /* ScrollableContentPagerTests.swift */; };
 		8CF3294D2875D5C8003F799A /* GalleryViewLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329362875D5C8003F799A /* GalleryViewLayoutTests.swift */; };
 		8CF3294E2875D5C8003F799A /* TabContentsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329382875D5C8003F799A /* TabContentsViewModelTests.swift */; };
-		8CF3294F2875D5C8003F799A /* VisibilityActionPerformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF3293A2875D5C8003F799A /* VisibilityActionPerformerTests.swift */; };
+		8CF3294F2875D5C8003F799A /* VisibilityActionPerformersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF3293A2875D5C8003F799A /* VisibilityActionPerformersTests.swift */; };
 		8CF329502875D5C8003F799A /* GalleryViewMetricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF3293B2875D5C8003F799A /* GalleryViewMetricsTests.swift */; };
 		8CF329512875D5C8003F799A /* LayeredBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF3293D2875D5C8003F799A /* LayeredBlockTests.swift */; };
 		8CF329522875D5C8003F799A /* ResizableBlockMeasureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF3293E2875D5C8003F799A /* ResizableBlockMeasureTests.swift */; };
@@ -501,7 +501,7 @@
 		8CF329342875D5C8003F799A /* ScrollableContentPagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableContentPagerTests.swift; sourceTree = "<group>"; };
 		8CF329362875D5C8003F799A /* GalleryViewLayoutTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewLayoutTests.swift; sourceTree = "<group>"; };
 		8CF329382875D5C8003F799A /* TabContentsViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabContentsViewModelTests.swift; sourceTree = "<group>"; };
-		8CF3293A2875D5C8003F799A /* VisibilityActionPerformerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisibilityActionPerformerTests.swift; sourceTree = "<group>"; };
+		8CF3293A2875D5C8003F799A /* VisibilityActionPerformersTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisibilityActionPerformersTests.swift; sourceTree = "<group>"; };
 		8CF3293B2875D5C8003F799A /* GalleryViewMetricsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewMetricsTests.swift; sourceTree = "<group>"; };
 		8CF3293D2875D5C8003F799A /* LayeredBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayeredBlockTests.swift; sourceTree = "<group>"; };
 		8CF3293E2875D5C8003F799A /* ResizableBlockMeasureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizableBlockMeasureTests.swift; sourceTree = "<group>"; };
@@ -1155,7 +1155,7 @@
 		8CF329392875D5C8003F799A /* VisibilityActionPerformer */ = {
 			isa = PBXGroup;
 			children = (
-				8CF3293A2875D5C8003F799A /* VisibilityActionPerformerTests.swift */,
+				8CF3293A2875D5C8003F799A /* VisibilityActionPerformersTests.swift */,
 			);
 			path = VisibilityActionPerformer;
 			sourceTree = "<group>";
@@ -1778,7 +1778,7 @@
 				431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */,
 				8CF329572875D5C8003F799A /* BlockTests+Layout.swift in Sources */,
 				8CF3294B2875D5C8003F799A /* GenericCollectionLayoutTests.swift in Sources */,
-				8CF3294F2875D5C8003F799A /* VisibilityActionPerformerTests.swift in Sources */,
+				8CF3294F2875D5C8003F799A /* VisibilityActionPerformersTests.swift in Sources */,
 				8CF3295C2875D5C8003F799A /* SwitchableContainerBlockTests.swift in Sources */,
 				8CF3295B2875D5C8003F799A /* WrapperBlockTests.swift in Sources */,
 				818EB5742A8E289E007F1007 /* BlockErrorExtensions.swift in Sources */,

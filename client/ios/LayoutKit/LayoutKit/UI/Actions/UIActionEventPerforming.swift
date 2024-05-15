@@ -85,11 +85,11 @@ extension UserInterfaceAction.Payload {
   fileprivate func removingURLPayload() -> UserInterfaceAction.Payload? {
     switch self {
     case .url:
-      return nil
+      nil
     case .divAction:
-      return nil
+      nil
     case .empty, .menu:
-      return self
+      self
     }
   }
 }

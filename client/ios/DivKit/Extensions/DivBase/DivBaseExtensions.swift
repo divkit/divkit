@@ -3,7 +3,6 @@ import CoreGraphics
 import BasePublic
 import BaseUIPublic
 import LayoutKit
-import NetworkingPublic
 
 extension DivBase {
   func applyBaseProperties(
@@ -15,18 +14,26 @@ extension DivBase {
     clipToBounds: Bool = true
   ) throws -> Block {
     let extensionHandlers = context.getExtensionHandlers(for: self)
-
     for extensionHandler in extensionHandlers {
       extensionHandler.accept(div: self, context: context)
     }
 
-    let expressionResolver = context.expressionResolver
+    let path = context.parentPath
     let statePath = context.parentDivStatePath ?? DivData.rootPath
 
+    let expressionResolver = context.expressionResolver
     let visibility = resolveVisibility(expressionResolver)
     if visibility == .gone {
-      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
+      if let visibilityParams = context.makeVisibilityParams(
+        actions: makeDisappearActions(context: context),
+        isVisible: false
+      ) {
+        return EmptyBlock.zeroSized.addingDecorations(
+          visibilityParams: visibilityParams
+        )
+      }
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: path)
       return EmptyBlock.zeroSized
     }
 
@@ -43,7 +50,7 @@ extension DivBase {
 
     let externalInsets = margins.resolve(context)
     if visibility == .invisible {
-      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: path)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       block = applyExtensionHandlersAfterBaseProperties(
         to: block.addingEdgeInsets(externalInsets, clipsToBounds: clipToBounds),
@@ -59,9 +66,12 @@ extension DivBase {
     // and alpha should be applied to block with border and shadow.
     var visibilityActions = makeVisibilityActions(context: context)
     visibilityActions += makeDisappearActions(context: context)
-    let hasVisibilityActions = !visibilityActions.isEmpty
+    let visibilityParams = context.makeVisibilityParams(
+      actions: visibilityActions,
+      isVisible: true
+    )
 
-    let isFocused = context.blockStateStorage.isFocused(path: context.parentPath)
+    let isFocused = context.blockStateStorage.isFocused(path: path)
     let border = getBorder(isFocused)
 
     let boundary: BoundaryTrait? = if !clipToBounds {
@@ -89,17 +99,7 @@ extension DivBase {
       boundary: boundary,
       border: border?.resolveBorder(expressionResolver),
       shadow: shadow,
-      visibilityActions: hasVisibilityActions ? visibilityActions : nil,
-      lastVisibleArea: hasVisibilityActions ? Property<Int>(
-        getter: { context.lastVisibleBoundsCache.lastVisibleArea(for: context.parentPath) },
-        setter: {
-          context.lastVisibleBoundsCache.updateLastVisibleArea(
-            for: context.parentPath,
-            area: $0
-          )
-        }
-      ) : nil,
-      scheduler: hasVisibilityActions ? context.scheduler : nil,
+      visibilityParams: visibilityParams,
       tooltips: tooltips.makeTooltips(context: context),
       accessibilityElement: accessibilityElement
     )
@@ -358,6 +358,27 @@ extension DivBorder {
       topRight: CGFloat(topRight),
       bottomLeft: CGFloat(bottomLeft),
       bottomRight: CGFloat(bottomRight)
+    )
+  }
+}
+
+extension DivBlockModelingContext {
+  fileprivate func makeVisibilityParams(
+    actions: [VisibilityAction],
+    isVisible: Bool
+  ) -> VisibilityParams? {
+    if actions.isEmpty {
+      return nil
+    }
+    let path = parentPath
+    return VisibilityParams(
+      actions: actions,
+      isVisible: isVisible,
+      lastVisibleArea: Property<Int>(
+        getter: { lastVisibleBoundsCache.lastVisibleArea(for: path) },
+        setter: { lastVisibleBoundsCache.updateLastVisibleArea(for: path, area: $0) }
+      ),
+      scheduler: scheduler
     )
   }
 }

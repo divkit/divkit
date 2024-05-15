@@ -398,9 +398,9 @@ extension DecoratingBlock: CustomDebugStringConvertible {
       decorations.append("Alpha: \(childAlpha)")
     }
 
-    if !visibilityActions.isEmpty {
+    if let visibilityParams {
       var visibilityActionDescription = "Visibility actions:\n"
-      for action in visibilityActions {
+      for action in visibilityParams.actions {
         let uiAction = action.uiAction
         visibilityActionDescription += "   UIAction:\n"
         visibilityActionDescription += "      path: \(uiAction.path)\n"

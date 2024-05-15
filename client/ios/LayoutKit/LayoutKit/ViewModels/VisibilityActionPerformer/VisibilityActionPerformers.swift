@@ -3,25 +3,41 @@ import Foundation
 
 import BasePublic
 
-public final class VisibilityActionPerformers {
+final class VisibilityActionPerformers {
+  private let visibilityParams: VisibilityParams
   private let actionPerformers: [VisibilityActionPerformer]
-  private let lastVisibleArea: Property<Int>
 
   init(
-    visibilityCheckParams: [VisibilityCheckParam],
-    lastVisibleArea: Property<Int>,
-    scheduling: Scheduling
+    visibilityParams: VisibilityParams,
+    actionSender: ViewType
   ) {
-    self.lastVisibleArea = lastVisibleArea
-    actionPerformers = visibilityCheckParams.map {
-      VisibilityActionPerformer(visibilityCheckParam: $0, scheduling: scheduling)
+    self.visibilityParams = visibilityParams
+
+    actionPerformers = visibilityParams.actions.map { action in
+      VisibilityActionPerformer(
+        requiredDuration: action.requiredDuration,
+        targetVisibilityPercentage: action.targetPercentage,
+        limiter: action.limiter,
+        action: {
+          UIActionEvent(
+            uiAction: action.uiAction,
+            originalSender: actionSender
+          ).sendFrom(actionSender)
+        },
+        type: action.actionType,
+        timerScheduler: visibilityParams.scheduler
+      )
     }
   }
 
   func onVisibleBoundsChanged(to: CGRect, bounds: CGRect) {
-    let visibleAreaPercentageBefore = lastVisibleArea.value
-    let visibleAreaPercentageAfter = bounds.isEmpty ? 100 : Int(to.area * 100 / bounds.area)
-    lastVisibleArea.value = visibleAreaPercentageAfter
+    let visibleAreaPercentageBefore = visibilityParams.lastVisibleArea.value
+    let visibleAreaPercentageAfter: Int = if bounds.isEmpty {
+      visibilityParams.isVisible ? 100 : 0
+    } else {
+      min(Int(to.area * 100 / bounds.area), 100)
+    }
+    visibilityParams.lastVisibleArea.value = visibleAreaPercentageAfter
 
     for performer in actionPerformers {
       performer.onVisibleBoundsChanged(
@@ -29,19 +45,6 @@ public final class VisibilityActionPerformers {
         visibleAreaPercentageAfter: visibleAreaPercentageAfter
       )
     }
-  }
-}
-
-extension VisibilityActionPerformer {
-  fileprivate convenience init(visibilityCheckParam: VisibilityCheckParam, scheduling: Scheduling) {
-    self.init(
-      requiredDuration: visibilityCheckParam.requiredDuration,
-      targetVisibilityPercentage: visibilityCheckParam.targetPercentage,
-      limiter: visibilityCheckParam.limiter,
-      action: visibilityCheckParam.action,
-      type: visibilityCheckParam.type,
-      timerScheduler: scheduling
-    )
   }
 }
 

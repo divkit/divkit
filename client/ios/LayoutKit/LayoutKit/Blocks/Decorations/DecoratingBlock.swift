@@ -24,9 +24,7 @@ final class DecoratingBlock: WrapperBlock {
   let childAlpha: CGFloat
   let blurEffect: BlurEffect?
   let paddings: EdgeInsets
-  let visibilityActions: [VisibilityAction]
-  let scheduler: Scheduling?
-  let lastVisibleArea: Property<Int>?
+  let visibilityParams: VisibilityParams?
   let tooltips: [BlockTooltip]
   let accessibilityElement: AccessibilityElement?
 
@@ -44,9 +42,7 @@ final class DecoratingBlock: WrapperBlock {
     childAlpha: CGFloat = defaultChildAlpha,
     blurEffect: BlurEffect? = nil,
     paddings: EdgeInsets = .zero,
-    visibilityActions: [VisibilityAction] = [],
-    scheduler: Scheduling? = nil,
-    lastVisibleArea: Property<Int>? = nil,
+    visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip] = [],
     accessibilityElement: AccessibilityElement? = nil
   ) {
@@ -63,9 +59,7 @@ final class DecoratingBlock: WrapperBlock {
     self.childAlpha = childAlpha
     self.blurEffect = blurEffect
     self.paddings = paddings
-    self.visibilityActions = visibilityActions
-    self.scheduler = scheduler
-    self.lastVisibleArea = lastVisibleArea
+    self.visibilityParams = visibilityParams
     self.tooltips = tooltips
     self.accessibilityElement = accessibilityElement
   }
@@ -119,7 +113,7 @@ final class DecoratingBlock: WrapperBlock {
       && blurEffect == other.blurEffect
       && paddings == other.paddings
       && child.equals(other.child)
-      && visibilityActions == other.visibilityActions
+      && visibilityParams == other.visibilityParams
       && tooltips == other.tooltips
       && accessibilityElement == other.accessibilityElement
   }
@@ -149,9 +143,7 @@ extension DecoratingBlock {
     childAlpha: CGFloat? = nil,
     blurEffect: BlurEffect? = nil,
     paddings: EdgeInsets? = nil,
-    visibilityActions: [VisibilityAction]? = nil,
-    scheduler: Scheduling? = nil,
-    lastVisibleArea: Property<Int>? = nil,
+    visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
     accessibilityElement: AccessibilityElement? = nil
   ) -> DecoratingBlock {
@@ -169,9 +161,7 @@ extension DecoratingBlock {
       childAlpha: childAlpha ?? self.childAlpha,
       blurEffect: blurEffect ?? self.blurEffect,
       paddings: paddings ?? self.paddings,
-      visibilityActions: visibilityActions ?? self.visibilityActions,
-      scheduler: scheduler ?? self.scheduler,
-      lastVisibleArea: lastVisibleArea ?? self.lastVisibleArea,
+      visibilityParams: visibilityParams ?? self.visibilityParams,
       tooltips: tooltips ?? self.tooltips,
       accessibilityElement: accessibilityElement ?? self.accessibilityElement
     )

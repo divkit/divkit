@@ -3,7 +3,6 @@ import Foundation
 
 import BaseUIPublic
 import CommonCorePublic
-import LayoutKitInterface
 
 extension Block {
   public var wrappingWidthTrait: LayoutTrait {
@@ -26,9 +25,7 @@ extension Block {
     doubleTapActions: NonEmptyArray<UserInterfaceAction>? = nil,
     longTapActions: LongTapActions? = nil,
     analyticsURL: URL? = nil,
-    visibilityActions: [VisibilityAction]? = nil,
-    scheduler: Scheduling? = nil,
-    lastVisibleArea: Property<Int>? = nil,
+    visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool,
     accessibilityElement: AccessibilityElement? = nil
@@ -42,7 +39,7 @@ extension Block {
         || doubleTapActions != nil
         || longTapActions != nil
         || analyticsURL != nil
-        || visibilityActions != nil
+        || visibilityParams != nil
         || tooltips?.isEmpty == false
         || forceWrapping
         || accessibilityElement != nil
@@ -76,7 +73,7 @@ extension Block {
       )
 
       assert(
-        block.visibilityActions.isEmpty || visibilityActions == nil,
+        block.visibilityParams == nil || visibilityParams == nil,
         "Applying visibility actions over another one doesn't make sense"
       )
       #endif
@@ -93,9 +90,7 @@ extension Block {
         border: (border ?? block.border) as BlockBorder?,
         childAlpha: alpha.map { $0 * block.childAlpha },
         blurEffect: blurEffect ?? block.blurEffect,
-        visibilityActions: visibilityActions ?? block.visibilityActions,
-        scheduler: scheduler ?? block.scheduler,
-        lastVisibleArea: lastVisibleArea ?? block.lastVisibleArea,
+        visibilityParams: visibilityParams ?? block.visibilityParams,
         tooltips: [tooltips, block.tooltips].compactMap { $0 }.flatMap { $0 },
         accessibilityElement: accessibilityElement
       )
@@ -119,9 +114,7 @@ extension Block {
       border: border,
       childAlpha: alpha ?? DecoratingBlock.defaultChildAlpha,
       blurEffect: blurEffect,
-      visibilityActions: visibilityActions ?? [],
-      scheduler: scheduler,
-      lastVisibleArea: lastVisibleArea,
+      visibilityParams: visibilityParams,
       tooltips: tooltips ?? [],
       accessibilityElement: accessibilityElement
     )
@@ -148,9 +141,7 @@ extension Block {
     longTapActions: LongTapActions? = nil,
     analyticsURL: URL? = nil,
     shadow: BlockShadow? = nil,
-    visibilityActions: [VisibilityAction]? = nil,
-    lastVisibleArea: Property<Int>? = nil,
-    scheduler: Scheduling? = nil,
+    visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool = false,
     accessibilityElement: AccessibilityElement? = nil
@@ -167,9 +158,7 @@ extension Block {
       doubleTapActions: doubleTapActions,
       longTapActions: longTapActions,
       analyticsURL: analyticsURL,
-      visibilityActions: visibilityActions,
-      scheduler: scheduler,
-      lastVisibleArea: lastVisibleArea,
+      visibilityParams: visibilityParams,
       tooltips: tooltips,
       forceWrapping: forceWrapping,
       accessibilityElement: accessibilityElement
