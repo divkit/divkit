@@ -10,5 +10,16 @@
                 "version_added": "1.0.0"
             }
         }
+    }, {
+        "id": "svg",
+        "name": "<code>svg</code> image format",
+        "compat": {
+            "web": {
+                "version_added": "1.0.0"
+            },
+            "android": {
+                "version_added": "30.0.0"
+            }
+        }
     }]
 }

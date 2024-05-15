@@ -1,10 +1,21 @@
 {
     "features": [{
         "id": "ext_lottie_scale",
-        "name": "Lottie extension <code>scale</code> property support",
+        "name": "Lottie extension <code>scale</code> property",
         "compat": {
             "ios": {
                 "version_added": "29.15.0"
+            }
+        }
+    }, {
+        "id": "ext_gesture",
+        "name": "<code>gesture</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "30.0.0"
+            },
+            "ios": {
+                "version_added": "29.8.0"
             }
         }
     }]

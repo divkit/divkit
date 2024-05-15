@@ -3,11 +3,13 @@
         "id": "container_item_builder",
         "name": "Container property <code>item_builder</code>",
         "compat": {
-            "android": {
+            "android": [{
                 "version_added": "29.12.0",
                 "version_removed": "29.13.0",
                 "notes": "Removed due to performance issues"
-            },
+            }, {
+                "version_added": "30.0.0"
+            }],
             "ios": {
                 "version_added": "29.0.0"
             },
