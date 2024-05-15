@@ -15,6 +15,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
 import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
@@ -167,7 +168,7 @@ internal class DivGalleryBinder @Inject constructor(
             val galleryState = state.getBlockState(id) as GalleryState?
             val position = galleryState?.visibleItemIndex
                 ?: div.defaultItem.evaluate(resolver).toIntSafely()
-            val offset = galleryState?.scrollOffset
+            val offset = galleryState?.scrollOffset ?: if (view.isLayoutRtl()) view.paddingRight else view.paddingLeft
             view.scrollToPositionInternal(position, offset, scrollMode.toScrollPosition())
             view.addOnScrollListener(UpdateStateScrollListener(id, state, itemHelper))
         }
