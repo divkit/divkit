@@ -74,19 +74,29 @@ func formatArgForError(_ value: Any) -> String {
   }
 }
 
-func formatTypeForError(_ value: Any) -> String {
-  switch value {
-  case is Bool:
+func formatTypeForError(_ type: Any.Type) -> String {
+  switch type {
+  case is Bool.Type:
     "Boolean"
-  case is Int:
+  case is Int.Type:
     "Integer"
-  case is Double:
+  case is Double.Type:
     "Number"
-  case is Date:
+  case is RGBAColor.Type:
+    "Color"
+  case is Date.Type:
     "DateTime"
+  case is [AnyHashable].Type:
+    "Array"
+  case is [String: AnyHashable].Type:
+    "Dict"
   default:
-    "\(type(of: value))"
+    String(describing: type)
   }
+}
+
+func formatTypeForError(_ value: Any) -> String {
+  formatTypeForError(type(of: value))
 }
 
 private func formatValue(_ value: Any) -> String {

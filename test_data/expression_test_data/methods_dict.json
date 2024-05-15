@@ -345,6 +345,24 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "dict_var.getString(123) => error",
+      "expression": "@{dict_var.getString(123)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getString(123)]. Method 'getString' has no matching override for given argument types: Integer."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

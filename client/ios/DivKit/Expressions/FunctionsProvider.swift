@@ -107,7 +107,7 @@ private struct FunctionEvaluator: Function {
             "\(message) Non empty argument list is required for \(symbol.type) '\(name)'."
           )
         }
-        let argTypes = args
+        let argTypes = correctedArgs
           .map { formatTypeForError($0) }
           .joined(separator: ", ")
         throw ExpressionError(

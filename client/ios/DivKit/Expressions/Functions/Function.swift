@@ -105,7 +105,8 @@ struct FunctionUnary<T1, R>: SimpleFunction {
   }
 
   func invoke(_ args: [Any]) throws -> Any {
-    try impl(castArg(args[0]))
+    try checkArgs(args, count: 1)
+    return try impl(castArg(args[0]))
   }
 }
 
@@ -129,7 +130,8 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
   }
 
   func invoke(_ args: [Any]) throws -> Any {
-    try impl(
+    try checkArgs(args, count: 2)
+    return try impl(
       castArg(args[0]),
       castArg(args[1])
     )
@@ -157,7 +159,8 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
   }
 
   func invoke(_ args: [Any]) throws -> Any {
-    try impl(
+    try checkArgs(args, count: 3)
+    return try impl(
       castArg(args[0]),
       castArg(args[1]),
       castArg(args[2])
@@ -187,7 +190,8 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
   }
 
   func invoke(_ args: [Any]) throws -> Any {
-    try impl(
+    try checkArgs(args, count: 4)
+    return try impl(
       castArg(args[0]),
       castArg(args[1]),
       castArg(args[2]),
@@ -215,7 +219,8 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
   }
 
   func invoke(_ args: [Any]) throws -> Any {
-    try impl(args.map { try castArg($0) })
+    try checkVarArgs(args, count: 1)
+    return try impl(args.map { try castArg($0) })
   }
 }
 
@@ -239,7 +244,8 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
   }
 
   func invoke(_ args: [Any]) throws -> Any {
-    try impl(
+    try checkVarArgs(args, count: 2)
+    return try impl(
       castArg(args[0]),
       args.dropFirst().map { try castArg($0) }
     )
@@ -267,7 +273,8 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
   }
 
   func invoke(_ args: [Any]) throws -> Any {
-    try impl(
+    try checkVarArgs(args, count: 3)
+    return try impl(
       castArg(args[0]),
       castArg(args[1]),
       args.dropFirst(2).map { try castArg($0) }
@@ -408,6 +415,18 @@ struct FunctionSignature: Decodable, Equatable {
   }
 }
 
+private func checkArgs(_ args: [Any], count: Int) throws {
+  if args.count != count {
+    throw ExpressionError("Exactly \(count) argument(s) expected.")
+  }
+}
+
+private func checkVarArgs(_ args: [Any], count: Int) throws {
+  if args.count < count {
+    throw ExpressionError("At least \(count) argument(s) expected.")
+  }
+}
+
 private func castArg<T>(_ value: Any) throws -> T {
   if let castedValue = value as? T {
     return castedValue
@@ -417,5 +436,7 @@ private func castArg<T>(_ value: Any) throws -> T {
     return Double(intValue) as! T
   }
 
-  throw ExpressionError("Argument couldn't be casted to \(T.self)")
+  throw ExpressionError(
+    "Invalid argument type: expected \(formatTypeForError(T.self)), got \(formatTypeForError(value))."
+  )
 }

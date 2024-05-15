@@ -134,7 +134,7 @@ final class ExpressionResolverTests: XCTestCase {
 
     XCTAssertEqual(
       error,
-      "Failed to initialize RGBAColor from string: invalid. Expression: @{'invalid'}"
+      "Failed to initialize Color from string: invalid. Expression: @{'invalid'}"
     )
   }
 
@@ -288,7 +288,7 @@ final class ExpressionResolverTests: XCTestCase {
 
     XCTAssertEqual(
       error,
-      "Failed to initialize RGBAColor from string: invalid. Expression: @{'invalid'}"
+      "Failed to initialize Color from string: invalid. Expression: @{'invalid'}"
     )
   }
 
@@ -305,7 +305,7 @@ final class ExpressionResolverTests: XCTestCase {
 
     XCTAssertEqual(
       error,
-      "Result type String is not compatible with expected type Double. Expression: @{'invalid'}"
+      "Invalid result type: expected Number, got String. Expression: @{'invalid'}"
     )
   }
 

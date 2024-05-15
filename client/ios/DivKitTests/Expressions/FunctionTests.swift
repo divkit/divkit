@@ -3,6 +3,7 @@
 import XCTest
 
 final class FunctionTests: XCTestCase {
+  private var unaryFunction = FunctionUnary<String, Bool> { _ in true }
   private var binaryFunction: SimpleFunction!
 
   private var lastArgs: [Any] = []
@@ -17,19 +18,40 @@ final class FunctionTests: XCTestCase {
   func test_invoke_FunctionBinary_WithoutCast() throws {
     _ = try binaryFunction.invoke([1.2, 3.4])
 
-    checLastArgs([1.2, 3.4])
+    checkLastArgs([1.2, 3.4])
   }
 
   func test_invoke_FunctionBinary_WithCast() throws {
     _ = try binaryFunction.invoke([2, 3.4])
 
-    checLastArgs([2.0, 3.4])
+    checkLastArgs([2.0, 3.4])
   }
 
   func test_invoke_FunctionBinary_WithInvalidArguments() throws {
     XCTAssertThrowsError(
       _ = try binaryFunction.invoke([1.2, true]),
-      ExpressionError("Argument couldn't be casted to Double")
+      ExpressionError("Invalid argument type: expected Number, got Boolean.")
+    )
+  }
+
+  func test_invoke_FunctionBinary_WithWrongArgumentCount() throws {
+    XCTAssertThrowsError(
+      _ = try binaryFunction.invoke([1.2]),
+      ExpressionError("Exactly 2 argument(s) expected.")
+    )
+  }
+
+  func test_invoke_FunctionUnary_WithInvalidArguments() throws {
+    XCTAssertThrowsError(
+      _ = try unaryFunction.invoke([1]),
+      ExpressionError("Invalid argument type: expected String, got Integer.")
+    )
+  }
+
+  func test_invoke_FunctionUnary_WithWrongArgumentCount() throws {
+    XCTAssertThrowsError(
+      _ = try unaryFunction.invoke(["one", "two"]),
+      ExpressionError("Exactly 1 argument(s) expected.")
     )
   }
 
@@ -108,7 +130,7 @@ final class FunctionTests: XCTestCase {
     )
   }
 
-  private func checLastArgs(_ args: [AnyHashable]) {
+  private func checkLastArgs(_ args: [AnyHashable]) {
     XCTAssertEqual(args, lastArgs as! [AnyHashable])
   }
 }

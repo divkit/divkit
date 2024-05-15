@@ -241,7 +241,7 @@ public final class ExpressionResolver {
     }
 
     errorTracker(ExpressionError(
-      "Failed to initialize \(T.self) from string: \(stringValue).",
+      "Failed to initialize \(formatTypeForError(T.self)) from string: \(stringValue).",
       expression: link.rawValue
     ))
     return nil
@@ -264,7 +264,7 @@ public final class ExpressionResolver {
       return castedValue
     }
     throw ExpressionError(
-      "Result type \(Swift.type(of: value)) is not compatible with expected type \(T.self)."
+      "Invalid result type: expected \(formatTypeForError(T.self)), got \(formatTypeForError(value))."
     )
   }
 

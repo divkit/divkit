@@ -32,6 +32,78 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "round() => error",
+      "expression": "@{round()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [round()]. Exactly 1 argument(s) expected."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "round('string') => error",
+      "expression": "@{round('string')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [round('string')]. Invalid argument type: expected Number, got String."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "round(dict_var) => error",
+      "expression": "@{round(dict_var)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [round(<dict>)]. Invalid argument type: expected Number, got Dict."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "round(1.5, 2.5) => error",
+      "expression": "@{round(1.5, 2.5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [round(1.5, 2.5)]. Exactly 1 argument(s) expected."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getOptDictFromDict(dict_var) => error",
+      "expression": "@{getOptDictFromDict(dict_var)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getOptDictFromDict(<dict>)]. At least 2 argument(s) expected."
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
