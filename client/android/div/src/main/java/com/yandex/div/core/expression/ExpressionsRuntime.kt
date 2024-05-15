@@ -24,8 +24,8 @@ internal class ExpressionsRuntime(
     fun updateSubscriptions() {
         if (unsubscribed) {
             unsubscribed = false
-            variableController.restoreSubscriptions()
             expressionResolverImpl.subscribeOnVariables()
+            variableController.restoreSubscriptions()
         }
     }
 

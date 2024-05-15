@@ -25,6 +25,12 @@ internal class VariableSource(
         }
     }
 
+    internal fun receiveVariablesUpdates(observer: (Variable) -> Unit) {
+        variables.values.forEach {
+            observer.invoke(it)
+        }
+    }
+
     internal fun removeDeclarationObserver(observer: (Variable) -> Unit) {
         declarationObservers.remove(observer)
     }

@@ -85,7 +85,6 @@ internal class VariableControllerImpl : VariableController {
         onChangeObservers[v.name]?.forEach { it.invoke(v) }
     }
 
-
     /**
      * aka "adding references to global variables"
      */
@@ -125,6 +124,7 @@ internal class VariableControllerImpl : VariableController {
     internal fun restoreSubscriptions() {
         extraVariablesSources.forEach { variableSource ->
             variableSource.observeVariables(notifyVariableChangedCallback)
+            variableSource.receiveVariablesUpdates(notifyVariableChangedCallback)
             variableSource.observeDeclaration(declarationObserver)
         }
     }
