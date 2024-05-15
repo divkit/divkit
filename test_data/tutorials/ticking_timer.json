@@ -263,12 +263,11 @@
               "title_end": 11
             },
             {
-              "type": "grid",
+              "type": "container",
               "orientation": "horizontal",
               "width": {
                 "type": "match_parent"
               },
-              "column_count": 2,
               "content_alignment_horizontal": "center",
               "items": [
                 {
@@ -294,7 +293,17 @@
                       "url": "div-action://timer?id=ticker&action=pause"
                     }
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
                 {
                   "type": "button",
                   "text": "Resume",
@@ -314,7 +323,17 @@
                       "url": "div-action://timer?id=ticker&action=stop"
                     }
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
                 {
                   "type": "button",
                   "text": "Cancel",
