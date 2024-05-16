@@ -161,9 +161,12 @@ Factor
 UnaryExpression
     = &('-') val:Number { return val; }
     / &('-') val:Integer { return val; }
-    / op:( '!' / '+' / '-' ) _  expr:Method
+    / op:( '!' / '+' / '-' ) _  expr:(DoubleUnaryExpressionCatch / Method)
         { return {type: 'UnaryExpression', operator: op, argument: expr}; }
     / Method
+
+DoubleUnaryExpressionCatch
+    = ('+' / '-') { throw new Error("Incorrect unary operator"); }
 
 Method
     = head:Call tail:(_ '.' _ StrictIdentifier _ ('(' _ Arguments _ ')')?)*
