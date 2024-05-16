@@ -1,6 +1,8 @@
 import type {
+    ArrayValue,
     BooleanValue,
     ColorValue,
+    DictValue,
     EvalContext,
     EvalValue,
     IntegerValue,
@@ -10,14 +12,21 @@ import type {
 } from '../eval';
 import type { VariableType, VariableValue } from '../variable';
 import { registerFunc, registerMethod } from './funcs';
-import { BOOLEAN, COLOR, INTEGER, NUMBER, STRING, URL } from '../const';
+import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import { transformColorValue, valToString } from '../utils';
 import { MAX_INT, MIN_INT, toBigInt } from '../bigint';
 
 function toString(
     _ctx: EvalContext,
-    arg: IntegerValue | NumberValue | BooleanValue | ColorValue | UrlValue | StringValue
+    arg: IntegerValue | NumberValue | BooleanValue | ColorValue | UrlValue | StringValue | ArrayValue | DictValue
 ): EvalValue {
+    if (arg.type === ARRAY || arg.type === DICT) {
+        return {
+            type: STRING,
+            value: JSON.stringify(arg.value)
+        };
+    }
+
     return {
         type: STRING,
         value: valToString(arg)
@@ -191,6 +200,8 @@ export function registerStd(): void {
     registerFunc('toString', [COLOR], toString);
     registerFunc('toString', [URL], toString);
     registerFunc('toString', [STRING], toString);
+    registerFunc('toString', [ARRAY], toString);
+    registerFunc('toString', [DICT], toString);
 
     registerFunc('toNumber', [INTEGER], toNumber);
     registerFunc('toNumber', [STRING], toNumber);
@@ -224,4 +235,6 @@ export function registerStd(): void {
     registerMethod('toString', [COLOR], toString);
     registerMethod('toString', [URL], toString);
     registerMethod('toString', [STRING], toString);
+    registerMethod('toString', [ARRAY], toString);
+    registerMethod('toString', [DICT], toString);
 }
