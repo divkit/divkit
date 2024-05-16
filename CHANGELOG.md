@@ -1,3 +1,12 @@
+## 30.1.0
+
+# Android Client:
+* Fixed a bug where updates to global variables are lost if they occurred after the destruction of Div2View, but before the creation of a new one.
+
+# iOS Client:
+* Implemented operands lazy evaluation.
+
+
 ## 30.0.0
 
 # Android Client:
