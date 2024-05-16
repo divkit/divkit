@@ -360,13 +360,13 @@ private fun throwMissingPropertyException(functionName: String, args: List<Any>,
 
 private fun throwWrongTypeException(functionName: String, args: List<Any>, expected: EvaluableType, actual: Any): Nothing {
     val actualType = when (actual) {
-        is Int, is Double -> "number"
-        is JSONObject -> "dict"
-        is JSONArray -> "array"
-        else -> actual.javaClass.simpleName.lowercase()
+        is Int, is Double, is BigDecimal -> "Number"
+        is JSONObject -> "Dict"
+        is JSONArray -> "Array"
+        else -> actual.javaClass.simpleName
     }
     throwException(functionName, args,
-        "Incorrect value type: expected \"${expected.typeName.lowercase()}\", got \"$actualType\".")
+        "Incorrect value type: expected ${expected.typeName}, got $actualType.")
 }
 
 private fun throwException(functionName: String, args: List<Any>, message: String): Nothing {

@@ -229,7 +229,7 @@
       "expression": "@{toInteger()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toInteger()]. Non empty argument list is required for function 'toInteger'."
+        "value": "Failed to evaluate [toInteger()]. Function requires non empty argument list."
       },
       "variables": [],
       "platforms": [
@@ -243,7 +243,7 @@
       "expression": "@{toInteger(1.0, 1.0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toInteger(1.0, 1.0)]. Function 'toInteger' has no matching override for given argument types: Number, Number."
+        "value": "Failed to evaluate [toInteger(1.0, 1.0)]. Function has no matching overload for given argument types: Number, Number."
       },
       "variables": [],
       "platforms": [

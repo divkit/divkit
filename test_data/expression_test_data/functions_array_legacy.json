@@ -47,7 +47,7 @@
       "expression": "@{getArrayInteger(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayInteger(<array>, 0)]. Incorrect value type: expected \"integer\", got \"string\"."
+        "value": "Failed to evaluate [getArrayInteger(<array>, 0)]. Incorrect value type: expected Integer, got String."
       },
       "variables": [
         {
@@ -137,7 +137,7 @@
       "expression": "@{getArrayNumber(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayNumber(<array>, 0)]. Incorrect value type: expected \"number\", got \"string\"."
+        "value": "Failed to evaluate [getArrayNumber(<array>, 0)]. Incorrect value type: expected Number, got String."
       },
       "variables": [
         {
@@ -227,14 +227,14 @@
       "expression": "@{getArrayString(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayString(<array>, 0)]. Incorrect value type: expected \"string\", got \"number\"."
+        "value": "Failed to evaluate [getArrayString(<array>, 0)]. Incorrect value type: expected String, got Number."
       },
       "variables": [
         {
           "type": "array",
           "name": "array",
           "value": [
-            123
+            123.45
           ]
         }
       ],
@@ -317,14 +317,14 @@
       "expression": "@{getArrayBoolean(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayBoolean(<array>, 0)]. Incorrect value type: expected \"boolean\", got \"number\"."
+        "value": "Failed to evaluate [getArrayBoolean(<array>, 0)]. Incorrect value type: expected Boolean, got Number."
       },
       "variables": [
         {
           "type": "array",
           "name": "array",
           "value": [
-            123
+            123.45
           ]
         }
       ],
@@ -405,14 +405,14 @@
       "expression": "@{getArrayColor(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayColor(<array>, 0)]. Incorrect value type: expected \"color\", got \"number\"."
+        "value": "Failed to evaluate [getArrayColor(<array>, 0)]. Incorrect value type: expected Color, got Number."
       },
       "variables": [
         {
           "type": "array",
           "name": "array",
           "value": [
-            123
+            123.45
           ]
         }
       ],
@@ -522,14 +522,14 @@
       "expression": "@{getArrayUrl(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayUrl(<array>, 0)]. Incorrect value type: expected \"url\", got \"number\"."
+        "value": "Failed to evaluate [getArrayUrl(<array>, 0)]. Incorrect value type: expected Url, got Number."
       },
       "variables": [
         {
           "type": "array",
           "name": "array",
           "value": [
-            123
+            123.45
           ]
         }
       ],

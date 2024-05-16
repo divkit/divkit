@@ -299,7 +299,7 @@
       "expression": "@{toNumber(true)}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toNumber(true)]. Function 'toNumber' has no matching override for given argument types: Boolean."
+        "value":  "Failed to evaluate [toNumber(true)]. Function has no matching overload for given argument types: Boolean."
       },
       "variables": [],
       "platforms": [
@@ -313,7 +313,7 @@
       "expression": "@{toNumber(false)}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toNumber(false)]. Function 'toNumber' has no matching override for given argument types: Boolean."
+        "value":  "Failed to evaluate [toNumber(false)]. Function has no matching overload for given argument types: Boolean."
       },
       "variables": [],
       "platforms": [
@@ -327,7 +327,7 @@
       "expression": "@{toNumber(1.0)}",
       "expected": {
         "type": "error",
-        "value":  "Failed to evaluate [toNumber(1.0)]. Function 'toNumber' has no matching override for given argument types: Number."
+        "value":  "Failed to evaluate [toNumber(1.0)]. Function has no matching overload for given argument types: Number."
       },
       "variables": [],
       "platforms": [
@@ -341,7 +341,7 @@
       "expression": "@{toNumber()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toNumber()]. Non empty argument list is required for function 'toNumber'."
+        "value": "Failed to evaluate [toNumber()]. Function requires non empty argument list."
       },
       "variables": [],
       "platforms": [
@@ -355,7 +355,7 @@
       "expression": "@{toNumber(1, 1)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toNumber(1, 1)]. Function 'toNumber' has no matching override for given argument types: Integer, Integer."
+        "value": "Failed to evaluate [toNumber(1, 1)]. Function has no matching overload for given argument types: Integer, Integer."
       },
       "variables": [],
       "platforms": [

@@ -87,7 +87,7 @@ internal fun Function.withArgumentsValidation(args: List<EvaluableType>): Functi
 
 internal fun getFunctionArgumentsException(name: String, args: List<EvaluableType>): Exception {
     if (args.isEmpty()) {
-        return EvaluableException("Non empty argument list is required for function '$name'.")
+        return EvaluableException("Function requires non empty argument list.")
     }
-    return EvaluableException("Function '${name}' has no matching override for given argument types: ${args.toMessageFormat()}.")
+    return EvaluableException("Function has no matching overload for given argument types: ${args.toMessageFormat()}.")
 }

@@ -5,7 +5,7 @@
       "expression": "@{max()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [max()]. Non empty argument list is required for function 'max'."
+        "value": "Failed to evaluate [max()]. Function requires non empty argument list."
       },
       "variables": [],
       "platforms": [
@@ -103,7 +103,7 @@
       "expression": "@{min()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [min()]. Non empty argument list is required for function 'min'."
+        "value": "Failed to evaluate [min()]. Function requires non empty argument list."
       },
       "variables": [],
       "platforms": [

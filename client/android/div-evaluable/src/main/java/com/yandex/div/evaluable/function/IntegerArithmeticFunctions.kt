@@ -191,7 +191,7 @@ internal object IntegerMax : Function() {
         args: List<Any>
     ): Any {
         if (args.isEmpty()) {
-            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
+            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST)
         }
         return args.fold(initial = Long.MIN_VALUE) { max, arg ->
            max(max, arg as Long)
@@ -216,7 +216,7 @@ internal object IntegerMin : Function() {
         args: List<Any>
     ): Any {
         if (args.isEmpty()) {
-            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
+            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST)
         }
         return args.fold(initial = Long.MAX_VALUE) { min, arg ->
             min(min, arg as Long)

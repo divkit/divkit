@@ -61,7 +61,7 @@
       "expression": "@{toBoolean(3.1415)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toBoolean(3.1415)]. Function 'toBoolean' has no matching override for given argument types: Number."
+        "value": "Failed to evaluate [toBoolean(3.1415)]. Function has no matching overload for given argument types: Number."
       },
       "variables": [],
       "platforms": [
@@ -75,7 +75,7 @@
       "expression": "@{toBoolean(true)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toBoolean(true)]. Function 'toBoolean' has no matching override for given argument types: Boolean."
+        "value": "Failed to evaluate [toBoolean(true)]. Function has no matching overload for given argument types: Boolean."
       },
       "variables": [],
       "platforms": [
@@ -89,7 +89,7 @@
       "expression": "@{toBoolean()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toBoolean()]. Non empty argument list is required for function 'toBoolean'."
+        "value": "Failed to evaluate [toBoolean()]. Function requires non empty argument list."
       },
       "variables": [],
       "platforms": [
@@ -103,7 +103,7 @@
       "expression": "@{toBoolean(1, 1)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toBoolean(1, 1)]. Function 'toBoolean' has no matching override for given argument types: Integer, Integer."
+        "value": "Failed to evaluate [toBoolean(1, 1)]. Function has no matching overload for given argument types: Integer, Integer."
       },
       "variables": [],
       "platforms": [

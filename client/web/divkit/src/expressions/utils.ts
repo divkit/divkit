@@ -77,7 +77,7 @@ export function valToPreview(val: EvalValue): string {
     return res;
 }
 
-export function typeToString(type: EvalTypes): string {
+export function typeToString(type: string): string {
     if (type === 'datetime') {
         return 'DateTime';
     }
@@ -200,7 +200,7 @@ export function convertJsValueToDivKit(ctx: EvalContext, val: unknown, evalType:
                 type = 'dict';
             }
         }
-        throw new Error(`Incorrect value type: expected "${evalType}", got "${type}".`);
+        throw new Error(`Incorrect value type: expected ${typeToString(evalType)}, got ${typeToString(type)}.`);
     }
     if (jsType === 'number' && evalType === 'integer') {
         checkIntegerOverflow(ctx, val as number);

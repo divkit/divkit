@@ -1,7 +1,7 @@
 import { toBigInt } from '../bigint';
 import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import type { ArrayValue, BooleanValue, ColorValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
-import { checkIntegerOverflow, transformColorValue } from '../utils';
+import { checkIntegerOverflow, transformColorValue, typeToString } from '../utils';
 import { registerFunc, registerMethod } from './funcs';
 
 function arrayGetter(jsType: string, runtimeType: string) {
@@ -19,14 +19,14 @@ function arrayGetter(jsType: string, runtimeType: string) {
         ) {
             if (type === 'object') {
                 if (Array.isArray(val)) {
-                    type = 'array';
+                    type = 'Array';
                 } else if (val === null) {
-                    type = 'null';
+                    type = 'Null';
                 } else {
-                    type = 'dict';
+                    type = 'Dict';
                 }
             }
-            throw new Error(`Incorrect value type: expected "${runtimeType}", got "${type}".`);
+            throw new Error(`Incorrect value type: expected ${typeToString(runtimeType)}, got ${typeToString(type)}.`);
         }
         if (jsType === 'number' && runtimeType === 'integer') {
             checkIntegerOverflow(ctx, val as number);

@@ -193,7 +193,7 @@ internal object DoubleMax : Function() {
         args: List<Any>
     ): Any {
         if (args.isEmpty()) {
-            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
+            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST)
         }
         return args.fold(initial = args.first()) { max, arg ->
             max(max as Double, arg as Double)
@@ -218,7 +218,7 @@ internal object DoubleMin : Function() {
         args: List<Any>
     ): Any {
         if (args.isEmpty()) {
-            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
+            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST)
         }
         return args.fold(initial = args.first()) { min, arg ->
             min(min as Double, arg as Double)

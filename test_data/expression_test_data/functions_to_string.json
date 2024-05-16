@@ -285,7 +285,7 @@
       "expression": "@{toString()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toString()]. Non empty argument list is required for function 'toString'."
+        "value": "Failed to evaluate [toString()]. Function requires non empty argument list."
       },
       "variables": [],
       "platforms": [
@@ -299,7 +299,7 @@
       "expression": "@{toString(1, 1)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [toString(1, 1)]. Function 'toString' has no matching override for given argument types: Integer, Integer."
+        "value": "Failed to evaluate [toString(1, 1)]. Function has no matching overload for given argument types: Integer, Integer."
       },
       "variables": [],
       "platforms": [

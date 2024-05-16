@@ -7,7 +7,7 @@ public struct ExpressionError: LocalizedError, CustomStringConvertible {
 
   static func incorrectType(_ expectedType: String, _ value: AnyHashable) -> Error {
     ExpressionError(
-      "Incorrect value type: expected \"\(expectedType)\", got \"\(value.actualType)\"."
+      "Incorrect value type: expected \(expectedType), got \(formatTypeForError(value))."
     )
   }
 

@@ -49,18 +49,18 @@
       ]
     },
     {
-      "name": "dict_var.getBoolean('integer_prop') => error",
-      "expression": "@{dict_var.getBoolean('integer_prop')}",
+      "name": "dict_var.getBoolean('number_prop') => error",
+      "expression": "@{dict_var.getBoolean('number_prop')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getBoolean('integer_prop')]. Incorrect value type: expected \"boolean\", got \"number\"."
+        "value": "Failed to evaluate [getBoolean('number_prop')]. Incorrect value type: expected Boolean, got Number."
       },
       "variables": [
         {
           "name": "dict_var",
           "type": "dict",
           "value": {
-            "integer_prop": 1
+            "number_prop": 1.0
           }
         }
       ],
@@ -307,18 +307,18 @@
       ]
     },
     {
-      "name": "dict_var.getString('integer_prop') => error",
-      "expression": "@{dict_var.getString('integer_prop')}",
+      "name": "dict_var.getString('number_prop') => error",
+      "expression": "@{dict_var.getString('number_prop')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getString('integer_prop')]. Incorrect value type: expected \"string\", got \"number\"."
+        "value": "Failed to evaluate [getString('number_prop')]. Incorrect value type: expected String, got Number."
       },
       "variables": [
         {
           "name": "dict_var",
           "type": "dict",
           "value": {
-            "integer_prop": 10
+            "number_prop": 123.45
           }
         }
       ],
@@ -332,7 +332,7 @@
       "expression": "@{dict_var.getString()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getString()]. Non empty argument list is required for method 'getString'."
+        "value": "Failed to evaluate [getString()]. Method requires non empty argument list."
       },
       "variables": [
         {
@@ -351,7 +351,7 @@
       "expression": "@{dict_var.getString(123)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getString(123)]. Method 'getString' has no matching override for given argument types: Integer."
+        "value": "Failed to evaluate [getString(123)]. Method has no matching overload for given argument types: Integer."
       },
       "variables": [
         {

@@ -137,7 +137,7 @@ extension [AnyHashable] {
   fileprivate func getArray(index: Int) throws -> [AnyHashable] {
     let value = try getValue(index: index)
     guard let arrayValue = value as? [AnyHashable] else {
-      throw ExpressionError.incorrectType("array", value)
+      throw ExpressionError.incorrectType("Array", value)
     }
     return arrayValue
   }
@@ -145,7 +145,7 @@ extension [AnyHashable] {
   fileprivate func getDict(index: Int) throws -> Dict {
     let value = try getValue(index: index)
     guard let dictValue = value as? Dict else {
-      throw ExpressionError.incorrectType("dict", value)
+      throw ExpressionError.incorrectType("Dict", value)
     }
     return dictValue
   }
@@ -153,7 +153,7 @@ extension [AnyHashable] {
   fileprivate func getBoolean(index: Int) throws -> Bool {
     let value = try getValue(index: index)
     guard value.isBool, let boolValue = value as? Bool else {
-      throw ExpressionError.incorrectType("boolean", value)
+      throw ExpressionError.incorrectType("Boolean", value)
     }
     return boolValue
   }
@@ -161,7 +161,7 @@ extension [AnyHashable] {
   fileprivate func getColor(index: Int) throws -> Color {
     let value = try getValue(index: index)
     guard let stringValue = value as? String else {
-      throw ExpressionError.incorrectType("color", value)
+      throw ExpressionError.incorrectType("Color", value)
     }
     guard let color = Color.color(withHexString: stringValue) else {
       throw ExpressionError("Unable to convert value to Color, expected format #AARRGGBB.")
@@ -172,7 +172,7 @@ extension [AnyHashable] {
   fileprivate func getInteger(index: Int) throws -> Int {
     let value = try getValue(index: index)
     if value.isBool {
-      throw ExpressionError.incorrectType("integer", value)
+      throw ExpressionError.incorrectType("Integer", value)
     }
     guard let intValue = value as? Int else {
       if let doubleValue = value as? Double {
@@ -181,7 +181,7 @@ extension [AnyHashable] {
         }
         throw ExpressionError("Cannot convert value to integer.")
       }
-      throw ExpressionError.incorrectType("integer", value)
+      throw ExpressionError.incorrectType("Integer", value)
     }
     return intValue
   }
@@ -189,7 +189,7 @@ extension [AnyHashable] {
   fileprivate func getNumber(index: Int) throws -> Double {
     let value = try getValue(index: index)
     if value.isBool {
-      throw ExpressionError.incorrectType("number", value)
+      throw ExpressionError.incorrectType("Number", value)
     }
     if let numberValue = value as? Double {
       return numberValue
@@ -197,13 +197,13 @@ extension [AnyHashable] {
     if let intValue = value as? Int {
       return Double(intValue)
     }
-    throw ExpressionError.incorrectType("number", value)
+    throw ExpressionError.incorrectType("Number", value)
   }
 
   fileprivate func getString(index: Int) throws -> String {
     let value = try getValue(index: index)
     guard let stringValue = value as? String else {
-      throw ExpressionError.incorrectType("string", value)
+      throw ExpressionError.incorrectType("String", value)
     }
     return stringValue
   }
@@ -214,7 +214,7 @@ extension [AnyHashable] {
       let stringValue = value as? String,
       let url = URL(string: stringValue)
     else {
-      throw ExpressionError.incorrectType("url", value)
+      throw ExpressionError.incorrectType("Url", value)
     }
     return url
   }

@@ -104,14 +104,14 @@ private struct FunctionEvaluator: Function {
       if error is NoMatchingSignatureError {
         if correctedArgs.count == 0 {
           throw ExpressionError(
-            "\(message) Non empty argument list is required for \(symbol.type) '\(name)'."
+            "\(message) \(symbol.type.capitalized) requires non empty argument list."
           )
         }
         let argTypes = correctedArgs
           .map { formatTypeForError($0) }
           .joined(separator: ", ")
         throw ExpressionError(
-          "\(message) \(symbol.type.capitalized) '\(name)' has no matching override for given argument types: \(argTypes)."
+          "\(message) \(symbol.type.capitalized) has no matching overload for given argument types: \(argTypes)."
         )
       }
       throw ExpressionError("\(message) \(error.localizedDescription)")

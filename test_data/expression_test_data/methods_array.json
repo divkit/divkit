@@ -193,7 +193,7 @@
       "expression": "@{array_var.getBoolean(0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getBoolean(0)]. Incorrect value type: expected \"boolean\", got \"number\"."
+        "value": "Failed to evaluate [getBoolean(0)]. Incorrect value type: expected Boolean, got Number."
       },
       "variables": [
         {
@@ -214,7 +214,7 @@
       "expression": "@{array_var.getInteger(0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getInteger(0)]. Incorrect value type: expected \"integer\", got \"string\"."
+        "value": "Failed to evaluate [getInteger(0)]. Incorrect value type: expected Integer, got String."
       },
       "variables": [
         {

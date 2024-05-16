@@ -165,7 +165,7 @@ function absNumber(_ctx: EvalContext, arg: NumberValue): EvalValue {
 
 function maxInt(_ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
     if (!args.length) {
-        throw new Error('Non empty argument list is required for function \'max\'.');
+        throw new Error('Function requires non empty argument list.');
     }
 
     let max = args[0].value;
@@ -183,7 +183,7 @@ function maxInt(_ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
 
 function maxNum(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
     if (!args.length) {
-        throw new Error('Non empty argument list is required for function \'max\'.');
+        throw new Error('Function requires non empty argument list.');
     }
 
     return {
@@ -194,7 +194,7 @@ function maxNum(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
 
 function minInt(_ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
     if (!args.length) {
-        throw new Error('Non empty argument list is required for function \'min\'.');
+        throw new Error('Function requires non empty argument list.');
     }
 
     let min = args[0].value;
@@ -212,7 +212,7 @@ function minInt(_ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
 
 function minNum(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
     if (!args.length) {
-        throw new Error('Non empty argument list is required for function \'min\'.');
+        throw new Error('Function requires non empty argument list.');
     }
 
     return {
