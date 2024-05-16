@@ -1611,11 +1611,11 @@
                                 (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                             ) {
                                 const actionsToLog: Action[] = [];
-                                for (const action of trigger.actions) {
-                                    const resultAction = getJsonWithVars(logError, action);
-                                    if (resultAction.log_id) {
-                                        await execActionInternal(resultAction as Action);
-                                        actionsToLog.push(resultAction as Action);
+                                const actions = trigger.actions.map(action => getJsonWithVars(logError, action));
+                                for (const action of actions) {
+                                    if (action.log_id) {
+                                        await execActionInternal(action as Action);
+                                        actionsToLog.push(action as Action);
                                     }
                                 }
                                 for (const action of actionsToLog) {
