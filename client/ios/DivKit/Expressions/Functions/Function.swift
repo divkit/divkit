@@ -338,7 +338,6 @@ enum ArgumentType: String, Decodable, CaseIterable {
   case url
   case dict
   case array
-  case any
 
   var swiftType: Any.Type {
     switch self {
@@ -360,8 +359,6 @@ enum ArgumentType: String, Decodable, CaseIterable {
       [String: AnyHashable].self
     case .array:
       [AnyHashable].self
-    case .any:
-      Any.self
     }
   }
 
@@ -370,8 +367,6 @@ enum ArgumentType: String, Decodable, CaseIterable {
       return true
     }
     switch self {
-    case .any:
-      return true
     case .number:
       return type == .integer
     default:
@@ -381,7 +376,7 @@ enum ArgumentType: String, Decodable, CaseIterable {
 
   static func from(type: Any.Type) throws -> ArgumentType {
     guard let type = allCases.first(where: { $0.swiftType == type }) else {
-      throw ExpressionError("Type is not supported")
+      throw ExpressionError("Type is not supported: \(type).")
     }
     return type
   }
