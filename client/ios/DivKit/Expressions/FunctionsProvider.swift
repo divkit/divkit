@@ -121,13 +121,13 @@ private struct FunctionEvaluator: Function {
 
 private let staticFunctions: [String: Function] = {
   var functions: [String: Function] = [:]
-  CastFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
-  ColorFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
   DatetimeFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
-  IntervalFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
   MathFunctions.allCases.forEach { functions[$0.rawValue] = $0.function }
   functions.addArrayFunctions()
+  functions.addCastFunctions()
+  functions.addColorFunctions()
   functions.addDictFunctions()
+  functions.addIntervalFunctions()
   functions.addStringFunctions()
   functions.addToStringFunctions()
   return functions

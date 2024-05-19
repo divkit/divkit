@@ -2,118 +2,83 @@ import Foundation
 
 import CommonCorePublic
 
-enum ColorFunctions: CaseIterable {
-  enum Channel: String, CaseIterable {
-    case alpha
-    case red
-    case green
-    case blue
+extension [String: Function] {
+  mutating func addColorFunctions() {
+    addFunction("argb", _argb)
+    addFunction("rgb", _rgb)
 
-    var description: String {
-      rawValue.capitalized
-    }
-  }
-
-  case argb
-  case rgb
-  case get(Channel)
-  case set(Channel)
-
-  static var allCases: [ColorFunctions] {
-    [.argb, .rgb] + Channel.allCases.flatMap { [.get($0), .set($0)] }
-  }
-
-  var rawValue: String {
-    switch self {
-    case .argb:
-      "argb"
-    case .rgb:
-      "rgb"
-    case let .get(channel):
-      "getColor\(channel.description)"
-    case let .set(channel):
-      "setColor\(channel.description)"
-    }
-  }
-
-  var function: Function {
-    switch self {
-    case .argb:
-      FunctionQuaternary(impl: _argb)
-    case .rgb:
-      FunctionTernary(impl: _rgb)
-    case let .get(channel):
-      OverloadedFunction(
-        functions: [
-          FunctionUnary(impl: { try getChannel(channel, from: $0) }),
-          FunctionUnary(impl: { getChannelFromColor(channel, from: $0) }),
-        ]
-      )
-    case let .set(channel):
-      OverloadedFunction(
-        functions: [
-          FunctionBinary(impl: { try setChannel(channel, to: $0, value: $1) }),
-          FunctionBinary(impl: { try setChannelForColor(channel, to: $0, value: $1) }),
-        ]
-      )
+    for channel in Channel.allCases {
+      addFunction("getColor\(channel.description)", _getColor(channel: channel))
+      addFunction("setColor\(channel.description)", _setColor(channel: channel))
     }
   }
 }
 
-private func _argb(alpha: Double, red: Double, green: Double, blue: Double) throws -> Color {
+private enum Channel: String, CaseIterable {
+  case alpha
+  case red
+  case green
+  case blue
+
+  var description: String {
+    rawValue.capitalized
+  }
+}
+
+private let _argb = FunctionQuaternary { alpha, red, green, blue in
   guard isNormalized(alpha), isNormalized(red), isNormalized(green), isNormalized(blue) else {
     throw valueOutOfRangeError()
   }
   return Color(red: red, green: green, blue: blue, alpha: alpha)
 }
 
-private func _rgb(red: Double, green: Double, blue: Double) throws -> Color {
+private let _rgb = FunctionTernary { red, green, blue in
   guard isNormalized(red), isNormalized(green), isNormalized(blue) else {
     throw valueOutOfRangeError()
   }
   return Color(red: red, green: green, blue: blue, alpha: 1)
 }
 
-private func getChannel(_ channel: ColorFunctions.Channel, from color: String) throws -> Double {
+private func _getColor(channel: Channel) -> Function {
+  OverloadedFunction(
+    functions: [
+      FunctionUnary { try getChannel(channel, from: $0) },
+      FunctionUnary<Color, Double> { $0.makeChannel(channel) },
+    ]
+  )
+}
+
+private func _setColor(channel: Channel) -> Function {
+  OverloadedFunction(
+    functions: [
+      FunctionBinary<String, Double, Color> { color, value in
+        guard let color = Color.color(withHexString: color) else {
+          throw invalidValueFormatError()
+        }
+        guard isNormalized(value) else {
+          throw valueOutOfRangeError()
+        }
+        return color.set(value, for: channel)
+      },
+      FunctionBinary<Color, Double, Color> { color, value in
+        guard isNormalized(value) else {
+          throw valueOutOfRangeError()
+        }
+        return color.set(value, for: channel)
+      }
+    ]
+  )
+}
+
+private func getChannel(_ channel: Channel, from color: String) throws -> Double {
   guard let color = Color.color(withHexString: color) else {
     throw invalidValueFormatError()
   }
   return color.makeChannel(channel)
 }
 
-private func getChannelFromColor(_ channel: ColorFunctions.Channel, from color: Color) -> Double {
-  color.makeChannel(channel)
-}
-
-private func setChannel(
-  _ channel: ColorFunctions.Channel,
-  to color: String,
-  value: Double
-) throws -> Color {
-  guard let color = Color.color(withHexString: color) else {
-    throw invalidValueFormatError()
-  }
-
-  guard isNormalized(value) else {
-    throw valueOutOfRangeError()
-  }
-
-  return color.set(value, for: channel)
-}
-
-private func setChannelForColor(
-  _ channel: ColorFunctions.Channel,
-  to color: Color,
-  value: Double
-) throws -> Color {
-  guard isNormalized(value) else {
-    throw valueOutOfRangeError()
-  }
-  return color.set(value, for: channel)
-}
-
 extension Color {
-  fileprivate func makeChannel(_ channel: ColorFunctions.Channel) -> Double {
+  fileprivate func makeChannel(_ channel: Channel) -> Double {
     switch channel {
     case .alpha:
       alpha
@@ -126,7 +91,7 @@ extension Color {
     }
   }
 
-  fileprivate func set(_ value: Double, for channel: ColorFunctions.Channel) -> Color {
+  fileprivate func set(_ value: Double, for channel: Channel) -> Color {
     switch channel {
     case .alpha:
       Color(red: red, green: green, blue: blue, alpha: value)
@@ -138,10 +103,6 @@ extension Color {
       Color(red: red, green: green, blue: value, alpha: alpha)
     }
   }
-}
-
-private func cast(_ value: Any) -> Double? {
-  value as? Double
 }
 
 private func isNormalized(_ value: Double) -> Bool {

@@ -51,47 +51,47 @@ extension [String: Function] {
   }
 }
 
-private var _getArray = FunctionVarBinary<Dict, String, [AnyHashable]> {
+private let _getArray = FunctionVarBinary<Dict, String, [AnyHashable]> {
   try $0.getArray(path: $1)
 }
 
-private var _getBoolean = FunctionVarBinary<Dict, String, Bool> {
+private let _getBoolean = FunctionVarBinary<Dict, String, Bool> {
   try $0.getBoolean(path: $1)
 }
 
-private var _getColor = FunctionVarBinary<Dict, String, Color> {
+private let _getColor = FunctionVarBinary<Dict, String, Color> {
   try $0.getColor(path: $1)
 }
 
-private var _getDict = FunctionVarBinary<Dict, String, Dict> {
+private let _getDict = FunctionVarBinary<Dict, String, Dict> {
   try $0.getDict(path: $1)
 }
 
-private var _getInteger = FunctionVarBinary<Dict, String, Int> {
+private let _getInteger = FunctionVarBinary<Dict, String, Int> {
   try $0.getInteger(path: $1)
 }
 
-private var _getNumber = FunctionVarBinary<Dict, String, Double> {
+private let _getNumber = FunctionVarBinary<Dict, String, Double> {
   try $0.getNumber(path: $1)
 }
 
-private var _getString = FunctionVarBinary<Dict, String, String> {
+private let _getString = FunctionVarBinary<Dict, String, String> {
   try $0.getString(path: $1)
 }
 
-private var _getUrl = FunctionVarBinary<Dict, String, URL> {
+private let _getUrl = FunctionVarBinary<Dict, String, URL> {
   try $0.getUrl(path: $1)
 }
 
-private var _getOptArray = FunctionVarBinary<Dict, String, [AnyHashable]> {
+private let _getOptArray = FunctionVarBinary<Dict, String, [AnyHashable]> {
   (try? $0.getArray(path: $1)) ?? []
 }
 
-private var _getOptBoolean = FunctionVarTernary<Bool, Dict, String, Bool> {
+private let _getOptBoolean = FunctionVarTernary<Bool, Dict, String, Bool> {
   (try? $1.getBoolean(path: $2)) ?? $0
 }
 
-private var _getOptColor = OverloadedFunction(functions: [
+private let _getOptColor = OverloadedFunction(functions: [
   FunctionVarTernary<Color, Dict, String, Color> {
     (try? $1.getColor(path: $2)) ?? $0
   },
@@ -103,23 +103,23 @@ private var _getOptColor = OverloadedFunction(functions: [
   },
 ])
 
-private var _getOptDict = FunctionVarBinary<Dict, String, Dict> {
+private let _getOptDict = FunctionVarBinary<Dict, String, Dict> {
   (try? $0.getDict(path: $1)) ?? [:]
 }
 
-private var _getOptInteger = FunctionVarTernary<Int, Dict, String, Int> {
+private let _getOptInteger = FunctionVarTernary<Int, Dict, String, Int> {
   (try? $1.getInteger(path: $2)) ?? $0
 }
 
-private var _getOptNumber = FunctionVarTernary<Double, Dict, String, Double> {
+private let _getOptNumber = FunctionVarTernary<Double, Dict, String, Double> {
   (try? $1.getNumber(path: $2)) ?? $0
 }
 
-private var _getOptString = FunctionVarTernary<String, Dict, String, String> {
+private let _getOptString = FunctionVarTernary<String, Dict, String, String> {
   (try? $1.getString(path: $2)) ?? $0
 }
 
-private var _getOptUrl = OverloadedFunction(functions: [
+private let _getOptUrl = OverloadedFunction(functions: [
   FunctionVarTernary<URL, Dict, String, URL> {
     (try? $1.getUrl(path: $2)) ?? $0
   },

@@ -2,105 +2,80 @@ import Foundation
 
 import CommonCorePublic
 
-enum CastFunctions: String, CaseIterable {
-  case toBoolean
-  case toNumber
-  case toInteger
-  case toColor
-  case toUrl
+extension [String: Function] {
+  mutating func addCastFunctions() {
+    addFunction("toBoolean", _toBoolean)
+    addFunction("toColor", _toColor)
+    addFunction("toInteger", _toInteger)
+    addFunction("toNumber", _toNumber)
+    addFunction("toUrl", _toUrl)
+  }
+}
 
-  var function: Function {
-    switch self {
-    case .toBoolean:
-      OverloadedFunction(
-        functions: [
-          FunctionUnary(impl: _stringToBoolean),
-          FunctionUnary(impl: _intToBoolean),
-        ]
-      )
-    case .toNumber:
-      OverloadedFunction(
-        functions: [
-          FunctionUnary(impl: _intToNumber),
-          FunctionUnary(impl: _stringToNumber),
-        ]
-      )
-    case .toInteger:
-      OverloadedFunction(
-        functions: [
-          FunctionUnary(impl: _boolToInteger),
-          FunctionUnary(impl: _doubleToInteger),
-          FunctionUnary(impl: _stringToInteger),
-        ]
-      )
-    case .toColor:
-      FunctionUnary(impl: _stringToColor)
-    case .toUrl:
-      FunctionUnary(impl: _stringToUrl)
+private let _toBoolean = OverloadedFunction(
+  functions: [
+    FunctionUnary<String, Bool> {
+      switch $0 {
+      case "true":
+        return true
+      case "false":
+        return false
+      default:
+        throw ExpressionError("Unable to convert value to Boolean.")
+      }
+    },
+    FunctionUnary<Int, Bool> {
+      switch $0 {
+      case 1:
+        return true
+      case 0:
+        return false
+      default:
+        throw ExpressionError("Unable to convert value to Boolean.")
+      }
     }
-  }
-}
+  ]
+)
 
-private func _stringToBoolean(value: String) throws -> Bool {
-  switch value {
-  case "true":
-    return true
-  case "false":
-    return false
-  default:
-    throw ExpressionError("Unable to convert value to Boolean.")
-  }
-}
+private let _toInteger = OverloadedFunction(
+  functions: [
+    FunctionUnary<Bool, Int> { $0 ? 1 : 0 },
+    FunctionUnary<Double, Int> {
+      guard Double(Int.min) <= $0, $0 <= Double(Int.max) else {
+        throw ExpressionError("Unable to convert value to Integer.")
+      }
+      return Int($0)
+    },
+    FunctionUnary<String, Int> {
+      guard let number = Int($0) else {
+        throw ExpressionError("Unable to convert value to Integer.")
+      }
+      return number
+    }
+  ]
+)
 
-private func _intToBoolean(value: Int) throws -> Bool {
-  switch value {
-  case 1:
-    return true
-  case 0:
-    return false
-  default:
-    throw ExpressionError("Unable to convert value to Boolean.")
-  }
-}
-
-private func _intToNumber(value: Int) throws -> Double {
-  Double(value)
-}
-
-private func _stringToNumber(value: String) throws -> Double {
-  guard let number = Double(value), number.isFinite else {
-    throw ExpressionError("Unable to convert value to Number.")
-  }
-  return number
-}
-
-private func _boolToInteger(value: Bool) throws -> Int {
-  value ? 1 : 0
-}
-
-private func _stringToInteger(value: String) throws -> Int {
-  guard let number = Int(value) else {
-    throw ExpressionError("Unable to convert value to Integer.")
-  }
-  return number
-}
-
-private func _doubleToInteger(value: Double) throws -> Int {
-  guard Double(Int.min) <= value, value <= Double(Int.max) else {
-    throw ExpressionError("Unable to convert value to Integer.")
-  }
-  return Int(value)
-}
-
-private func _stringToColor(value: String) throws -> Color {
-  guard let color = Color.color(withHexString: value) else {
+private let _toColor = FunctionUnary {
+  guard let color = Color.color(withHexString: $0) else {
     throw ExpressionError("Unable to convert value to Color, expected format #AARRGGBB.")
   }
   return color
 }
 
-private func _stringToUrl(value: String) throws -> URL {
-  guard let url = URL(string: value) else {
+private let _toNumber = OverloadedFunction(
+  functions: [
+    FunctionUnary<Int, Double> { Double($0) },
+    FunctionUnary<String, Double> {
+      guard let number = Double($0), number.isFinite else {
+        throw ExpressionError("Unable to convert value to Number.")
+      }
+      return number
+    }
+  ]
+)
+
+private let _toUrl = FunctionUnary {
+  guard let url = URL(string: $0) else {
     throw ExpressionError("Unable to convert value to URL.")
   }
   return url

@@ -53,47 +53,47 @@ extension [String: Function] {
   }
 }
 
-private var _getArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
+private let _getArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
   try $0.getArray(index: $1)
 }
 
-private var _getBoolean = FunctionBinary<[AnyHashable], Int, Bool> {
+private let _getBoolean = FunctionBinary<[AnyHashable], Int, Bool> {
   try $0.getBoolean(index: $1)
 }
 
-private var _getColor = FunctionBinary<[AnyHashable], Int, Color> {
+private let _getColor = FunctionBinary<[AnyHashable], Int, Color> {
   try $0.getColor(index: $1)
 }
 
-private var _getDict = FunctionBinary<[AnyHashable], Int, Dict> {
+private let _getDict = FunctionBinary<[AnyHashable], Int, Dict> {
   try $0.getDict(index: $1)
 }
 
-private var _getInteger = FunctionBinary<[AnyHashable], Int, Int> {
+private let _getInteger = FunctionBinary<[AnyHashable], Int, Int> {
   try $0.getInteger(index: $1)
 }
 
-private var _getNumber = FunctionBinary<[AnyHashable], Int, Double> {
+private let _getNumber = FunctionBinary<[AnyHashable], Int, Double> {
   try $0.getNumber(index: $1)
 }
 
-private var _getString = FunctionBinary<[AnyHashable], Int, String> {
+private let _getString = FunctionBinary<[AnyHashable], Int, String> {
   try $0.getString(index: $1)
 }
 
-private var _getUrl = FunctionBinary<[AnyHashable], Int, URL> {
+private let _getUrl = FunctionBinary<[AnyHashable], Int, URL> {
   try $0.getUrl(index: $1)
 }
 
-private var _getOptArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
+private let _getOptArray = FunctionBinary<[AnyHashable], Int, [AnyHashable]> {
   (try? $0.getArray(index: $1)) ?? []
 }
 
-private var _getOptBoolean = FunctionTernary<[AnyHashable], Int, Bool, Bool> {
+private let _getOptBoolean = FunctionTernary<[AnyHashable], Int, Bool, Bool> {
   (try? $0.getBoolean(index: $1)) ?? $2
 }
 
-private var _getOptColor = OverloadedFunction(functions: [
+private let _getOptColor = OverloadedFunction(functions: [
   FunctionTernary<[AnyHashable], Int, Color, Color> {
     (try? $0.getColor(index: $1)) ?? $2
   },
@@ -105,23 +105,23 @@ private var _getOptColor = OverloadedFunction(functions: [
   },
 ])
 
-private var _getOptDict = FunctionBinary<[AnyHashable], Int, Dict> {
+private let _getOptDict = FunctionBinary<[AnyHashable], Int, Dict> {
   (try? $0.getDict(index: $1)) ?? [:]
 }
 
-private var _getOptInteger = FunctionTernary<[AnyHashable], Int, Int, Int> {
+private let _getOptInteger = FunctionTernary<[AnyHashable], Int, Int, Int> {
   (try? $0.getInteger(index: $1)) ?? $2
 }
 
-private var _getOptNumber = FunctionTernary<[AnyHashable], Int, Double, Double> {
+private let _getOptNumber = FunctionTernary<[AnyHashable], Int, Double, Double> {
   (try? $0.getNumber(index: $1)) ?? $2
 }
 
-private var _getOptString = FunctionTernary<[AnyHashable], Int, String, String> {
+private let _getOptString = FunctionTernary<[AnyHashable], Int, String, String> {
   (try? $0.getString(index: $1)) ?? $2
 }
 
-private var _getOptUrl = OverloadedFunction(functions: [
+private let _getOptUrl = OverloadedFunction(functions: [
   FunctionTernary<[AnyHashable], Int, URL, URL> {
     (try? $0.getUrl(index: $1)) ?? $2
   },
