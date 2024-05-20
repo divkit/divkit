@@ -176,7 +176,7 @@ private enum ExpectedValue: Decodable {
       self = .string(value)
     case "datetime":
       let value = try container.decode(String.self, forKey: .value)
-      self = .datetime(value.toDatetime()!)
+      self = .datetime(value.toDate()!)
     case "array":
       let value = try JSONObject(from: decoder).makeDictionary()
       guard let array = value?["value"] as? [AnyHashable] else {
