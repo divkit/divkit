@@ -1,7 +1,8 @@
 {
   "description": "Tab swipe restricted",
   "platforms": [
-    "web"
+    "android",
+    "ios"
   ],
   "div_data": {
     "card": {

@@ -49,7 +49,11 @@
         "input has focus, label says that timer is started",
         "input had lost the foucs, label says that timer is finished"
       ],
-      "file": "actions/clear-focus.json"
+      "file": "actions/clear-focus.json",
+      "automated": [
+        "android",
+        "web"
+      ]
     },
     {
       "title": "Focus action",
@@ -67,7 +71,10 @@
         "related element is selected",
         "button changes to input and it gets focus"
       ],
-      "file": "actions/focus-element-mobile.json"
+      "file": "actions/focus-element-mobile.json",
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Simple tap",
@@ -107,6 +114,8 @@
     {
       "title": "Tab swipe",
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "tags": [
@@ -126,6 +135,8 @@
     {
       "title": "Tab swipe restricted",
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "tags": [
@@ -199,6 +210,10 @@
         "android",
         "ios"
       ],
+      "automated": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -226,7 +241,9 @@
     {
       "title": "Gallery default item states",
       "automated": [
-        "web"
+        "web",
+        "android",
+        "ios"
       ],
       "tags": [
         "DivGallery"
@@ -243,7 +260,9 @@
     {
       "title": "Gallery paging default item states",
       "automated": [
-        "web"
+        "android",
+        "web",
+        "ios"
       ],
       "tags": [
         "DivGallery"
@@ -274,6 +293,11 @@
       "tags": [
         "DivGallery"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "file": "gallery/gallery-bottom-multiline.json"
     },
     {
@@ -281,10 +305,20 @@
       "tags": [
         "DivGallery"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "file": "gallery/gallery-bottom-multiline-selected-action.json"
     },
     {
       "title": "Gallery bottom singleline",
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -294,6 +328,11 @@
       "title": "Gallery top multiline",
       "tags": [
         "DivGallery"
+      ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
       ],
       "file": "gallery/gallery-top-multiline.json"
     },
@@ -373,7 +412,9 @@
         "Slider"
       ],
       "automated": [
-        "android"
+        "android",
+        "web",
+        "ios"
       ],
       "priority": "blocker",
       "steps": [
@@ -390,7 +431,9 @@
         "Slider"
       ],
       "automated": [
-        "android"
+        "ios",
+        "android",
+        "web"
       ],
       "priority": "critical",
       "steps": [
@@ -406,6 +449,11 @@
       "tags": [
         "Slider"
       ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
+      ],
       "steps": [
         "Interact with slider"
       ],
@@ -417,7 +465,9 @@
     {
       "title": "Root state switching",
       "automated": [
-        "web"
+        "android",
+        "web",
+        "ios"
       ],
       "steps": [
         "Press 'CHANGE STATE (TEMPORARY)'",
@@ -1181,7 +1231,9 @@
     {
       "title": "Visibility action in visible block",
       "automated": [
-        "web"
+        "android",
+        "web",
+        "ios"
       ],
       "tags": [
         "visibility_actions"
@@ -1197,6 +1249,8 @@
     {
       "title": "Visibility actions in DivState",
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "tags": [
@@ -1217,6 +1271,10 @@
       "title": "Variables in gallery",
       "tags": [
         "DivGallery"
+      ],
+      "automated": [
+        "android",
+        "web"
       ],
       "steps": [
         "Check different combinations of gallery properties"
@@ -1252,6 +1310,11 @@
       "tags": [
         "DivPager"
       ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
+      ],
       "steps": [
         "Check different combinations of pager properties"
       ],
@@ -1279,6 +1342,11 @@
       "title": "Variables in tabs",
       "tags": [
         "DivTabs"
+      ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
       ],
       "steps": [
         "Check different combinations of tabs properties"
@@ -1357,6 +1425,8 @@
     {
       "title": "Variables in DivImage",
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "tags": [
@@ -1382,6 +1452,8 @@
     {
       "title": "Variables triggers",
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "tags": [
@@ -1403,6 +1475,11 @@
       "tags": [
         "Triggers"
       ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
+      ],
       "steps": [
         "'Thumb value' show current thumb position",
         "'First selected positive position' show first selected positive thumb value",
@@ -1420,6 +1497,11 @@
         "Slider",
         "Triggers",
         "Functions"
+      ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
       ],
       "expected_results": [
         "Slider and input values should be synchronized",
@@ -1477,6 +1559,10 @@
       "tags": [
         "DivText"
       ],
+      "automated": [
+        "android",
+        "ios"
+      ],
       "file": "div-text.json"
     },
     {
@@ -1498,6 +1584,11 @@
       "title": "Text input",
       "tags": [
         "DivInput"
+      ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
       ],
       "steps": [
         "Tap on input field",
@@ -1521,7 +1612,12 @@
         "Text under the input should be equal to text in input and change on input changes.",
         "Max lines = 1. Line break is unavailable."
       ],
-      "file": "single_line_input.json"
+      "file": "single_line_input.json",
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "title": "Select",
@@ -1618,7 +1714,12 @@
     },
     {
       "title": "Shortcuts",
-      "file": "shortcuts.json"
+      "file": "shortcuts.json",
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "title": "Auto ellipsize",
@@ -1626,11 +1727,19 @@
         "android",
         "ios"
       ],
-      "file": "auto-ellipsize.json"
+      "file": "auto-ellipsize.json",
+      "automated": [
+        "android",
+        "ios"
+      ]
     },
     {
       "title": "Expand cutout 1",
       "platforms": [
+        "android",
+        "ios"
+      ],
+      "automated": [
         "android",
         "ios"
       ],
@@ -1639,6 +1748,10 @@
     {
       "title": "Expand cutout 2",
       "platforms": [
+        "android",
+        "ios"
+      ],
+      "automated": [
         "android",
         "ios"
       ],
@@ -1683,24 +1796,38 @@
     {
       "title": "States default state",
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "file": "states_default_state.json"
     },
     {
       "title": "Tabs item actions",
-      "file": "tabs-item-actions.json"
+      "file": "tabs-item-actions.json",
+      "automated": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     {
       "title": "Grid layout",
       "automated": [
-        "web"
+        "android",
+        "web",
+        "ios"
       ],
       "file": "grid_layout.json"
     },
     {
       "title": "Grid with weights",
-      "file": "grid-with-weights.json"
+      "file": "grid-with-weights.json",
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "title": "Image Shimmer Preview",
@@ -1715,11 +1842,20 @@
     },
     {
       "title": "Custom container",
-      "file": "custom-container.json"
+      "file": "custom-container.json",
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "title": "Custom card",
-      "file": "custom-card.json"
+      "file": "custom-card.json",
+      "automated": [
+        "android",
+        "web"
+      ]
     },
     {
       "title": "Rive animations",
@@ -1808,6 +1944,9 @@
       "platforms": [
         "android"
       ],
+      "automated": [
+        "android"
+      ],
       "expected_results": [
         "Two pagers with indicator of different shapes - Rounded Rectangle and Circle"
       ],
@@ -1835,6 +1974,11 @@
       "tags": [
         "Timers"
       ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
+      ],
       "expected_results": [
         "The timer calls tick_actions and changes the variable with the set interval.",
         "After the duration expires, the timer stops and calls end_actions."
@@ -1846,6 +1990,11 @@
       "tags": [
         "Timers"
       ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
+      ],
       "expected_results": [
         "The timer calls tick_actions and changes the variable with the set interval.",
         "The timer is endless and can be stopped only by an action."
@@ -1856,6 +2005,11 @@
       "title": "Countdown timer",
       "tags": [
         "Timers"
+      ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
       ],
       "expected_results": [
         "The timer changes the value of the variable only at the end of the work."
@@ -1875,7 +2029,12 @@
         "Starting blur radius is 4",
         "Blur radius is changed to 0 or 8 when clicking on images"
       ],
-      "file": "div_image_blur.json"
+      "file": "div_image_blur.json",
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "title": "Blur in background image",
@@ -1887,7 +2046,12 @@
         "Starting blur radius is 4",
         "Blur radius is changed to 0 or 8 when clicking on buttons"
       ],
-      "file": "div_background_blur.json"
+      "file": "div_background_blur.json",
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "title": "Container with aspect size",
@@ -1897,7 +2061,12 @@
       "expected_results": [
         "Containers with correct height appear"
       ],
-      "file": "container/aspect.json"
+      "file": "container/aspect.json",
+      "automated": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     {
       "title": "SizeProvider extension",
@@ -1905,6 +2074,11 @@
         "android",
         "ios",
         "web"
+      ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
       ],
       "tags": [
         "extensions",
@@ -1922,6 +2096,11 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "tags": [
         "extensions",
         "SizeProvider"
@@ -1934,6 +2113,11 @@
     {
       "title": "Fixed length input mask",
       "platforms": [
+        "android",
+        "web",
+        "ios"
+      ],
+      "automated": [
         "android",
         "web",
         "ios"
@@ -1971,6 +2155,10 @@
         "android",
         "ios"
       ],
+      "automated": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -1992,6 +2180,10 @@
         "android",
         "ios"
       ],
+      "automated": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -2000,6 +2192,10 @@
     {
       "title": "Expression input validator",
       "platforms": [
+        "android",
+        "ios"
+      ],
+      "automated": [
         "android",
         "ios"
       ],
@@ -2017,7 +2213,11 @@
       "tags": [
         "DivInput"
       ],
-      "file": "currency_input_mask.json"
+      "file": "currency_input_mask.json",
+      "automated": [
+        "android",
+        "web"
+      ]
     },
     {
       "title": "Video with controls",
@@ -2103,6 +2303,11 @@
       "tags": [
         "DivState"
       ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
+      ],
       "steps": [
         "Check default state"
       ],
@@ -2115,6 +2320,11 @@
       "title": "state_id_variable",
       "tags": [
         "DivState"
+      ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
       ],
       "steps": [
         "Open example",
@@ -2131,6 +2341,11 @@
       "tags": [
         "Tooltips",
         "Visibility_actions"
+      ],
+      "automated": [
+        "android",
+        "ios",
+        "web"
       ],
       "steps": [
         "Click on buttons"
@@ -2165,6 +2380,11 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2178,6 +2398,11 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2190,6 +2415,11 @@
       "title": "Patch gallery",
       "tags": [
         "patch"
+      ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
       ],
       "steps": [
         "Wait 1 second"
@@ -2217,6 +2447,11 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2229,6 +2464,11 @@
       "title": "Patch grid internal items",
       "tags": [
         "patch"
+      ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
       ],
       "steps": [
         "Wait 1 second"
@@ -2243,6 +2483,11 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2256,6 +2501,11 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "steps": [
         "Wait 1 second"
       ],
@@ -2268,6 +2518,11 @@
       "title": "Patch state partial",
       "tags": [
         "patch"
+      ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
       ],
       "steps": [
         "Wait 1 second",
@@ -2284,6 +2539,11 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "steps": [
         "Wait 1 second",
         "toggle state"
@@ -2297,6 +2557,11 @@
       "title": "Patch state transactional success",
       "tags": [
         "patch"
+      ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
       ],
       "steps": [
         "Wait 1 second",
@@ -2313,6 +2578,11 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "steps": [
         "Wait 1 second",
         "Check all tabs"
@@ -2327,6 +2597,11 @@
       "tags": [
         "patch"
       ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
+      ],
       "steps": [
         "Wait 1 second",
         "Check all tabs"
@@ -2340,6 +2615,11 @@
       "title": "Patch tabs transactional success",
       "tags": [
         "patch"
+      ],
+      "automated": [
+        "android",
+        "web",
+        "ios"
       ],
       "steps": [
         "Wait 1 second",
@@ -2358,6 +2638,10 @@
       "platforms": [
         "web",
         "ios"
+      ],
+      "automated": [
+        "ios",
+        "web"
       ],
       "steps": [
         "Press buttons with div-actions."
@@ -2554,8 +2838,8 @@
     {
       "title": "Container with item_builder",
       "platforms": [
-          "ios",
-          "web"
+        "ios",
+        "web"
       ],
       "tags": [
         "actions",
@@ -2592,6 +2876,11 @@
         "android",
         "web"
       ],
+      "automated": [
+        "ios",
+        "android",
+        "web"
+      ],
       "tags": [
         "input"
       ],
@@ -2608,6 +2897,10 @@
     {
       "title": "Vector scale",
       "platforms": [
+        "android",
+        "web"
+      ],
+      "automated": [
         "android",
         "web"
       ],

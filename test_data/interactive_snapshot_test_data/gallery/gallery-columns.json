@@ -2,7 +2,6 @@
   "description": "Gallery columns",
   "platforms": [
     "android",
-    "web",
     "ios"
   ],
   "div_data": {

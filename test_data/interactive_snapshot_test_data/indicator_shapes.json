@@ -1,8 +1,7 @@
 {
-  "description": "Auto ellipsize",
+  "description": "Indicator shapes",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

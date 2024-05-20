@@ -2,7 +2,8 @@
   "description": "Variable triggers (closures)",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "div_data": {
     "templates": {

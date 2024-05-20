@@ -2,6 +2,7 @@
   "description": "Variables in pager",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "div_data": {

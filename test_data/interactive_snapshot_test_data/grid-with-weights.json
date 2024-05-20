@@ -2,7 +2,8 @@
   "description": "Grid with weights",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "div_data": {
     "templates": {

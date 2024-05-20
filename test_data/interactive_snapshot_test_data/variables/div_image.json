@@ -2,7 +2,7 @@
   "description": "Variables in DivImage",
   "platforms": [
     "android",
-    "web"
+    "ios"
   ],
   "div_data": {
     "templates": {

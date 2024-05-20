@@ -1,7 +1,8 @@
 {
   "description": "Tab swipe",
   "platforms": [
-    "web"
+    "android",
+    "ios"
   ],
   "div_data": {
     "templates": {

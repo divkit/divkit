@@ -2,7 +2,6 @@
   "description": "Gallery default item states",
   "platforms": [
     "android",
-    "web",
     "ios"
   ],
   "div_data": {

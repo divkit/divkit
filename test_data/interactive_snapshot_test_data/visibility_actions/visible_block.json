@@ -2,7 +2,7 @@
   "description": "Visibility action in visible block",
   "platforms": [
     "android",
-    "web"
+    "ios"
   ],
   "div_data": {
     "card": {

@@ -2,7 +2,7 @@
   "description": "Root state switching",
   "platforms": [
     "android",
-    "web"
+    "ios"
   ],
   "div_data": {
     "templates": {
