@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:golden_toolkit/golden_toolkit.dart';
+import 'framework.dart';
 
 abstract class Devices {
   static const iphone3 = Device(

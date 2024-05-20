@@ -13,7 +13,7 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 /// Future<void> testExecutable(FutureOr<void> Function() testMain) async =>
 ///     goldenTestsTestExecutable(testMain);
 /// ```
-Future<void> goldenTestsTestExecutableForCI(
+Future<void> goldenTestsTestExecutable(
   FutureOr<void> Function() testMain,
 ) async =>
     GoldenToolkit.runWithConfiguration(

@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'models/test_files.dart';
-import 'skipped_tests.dart';
-import 'test_data_paths.dart';
-import 'test_loader.dart';
-import 'test_runner.dart';
+import 'config/skipped_tests.dart';
+import 'config/test_data_paths.dart';
+import 'config/test_loader.dart';
+import 'config/test_runner.dart';
 
 void main() async {
   for (final testDataPath in testDataPaths) {
