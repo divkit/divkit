@@ -295,17 +295,6 @@ extension UnicodeScalarView {
       }
     }
 
-    func scanHex() -> String? {
-      scanCharacters {
-        switch $0 {
-        case "0"..."9", "A"..."F", "a"..."f":
-          true
-        default:
-          false
-        }
-      }
-    }
-
     func scanExponent() -> String? {
       let start = self
       if let e = scanCharacter({ $0 == "e" || $0 == "E" }) {
@@ -323,9 +312,6 @@ extension UnicodeScalarView {
       var endOfInt = self
       let sign = scanCharacter { $0 == "-" } ?? ""
       if let integer = scanInteger() {
-        if integer == "0", scanCharacter("x") {
-          return .integer("\(sign)0x\(scanHex() ?? "")")
-        }
         endOfInt = self
         if scanCharacter(".") {
           guard let fraction = scanInteger() else {

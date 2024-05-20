@@ -153,6 +153,20 @@
                 "ios",
                 "web"
             ]
+        },
+        {
+            "name": "0xFF => error",
+            "expression": "@{0xFF}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
         }
     ]
 }
