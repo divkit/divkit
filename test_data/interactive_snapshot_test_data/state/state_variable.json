@@ -1,0 +1,175 @@
+{
+    "description": "state_id_variable",
+    "platforms": [
+        "android",
+        "ios",
+        "web"
+    ],
+    "div_data": {
+        "templates": {
+            "title": {
+                "type": "text",
+                "font_size": 18,
+                "margins": {
+                    "left": 20,
+                    "right": 20,
+                    "top": 20,
+                    "bottom": 20
+                }
+            },
+            "button": {
+                "type": "title",
+                "width": {
+                    "type": "wrap_content"
+                },
+                "background": [
+                    {
+                        "type": "solid",
+                        "color": "#f1dff2"
+                    }
+                ],
+                "border": {
+                    "corner_radius": 8
+                },
+                "paddings": {
+                    "left": 20,
+                    "right": 20,
+                    "top": 10,
+                    "bottom": 10
+                }
+            }
+        },
+        "card": {
+            "log_id": "test",
+            "variables": [
+                {
+                    "name": "state_id_var",
+                    "type": "string",
+                    "value": "state2"
+                }
+            ],
+            "states": [
+                {
+                    "state_id": 0,
+                    "div": {
+                        "type": "container",
+                        "items": [
+                            {
+                                "type": "title",
+                                "text": "Variable: @{state_id_var}"
+                            },
+                            {
+                                "type": "state",
+                                "id": "states",
+                                "state_id_variable": "state_id_var",
+                                "states": [
+                                    {
+                                        "state_id": "state1",
+                                        "div": {
+                                            "type": "title",
+                                            "text": "State 1"
+                                        }
+                                    },
+                                    {
+                                        "state_id": "state2",
+                                        "div": {
+                                            "type": "title",
+                                            "text": "Second state"
+                                        }
+                                    },
+                                    {
+                                        "state_id": "state3",
+                                        "div": {
+                                            "type": "title",
+                                            "text": "Third state"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "button",
+                                "text": "Set state 2 by action",
+                                "actions": [
+                                    {
+                                        "log_id": "state2",
+                                        "url": "div-action://set_state?state_id=0/states/state2"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "button",
+                                "text": "Set state 2 by variable",
+                                "actions": [
+                                    {
+                                        "log_id": "state2",
+                                        "url": "div-action://set_variable?name=state_id_var&value=state2"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "button",
+                                "text": "Set state 3 by action",
+                                "actions": [
+                                    {
+                                        "log_id": "state3",
+                                        "url": "div-action://set_state?state_id=0/states/state3"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "button",
+                                "text": "Set state 3 by variable",
+                                "actions": [
+                                    {
+                                        "log_id": "state3",
+                                        "url": "div-action://set_variable?name=state_id_var&value=state3"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "steps": [
+        {
+            "expected_screenshot": "step0.png"
+        },
+        {
+            "div_actions": [
+                {
+                    "log_id": "state3",
+                    "url": "div-action://set_state?state_id=0/states/state3"
+                }
+            ]
+        },
+        {
+            "div_actions": [
+                {
+                    "log_id": "state2",
+                    "url": "div-action://set_state?state_id=0/states/state2"
+                }
+            ],
+            "expected_screenshot": "step0.png"
+        },
+        {
+            "div_actions": [
+                {
+                    "log_id": "state3",
+                    "url": "div-action://set_variable?name=state_id_var&value=state3"
+                }
+            ],
+            "expected_screenshot": "step1.png"
+        },
+        {
+            "div_actions": [
+                {
+                    "log_id": "state2",
+                    "url": "div-action://set_variable?name=state_id_var&value=state2"
+                }
+            ],
+            "expected_screenshot": "step0.png"
+        }
+    ]
+}

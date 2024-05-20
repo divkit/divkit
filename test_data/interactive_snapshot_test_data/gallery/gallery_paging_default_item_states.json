@@ -1,0 +1,327 @@
+{
+  "description": "Gallery default item states",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "id": "gallery",
+            "type": "gallery",
+            "default_item": 2,
+            "orientation": "horizontal",
+            "scroll_mode": "paging",
+            "items": [
+              {
+                "type": "gallery_item_content",
+                "header_text": "Item 0",
+                "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                "content_id": "content_0",
+                "button_id": "button_0",
+                "content_expand_action": "div-action://set_state?state_id=0/content_0/expanded",
+                "content_collapse_action": "div-action://set_state?state_id=0/content_0/collapsed",
+                "text_expand_action": "div-action://set_state?state_id=0/button_0/text_expand",
+                "text_collapse_action": "div-action://set_state?state_id=0/button_0/text_collapse"
+              },
+              {
+                "id": "blocks_2",
+                "expand_id": "expand_2",
+                "type": "gallery_item_content",
+                "header_text": "Item 1",
+                "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                "content_id": "content_1",
+                "button_id": "button_1",
+                "content_expand_action": "div-action://set_state?state_id=0/content_1/expanded",
+                "content_collapse_action": "div-action://set_state?state_id=0/content_1/collapsed",
+                "text_expand_action": "div-action://set_state?state_id=0/button_1/text_expand",
+                "text_collapse_action": "div-action://set_state?state_id=0/button_1/text_collapse"
+              },
+              {
+                "type": "gallery_item_content",
+                "header_text": "Item 2",
+                "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                "content_id": "content_2",
+                "button_id": "button_2",
+                "content_expand_action": "div-action://set_state?state_id=0/content_2/expanded",
+                "content_collapse_action": "div-action://set_state?state_id=0/content_2/collapsed",
+                "text_expand_action": "div-action://set_state?state_id=0/button_2/text_expand",
+                "text_collapse_action": "div-action://set_state?state_id=0/button_2/text_collapse"
+              },
+              {
+                "type": "gallery_item_content",
+                "header_text": "Item 3",
+                "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                "content_id": "content_3",
+                "button_id": "button_3",
+                "content_expand_action": "div-action://set_state?state_id=0/content_3/expanded",
+                "content_collapse_action": "div-action://set_state?state_id=0/content_3/collapsed",
+                "text_expand_action": "div-action://set_state?state_id=0/button_3/text_expand",
+                "text_collapse_action": "div-action://set_state?state_id=0/button_3/text_collapse"
+              },
+              {
+                "type": "gallery_item_content",
+                "header_text": "Item 4",
+                "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                "content_id": "content_4",
+                "button_id": "button_4",
+                "content_expand_action": "div-action://set_state?state_id=0/content_4/expanded",
+                "content_collapse_action": "div-action://set_state?state_id=0/content_4/collapsed",
+                "text_expand_action": "div-action://set_state?state_id=0/button_4/text_expand",
+                "text_collapse_action": "div-action://set_state?state_id=0/button_4/text_collapse"
+              },
+              {
+                "type": "gallery_item_content",
+                "header_text": "5",
+                "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                "content_id": "content_5",
+                "button_id": "button_5",
+                "content_expand_action": "div-action://set_state?state_id=0/content_5/expanded",
+                "content_collapse_action": "div-action://set_state?state_id=0/content_5/collapsed",
+                "text_expand_action": "div-action://set_state?state_id=0/button_5/text_expand",
+                "text_collapse_action": "div-action://set_state?state_id=0/button_5/text_collapse"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "templates": {
+      "gallery_item_text": {
+        "type": "text",
+        "paddings": {
+          "left": 16,
+          "right": 16
+        },
+        "text_color": "#000000",
+        "font_size": 16
+      },
+      "gallery_item_button": {
+        "type": "text",
+        "height": {
+          "type": "fixed",
+          "value": 36
+        },
+        "margins": {
+          "left": 16,
+          "right": 16,
+          "bottom": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#f1dff2"
+          }
+        ],
+        "border": {
+          "corner_radius": 8
+        },
+        "font_size": 16,
+        "font_weight": "medium",
+        "max_lines": 1,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "text_color": "#000000"
+      },
+      "gallery_item_content": {
+        "type": "container",
+        "width": {
+          "type": "fixed",
+          "value": 320
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "margins": {
+          "top": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0e000000"
+          }
+        ],
+        "items": [
+          {
+            "type": "text",
+            "text_color": "#000000",
+            "width": {
+              "type": "match_parent"
+            },
+            "paddings": {
+              "left": 16,
+              "right": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "font_size": 18,
+            "text_alignment_horizontal": "left",
+            "$text": "header_text"
+          },
+          {
+            "type": "state",
+            "$id": "content_id",
+            "states": [
+              {
+                "state_id": "collapsed",
+                "animation_in": {
+                  "name": "fade",
+                  "interpolator": "ease",
+                  "duration": 200
+                },
+                "animation_out": {
+                  "name": "fade",
+                  "interpolator": "ease_in_out",
+                  "duration": 200
+                },
+                "div": {
+                  "type": "gallery_item_text",
+                  "margins": {
+                    "bottom": 16
+                  },
+                  "max_lines": 5,
+                  "$text": "item_text"
+                }
+              },
+              {
+                "state_id": "expanded",
+                "animation_in": {
+                  "name": "fade",
+                  "interpolator": "ease",
+                  "duration": 200
+                },
+                "animation_out": {
+                  "name": "fade",
+                  "interpolator": "ease_in_out",
+                  "duration": 200
+                },
+                "div": {
+                  "type": "gallery_item_text",
+                  "margins": {
+                    "bottom": 16
+                  },
+                  "$text": "item_text"
+                }
+              }
+            ]
+          },
+          {
+            "type": "state",
+            "$id": "button_id",
+            "states": [
+              {
+                "state_id": "text_expand",
+                "div": {
+                  "type": "gallery_item_button",
+                  "text": "EXPAND",
+                  "actions": [
+                    {
+                      "log_id": "expand_content",
+                      "$url": "content_expand_action"
+                    },
+                    {
+                      "log_id": "button_text_collapse",
+                      "$url": "text_collapse_action"
+                    }
+                  ],
+                  "$id": "expand_id"
+                }
+              },
+              {
+                "state_id": "text_collapse",
+                "div": {
+                  "type": "gallery_item_button",
+                  "text": "COLLAPSE",
+                  "actions": [
+                    {
+                      "log_id": "collapse_content",
+                      "$url": "content_collapse_action"
+                    },
+                    {
+                      "log_id": "button_text_expand",
+                      "$url": "text_expand_action"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change",
+          "url": "div-action://set_current_item?id=gallery&item=1"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "open_text",
+          "url": "div-action://set_state?state_id=0/content_1/expanded"
+        },
+        {
+          "log_id": "open",
+          "url": "div-action://set_state?state_id=0/button_1/text_collapse"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change",
+          "url": "div-action://set_current_item?id=gallery&item=2"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change",
+          "url": "div-action://set_current_item?id=gallery&item=1"
+        }
+      ],
+      "expected_screenshot": "step4.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "collapse_text",
+          "url": "div-action://set_state?state_id=0/content_1/collapsed"
+        },
+        {
+          "log_id": "collapse",
+          "url": "div-action://set_state?state_id=0/button_1/text_extend"
+        }
+      ],
+      "expected_screenshot": "step5.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change",
+          "url": "div-action://set_current_item?id=gallery&item=0"
+        }
+      ],
+      "expected_screenshot": "step6.png"
+    }
+  ]
+}

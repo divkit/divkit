@@ -1,0 +1,424 @@
+{
+  "description": "Common timer",
+  "platforms": [
+    "android",
+    "web",
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "field": {
+        "type": "container",
+        "orientation": "horizontal",
+        "width": {
+          "type": "wrap_content"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "paddings": {
+          "left": 8,
+          "top": 8,
+          "right": 8,
+          "bottom": 8
+        },
+        "content_alignment_horizontal": "center",
+        "content_alignment_vertical": "center",
+        "items": [
+          {
+            "type": "text",
+            "$text": "title",
+            "width": {
+              "type": "wrap_content"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "text_alignment_vertical": "center",
+            "text_alignment_horizontal": "center",
+            "font_size": 24,
+            "ranges": [
+              {
+                "start": 0,
+                "$end": "title_end",
+                "font_weight": "bold"
+              }
+            ]
+          }
+        ]
+      },
+      "button": {
+        "type": "text",
+        "width": {
+          "type": "fixed",
+          "value": 150
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "margins": {
+          "left": 8,
+          "top": 8,
+          "right": 8,
+          "bottom": 8
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center"
+      },
+      "controller_button": {
+        "type": "text",
+        "width": {
+          "type": "wrap_content"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "paddings": {
+          "left": 8,
+          "top": 8,
+          "right": 8,
+          "bottom": 8
+        },
+        "margins": {
+          "left": 4,
+          "top": 4,
+          "right": 4,
+          "bottom": 4
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 12,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center"
+      },
+      "value_controller": {
+        "type": "container",
+        "orientation": "horizontal",
+        "content_alignment_horizontal": "center",
+        "content_alignment_vertical": "center",
+        "items": [
+          {
+            "type": "controller_button",
+            "text": "<<<",
+            "action": {
+              "log_id": "major_decrement",
+              "$url": "major_decrement_url"
+            }
+          },
+          {
+            "type": "controller_button",
+            "text": "<<",
+            "action": {
+              "log_id": "moderate_decrement",
+              "$url": "moderate_decrement_url"
+            }
+          },
+          {
+            "type": "controller_button",
+            "text": "<",
+            "action": {
+              "log_id": "minor_decrement",
+              "$url": "minor_decrement_url"
+            }
+          },
+          {
+            "type": "text",
+            "$text": "variable",
+            "margins": {
+              "left": 8,
+              "top": 8,
+              "right": 8,
+              "bottom": 8
+            },
+            "font_size": 16,
+            "font_weight": "medium",
+            "width": {
+              "type": "wrap_content"
+            }
+          },
+          {
+            "type": "controller_button",
+            "text": ">",
+            "action": {
+              "log_id": "minor_increment",
+              "$url": "minor_increment_url"
+            }
+          },
+          {
+            "type": "controller_button",
+            "text": ">>",
+            "action": {
+              "log_id": "moderate_increment",
+              "$url": "moderate_increment_url"
+            }
+          },
+          {
+            "type": "controller_button",
+            "text": ">>>",
+            "action": {
+              "log_id": "major_increment",
+              "$url": "major_increment_url"
+            }
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "div2_sample_card",
+      "variables": [
+        {
+          "name": "timer_value",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "timer_state",
+          "type": "string",
+          "value": "initial"
+        },
+        {
+          "name": "tick_count_value",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "timer_duration",
+          "type": "integer",
+          "value": 5000
+        },
+        {
+          "name": "timer_interval",
+          "type": "integer",
+          "value": 1000
+        }
+      ],
+      "timers": [
+        {
+          "id": "ticker",
+          "duration": "@{timer_duration}",
+          "tick_interval": "@{timer_interval}",
+          "value_variable": "timer_value",
+          "tick_actions": [
+            {
+              "log_id": "tick",
+              "url": "div-action://set_variable?name=timer_state&value=ticking"
+            },
+            {
+              "log_id": "tick",
+              "url": "div-action://set_variable?name=tick_count_value&value=@{tick_count_value+1}"
+            }
+          ],
+          "end_actions": [
+            {
+              "log_id": "end",
+              "url": "div-action://set_variable?name=timer_state&value=ended"
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "content_alignment_horizontal": "center",
+            "content_alignment_vertical": "center",
+            "width": {
+              "type": "match_parent"
+            },
+            "items": [
+              {
+                "type": "field",
+                "title": "Value: @{timer_value}",
+                "title_end": 6
+              },
+              {
+                "type": "field",
+                "title": "Tick count: @{tick_count_value}",
+                "title_end": 11
+              },
+              {
+                "type": "grid",
+                "orientation": "horizontal",
+                "width": {
+                  "type": "match_parent"
+                },
+                "column_count": 2,
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "button",
+                    "text": "Start",
+                    "actions": [
+                      {
+                        "log_id": "Start timer",
+                        "url": "div-action://timer?id=ticker&action=start"
+                      },
+                      {
+                        "log_id": "tick",
+                        "url": "div-action://set_variable?name=tick_count_value&value=0"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "button",
+                    "text": "Pause",
+                    "actions": [
+                      {
+                        "log_id": "Pause timer",
+                        "url": "div-action://timer?id=ticker&action=pause"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "button",
+                    "text": "Resume",
+                    "actions": [
+                      {
+                        "log_id": "Resume timer",
+                        "url": "div-action://timer?id=ticker&action=resume"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "button",
+                    "text": "Stop",
+                    "actions": [
+                      {
+                        "log_id": "Stop timer",
+                        "url": "div-action://timer?id=ticker&action=stop"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "button",
+                    "text": "Cancel",
+                    "actions": [
+                      {
+                        "log_id": "Stop timer",
+                        "url": "div-action://timer?id=ticker&action=cancel"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "button",
+                    "text": "Reset",
+                    "actions": [
+                      {
+                        "log_id": "Stop timer",
+                        "url": "div-action://timer?id=ticker&action=reset"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "value_controller",
+                "variable": "@{timer_duration}",
+                "major_decrement_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration - 5000}",
+                "moderate_decrement_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration - 1000}",
+                "minor_decrement_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration - 100}",
+                "minor_increment_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration + 100}",
+                "moderate_increment_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration + 1000}",
+                "major_increment_url": "div-action://set_variable?name=timer_duration&value=@{timer_duration + 5000}"
+              },
+              {
+                "type": "value_controller",
+                "variable": "@{timer_interval}",
+                "major_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 1000}",
+                "moderate_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 250}",
+                "minor_decrement_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval - 50}",
+                "minor_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 50}",
+                "moderate_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 250}",
+                "major_increment_url": "div-action://set_variable?name=timer_interval&value=@{timer_interval + 1000}"
+              }
+            ],
+            "margins": {
+              "top": 8,
+              "bottom": 8,
+              "left": 8,
+              "right": 8
+            }
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change interval",
+          "url": "div-action://set_variable?name=timer_duration&value=2000"
+        },
+        {
+          "log_id": "start",
+          "url": "div-action://timer?id=ticker&action=start"
+        }
+      ],
+      "delay": 2000,
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "delay": 1000,
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change interval",
+          "url": "div-action://set_variable?name=timer_interval&value=200"
+        },
+        {
+          "log_id": "change interval",
+          "url": "div-action://set_variable?name=timer_duration&value=2000"
+        },
+        {
+          "log_id": "start",
+          "url": "div-action://timer?id=ticker&action=start"
+        }
+      ],
+      "delay": 2000,
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "delay": 1000,
+      "expected_screenshot": "step3.png"
+    }
+  ]
+}

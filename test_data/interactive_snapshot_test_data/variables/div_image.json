@@ -1,0 +1,163 @@
+{
+  "description": "Variables in DivImage",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "label_text": {
+        "type": "text",
+        "font_size": 24,
+        "font_weight": "bold",
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "height": {
+          "type": "match_parent"
+        },
+        "width": {
+          "type": "match_parent"
+        }
+      }
+    },
+    "card": {
+      "variables": [
+        {
+          "name": "color_variable",
+          "type": "color",
+          "value": "#ffff0000"
+        },
+        {
+          "name": "ratio",
+          "type": "number",
+          "value": 18.7821782178217822
+        },
+        {
+          "name": "image_url",
+          "type": "string",
+          "value": "https://yastatic.net/s3/home/divkit/shape.png"
+        }
+
+      ],
+      "log_id": "simple_tap",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "id": "label",
+            "alignment_vertical": "center",
+            "height": {
+              "type": "match_parent"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#9f55ff00"
+              }
+            ],
+            "items": [
+              {
+                "type": "image",
+                "border": {
+                  "corner_radius": 20,
+                  "stroke": {
+                    "color": "#1F000000",
+                    "width": 1
+                  }
+                },
+                "width": {
+                  "type": "match_parent"
+                },
+                "tint_color": "@{color_variable}",
+                "image_url": "@{image_url}",
+                "placeholder_color": "#505040"
+              },
+              {
+                "type": "label_text",
+                "text_color": "#ffff0000",
+                "text": "set red tint color",
+                "action": {
+                  "url": "div-action://set_variable?name=color_variable&value=%23ffff0000",
+                  "log_id": "to_red"
+                }
+              },
+              {
+                "type": "label_text",
+                "text_color": "#ff0000ff",
+                "text": "set blue tint color",
+                "action": {
+                  "url": "div-action://set_variable?name=color_variable&value=%23ff0000ff",
+                  "log_id": "to_blue"
+                }
+              },
+              {
+                "type": "label_text",
+                "text_color": "#fff",
+                "text": "img#1",
+                "action": {
+                  "url": "div-action://set_variable?name=image_url&value=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdiv%2Fbottomsheet%2Fbender%2Fcamera.2.png",
+                  "log_id": "change_img_url"
+                }
+              },
+              {
+                "type": "label_text",
+                "text_color": "#fff",
+                "text": "img#2",
+                "action": {
+                  "url": "div-action://set_variable?name=image_url&value=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fpattern.png",
+                  "log_id": "change_img_url"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=color_variable&value=%23ff0000ff",
+          "log_id": "to_blue"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=image_url&value=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdiv%2Fbottomsheet%2Fbender%2Fcamera.2.png",
+          "log_id": "change_img_url"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=color_variable&value=%23ffff0000",
+          "log_id": "to_red"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=image_url&value=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fpattern.png",
+          "log_id": "change_img_url"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=color_variable&value=%23ff0000ff",
+          "log_id": "to_blue"
+        }
+      ]
+    }
+  ]
+}

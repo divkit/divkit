@@ -1,0 +1,141 @@
+{
+  "description": "Container with aspect size",
+  "platforms": [
+    "android",
+    "web",
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "block": {
+        "type": "container",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#A0FFA0"
+          }
+        ],
+        "margins": {
+          "top": 10
+        }
+      },
+      "content": {
+        "type": "text",
+        "font_size": 16,
+        "width": {
+          "type": "wrap_content"
+        },
+        "margins": {
+          "left": 10,
+          "right": 10,
+          "top": 10,
+          "bottom": 10
+        }
+      }
+    },
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "paddings": {
+              "left": 10,
+              "right": 10
+            },
+            "items": [
+              {
+                "type": "block",
+                "width": {
+                  "type": "match_parent"
+                },
+                "aspect": {
+                  "ratio": 2
+                },
+                "items": [
+                  {
+                    "type": "content",
+                    "text": "width = match_parent\naspect = 2"
+                  }
+                ]
+              },
+              {
+                "type": "block",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "aspect": {
+                  "ratio": 2
+                },
+                "items": [
+                  {
+                    "type": "content",
+                    "text": "width = wrap_content\naspect = 2"
+                  }
+                ]
+              },
+              {
+                "type": "block",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "aspect": {
+                  "ratio": 0.75
+                },
+                "items": [
+                  {
+                    "type": "content",
+                    "text": "width = wrap_content\naspect = 0.75"
+                  }
+                ]
+              },
+              {
+                "type": "block",
+                "orientation": "overlap",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "aspect": {
+                  "ratio": 2
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "text": " ",
+                    "width": {
+                      "type": "fixed",
+                      "value": 200
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 200
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#A0A0FF"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "content",
+                    "text": "width = wrap_content\norientation = overlap\naspect = 2"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}
