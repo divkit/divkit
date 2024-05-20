@@ -2,22 +2,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:path/path.dart' as path;
 
-import 'ci_file_comparator.dart';
+import 'enhanced_file_comparator.dart';
 
-/// Matcher function for Golden tests on CI.
+/// Enhanced matcher function for Golden tests.
+///
+/// Can be used for basic golden tests CI setup.
 ///
 /// Runs [screenMatchesGolden] from golden_toolkit framework
-/// with [CIFileComparator].
+/// with [EnhancedLocalFileComparator].
 ///
 /// See their docs for more details.
-Future<void> screenMatchesGoldenForCI(
+Future<void> enhancedScreenMatchesGolden(
   WidgetTester tester,
   String name, {
   bool? autoHeight,
   Finder? finder,
   CustomPump? customPump,
 }) =>
-    _screenMatchesGoldenForCI(
+    _enhancedScreenMatchesGolden(
       tester,
       name,
       autoHeight: autoHeight,
@@ -25,14 +27,14 @@ Future<void> screenMatchesGoldenForCI(
       customPump: customPump,
     );
 
-Future<void> _screenMatchesGoldenForCI(
+Future<void> _enhancedScreenMatchesGolden(
   WidgetTester tester,
   String name, {
   bool? autoHeight,
   Finder? finder,
   CustomPump? customPump,
 }) {
-  goldenFileComparator = CIFileComparator(
+  goldenFileComparator = EnhancedLocalFileComparator(
     path.join(
       (goldenFileComparator as LocalFileComparator).basedir.toString(),
       name,
