@@ -12,9 +12,6 @@
         "state_id": 0,
         "div": {
           "type": "text",
-          "width": {
-            "type": "wrap_content"
-          },
           "paddings": {
             "left": 4,
             "top": 4,
@@ -23,20 +20,20 @@
           },
           "font_size": 14,
           "line_height": 18,
-          "text": "Lorem ipsum dolor sit amet, consectetur\nadipiscing elit, sed do eiusmod tempor\nincididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud\nexercitation ullamco laboris nisi ut\naliquip ex ea commodo consequat.",
+          "text": "Multiline text with line overall height containing:\n\t1. font size range\n\t2. line height range",
           "ranges": [
             {
-              "start": 64,
-              "end": 71,
-              "font_size": 24,
-              "font_weight": "bold",
-              "line_height": 28
-            },
-            {
-              "start": 135,
-              "end": 140,
+              "start": 56,
+              "end": 65,
               "font_size": 24,
               "font_weight": "medium"
+            },
+            {
+              "start": 76,
+              "end": 87,
+              "font_size": 24,
+              "font_weight": "medium",
+              "line_height": 28
             }
           ]
         }

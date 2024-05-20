@@ -74,13 +74,15 @@ internal class BitmapImageSpan @JvmOverloads constructor(
                 AnchorPoint.LINE_BOTTOM -> fm.bottom
             }
 
-            val desiredFmTop = -imageHeight + imageOffset + imageBaseline
-            val desiredFmBottom = desiredFmTop + imageHeight
-            fm.top = min(desiredFmTop, fm.top)
-            fm.ascent = min(desiredFmTop, fm.ascent)
-            fm.descent = max(desiredFmBottom, fm.descent)
-            fm.bottom = max(desiredFmBottom, fm.bottom)
-            fm.leading = fm.descent - fm.ascent
+            val targetAscent = -imageHeight + imageOffset + imageBaseline
+            val targetDescent = targetAscent + imageHeight
+            val topAscent = fm.top - fm.ascent
+            val bottomDescent = fm.bottom - fm.descent
+
+            fm.ascent = min(targetAscent, fm.ascent)
+            fm.descent = max(targetDescent, fm.descent)
+            fm.top = fm.ascent + topAscent
+            fm.bottom = fm.descent + bottomDescent
         }
         return drawable.bounds.right
     }

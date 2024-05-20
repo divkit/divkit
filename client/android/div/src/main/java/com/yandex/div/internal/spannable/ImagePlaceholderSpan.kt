@@ -3,9 +3,9 @@ package com.yandex.div.internal.spannable
 import android.graphics.Canvas
 import android.graphics.Paint
 import androidx.annotation.CallSuper
-import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 /**
  * Placeholder image span for reserving space
@@ -19,20 +19,20 @@ internal class ImagePlaceholderSpan(
 
     @CallSuper
     override fun adjustSize(paint: Paint, text: CharSequence, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
-        if (lineHeight <= 0) {
+        if (fm == null || lineHeight > 0) {
             return width
         }
 
-        fm?.apply {
-            val offset = getImageOffset(height, paint)
-            val desiredFmTop = ceil(height - offset).toInt()
-            fm.ascent = min(-desiredFmTop, fm.ascent)
-            fm.top = min(-desiredFmTop, fm.top)
-            val desiredFmBottom = ceil(offset).toInt()
-            fm.descent = max(desiredFmBottom, fm.descent)
-            fm.bottom = max(desiredFmBottom, fm.bottom)
-            fm.leading = fm.descent - fm.ascent
-        }
+        val imageOffset = getImageOffset(height, paint).roundToInt()
+        val targetAscent = -height + imageOffset
+        val targetDescent = targetAscent + height
+        val topAscent = fm.top - fm.ascent
+        val bottomDescent = fm.bottom - fm.descent
+
+        fm.ascent = min(targetAscent, fm.ascent)
+        fm.descent = max(targetDescent, fm.descent)
+        fm.top = fm.ascent + topAscent
+        fm.bottom = fm.descent + bottomDescent
 
         return width
     }
