@@ -147,7 +147,7 @@
       "expected_screenshot": "step1.png"
     },
     {
-      "delay": 4000,
+      "delay": 7000,
       "expected_screenshot": "step2.png"
     },
     {
