@@ -131,6 +131,14 @@
             () => getJson(json) :
             () => getCrossplatformJson(crossplatformJson);
 
+        const origScroll = Element.prototype.scroll;
+        Element.prototype.scroll = function (options) {
+            if (typeof options === 'object') {
+                options.behavior = 'instant';
+            }
+            origScroll.call(this, options);
+        };
+
         Promise.all([
             document.fonts.load('400 12px "YS Text"', 'test'),
             document.fonts.load('500 12px "YS Text"', 'test'),

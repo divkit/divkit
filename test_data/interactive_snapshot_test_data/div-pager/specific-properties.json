@@ -94,6 +94,7 @@
             "items": [
               {
                 "type": "div_base",
+                "id": "pager",
                 "layout_mode": {
                   "type": "percentage",
                   "page_width": {
@@ -151,6 +152,10 @@
     },
     {
       "div_actions": [
+        {
+          "url": "div-action://scroll_to_start?id=pager",
+          "log_id": "page_width"
+        },
         {
           "url": "div-action://set_variable?name=orientation&value=vertical",
           "log_id": "orientation"
