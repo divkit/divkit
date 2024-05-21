@@ -40,6 +40,9 @@
             },
             "web": {
                 "version_added": "29.4.0"
+            },
+            "flutter": {
+                "version_added": "0.1.0"
             }
         }
     }]

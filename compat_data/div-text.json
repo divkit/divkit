@@ -1,7 +1,7 @@
 {
     "features": [{
         "id": "text_truncate",
-        "name": "Text truncate",
+        "name": "Text <code>truncate</code> property",
         "status": {
             "deprecated": true,
             "notes": "Property is deprecated and should not be used. Use <code>ellipsis</code> instead"
@@ -12,6 +12,20 @@
             },
             "ios": {
                 "version_added": "1.0.0"
+            }
+        }
+    }, {
+        "id": "text_auto_ellipsize",
+        "name": "Text <code>auto_ellipsize</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "29.2.0"
+            },
+            "flutter": {
+                "version_added": "0.1.0"
             }
         }
     }]
