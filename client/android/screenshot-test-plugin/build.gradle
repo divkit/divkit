@@ -14,6 +14,7 @@ dependencies {
     implementation libs.kotlinpoet
     implementation libs.kotlin.reflect
     implementation libs.protobuf
+    implementation libs.webp.imageio
 
     implementation libs.google.testing.platform.proto
 }

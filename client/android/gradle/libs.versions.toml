@@ -34,6 +34,7 @@ robolectric = "4.11.1"
 stetho = "1.6.0"
 strikt = "0.28.2"
 tinkoffAllure = "2.5.1"
+webp-imageio = "0.1.6"
 yatagan = "1.5.0"
 
 androidx-activity = "1.8.2"
@@ -176,6 +177,8 @@ stetho-core = { module = "com.facebook.stetho:stetho", version.ref = "stetho" }
 stetho-okhttp3 = { module = "com.facebook.stetho:stetho-okhttp3", version.ref = "stetho" }
 
 strict-core = { module = "io.strikt:strikt-core", version.ref = "strikt" }
+
+webp-imageio = { module = "org.sejda.imageio:webp-imageio", version.ref = "webp-imageio" }
 
 yatagan-api-compiled = { module = "com.yandex.yatagan:api-compiled", version.ref = "yatagan" }
 yatagan-processor-jap = { module = "com.yandex.yatagan:processor-jap", version.ref = "yatagan" }

@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 import kotlin.math.max
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 internal class ImageComparator(private val logger: Logger) {
 
@@ -25,34 +27,45 @@ internal class ImageComparator(private val logger: Logger) {
         val rhsImage = ImageIO.read(rhs)
 
         if (lhsImage.width != rhsImage.width || lhsImage.height != rhsImage.height) {
-            throw RuntimeException("Images has different size: left(${lhsImage.size()}), right(${rhsImage.size()})")
+            throw RuntimeException(
+                "Images has different size: left(${lhsImage.size()}), right(${rhsImage.size()})"
+            )
         }
 
-        for (width in 0 until lhsImage.width) {
-            for (height in 0 until lhsImage.height) {
-                val delta = componentsSquareDelta(lhsImage.getRGB(width, height), rhsImage.getRGB(width, height))
-                if (delta > MAX_COMPONENTS_DELTA) {
-                    val color1 = Integer.toHexString(lhsImage.getRGB(width, height))
-                    val color2 = Integer.toHexString(rhsImage.getRGB(width, height))
-                    throw RuntimeException("Too big delta $delta at ($width, $height). New: $color1, old: $color2")
-                }
+        val width = lhsImage.width
+        val height = lhsImage.height
+
+        val geometricDistanceSum = (0 until width).sumOf { x ->
+            (0 until height).sumOf { y ->
+                normalizeGeometricDistance(
+                    geometricDistance(lhsImage.getRGB(x, y), rhsImage.getRGB(x, y))
+                )
             }
+        }
+
+        val actualDifference = geometricDistanceSum / width / height
+
+        if (actualDifference > THRESHOLD) {
+            throw RuntimeException(
+                "Difference exceeds threshold: actual: $actualDifference, threshold: $THRESHOLD"
+            )
         }
     }
 
-    private fun componentsSquareDelta(rgb1: Int, rgb2: Int): Int {
-        val component11 = (rgb1 shr 24) and 0xFF
-        val component12 = (rgb1 shr 16) and 0xFF
-        val component13 = (rgb1 shr 8) and 0xFF
-        val component14 = rgb1 and 0xFF
-        val component21 = (rgb2 shr 24) and 0xFF
-        val component22 = (rgb2 shr 16) and 0xFF
-        val component23 = (rgb2 shr 8) and 0xFF
-        val component24 = rgb2 and 0xFF
-        return (component11 - component21) * (component11 - component21) +
-                (component12 - component22) * (component12 - component22) +
-                (component13 - component23) * (component13 - component23) +
-                (component14 - component24) * (component14 - component24)
+    private fun geometricDistance(rgb1: Int, rgb2: Int): Double {
+        val geometricDistanceSquared = (24 downTo 0 step 8) // a, r, g, b, each component is 8 bit wide
+            .sumOf { componentShift ->
+                val component1 = (rgb1 shr componentShift) and 0xFF
+                val component2 = (rgb2 shr componentShift) and 0xFF
+
+                (component1 - component2).toDouble().pow(2)
+            }
+
+        return sqrt(geometricDistanceSquared)
+    }
+
+    private fun normalizeGeometricDistance(distance: Double): Double {
+        return distance / 0xFF / sqrt(3.0) // Max distance is sqrt(3 * (0xFF - 0)^2)
     }
 
     fun createDiff(lhs: File, rhs: File, diff: File, imagePath: String) {
@@ -93,11 +106,6 @@ internal class ImageComparator(private val logger: Logger) {
     private fun BufferedImage.getRGBSafe(x: Int, y: Int) = if (y < height) getRGB(x, y) else 0
 
     companion object {
-
-        /**
-         * Empirical value for difference in pixel components due to compression artifacts
-         * (r1-r2)^2 + (g1-g2)^2 + (b1-b2)^2 <= MAX, so 12 means maximum components delta 2 is allowed
-         */
-        private const val MAX_COMPONENTS_DELTA = 21
+        private const val THRESHOLD = 5e-5 // Scaled from 0 to 1
     }
 }
