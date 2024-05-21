@@ -371,6 +371,12 @@ Additional external storage. The `getValue` and `setValue` methods should be imp
 
 Please note that these methods must be synchronous! DivKit does not have asynchronous render methods, so any `getValue` function cannot be asynchronous. It is possible to process `setValue` asynchronously, but if the value from `getValue` is critical for you and cannot be read synchronously, you must read it before calling `render`.
 
+#### weekStartDay
+
+Number, optional. 0 by default.
+
+Affects the formatting of dates.
+
 #### theme (DEPRECATED)
 
 `system` | `light` | `dark`

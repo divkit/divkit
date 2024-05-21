@@ -9,7 +9,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -21,7 +22,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -33,7 +35,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -45,10 +48,11 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
-     {
+    {
       "name": "formatDateAsUTCWithLocale(parseUnixTime(0), en-US) => 0:00 AM",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'K:mm a', 'en-US')}",
       "expected": {
@@ -57,10 +61,11 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
-     {
+    {
       "name": "formatDateAsUTCWithLocale(setDay(parseUnixTime(0), 13), en-US) => 1970-01-01T00:00:00.000",
       "expression": "@{formatDateAsUTCWithLocale(setDay(parseUnixTime(0), 13), 'yyyy-MM-dd\\'T\\'HH:mm:ss.SSS', 'en-US')}",
       "expected": {
@@ -69,7 +74,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -81,19 +87,26 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
       "name": "formatDateAsUTCWithLocale(parseUnixTime(3927600), 'ru-RU') => 1970-02-03, week of year 7",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3927600), 'yyyy-MM-dd\\', week of year \\'w', 'ru-RU')}",
+      "platform_specific": {
+        "web": {
+          "weekStartDay": 1
+        }
+      },
       "expected": {
         "type": "string",
         "value": "1970-02-15, week of year 7"
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -105,7 +118,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -116,7 +130,8 @@
         "value": "Year 1970, extended year 1970"
       },
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -128,7 +143,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -140,7 +156,8 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

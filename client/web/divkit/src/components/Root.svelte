@@ -103,6 +103,7 @@
     export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
     export let direction: Direction = 'ltr';
     export let store: Store | undefined = undefined;
+    export let weekStartDay = 0;
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -260,7 +261,7 @@
 
         const vars = mergeVars(variables, additionalVars);
 
-        const prepared = prepareVars(jsonProp, logError, store);
+        const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
         if (!prepared.vars.length) {
             if (prepared.hasExpression) {
                 return constStore(prepared.applyVars(vars));
@@ -280,7 +281,7 @@
         additionalVars?: Map<string, Variable>,
         keepComplex = false
     ): MaybeMissing<T> {
-        const prepared = prepareVars(jsonProp, logError, store);
+        const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
 
         if (!prepared.hasExpression) {
             return jsonProp;
@@ -1589,7 +1590,9 @@
                         const stores = exprVars.map(name => variables.get(name) || awaitVariableChanges(name));
 
                         derived(stores, () => {
-                            const res = evalExpression(variables, store, ast);
+                            const res = evalExpression(variables, store, ast, {
+                                weekStartDay
+                            });
 
                             res.warnings.forEach(logError);
 

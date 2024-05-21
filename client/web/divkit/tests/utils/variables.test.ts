@@ -14,7 +14,7 @@ describe('correctPositiveNumber', () => {
     test('no vars', () => {
         const prepared = prepareVars({
             prop: 123
-        }, logError, undefined);
+        }, logError, undefined, 0);
         expect(prepared.vars).toStrictEqual([]);
         expect(prepared.applyVars(new Map())).toStrictEqual({
             prop: 123
@@ -24,7 +24,7 @@ describe('correctPositiveNumber', () => {
     test('simple', () => {
         const prepared = prepareVars({
             prop: '@{var}'
-        }, logError, undefined);
+        }, logError, undefined, 0);
         expect(prepared.vars).toStrictEqual(['var']);
         const map = new Map();
         const variable = new IntegerVariable('var', 123);
@@ -38,7 +38,7 @@ describe('correctPositiveNumber', () => {
     test('simple no val', () => {
         const prepared = prepareVars({
             prop: '@{var}'
-        }, noError, undefined);
+        }, noError, undefined, 0);
         expect(prepared.vars).toStrictEqual(['var']);
         const map = new Map();
         expect(prepared.applyVars(map)).toStrictEqual({
@@ -53,7 +53,7 @@ describe('correctPositiveNumber', () => {
                 'smth',
                 456
             ]
-        }, logError, undefined);
+        }, logError, undefined, 0);
         expect(prepared.vars).toStrictEqual(['var']);
         const map = new Map();
         const variable = new IntegerVariable('var', 123);
@@ -70,7 +70,7 @@ describe('correctPositiveNumber', () => {
     test('interpolation', () => {
         const prepared = prepareVars({
             prop: 'Hello, @{var}'
-        }, logError, undefined);
+        }, logError, undefined, 0);
         expect(prepared.vars).toStrictEqual(['var']);
         const map = new Map();
         const variable = new IntegerVariable('var', 123);
@@ -83,7 +83,7 @@ describe('correctPositiveNumber', () => {
     test('multiple vars', () => {
         const prepared = prepareVars({
             prop: 'Hello, @{var}. Good bye, @{var2}'
-        }, logError, undefined);
+        }, logError, undefined, 0);
         expect(prepared.vars).toStrictEqual(['var', 'var2']);
         const map = new Map();
         const variable = new IntegerVariable('var', 123);

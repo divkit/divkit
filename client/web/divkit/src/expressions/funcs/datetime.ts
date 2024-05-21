@@ -1,8 +1,10 @@
-import type { DatetimeValue, EvalContext, EvalValue, IntegerValue } from '../eval';
+/* eslint-disable no-nested-ternary */
+import type { DatetimeValue, EvalContext, EvalValue, IntegerValue, StringValue } from '../eval';
 import { registerFunc } from './funcs';
-import { DATETIME, INTEGER } from '../const';
+import { DATETIME, INTEGER, STRING } from '../const';
 import { valToString } from '../utils';
 import { toBigInt } from '../bigint';
+import { formatDate } from '../../utils/formatDate';
 
 function getMaxDate(date: Date): number {
     const copy = new Date(date);
@@ -17,6 +19,17 @@ function parseUnixTime(_ctx: EvalContext, arg: IntegerValue): EvalValue {
     return {
         type: DATETIME,
         value: new Date(Number(arg.value) * 1000)
+    };
+}
+
+function parseUnixTimeAsLocal(_ctx: EvalContext, arg: IntegerValue): EvalValue {
+    const date = new Date(Number(arg.value) * 1000);
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset);
+
+    return {
+        type: DATETIME,
+        value: date
     };
 }
 
@@ -164,6 +177,19 @@ const getter = (
     };
 };
 
+function makeFormat(isUTC: boolean) {
+    return (ctx: EvalContext, datetime: DatetimeValue, format: StringValue, locale?: StringValue): EvalValue => {
+        return {
+            type: STRING,
+            value: formatDate(datetime.value, format.value, {
+                locale: locale?.value,
+                isUTC,
+                weekStartDay: ctx.weekStartDay
+            })
+        };
+    };
+}
+
 const getYear = getter('getUTCFullYear');
 const getMonth = getter('getUTCMonth');
 const getDay = getter('getUTCDate');
@@ -173,8 +199,12 @@ const getMinutes = getter('getUTCMinutes');
 const getSeconds = getter('getUTCSeconds');
 const getMillis = getter('getUTCMilliseconds');
 
+const formatAsLocal = makeFormat(false);
+const formatAsUTC = makeFormat(true);
+
 export function registerDatetime(): void {
     registerFunc('parseUnixTime', [INTEGER], parseUnixTime);
+    registerFunc('parseUnixTimeAsLocal', [INTEGER], parseUnixTimeAsLocal);
     registerFunc('nowLocal', [], nowLocal);
     registerFunc('addMillis', [DATETIME, INTEGER], addMillis);
 
@@ -194,4 +224,9 @@ export function registerDatetime(): void {
     registerFunc('getMinutes', [DATETIME], getMinutes);
     registerFunc('getSeconds', [DATETIME], getSeconds);
     registerFunc('getMillis', [DATETIME], getMillis);
+
+    registerFunc('formatDateAsLocal', [DATETIME, STRING], formatAsLocal);
+    registerFunc('formatDateAsUTC', [DATETIME, STRING], formatAsUTC);
+    registerFunc('formatDateAsLocalWithLocale', [DATETIME, STRING, STRING], formatAsLocal);
+    registerFunc('formatDateAsUTCWithLocale', [DATETIME, STRING, STRING], formatAsUTC);
 }

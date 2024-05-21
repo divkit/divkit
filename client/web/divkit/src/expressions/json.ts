@@ -23,13 +23,24 @@ class ExpressionBinding {
      * @param logError
      */
     apply(
-        variables: VariablesMap,
-        logError: LogError,
-        store: Store | undefined,
-        keepComplex = false
+        {
+            variables,
+            logError,
+            store,
+            weekStartDay,
+            keepComplex
+        }: {
+            variables: VariablesMap;
+            logError: LogError;
+            store: Store | undefined;
+            weekStartDay: number;
+            keepComplex?: boolean;
+        }
     ): VariableValue | string | undefined {
         try {
-            const res = evalExpression(variables, store, this.ast);
+            const res = evalExpression(variables, store, this.ast, {
+                weekStartDay
+            });
             res.warnings.forEach(logError);
             const result = res.result;
 
@@ -180,28 +191,31 @@ function prepareVarsObj<T>(
 
 function applyVars(
     jsonProp: unknown,
-    variables: VariablesMap,
-    logError: LogError,
-    store: Store | undefined,
-    keepComplex = false
+    opts: {
+        variables: VariablesMap;
+        logError: LogError;
+        store: Store | undefined;
+        weekStartDay: number;
+        keepComplex?: boolean;
+    }
 ): unknown {
     if (jsonProp) {
         if (
             (process.env.ENABLE_EXPRESSIONS || process.env.ENABLE_EXPRESSIONS === undefined) &&
             jsonProp instanceof ExpressionBinding
         ) {
-            return jsonProp.apply(variables, logError, store, keepComplex);
+            return jsonProp.apply(opts);
         } else if (
             (!process.env.ENABLE_EXPRESSIONS && process.env.ENABLE_EXPRESSIONS !== undefined) &&
             jsonProp instanceof VariableBinding
         ) {
-            return jsonProp.apply(variables, logError);
+            return jsonProp.apply(opts.variables, opts.logError);
         } else if (Array.isArray(jsonProp)) {
-            return jsonProp.map(it => applyVars(it, variables, logError, store));
+            return jsonProp.map(it => applyVars(it, opts));
         } else if (typeof jsonProp === 'object') {
             const res: Record<string, unknown> = {};
             for (const key in jsonProp) {
-                res[key] = applyVars(jsonProp[key as keyof typeof jsonProp], variables, logError, store);
+                res[key] = applyVars(jsonProp[key as keyof typeof jsonProp], opts);
             }
             return res;
         }
@@ -209,7 +223,7 @@ function applyVars(
     return jsonProp;
 }
 
-export function prepareVars<T>(jsonProp: T, logError: LogError, store: Store | undefined): {
+export function prepareVars<T>(jsonProp: T, logError: LogError, store: Store | undefined, weekStartDay: number): {
     vars: string[];
     hasExpression: boolean;
     applyVars: (variables: VariablesMap, keepComplex?: boolean) => MaybeMissing<T>;
@@ -229,7 +243,13 @@ export function prepareVars<T>(jsonProp: T, logError: LogError, store: Store | u
         vars,
         hasExpression: result.hasExpression,
         applyVars(variables: VariablesMap, keepComplex?: boolean) {
-            return applyVars(root, variables, logError, store, keepComplex) as MaybeMissing<T>;
+            return applyVars(root, {
+                variables,
+                logError,
+                store,
+                weekStartDay,
+                keepComplex
+            }) as MaybeMissing<T>;
         }
     };
 }

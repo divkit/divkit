@@ -55,7 +55,9 @@ function runCase(item: any) {
         }
         return;
     }
-    const res = evalExpression(vars, undefined, ast);
+    const res = evalExpression(vars, undefined, ast, {
+        weekStartDay: item.platform_specific?.web?.weekStartDay || 0
+    });
     if (item.expected.value !== '' || res.result.type !== 'error') {
         if (res.result.type === 'number' && item.expected.type === 'number') {
             expect(res.result.value).toBeCloseTo(item.expected.value);

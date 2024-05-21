@@ -100,6 +100,7 @@ export interface EvalContext {
     warnings: WrappedError[];
     safeIntegerOverflow: boolean;
     store?: Store;
+    weekStartDay: number;
 }
 
 register();
@@ -560,7 +561,9 @@ export function evalAny(ctx: EvalContext, expr: Node): EvalValue {
     throw new Error('Unsupported expression');
 }
 
-export function evalExpression(vars: VariablesMap, store: Store | undefined, expr: Node): {
+export function evalExpression(vars: VariablesMap, store: Store | undefined, expr: Node, opts?: {
+    weekStartDay?: number;
+}): {
     result: EvalResult;
     warnings: WrappedError[];
 } {
@@ -569,7 +572,8 @@ export function evalExpression(vars: VariablesMap, store: Store | undefined, exp
             variables: vars,
             warnings: [],
             safeIntegerOverflow: false,
-            store
+            store,
+            weekStartDay: opts?.weekStartDay || 0
         };
 
         const result = evalAny(ctx, expr);
