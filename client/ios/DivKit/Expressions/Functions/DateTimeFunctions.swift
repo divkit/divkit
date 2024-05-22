@@ -189,31 +189,19 @@ private let getMillis = FunctionUnary<Date, Int> {
 }
 
 private let formatDateAsLocal = FunctionBinary<Date, String, String> {
-  try formatDate($0, format: $1)
+  makeDateFormatter($1, isUTC: false).string(from: $0)
 }
 
 private let formatDateAsLocalWithLocale = FunctionTernary<Date, String, String, String> {
-  try formatDate($0, format: $1, locale: $2)
+  makeDateFormatter($1, isUTC: false, locale: $2).string(from: $0)
 }
 
 private let formatDateAsUTC = FunctionBinary<Date, String, String> {
-  try formatDate($0, format: $1, isUTC: true)
+  makeDateFormatter($1, isUTC: true).string(from: $0)
 }
 
 private let formatDateAsUTCWithLocale = FunctionTernary<Date, String, String, String> {
-  try formatDate($0, format: $1, isUTC: true, locale: $2)
-}
-
-private func formatDate(
-  _ value: Date,
-  format: String,
-  isUTC: Bool = false,
-  locale: String? = nil
-) throws -> String {
-  guard !format.contains("Z"), !format.contains("z") else {
-    throw ExpressionError("z/Z not supported in [\(format)].")
-  }
-  return makeDateFormatter(format, isUTC: isUTC, locale: locale).string(from: value)
+  makeDateFormatter($1, isUTC: true, locale: $2).string(from: $0)
 }
 
 private let dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -264,7 +252,7 @@ private let calendar: Calendar = {
 
 private func makeDateFormatter(
   _ format: String,
-  isUTC: Bool = false,
+  isUTC: Bool,
   locale: String? = nil
 ) -> DateFormatter {
   let formatter = DateFormatter()

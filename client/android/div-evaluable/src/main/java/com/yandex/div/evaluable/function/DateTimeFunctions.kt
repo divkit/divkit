@@ -549,12 +549,9 @@ internal object FormatDateAsLocal : Function() {
         val datetime = args[0] as DateTime
         val pattern = args[1] as String
 
-        throwExceptionIfZInTimezone(name, args, pattern)
-
         val date = datetime.toDate()
         val sdf = SimpleDateFormat(pattern, Locale.getDefault())
         sdf.timeZone = TimeZone.getDefault()
-
         return sdf.format(date)
     }
 }
@@ -578,12 +575,9 @@ internal object FormatDateAsUTC : Function() {
         val datetime = args[0] as DateTime
         val pattern = args[1] as String
 
-        throwExceptionIfZInTimezone(name, args, pattern)
-
         val date = datetime.toDate()
         val sdf = SimpleDateFormat(pattern, Locale.getDefault())
         sdf.timeZone = TimeZone.getTimeZone("UTC")
-
         return sdf.format(date)
     }
 }
@@ -609,12 +603,9 @@ internal object FormatDateAsLocalWithLocale : Function() {
         val pattern = args[1] as String
         val locale = args[2] as String
 
-        throwExceptionIfZInTimezone(name, args, pattern)
-
         val date = datetime.toDate()
         val sdf = SimpleDateFormat(pattern, Locale.Builder().setLanguageTag(locale).build())
         sdf.timeZone = TimeZone.getDefault()
-
         return sdf.format(date)
     }
 }
@@ -640,23 +631,10 @@ internal object FormatDateAsUTCWithLocale : Function() {
         val pattern = args[1] as String
         val locale = args[2] as String
 
-        throwExceptionIfZInTimezone(name, args, pattern)
-
         val date = datetime.toDate()
         val sdf = SimpleDateFormat(pattern, Locale.Builder().setLanguageTag(locale).build())
         sdf.timeZone = TimeZone.getTimeZone("UTC")
-
         return sdf.format(date)
-    }
-}
-
-private fun throwExceptionIfZInTimezone(
-    name: String,
-    args: List<Any>,
-    pattern: String
-) {
-    if (pattern.toLowerCase().contains("z")) {
-        throwExceptionOnFunctionEvaluationFailed(name, args, "z/Z not supported in [$pattern].")
     }
 }
 
