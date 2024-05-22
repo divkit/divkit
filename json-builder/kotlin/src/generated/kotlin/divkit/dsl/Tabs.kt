@@ -60,6 +60,7 @@ class Tabs internal constructor(
             separatorColor = additive.separatorColor ?: properties.separatorColor,
             separatorPaddings = additive.separatorPaddings ?: properties.separatorPaddings,
             switchTabsByContentSwipeEnabled = additive.switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
+            tabTitleDelimiter = additive.tabTitleDelimiter ?: properties.tabTitleDelimiter,
             tabTitleStyle = additive.tabTitleStyle ?: properties.tabTitleStyle,
             titlePaddings = additive.titlePaddings ?: properties.titlePaddings,
             tooltips = additive.tooltips ?: properties.tooltips,
@@ -182,6 +183,10 @@ class Tabs internal constructor(
          */
         val switchTabsByContentSwipeEnabled: Property<Boolean>?,
         /**
+         * Style of delimiters between tab titles.
+         */
+        val tabTitleDelimiter: Property<TabTitleDelimiter>?,
+        /**
          * Design style of tab titles.
          */
         val tabTitleStyle: Property<TabTitleStyle>?,
@@ -260,6 +265,7 @@ class Tabs internal constructor(
             result.tryPutProperty("separator_color", separatorColor)
             result.tryPutProperty("separator_paddings", separatorPaddings)
             result.tryPutProperty("switch_tabs_by_content_swipe_enabled", switchTabsByContentSwipeEnabled)
+            result.tryPutProperty("tab_title_delimiter", tabTitleDelimiter)
             result.tryPutProperty("tab_title_style", tabTitleStyle)
             result.tryPutProperty("title_paddings", titlePaddings)
             result.tryPutProperty("tooltips", tooltips)
@@ -319,6 +325,57 @@ class Tabs internal constructor(
                 result.tryPutProperty("div", div)
                 result.tryPutProperty("title", title)
                 result.tryPutProperty("title_click_action", titleClickAction)
+                return result
+            }
+        }
+    }
+
+
+    /**
+     * Style of delimiters between tab titles.
+     * 
+     * Can be created using the method [tabsTabTitleDelimiter].
+     * 
+     * Required parameters: `image_url`.
+     */
+    @Generated
+    class TabTitleDelimiter internal constructor(
+        @JsonIgnore
+        val properties: Properties,
+    ) {
+        @JsonAnyGetter
+        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+        operator fun plus(additive: Properties): TabTitleDelimiter = TabTitleDelimiter(
+            Properties(
+                height = additive.height ?: properties.height,
+                imageUrl = additive.imageUrl ?: properties.imageUrl,
+                width = additive.width ?: properties.width,
+            )
+        )
+
+        class Properties internal constructor(
+            /**
+             * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+             * Default value: `{"type": "fixed", "value": 12}`.
+             */
+            val height: Property<FixedSize>?,
+            /**
+             * Direct URL to an image.
+             */
+            val imageUrl: Property<Url>?,
+            /**
+             * Element width.
+             * Default value: `{"type": "fixed", "value": 12}`.
+             */
+            val width: Property<FixedSize>?,
+        ) {
+            internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                val result = mutableMapOf<String, Any>()
+                result.putAll(properties)
+                result.tryPutProperty("height", height)
+                result.tryPutProperty("image_url", imageUrl)
+                result.tryPutProperty("width", width)
                 return result
             }
         }
@@ -508,6 +565,7 @@ class Tabs internal constructor(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -548,6 +606,7 @@ fun DivScope.tabs(
     separatorColor: Color? = null,
     separatorPaddings: EdgeInsets? = null,
     switchTabsByContentSwipeEnabled: Boolean? = null,
+    tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
@@ -586,6 +645,7 @@ fun DivScope.tabs(
         separatorColor = valueOrNull(separatorColor),
         separatorPaddings = valueOrNull(separatorPaddings),
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
+        tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
         tabTitleStyle = valueOrNull(tabTitleStyle),
         titlePaddings = valueOrNull(titlePaddings),
         tooltips = valueOrNull(tooltips),
@@ -626,6 +686,7 @@ fun DivScope.tabs(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -666,6 +727,7 @@ fun DivScope.tabsProps(
     separatorColor: Color? = null,
     separatorPaddings: EdgeInsets? = null,
     switchTabsByContentSwipeEnabled: Boolean? = null,
+    tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
@@ -703,6 +765,7 @@ fun DivScope.tabsProps(
     separatorColor = valueOrNull(separatorColor),
     separatorPaddings = valueOrNull(separatorPaddings),
     switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
+    tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
     tabTitleStyle = valueOrNull(tabTitleStyle),
     titlePaddings = valueOrNull(titlePaddings),
     tooltips = valueOrNull(tooltips),
@@ -742,6 +805,7 @@ fun DivScope.tabsProps(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -782,6 +846,7 @@ fun TemplateScope.tabsRefs(
     separatorColor: ReferenceProperty<Color>? = null,
     separatorPaddings: ReferenceProperty<EdgeInsets>? = null,
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
+    tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -819,6 +884,7 @@ fun TemplateScope.tabsRefs(
     separatorColor = separatorColor,
     separatorPaddings = separatorPaddings,
     switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
+    tabTitleDelimiter = tabTitleDelimiter,
     tabTitleStyle = tabTitleStyle,
     titlePaddings = titlePaddings,
     tooltips = tooltips,
@@ -858,6 +924,7 @@ fun TemplateScope.tabsRefs(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -898,6 +965,7 @@ fun Tabs.override(
     separatorColor: Color? = null,
     separatorPaddings: EdgeInsets? = null,
     switchTabsByContentSwipeEnabled: Boolean? = null,
+    tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
@@ -936,6 +1004,7 @@ fun Tabs.override(
         separatorColor = valueOrNull(separatorColor) ?: properties.separatorColor,
         separatorPaddings = valueOrNull(separatorPaddings) ?: properties.separatorPaddings,
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled) ?: properties.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = valueOrNull(tabTitleDelimiter) ?: properties.tabTitleDelimiter,
         tabTitleStyle = valueOrNull(tabTitleStyle) ?: properties.tabTitleStyle,
         titlePaddings = valueOrNull(titlePaddings) ?: properties.titlePaddings,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
@@ -976,6 +1045,7 @@ fun Tabs.override(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1016,6 +1086,7 @@ fun Tabs.defer(
     separatorColor: ReferenceProperty<Color>? = null,
     separatorPaddings: ReferenceProperty<EdgeInsets>? = null,
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
+    tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1054,6 +1125,7 @@ fun Tabs.defer(
         separatorColor = separatorColor ?: properties.separatorColor,
         separatorPaddings = separatorPaddings ?: properties.separatorPaddings,
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = tabTitleDelimiter ?: properties.tabTitleDelimiter,
         tabTitleStyle = tabTitleStyle ?: properties.tabTitleStyle,
         titlePaddings = titlePaddings ?: properties.titlePaddings,
         tooltips = tooltips ?: properties.tooltips,
@@ -1124,6 +1196,7 @@ fun Tabs.evaluate(
         separatorColor = separatorColor ?: properties.separatorColor,
         separatorPaddings = properties.separatorPaddings,
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = properties.tabTitleDelimiter,
         tabTitleStyle = properties.tabTitleStyle,
         titlePaddings = properties.titlePaddings,
         tooltips = properties.tooltips,
@@ -1164,6 +1237,7 @@ fun Tabs.evaluate(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1204,6 +1278,7 @@ fun Component<Tabs>.override(
     separatorColor: Color? = null,
     separatorPaddings: EdgeInsets? = null,
     switchTabsByContentSwipeEnabled: Boolean? = null,
+    tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
@@ -1243,6 +1318,7 @@ fun Component<Tabs>.override(
         separatorColor = valueOrNull(separatorColor),
         separatorPaddings = valueOrNull(separatorPaddings),
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
+        tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
         tabTitleStyle = valueOrNull(tabTitleStyle),
         titlePaddings = valueOrNull(titlePaddings),
         tooltips = valueOrNull(tooltips),
@@ -1283,6 +1359,7 @@ fun Component<Tabs>.override(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1323,6 +1400,7 @@ fun Component<Tabs>.defer(
     separatorColor: ReferenceProperty<Color>? = null,
     separatorPaddings: ReferenceProperty<EdgeInsets>? = null,
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
+    tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1362,6 +1440,7 @@ fun Component<Tabs>.defer(
         separatorColor = separatorColor,
         separatorPaddings = separatorPaddings,
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = tabTitleDelimiter,
         tabTitleStyle = tabTitleStyle,
         titlePaddings = titlePaddings,
         tooltips = tooltips,
@@ -1433,6 +1512,7 @@ fun Component<Tabs>.evaluate(
         separatorColor = separatorColor,
         separatorPaddings = null,
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = null,
         tabTitleStyle = null,
         titlePaddings = null,
         tooltips = null,
@@ -1565,6 +1645,115 @@ fun Tabs.Item.evaluate(
 
 @Generated
 fun Tabs.Item.asList() = listOf(this)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun DivScope.tabsTabTitleDelimiter(
+    `use named arguments`: Guard = Guard.instance,
+    height: FixedSize? = null,
+    imageUrl: Url? = null,
+    width: FixedSize? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = valueOrNull(height),
+        imageUrl = valueOrNull(imageUrl),
+        width = valueOrNull(width),
+    )
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun DivScope.tabsTabTitleDelimiterProps(
+    `use named arguments`: Guard = Guard.instance,
+    height: FixedSize? = null,
+    imageUrl: Url? = null,
+    width: FixedSize? = null,
+) = Tabs.TabTitleDelimiter.Properties(
+    height = valueOrNull(height),
+    imageUrl = valueOrNull(imageUrl),
+    width = valueOrNull(width),
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun TemplateScope.tabsTabTitleDelimiterRefs(
+    `use named arguments`: Guard = Guard.instance,
+    height: ReferenceProperty<FixedSize>? = null,
+    imageUrl: ReferenceProperty<Url>? = null,
+    width: ReferenceProperty<FixedSize>? = null,
+) = Tabs.TabTitleDelimiter.Properties(
+    height = height,
+    imageUrl = imageUrl,
+    width = width,
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun Tabs.TabTitleDelimiter.override(
+    `use named arguments`: Guard = Guard.instance,
+    height: FixedSize? = null,
+    imageUrl: Url? = null,
+    width: FixedSize? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = valueOrNull(height) ?: properties.height,
+        imageUrl = valueOrNull(imageUrl) ?: properties.imageUrl,
+        width = valueOrNull(width) ?: properties.width,
+    )
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun Tabs.TabTitleDelimiter.defer(
+    `use named arguments`: Guard = Guard.instance,
+    height: ReferenceProperty<FixedSize>? = null,
+    imageUrl: ReferenceProperty<Url>? = null,
+    width: ReferenceProperty<FixedSize>? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = height ?: properties.height,
+        imageUrl = imageUrl ?: properties.imageUrl,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param imageUrl Direct URL to an image.
+ */
+@Generated
+fun Tabs.TabTitleDelimiter.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    imageUrl: ExpressionProperty<Url>? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = properties.height,
+        imageUrl = imageUrl ?: properties.imageUrl,
+        width = properties.width,
+    )
+)
+
+@Generated
+fun Tabs.TabTitleDelimiter.asList() = listOf(this)
 
 /**
  * @param activeBackgroundColor Background color of the active tab title.
