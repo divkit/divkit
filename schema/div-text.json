@@ -42,6 +42,13 @@
             "ios"
           ]
         },
+        "font_feature_settings": {
+          "type": "string",
+          "$description": "translations.json#/div_font_feature_settings",
+          "platforms": [
+            "android"
+          ]
+        },
         "letter_spacing": {
           "type": "number",
           "$description": "translations.json#/div_text_range_letter_spacing"
@@ -243,6 +250,13 @@
           "platforms": [
             "android",
             "ios"
+          ]
+        },
+        "font_feature_settings": {
+          "type": "string",
+          "$description": "translations.json#/div_font_feature_settings",
+          "platforms": [
+            "android"
           ]
         },
         "line_height": {

@@ -32,6 +32,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
+import com.yandex.div.core.view2.spannable.FontFeatureSpan
 import com.yandex.div.core.view2.spannable.FontSizeSpan
 import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
 import com.yandex.div.core.view2.spannable.ShadowSpan
@@ -106,6 +107,7 @@ internal class DivTextBinder @Inject constructor(
         view.bindTypeface(div, oldDiv, expressionResolver)
         view.bindTextAlignment(div, oldDiv, expressionResolver)
         view.bindFontSize(div, oldDiv, expressionResolver)
+        view.bindFontFeatureSettings(div, oldDiv, expressionResolver)
         view.bindLineHeight(context, div, oldDiv, expressionResolver)
         view.bindTextColor(div, oldDiv, expressionResolver)
         view.bindUnderline(div, oldDiv, expressionResolver)
@@ -254,6 +256,35 @@ internal class DivTextBinder @Inject constructor(
         val fontSize = size.toIntSafely()
         applyFontSize(fontSize, unit)
         applyLetterSpacing(letterSpacing, fontSize)
+    }
+
+    //endregion
+
+    //region Font Feature Settings
+
+    private fun DivLineHeightTextView.bindFontFeatureSettings(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver
+    ) {
+        if (newDiv.fontFeatureSettings.equalsToConstant(oldDiv?.fontFeatureSettings)) {
+            return
+        }
+
+        applyFontFeatureSettings(newDiv.fontFeatureSettings?.evaluate(resolver))
+
+        if (newDiv.fontFeatureSettings.isConstantOrNull()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyFontFeatureSettings(newDiv.fontFeatureSettings?.evaluate(resolver))
+        }
+        addSubscription(newDiv.fontFeatureSettings?.observe(resolver, callback))
+    }
+
+    private fun TextView.applyFontFeatureSettings(settings: String?) {
+        fontFeatureSettings = settings.takeIf { it?.isNotBlank() == true }
     }
 
     //endregion
@@ -1038,6 +1069,9 @@ internal class DivTextBinder @Inject constructor(
                         lineHeight.unitToPx(metrics, fontSizeUnit)
                     ),
                     start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            }
+            range.fontFeatureSettings?.evaluate(resolver)?.let { settings ->
+                setSpan(FontFeatureSpan(settings), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
             range.textColor?.evaluate(resolver)?.let {
                 setSpan(TextColorSpan(it), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)

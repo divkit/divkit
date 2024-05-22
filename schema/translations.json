@@ -695,6 +695,10 @@
     "en": "Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>",
     "ru": "Семейство шрифта:<li>`text` — стандартный текстовый шрифт;</li><li>`display` — семейство для шрифтов с крупным кеглем.</li>"
   },
+  "div_font_feature_settings": {
+    "en": "List of OpenType font features. The format is the same as the CSS font-feature-settings attribute: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop",
+    "ru": "Список функции шрифтов OpenType. Формат соответствует атрибуту CSS font-feature-settings: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop"
+  },
   "div_font_size": {
     "en": "Font size.",
     "ru": "Размер шрифта."
