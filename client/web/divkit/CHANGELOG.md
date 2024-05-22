@@ -1,3 +1,12 @@
+## 30.2.0 (May 27, 2024)
+
+* Calculate `is_enabled` in `actions` before executing the entire list of actions, not in the process.
+* Implemented `toString` function and method for arrays and dicts.
+* Improved expression error messages.
+* Fixed unary minus operator parsing.
+* Added functions `parseUnixTimeAsLocal`, `formatDateAsLocal`, `formatDateAsUTC`, `formatDateAsLocalWithLocale`, `formatDateAsUTCWithLocale` and the `weekStartDay` parameter.
+
+
 ## 30.0.0 (May 13, 2024)
 
 * Breaking change: actions from `variable_triggers` lead to execution of a callback `onStat` with type = `trigger`.

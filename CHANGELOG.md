@@ -1,3 +1,22 @@
+## 30.2.0
+
+# Android Client:
+* Fixed line height adjustment for embedded images and image placeholdes in `div-text`.
+* Added padding on draw `default_item` in `gallery`.
+* Improved expression error messages.
+
+# iOS Client:
+* Fixed disappear actions for gone blocks.
+* Improved expression error messages.
+
+# Web Client:
+* Calculate `is_enabled` in `actions` before executing the entire list of actions, not in the process.
+* Implemented `toString` function and method for arrays and dicts.
+* Improved expression error messages.
+* Fixed unary minus operator parsing.
+* Added functions `parseUnixTimeAsLocal`, `formatDateAsLocal`, `formatDateAsUTC`, `formatDateAsLocalWithLocale`, `formatDateAsUTCWithLocale` and the `weekStartDay` parameter.
+
+
 ## 30.1.0
 
 # Android Client:
