@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs.gallery
 
+import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -25,17 +26,23 @@ internal class DivGridLayoutManager(
     override val divItems
         get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.nonNullItems
 
-    private val midPadding
+    private val itemSpacing
         get() = div.itemSpacing.evaluate(bindingContext.expressionResolver).dpToPx(view.resources.displayMetrics)
+
+    private val crossSpacing
+        get() = div.crossSpacing?.evaluate(bindingContext.expressionResolver)?.dpToPx(view.resources.displayMetrics)
+            ?: itemSpacing
+
+    private fun spacingByOrientation(alongOrientation: Int) = if (alongOrientation == orientation) itemSpacing else crossSpacing
 
     override fun toLayoutManager() = this
 
-    override fun getPaddingStart() = super.getPaddingStart() - midPadding / 2
-    override fun getPaddingEnd() = super.getPaddingEnd() - midPadding / 2
-    override fun getPaddingLeft() = super.getPaddingLeft() - midPadding / 2
-    override fun getPaddingTop() = super.getPaddingTop() - midPadding / 2
-    override fun getPaddingRight() = super.getPaddingRight() - midPadding / 2
-    override fun getPaddingBottom() = super.getPaddingBottom() - midPadding / 2
+    override fun getPaddingStart() = super.getPaddingStart() - itemSpacing / 2
+    override fun getPaddingEnd() = super.getPaddingEnd() - itemSpacing / 2
+    override fun getPaddingLeft() = super.getPaddingLeft() - spacingByOrientation(HORIZONTAL) / 2
+    override fun getPaddingTop() = super.getPaddingTop() - spacingByOrientation(VERTICAL) / 2
+    override fun getPaddingRight() = super.getPaddingRight() - spacingByOrientation(HORIZONTAL) / 2
+    override fun getPaddingBottom() = super.getPaddingBottom() - spacingByOrientation(VERTICAL) / 2
 
     override fun layoutDecorated(child: View, left: Int, top: Int, right: Int, bottom: Int) {
         super.layoutDecorated(child, left, top, right, bottom)
@@ -45,6 +52,25 @@ internal class DivGridLayoutManager(
     override fun onLayoutCompleted(state: RecyclerView.State?) {
         _onLayoutCompleted(state)
         super.onLayoutCompleted(state)
+    }
+
+    override fun calculateItemDecorationsForChild(child: View, outRect: Rect) {
+        super.calculateItemDecorationsForChild(child, outRect)
+
+        val position = _getPosition(child)
+        val item = div.nonNullItems[position].value()
+
+        val isFixedHeight = item.height is DivSize.Fixed
+        val isFixedWidth = item.width is DivSize.Fixed
+
+        val isMultiSpan = spanCount > 1
+
+        val verticalOffset = if (isFixedHeight && isMultiSpan) spacingByOrientation(VERTICAL) / 2 else 0
+        val horizontalOffset = if (isFixedWidth && isMultiSpan) spacingByOrientation(HORIZONTAL) / 2 else 0
+
+        outRect.apply {
+            set(left - horizontalOffset, top - verticalOffset, right - horizontalOffset, bottom - verticalOffset)
+        }
     }
 
     override fun layoutDecoratedWithMargins(child: View, left: Int, top: Int, right: Int, bottom: Int) {
@@ -117,26 +143,6 @@ internal class DivGridLayoutManager(
     override fun _getChildAt(index: Int): View? = getChildAt(index)
 
     override fun _getPosition(child: View): Int = getPosition(child)
-
-    override fun getDecoratedMeasuredWidth(child: View): Int {
-        val position = _getPosition(child)
-        val item = div.nonNullItems[position].value()
-
-        val isFixedWidth = item.width is DivSize.Fixed
-        val isMultiSpan = spanCount > 1
-
-        return super.getDecoratedMeasuredWidth(child) + if (isFixedWidth && isMultiSpan) midPadding else 0
-    }
-
-    override fun getDecoratedMeasuredHeight(child: View): Int {
-        val position = _getPosition(child)
-        val item = div.nonNullItems[position].value()
-
-        val isFixedHeight = item.height is DivSize.Fixed
-        val isMultiSpan = spanCount > 1
-
-        return super.getDecoratedMeasuredHeight(child) + if (isFixedHeight && isMultiSpan) midPadding else 0
-    }
 
     override fun width(): Int = width
 
