@@ -1731,6 +1731,22 @@
     "en": "Switching tabs by scrolling through the contents.",
     "ru": "Переключение табов скроллом по содержимому."
   },
+  "div_tabs_tab_title_delimiter_delimiter_style": {
+    "en": "Style of delimiters between tab titles.",
+    "ru": "Стиль оформления разделителей между заголовками табов."
+  },
+  "div_tabs_tab_title_delimiter_style_background_color": {
+    "en": "Background color of delimiter.",
+    "ru": "Цвет фона разделителей."
+  },
+  "div_tabs_tab_title_delimiter_style_corner_radius": {
+    "en": "Delimiters corner rounding radii. If the parameter isn't specified, the rounding is maximum (half of the smallest size). Not used if the `corners_radius` parameter is set.",
+    "ru": "Радиус скругления углов разделителей. Если параметр не задан, то максимальное скругление (половина от наименьшего размера). Не используется, если задан параметр `corners_radius`."
+  },
+  "div_tabs_tab_title_delimiter_style_corners_radius": {
+    "en": "Rounding radii of corners of delimiters. Empty values are replaced by 0.",
+    "ru": "Радиусы скругления углов разделителей. Пустые значения будут заменены на 0."
+  },
   "div_tabs_tab_title_style": {
     "en": "Design style of tab titles.",
     "ru": "Стиль оформления заголовков табов."
@@ -1806,22 +1822,6 @@
   "div_tabs_title_paddings": {
     "en": "Indents in the tab name.",
     "ru": "Отступы в названии таба."
-  },
-  "div_tabs_tab_title_delimiter_delimiter_style": {
-    "en": "Style of delimiters between tab titles.",
-    "ru": "Стиль оформления разделителей между заголовками табов."
-  },
-  "div_tabs_tab_title_delimiter_style_background_color": {
-    "en": "Background color of delimiter.",
-    "ru": "Цвет фона разделителей."
-  },
-  "div_tabs_tab_title_delimiter_style_corner_radius": {
-    "en": "Delimiters corner rounding radii. If the parameter isn't specified, the rounding is maximum (half of the smallest size). Not used if the `corners_radius` parameter is set.",
-    "ru": "Радиус скругления углов разделителей. Если параметр не задан, то максимальное скругление (половина от наименьшего размера). Не используется, если задан параметр `corners_radius`."
-  },
-  "div_tabs_tab_title_delimiter_style_corners_radius": {
-    "en": "Rounding radii of corners of delimiters. Empty values are replaced by 0.",
-    "ru": "Радиусы скругления углов разделителей. Пустые значения будут заменены на 0."
   },
   "div_text": {
     "en": "Text.",
