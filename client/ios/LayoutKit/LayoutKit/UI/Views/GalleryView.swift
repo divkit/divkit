@@ -277,6 +277,19 @@ extension GalleryView: ScrollDelegate {
     scrollStartOffset = getOffset(scrollView)
   }
 
+  public func onWillEndDragging(
+    _ scrollView: any ScrollView,
+    withVelocity _: CGPoint,
+    targetContentOffset: UnsafeMutablePointer<CGPoint>
+  ) {
+    switch model.scrollMode {
+    case .default:
+      break
+    case .autoPaging, .fixedPaging:
+      targetContentOffset.pointee = scrollView.contentOffset
+    }
+  }
+
   public func onDidScroll(_ scrollView: ScrollView) {
     var offset = getOffset(scrollView)
     let contentPosition: GalleryViewState.Position
