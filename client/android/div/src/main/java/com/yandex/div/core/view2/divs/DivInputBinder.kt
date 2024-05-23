@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.Color
+import android.text.InputFilter
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
@@ -79,6 +80,7 @@ internal class DivInputBinder @Inject constructor(
             observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
             observeLineHeight(div, expressionResolver)
             observeMaxVisibleLines(div, expressionResolver)
+            observeMaxLength(div, expressionResolver)
 
             observeHintText(div, expressionResolver)
             observeHintColor(div, expressionResolver)
@@ -212,6 +214,15 @@ internal class DivInputBinder @Inject constructor(
 
         val callback = { _: Any -> maxLines = maxLinesExpr.evaluate(resolver).toIntSafely() }
         addSubscription(maxLinesExpr.observeAndGet(resolver, callback))
+    }
+
+    private fun DivInputView.observeMaxLength(div: DivInput, resolver: ExpressionResolver) {
+        val maxLengthExpr = div.maxLength ?: return
+
+        val callback = { _: Any ->
+            filters = arrayOf(InputFilter.LengthFilter(maxLengthExpr.evaluate(resolver).toIntSafely()))
+        }
+        addSubscription(maxLengthExpr.observeAndGet(resolver, callback))
     }
 
     private fun DivInputView.observeHintText(div: DivInput, resolver: ExpressionResolver) {

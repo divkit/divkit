@@ -78,6 +78,13 @@
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_input_max_visible_lines"
         },
+        "max_length": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_input_max_length",
+          "platforms": [
+            "android"
+          ]
+        },
         "letter_spacing": {
           "type": "number",
           "default_value": "0",
