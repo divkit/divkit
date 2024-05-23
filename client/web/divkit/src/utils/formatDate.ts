@@ -2,7 +2,7 @@
 
 type FormatGetter = (opts: Intl.DateTimeFormatOptions & {
     date?: Date;
-}, field: Intl.DateTimeFormatPartTypes | 'week' | 'weekyear' | 'extendedyear' | 'weekofmonth' | 'dayofyear' | 'dayofweekinmonth' | 'weekdaynumeric') => string | undefined;
+}, field: Intl.DateTimeFormatPartTypes | 'week' | 'weekyear' | 'extendedyear' | 'weekofmonth' | 'dayofyear' | 'dayofweekinmonth' | 'weekdaynumeric' | 'timezoneoffset') => string | undefined;
 
 function formatNumber(num: string | undefined, len: number | undefined): string | undefined {
     if (!num || !len) {
@@ -167,6 +167,18 @@ const formatters: Record<string, (token: number, getter: FormatGetter) => string
         }
         return res;
     },
+    z(token, getter) {
+        return getter({
+            timeZoneName: token === 4 ? 'long' : 'short'
+        }, 'timeZoneName');
+    },
+    Z(_token, getter) {
+        const offset = -Number(getter({}, 'timezoneoffset'));
+        const timeOffset = Math.abs(offset / 60);
+        const fullOffset = Math.floor(timeOffset) * 100 + (timeOffset - Math.floor(timeOffset)) * 60;
+
+        return (offset >= 0 ? '+' : '-') + formatNumber(String(fullOffset), 4);
+    },
 };
 
 const formattingTokensRegExp =
@@ -322,6 +334,13 @@ export function formatDate(date: Date, format: string, {
             return String(year);
         }
 
+        if (field === 'timezoneoffset') {
+            if (isUTC) {
+                return '0';
+            }
+            return String(date.getTimezoneOffset());
+        }
+
         if (isUTC) {
             opts.timeZone = 'UTC';
         }
@@ -346,10 +365,6 @@ export function formatDate(date: Date, format: string, {
             const firstCharacter = substring[0];
             if (firstCharacter === "'") {
                 return cleanEscapedString(substring);
-            }
-
-            if (firstCharacter === 'z' || firstCharacter === 'Z') {
-                throw new Error(`z/Z not supported in [${format}].`);
             }
 
             if (formatters[firstCharacter]) {

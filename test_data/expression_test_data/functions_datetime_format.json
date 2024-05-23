@@ -195,34 +195,47 @@
       },
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
       "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm z') => 15/02/1970 12:34 UTC",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm z')}",
+      "unsupported_platforms": {
+        "ios": "Platform-specific format"
+      },
       "expected": {
         "type": "string",
         "value": "15/02/1970 12:34 UTC"
       },
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
       "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz') => 15/02/1970 12:34 UTC",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz')}",
+      "unsupported_platforms": {
+        "ios": "Platform-specific format"
+      },
       "expected": {
         "type": "string",
         "value": "15/02/1970 12:34 Coordinated Universal Time"
       },
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
       "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm z') => 15/02/1970 12:34 GMT",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm z')}",
+      "unsupported_platforms": {
+        "web": "Platform-specific format",
+        "android": "Platform-specific format"
+      },
       "expected": {
         "type": "string",
         "value": "15/02/1970 12:34 GMT"
@@ -234,23 +247,16 @@
     {
       "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz') => 15/02/1970 12:34 UTC",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz')}",
+      "unsupported_platforms": {
+        "web": "Platform-specific format",
+        "android": "Platform-specific format"
+      },
       "expected": {
         "type": "string",
         "value": "15/02/1970 12:34 Greenwich Mean Time"
       },
       "platforms": [
         "ios"
-      ]
-    },
-    {
-      "name": "formatDateAsUTC(parseUnixTime(0), 'dd/MM/yyyy HH:mm Z') => error",
-      "expression": "@{formatDateAsUTC(parseUnixTime(0), 'dd/MM/yyyy HH:mm Z')}",
-      "expected": {
-        "type": "error",
-        "value": "Failed to evaluate [formatDateAsUTC(1970-01-01 00:00:00, 'dd/MM/yyyy HH:mm Z')]. z/Z not supported in [dd/MM/yyyy HH:mm Z]."
-      },
-      "platforms": [
-        "web"
       ]
     }
   ]

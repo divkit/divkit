@@ -451,6 +451,44 @@ describe('formatDate', () => {
                 locale: 'en-US'
             })).toEqual('123');
         });
+
+        test('z', () => {
+            expect(formatDate(testDate2, 'z', {
+                locale: 'en-US',
+                isUTC: true
+            })).toEqual('UTC');
+            expect(formatDate(testDate2, 'zz', {
+                locale: 'en-US',
+                isUTC: true
+            })).toEqual('UTC');
+            expect(formatDate(testDate2, 'zzz', {
+                locale: 'en-US',
+                isUTC: true
+            })).toEqual('UTC');
+            expect(formatDate(testDate2, 'zzzz', {
+                locale: 'en-US',
+                isUTC: true
+            })).toEqual('Coordinated Universal Time');
+        });
+
+        test('Z', () => {
+            expect(formatDate(testDate2, 'Z', {
+                locale: 'en-US',
+                isUTC: true
+            })).toEqual('+0000');
+            expect(formatDate(testDate2, 'ZZ', {
+                locale: 'en-US',
+                isUTC: true
+            })).toEqual('+0000');
+            expect(formatDate(testDate2, 'ZZZ', {
+                locale: 'en-US',
+                isUTC: true
+            })).toEqual('+0000');
+            expect(formatDate(testDate2, 'ZZZZ', {
+                locale: 'en-US',
+                isUTC: true
+            })).toEqual('+0000');
+        });
     });
 
     // Based on date-fns tests https://github.com/date-fns/date-fns/blob/main/src/format/test.ts (MIT License)
