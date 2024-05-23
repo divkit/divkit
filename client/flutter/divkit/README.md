@@ -1,6 +1,14 @@
-# divkit
+# DivKit <img alt="Playground app" src="readme_pictures/app_screen.png" width="30%" align="right" style="margin:20px;">
 [![Pub](https://img.shields.io/pub/v/divkit.svg)](https://pub.dartlang.org/packages/divkit)
-DivKit client on Flutter library.
+[![GitHub Stars](https://img.shields.io/github/stars/divkit/divkit)](https://github.com/divkit/divkit/stargazers)
+
+DivKit 🐋 is an open source Server-Driven UI (SDUI) framework. It allows you to roll out server-sourced updates to different app versions. Also, it can be used for fast UI prototyping, allowing you to write a layout once and then ship it anywhere using Flutter. DivKit is an excellent choice to start using server-driven UI in your project because it can be easily integrated as a simple view in any part of your app. At the starting point, you don’t need a server integration. You can include all JSON on the client-side to try it in a real-world application.
+
+Also, we’ve made a [sandbox](https://divkit.tech/playground) for you to experiment with. You can try different samples in the web editor and see the results. You can use the [DivKit website](https://divkit.tech/en) to find a lot of handy samples and documentation, but feel free to ask us anything in the Telegram community chat.
+
+[Documentation](https://divkit.tech/doc). [Medium tutorial](https://medium.com/p/cad519252f0f). [Обзор на Хабр](https://habr.com/ru/companies/yandex/articles/814187).
+
+Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru).
 
 ## How it works
 
@@ -8,21 +16,14 @@ DivKit builds native views from JSON data.
 
 JSON → DivData → DivKitView
 
-- JSON – raw data with templates in DivKit format (see [DivKit schema](../../../public/schema)).
+- JSON – raw data with templates in DivKit format (see [DivKit schema](https://github.com/divkit/divkit/tree/main/schema)).
 
-- DivData – data objects parsed from JSON.
+- DivData – data objects parsed from JSON (see [Generated DTO](https://github.com/divkit/divkit/tree/main/client/flutter/divkit/lib/src/generated_sources)).
 
-- DivKitView — plain Flutter Widget
+- DivKitView — plain Flutter Widget (you use it directly)
 
 ## Playground app
-
-Use [DivKit playground app](example/lib/main.dart) to look through layout examples and supported functions.
-
----
-
-[Documentation](https://divkit.tech/doc). [Medium tutorial](https://medium.com/p/cad519252f0f). [Habr tutorial](https://habr.com/ru/company/yandex/blog/683886/).
-
-Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru).
+Since the Flutter client does not support full-fledged launch on the web, therefore, in order to poke the functionality, you need to run an example of the current library. Use [DivKit playground app](https://github.com/divkit/divkit/tree/main/client/flutter/divkit/example) to look through layout examples and supported functions.
 
 ---
 ## Supported features
@@ -64,21 +65,24 @@ Supported components (may contain unavailable features for more info look at doc
     );
     ```
 
+   P.s. The process of building a DTO is quite expensive, so it is better to create it outside the widget in order to avoid frame loss.
+
 4. Use DivKitView inside your widget tree with layout passed by param "data":
     ```dart
     DivKitView(
         data: data,
     )
     ```
-Please ensure that there is Directionality widget in the tree.
+   Please ensure that there is Directionality widget in the tree.
+   
+   Optionally, you can pass customs handler, actions handler and other params to configure DivKitView behavior:
+   ```dart
+       DivKitView(
+         data: data,
+         customHandler: MyCustomHandler(), // DivCustomHandler?
+         actionHandler: MyCustomActionHandler(), // DivActionHandler?
+         variableStorage: MyOwnVariableStorage(), // DivVariableStorage?
+       )
+   ```
 
-Optionally, you can pass customs handler, actions handler and other params to configure DivKitView behavior:
-```dart
-    DivKitView(
-      data: data,
-      customHandler: MyCustomHandler(), // DivCustomHandler?
-      actionHandler: MyCustomActionHandler(), // DivActionHandler?
-      variableStorage: MyOwnVariableStorage(), // DivVariableStorage?
-    )
-```
-Important! If you wish to work with default div-actions and use your own actionHandler don't forget to inherit **DefaultDivActionHandler**.
+   P.s. If you wish to work with default div-actions and use your own actionHandler don't forget to inherit **DefaultDivActionHandler**.

@@ -1,3 +1,6 @@
+## 0.4.1
+* Correct README and add documentation.
+
 ## 0.4.0
 * Use codecs for type-safe communication on Android, iOS is still using strings.
 

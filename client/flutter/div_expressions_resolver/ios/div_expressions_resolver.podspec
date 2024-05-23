@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'div_expressions_resolver'
-  s.version          = '0.4.0'
+  s.version          = '0.4.1'
   s.summary          = 'Flutter DivKit expressions resolver'
   s.description      = 'DivKit expression resolver implementation for Flutter'
   s.homepage         = 'https://github.com/divkit/divkit/tree/main/client/flutter/div_expressions_resolver'

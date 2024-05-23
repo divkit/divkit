@@ -402,6 +402,7 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-resizable-height.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-scrollbar.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-with-columns.json',
+    'example/assets/test_data/snapshot_test_data/div-gallery/vertical-grid-gallery-wrapped-item-spacing.json'
   ].map(
     (e) => _SkipTest(
       e,

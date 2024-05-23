@@ -421,8 +421,12 @@ extension DivSizeUnitMultiplier on DivSizeUnit {
       case DivSizeUnit.dp:
         return 1.0;
       case DivSizeUnit.sp:
+        // Since we still support a wide range of Flutter versions, we cannot migrate to the new View API yet.
+        // ignore: deprecated_member_use
         return window.textScaleFactor;
       case DivSizeUnit.px:
+        // Since we still support a wide range of Flutter versions, we cannot migrate to the new View API yet.
+        // ignore: deprecated_member_use
         return 1 / window.devicePixelRatio;
     }
   }

@@ -1,3 +1,6 @@
+// Since we still support a wide range of flutter_svg versions, we cannot migrate to the new API yet.
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math' as math;
 import 'dart:ui';
 

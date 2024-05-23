@@ -1,5 +1,5 @@
 PODS:
-  - div_expressions_resolver (0.4.0):
+  - div_expressions_resolver (0.4.1):
     - DivKit (~> 29.0)
     - Flutter
   - DivKit (29.15.1):
@@ -26,7 +26,7 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - sqflite (0.0.2):
+  - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
   - VGSL_Fundamentals (4.2.0):
@@ -80,16 +80,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  div_expressions_resolver: a7261aef17747d948e4ec12e267dd41022c6decc
+  div_expressions_resolver: 6734959e5feaf44241ea4d4888274eeca9557586
   DivKit: 96a1189bbb1286544119551819db721237edc49a
   DivKit_LayoutKit: d8cd3826a2d004b159517d514e1580467f89efc3
   DivKit_LayoutKitInterface: 805245d61e6525632171de529592afb880692cae
   DivKit_Serialization: 3921944d94687b824d79bad54ae9811326fc36ca
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   FMDB: eae540775bf7d0c87a5af926ae37af69effe5a19
-  integration_test: 13825b8a9334a850581300559b8839134b124670
+  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
-  sqflite: f7868cb717a559a515967bb4033af73521c7d3f4
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   VGSL_Fundamentals: 5967995b1ff711ef1fdd459bd07d0b2890478e5c
   VGSL_Fundamentals_Tiny: 37acd9341007d21a4d6a3b07e74803c3ed8410eb
   VGSLBase: 1142504ccd655d0e0cf89691df47e780f633d25a

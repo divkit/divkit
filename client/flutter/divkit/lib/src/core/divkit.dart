@@ -27,6 +27,8 @@ import 'package:meta/meta.dart';
 /// The main widget embedding DivKit BDUI in the Flutter host application.
 class DivKitView extends StatelessWidget {
   /// The data of layout that will be rendered.
+  /// The process of building a DTO is quite expensive, so it is better
+  /// to create it outside the widget in order to avoid frame loss.
   final DivKitData data;
 
   /// External storage. Used to transfer the context from the host environment.
@@ -40,13 +42,14 @@ class DivKitView extends StatelessWidget {
   /// Handler for div-custom.
   final DivCustomHandler? customHandler;
 
-  /// Cache manager to override DefaultCacheManager if needed in DivImage.
-  final BaseCacheManager? cacheManager;
-
   /// LTR or RTL mode. If null used auto.
   final TextDirection? textDirection;
 
-  /// Light or dark mode. If null used auto.
+  /// [NOT_USED_FOR_SVG] Cache manager to override DefaultCacheManager if needed in DivImage.
+  @experimental
+  final BaseCacheManager? cacheManager;
+
+  /// [NOT_SUPPORTED_YET] Light or dark mode. If null used auto.
   @experimental
   final Brightness? brightness;
 
@@ -73,13 +76,13 @@ class DivKitView extends StatelessWidget {
   /// ```dart
   ///     DivKitView(
   ///       data: data,
-  ///       customHandler: MyCustomHandler(), // DivCustomHandler?
-  ///       actionHandler: MyCustomActionHandler(), // DivActionHandler?
-  ///       variableStorage: MyOwnVariableStorage(), // DivVariableStorage?
+  ///       customHandler: MyCustomHandler(),
+  ///       actionHandler: MyCustomActionHandler(),
+  ///       variableStorage: MyOwnVariableStorage(),
   ///     )
   /// ```
   /// Important! If you wish to work with default div-actions and use your own
-  /// actionHandler don't forget to inherit **DefaultDivActionHandler**.
+  /// actionHandler don't forget to inherit [DefaultDivActionHandler].
   const DivKitView({
     required this.data,
     this.variableStorage,

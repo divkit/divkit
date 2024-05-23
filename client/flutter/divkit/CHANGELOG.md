@@ -1,3 +1,6 @@
+## 0.1.4
+* Correct README and add documentation.
+
 ## 0.1.3
 * Make a wide range of versions for flutter_svg
 * Try passing through external logging

@@ -2,29 +2,78 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-Object _encodeColor(Color input) => <Object?>[
-      input.value,
-    ];
+/// Allows you to calculate expressions according to the
+/// [DivKit specification](https://divkit.tech/docs/en/concepts/expressions)
+/// Uses native implementations for its work.
+class NativeDivExpressionsResolver {
+  static const MessageCodec<Object?> _channelCodec = _NativeDivExpressionsResolverCodec();
 
-Color _decodeColor(Object result) => Color(
-      (result as List<Object?>)[0]! as int,
+  final BinaryMessenger? _binaryMessenger;
+
+  /// Constructor for [NativeDivExpressionsResolver]. The [binaryMessenger] named argument is
+  /// available for dependency injection. If it is left null, the default
+  /// BinaryMessenger will be used which routes to the host platform.
+  NativeDivExpressionsResolver({BinaryMessenger? binaryMessenger})
+      : _binaryMessenger = binaryMessenger;
+
+  /// Allows you to calculate an [expression] using variable data from the [context].
+  Future<Object?> resolve(
+    String expression, {
+    Map<String, dynamic> context = const {},
+  }) async {
+    const channelName = 'div_expressions_resolver.NativeDivExpressionsResolver.resolve';
+    final channel = BasicMessageChannel<Object?>(
+      channelName,
+      _channelCodec,
+      binaryMessenger: _binaryMessenger,
     );
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[expression, context]) as List<Object?>?;
+    if (replyList == null) {
+      throw _createConnectionError(channelName);
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return replyList[0];
+    }
+  }
 
-Object _encodeUri(Uri input) => <Object?>[
-      input.toString(),
-    ];
-
-Uri _decodeUri(Object result) => Uri.parse(
-      (result as List<Object?>)[0]! as String,
+  /// Allows you to reset the context. It is only used for the Android version.
+  Future<void> clearVariables() async {
+    const channelName =
+        'div_expressions_resolver.NativeDivExpressionsResolver.clearVariables';
+    final channel = BasicMessageChannel<Object?>(
+      channelName,
+      _channelCodec,
+      binaryMessenger: _binaryMessenger,
     );
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
+      throw _createConnectionError(channelName);
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
 
-PlatformException _createConnectionError(String channelName) {
-  return PlatformException(
-    code: 'channel-error',
-    message: 'Unable to establish connection on channel: "$channelName".',
-  );
+  PlatformException _createConnectionError(String channelName) {
+    return PlatformException(
+      code: 'channel-error',
+      message: 'Unable to establish connection on channel: "$channelName".',
+    );
+  }
 }
 
+/// The code allows you to make a complete interop of the context.
 class _NativeDivExpressionsResolverCodec extends StandardMessageCodec {
   const _NativeDivExpressionsResolverCodec();
 
@@ -52,64 +101,20 @@ class _NativeDivExpressionsResolverCodec extends StandardMessageCodec {
         return super.readValueOfType(type, buffer);
     }
   }
-}
 
-class NativeDivExpressionsResolver {
-  /// Constructor for [NativeDivExpressionsResolver].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  NativeDivExpressionsResolver({BinaryMessenger? binaryMessenger})
-      : _binaryMessenger = binaryMessenger;
-  final BinaryMessenger? _binaryMessenger;
+  Object _encodeColor(Color input) => <Object?>[
+    input.value,
+  ];
 
-  static const MessageCodec<Object?> channelCodec =
-      _NativeDivExpressionsResolverCodec();
+  Color _decodeColor(Object result) => Color(
+    (result as List<Object?>)[0]! as int,
+  );
 
-  Future<Object?> resolve(
-    String expression, {
-    Map<String, dynamic> context = const {},
-  }) async {
-    const String channelName =
-        'div_expressions_resolver.NativeDivExpressionsResolver.resolve';
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-      channelName,
-      channelCodec,
-      binaryMessenger: _binaryMessenger,
-    );
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[expression, context]) as List<Object?>?;
-    if (replyList == null) {
-      throw _createConnectionError(channelName);
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return replyList[0];
-    }
-  }
+  Object _encodeUri(Uri input) => <Object?>[
+    input.toString(),
+  ];
 
-  Future<void> clearVariables() async {
-    const String channelName =
-        'div_expressions_resolver.NativeDivExpressionsResolver.clearVariables';
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-      channelName,
-      channelCodec,
-      binaryMessenger: _binaryMessenger,
-    );
-    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
-    if (replyList == null) {
-      throw _createConnectionError(channelName);
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
+  Uri _decodeUri(Object result) => Uri.parse(
+    (result as List<Object?>)[0]! as String,
+  );
 }
