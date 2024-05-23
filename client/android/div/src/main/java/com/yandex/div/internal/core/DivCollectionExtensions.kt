@@ -1,5 +1,6 @@
 package com.yandex.div.internal.core
 
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.variables.VariableSource
 import com.yandex.div.data.Variable
@@ -16,10 +17,22 @@ import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import org.json.JSONObject
 
+@InternalApi
 fun DivContainer.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
-    items?.map { DivItemBuilderResult(it, resolver) } ?: itemBuilder?.build(resolver) ?: emptyList()
+    buildItems(items, itemBuilder, resolver)
 
-private fun DivCollectionItemBuilder.build(resolver: ExpressionResolver): List<DivItemBuilderResult> {
+@InternalApi
+fun DivGallery.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
+    buildItems(items, itemBuilder, resolver)
+
+@InternalApi
+fun DivPager.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
+    buildItems(items, itemBuilder, resolver)
+
+private fun buildItems(items: List<Div>?, itemBuilder: DivCollectionItemBuilder?, resolver: ExpressionResolver) =
+    items?.toDivItemBuilderResult(resolver) ?: itemBuilder?.build(resolver) ?: emptyList()
+
+internal fun DivCollectionItemBuilder.build(resolver: ExpressionResolver): List<DivItemBuilderResult> {
     return data.evaluate(resolver).mapNotNull {
         (it as? JSONObject)?.let { json -> buildItem(json, resolver) }
     }
@@ -35,8 +48,9 @@ private fun DivCollectionItemBuilder.buildItem(
         mutableListOf()
     )
     val newResolver = (resolver as? ExpressionResolverImpl)?.plus(localVariableSource) ?: resolver
-    val prototype = prototypes.find { it.selector.evaluate(newResolver) }?.div ?: return null
-    return DivItemBuilderResult(prototype.copy(), newResolver)
+    return prototypes.find {
+        it.selector.evaluate(newResolver)
+    }?.div?.copy()?.toItemBuilderResult(newResolver)
 }
 
 private fun Div.copy(): Div {
@@ -69,9 +83,6 @@ val DivCustom.nonNullItems: List<Div> get() = items ?: emptyList()
 
 val DivGallery.nonNullItems: List<Div> get() = items ?: emptyList()
 
-internal fun DivGallery.itemsToDivItemBuilderResult(resolver: ExpressionResolver) =
-    nonNullItems.toDivItemBuilderResult(resolver)
-
 val DivGrid.nonNullItems: List<Div> get() = items ?: emptyList()
 
 internal fun DivGrid.itemsToDivItemBuilderResult(resolver: ExpressionResolver) =
@@ -79,13 +90,12 @@ internal fun DivGrid.itemsToDivItemBuilderResult(resolver: ExpressionResolver) =
 
 val DivPager.nonNullItems: List<Div> get() = items ?: emptyList()
 
-internal fun DivPager.itemsToDivItemBuilderResult(resolver: ExpressionResolver) =
-    nonNullItems.toDivItemBuilderResult(resolver)
-
 internal fun DivTabs.itemsToDivItemBuilderResult(resolver: ExpressionResolver) =
-    items.map { DivItemBuilderResult(it.div, resolver) }
+    items.map { it.div.toItemBuilderResult(resolver) }
 
 internal fun DivState.statesToDivItemBuilderResult(resolver: ExpressionResolver) =
-    states.mapNotNull { state -> state.div?.let { DivItemBuilderResult(it, resolver) } }
+    states.mapNotNull { state -> state.div?.toItemBuilderResult(resolver) }
 
-private fun List<Div>.toDivItemBuilderResult(resolver: ExpressionResolver) = map { DivItemBuilderResult(it, resolver) }
+internal fun List<Div>.toDivItemBuilderResult(resolver: ExpressionResolver) = map { it.toItemBuilderResult(resolver) }
+
+internal fun Div.toItemBuilderResult(resolver: ExpressionResolver) = DivItemBuilderResult(this, resolver)

@@ -2,12 +2,9 @@ package com.yandex.div.core.view2.divs.gallery
 
 import android.annotation.SuppressLint
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.R
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
@@ -23,8 +20,8 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.DivBaseBinder
-import com.yandex.div.core.view2.divs.DivPatchableAdapter
-import com.yandex.div.core.view2.divs.PagerSnapStartHelper
+import com.yandex.div.core.view2.divs.DivCollectionAdapterHelper
+import com.yandex.div.core.view2.divs.DivPatchableAdapterHelper
 import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.bindStates
 import com.yandex.div.core.view2.divs.dpToPx
@@ -33,12 +30,14 @@ import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.PaddingItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivGallery
-import java.util.WeakHashMap
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.math.abs
@@ -59,8 +58,8 @@ internal class DivGalleryBinder @Inject constructor(
 
         val oldDiv = (view as? DivRecyclerView)?.div
         if (div === oldDiv) {
-            val adapter = view.adapter as GalleryAdapter
-            adapter.applyPatch(view, divPatchCache)
+            val adapter = view.adapter as? GalleryPatchableAdapter ?: return
+            adapter.applyPatch(view, divPatchCache, context)
             adapter.closeAllSubscription()
             adapter.subscribeOnElements()
             view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
@@ -90,8 +89,12 @@ internal class DivGalleryBinder @Inject constructor(
         val itemStateBinder = { itemView: View, _: Div ->
             itemView.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
         }
-        view.adapter =
-            GalleryAdapter(div.nonNullItems, context, divBinder.get(), viewCreator, itemStateBinder, path)
+        val itemBuilder = div.itemBuilder
+        view.adapter = if (div.items != null || itemBuilder == null) {
+            GalleryPatchableAdapter(div.nonNullItems, context, divBinder.get(), viewCreator, itemStateBinder, path)
+        } else {
+            GalleryCollectionAdapter(itemBuilder, context, divBinder.get(), viewCreator, itemStateBinder, path)
+        }
         view.resetAnimatorAndRestoreOnLayout()
 
         updateDecorations(view, div, context)
@@ -277,7 +280,7 @@ internal class DivGalleryBinder @Inject constructor(
                 val position = recycler.getChildAdapterPosition(child)
                 if (position == RecyclerView.NO_POSITION) return@forEach
 
-                val div = (recycler.adapter as GalleryAdapter).items[position]
+                val div = (recycler.adapter as DivGalleryAdapter<*>).getItemDiv(position)
                 visibilityActionTracker.startTrackingViewsHierarchy(bindingContext, child, div)
             }
 
@@ -290,48 +293,37 @@ internal class DivGalleryBinder @Inject constructor(
         }
     }
 
-    internal class GalleryAdapter(
+    internal class GalleryPatchableAdapter(
         divs: List<Div>,
         private val bindingContext: BindingContext,
-        private val divBinder: DivBinder,
-        private val viewCreator: DivViewCreator,
-        private val itemStateBinder: (itemView: View, div: Div) -> Unit,
+        divBinder: DivBinder,
+        viewCreator: DivViewCreator,
+        itemStateBinder: (itemView: View, div: Div) -> Unit,
         private val path: DivStatePath
-    ) : DivPatchableAdapter<GalleryViewHolder>(divs, bindingContext) {
+    ) : DivGalleryAdapter<Div>(divs, bindingContext, divBinder, viewCreator, itemStateBinder),
+        DivPatchableAdapterHelper<GalleryViewHolder> {
 
-        private val ids = WeakHashMap<Div, Long>()
-        private var lastItemId = 0L
+        override fun GalleryViewHolder.bindItem(position: Int) = bind(bindingContext, visibleItems[position], path)
+    }
 
-        override val subscriptions = mutableListOf<Disposable>()
+    internal class GalleryCollectionAdapter(
+        itemBuilder: DivCollectionItemBuilder,
+        private val bindingContext: BindingContext,
+        divBinder: DivBinder,
+        viewCreator: DivViewCreator,
+        itemStateBinder: (itemView: View, div: Div) -> Unit,
+        private val path: DivStatePath
+    ) : DivGalleryAdapter<DivItemBuilderResult>(
+        itemBuilder.build(bindingContext.expressionResolver),
+        bindingContext,
+        divBinder,
+        viewCreator,
+        itemStateBinder,
+    ), DivCollectionAdapterHelper<GalleryViewHolder> {
 
-        init {
-            setHasStableIds(true)
-            subscribeOnElements()
-        }
-
-        override fun onViewAttachedToWindow(holder: GalleryViewHolder) {
-            super.onViewAttachedToWindow(holder)
-            holder.oldDiv?.let { div ->
-                itemStateBinder.invoke(holder.rootView, div)
-            }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-            val view = DivViewWrapper(bindingContext.divView.context)
-            return GalleryViewHolder(view, divBinder, viewCreator)
-        }
-
-        override fun getItemId(position: Int): Long {
-            val item = activeItems[position]
-            return ids[item] ?: (lastItemId++).also { ids[item] = it }
-        }
-
-        override fun getItemCount() = activeItems.size
-
-        override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
-            holder.bind(bindingContext, activeItems[position], path)
-            holder.rootView.setTag(R.id.div_gallery_item_index, position)
-            divBinder.attachIndicators()
+        override fun GalleryViewHolder.bindItem(position: Int) {
+            val item = visibleItems[position]
+            bind(BindingContext(bindingContext.divView, item.expressionResolver), item.div, path)
         }
     }
 

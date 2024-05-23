@@ -27,9 +27,10 @@ internal interface DivGalleryItemHelper {
     val bindingContext: BindingContext
     val view: RecyclerView
     val div: DivGallery
-    val divItems: List<Div>
 
     val childrenToRelayout: MutableSet<View>
+
+    fun getItemDiv(position: Int): Div
 
     fun toLayoutManager(): RecyclerView.LayoutManager
 
@@ -53,7 +54,7 @@ internal interface DivGalleryItemHelper {
         bottom: Int,
         isRelayoutingChildren: Boolean = false
     ) {
-        val childDiv = runCatching { divItems[child.getTag(R.id.div_gallery_item_index) as Int].value() }.getOrNull()
+        val childDiv = runCatching { getItemDiv(child.getTag(R.id.div_gallery_item_index) as Int).value() }.getOrNull()
 
         val resolver = bindingContext.expressionResolver
         val parentAlignment = div.crossContentAlignment
@@ -224,7 +225,7 @@ internal interface DivGalleryItemHelper {
 
         val container = (child as? ViewGroup) ?: return
         val itemView = container.children.firstOrNull() ?: return
-        val div = divItems[position]
+        val div = getItemDiv(position)
 
         val divView = bindingContext.divView
         if (clear) {

@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
+import com.yandex.div.core.view2.divs.DivAdapter
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 import com.yandex.div.core.view2.divs.gallery.ScrollPosition
-import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 
 internal class DivLinearLayoutManager(
@@ -22,8 +22,7 @@ internal class DivLinearLayoutManager(
 
     override val childrenToRelayout = HashSet<View>()
 
-    override val divItems
-        get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.nonNullItems
+    override fun getItemDiv(position: Int): Div = (view.adapter as DivAdapter<*, *>).getItemDiv(position)
 
     override fun toLayoutManager() = this
 

@@ -2,7 +2,8 @@ package com.yandex.div.core.view2.reuse
 
 import android.view.View
 import android.view.ViewGroup
-import com.yandex.div.core.view2.divs.DivPatchableAdapter
+import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
+import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
@@ -11,6 +12,8 @@ import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.itemsToDivItemBuilderResult
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.internal.core.toDivItemBuilderResult
+import com.yandex.div.internal.core.toItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -18,7 +21,6 @@ import com.yandex.div2.DivCustom
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGrid
 import com.yandex.div2.DivPager
-import com.yandex.div2.DivState
 
 internal class ExistingToken(
     item: DivItemBuilderResult,
@@ -44,7 +46,7 @@ internal class ExistingToken(
             is Div.Gallery -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
             is Div.Pager -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
             is Div.Tabs -> throw RebindTask.UnsupportedElementException(div::class.java) // Not supported yet. Only full rebind
-            is Div.State -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
+            is Div.State -> stateToExistingTokenList(item.expressionResolver, parentToken)
         }
     }
 
@@ -57,7 +59,7 @@ internal class ExistingToken(
         val customView = ((view as? DivCustomWrapper)?.customView as? ViewGroup) ?: return emptyList()
         nonNullItems.forEachIndexed { index, item ->
             val token = ExistingToken(
-                item = DivItemBuilderResult(item, resolver),
+                item = item.toItemBuilderResult(resolver),
                 view = customView.getChildAt(index) ?: return emptyList(),
                 childIndex = index,
                 parentToken = parentToken ?: this@ExistingToken,
@@ -67,20 +69,27 @@ internal class ExistingToken(
         return tokens
     }
 
-    private fun DivGrid.itemsToExistingTokenList(resolver: ExpressionResolver, parentToken: ExistingToken?): List<ExistingToken> {
-        return simpleItemsToExistingTokenList(itemsToDivItemBuilderResult(resolver), parentToken)
-    }
+    private fun DivGrid.itemsToExistingTokenList(
+        resolver: ExpressionResolver,
+        parentToken: ExistingToken?
+    ): List<ExistingToken> = simpleItemsToExistingTokenList(itemsToDivItemBuilderResult(resolver), parentToken)
 
-    private fun DivState.itemsToExistingTokenList(resolver: ExpressionResolver, parentToken: ExistingToken?): List<ExistingToken> {
+    private fun stateToExistingTokenList(
+        resolver: ExpressionResolver,
+        parentToken: ExistingToken?
+    ): List<ExistingToken> {
         val stateDiv = (view as? DivStateLayout)?.activeStateDiv ?: return emptyList()
-        return simpleItemsToExistingTokenList(listOf(stateDiv).map { DivItemBuilderResult(it, resolver) }, parentToken)
+        return simpleItemsToExistingTokenList(listOf(stateDiv).toDivItemBuilderResult(resolver), parentToken)
     }
 
-    private fun DivPager.itemsToExistingTokenList(resolver: ExpressionResolver, parentToken: ExistingToken?): List<ExistingToken> {
+    private fun DivPager.itemsToExistingTokenList(
+        resolver: ExpressionResolver,
+        parentToken: ExistingToken?
+    ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()
         val pager = (view as? DivPagerView)?.viewPager ?: return emptyList()
-        val adapter = (pager.adapter as? DivPatchableAdapter) ?: return emptyList()
-        val activeItems = adapter.activeItems
+        val adapter = (pager.adapter as? DivPagerAdapter<*>) ?: return emptyList()
+        val activeItems = adapter.visibleDivs
         val activeHashes = activeItems.map { it.hash() }
 
         items?.forEachIndexed { index, newItem ->
@@ -88,7 +97,7 @@ internal class ExistingToken(
                 val childViewIndex = activeHashes.indexOf(newItem.hash())
                 val targetView = view.getPageView(childViewIndex) ?: return@forEachIndexed
                 val token = ExistingToken(
-                    item = DivItemBuilderResult(newItem, resolver),
+                    item = newItem.toItemBuilderResult(resolver),
                     view = targetView,
                     childIndex = index,
                     parentToken = parentToken ?: this@ExistingToken,
@@ -100,17 +109,20 @@ internal class ExistingToken(
         return tokens
     }
 
-    private fun DivGallery.itemsToExistingTokenList(resolver: ExpressionResolver, parentToken: ExistingToken?): List<ExistingToken> {
+    private fun DivGallery.itemsToExistingTokenList(
+        resolver: ExpressionResolver,
+        parentToken: ExistingToken?
+    ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()
-        val adapter = ((view as? DivRecyclerView)?.adapter as? DivPatchableAdapter) ?: return emptyList()
-        val activeItems = adapter.activeItems
+        val adapter = ((view as? DivRecyclerView)?.adapter as? DivGalleryAdapter<*>) ?: return emptyList()
+        val activeItems = adapter.visibleDivs
         val activeHashes = activeItems.map { it.hash() }
 
         items?.forEachIndexed { index, newItem ->
             if (newItem.hash() in activeHashes) {
                 val targetView = view.getItemView(index) ?: return@forEachIndexed
                 val token = ExistingToken(
-                    item = DivItemBuilderResult(newItem, resolver),
+                    item = newItem.toItemBuilderResult(resolver),
                     view = targetView,
                     childIndex = index,
                     parentToken = parentToken ?: this@ExistingToken,
@@ -122,7 +134,10 @@ internal class ExistingToken(
         return tokens
     }
 
-    private fun simpleItemsToExistingTokenList(items: List<DivItemBuilderResult>, parentToken: ExistingToken?): List<ExistingToken> {
+    private fun simpleItemsToExistingTokenList(
+        items: List<DivItemBuilderResult>,
+        parentToken: ExistingToken?
+    ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()
         items.forEachIndexed { index, item ->
             val token = ExistingToken(

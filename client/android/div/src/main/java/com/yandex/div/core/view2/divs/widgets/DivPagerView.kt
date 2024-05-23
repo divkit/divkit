@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.view2.divs.PagerSelectedActionsDispatcher
 import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost

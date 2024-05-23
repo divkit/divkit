@@ -7,6 +7,7 @@ import com.yandex.div.core.util.observeShape
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.divs.pager.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
 import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression

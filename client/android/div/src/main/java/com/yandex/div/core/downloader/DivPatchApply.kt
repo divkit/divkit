@@ -385,7 +385,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         when(currentView) {
             is DivRecyclerView -> {
                 if (currentView.div === divWithPatchedChild) {
-                    val adapter = (currentView.adapter as? DivGalleryBinder.GalleryAdapter) ?: return currentView
+                    val adapter = (currentView.adapter as? DivGalleryBinder.GalleryPatchableAdapter) ?: return currentView
                     currentView.div?.items?.forEachIndexed { i, child ->
                         if (child.value().id == patchedChildId) {
                             adapter.notifyItemChanged(i)

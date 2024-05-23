@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.divs.DivAdapter
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div2.DivGallery
@@ -23,8 +24,7 @@ internal class DivGridLayoutManager(
 
     override val childrenToRelayout = HashSet<View>()
 
-    override val divItems
-        get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.nonNullItems
+    override fun getItemDiv(position: Int) = (view.adapter as DivAdapter<*, *>).getItemDiv(position)
 
     private val itemSpacing
         get() = div.itemSpacing.evaluate(bindingContext.expressionResolver).dpToPx(view.resources.displayMetrics)
