@@ -105,6 +105,8 @@
     export let store: Store | undefined = undefined;
     export let weekStartDay = 0;
 
+    let isMounted = true;
+
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
         const touchQuery = matchMedia('(any-pointer: coarse)');
@@ -1287,7 +1289,11 @@
     }
 
     function registerTimeout(timeout: number): void {
-        timeouts.push(timeout);
+        if (isMounted) {
+            timeouts.push(timeout);
+        } else {
+            clearTimeout(timeout);
+        }
     }
 
     setContext<RootCtxValue>(ROOT_CTX, {
@@ -1705,6 +1711,7 @@
     });
 
     onDestroy(() => {
+        isMounted = false;
         rootInstancesCount--;
 
         if (!rootInstancesCount) {
