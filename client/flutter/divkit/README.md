@@ -1,4 +1,4 @@
-# DivKit <img alt="Playground app" src="readme_pictures/app_screen.png" width="30%" align="right" style="margin:20px;">
+# DivKit <img alt="Playground app" src="https://github.com/divkit/divkit/blob/main/readme_pictures/app_screen.png" width="30%" align="right" style="margin:20px;">
 [![Pub](https://img.shields.io/pub/v/divkit.svg)](https://pub.dartlang.org/packages/divkit)
 [![GitHub Stars](https://img.shields.io/github/stars/divkit/divkit)](https://github.com/divkit/divkit/stargazers)
 
@@ -55,7 +55,7 @@ Supported components (may contain unavailable features for more info look at doc
 
     from JSON:
     ```dart
-    final data = DefaultDivKitData.fromJson(json); // Map<String, dynamic>
+    final data = DefaultDivKitData.fromJson(json); // json is Map<String, dynamic>
     ```
     or from card and templates:
     ```dart
@@ -70,19 +70,19 @@ Supported components (may contain unavailable features for more info look at doc
 4. Use DivKitView inside your widget tree with layout passed by param "data":
     ```dart
     DivKitView(
-        data: data,
+        data: data, // DivKitData
     )
     ```
    Please ensure that there is Directionality widget in the tree.
    
    Optionally, you can pass customs handler, actions handler and other params to configure DivKitView behavior:
    ```dart
-       DivKitView(
-         data: data,
-         customHandler: MyCustomHandler(), // DivCustomHandler?
-         actionHandler: MyCustomActionHandler(), // DivActionHandler?
-         variableStorage: MyOwnVariableStorage(), // DivVariableStorage?
-       )
+    DivKitView(
+      data: data,
+      customHandler: MyCustomHandler(), // DivCustomHandler?
+      actionHandler: MyCustomActionHandler(), // DivActionHandler?
+      variableStorage: MyOwnVariableStorage(), // DivVariableStorage?
+    )
    ```
 
    P.s. If you wish to work with default div-actions and use your own actionHandler don't forget to inherit **DefaultDivActionHandler**.
