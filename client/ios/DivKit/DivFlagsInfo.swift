@@ -11,7 +11,7 @@ public struct DivFlagsInfo {
 
   /// Creates an instance of `DivFlagsInfo`.
   public init(
-    imageLoadingOptimizationEnabled: Bool = false
+    imageLoadingOptimizationEnabled: Bool = true
   ) {
     self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
   }

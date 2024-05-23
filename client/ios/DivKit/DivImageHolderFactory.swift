@@ -44,7 +44,7 @@ final class DefaultImageHolderFactory: DivImageHolderFactory {
 
   init(
     requestPerformer: URLRequestPerforming,
-    imageLoadingOptimizationEnabled: Bool
+    imageLoadingOptimizationEnabled: Bool = true
   ) {
     self.requester = NetworkURLResourceRequester(performer: requestPerformer)
     self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
