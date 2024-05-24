@@ -97,23 +97,24 @@ extension GalleryViewModel {
   }
 
   fileprivate func pages(for frames: [CGRect], fitting size: CGSize?) -> [GalleryViewLayout.Page] {
-    guard let lastFrame = frames.last else {
+    guard let firstFrame = frames.first, let lastFrame = frames.last else {
       return []
     }
 
-    let lastOrigin = lastFrame.origin.dimension(in: direction)
-    let lastSize = lastFrame.size.dimension(in: direction)
-    let lastEdge = lastOrigin + lastSize + lastGap(forSize: size)
+    let firstFrameOrigin = firstFrame.origin.dimension(in: direction)
+    let lastFrameOrigin = lastFrame.origin.dimension(in: direction)
+    let lastFrameSize = lastFrame.size.dimension(in: direction)
+    let lastEdge = lastFrameOrigin + lastFrameSize + lastGap(forSize: size)
     let pageSize = self.pageSize(fitting: size)
 
     let origins = frames.map { frame -> CGFloat in
-      let origin = frame.origin.dimension(in: direction)
+      let frameOrigin = frame.origin.dimension(in: direction)
       switch scrollMode {
       case .default:
-        return origin
+        return frameOrigin - firstFrameOrigin
       case .autoPaging, .fixedPaging:
         let size = frame.size.dimension(in: direction)
-        return max(0, origin - (pageSize - size) / 2)
+        return max(0, frameOrigin - (pageSize - size) / 2)
       }
     }
 
