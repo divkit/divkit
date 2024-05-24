@@ -46,7 +46,8 @@
           "type": "string",
           "$description": "translations.json#/div_font_feature_settings",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "letter_spacing": {
@@ -256,7 +257,8 @@
           "type": "string",
           "$description": "translations.json#/div_font_feature_settings",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "line_height": {

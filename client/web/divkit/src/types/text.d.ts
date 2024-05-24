@@ -18,6 +18,7 @@ export interface TextStyles {
     font_size?: number;
     font_family?: string;
     // font_size_unit
+    font_feature_settings?: string;
     letter_spacing?: number;
     font_weight?: FontWeight;
     text_color?: string;

@@ -95,7 +95,8 @@
         underline: componentContext.json.underline,
         strike: componentContext.json.strike,
         line_height: componentContext.json.line_height,
-        text_shadow: componentContext.json.text_shadow
+        text_shadow: componentContext.json.text_shadow,
+        font_feature_settings: componentContext.json.font_feature_settings
     });
     $: jsonTextSize = componentContext.getDerivedFromVars(componentContext.json.font_size);
     $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);

@@ -140,7 +140,8 @@
          * 2) There should not be a border-radius on line breaks, but there should be a border
          */
         'box-shadow': border ? `inset 0 0 0 ${pxToEm(border.width)} ${border.color}` : undefined,
-        'border-radius': borderRadius ? pxToEm(borderRadius) : undefined
+        'border-radius': borderRadius ? pxToEm(borderRadius) : undefined,
+        'font-feature-settings': textStyles.font_feature_settings || undefined,
     };
 </script>
 
