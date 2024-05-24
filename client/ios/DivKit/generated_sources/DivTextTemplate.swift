@@ -319,6 +319,7 @@ public final class DivTextTemplate: TemplateValue {
     public let border: Field<DivTextRangeBorderTemplate>?
     public let end: Field<Expression<Int>>? // constraint: number > 0
     public let fontFamily: Field<Expression<String>>?
+    public let fontFeatureSettings: Field<Expression<String>>?
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>?
@@ -338,6 +339,7 @@ public final class DivTextTemplate: TemplateValue {
         border: dictionary.getOptionalField("border", templateToType: templateToType),
         end: dictionary.getOptionalExpressionField("end"),
         fontFamily: dictionary.getOptionalExpressionField("font_family"),
+        fontFeatureSettings: dictionary.getOptionalExpressionField("font_feature_settings"),
         fontSize: dictionary.getOptionalExpressionField("font_size"),
         fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
         fontWeight: dictionary.getOptionalExpressionField("font_weight"),
@@ -358,6 +360,7 @@ public final class DivTextTemplate: TemplateValue {
       border: Field<DivTextRangeBorderTemplate>? = nil,
       end: Field<Expression<Int>>? = nil,
       fontFamily: Field<Expression<String>>? = nil,
+      fontFeatureSettings: Field<Expression<String>>? = nil,
       fontSize: Field<Expression<Int>>? = nil,
       fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
       fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -375,6 +378,7 @@ public final class DivTextTemplate: TemplateValue {
       self.border = border
       self.end = end
       self.fontFamily = fontFamily
+      self.fontFeatureSettings = fontFeatureSettings
       self.fontSize = fontSize
       self.fontSizeUnit = fontSizeUnit
       self.fontWeight = fontWeight
@@ -394,6 +398,7 @@ public final class DivTextTemplate: TemplateValue {
       let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let endValue = parent?.end?.resolveValue(context: context, validator: ResolvedValue.endValidator) ?? .noValue
       let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue
+      let fontFeatureSettingsValue = parent?.fontFeatureSettings?.resolveOptionalValue(context: context) ?? .noValue
       let fontSizeValue = parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
       let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue
       let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue
@@ -411,6 +416,7 @@ public final class DivTextTemplate: TemplateValue {
         borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
         endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
         fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
+        fontFeatureSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_feature_settings", error: $0) },
         fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
         fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
         fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
@@ -441,6 +447,7 @@ public final class DivTextTemplate: TemplateValue {
         border: borderValue.value,
         end: endNonNil,
         fontFamily: fontFamilyValue.value,
+        fontFeatureSettings: fontFeatureSettingsValue.value,
         fontSize: fontSizeValue.value,
         fontSizeUnit: fontSizeUnitValue.value,
         fontWeight: fontWeightValue.value,
@@ -465,6 +472,7 @@ public final class DivTextTemplate: TemplateValue {
       var borderValue: DeserializationResult<DivTextRangeBorder> = .noValue
       var endValue: DeserializationResult<Expression<Int>> = parent?.end?.value() ?? .noValue
       var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
+      var fontFeatureSettingsValue: DeserializationResult<Expression<String>> = parent?.fontFeatureSettings?.value() ?? .noValue
       var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
       var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
       var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
@@ -488,6 +496,8 @@ public final class DivTextTemplate: TemplateValue {
           endValue = deserialize(__dictValue, validator: ResolvedValue.endValidator).merged(with: endValue)
         case "font_family":
           fontFamilyValue = deserialize(__dictValue).merged(with: fontFamilyValue)
+        case "font_feature_settings":
+          fontFeatureSettingsValue = deserialize(__dictValue).merged(with: fontFeatureSettingsValue)
         case "font_size":
           fontSizeValue = deserialize(__dictValue, validator: ResolvedValue.fontSizeValidator).merged(with: fontSizeValue)
         case "font_size_unit":
@@ -520,6 +530,8 @@ public final class DivTextTemplate: TemplateValue {
           endValue = endValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.endValidator) })
         case parent?.fontFamily?.link:
           fontFamilyValue = fontFamilyValue.merged(with: { deserialize(__dictValue) })
+        case parent?.fontFeatureSettings?.link:
+          fontFeatureSettingsValue = fontFeatureSettingsValue.merged(with: { deserialize(__dictValue) })
         case parent?.fontSize?.link:
           fontSizeValue = fontSizeValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.fontSizeValidator) })
         case parent?.fontSizeUnit?.link:
@@ -557,6 +569,7 @@ public final class DivTextTemplate: TemplateValue {
         borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
         endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
         fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
+        fontFeatureSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_feature_settings", error: $0) },
         fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
         fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
         fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
@@ -587,6 +600,7 @@ public final class DivTextTemplate: TemplateValue {
         border: borderValue.value,
         end: endNonNil,
         fontFamily: fontFamilyValue.value,
+        fontFeatureSettings: fontFeatureSettingsValue.value,
         fontSize: fontSizeValue.value,
         fontSizeUnit: fontSizeUnitValue.value,
         fontWeight: fontWeightValue.value,
@@ -615,6 +629,7 @@ public final class DivTextTemplate: TemplateValue {
         border: merged.border?.tryResolveParent(templates: templates),
         end: merged.end,
         fontFamily: merged.fontFamily,
+        fontFeatureSettings: merged.fontFeatureSettings,
         fontSize: merged.fontSize,
         fontSizeUnit: merged.fontSizeUnit,
         fontWeight: merged.fontWeight,
@@ -650,6 +665,7 @@ public final class DivTextTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let focusedTextColor: Field<Expression<Color>>?
   public let fontFamily: Field<Expression<String>>?
+  public let fontFeatureSettings: Field<Expression<String>>?
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
@@ -707,6 +723,7 @@ public final class DivTextTemplate: TemplateValue {
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       focusedTextColor: dictionary.getOptionalExpressionField("focused_text_color", transform: Color.color(withHexString:)),
       fontFamily: dictionary.getOptionalExpressionField("font_family"),
+      fontFeatureSettings: dictionary.getOptionalExpressionField("font_feature_settings"),
       fontSize: dictionary.getOptionalExpressionField("font_size"),
       fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
       fontWeight: dictionary.getOptionalExpressionField("font_weight"),
@@ -765,6 +782,7 @@ public final class DivTextTemplate: TemplateValue {
     focus: Field<DivFocusTemplate>? = nil,
     focusedTextColor: Field<Expression<Color>>? = nil,
     fontFamily: Field<Expression<String>>? = nil,
+    fontFeatureSettings: Field<Expression<String>>? = nil,
     fontSize: Field<Expression<Int>>? = nil,
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -820,6 +838,7 @@ public final class DivTextTemplate: TemplateValue {
     self.focus = focus
     self.focusedTextColor = focusedTextColor
     self.fontFamily = fontFamily
+    self.fontFeatureSettings = fontFeatureSettings
     self.fontSize = fontSize
     self.fontSizeUnit = fontSizeUnit
     self.fontWeight = fontWeight
@@ -876,6 +895,7 @@ public final class DivTextTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let focusedTextColorValue = parent?.focusedTextColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue
+    let fontFeatureSettingsValue = parent?.fontFeatureSettings?.resolveOptionalValue(context: context) ?? .noValue
     let fontSizeValue = parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
     let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue
     let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue
@@ -930,6 +950,7 @@ public final class DivTextTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       focusedTextColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "focused_text_color", error: $0) },
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
+      fontFeatureSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_feature_settings", error: $0) },
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
@@ -993,6 +1014,7 @@ public final class DivTextTemplate: TemplateValue {
       focus: focusValue.value,
       focusedTextColor: focusedTextColorValue.value,
       fontFamily: fontFamilyValue.value,
+      fontFeatureSettings: fontFeatureSettingsValue.value,
       fontSize: fontSizeValue.value,
       fontSizeUnit: fontSizeUnitValue.value,
       fontWeight: fontWeightValue.value,
@@ -1054,6 +1076,7 @@ public final class DivTextTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var focusedTextColorValue: DeserializationResult<Expression<Color>> = parent?.focusedTextColor?.value() ?? .noValue
     var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
+    var fontFeatureSettingsValue: DeserializationResult<Expression<String>> = parent?.fontFeatureSettings?.value() ?? .noValue
     var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
@@ -1127,6 +1150,8 @@ public final class DivTextTemplate: TemplateValue {
         focusedTextColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: focusedTextColorValue)
       case "font_family":
         fontFamilyValue = deserialize(__dictValue).merged(with: fontFamilyValue)
+      case "font_feature_settings":
+        fontFeatureSettingsValue = deserialize(__dictValue).merged(with: fontFeatureSettingsValue)
       case "font_size":
         fontSizeValue = deserialize(__dictValue, validator: ResolvedValue.fontSizeValidator).merged(with: fontSizeValue)
       case "font_size_unit":
@@ -1233,6 +1258,8 @@ public final class DivTextTemplate: TemplateValue {
         focusedTextColorValue = focusedTextColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
       case parent?.fontFamily?.link:
         fontFamilyValue = fontFamilyValue.merged(with: { deserialize(__dictValue) })
+      case parent?.fontFeatureSettings?.link:
+        fontFeatureSettingsValue = fontFeatureSettingsValue.merged(with: { deserialize(__dictValue) })
       case parent?.fontSize?.link:
         fontSizeValue = fontSizeValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.fontSizeValidator) })
       case parent?.fontSizeUnit?.link:
@@ -1355,6 +1382,7 @@ public final class DivTextTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       focusedTextColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "focused_text_color", error: $0) },
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
+      fontFeatureSettingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_feature_settings", error: $0) },
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
@@ -1418,6 +1446,7 @@ public final class DivTextTemplate: TemplateValue {
       focus: focusValue.value,
       focusedTextColor: focusedTextColorValue.value,
       fontFamily: fontFamilyValue.value,
+      fontFeatureSettings: fontFeatureSettingsValue.value,
       fontSize: fontSizeValue.value,
       fontSizeUnit: fontSizeUnitValue.value,
       fontWeight: fontWeightValue.value,
@@ -1484,6 +1513,7 @@ public final class DivTextTemplate: TemplateValue {
       focus: focus ?? mergedParent.focus,
       focusedTextColor: focusedTextColor ?? mergedParent.focusedTextColor,
       fontFamily: fontFamily ?? mergedParent.fontFamily,
+      fontFeatureSettings: fontFeatureSettings ?? mergedParent.fontFeatureSettings,
       fontSize: fontSize ?? mergedParent.fontSize,
       fontSizeUnit: fontSizeUnit ?? mergedParent.fontSizeUnit,
       fontWeight: fontWeight ?? mergedParent.fontWeight,
@@ -1545,6 +1575,7 @@ public final class DivTextTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       focusedTextColor: merged.focusedTextColor,
       fontFamily: merged.fontFamily,
+      fontFeatureSettings: merged.fontFeatureSettings,
       fontSize: merged.fontSize,
       fontSizeUnit: merged.fontSizeUnit,
       fontWeight: merged.fontWeight,

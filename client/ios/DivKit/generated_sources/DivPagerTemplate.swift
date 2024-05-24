@@ -23,6 +23,7 @@ public final class DivPagerTemplate: TemplateValue {
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
   public let infiniteScroll: Field<Expression<Bool>>? // default value: false
+  public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
   public let itemSpacing: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(0))
   public let items: Field<[DivTemplate]>?
   public let layoutMode: Field<DivPagerLayoutModeTemplate>?
@@ -61,6 +62,7 @@ public final class DivPagerTemplate: TemplateValue {
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       infiniteScroll: dictionary.getOptionalExpressionField("infinite_scroll"),
+      itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
       itemSpacing: dictionary.getOptionalField("item_spacing", templateToType: templateToType),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
       layoutMode: dictionary.getOptionalField("layout_mode", templateToType: templateToType),
@@ -100,6 +102,7 @@ public final class DivPagerTemplate: TemplateValue {
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     infiniteScroll: Field<Expression<Bool>>? = nil,
+    itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
     itemSpacing: Field<DivFixedSizeTemplate>? = nil,
     items: Field<[DivTemplate]>? = nil,
     layoutMode: Field<DivPagerLayoutModeTemplate>? = nil,
@@ -136,6 +139,7 @@ public final class DivPagerTemplate: TemplateValue {
     self.height = height
     self.id = id
     self.infiniteScroll = infiniteScroll
+    self.itemBuilder = itemBuilder
     self.itemSpacing = itemSpacing
     self.items = items
     self.layoutMode = layoutMode
@@ -173,6 +177,7 @@ public final class DivPagerTemplate: TemplateValue {
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let infiniteScrollValue = parent?.infiniteScroll?.resolveOptionalValue(context: context) ?? .noValue
+    let itemBuilderValue = parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let layoutModeValue = parent?.layoutMode?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -208,6 +213,7 @@ public final class DivPagerTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       infiniteScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "infinite_scroll", error: $0) },
+      itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
@@ -252,6 +258,7 @@ public final class DivPagerTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       infiniteScroll: infiniteScrollValue.value,
+      itemBuilder: itemBuilderValue.value,
       itemSpacing: itemSpacingValue.value,
       items: itemsValue.value,
       layoutMode: layoutModeNonNil,
@@ -294,6 +301,7 @@ public final class DivPagerTemplate: TemplateValue {
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var infiniteScrollValue: DeserializationResult<Expression<Bool>> = parent?.infiniteScroll?.value() ?? .noValue
+    var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
     var itemSpacingValue: DeserializationResult<DivFixedSize> = .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
     var layoutModeValue: DeserializationResult<DivPagerLayoutMode> = .noValue
@@ -344,6 +352,8 @@ public final class DivPagerTemplate: TemplateValue {
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "infinite_scroll":
         infiniteScrollValue = deserialize(__dictValue).merged(with: infiniteScrollValue)
+      case "item_builder":
+        itemBuilderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCollectionItemBuilderTemplate.self).merged(with: itemBuilderValue)
       case "item_spacing":
         itemSpacingValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: itemSpacingValue)
       case "items":
@@ -412,6 +422,8 @@ public final class DivPagerTemplate: TemplateValue {
         idValue = idValue.merged(with: { deserialize(__dictValue) })
       case parent?.infiniteScroll?.link:
         infiniteScrollValue = infiniteScrollValue.merged(with: { deserialize(__dictValue) })
+      case parent?.itemBuilder?.link:
+        itemBuilderValue = itemBuilderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCollectionItemBuilderTemplate.self) })
       case parent?.itemSpacing?.link:
         itemSpacingValue = itemSpacingValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
       case parent?.items?.link:
@@ -463,6 +475,7 @@ public final class DivPagerTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      itemBuilderValue = itemBuilderValue.merged(with: { parent.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemSpacingValue = itemSpacingValue.merged(with: { parent.itemSpacing?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       layoutModeValue = layoutModeValue.merged(with: { parent.layoutMode?.resolveValue(context: context, useOnlyLinks: true) })
@@ -494,6 +507,7 @@ public final class DivPagerTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       infiniteScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "infinite_scroll", error: $0) },
+      itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
@@ -538,6 +552,7 @@ public final class DivPagerTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       infiniteScroll: infiniteScrollValue.value,
+      itemBuilder: itemBuilderValue.value,
       itemSpacing: itemSpacingValue.value,
       items: itemsValue.value,
       layoutMode: layoutModeNonNil,
@@ -585,6 +600,7 @@ public final class DivPagerTemplate: TemplateValue {
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       infiniteScroll: infiniteScroll ?? mergedParent.infiniteScroll,
+      itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
       itemSpacing: itemSpacing ?? mergedParent.itemSpacing,
       items: items ?? mergedParent.items,
       layoutMode: layoutMode ?? mergedParent.layoutMode,
@@ -627,6 +643,7 @@ public final class DivPagerTemplate: TemplateValue {
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       infiniteScroll: merged.infiniteScroll,
+      itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
       itemSpacing: merged.itemSpacing?.tryResolveParent(templates: templates),
       items: merged.items?.tryResolveParent(templates: templates),
       layoutMode: try merged.layoutMode?.resolveParent(templates: templates),

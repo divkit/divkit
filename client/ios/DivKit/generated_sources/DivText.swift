@@ -85,6 +85,7 @@ public final class DivText: DivBase {
     public let border: DivTextRangeBorder?
     public let end: Expression<Int> // constraint: number > 0
     public let fontFamily: Expression<String>?
+    public let fontFeatureSettings: Expression<String>?
     public let fontSize: Expression<Int>? // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight>?
@@ -103,6 +104,10 @@ public final class DivText: DivBase {
 
     public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
       resolver.resolveString(fontFamily)
+    }
+
+    public func resolveFontFeatureSettings(_ resolver: ExpressionResolver) -> String? {
+      resolver.resolveString(fontFeatureSettings)
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int? {
@@ -166,6 +171,7 @@ public final class DivText: DivBase {
       border: DivTextRangeBorder? = nil,
       end: Expression<Int>,
       fontFamily: Expression<String>? = nil,
+      fontFeatureSettings: Expression<String>? = nil,
       fontSize: Expression<Int>? = nil,
       fontSizeUnit: Expression<DivSizeUnit>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
@@ -183,6 +189,7 @@ public final class DivText: DivBase {
       self.border = border
       self.end = end
       self.fontFamily = fontFamily
+      self.fontFeatureSettings = fontFeatureSettings
       self.fontSize = fontSize
       self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
       self.fontWeight = fontWeight
@@ -216,6 +223,7 @@ public final class DivText: DivBase {
   public let focus: DivFocus?
   public let focusedTextColor: Expression<Color>?
   public let fontFamily: Expression<String>?
+  public let fontFeatureSettings: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
@@ -278,6 +286,10 @@ public final class DivText: DivBase {
 
   public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(fontFamily)
+  }
+
+  public func resolveFontFeatureSettings(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(fontFeatureSettings)
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -387,6 +399,7 @@ public final class DivText: DivBase {
     focus: DivFocus? = nil,
     focusedTextColor: Expression<Color>? = nil,
     fontFamily: Expression<String>? = nil,
+    fontFeatureSettings: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
@@ -441,6 +454,7 @@ public final class DivText: DivBase {
     self.focus = focus
     self.focusedTextColor = focusedTextColor
     self.fontFamily = fontFamily
+    self.fontFeatureSettings = fontFeatureSettings
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
@@ -525,83 +539,84 @@ extension DivText: Equatable {
       return false
     }
     guard
+      lhs.fontFeatureSettings == rhs.fontFeatureSettings,
       lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight
+      lhs.fontSizeUnit == rhs.fontSizeUnit
     else {
       return false
     }
     guard
+      lhs.fontWeight == rhs.fontWeight,
       lhs.height == rhs.height,
-      lhs.id == rhs.id,
-      lhs.images == rhs.images
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.images == rhs.images,
       lhs.letterSpacing == rhs.letterSpacing,
-      lhs.lineHeight == rhs.lineHeight,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.lineHeight == rhs.lineHeight
     else {
       return false
     }
     guard
+      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.maxLines == rhs.maxLines,
-      lhs.minHiddenLines == rhs.minHiddenLines
+      lhs.maxLines == rhs.maxLines
     else {
       return false
     }
     guard
+      lhs.minHiddenLines == rhs.minHiddenLines,
       lhs.paddings == rhs.paddings,
-      lhs.ranges == rhs.ranges,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.ranges == rhs.ranges
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectable == rhs.selectable,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.strike == rhs.strike
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.strike == rhs.strike,
       lhs.text == rhs.text,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
     else {
       return false
     }
     guard
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
       lhs.textColor == rhs.textColor,
-      lhs.textGradient == rhs.textGradient,
-      lhs.textShadow == rhs.textShadow
+      lhs.textGradient == rhs.textGradient
     else {
       return false
     }
     guard
+      lhs.textShadow == rhs.textShadow,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.underline == rhs.underline,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -634,6 +649,7 @@ extension DivText: Serializable {
     result["focus"] = focus?.toDictionary()
     result["focused_text_color"] = focusedTextColor?.toValidSerializationValue()
     result["font_family"] = fontFamily?.toValidSerializationValue()
+    result["font_feature_settings"] = fontFeatureSettings?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
@@ -733,32 +749,33 @@ extension DivText.Range: Equatable {
     guard
       lhs.end == rhs.end,
       lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize
+      lhs.fontFeatureSettings == rhs.fontFeatureSettings
     else {
       return false
     }
     guard
+      lhs.fontSize == rhs.fontSize,
       lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.fontWeight == rhs.fontWeight
     else {
       return false
     }
     guard
+      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.start == rhs.start,
-      lhs.strike == rhs.strike
+      lhs.start == rhs.start
     else {
       return false
     }
     guard
+      lhs.strike == rhs.strike,
       lhs.textColor == rhs.textColor,
-      lhs.textShadow == rhs.textShadow,
-      lhs.topOffset == rhs.topOffset
+      lhs.textShadow == rhs.textShadow
     else {
       return false
     }
     guard
+      lhs.topOffset == rhs.topOffset,
       lhs.underline == rhs.underline
     else {
       return false
@@ -801,6 +818,7 @@ extension DivText.Range: Serializable {
     result["border"] = border?.toDictionary()
     result["end"] = end.toValidSerializationValue()
     result["font_family"] = fontFamily?.toValidSerializationValue()
+    result["font_feature_settings"] = fontFeatureSettings?.toValidSerializationValue()
     result["font_size"] = fontSize?.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight?.toValidSerializationValue()

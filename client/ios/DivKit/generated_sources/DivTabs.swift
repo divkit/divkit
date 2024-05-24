@@ -25,6 +25,26 @@ public final class DivTabs: DivBase {
     }
   }
 
+  public final class TabTitleDelimiter {
+    public let height: DivFixedSize // default value: DivFixedSize(value: .value(12))
+    public let imageUrl: Expression<URL>
+    public let width: DivFixedSize // default value: DivFixedSize(value: .value(12))
+
+    public func resolveImageUrl(_ resolver: ExpressionResolver) -> URL? {
+      resolver.resolveUrl(imageUrl)
+    }
+
+    init(
+      height: DivFixedSize? = nil,
+      imageUrl: Expression<URL>,
+      width: DivFixedSize? = nil
+    ) {
+      self.height = height ?? DivFixedSize(value: .value(12))
+      self.imageUrl = imageUrl
+      self.width = width ?? DivFixedSize(value: .value(12))
+    }
+  }
+
   public final class TabTitleStyle {
     @frozen
     public enum AnimationType: String, CaseIterable {
@@ -197,6 +217,7 @@ public final class DivTabs: DivBase {
   public let separatorColor: Expression<Color> // default value: #14000000
   public let separatorPaddings: DivEdgeInsets // default value: DivEdgeInsets(bottom: .value(0), left: .value(12), right: .value(12), top: .value(0))
   public let switchTabsByContentSwipeEnabled: Expression<Bool> // default value: true
+  public let tabTitleDelimiter: TabTitleDelimiter?
   public let tabTitleStyle: TabTitleStyle?
   public let titlePaddings: DivEdgeInsets // default value: DivEdgeInsets(bottom: .value(8), left: .value(12), right: .value(12), top: .value(0))
   public let tooltips: [DivTooltip]?
@@ -301,6 +322,7 @@ public final class DivTabs: DivBase {
     separatorColor: Expression<Color>?,
     separatorPaddings: DivEdgeInsets?,
     switchTabsByContentSwipeEnabled: Expression<Bool>?,
+    tabTitleDelimiter: TabTitleDelimiter?,
     tabTitleStyle: TabTitleStyle?,
     titlePaddings: DivEdgeInsets?,
     tooltips: [DivTooltip]?,
@@ -338,6 +360,7 @@ public final class DivTabs: DivBase {
     self.separatorColor = separatorColor ?? .value(Color.colorWithARGBHexCode(0x14000000))
     self.separatorPaddings = separatorPaddings ?? DivEdgeInsets(bottom: .value(0), left: .value(12), right: .value(12), top: .value(0))
     self.switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?? .value(true)
+    self.tabTitleDelimiter = tabTitleDelimiter
     self.tabTitleStyle = tabTitleStyle
     self.titlePaddings = titlePaddings ?? DivEdgeInsets(bottom: .value(8), left: .value(12), right: .value(12), top: .value(0))
     self.tooltips = tooltips
@@ -413,29 +436,34 @@ extension DivTabs: Equatable {
       return false
     }
     guard
+      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter,
       lhs.tabTitleStyle == rhs.tabTitleStyle,
-      lhs.titlePaddings == rhs.titlePaddings,
-      lhs.tooltips == rhs.tooltips
+      lhs.titlePaddings == rhs.titlePaddings
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -473,6 +501,7 @@ extension DivTabs: Serializable {
     result["separator_color"] = separatorColor.toValidSerializationValue()
     result["separator_paddings"] = separatorPaddings.toDictionary()
     result["switch_tabs_by_content_swipe_enabled"] = switchTabsByContentSwipeEnabled.toValidSerializationValue()
+    result["tab_title_delimiter"] = tabTitleDelimiter?.toDictionary()
     result["tab_title_style"] = tabTitleStyle?.toDictionary()
     result["title_paddings"] = titlePaddings.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
@@ -496,6 +525,21 @@ extension DivTabs.Item: Equatable {
       lhs.div == rhs.div,
       lhs.title == rhs.title,
       lhs.titleClickAction == rhs.titleClickAction
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+#if DEBUG
+extension DivTabs.TabTitleDelimiter: Equatable {
+  public static func ==(lhs: DivTabs.TabTitleDelimiter, rhs: DivTabs.TabTitleDelimiter) -> Bool {
+    guard
+      lhs.height == rhs.height,
+      lhs.imageUrl == rhs.imageUrl,
+      lhs.width == rhs.width
     else {
       return false
     }
@@ -560,6 +604,16 @@ extension DivTabs.Item: Serializable {
     result["div"] = div.toDictionary()
     result["title"] = title.toValidSerializationValue()
     result["title_click_action"] = titleClickAction?.toDictionary()
+    return result
+  }
+}
+
+extension DivTabs.TabTitleDelimiter: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["height"] = height.toDictionary()
+    result["image_url"] = imageUrl.toValidSerializationValue()
+    result["width"] = width.toDictionary()
     return result
   }
 }

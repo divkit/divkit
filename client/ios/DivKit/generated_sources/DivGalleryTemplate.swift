@@ -31,6 +31,7 @@ public final class DivGalleryTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
+  public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
   public let itemSpacing: Field<Expression<Int>>? // constraint: number >= 0; default value: 8
   public let items: Field<[DivTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
@@ -71,6 +72,7 @@ public final class DivGalleryTemplate: TemplateValue {
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
+      itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
       itemSpacing: dictionary.getOptionalExpressionField("item_spacing"),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
@@ -112,6 +114,7 @@ public final class DivGalleryTemplate: TemplateValue {
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
     itemSpacing: Field<Expression<Int>>? = nil,
     items: Field<[DivTemplate]>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
@@ -150,6 +153,7 @@ public final class DivGalleryTemplate: TemplateValue {
     self.focus = focus
     self.height = height
     self.id = id
+    self.itemBuilder = itemBuilder
     self.itemSpacing = itemSpacing
     self.items = items
     self.margins = margins
@@ -189,6 +193,7 @@ public final class DivGalleryTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
+    let itemBuilderValue = parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.itemSpacingValidator) ?? .noValue
     let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -226,6 +231,7 @@ public final class DivGalleryTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
@@ -264,6 +270,7 @@ public final class DivGalleryTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      itemBuilder: itemBuilderValue.value,
       itemSpacing: itemSpacingValue.value,
       items: itemsValue.value,
       margins: marginsValue.value,
@@ -308,6 +315,7 @@ public final class DivGalleryTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+    var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
     var itemSpacingValue: DeserializationResult<Expression<Int>> = parent?.itemSpacing?.value() ?? .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -362,6 +370,8 @@ public final class DivGalleryTemplate: TemplateValue {
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
+      case "item_builder":
+        itemBuilderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCollectionItemBuilderTemplate.self).merged(with: itemBuilderValue)
       case "item_spacing":
         itemSpacingValue = deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator).merged(with: itemSpacingValue)
       case "items":
@@ -434,6 +444,8 @@ public final class DivGalleryTemplate: TemplateValue {
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.id?.link:
         idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.itemBuilder?.link:
+        itemBuilderValue = itemBuilderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCollectionItemBuilderTemplate.self) })
       case parent?.itemSpacing?.link:
         itemSpacingValue = itemSpacingValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator) })
       case parent?.items?.link:
@@ -485,6 +497,7 @@ public final class DivGalleryTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      itemBuilderValue = itemBuilderValue.merged(with: { parent.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -515,6 +528,7 @@ public final class DivGalleryTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
@@ -553,6 +567,7 @@ public final class DivGalleryTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      itemBuilder: itemBuilderValue.value,
       itemSpacing: itemSpacingValue.value,
       items: itemsValue.value,
       margins: marginsValue.value,
@@ -602,6 +617,7 @@ public final class DivGalleryTemplate: TemplateValue {
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
       itemSpacing: itemSpacing ?? mergedParent.itemSpacing,
       items: items ?? mergedParent.items,
       margins: margins ?? mergedParent.margins,
@@ -646,6 +662,7 @@ public final class DivGalleryTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
+      itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
       itemSpacing: merged.itemSpacing,
       items: merged.items?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),

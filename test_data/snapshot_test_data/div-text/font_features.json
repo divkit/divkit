@@ -2,6 +2,7 @@
   "description": "Text with font features",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

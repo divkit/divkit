@@ -47,6 +47,7 @@
           "$description": "translations.json#/div_font_feature_settings",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },
@@ -258,6 +259,7 @@
           "$description": "translations.json#/div_font_feature_settings",
           "platforms": [
             "android",
+            "ios",
             "web"
           ]
         },
