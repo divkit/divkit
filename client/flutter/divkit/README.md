@@ -1,4 +1,4 @@
-# DivKit <img alt="Playground app" src="https://github.com/divkit/divkit/blob/main/readme_pictures/app_screen.png" width="30%" align="right" style="margin:20px;">
+# DivKit <img alt="Playground app" src="https://raw.githubusercontent.com/divkit/divkit/main/readme_pictures/app_screen.png" width="30%" align="right" style="margin:20px;">
 [![Pub](https://img.shields.io/pub/v/divkit.svg)](https://pub.dartlang.org/packages/divkit)
 [![GitHub Stars](https://img.shields.io/github/stars/divkit/divkit)](https://github.com/divkit/divkit/stargazers)
 
