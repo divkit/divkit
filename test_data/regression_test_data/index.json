@@ -2417,7 +2417,8 @@
       "title": "Gesture (extension)",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "extensions"
