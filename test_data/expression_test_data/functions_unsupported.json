@@ -42,7 +42,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -54,7 +55,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -72,7 +74,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -84,7 +87,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -102,7 +106,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
