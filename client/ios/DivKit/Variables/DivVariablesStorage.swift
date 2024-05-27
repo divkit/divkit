@@ -39,7 +39,7 @@ public final class DivVariablesStorage {
 
   private let globalStorage: DivVariableStorage
   private var cardVariables: [DivCardID: DivVariables] = [:]
-  private let lock = RWLock()
+  private let lock = AllocatedUnfairLock()
 
   private let changeEventsPipe = SignalPipe<ChangeEvent>()
   public let changeEvents: Signal<ChangeEvent>
@@ -77,7 +77,7 @@ public final class DivVariablesStorage {
     cardId: DivCardID,
     name: DivVariableName
   ) -> T? {
-    let variable = lock.read {
+    let variable = lock.withLock {
       cardVariables[cardId]?[name]
     }
     if let variable {
@@ -90,8 +90,7 @@ public final class DivVariablesStorage {
     cardId: DivCardID,
     variables: DivVariables
   ) {
-    var changeEvent: ChangeEvent?
-    lock.write {
+    let changeEvent: ChangeEvent? = lock.withLock {
       let oldValues = allValues
       cardVariables[cardId] = variables
 
@@ -100,9 +99,9 @@ public final class DivVariablesStorage {
         new: variables
       )
       if changedVariables.isEmpty {
-        return
+        return nil
       }
-      changeEvent = ChangeEvent(
+      return ChangeEvent(
         kind: .local(cardId, changedVariables),
         newValues: allValues
       )
@@ -117,7 +116,7 @@ public final class DivVariablesStorage {
     for cardId: DivCardID,
     replaceExisting: Bool = true
   ) {
-    let oldVariables = lock.read {
+    let oldVariables = lock.withLock {
       cardVariables[cardId] ?? [:]
     }
     let resultVariables = replaceExisting ?
@@ -143,20 +142,20 @@ public final class DivVariablesStorage {
   }
 
   public func makeVariables(for cardId: DivCardID) -> DivVariables {
-    lock.read {
+    lock.withLock {
       globalStorage.allValues + (cardVariables[cardId] ?? [:])
     }
   }
 
   public func reset() {
-    lock.write {
+    lock.withLock {
       globalStorage.clear()
       cardVariables = [:]
     }
   }
 
   public func reset(cardId: DivCardID) {
-    lock.write {
+    lock.withLock {
       cardVariables[cardId] = [:]
     }
   }
@@ -198,22 +197,21 @@ extension DivVariablesStorage: DivVariableUpdater {
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
   ) {
-    var changeEvent: ChangeEvent? = nil
-    lock.write {
+    let changeEvent: ChangeEvent? = lock.withLock {
       var variables = cardVariables[cardId]
       if let oldValue = variables?[name] {
         guard let newValue = valueFactory(oldValue), newValue != oldValue else {
-          return
+          return nil
         }
         variables?[name] = newValue
         cardVariables[cardId] = variables
-        changeEvent = ChangeEvent(
+        return ChangeEvent(
           kind: .local(cardId, [name]),
           newValues: allValues
         )
-      } else {
-        globalStorage.update(name: name, valueFactory: valueFactory)
       }
+      globalStorage.update(name: name, valueFactory: valueFactory)
+      return nil
     }
     if let changeEvent {
       notify(changeEvent)

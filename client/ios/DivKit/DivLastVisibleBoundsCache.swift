@@ -4,27 +4,27 @@ import CommonCorePublic
 import LayoutKit
 
 public final class DivLastVisibleBoundsCache {
-  private let rwLock = RWLock()
+  private let lock = AllocatedUnfairLock()
 
   private var storage: [UIElementPath: Int] = [:]
 
   init() {}
 
   func lastVisibleArea(for path: UIElementPath) -> Int {
-    rwLock.read {
+    lock.withLock {
       storage[path] ?? .zero
     }
   }
 
   func updateLastVisibleArea(for path: UIElementPath, area: Int) {
-    rwLock.write {
+    lock.withLock {
       storage[path] = area
     }
   }
 
   func dropVisibleBounds(forMatchingPrefix prefix: UIElementPath) {
     let prefix = prefix.description + "/"
-    rwLock.write {
+    lock.withLock {
       for item in storage {
         if (item.key.description + "/").starts(with: prefix) {
           storage[item.key] = nil
@@ -34,7 +34,7 @@ public final class DivLastVisibleBoundsCache {
   }
 
   func reset() {
-    rwLock.write {
+    lock.withLock {
       storage.removeAll()
     }
   }

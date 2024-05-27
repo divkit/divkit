@@ -16,7 +16,7 @@ public final class DivTriggersStorage {
   }
 
   private var triggersByCard: [CardTriggers] = []
-  private let triggersLock = RWLock()
+  private let lock = AllocatedUnfairLock()
 
   private let variablesStorage: DivVariablesStorage
   private let actionHandler: DivActionHandler?
@@ -45,7 +45,7 @@ public final class DivTriggersStorage {
     triggers: [DivTrigger]
   ) {
     let cardTriggers = (cardId, triggers.map { Item($0) })
-    triggersLock.write {
+    lock.withLock {
       triggersByCard.removeAll { $0.cardId == cardId }
       triggersByCard.append(cardTriggers)
     }
@@ -58,15 +58,14 @@ public final class DivTriggersStorage {
   }
 
   private func runActions(event: DivVariablesStorage.ChangeEvent) {
-    var triggers: [CardTriggers] = []
-    triggersLock.read {
+    let triggers = lock.withLock {
       switch event.kind {
       case let .local(cardId, _):
-        triggers = triggersByCard
+        triggersByCard
           .first { $0.cardId == cardId }
           .map { [$0] } ?? []
       case .global:
-        triggers = triggersByCard
+        triggersByCard
       }
     }
 
