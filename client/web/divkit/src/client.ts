@@ -79,5 +79,9 @@ export {
 } from './extensions/sizeProvider';
 
 export {
+    Gesture
+} from './extensions/gesture';
+
+export {
     lottieExtensionBuilder
 } from './extensions/lottie';

@@ -42,5 +42,6 @@ export { createVariable, createGlobalVariablesController } from './variables';
 
 export {
     SizeProvider,
+    Gesture,
     lottieExtensionBuilder
 } from './extensions';

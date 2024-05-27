@@ -1,5 +1,6 @@
 import Root from './components/Root.svelte';
 import { SizeProvider } from './extensions/sizeProvider';
+import { Gesture } from './extensions/gesture';
 import { lottieExtensionBuilder } from './extensions/lottie';
 import type { DivExtensionClass } from '../typings/common';
 import Lottie from 'lottie-web/build/player/lottie';
@@ -31,6 +32,7 @@ window.root = new Root({
         },
         extensions: new Map<string, DivExtensionClass>([
             ['size_provider', SizeProvider],
+            ['gesture', Gesture],
             ['lottie', lottieExtensionBuilder(Lottie.loadAnimation)],
         ]),
         customComponents: new Map([

@@ -1168,6 +1168,13 @@
     function getExtensionContext(): DivExtensionContext {
         return {
             variables,
+            processExpressions<T>(t: T) {
+                return getJsonWithVars(
+                    logError,
+                    t
+                ) as T;
+            },
+            execAction,
             logError
         };
     }

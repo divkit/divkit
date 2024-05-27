@@ -257,7 +257,7 @@ export type FetchInit = RequestInit | ((url: string) => RequestInit);
 
 export interface DivkitInstance {
     $destroy(): void;
-    execAction(action: Action | VisibilityAction): void;
+    execAction(action: Action | VisibilityAction | DisappearAction): void;
     /** @deprecated */
     setTheme(theme: Theme): void;
     /** Experimental */
@@ -281,6 +281,8 @@ export interface Customization {
 
 export interface DivExtensionContext {
     variables: Map<string, Variable>;
+    processExpressions<T>(t: T): T;
+    execAction(action: Action | VisibilityAction | DisappearAction): void;
     logError(error: WrappedError): void;
 }
 
