@@ -888,4 +888,9 @@ internal fun DivContentAlignmentVertical.toAlignmentVertical(): DivAlignmentVert
     else -> DivAlignmentVertical.TOP
 }
 
+internal fun View.clearFocusOnClick() {
+    if (this.isFocused || !this.isInTouchMode) return
+    rootView.clearFocus()
+}
+
 internal val View.bindingContext get() = (this as? DivHolderView<*>)?.bindingContext

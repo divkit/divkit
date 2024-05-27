@@ -39,8 +39,8 @@ class Div2InputHighlightScreenshotTest(case: String, escapedCase: String) {
     @Test
     @Screenshot(viewId = R.id.morda_screenshot_div, name = "highlight_color_changed")
     fun divScreenshotChangedColor() {
-        divFocus { clickOnTopInput() }
         divInput { clickOnActionButton() }
+        divFocus { clickOnTopInput() }
     }
 
     companion object {

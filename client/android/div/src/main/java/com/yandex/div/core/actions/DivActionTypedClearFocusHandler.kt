@@ -1,7 +1,5 @@
 package com.yandex.div.core.actions
 
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionTyped
@@ -14,16 +12,11 @@ internal class DivActionTypedClearFocusHandler @Inject constructor() : DivAction
         return when (action) {
             is DivActionTyped.ClearFocus -> {
                 view.clearFocus()
-                closeKeyboard(view)
+                view.closeKeyboard()
                 true
             }
 
             else -> false
         }
-    }
-
-    private fun closeKeyboard(view: Div2View) {
-        val imm = ContextCompat.getSystemService(view.getContext(), InputMethodManager::class.java)
-        imm?.hideSoftInputFromWindow(view.windowToken, InputMethodManager.SHOW_IMPLICIT)
     }
 }

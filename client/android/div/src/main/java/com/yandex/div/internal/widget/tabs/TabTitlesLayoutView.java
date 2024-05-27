@@ -1,8 +1,12 @@
 package com.yandex.div.internal.widget.tabs;
 
+import static com.yandex.div.core.view2.divs.BaseDivViewExtensionsKt.clearFocusOnClick;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,6 +65,8 @@ public class TabTitlesLayoutView<ACTION>
                 }
 
                 int pos = tab.getPosition();
+                View tabView = tab.getTabView();
+                if (tabView != null) clearFocusOnClick(tabView);
                 mHost.setCurrentPage(pos, false);
             }
 

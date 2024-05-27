@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
+import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.AccessibilityStateProvider
@@ -276,7 +277,7 @@ internal class DivInputBinder @Inject constructor(
 
     private fun DivInputView.observeIsEnabled(div: DivInput, resolver: ExpressionResolver) {
         val callback = { isEnabled: Boolean ->
-            if (!isEnabled && isFocused) closeKeyboard(this)
+            if (!isEnabled && isFocused) closeKeyboard()
             enabled = isEnabled
         }
         addSubscription(div.isEnabled.observeAndGet(resolver, callback))
@@ -455,11 +456,6 @@ internal class DivInputBinder @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun closeKeyboard(view: View) {
-        val imm = ContextCompat.getSystemService(view.context, InputMethodManager::class.java)
-        imm?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun ValidatorItemData.validate(
