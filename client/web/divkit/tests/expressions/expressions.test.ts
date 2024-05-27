@@ -72,12 +72,43 @@ function runCase(item: any) {
     }
 }
 
+interface Test {
+    name?: string;
+    expression: string;
+    expected: {
+        type: 'error' | 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'datetime' | 'array' | 'dict';
+        value: unknown;
+    };
+}
+
+function getTestName(test: Test): string {
+    if (test.name) {
+        return test.name;
+    }
+
+    let expr;
+    if (test.expression.startsWith('@{') && test.expression.endsWith('}') && !test.expression.slice(2).includes('@{')) {
+        expr = test.expression.slice(2, test.expression.length - 1);
+    } else {
+        expr = test.expression;
+    }
+
+    let expected;
+    if (test.expected.type === 'error') {
+        expected = 'error';
+    } else if (test.expected.type === 'array') {
+        expected = '<array>';
+    } else if (test.expected.type === 'dict') {
+        expected = '<dict>';
+    } else {
+        expected = String(test.expected.value);
+    }
+
+    return `${expr} => ${expected}`;
+}
+
 describe('expressions', () => {
     for (const file of tests) {
-        /* if (file !== 'methods_dict.json') {
-            continue;
-        } */
-
         const name = file.replace('.json', '');
         const contents = require(path.resolve(dir, file));
 
@@ -87,7 +118,7 @@ describe('expressions', () => {
             describe(name, () => {
                 for (const item of contents.cases) {
                     if (item.platforms.includes('web')) {
-                        let name = item.name;
+                        let name = getTestName(item);
 
                         if (!counter[name]) {
                             counter[name] = 0;
