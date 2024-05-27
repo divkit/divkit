@@ -239,7 +239,7 @@
         ];
         let images = textImages || [];
         let prevIndex = 0;
-        let activeRanges: MaybeMissing<TextStyles>[] = [];
+        let activeRanges: MaybeMissing<TextRange>[] = [];
         let list: ({
             index: number;
             range: MaybeMissing<TextRange> & {
@@ -260,6 +260,9 @@
 
         ranges.forEach(range => {
             if (range.start !== undefined && range.end !== undefined) {
+                if (!range.top_offset) {
+                    range.top_offset = 0;
+                }
                 list.push({
                     index: range.start,
                     range: range as typeof range & {
@@ -336,6 +339,9 @@
                 activeRanges.push(range);
             } else if (item.type === 'rangeEnd') {
                 activeRanges = activeRanges.filter(range => range !== item.range);
+                if (activeRanges.length) {
+                    activeRanges[activeRanges.length - 1].top_offset = 0;
+                }
             } else if (item.type === 'image') {
                 let textStyles2 = Object.assign({ ...rootTextStyles }, ...activeRanges as any[]) as TextStyles;
                 let imageWidth = pxToEm(
