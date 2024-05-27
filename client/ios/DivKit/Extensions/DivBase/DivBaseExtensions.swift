@@ -114,11 +114,12 @@ extension DivBase {
       )
     }
 
+    let clipToBounds = rotation == nil && shadow == nil
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
-      .addActions(context: context, actionsHolder: actionsHolder)
+      .addActions(context: context, actionsHolder: actionsHolder, clipToBounds: clipToBounds)
       .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
-        boundary: rotation != nil || shadow != nil ? .noClip : nil,
+        boundary: clipToBounds ? nil : .noClip,
         alpha: CGFloat(resolveAlpha(expressionResolver))
       )
 

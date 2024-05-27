@@ -9,7 +9,7 @@ import CommonCorePublic
 final class DivBaseExtensionsTests: XCTestCase {
   private let timer = TestTimerScheduler()
 
-  func test_WithId() throws {
+  func test_WithId() {
     let block = makeBlock(
       divSeparator(
         id: "id1"
@@ -27,7 +27,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
-  func test_WithMarginsAndPaddings() throws {
+  func test_WithMarginsAndPaddings() {
     let block = makeBlock(
       divText(
         margins: DivEdgeInsets(bottom: .value(10), top: .value(10)),
@@ -55,7 +55,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
-  func test_WithAccessibility() throws {
+  func test_WithAccessibility() {
     let block = makeBlock(
       divSeparator(
         accessibility: DivAccessibility(
@@ -81,7 +81,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
-  func test_MarginsOverAccessibility() throws {
+  func test_MarginsOverAccessibility() {
     let block = makeBlock(
       divSeparator(
         accessibility: DivAccessibility(
@@ -145,11 +145,8 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
-  func test_MarginsOverActions() throws {
-    let action = divAction(
-      logId: "action_log_id",
-      url: "https://some.url"
-    )
+  func test_MarginsOverActions() {
+    let action = divAction(logId: "action_log_id")
     let block = makeBlock(
       divSeparator(
         actions: [action],
@@ -174,7 +171,91 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
-  func test_WithVisibility_Gone() throws {
+  func test_WithBorderAndActions() {
+    let action = divAction(logId: "action_log_id")
+    let block = makeBlock(
+      divSeparator(
+        actions: [action],
+        border: DivBorder(
+          cornerRadius: .value(20),
+          stroke: DivStroke(
+            color: .value(color("#112233")),
+            width: .value(2)
+          )
+        )
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: separatorBlock(),
+        actions: NonEmptyArray(action.uiAction!),
+        actionAnimation: .default,
+        boundary: .clipCorner(CornerRadii(20)),
+        border: BlockBorder(
+          color: color("#112233"),
+          width: 2
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithShadowActionsAndMargins() {
+    let action = divAction(
+      logId: "action_log_id",
+      url: "https://some.url"
+    )
+    let block = makeBlock(
+      divSeparator(
+        actions: [action],
+        border: DivBorder(
+          hasShadow: .value(true),
+          shadow: DivShadow(
+            blur: .value(5),
+            color: .value(color("#112233")),
+            offset: DivPoint(
+              x: DivDimension(value: .value(10)),
+              y: DivDimension(value: .value(20))
+            )
+          )
+        ),
+        margins: DivEdgeInsets(bottom: .value(10), top: .value(10))
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: DecoratingBlock(
+          child: ShadedBlock(
+            block: DecoratingBlock(
+              child: separatorBlock(),
+              accessibilityElement: .default
+            ),
+            shadow: BlockShadow(
+              cornerRadii: CornerRadii(0),
+              blurRadius: 5,
+              offset: CGPoint(x: 10, y: 20),
+              color: color("#112233")
+            )
+          ),
+          actions: NonEmptyArray(action.uiAction!),
+          actionAnimation: .default,
+          boundary: .noClip
+        ),
+        boundary: .noClip,
+        paddings: EdgeInsets(vertical: 10)
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithVisibility_Gone() {
     let block = makeBlock(
       divSeparator(
         visibility: .value(.gone)
@@ -189,7 +270,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
-  func test_WithVisibility_Invisible() throws {
+  func test_WithVisibility_Invisible() {
     let block = makeBlock(
       divSeparator(
         visibility: .value(.invisible)

@@ -111,6 +111,7 @@ func divText(
 func divSeparator(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  border: DivBorder? = nil,
   delimiterStyle: DivSeparator.DelimiterStyle? = nil,
   id: String? = nil,
   margins: DivEdgeInsets? = nil,
@@ -122,6 +123,7 @@ func divSeparator(
   .divSeparator(DivSeparator(
     accessibility: accessibility,
     actions: actions,
+    border: border,
     delimiterStyle: delimiterStyle,
     id: id,
     margins: margins,
@@ -135,6 +137,7 @@ func divSeparator(
 func divContainer(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  clipToBounds: Bool = true,
   height: DivSize? = nil,
   itemBuilder: DivCollectionItemBuilder? = nil,
   items: [Div]? = nil,
@@ -151,7 +154,7 @@ func divContainer(
     aspect: nil,
     background: nil,
     border: nil,
-    clipToBounds: nil,
+    clipToBounds: .value(clipToBounds),
     columnSpan: nil,
     contentAlignmentHorizontal: nil,
     contentAlignmentVertical: nil,

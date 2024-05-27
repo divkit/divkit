@@ -52,7 +52,8 @@ extension DivActionsHolder {
 extension Block {
   func addActions(
     context: DivBlockModelingContext,
-    actionsHolder: DivActionsHolder?
+    actionsHolder: DivActionsHolder?,
+    clipToBounds: Bool
   ) -> Block {
     guard let actionsHolder else {
       return self
@@ -66,6 +67,7 @@ extension Block {
     }
 
     return addingDecorations(
+      boundary: clipToBounds ? nil : .noClip,
       actions: actions,
       actionAnimation: actionsHolder.actionAnimation
         .resolveActionAnimation(context.expressionResolver),

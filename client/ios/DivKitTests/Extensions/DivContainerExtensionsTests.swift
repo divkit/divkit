@@ -83,6 +83,39 @@ final class DivContainerExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_NoClipping() throws {
+    let block = makeBlock(
+      divContainer(
+        clipToBounds: false,
+        items: [
+          divSeparator(),
+        ]
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: SeparatorBlock(
+                color: color("#14000000")
+              ),
+              accessibilityElement: .default
+            ),
+          ],
+          clipContent: false
+        ),
+        boundary: .noClip,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WithItemBuilder() throws {
     let block = makeBlock(
       divContainer(
