@@ -36,7 +36,8 @@
         "selectComponent": "Выбрать компонент",
         "designComponents": "Компоненты",
         "designPalette": "Палитра",
-        "designVariables": "Переменные"
+        "designVariables": "Переменные",
+        "description": "DivKit — Кроссплатформенный фреймворк для Server-driven UI с открытым кодом"
     },
     "en": {
         "name": "Eng",
@@ -75,6 +76,7 @@
         "selectComponent": "Select component",
         "designComponents": "Components",
         "designPalette": "Palette",
-        "designVariables": "Variables"
+        "designVariables": "Variables",
+        "description": "Open-source cross-platform Server-Driven UI framework"
     }
 }
