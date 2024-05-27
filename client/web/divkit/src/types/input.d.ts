@@ -42,6 +42,7 @@ export interface DivInputData extends DivBaseData {
     text_alignment_vertical?: AlignmentVertical;
     line_height?: number;
     max_visible_lines?: number;
+    max_length?: number;
     letter_spacing?: number;
     hint_text?: string;
     hint_color?: string;

@@ -10,6 +10,24 @@
         uri: 'url',
         password: 'password'
     };
+
+    const ALLOWED_BLOCKED_MULTILINE_KEYS = new Set([
+        'Backspace',
+        'Delete',
+        'Tab',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowUp',
+        'ArrowDown',
+        'Home',
+        'End',
+        'Control',
+        'Shift',
+        'Alt',
+        'Command',
+        'Meta',
+        'Escape',
+    ]);
 </script>
 
 <script lang="ts">
@@ -83,6 +101,7 @@
     let verticalPadding = '';
     let description = '';
     let isEnabled = true;
+    let maxLength = Infinity;
 
     $: origJson = componentContext.origJson;
 
@@ -100,6 +119,7 @@
         inputType = 'text';
         inputMode = undefined;
         isEnabled = true;
+        maxLength = Infinity;
     }
 
     $: if (origJson) {
@@ -130,6 +150,7 @@
     $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
     $: jsonSelectAll = componentContext.getDerivedFromVars(componentContext.json.select_all_on_focus);
     $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
+    $: jsonMaxLength = componentContext.getDerivedFromVars(componentContext.json.max_length);
 
     $: if (variable) {
         hasError = false;
@@ -152,7 +173,12 @@
     $: updateMaskData($jsonMask);
 
     $: if (!inputMask && value !== $valueVariable) {
-        value = contentEditableValue = $valueVariable;
+        let val = $valueVariable;
+        if (val.length > maxLength) {
+            val = val.slice(0, maxLength);
+            valueVariable.setValue(val);
+        }
+        value = contentEditableValue = val;
     }
 
     $: if (inputMask && inputMask.rawValue !== $rawValueVariable) {
@@ -211,6 +237,10 @@
 
     $: {
         isEnabled = correctBooleanInt($jsonIsEnabled, isEnabled);
+    }
+
+    $: {
+        maxLength = correctPositiveNumber($jsonMaxLength, maxLength);
     }
 
     $: {
@@ -289,12 +319,26 @@
             val = '';
         }
 
+        if (val.length > maxLength) {
+            val = contentEditableValue = val.slice(0, maxLength);
+        }
+
         if (value !== val) {
             value = contentEditableValue = val;
             valueVariable.setValue(val);
             if (inputMask) {
                 runValueMask();
             }
+        }
+    }
+
+    function onKeydown(event: KeyboardEvent): void {
+        if (
+            value.length >= maxLength &&
+            !ALLOWED_BLOCKED_MULTILINE_KEYS.has(event.key) &&
+            !(event.ctrlKey || event.altKey || event.metaKey)
+        ) {
+            event.preventDefault();
         }
     }
 
@@ -453,7 +497,6 @@
                 >​</span>
 
                 {#if isEnabled}
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span
                         bind:this={input}
                         class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, multiline: true })}
@@ -466,6 +509,7 @@
                         style={makeStyle(paddingStl)}
                         bind:innerText={contentEditableValue}
                         on:input={onInput}
+                        on:keydown={onKeydown}
                         on:paste={onPaste}
                         on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                         on:click={$jsonSelectAll ? onClick : undefined}
@@ -500,6 +544,7 @@
                 aria-label={description}
                 style={makeStyle(paddingStl)}
                 disabled={!isEnabled}
+                maxlength={maxLength === Infinity ? undefined : maxLength}
                 {placeholder}
                 {value}
                 on:input={onInput}
