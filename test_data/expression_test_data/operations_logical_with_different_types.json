@@ -9,8 +9,9 @@
       },
       "variables": [],
       "platforms": [
-        "web",
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -22,8 +23,9 @@
       },
       "variables": [],
       "platforms": [
-        "web",
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
@@ -35,12 +37,13 @@
       },
       "variables": [],
       "platforms": [
-        "web",
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
-      "name": "true || abc => error",
+      "name": "true || abc => true",
       "expression": "@{true || abc}",
       "expected": {
         "type": "boolean",
@@ -48,6 +51,8 @@
       },
       "variables": [],
       "platforms": [
+        "android",
+        "ios",
         "web"
       ]
     }

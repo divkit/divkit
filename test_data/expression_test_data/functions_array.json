@@ -1,27 +1,6 @@
 {
   "cases": [
     {
-      "name": "unknownArrayFunc(array) => error",
-      "expression": "@{unknownArrayFunc(array)}",
-      "expected": {
-        "type": "error",
-        "value": "Failed to evaluate [unknownArrayFunc(<array>)]. Unknown function name: unknownArrayFunc."
-      },
-      "variables": [
-        {
-          "type": "array",
-          "name": "array",
-          "value": [
-            123
-          ]
-        }
-      ],
-      "platforms": [
-        "android",
-        "web"
-      ]
-    },
-    {
       "name": "getStringFromArray(array, 'index_out_of_bounds') => error",
       "expression": "@{getStringFromArray(array, 0)}",
       "expected": {

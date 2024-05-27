@@ -29,7 +29,7 @@ private let andOperator = LazyFunction { args, evaluators in
 
   let arg1 = try args[1].evaluate(evaluators)
   guard let rhs = arg1 as? Bool else {
-    throw invalidArgsError(lhs: arg0, op: "&&")
+    throw invalidArgsError(lhs: arg0, rhs: arg1, op: "&&")
   }
   return rhs
 }
@@ -45,7 +45,7 @@ private let orOperator = LazyFunction { args, evaluators in
 
   let arg1 = try args[1].evaluate(evaluators)
   guard let rhs = arg1 as? Bool else {
-    throw invalidArgsError(lhs: arg0, op: "||")
+    throw invalidArgsError(lhs: arg0, rhs: arg1, op: "||")
   }
   return rhs
 }
@@ -66,5 +66,11 @@ private let ternaryOperator = LazyFunction { args, evaluators in
 private func invalidArgsError(lhs: Any, op: String) -> Error {
   ExpressionError(
     "Failed to evaluate [\(formatArgForError(lhs)) \(op) ...]. '\(op)' must be called with boolean operands."
+  )
+}
+
+private func invalidArgsError(lhs: Any, rhs: Any, op: String) -> Error {
+  ExpressionError(
+    "Failed to evaluate [\(formatArgForError(lhs)) \(op) \(formatArgForError(rhs))]. Operator '\(op)' cannot be applied to different types: \(formatTypeForError(lhs)) and \(formatTypeForError(rhs))."
   )
 }
