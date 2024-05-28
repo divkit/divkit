@@ -123,19 +123,19 @@ internal class DivGridLayoutManager(
     }
 
     override fun firstCompletelyVisibleItemPosition(): Int {
-        val indexes = IntArray(itemCount)
+        val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
         findFirstCompletelyVisibleItemPositions(indexes)
         return indexes.first()
     }
 
     override fun firstVisibleItemPosition(): Int {
-        val indexes = IntArray(itemCount)
+        val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
         findFirstVisibleItemPositions(indexes)
         return indexes.first()
     }
 
     override fun lastVisibleItemPosition(): Int {
-        val indexes = IntArray(itemCount)
+        val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
         findLastVisibleItemPositions(indexes)
         return indexes.last()
     }
