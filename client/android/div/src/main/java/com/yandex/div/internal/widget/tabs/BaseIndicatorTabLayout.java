@@ -10,6 +10,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -205,6 +206,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     private PagerAdapter mPagerAdapter;
     private DataSetObserver mPagerAdapterObserver;
     private TabLayoutOnPageChangeListener mPageChangeListener;
+    private final TabTitleDelimitersController mTabTitleDelimitersController;
 
     // Pool we use as a simple RecyclerBin
     @NonNull
@@ -246,6 +248,8 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
                 a.getDimensionPixelSize(R.styleable.TabLayout_tabIndicatorHeight, 0));
         mTabIndicators.setSelectedIndicatorColor(a.getColor(R.styleable.TabLayout_tabIndicatorColor, 0));
         mTabIndicators.setIndicatorColor(a.getColor(R.styleable.TabLayout_tabBackground, 0));
+
+        mTabTitleDelimitersController = new TabTitleDelimitersController(getContext(), mTabIndicators);
 
         mTabPaddingStart = mTabPaddingTop = mTabPaddingEnd = mTabPaddingBottom = a
                 .getDimensionPixelSize(R.styleable.TabLayout_tabPadding, 0);
@@ -577,7 +581,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
      */
     public void removeAllTabs() {
         // Remove all the views
-        for (int i = mTabIndicators.getChildCount() - 1; i >= 0; i--) {
+        for (int i = mTabs.size() - 1; i >= 0; i--) {
             removeTabViewAt(i);
         }
 
@@ -665,6 +669,17 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     @SuppressWarnings("unused")
     public void setTabTextColors(int normalColor, int selectedColor) {
         setTabTextColors(createColorStateList(normalColor, selectedColor));
+    }
+
+    /**
+     * Sets the dividers between tabs titles.
+     *
+     * @attr bitmap - image bitmap, which will be used as a divider.
+     * @attr width - width of divider.
+     * @atte height - height of divider.
+     */
+    public void setTabDelimiter(Bitmap bitmap, int width, int height) {
+        mTabTitleDelimitersController.updateTitleDelimiters(bitmap, width, height);
     }
 
     /**
@@ -831,6 +846,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     private void addTabView(Tab tab, boolean setSelected) {
         final TabView tabView = tab.mView;
         mTabIndicators.addView(tabView, createLayoutParamsForTabs());
+        mTabTitleDelimitersController.tabAdded(mTabIndicators.getChildCount() - 1);
         if (setSelected) {
             tabView.setSelected(true);
         }
@@ -838,7 +854,9 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
 
     private void addTabView(Tab tab, int position, boolean setSelected) {
         final TabView tabView = tab.mView;
-        mTabIndicators.addView(tabView, position, createLayoutParamsForTabs());
+        int positionInLayout = mTabIndicators.getTabPositionInLayout(position);
+        mTabIndicators.addView(tabView, positionInLayout, createLayoutParamsForTabs());
+        mTabTitleDelimitersController.tabAdded(positionInLayout);
         if (setSelected) {
             tabView.setSelected(true);
         }
@@ -965,7 +983,9 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
 
     private void removeTabViewAt(int position) {
         final TabView view = (TabView) mTabIndicators.getChildAt(position);
-        mTabIndicators.removeViewAt(position);
+        int positionInLayout = mTabIndicators.getTabPositionInLayout(position);
+        mTabIndicators.removeViewAt(positionInLayout);
+        mTabTitleDelimitersController.tabRemoved(positionInLayout);
         if (view != null) {
             view.reset();
             mTabViewPool.release(view);
@@ -1007,10 +1027,11 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
 
     private void setSelectedTabView(int position) {
         final int tabCount = mTabIndicators.getChildCount();
-        if (position < tabCount && !mTabIndicators.getChildAt(position).isSelected()) {
+        int layoutPosition = mTabIndicators.getTabPositionInLayout(position);
+        if (layoutPosition < tabCount && !mTabIndicators.getChildAt(layoutPosition).isSelected()) {
             for (int i = 0; i < tabCount; i++) {
                 final View child = mTabIndicators.getChildAt(i);
-                child.setSelected(i == position);
+                child.setSelected(i == layoutPosition);
             }
         }
     }
@@ -1075,7 +1096,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
 
     private int calculateScrollXForTab(int position, float positionOffset) {
         if (mMode == MODE_SCROLLABLE) {
-            final View selectedChild = mTabIndicators.getChildAt(position);
+            final View selectedChild = mTabIndicators.getTab(position);
 
             if (selectedChild == null) {
                 return 0;
@@ -1127,6 +1148,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     private void updateTabViews(final boolean requestLayout) {
         for (int i = 0; i < mTabIndicators.getChildCount(); i++) {
             View child = mTabIndicators.getChildAt(i);
+            if (!(child instanceof TabView)) continue;
             child.setMinimumWidth(getTabMinWidth());
             updateTabViewLayoutParams((LinearLayout.LayoutParams) child.getLayoutParams());
             if (requestLayout) {
@@ -1263,7 +1285,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
         NONE
     }
 
-    private static class OvalIndicators extends LinearLayout {
+    static class OvalIndicators extends LinearLayout {
         protected int mIndicatorHeight;
 
         private static final int UNDEFINED_COLOR = -1;
@@ -1296,12 +1318,14 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
         private final int mPaddingTop;
         private final int mPaddingBottom;
 
+        private boolean mHasDelimiters;
+
         private float mOpacity = 1f;
         private int mFutureSelectedPosition = -1;
 
         private AnimationType mAnimationType = AnimationType.SLIDE;
 
-        OvalIndicators(Context context, int paddingTop, int paddingBottom) {
+        private OvalIndicators(Context context, int paddingTop, int paddingBottom) {
             super(context);
 
             setId(R.id.tab_sliding_oval_indicator);
@@ -1309,6 +1333,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
             setWillNotDraw(false);
 
             mSize = getChildCount();
+            if (mHasDelimiters) mSize = (mSize + 1) / 2;
             initIndicatorArrays(mSize);
 
             mIndicatorPaint = new Paint();
@@ -1370,7 +1395,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
             float height = getHeight();
             if (mUnselectedColor != UNDEFINED_COLOR) {
                 // Draw unselected indicators
-                for (int i = 0, z = getChildCount(); i < z; i++) {
+                for (int i = 0, z = mSize; i < z; i++) {
                     drawRoundRect(canvas,
                                   mIndicatorsLeft[i],
                                   mIndicatorsRight[i],
@@ -1379,18 +1404,20 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
                 }
             }
             if (mSelectedColor != UNDEFINED_COLOR) {
+                int selected = getTabPositionInLayout(mSelectedPosition);
+                int future = getTabPositionInLayout(mFutureSelectedPosition);
                 // Draw selected indicator
                 switch (mAnimationType) {
                     case FADE:
                         drawRoundRect(canvas,
-                                      mIndicatorsLeft[mSelectedPosition],
-                                      mIndicatorsRight[mSelectedPosition],
+                                      mIndicatorsLeft[selected],
+                                      mIndicatorsRight[selected],
                                       height,
                                       mSelectedColor, mOpacity);
                         if (mFutureSelectedPosition != -1) {
                             drawRoundRect(canvas,
-                                          mIndicatorsLeft[mFutureSelectedPosition],
-                                          mIndicatorsRight[mFutureSelectedPosition],
+                                          mIndicatorsLeft[future],
+                                          mIndicatorsRight[future],
                                           height,
                                           mSelectedColor, 1f - mOpacity);
                         }
@@ -1404,8 +1431,8 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
                         break;
                     default:
                         drawRoundRect(canvas,
-                                      mIndicatorsLeft[mSelectedPosition],
-                                      mIndicatorsRight[mSelectedPosition],
+                                      mIndicatorsLeft[selected],
+                                      mIndicatorsRight[selected],
                                       height,
                                       mSelectedColor, 1f);
                         break;
@@ -1500,13 +1527,29 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
             }
         }
 
+        void setContainsDelimiters(boolean containsDelimiters) {
+            if (mHasDelimiters != containsDelimiters) {
+                mHasDelimiters = containsDelimiters;
+                updateOpacity();
+                updateIndicatorsPosition();
+            }
+        }
+
+        boolean hasDelimiters() {
+            return mHasDelimiters;
+        }
+
+        View getTab(int position) {
+            return getChildAt(getTabPositionInLayout(position));
+        }
+
         void animateSelectedIndicatorToPosition(int position, long duration) {
             if (mSelectedIndicatorAnimator != null && mSelectedIndicatorAnimator.isRunning()) {
                 mSelectedIndicatorAnimator.cancel();
                 float fraction = mSelectedIndicatorAnimator.getAnimatedFraction();
                 duration = Math.round((1f - fraction) * mSelectedIndicatorAnimator.getDuration());
             }
-            final View targetView = getChildAt(position);
+            final View targetView = getTab(position);
             if (targetView == null) {
                 // If we don't have a view, just update the position now and return
                 updateIndicatorsPosition();
@@ -1550,31 +1593,38 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
                 initIndicatorArrays(childCount);
             }
 
+            int selectedPosition = getTabPositionInLayout(mSelectedPosition);
             for (int titleIndex = 0; titleIndex < childCount; titleIndex++) {
                 title = getChildAt(titleIndex);
+                if (!(title instanceof TabView)) continue;
                 left = -1;
                 right = -1;
                 selectedLeft = -1;
                 selectedRight = -1;
-                if (title != null && title.getWidth() > 0) {
+                if (title.getWidth() > 0) {
                     left = title.getLeft();
                     right = title.getRight();
                     selectedLeft = left;
                     selectedRight = right;
                     if (mAnimationType == AnimationType.SLIDE) {
-                        if (titleIndex == mSelectedPosition && mOffset > 0f && titleIndex < childCount - 1) {
+                        if (titleIndex == selectedPosition && mOffset > 0f && titleIndex < childCount - 1) {
                             // Draw the selection partway between the tabs
-                            View nextTitle = getChildAt(titleIndex + 1);
+                            int nextChild = mHasDelimiters ? titleIndex + 2 : titleIndex + 1;
+                            View nextTitle = getChildAt(nextChild);
                             selectedLeft = (int) (mOffset * nextTitle.getLeft() + (1.0f - mOffset) * left);
                             selectedRight = (int) (mOffset * nextTitle.getRight() + (1.0f - mOffset) * right);
                         }
                     }
                 }
                 setUnselectedIndicatorPosition(titleIndex, left, right);
-                if (titleIndex == mSelectedPosition) {
+                if (titleIndex == selectedPosition) {
                     setSelectedIndicatorPosition(selectedLeft, selectedRight);
                 }
             }
+        }
+
+        private int getTabPositionInLayout(int position) {
+            return mHasDelimiters && position != -1 ? position * 2 : position;
         }
 
         protected void updateOpacity() {

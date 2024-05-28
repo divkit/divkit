@@ -2,15 +2,20 @@ package com.yandex.div.core.view2.divs.tabs
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.PictureDrawable
 import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.DivDataTag
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.font.DivTypefaceType
+import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
@@ -27,6 +32,7 @@ import com.yandex.div.core.view2.divs.applyMargins
 import com.yandex.div.core.view2.divs.applyPaddings
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.spToPx
+import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -46,6 +52,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSize
+import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivTabs
 import javax.inject.Inject
 import javax.inject.Named
@@ -58,6 +65,7 @@ internal class DivTabsBinder @Inject constructor(
     private val textStyleProvider: TabTextStyleProvider,
     private val actionBinder: DivActionBinder,
     private val div2Logger: Div2Logger,
+    private val imageLoader: DivImageLoader,
     private val visibilityActionTracker: DivVisibilityActionTracker,
     private val divPatchCache: DivPatchCache,
     @Named(Names.THEMED_CONTEXT) private val context: Context,
@@ -95,6 +103,7 @@ internal class DivTabsBinder @Inject constructor(
 
         view.titleLayout.observeHeight(div, resolver)
         view.observeStyle(resolver, div.tabTitleStyle)
+        view.observeDividerStyle(resolver, div.tabTitleDelimiter, context)
         view.pagerLayout.clipToPadding = false
         div.separatorPaddings.observe(resolver, view) {
             view.divider.applyMargins(div.separatorPaddings, resolver)
@@ -261,25 +270,22 @@ internal class DivTabsBinder @Inject constructor(
     private fun DivTabsLayout.observeStyle(resolver: ExpressionResolver, style: DivTabs.TabTitleStyle?) {
         titleLayout.applyStyle(resolver, style ?: DEFAULT_TAB_TITLE_STYLE)
 
-        fun Expression<*>?.addToSubscriber() = addSubscription(this?.observe(resolver) {
-            titleLayout.applyStyle(
-                resolver,
-                style ?: DEFAULT_TAB_TITLE_STYLE
-            )
-        })
+        val callback = { _: Any? ->
+            titleLayout.applyStyle(resolver, style ?: DEFAULT_TAB_TITLE_STYLE)
+        }
 
-        style?.activeTextColor.addToSubscriber()
-        style?.activeBackgroundColor.addToSubscriber()
-        style?.inactiveTextColor.addToSubscriber()
-        style?.inactiveBackgroundColor.addToSubscriber()
-        style?.cornerRadius.addToSubscriber()
-        style?.cornersRadius?.topLeft.addToSubscriber()
-        style?.cornersRadius?.topRight.addToSubscriber()
-        style?.cornersRadius?.bottomRight.addToSubscriber()
-        style?.cornersRadius?.bottomLeft.addToSubscriber()
-        style?.itemSpacing.addToSubscriber()
-        style?.animationType.addToSubscriber()
-        style?.animationDuration.addToSubscriber()
+        style?.activeTextColor?.observe(resolver, callback)
+        style?.activeBackgroundColor?.observe(resolver, callback)
+        style?.inactiveTextColor?.observe(resolver, callback)
+        style?.inactiveBackgroundColor?.observe(resolver, callback)
+        style?.cornerRadius?.observe(resolver, callback)
+        style?.cornersRadius?.topLeft?.observe(resolver, callback)
+        style?.cornersRadius?.topRight?.observe(resolver, callback)
+        style?.cornersRadius?.bottomRight?.observe(resolver, callback)
+        style?.cornersRadius?.bottomLeft?.observe(resolver, callback)
+        style?.itemSpacing?.observe(resolver, callback)
+        style?.animationType?.observe(resolver, callback)
+        style?.animationDuration?.observe(resolver, callback)
     }
 
     private fun TabTitlesLayoutView<*>.applyStyle(resolver: ExpressionResolver, style: DivTabs.TabTitleStyle) {
@@ -299,6 +305,58 @@ internal class DivTabsBinder @Inject constructor(
         })
         setAnimationDuration(style.animationDuration.evaluate(resolver))
         setTabTitleStyle(style)
+    }
+
+    private fun DivTabsLayout.observeDividerStyle(
+        resolver: ExpressionResolver,
+        style: DivTabs.TabTitleDelimiter?,
+        bindingContext: BindingContext,
+    ) {
+        style ?: return
+        titleLayout.applyDelimiterStyle(resolver, style, bindingContext)
+        val callback = { _: Any? -> titleLayout.applyDelimiterStyle(resolver, style, bindingContext) }
+
+        style.width.value.observe(resolver, callback)
+        style.width.unit.observe(resolver, callback)
+        style.height.value.observe(resolver, callback)
+        style.height.unit.observe(resolver, callback)
+        style.imageUrl.observe(resolver, callback)
+    }
+
+    private fun TabTitlesLayoutView<*>.applyDelimiterStyle(
+        resolver: ExpressionResolver,
+        style: DivTabs.TabTitleDelimiter,
+        bindingContext: BindingContext,
+    ) {
+        val metrics = resources.displayMetrics
+        val evaluatedWidth = style.width.let { width ->
+            width.value.evaluate(resolver).toPx(width.unit.evaluate(resolver), metrics)
+        }
+        val evaluatedHeight = style.height.let { height ->
+            height.value.evaluate(resolver).toPx(height.unit.evaluate(resolver), metrics)
+        }
+
+        val reference = imageLoader.loadImage(
+            style.imageUrl.evaluate(resolver).toString(),
+            object : DivIdLoggingImageDownloadCallback(bindingContext.divView) {
+                override fun onSuccess(cachedBitmap: CachedBitmap) {
+                    super.onSuccess(cachedBitmap)
+                    setTabDelimiter(cachedBitmap.bitmap, evaluatedWidth, evaluatedHeight)
+                }
+
+                override fun onSuccess(pictureDrawable: PictureDrawable) {
+                    super.onSuccess(pictureDrawable)
+                    setTabDelimiter(pictureDrawable.toBitmap(), evaluatedWidth, evaluatedHeight)
+                }
+
+                override fun onError() {
+                    super.onError()
+                    setTabDelimiter(null, 0, 0)
+                }
+            }
+        )
+
+        bindingContext.divView.addLoadReference(reference, this)
     }
 
     private fun DivTabs.TabTitleStyle.getCornerRadii(

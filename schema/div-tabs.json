@@ -185,7 +185,9 @@
         "tab_title_delimiter": {
           "$ref": "#/definitions/delimiter_style",
           "$description": "translations.json#/div_tabs_tab_title_delimiter_delimiter_style",
-          "platforms": []
+          "platforms": [
+            "android"
+          ]
         },
         "selected_tab": {
           "$ref": "common.json#/non_negative_integer",
