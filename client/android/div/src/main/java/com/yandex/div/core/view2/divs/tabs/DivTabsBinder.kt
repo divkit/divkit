@@ -115,6 +115,7 @@ internal class DivTabsBinder @Inject constructor(
             view.divider.visibility = if (hasSeparator) View.VISIBLE else View.GONE
         })
         view.titleLayout.setOnScrollChangedListener { div2Logger.logTabTitlesScroll(divView) }
+        view.titleLayout.setFocusTracker(context.divView.inputFocusTracker)
 
         bindAdapter(path, context, view, oldDiv, div, divBinder, view)
 

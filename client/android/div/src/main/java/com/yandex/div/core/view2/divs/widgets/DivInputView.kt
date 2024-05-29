@@ -80,7 +80,7 @@ internal class DivInputView @JvmOverloads constructor(
     }
 
     override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
-        tag?.let { focusTracker?.inputFocusChanged(tag = it, focused = focused) }
+        focusTracker?.inputFocusChanged(tag = tag, view = this, focused = focused)
         super.onFocusChanged(focused, direction, previouslyFocusedRect)
         if (focused) openKeyboard() else closeKeyboard()
     }

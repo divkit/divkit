@@ -35,6 +35,7 @@ internal class DivSelectBinder @Inject constructor(
 
         view.apply {
             textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
+            focusTracker = context.divView.inputFocusTracker
 
             applyOptions(div, context)
             observeVariable(div, context, errorCollector)

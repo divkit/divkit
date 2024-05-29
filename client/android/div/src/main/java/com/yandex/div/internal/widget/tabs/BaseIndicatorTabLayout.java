@@ -39,6 +39,7 @@ import com.yandex.div.R;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.util.ViewsKt;
 import com.yandex.div.core.view2.divs.BaseDivViewExtensionsKt;
+import com.yandex.div.core.view2.reuse.InputFocusTracker;
 import com.yandex.div.internal.Log;
 import com.yandex.div.internal.util.NestedHorizontalScrollCompanion;
 
@@ -207,6 +208,8 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     private DataSetObserver mPagerAdapterObserver;
     private TabLayoutOnPageChangeListener mPageChangeListener;
     private final TabTitleDelimitersController mTabTitleDelimitersController;
+    @Nullable
+    private InputFocusTracker mInputFocusTracker;
 
     // Pool we use as a simple RecyclerBin
     @NonNull
@@ -826,6 +829,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     private void configureTabView(@NonNull TabView tabView) {
         tabView.setTabPadding(mTabPaddingStart, mTabPaddingTop, mTabPaddingEnd, mTabPaddingBottom);
         tabView.setTextTypeface(mTypefaceProvider, mTabTextAppearance);
+        tabView.setInputFocusTracker(mInputFocusTracker);
         tabView.setTextColorList(mTabTextColors);
         tabView.setBoldTextOnSelection(mTabTextBoldOnSelection);
         tabView.setEllipsizeEnabled(mIsTabEllipsizeEnabled);
@@ -1161,6 +1165,10 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     @MainThread
     public void bindTypefaceProvider(@NonNull DivTypefaceProvider typefaceProvider) {
         mTypefaceProvider = typefaceProvider;
+    }
+
+    public void setFocusTracker(InputFocusTracker focusTracker) {
+        mInputFocusTracker = focusTracker;
     }
 
     /**

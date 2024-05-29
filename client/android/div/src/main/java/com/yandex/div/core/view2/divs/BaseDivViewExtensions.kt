@@ -34,6 +34,7 @@ import com.yandex.div.core.view2.animations.asTouchListener
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.FixedLineHeightView
 import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
@@ -888,9 +889,9 @@ internal fun DivContentAlignmentVertical.toAlignmentVertical(): DivAlignmentVert
     else -> DivAlignmentVertical.TOP
 }
 
-internal fun View.clearFocusOnClick() {
+internal fun View.clearFocusOnClick(focusTracker: InputFocusTracker) {
     if (this.isFocused || !this.isInTouchMode) return
-    rootView.clearFocus()
+    focusTracker.removeFocusFromFocusedInput()
 }
 
 internal val View.bindingContext get() = (this as? DivHolderView<*>)?.bindingContext

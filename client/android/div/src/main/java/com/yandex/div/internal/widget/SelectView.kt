@@ -17,19 +17,21 @@ import androidx.appcompat.widget.ListPopupWindow
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.clearFocusOnClick
+import com.yandex.div.core.view2.reuse.InputFocusTracker
 
 private const val POPUP_ITEM_HEIGHT = 48
 
 internal open class SelectView constructor(context: Context) : EllipsizedTextView(context) {
     init {
         this.setOnClickListener {
-            clearFocusOnClick()
+            focusTracker?.let { tracker -> clearFocusOnClick(tracker) }
             popupWindow.resetPosition()
             popupWindow.show()
         }
     }
 
     var onItemSelectedListener: ((Int) -> Unit)? = null
+    var focusTracker: InputFocusTracker? = null
 
     @SuppressLint("RestrictedApi")
     private val popupWindow = PopupWindow(context).apply {
