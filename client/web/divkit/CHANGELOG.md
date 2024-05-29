@@ -1,3 +1,16 @@
+## 30.3.0 (June 6, 2024)
+
+* Fixed an issue with the `text` property `top_offset` and ranges intersection.
+* Added new API's for the extensions: `processExpressions` and `execAction`.
+* Added `gesture` extension.
+* Fixed an issue with calling `disappear_actions` after instance destruction.
+* When passing `data` directly inside `item_builder`, its expressions are no longer executed.
+* Supported `z`/`Z` patterns in datetime formatting functions.
+* Added `max_length` property support for `input`.
+* Supported `font_feature_settings` property for `text`.
+* Updated error messages for invalid calls inside expressions.
+
+
 ## 30.2.0 (May 27, 2024)
 
 * Calculate `is_enabled` in `actions` before executing the entire list of actions, not in the process.
