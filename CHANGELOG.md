@@ -1,3 +1,32 @@
+## 30.3.0
+
+# Android Client:
+* Fixed sizes calculation for `gallery` `items` wrapped within `container`.
+* Added `tab_title_delimiter` property support for `tabs`.
+* Remove focus from focused `input` if some clickable div were clicked.
+* Removed `z`/`Z` patterns restriction from datetime formatting functions.
+* Added `max_length` property support for `input`.
+* Fixed crash by `gallery` when count of `items` was less then `column_count`. 
+* Supported `font_feature_settings` property for `div-text`.
+
+# iOS Client:
+* Fixed items position in `gallery`.
+* Supported `font_feature_settings` property for `div-text`.
+* Removed `z`/`Z` patterns restriction from datetime formatting functions.
+* Fixed clipping in `container`.
+
+# Web Client:
+* Fixed an issue with the `text` property `top_offset` and ranges intersection.
+* Added new API's for the extensions: `processExpressions` and `execAction`.
+* Added `gesture` extension.
+* Fixed an issue with calling `disappear_actions` after instance destruction.
+* When passing `data` directly inside `item_builder`, its expressions are no longer executed.
+* Supported `z`/`Z` patterns in datetime formatting functions.
+* Added `max_length` property support for `input`.
+* Supported `font_feature_settings` property for `text`.
+* Updated error messages for invalid calls inside expressions.
+
+
 ## 30.2.0
 
 # Android Client:
