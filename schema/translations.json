@@ -1067,13 +1067,13 @@
     "en": "Name of the variable to store the unprocessed value.",
     "ru": "Имя переменной для хранения необработанного значения."
   },
-  "div_input_max_visible_lines": {
-    "en": "Maximum number of lines to be displayed in the input field.",
-    "ru": "Максимальное количество строк, которое будет видно в поле ввода."
-  },
   "div_input_max_length": {
     "en": "The maximum number of characters that can be entered in the input field.",
     "ru": "Максимальное количество символов, которое возможно ввести в поле ввода."
+  },
+  "div_input_max_visible_lines": {
+    "en": "Maximum number of lines to be displayed in the input field.",
+    "ru": "Максимальное количество строк, которое будет видно в поле ввода."
   },
   "div_input_method": {
     "en": "Data entry method. If the value isn't set, the `keyboard_type` parameter's value is used instead.",
