@@ -56,6 +56,7 @@ public final class DivInput: DivBase {
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let margins: DivEdgeInsets?
   public let mask: DivInputMask?
+  public let maxLength: Expression<Int>? // constraint: number > 0
   public let maxVisibleLines: Expression<Int>? // constraint: number > 0
   public let nativeInterface: NativeInterface?
   public let paddings: DivEdgeInsets?
@@ -138,6 +139,10 @@ public final class DivInput: DivBase {
     resolver.resolveNumeric(lineHeight)
   }
 
+  public func resolveMaxLength(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumeric(maxLength)
+  }
+
   public func resolveMaxVisibleLines(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(maxVisibleLines)
   }
@@ -178,6 +183,9 @@ public final class DivInput: DivBase {
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let maxLengthValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 > 0 })
+
   static let maxVisibleLinesValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
@@ -213,6 +221,7 @@ public final class DivInput: DivBase {
     lineHeight: Expression<Int>? = nil,
     margins: DivEdgeInsets? = nil,
     mask: DivInputMask? = nil,
+    maxLength: Expression<Int>? = nil,
     maxVisibleLines: Expression<Int>? = nil,
     nativeInterface: NativeInterface? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -260,6 +269,7 @@ public final class DivInput: DivBase {
     self.lineHeight = lineHeight
     self.margins = margins
     self.mask = mask
+    self.maxLength = maxLength
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
@@ -345,54 +355,55 @@ extension DivInput: Equatable {
     }
     guard
       lhs.mask == rhs.mask,
-      lhs.maxVisibleLines == rhs.maxVisibleLines,
-      lhs.nativeInterface == rhs.nativeInterface
+      lhs.maxLength == rhs.maxLength,
+      lhs.maxVisibleLines == rhs.maxVisibleLines
     else {
       return false
     }
     guard
+      lhs.nativeInterface == rhs.nativeInterface,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectAllOnFocus == rhs.selectAllOnFocus
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectAllOnFocus == rhs.selectAllOnFocus,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
     else {
       return false
     }
     guard
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
       lhs.textColor == rhs.textColor,
-      lhs.textVariable == rhs.textVariable,
-      lhs.tooltips == rhs.tooltips
+      lhs.textVariable == rhs.textVariable
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.validators == rhs.validators
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.validators == rhs.validators,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -431,6 +442,7 @@ extension DivInput: Serializable {
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["margins"] = margins?.toDictionary()
     result["mask"] = mask?.toDictionary()
+    result["max_length"] = maxLength?.toValidSerializationValue()
     result["max_visible_lines"] = maxVisibleLines?.toValidSerializationValue()
     result["native_interface"] = nativeInterface?.toDictionary()
     result["paddings"] = paddings?.toDictionary()

@@ -16,12 +16,13 @@ public final class DivActionHandler {
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let reporter: DivReporter
 
-  private let setVariableActionHandler: SetVariableActionHandler
-  private let arrayInsertValueActionHandler: ArrayInsertValueActionHandler
-  private let arrayRemoveValueActionHandler: ArrayRemoveValueActionHandler
-  private let copyToClipboardActionHandler: CopyToClipboardActionHandler
-  private let focusElementActionHandler: FocusElementActionHandler
-  private let clearFocusActionHandler: ClearFocusActionHandler
+  private let arrayInsertValueActionHandler = ArrayInsertValueActionHandler()
+  private let arrayRemoveValueActionHandler = ArrayRemoveValueActionHandler()
+  private let dictSetValueActionHandler = DictSetValueActionHandler()
+  private let clearFocusActionHandler = ClearFocusActionHandler()
+  private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
+  private let focusElementActionHandler = FocusElementActionHandler()
+  private let setVariableActionHandler = SetVariableActionHandler()
 
   init(
     divActionURLHandler: DivActionURLHandler,
@@ -45,13 +46,6 @@ public final class DivActionHandler {
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
     self.reporter = reporter
-
-    setVariableActionHandler = SetVariableActionHandler()
-    arrayInsertValueActionHandler = ArrayInsertValueActionHandler()
-    arrayRemoveValueActionHandler = ArrayRemoveValueActionHandler()
-    copyToClipboardActionHandler = CopyToClipboardActionHandler()
-    focusElementActionHandler = FocusElementActionHandler()
-    clearFocusActionHandler = ClearFocusActionHandler()
   }
 
   public convenience init(
@@ -140,18 +134,20 @@ public final class DivActionHandler {
 
     var isHandled = true
     switch action.typed {
-    case let .divActionSetVariable(action):
-      setVariableActionHandler.handle(action, context: context)
     case let .divActionArrayInsertValue(action):
       arrayInsertValueActionHandler.handle(action, context: context)
     case let .divActionArrayRemoveValue(action):
       arrayRemoveValueActionHandler.handle(action, context: context)
+    case let .divActionDictSetValue(action):
+      dictSetValueActionHandler.handle(action, context: context)
+    case .divActionClearFocus:
+      clearFocusActionHandler.handle(context: context)
     case let .divActionCopyToClipboard(action):
       copyToClipboardActionHandler.handle(action, context: context)
     case let .divActionFocusElement(action):
       focusElementActionHandler.handle(action, context: context)
-    case .divActionClearFocus:
-      clearFocusActionHandler.handle(context: context)
+    case let .divActionSetVariable(action):
+      setVariableActionHandler.handle(action, context: context)
     case .none:
       isHandled = false
     }

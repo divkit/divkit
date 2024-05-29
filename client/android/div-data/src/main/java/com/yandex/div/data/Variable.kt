@@ -22,13 +22,13 @@ sealed class Variable {
         val defaultValue: String,
     ) : Variable() {
         internal var value: String = defaultValue
-        set(value) {
-            if (field == value) {
-                return
+            set(value) {
+                if (field == value) {
+                    return
+                }
+                field = value
+                notifyVariableChanged(this)
             }
-            field = value
-            notifyVariableChanged(this)
-        }
     }
 
     class IntegerVariable(
@@ -52,7 +52,8 @@ sealed class Variable {
 
     class BooleanVariable(
         override val name: String,
-        val defaultValue: Boolean) : Variable() {
+        val defaultValue: Boolean
+    ) : Variable() {
         internal var value: Boolean = defaultValue
             set(value) {
                 if (field == value) {
@@ -68,8 +69,10 @@ sealed class Variable {
         }
     }
 
-    class DoubleVariable(override val name: String,
-                         val defaultValue: Double) : Variable() {
+    class DoubleVariable(
+        override val name: String,
+        val defaultValue: Double
+    ) : Variable() {
         internal var value: Double = defaultValue
             set(value) {
                 if (field == value) {
@@ -89,7 +92,6 @@ sealed class Variable {
         override val name: String,
         val defaultValue: Int,
     ) : Variable() {
-
         internal var value: Color = Color(defaultValue)
             set(value) {
                 if (field == value) {
@@ -147,8 +149,8 @@ sealed class Variable {
     }
 
     class ArrayVariable(
-            override val name: String,
-            val defaultValue: JSONArray
+        override val name: String,
+        val defaultValue: JSONArray
     ): Variable() {
         internal var value: JSONArray = defaultValue
             set(value) {
@@ -286,14 +288,6 @@ sealed class Variable {
     private fun String.parseAsJsonObject(): JSONObject {
         return try {
             JSONObject(this)
-        } catch (e: JSONException) {
-            throw VariableMutationException(cause = e)
-        }
-    }
-
-    private fun String.parseAsJsonArray(): JSONArray {
-        return try {
-            JSONArray(this)
         } catch (e: JSONException) {
             throw VariableMutationException(cause = e)
         }

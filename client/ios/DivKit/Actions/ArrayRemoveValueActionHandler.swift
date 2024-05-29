@@ -13,10 +13,9 @@ final class ArrayRemoveValueActionHandler {
     }
 
     guard index >= 0, index < array.count else {
-      DivKitLogger
-        .error(
-          "Index out of bound \(index) for removing value of \(variableName) with length \(array.count)"
-        )
+      DivKitLogger.error(
+        "Index out of bound \(index) for removing value of \(variableName) with length \(array.count)"
+      )
       return
     }
 

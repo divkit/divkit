@@ -75,6 +75,10 @@
     "en": "Copies data to the clipboard.",
     "ru": "Копирует данные в буфер обмена."
   },
+  "div_action_dict_set_value": {
+    "en": "Sets value in dictionary for the given key. Removes key if the value is not defined.",
+    "ru": "Устанавливает значение в словаре по заданному ключу. Удаляет ключ, если значение на задано."
+  },
   "div_action_focus_element": {
     "en": "Requests focus for an element. May require a user action on the web.",
     "ru": "Запрашивает фокус для элемента. В вебе может требовать действие пользователя."

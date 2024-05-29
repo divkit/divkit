@@ -14,10 +14,9 @@ final class ArrayInsertValueActionHandler {
 
     if let index = action.resolveIndex(expressionResolver) {
       guard index >= 0, index <= array.count else {
-        DivKitLogger
-          .error(
-            "Index out of bound \(index) for inserting value in \(variableName) with length \(array.count)"
-          )
+        DivKitLogger.error(
+          "Index out of bound \(index) for inserting value in \(variableName) with length \(array.count)"
+        )
         return
       }
       array.insert(value, at: index)

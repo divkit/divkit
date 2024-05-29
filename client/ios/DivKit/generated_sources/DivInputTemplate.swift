@@ -108,6 +108,7 @@ public final class DivInputTemplate: TemplateValue {
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let mask: Field<DivInputMaskTemplate>?
+  public let maxLength: Field<Expression<Int>>? // constraint: number > 0
   public let maxVisibleLines: Field<Expression<Int>>? // constraint: number > 0
   public let nativeInterface: Field<NativeInterfaceTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -158,6 +159,7 @@ public final class DivInputTemplate: TemplateValue {
       lineHeight: dictionary.getOptionalExpressionField("line_height"),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       mask: dictionary.getOptionalField("mask", templateToType: templateToType),
+      maxLength: dictionary.getOptionalExpressionField("max_length"),
       maxVisibleLines: dictionary.getOptionalExpressionField("max_visible_lines"),
       nativeInterface: dictionary.getOptionalField("native_interface", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -209,6 +211,7 @@ public final class DivInputTemplate: TemplateValue {
     lineHeight: Field<Expression<Int>>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     mask: Field<DivInputMaskTemplate>? = nil,
+    maxLength: Field<Expression<Int>>? = nil,
     maxVisibleLines: Field<Expression<Int>>? = nil,
     nativeInterface: Field<NativeInterfaceTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -257,6 +260,7 @@ public final class DivInputTemplate: TemplateValue {
     self.lineHeight = lineHeight
     self.margins = margins
     self.mask = mask
+    self.maxLength = maxLength
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
@@ -306,6 +310,7 @@ public final class DivInputTemplate: TemplateValue {
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let maskValue = parent?.mask?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let maxLengthValue = parent?.maxLength?.resolveOptionalValue(context: context, validator: ResolvedValue.maxLengthValidator) ?? .noValue
     let maxVisibleLinesValue = parent?.maxVisibleLines?.resolveOptionalValue(context: context, validator: ResolvedValue.maxVisibleLinesValidator) ?? .noValue
     let nativeInterfaceValue = parent?.nativeInterface?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -353,6 +358,7 @@ public final class DivInputTemplate: TemplateValue {
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
+      maxLengthValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_length", error: $0) },
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -409,6 +415,7 @@ public final class DivInputTemplate: TemplateValue {
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
       mask: maskValue.value,
+      maxLength: maxLengthValue.value,
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
@@ -463,6 +470,7 @@ public final class DivInputTemplate: TemplateValue {
     var lineHeightValue: DeserializationResult<Expression<Int>> = parent?.lineHeight?.value() ?? .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var maskValue: DeserializationResult<DivInputMask> = .noValue
+    var maxLengthValue: DeserializationResult<Expression<Int>> = parent?.maxLength?.value() ?? .noValue
     var maxVisibleLinesValue: DeserializationResult<Expression<Int>> = parent?.maxVisibleLines?.value() ?? .noValue
     var nativeInterfaceValue: DeserializationResult<DivInput.NativeInterface> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -536,6 +544,8 @@ public final class DivInputTemplate: TemplateValue {
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "mask":
         maskValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputMaskTemplate.self).merged(with: maskValue)
+      case "max_length":
+        maxLengthValue = deserialize(__dictValue, validator: ResolvedValue.maxLengthValidator).merged(with: maxLengthValue)
       case "max_visible_lines":
         maxVisibleLinesValue = deserialize(__dictValue, validator: ResolvedValue.maxVisibleLinesValidator).merged(with: maxVisibleLinesValue)
       case "native_interface":
@@ -628,6 +638,8 @@ public final class DivInputTemplate: TemplateValue {
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.mask?.link:
         maskValue = maskValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputMaskTemplate.self) })
+      case parent?.maxLength?.link:
+        maxLengthValue = maxLengthValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.maxLengthValidator) })
       case parent?.maxVisibleLines?.link:
         maxVisibleLinesValue = maxVisibleLinesValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.maxVisibleLinesValidator) })
       case parent?.nativeInterface?.link:
@@ -722,6 +734,7 @@ public final class DivInputTemplate: TemplateValue {
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
+      maxLengthValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_length", error: $0) },
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -778,6 +791,7 @@ public final class DivInputTemplate: TemplateValue {
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
       mask: maskValue.value,
+      maxLength: maxLengthValue.value,
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
@@ -837,6 +851,7 @@ public final class DivInputTemplate: TemplateValue {
       lineHeight: lineHeight ?? mergedParent.lineHeight,
       margins: margins ?? mergedParent.margins,
       mask: mask ?? mergedParent.mask,
+      maxLength: maxLength ?? mergedParent.maxLength,
       maxVisibleLines: maxVisibleLines ?? mergedParent.maxVisibleLines,
       nativeInterface: nativeInterface ?? mergedParent.nativeInterface,
       paddings: paddings ?? mergedParent.paddings,
@@ -891,6 +906,7 @@ public final class DivInputTemplate: TemplateValue {
       lineHeight: merged.lineHeight,
       margins: merged.margins?.tryResolveParent(templates: templates),
       mask: merged.mask?.tryResolveParent(templates: templates),
+      maxLength: merged.maxLength,
       maxVisibleLines: merged.maxVisibleLines,
       nativeInterface: merged.nativeInterface?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),

@@ -8,10 +8,11 @@ import Serialization
 public enum DivActionTyped {
   case divActionArrayInsertValue(DivActionArrayInsertValue)
   case divActionArrayRemoveValue(DivActionArrayRemoveValue)
-  case divActionSetVariable(DivActionSetVariable)
-  case divActionFocusElement(DivActionFocusElement)
   case divActionClearFocus(DivActionClearFocus)
   case divActionCopyToClipboard(DivActionCopyToClipboard)
+  case divActionDictSetValue(DivActionDictSetValue)
+  case divActionFocusElement(DivActionFocusElement)
+  case divActionSetVariable(DivActionSetVariable)
 
   public var value: Serializable {
     switch self {
@@ -19,13 +20,15 @@ public enum DivActionTyped {
       return value
     case let .divActionArrayRemoveValue(value):
       return value
-    case let .divActionSetVariable(value):
-      return value
-    case let .divActionFocusElement(value):
-      return value
     case let .divActionClearFocus(value):
       return value
     case let .divActionCopyToClipboard(value):
+      return value
+    case let .divActionDictSetValue(value):
+      return value
+    case let .divActionFocusElement(value):
+      return value
+    case let .divActionSetVariable(value):
       return value
     }
   }
@@ -39,13 +42,15 @@ extension DivActionTyped: Equatable {
       return l == r
     case let (.divActionArrayRemoveValue(l), .divActionArrayRemoveValue(r)):
       return l == r
-    case let (.divActionSetVariable(l), .divActionSetVariable(r)):
-      return l == r
-    case let (.divActionFocusElement(l), .divActionFocusElement(r)):
-      return l == r
     case let (.divActionClearFocus(l), .divActionClearFocus(r)):
       return l == r
     case let (.divActionCopyToClipboard(l), .divActionCopyToClipboard(r)):
+      return l == r
+    case let (.divActionDictSetValue(l), .divActionDictSetValue(r)):
+      return l == r
+    case let (.divActionFocusElement(l), .divActionFocusElement(r)):
+      return l == r
+    case let (.divActionSetVariable(l), .divActionSetVariable(r)):
       return l == r
     default:
       return false
