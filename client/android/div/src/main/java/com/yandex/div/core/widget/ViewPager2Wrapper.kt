@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.core.view2.divs.pager.DivPagerPageTransformer
 
 internal open class ViewPager2Wrapper @JvmOverloads constructor(
     context: Context,
@@ -15,6 +16,11 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     open val viewPager: ViewPager2 = ViewPager2(context)
+    internal var pageTransformer: DivPagerPageTransformer? = null
+        set(value) {
+            field = value
+            viewPager.setPageTransformer(value)
+        }
 
     init {
         addView(viewPager)

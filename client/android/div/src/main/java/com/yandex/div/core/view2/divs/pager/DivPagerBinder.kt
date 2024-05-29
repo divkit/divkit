@@ -87,6 +87,7 @@ internal class DivPagerBinder @Inject constructor(
             val adapter = view.viewPager.adapter as? PagerPatchableAdapter ?: return
             if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache, context)) {
                 adapter.notifyItemRangeChanged(0, adapter.itemCount)
+                view.pageTransformer?.onItemsCountChanged()
             }
             return
         }
@@ -225,85 +226,7 @@ internal class DivPagerBinder @Inject constructor(
         resolver: ExpressionResolver,
         pageTranslations: SparseArray<Float>
     ) {
-        val metrics = view.resources.displayMetrics
-        val orientation = div.orientation.evaluate(resolver)
-        val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
-        val startPadding = evaluateStartPadding(view, div, resolver)
-        val endPadding = evaluateEndPadding(view, div, resolver)
-
-        view.viewPager.setPageTransformer { page, position ->
-            val viewPager = page.parent.parent as ViewPager2
-            val recyclerView = viewPager.getChildAt(0) as RecyclerView
-
-            val pagePosition = recyclerView.layoutManager?.getPosition(page) ?: return@setPageTransformer
-            val widthOfThisItemAsNeighbour = div.evaluateNeighbourItemWidth(view, resolver,
-                pagePosition - sign(position).toInt(), startPadding, endPadding)
-            val neighbourItemWidth = div.evaluateNeighbourItemWidth(view, resolver,
-                pagePosition, startPadding, endPadding)
-
-            var offset = -position * (widthOfThisItemAsNeighbour + neighbourItemWidth + itemSpacing)
-            if (view.isLayoutRtl() && orientation == DivPager.Orientation.HORIZONTAL) {
-                offset = -offset
-            }
-            pageTranslations.put(pagePosition, offset)
-            if (orientation == DivPager.Orientation.HORIZONTAL) {
-                page.translationX = offset
-            } else {
-                page.translationY = offset
-            }
-        }
-    }
-
-    private fun evaluateStartPadding(
-        view: DivPagerView,
-        div: DivPager,
-        resolver: ExpressionResolver,
-    ): Float {
-        val metrics = view.resources.displayMetrics
-        val orientation = div.orientation.evaluate(resolver)
-        val paddings = div.paddings
-
-        return if (paddings == null) {
-            0.0f
-        } else if (orientation == DivPager.Orientation.HORIZONTAL) {
-            if (paddings.start != null) {
-                paddings.start?.evaluate(resolver).dpToPxF(metrics)
-            } else {
-                if (view.isLayoutRtl()) {
-                    paddings.right.evaluate(resolver).dpToPxF(metrics)
-                } else {
-                    paddings.left.evaluate(resolver).dpToPxF(metrics)
-                }
-            }
-        } else {
-            paddings.top.evaluate(resolver).dpToPxF(metrics)
-        }
-    }
-
-    private fun evaluateEndPadding(
-        view: DivPagerView,
-        div: DivPager,
-        resolver: ExpressionResolver,
-    ): Float {
-        val metrics = view.resources.displayMetrics
-        val orientation = div.orientation.evaluate(resolver)
-        val paddings = div.paddings
-
-        return if (paddings == null) {
-            0.0f
-        } else if (orientation == DivPager.Orientation.HORIZONTAL) {
-            if (paddings.end != null) {
-                paddings.end?.evaluate(resolver).dpToPxF(metrics)
-            } else {
-                if (view.isLayoutRtl()) {
-                    paddings.left.evaluate(resolver).dpToPxF(metrics)
-                } else {
-                    paddings.right.evaluate(resolver).dpToPxF(metrics)
-                }
-            }
-        } else {
-            paddings.bottom.evaluate(resolver).dpToPxF(metrics)
-        }
+        view.pageTransformer = DivPagerPageTransformer(view, div, resolver, pageTranslations)
     }
 
     private fun applyDecorations(
@@ -325,7 +248,6 @@ internal class DivPagerBinder @Inject constructor(
                 parentSize = if (isHorizontal) view.viewPager.width else view.viewPager.height,
                 itemSpacing = div.itemSpacing.toPxF(metrics, resolver),
                 orientation = if (isHorizontal) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL,
-                isLayoutRtl = { view.isLayoutRtl() },
             )
         )
 
@@ -402,42 +324,6 @@ internal class DivPagerBinder @Inject constructor(
             }
             oldWidth = newWidth
             observer.invoke(newWidth)
-        }
-    }
-
-    private fun DivPager.evaluateNeighbourItemWidth(
-        view: DivPagerView,
-        resolver: ExpressionResolver,
-        position: Int,
-        paddingStart: Float,
-        paddingEnd: Float
-    ): Float {
-        val metrics = view.resources.displayMetrics
-        val mode = layoutMode
-        val itemSpacing = itemSpacing.toPxF(metrics, resolver)
-        val lastPosition = (view.viewPager[0] as RecyclerView).adapter!!.itemCount - 1
-        if (mode is DivPagerLayoutMode.NeighbourPageSize) {
-            val fixedWidth = mode.value.neighbourPageWidth.toPxF(metrics, resolver)
-            val offsetsWidth = 2 * fixedWidth + itemSpacing
-            return when (position) {
-                0 -> offsetsWidth - paddingStart
-                lastPosition -> offsetsWidth - paddingEnd
-                else -> fixedWidth
-            }.coerceAtLeast(0f)
-        }
-
-        val parentSize = if (this.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL) {
-            view.viewPager.width
-        } else {
-            view.viewPager.height
-        }
-        val pageWidthPercent = (mode as DivPagerLayoutMode.PageSize).value.pageWidth.value.evaluate(resolver).toInt()
-        val neighbourItemsPart = 1 - pageWidthPercent / 100f
-        val getSideNeighbourPageSize = { padding: Float -> (parentSize - padding) * neighbourItemsPart - itemSpacing }
-        return when (position) {
-            0 -> getSideNeighbourPageSize(paddingStart)
-            lastPosition -> getSideNeighbourPageSize(paddingEnd)
-            else -> parentSize * neighbourItemsPart / 2
         }
     }
 
