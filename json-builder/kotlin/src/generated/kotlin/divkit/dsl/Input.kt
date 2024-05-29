@@ -61,6 +61,7 @@ class Input internal constructor(
             lineHeight = additive.lineHeight ?: properties.lineHeight,
             margins = additive.margins ?: properties.margins,
             mask = additive.mask ?: properties.mask,
+            maxLength = additive.maxLength ?: properties.maxLength,
             maxVisibleLines = additive.maxVisibleLines ?: properties.maxVisibleLines,
             nativeInterface = additive.nativeInterface ?: properties.nativeInterface,
             paddings = additive.paddings ?: properties.paddings,
@@ -196,6 +197,10 @@ class Input internal constructor(
          */
         val mask: Property<InputMask>?,
         /**
+         * The maximum number of characters that can be entered in the input field.
+         */
+        val maxLength: Property<Int>?,
+        /**
          * Maximum number of lines to be displayed in the input field.
          */
         val maxVisibleLines: Property<Int>?,
@@ -314,6 +319,7 @@ class Input internal constructor(
             result.tryPutProperty("line_height", lineHeight)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("mask", mask)
+            result.tryPutProperty("max_length", maxLength)
             result.tryPutProperty("max_visible_lines", maxVisibleLines)
             result.tryPutProperty("native_interface", nativeInterface)
             result.tryPutProperty("paddings", paddings)
@@ -411,6 +417,7 @@ class Input internal constructor(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -461,6 +468,7 @@ fun DivScope.input(
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
     mask: InputMask? = null,
+    maxLength: Int? = null,
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
@@ -509,6 +517,7 @@ fun DivScope.input(
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
         mask = valueOrNull(mask),
+        maxLength = valueOrNull(maxLength),
         maxVisibleLines = valueOrNull(maxVisibleLines),
         nativeInterface = valueOrNull(nativeInterface),
         paddings = valueOrNull(paddings),
@@ -559,6 +568,7 @@ fun DivScope.input(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -609,6 +619,7 @@ fun DivScope.inputProps(
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
     mask: InputMask? = null,
+    maxLength: Int? = null,
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
@@ -656,6 +667,7 @@ fun DivScope.inputProps(
     lineHeight = valueOrNull(lineHeight),
     margins = valueOrNull(margins),
     mask = valueOrNull(mask),
+    maxLength = valueOrNull(maxLength),
     maxVisibleLines = valueOrNull(maxVisibleLines),
     nativeInterface = valueOrNull(nativeInterface),
     paddings = valueOrNull(paddings),
@@ -705,6 +717,7 @@ fun DivScope.inputProps(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -755,6 +768,7 @@ fun TemplateScope.inputRefs(
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     mask: ReferenceProperty<InputMask>? = null,
+    maxLength: ReferenceProperty<Int>? = null,
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -802,6 +816,7 @@ fun TemplateScope.inputRefs(
     lineHeight = lineHeight,
     margins = margins,
     mask = mask,
+    maxLength = maxLength,
     maxVisibleLines = maxVisibleLines,
     nativeInterface = nativeInterface,
     paddings = paddings,
@@ -851,6 +866,7 @@ fun TemplateScope.inputRefs(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -901,6 +917,7 @@ fun Input.override(
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
     mask: InputMask? = null,
+    maxLength: Int? = null,
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
@@ -949,6 +966,7 @@ fun Input.override(
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         margins = valueOrNull(margins) ?: properties.margins,
         mask = valueOrNull(mask) ?: properties.mask,
+        maxLength = valueOrNull(maxLength) ?: properties.maxLength,
         maxVisibleLines = valueOrNull(maxVisibleLines) ?: properties.maxVisibleLines,
         nativeInterface = valueOrNull(nativeInterface) ?: properties.nativeInterface,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -999,6 +1017,7 @@ fun Input.override(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -1049,6 +1068,7 @@ fun Input.defer(
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     mask: ReferenceProperty<InputMask>? = null,
+    maxLength: ReferenceProperty<Int>? = null,
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1097,6 +1117,7 @@ fun Input.defer(
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = margins ?: properties.margins,
         mask = mask ?: properties.mask,
+        maxLength = maxLength ?: properties.maxLength,
         maxVisibleLines = maxVisibleLines ?: properties.maxVisibleLines,
         nativeInterface = nativeInterface ?: properties.nativeInterface,
         paddings = paddings ?: properties.paddings,
@@ -1137,6 +1158,7 @@ fun Input.defer(
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
@@ -1163,6 +1185,7 @@ fun Input.evaluate(
     keyboardType: ExpressionProperty<Input.KeyboardType>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
+    maxLength: ExpressionProperty<Int>? = null,
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
@@ -1197,6 +1220,7 @@ fun Input.evaluate(
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = properties.margins,
         mask = properties.mask,
+        maxLength = maxLength ?: properties.maxLength,
         maxVisibleLines = maxVisibleLines ?: properties.maxVisibleLines,
         nativeInterface = properties.nativeInterface,
         paddings = properties.paddings,
@@ -1247,6 +1271,7 @@ fun Input.evaluate(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -1297,6 +1322,7 @@ fun Component<Input>.override(
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
     mask: InputMask? = null,
+    maxLength: Int? = null,
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
@@ -1346,6 +1372,7 @@ fun Component<Input>.override(
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
         mask = valueOrNull(mask),
+        maxLength = valueOrNull(maxLength),
         maxVisibleLines = valueOrNull(maxVisibleLines),
         nativeInterface = valueOrNull(nativeInterface),
         paddings = valueOrNull(paddings),
@@ -1396,6 +1423,7 @@ fun Component<Input>.override(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -1446,6 +1474,7 @@ fun Component<Input>.defer(
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     mask: ReferenceProperty<InputMask>? = null,
+    maxLength: ReferenceProperty<Int>? = null,
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1495,6 +1524,7 @@ fun Component<Input>.defer(
         lineHeight = lineHeight,
         margins = margins,
         mask = mask,
+        maxLength = maxLength,
         maxVisibleLines = maxVisibleLines,
         nativeInterface = nativeInterface,
         paddings = paddings,
@@ -1535,6 +1565,7 @@ fun Component<Input>.defer(
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param maxLength The maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
@@ -1561,6 +1592,7 @@ fun Component<Input>.evaluate(
     keyboardType: ExpressionProperty<Input.KeyboardType>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
+    maxLength: ExpressionProperty<Int>? = null,
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
@@ -1596,6 +1628,7 @@ fun Component<Input>.evaluate(
         lineHeight = lineHeight,
         margins = null,
         mask = null,
+        maxLength = maxLength,
         maxVisibleLines = maxVisibleLines,
         nativeInterface = null,
         paddings = null,
