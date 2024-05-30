@@ -1113,7 +1113,13 @@ internal class DivTextBinder @Inject constructor(
             if (range.lineHeight != null || range.topOffset != null) {
                 val offset = range.topOffset?.evaluate(resolver).unitToPx(metrics, range.fontSizeUnit.evaluate(resolver))
                 val lineHeight = range.lineHeight?.evaluate(resolver).unitToPx(metrics, range.fontSizeUnit.evaluate(resolver))
-                setSpan(LineHeightWithTopOffsetSpan(offset, lineHeight), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                val textLineHeight = this@DivTextRanger.lineHeight.unitToPx(metrics, fontSizeUnit)
+                setSpan(
+                    LineHeightWithTopOffsetSpan(offset, lineHeight, textLineHeight),
+                    start,
+                    end,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
             }
             range.textShadow?.let {
                 val shadowParams = it.getShadowParams(

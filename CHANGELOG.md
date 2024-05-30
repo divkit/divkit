@@ -8,6 +8,7 @@
 * Added `max_length` property support for `input`.
 * Fixed crash by `gallery` when count of `items` was less then `column_count`. 
 * Supported `font_feature_settings` property for `div-text`.
+* Fixed line height calculation when range line height smaller than text one.
 
 # iOS Client:
 * Fixed items position in `gallery`.
