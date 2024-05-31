@@ -55,3 +55,8 @@ include ':ui-test-common'
 include ':unit-test-common'
 include ':utils'
 include ':video-custom'
+
+def internalSettings = file("settings.internal.gradle")
+if (internalSettings.exists()) {
+    apply from: internalSettings
+}

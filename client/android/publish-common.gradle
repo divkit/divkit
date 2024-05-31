@@ -23,7 +23,9 @@ ext {
     }
 }
 
-def publishToMavenCentral = rootProject.ext.has("publishToMavenCentral") && rootProject.ext.publishToMavenCentral
+def publishToMavenCentral = rootProject.ext.has("publishToMavenCentral")
+        && rootProject.ext.publishToMavenCentral
+        && !projectDir.path.contains("internal/android/libs")
 
 if (publishToMavenCentral) {
     rootProject.ext {
