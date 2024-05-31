@@ -12,6 +12,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
+import com.yandex.div2.DivActionArraySetValue
 import com.yandex.div2.DivActionDictSetValue
 import com.yandex.div2.DivActionSetVariable
 import com.yandex.div2.DivActionTyped
@@ -185,6 +186,45 @@ class DivActionHandlerTest {
     }
 
     @Test
+    fun `ArrayInsertValue action with index equal to length inserts value`() {
+        setVariable("array_var", JSONArray().put("value 1"))
+
+        val isHandled = handleTypedAction(
+            DivActionTyped.ArrayInsertValue(
+                DivActionArrayInsertValue(
+                    index = Expression.constant(1),
+                    value = typedValue("new value"),
+                    variableName = Expression.constant("array_var")
+                )
+            )
+        )
+
+        Assert.assertTrue(isHandled)
+
+        Assert.assertEquals(
+            JSONArray().put("value 1").put("new value"),
+            getVariableValue("array_var")
+        )
+    }
+
+    @Test
+    fun `ArrayInsertValue action does not change original value`() {
+        val array = JSONArray().put("value 1").put("value 2")
+        setVariable("array_var", array)
+
+        handleTypedAction(
+            DivActionTyped.ArrayInsertValue(
+                DivActionArrayInsertValue(
+                    value = typedValue("new value"),
+                    variableName = Expression.constant("array_var")
+                )
+            )
+        )
+
+        Assert.assertEquals(JSONArray().put("value 1").put("value 2"), array)
+    }
+
+    @Test
     fun `ArrayInsertValue action does nothing for invalid index`() {
         setVariable("array_var", JSONArray().put("value 1"))
 
@@ -237,6 +277,23 @@ class DivActionHandlerTest {
     }
 
     @Test
+    fun `ArrayRemoveValue action does not change original array`() {
+        val array = JSONArray().put("value 1").put("value 2")
+        setVariable("array_var", array)
+
+        handleTypedAction(
+            DivActionTyped.ArrayRemoveValue(
+                DivActionArrayRemoveValue(
+                    index = Expression.constant(0),
+                    variableName = Expression.constant("array_var")
+                )
+            )
+        )
+
+        Assert.assertEquals(JSONArray().put("value 1").put("value 2"), array)
+    }
+
+    @Test
     fun `ArrayRemoveValue action does nothing for invalid index`() {
         setVariable("array_var", JSONArray().put("value 1"))
 
@@ -261,6 +318,86 @@ class DivActionHandlerTest {
             DivActionTyped.ArrayRemoveValue(
                 DivActionArrayRemoveValue(
                     index = Expression.constant(2),
+                    variableName = Expression.constant("string_var")
+                )
+            )
+        )
+
+        Assert.assertTrue(isHandled)
+        Assert.assertEquals("value", getVariableValue("string_var"))
+    }
+
+    @Test
+    fun `ArraySetValue action sets value`() {
+        setVariable("array_var", JSONArray().put("value 1").put("value 2"))
+
+        val isHandled = handleTypedAction(
+            DivActionTyped.ArraySetValue(
+                DivActionArraySetValue(
+                    index = Expression.constant(1),
+                    value = typedValue("new value"),
+                    variableName = Expression.constant("array_var")
+                )
+            )
+        )
+
+        Assert.assertTrue(isHandled)
+
+        Assert.assertEquals(
+            JSONArray().put("value 1").put("new value"),
+            getVariableValue("array_var")
+        )
+    }
+
+    @Test
+    fun `ArraySetValue action does not change original array`() {
+        val array = JSONArray().put("value 1").put("value 2")
+        setVariable("array_var", array)
+
+        handleTypedAction(
+            DivActionTyped.ArraySetValue(
+                DivActionArraySetValue(
+                    index = Expression.constant(1),
+                    value = typedValue("new value"),
+                    variableName = Expression.constant("array_var")
+                )
+            )
+        )
+
+        Assert.assertEquals(JSONArray().put("value 1").put("value 2"), array)
+    }
+
+    @Test
+    fun `ArraySetValue action does nothing for invalid index`() {
+        setVariable("array_var", JSONArray().put("value 1").put("value 2"))
+
+        val isHandled = handleTypedAction(
+            DivActionTyped.ArraySetValue(
+                DivActionArraySetValue(
+                    index = Expression.constant(2),
+                    value = typedValue("new value"),
+                    variableName = Expression.constant("array_var")
+                )
+            )
+        )
+
+        Assert.assertTrue(isHandled)
+
+        Assert.assertEquals(
+            JSONArray().put("value 1").put("value 2"),
+            getVariableValue("array_var")
+        )
+    }
+
+    @Test
+    fun `ArraySetValue action does nothing for not array variable`() {
+        setVariable("string_var", "value")
+
+        val isHandled = handleTypedAction(
+            DivActionTyped.ArraySetValue(
+                DivActionArraySetValue(
+                    index = Expression.constant(0),
+                    value = typedValue("new value"),
                     variableName = Expression.constant("string_var")
                 )
             )

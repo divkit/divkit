@@ -6,6 +6,7 @@ import com.yandex.div.internal.util.asList
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
+import com.yandex.div2.DivActionArraySetValue
 import com.yandex.div2.DivActionTyped
 import org.json.JSONArray
 import javax.inject.Inject
@@ -20,21 +21,22 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
         view: Div2View,
         resolver: ExpressionResolver,
     ): Boolean = when (action) {
-
         is DivActionTyped.ArrayInsertValue -> {
-            handleInsert(action.value, view, resolver)
+            handle(action.value, view, resolver)
             true
         }
-
         is DivActionTyped.ArrayRemoveValue -> {
-            handleRemove(action.value, view, resolver)
+            handle(action.value, view, resolver)
             true
         }
-
+        is DivActionTyped.ArraySetValue -> {
+            handle(action.value, view, resolver)
+            true
+        }
         else -> false
     }
 
-    private fun handleInsert(
+    private fun handle(
         action: DivActionArrayInsertValue,
         view: Div2View,
         resolver: ExpressionResolver
@@ -42,67 +44,91 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor()
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index?.evaluate(resolver)?.toInt()
         val newValue = action.value.evaluate(resolver)
-        view.setVariable(variableName) { variable: Variable ->
-            if (variable !is Variable.ArrayVariable) {
-                view.logError(
-                    IllegalArgumentException("array_insert_value action requires array variable")
-                )
-                return@setVariable variable
+        view.updateVariable(variableName) { array ->
+            val length = array.length()
+            when (index) {
+                null, length -> array.mutate { add(newValue) }
+                in 0 until length -> array.mutate { add(index, newValue) }
+                else -> {
+                    view.logError(IndexOutOfBoundsException(
+                        "Index out of bound ($index) for mutation $variableName ($length)"
+                    ))
+                    array
+                }
             }
-
-            val value = variable.getValue() as? JSONArray
-            if (value == null) {
-                view.logError(IllegalArgumentException("Invalid variable value"))
-                return@setVariable variable
-            }
-
-            val length = value.length()
-            when (val indexToInsert = index ?: length) {
-                in 0..length -> variable.set(value.mutate { add(indexToInsert, newValue) })
-                else -> view.logError(IndexOutOfBoundsException(
-                    "Index out of bound ($indexToInsert) for mutation ${variable.name} (${length})"
-                ))
-            }
-            return@setVariable variable
         }
     }
 
-    private fun handleRemove(
+    private fun handle(
         action: DivActionArrayRemoveValue,
         view: Div2View,
         resolver: ExpressionResolver
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index.evaluate(resolver).toInt()
-        view.setVariable(variableName) { variable: Variable ->
-            if (variable !is Variable.ArrayVariable) {
-                view.logError(
-                    IllegalArgumentException("array_remove_value action requires array variable")
-                )
-                return@setVariable variable
-            }
-
-            val value = variable.getValue() as? JSONArray
-            if (value == null) {
-                view.logError(IllegalArgumentException("Invalid variable value"))
-                return@setVariable variable
-            }
-
-            val length = value.length()
+        view.updateVariable(variableName) { array ->
+            val length = array.length()
             when (index) {
-                in 0 until length -> variable.set(value.mutate { removeAt(index) })
-                else -> view.logError(IndexOutOfBoundsException(
-                    "Index out of bound ($index) for mutation ${variable.name} (${length})"
-                ))
+                in 0 until length -> array.mutate { removeAt(index) }
+                else -> {
+                    view.logError(IndexOutOfBoundsException(
+                        "Index out of bound ($index) for mutation $variableName ($length)"
+                    ))
+                    array
+                }
             }
-            return@setVariable variable
         }
     }
 
-    private fun JSONArray.mutate(action: MutableList<Any>.() -> Unit): JSONArray {
-        return asList<Any>()
-            .toMutableList()
-            .apply(action::invoke)
-            .let(::JSONArray)
+    private fun handle(
+        action: DivActionArraySetValue,
+        view: Div2View,
+        resolver: ExpressionResolver
+    ) {
+        val variableName = action.variableName.evaluate(resolver)
+        val index = action.index.evaluate(resolver).toInt()
+        val newValue = action.value.evaluate(resolver)
+        view.updateVariable(variableName) { array ->
+            val length = array.length()
+            when (index) {
+                in 0 until length -> array.mutate { this[index] = newValue }
+                else -> {
+                    view.logError(IndexOutOfBoundsException(
+                        "Index out of bound ($index) for mutation $variableName ($length)"
+                    ))
+                    array
+                }
+            }
+        }
+    }
+}
+
+private fun JSONArray.mutate(action: MutableList<Any>.() -> Unit): JSONArray {
+    return asList<Any>()
+        .toMutableList()
+        .apply(action::invoke)
+        .let(::JSONArray)
+}
+
+private fun Div2View.updateVariable(
+    name: String,
+    valueMutation: (JSONArray) -> JSONArray
+) {
+    view.setVariable(name) { variable: Variable ->
+        if (variable !is Variable.ArrayVariable) {
+            view.logError(
+                IllegalArgumentException("Action requires array variable")
+            )
+            return@setVariable variable
+        }
+
+        val value = variable.getValue() as? JSONArray
+        if (value == null) {
+            view.logError(IllegalArgumentException("Invalid variable value"))
+            return@setVariable variable
+        }
+
+        variable.set(valueMutation(value))
+        return@setVariable variable
     }
 }

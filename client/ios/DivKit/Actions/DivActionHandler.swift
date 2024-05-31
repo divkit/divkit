@@ -16,8 +16,7 @@ public final class DivActionHandler {
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let reporter: DivReporter
 
-  private let arrayInsertValueActionHandler = ArrayInsertValueActionHandler()
-  private let arrayRemoveValueActionHandler = ArrayRemoveValueActionHandler()
+  private let arrayActionsHandler = ArrayActionsHandler()
   private let dictSetValueActionHandler = DictSetValueActionHandler()
   private let clearFocusActionHandler = ClearFocusActionHandler()
   private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
@@ -135,9 +134,11 @@ public final class DivActionHandler {
     var isHandled = true
     switch action.typed {
     case let .divActionArrayInsertValue(action):
-      arrayInsertValueActionHandler.handle(action, context: context)
+      arrayActionsHandler.handle(action, context: context)
     case let .divActionArrayRemoveValue(action):
-      arrayRemoveValueActionHandler.handle(action, context: context)
+      arrayActionsHandler.handle(action, context: context)
+    case let .divActionArraySetValue(action):
+      arrayActionsHandler.handle(action, context: context)
     case let .divActionDictSetValue(action):
       dictSetValueActionHandler.handle(action, context: context)
     case .divActionClearFocus:

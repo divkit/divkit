@@ -43,6 +43,10 @@
     "en": "Deletes a value from the array",
     "ru": "Удаляет значение из массива"
   },
+  "div_action_array_set_value": {
+    "en": "Sets value in the array",
+    "ru": "Устанавливает значение в массиве по индексу"
+  },
   "div_action_base_download_callbacks": {
     "en": "Callbacks that are called after [data loading](../../interaction#loading-data).",
     "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction#loading-data)."

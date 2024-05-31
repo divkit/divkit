@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_array_set_value",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "array_set_value"
+      ]
+    },
+    "variable_name": {
+      "type": "string"
+    },
+    "index": {
+      "type": "integer"
+    },
+    "value": {
+      "$ref": "div-typed-value.json"
+    }
+  },
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "required": [
+    "type",
+    "variable_name",
+    "index",
+    "value"
+  ]
+}

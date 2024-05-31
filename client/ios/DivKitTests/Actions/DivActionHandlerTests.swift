@@ -53,17 +53,12 @@ final class DivActionHandlerTests: XCTestCase {
   func test_ArrayInsertValueAction_AppendsValue() {
     setVariableValue("array_var", .array([1, "two"]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionArrayInsertValue(
-          DivActionArrayInsertValue(
-            value: stringValue("new value"),
-            variableName: .value("array_var")
-          )
-        )
+    handle(.divActionArrayInsertValue(
+      DivActionArrayInsertValue(
+        value: stringValue("new value"),
+        variableName: .value("array_var")
       )
-    )
+    ))
 
     XCTAssertEqual([1, "two", "new value"] as [AnyHashable], getVariableValue("array_var"))
   }
@@ -71,55 +66,54 @@ final class DivActionHandlerTests: XCTestCase {
   func test_ArrayInsertValueAction_InsertsValue() {
     setVariableValue("array_var", .array([1, "two"]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionArrayInsertValue(
-          DivActionArrayInsertValue(
-            index: .value(1),
-            value: stringValue("new value"),
-            variableName: .value("array_var")
-          )
-        )
+    handle(.divActionArrayInsertValue(
+      DivActionArrayInsertValue(
+        index: .value(1),
+        value: stringValue("new value"),
+        variableName: .value("array_var")
       )
-    )
+    ))
 
     XCTAssertEqual([1, "new value", "two"] as [AnyHashable], getVariableValue("array_var"))
+  }
+
+  func test_ArrayInsertValueAction_WithIndexEqualLength_InsertsValue() {
+    setVariableValue("array_var", .array(["one", "two"]))
+
+    handle(.divActionArrayInsertValue(
+      DivActionArrayInsertValue(
+        index: .value(2),
+        value: stringValue("new value"),
+        variableName: .value("array_var")
+      )
+    ))
+
+    XCTAssertEqual(["one", "two", "new value"], getVariableValue("array_var"))
   }
 
   func test_ArrayInsertValueAction_DoesNothingForInvalidIndex() {
     setVariableValue("array_var", .array([1, "two"]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionArrayInsertValue(
-          DivActionArrayInsertValue(
-            index: .value(10),
-            value: stringValue("new value"),
-            variableName: .value("array_var")
-          )
-        )
+    handle(.divActionArrayInsertValue(
+      DivActionArrayInsertValue(
+        index: .value(10),
+        value: stringValue("new value"),
+        variableName: .value("array_var")
       )
-    )
+    ))
 
     XCTAssertEqual([1, "two"] as [AnyHashable], getVariableValue("array_var"))
   }
 
-  func test_ArrayInsertValueAction__DoesNothingForDifferentTypeVar() {
+  func test_ArrayInsertValueAction_DoesNothingForNotArrayVar() {
     setVariableValue("string_var", .string("value"))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionArrayInsertValue(
-          DivActionArrayInsertValue(
-            value: stringValue("new value"),
-            variableName: .value("string_var")
-          )
-        )
+    handle(.divActionArrayInsertValue(
+      DivActionArrayInsertValue(
+        value: stringValue("new value"),
+        variableName: .value("string_var")
       )
-    )
+    ))
 
     XCTAssertEqual("value", getVariableValue("string_var"))
   }
@@ -127,17 +121,12 @@ final class DivActionHandlerTests: XCTestCase {
   func test_ArrayRemoveValueAction_RemovesValue() {
     setVariableValue("array_var", .array([1, "two"]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionArrayRemoveValue(
-          DivActionArrayRemoveValue(
-            index: .value(1),
-            variableName: .value("array_var")
-          )
-        )
+    handle(.divActionArrayRemoveValue(
+      DivActionArrayRemoveValue(
+        index: .value(1),
+        variableName: .value("array_var")
       )
-    )
+    ))
 
     XCTAssertEqual([1] as [AnyHashable], getVariableValue("array_var"))
   }
@@ -145,36 +134,81 @@ final class DivActionHandlerTests: XCTestCase {
   func test_ArrayRemoveValueAction_DoesNothingForInvalidIndex() {
     setVariableValue("array_var", .array([1, "two"]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionArrayRemoveValue(
-          DivActionArrayRemoveValue(
-            index: .value(10),
-            variableName: .value("array_var")
-          )
-        )
+    handle(.divActionArrayRemoveValue(
+      DivActionArrayRemoveValue(
+        index: .value(10),
+        variableName: .value("array_var")
       )
-    )
+    ))
 
     XCTAssertEqual([1, "two"] as [AnyHashable], getVariableValue("array_var"))
+  }
+
+  func test_ArrayRemoveValueAction_DoesNothingForNotArrayVar() {
+    setVariableValue("string_var", .string("value"))
+
+    handle(.divActionArrayRemoveValue(
+      DivActionArrayRemoveValue(
+        index: .value(0),
+        variableName: .value("string_var")
+      )
+    ))
+
+    XCTAssertEqual("value", getVariableValue("string_var"))
+  }
+
+  func test_ArraySetValueAction_SetsValue() {
+    setVariableValue("array_var", .array(["one", "two"]))
+
+    handle(.divActionArraySetValue(
+      DivActionArraySetValue(
+        index: .value(1),
+        value: stringValue("new value"),
+        variableName: .value("array_var")
+      )
+    ))
+
+    XCTAssertEqual(["one", "new value"], getVariableValue("array_var"))
+  }
+
+  func test_ArraySetValueAction_DoesNothingForInvalidIndex() {
+    setVariableValue("array_var", .array(["one", "two"]))
+
+    handle(.divActionArraySetValue(
+      DivActionArraySetValue(
+        index: .value(2),
+        value: stringValue("new value"),
+        variableName: .value("array_var")
+      )
+    ))
+
+    XCTAssertEqual(["one", "two"], getVariableValue("array_var"))
+  }
+
+  func test_ArraySetValueAction_DoesNothingForNotArrayVar() {
+    setVariableValue("string_var", .string("value"))
+
+    handle(.divActionArraySetValue(
+      DivActionArraySetValue(
+        index: .value(0),
+        value: stringValue("new value"),
+        variableName: .value("string_var")
+      )
+    ))
+
+    XCTAssertEqual("value", getVariableValue("string_var"))
   }
 
   func test_DictSetValueAction_AddsValue() {
     setVariableValue("dict_var", .dict([:]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionDictSetValue(
-          DivActionDictSetValue(
-            key: .value("key"),
-            value: stringValue("new value"),
-            variableName: .value("dict_var")
-          )
-        )
+    handle(.divActionDictSetValue(
+      DivActionDictSetValue(
+        key: .value("key"),
+        value: stringValue("new value"),
+        variableName: .value("dict_var")
       )
-    )
+    ))
 
     XCTAssertEqual(["key": "new value"], getVariableValue("dict_var"))
   }
@@ -182,18 +216,13 @@ final class DivActionHandlerTests: XCTestCase {
   func test_DictSetValueAction_UpdatesValue() {
     setVariableValue("dict_var", .dict(["key": "value"]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionDictSetValue(
-          DivActionDictSetValue(
-            key: .value("key"),
-            value: .dictValue(DictValue(value: ["new_key": "new value"])),
-            variableName: .value("dict_var")
-          )
-        )
+    handle(.divActionDictSetValue(
+      DivActionDictSetValue(
+        key: .value("key"),
+        value: .dictValue(DictValue(value: ["new_key": "new value"])),
+        variableName: .value("dict_var")
       )
-    )
+    ))
 
     XCTAssertEqual(["key": ["new_key": "new value"]], getVariableValue("dict_var"))
   }
@@ -201,36 +230,26 @@ final class DivActionHandlerTests: XCTestCase {
   func test_DictSetValueAction_RemovesValue() {
     setVariableValue("dict_var", .dict(["key": "value"]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionDictSetValue(
-          DivActionDictSetValue(
-            key: .value("key"),
-            variableName: .value("dict_var")
-          )
-        )
+    handle(.divActionDictSetValue(
+      DivActionDictSetValue(
+        key: .value("key"),
+        variableName: .value("dict_var")
       )
-    )
+    ))
 
     XCTAssertEqual([String: AnyHashable](), getVariableValue("dict_var"))
   }
 
-  func test_DictSetValueAction_DoesNothingForDifferentTypeVar() {
+  func test_DictSetValueAction_DoesNothingForNotDictVar() {
     setVariableValue("array_var", .array(["one", "two"]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionDictSetValue(
-          DivActionDictSetValue(
-            key: .value("key"),
-            value: stringValue("new value"),
-            variableName: .value("array_var")
-          )
-        )
+    handle(.divActionDictSetValue(
+      DivActionDictSetValue(
+        key: .value("key"),
+        value: stringValue("new value"),
+        variableName: .value("array_var")
       )
-    )
+    ))
 
     XCTAssertEqual(["one", "two"], getVariableValue("array_var"))
   }
@@ -238,17 +257,12 @@ final class DivActionHandlerTests: XCTestCase {
   func test_SetVariableAction_SetsStringVariable() {
     setVariableValue("string_var", .string("default"))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionSetVariable(
-          DivActionSetVariable(
-            value: stringValue("new value"),
-            variableName: .value("string_var")
-          )
-        )
+    handle(.divActionSetVariable(
+      DivActionSetVariable(
+        value: stringValue("new value"),
+        variableName: .value("string_var")
       )
-    )
+    ))
 
     XCTAssertEqual("new value", getVariableValue("string_var"))
   }
@@ -256,17 +270,12 @@ final class DivActionHandlerTests: XCTestCase {
   func test_SetVariableAction_SetsArrayVariable() {
     setVariableValue("array_var", .array([]))
 
-    handle(
-      divAction(
-        logId: "test_log_id",
-        typed: .divActionSetVariable(
-          DivActionSetVariable(
-            value: .arrayValue(ArrayValue(value: .value(["value 1", "value 2"]))),
-            variableName: .value("array_var")
-          )
-        )
+    handle(.divActionSetVariable(
+      DivActionSetVariable(
+        value: .arrayValue(ArrayValue(value: .value(["value 1", "value 2"]))),
+        variableName: .value("array_var")
       )
-    )
+    ))
 
     XCTAssertEqual(["value 1", "value 2"], getVariableValue("array_var"))
   }
@@ -314,10 +323,19 @@ final class DivActionHandlerTests: XCTestCase {
     )
   }
 
+  private func handle(_ action: DivActionTyped) {
+    actionHandler.handle(
+      divAction(logId: "log_id", typed: action),
+      cardId: cardId,
+      source: .tap,
+      sender: nil
+    )
+  }
+
   private func getVariableValue<T>(_ name: DivVariableName) -> T? {
     variablesStorage.makeVariables(for: cardId)[name]?.typedValue()
   }
-  
+
   private func setVariableValue(_ name: DivVariableName, _ value: DivVariableValue) {
     variablesStorage.set(cardId: cardId, variables: [name: value])
   }

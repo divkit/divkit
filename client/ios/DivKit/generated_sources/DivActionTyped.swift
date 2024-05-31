@@ -8,6 +8,7 @@ import Serialization
 public enum DivActionTyped {
   case divActionArrayInsertValue(DivActionArrayInsertValue)
   case divActionArrayRemoveValue(DivActionArrayRemoveValue)
+  case divActionArraySetValue(DivActionArraySetValue)
   case divActionClearFocus(DivActionClearFocus)
   case divActionCopyToClipboard(DivActionCopyToClipboard)
   case divActionDictSetValue(DivActionDictSetValue)
@@ -19,6 +20,8 @@ public enum DivActionTyped {
     case let .divActionArrayInsertValue(value):
       return value
     case let .divActionArrayRemoveValue(value):
+      return value
+    case let .divActionArraySetValue(value):
       return value
     case let .divActionClearFocus(value):
       return value
@@ -41,6 +44,8 @@ extension DivActionTyped: Equatable {
     case let (.divActionArrayInsertValue(l), .divActionArrayInsertValue(r)):
       return l == r
     case let (.divActionArrayRemoveValue(l), .divActionArrayRemoveValue(r)):
+      return l == r
+    case let (.divActionArraySetValue(l), .divActionArraySetValue(r)):
       return l == r
     case let (.divActionClearFocus(l), .divActionClearFocus(r)):
       return l == r

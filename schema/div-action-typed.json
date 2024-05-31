@@ -7,6 +7,9 @@
       "$ref": "div-action-array-remove-value.json"
     },
     {
+      "$ref": "div-action-array-set-value.json"
+    },
+    {
       "$ref": "div-action-clear-focus.json"
     },
     {
