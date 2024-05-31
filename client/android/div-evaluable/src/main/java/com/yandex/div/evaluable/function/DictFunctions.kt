@@ -826,6 +826,29 @@ internal object GetOptArrayFromDict : Function() {
     }
 }
 
+internal object DictContainsKey : Function() {
+
+    override val name = "containsKey"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT),
+        FunctionArgument(type = EvaluableType.STRING)
+    )
+
+    override val resultType = EvaluableType.BOOLEAN
+    override val isPure = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val dict = args[0] as JSONObject
+        val key = args[1] as String
+        return dict.has(key)
+    }
+}
+
 private fun evaluateSafe(args: List<Any>, fallback: Any, defaultFallback: Boolean = false): Any? {
     val dictIndex = if (defaultFallback) 0 else 1
     var dict = args[dictIndex] as? JSONObject ?: return fallback

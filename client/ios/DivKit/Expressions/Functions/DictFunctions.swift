@@ -40,6 +40,8 @@ extension [String: Function] {
     addFunction("getNumber", _getNumber)
     addFunction("getString", _getString)
     addFunction("getUrl", _getUrl)
+
+    addFunction("containsKey", _containsKey)
   }
 
   private mutating func addFunctions(
@@ -130,6 +132,10 @@ private let _getOptUrl = OverloadedFunction(functions: [
     return URL(string: $0)!
   },
 ])
+
+private let _containsKey = FunctionBinary<Dict, String, Bool> { dict, key in
+  dict.contains { $0.key == key }
+}
 
 extension Dict {
   fileprivate func getArray(path: [String]) throws -> [AnyHashable] {

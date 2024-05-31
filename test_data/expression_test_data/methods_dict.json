@@ -364,6 +364,111 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "dict_var.containsKey('key') => true",
+      "expression": "@{dict_var.containsKey('key')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "key": "value"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.containsKey('unknown_key') => false",
+      "expression": "@{dict_var.containsKey('unknown_key')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.containsKey('value') => false",
+      "expression": "@{dict_var.containsKey('value')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "key": "value"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.containsKey('null_key') => true",
+      "expression": "@{dict_var.containsKey('null_key')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "null_key": null
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "name": "dict_var.containsKey('inner_key') => false",
+      "expression": "@{dict_var.containsKey('inner_key')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "dict": {
+              "inner_key": "value"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
     }
   ]
 }

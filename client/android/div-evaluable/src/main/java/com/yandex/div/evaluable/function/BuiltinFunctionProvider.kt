@@ -219,6 +219,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetOptUrlFromDictWithStringFallback)
         registry.register(GetOptUrlFromDictWithUrlFallback)
         registry.register(GetOptBooleanFromDict)
+        registry.registerMethod(DictContainsKey)
 
         // Array functions legacy
         registry.register(GetArrayInteger)
