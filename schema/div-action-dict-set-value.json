@@ -20,7 +20,8 @@
   },
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "required": [
     "type",

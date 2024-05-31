@@ -79,6 +79,7 @@
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
     import { arrayInsert, arrayRemove } from '../actions/array';
+    import { dictSetValue } from '../actions/dict';
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
     import TooltipView from './tooltip/Tooltip.svelte';
@@ -941,6 +942,10 @@
                     } catch (err) {
                         // do nothing
                     }
+                    break;
+                }
+                case 'dict_set_value': {
+                    dictSetValue(variables, log, actionTyped);
                     break;
                 }
                 default: {

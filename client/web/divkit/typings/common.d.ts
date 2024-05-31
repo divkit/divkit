@@ -186,8 +186,15 @@ export interface ActionClearFocus {
     type: 'clear_focus';
 }
 
+export interface ActionDictSetValue {
+    type: 'dict_set_value';
+    variable_name: string;
+    key: string;
+    value?: TypedValue;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
-    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus;
+    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue;
 
 export interface ActionBase {
     log_id: string;
