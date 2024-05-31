@@ -203,6 +203,14 @@
       "$description": "translations.json#/div_base_visibility",
       "default_value": "visible"
     },
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "div-variable.json"
+      },
+      "$description": "translations.json#/div_base_variables",
+      "platforms": []
+    },
     "transform": {
       "$ref": "div-transform.json",
       "$description": "translations.json#/div_base_transform",
