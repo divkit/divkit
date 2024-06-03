@@ -14,7 +14,8 @@ private const val NOT_SET = -1
  */
 internal class LineHeightWithTopOffsetSpan(
     @field:Px private val topOffset: Int,
-    @field:Px private val lineHeight: Int
+    @field:Px private val lineHeight: Int,
+    @field:Px private val textLineHeight: Int = 0
 ) : LineHeightSpan {
 
     private var fontMetricsSaved = false
@@ -40,8 +41,12 @@ internal class LineHeightWithTopOffsetSpan(
             fontMetricsSaved = true
             saveFontMetrics(fm)
         }
-        if (start <= spanEnd && spanStart <= end) {
-            applyLineHeight(fm)
+        if (start <= spanEnd && spanStart <= end) {  // segment intersection
+            if (start >= spanStart && end <= spanEnd) {
+                applyLineHeight(fm)
+            } else if (lineHeight > textLineHeight) {
+                applyLineHeight(fm)
+            }
         }
         if (spanStart in start..end) {
             applyTopOffset(fm)
