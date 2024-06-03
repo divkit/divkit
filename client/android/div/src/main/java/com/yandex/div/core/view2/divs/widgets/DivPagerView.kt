@@ -48,7 +48,10 @@ internal class DivPagerView @JvmOverloads constructor(
             field = value
         }
 
+    internal var pagerOnItemsCountChange: OnItemsUpdatedCallback? = null
+
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
+
     internal var currentItem: Int
         get() = viewPager.currentItem
         set(value) = viewPager.setCurrentItem(value, false)
@@ -101,5 +104,9 @@ internal class DivPagerView @JvmOverloads constructor(
         val recyclerView = getRecyclerView() ?: return null
         val wrappedChild = recyclerView.getChildAt(index) as? ViewGroup ?: return null
         return wrappedChild.getChildAt(0)
+    }
+
+    internal fun interface OnItemsUpdatedCallback {
+        fun onItemsUpdated()
     }
 }

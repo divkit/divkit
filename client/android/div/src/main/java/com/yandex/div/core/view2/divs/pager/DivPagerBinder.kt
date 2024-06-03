@@ -88,6 +88,8 @@ internal class DivPagerBinder @Inject constructor(
             if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache, context)) {
                 adapter.notifyItemRangeChanged(0, adapter.itemCount)
             }
+            view.pagerOnItemsCountChange?.onItemsUpdated()
+            setCallbacks(context, view, div)
             return
         }
 
@@ -126,6 +128,7 @@ internal class DivPagerBinder @Inject constructor(
         } else {
             PagerCollectionAdapter(itemBuilder, context, divBinder.get(), translationBinder, viewCreator, path, a11yEnabled)
         }
+        view.pagerOnItemsCountChange?.onItemsUpdated()
 
         val reusableObserver = { _: Any ->
             applyDecorations(view, div, resolver)
@@ -161,20 +164,7 @@ internal class DivPagerBinder @Inject constructor(
             updatePageTransformer(view, div, resolver, pageTranslations)
             applyDecorations(view, div, resolver)
         })
-
-        view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
-            bindingContext = context,
-            divs = divItems,
-            divActionBinder = divActionBinder,
-        )
-
-        view.changePageCallbackForLogger = PageChangeCallback(
-            bindingContext = context,
-            divPager = div,
-            divs = divItems,
-            recyclerView = view.viewPager.getChildAt(0) as RecyclerView,
-            pagerView = view,
-        )
+        setCallbacks(context, view, div)
 
         divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
@@ -198,6 +188,32 @@ internal class DivPagerBinder @Inject constructor(
         if (a11yEnabled) {
             view.enableAccessibility()
         }
+    }
+
+    private fun setCallbacks(
+        context: BindingContext,
+        view: DivPagerView,
+        div: DivPager,
+    ) {
+        val recyclerView = view.viewPager.getChildAt(0) as RecyclerView
+        val items = when (val adapter = recyclerView.adapter) {
+            is PagerPatchableAdapter -> adapter.items
+            else -> div.nonNullItems
+        }
+
+        view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
+            bindingContext = context,
+            divs = items,
+            divActionBinder = divActionBinder,
+        )
+
+        view.changePageCallbackForLogger = PageChangeCallback(
+            bindingContext = context,
+            divPager = div,
+            recyclerView = recyclerView,
+            divs = items,
+            pagerView = view,
+        )
     }
 
     private fun setInfiniteScroll(view: DivPagerView) {
