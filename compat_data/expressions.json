@@ -77,5 +77,19 @@
                 "version_added": "30.2.0"
             }
         }
+    }, {
+        "id": "fn_datetime_formats_timezone",
+        "name": "Datetime formatting functions <code>z</code> and <code>Z</code> flags",
+        "compat": {
+            "ios": {
+                "version_added": "30.3.0"
+            },
+            "android": {
+                "version_added": "30.3.0"
+            },
+            "web": {
+                "version_added": "30.3.0"
+            }
+        }
     }]
 }

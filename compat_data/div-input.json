@@ -21,5 +21,16 @@
                 "version_added": "29.15.0"
             }
         }
+    }, {
+        "id": "input_max_length",
+        "name": "Input property <code>max_length</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.3.0"
+            },
+            "web": {
+                "version_added": "30.3.0"
+            }
+        }
     }]
 }

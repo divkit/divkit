@@ -28,5 +28,19 @@
                 "version_added": "0.1.0"
             }
         }
+    }, {
+        "id": "text_font_feature_settings",
+        "name": "Text <code>font_feature_settings</code> property",
+        "compat": {
+            "android": {
+                "version_added": "30.3.0"
+            },
+            "web": {
+                "version_added": "30.3.0"
+            },
+            "ios": {
+                "version_added": "30.3.0"
+            }
+        }
     }]
 }
