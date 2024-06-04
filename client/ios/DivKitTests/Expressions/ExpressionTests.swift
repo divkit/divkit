@@ -20,7 +20,7 @@ private func makeTestCases() -> [(String, ExpressionTestCase)] {
         .cases ?? []
       return testCases
         .filter { $0.platforms.contains(.ios) }
-        .map { ("\(fileName): \($0.name)", $0) }
+        .map { ("\(fileName): \($0.description)", $0) }
     }
 }
 
@@ -63,7 +63,6 @@ private struct TestCases: Decodable {
 }
 
 private struct ExpressionTestCase: Decodable {
-  let name: String
   let expression: String
   let variables: DivVariables
   let expected: ExpectedValue
@@ -71,7 +70,6 @@ private struct ExpressionTestCase: Decodable {
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    name = try container.decode(String.self, forKey: .name)
     expression = try container.decode(String.self, forKey: .expression)
     expected = try container.decode(ExpectedValue.self, forKey: .expected)
     platforms = try container.decode([Platform].self, forKey: .platforms)
@@ -89,6 +87,17 @@ private struct ExpressionTestCase: Decodable {
       variables.append(variable)
     }
     self.variables = variables.extractDivVariableValues()
+  }
+
+  var description: String {
+    let formattedExpression = if expression.starts(with: "@{"),
+                                 expression.last == "}",
+                                 !expression.dropFirst(2).contains("@{") {
+      String(expression.dropFirst(2).dropLast())
+    } else {
+      expression
+    }
+    return "\(formattedExpression) -> \(expected.description)"
   }
 
   private enum CodingKeys: String, CodingKey {
@@ -152,7 +161,7 @@ private enum ExpectedValue: Decodable {
   case dict([String: AnyHashable])
   case error(String)
 
-  public init(from decoder: Decoder) throws {
+  init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     let type = try container.decode(String.self, forKey: .type)
     switch type {
@@ -201,6 +210,30 @@ private enum ExpectedValue: Decodable {
         )
       )
     }
+  }
+
+  var description: String {
+    let value: Any = switch self {
+    case let .string(value):
+      value
+    case let .double(value):
+      value
+    case let .integer(value):
+      value
+    case let .bool(value):
+      value
+    case let .color(value):
+      value
+    case let .datetime(value):
+      value
+    case let .array(value):
+      value
+    case let .dict(value):
+      value
+    case .error:
+      "error"
+    }
+    return formatArgForError(value)
   }
 
   private enum CodingKeys: String, CodingKey {

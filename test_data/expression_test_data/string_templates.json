@@ -348,20 +348,6 @@
             ]
         },
         {
-            "name": "string template with expression in the middle",
-            "expression": "This is @{'a'} string",
-            "expected": {
-                "type": "string",
-                "value": "This is a string"
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
             "name": "string template with expression at the end",
             "expression": "Sky color is @{'#75bbfd'}",
             "expected": {

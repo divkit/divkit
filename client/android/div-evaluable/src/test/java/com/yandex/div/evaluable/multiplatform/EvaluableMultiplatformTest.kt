@@ -4,7 +4,7 @@ import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.VariableProvider
-import com.yandex.div.evaluable.function.BuiltinFunctionProvider
+import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.isForAndroidPlatform
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.parsePlatform
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.toListOfJSONObject
@@ -31,7 +31,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     private val evaluationContext = EvaluationContext(
         variableProvider = variableProvider,
         storedValueProvider = mock(),
-        functionProvider = BuiltinFunctionProvider,
+        functionProvider = GeneratedBuiltinFunctionProvider,
         warningSender = { _, _ ->  }
     )
     private lateinit var testCase: ExpressionTestCase
@@ -109,15 +109,34 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     data class ExpressionTestCase(
         val fileName: String,
-        val name: String,
+        val name: String?,
         val expression: String,
         val variables: List<TestVariable>,
         val platform: List<String>,
         val expectedValue: Any,
         val expectedWarnings: List<String>
     ) {
+        val description: String
+            get() {
+                val formattedExpression = if (expression.startsWith("@{")
+                    && expression.endsWith("}")
+                    && !expression.drop(2).contains("@{")) {
+                    expression.drop(2).dropLast(1)
+                } else {
+                    expression
+                }
+                val result: String = when (expectedValue) {
+                    is String -> "'$expectedValue'"
+                    is JSONArray -> "<array>"
+                    is JSONObject -> "<dict>"
+                    is Exception -> "error"
+                    else -> expectedValue.toString()
+                }
+                return name ?: "$formattedExpression -> $result"
+            }
+
         override fun toString(): String {
-            return name
+            return description
         }
     }
 
@@ -184,12 +203,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         }
 
         private fun parseTestCase(file: File, json: JSONObject): TestCaseOrError<ExpressionTestCase> {
-            val name = try {
-                json.getString(CASE_NAME_FIELD)
-            } catch (e: JSONException) {
-                return TestCaseOrError(TestCaseParsingError("???", file, json, e))
-            }
-
+            val name = json.optString(CASE_NAME_FIELD)
             try {
                 val testCase = ExpressionTestCase(
                     file.name,
@@ -210,9 +224,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                         result
                     } ?: emptyList(),
                     parsePlatform(json),
-                    json.getJSONObject(CASE_EXPECTED_VALUE_FIELD).let { expected ->
-                        parseValue(expected)
-                    },
+                    parseValue(json.getJSONObject(CASE_EXPECTED_VALUE_FIELD)),
                     json.optJSONArray(CASE_EXPECTED_WARNINGS_FIELD)?.map { it as String } ?: emptyList()
                 )
 
@@ -224,7 +236,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
         private fun checkDuplicates(cases: Sequence<TestCaseOrError<ExpressionTestCase>>) {
             val duplicate = cases.mapNotNull { it.testCase }
-                .groupingBy { it.fileName to it.name }
+                .groupingBy { it.fileName to it.description }
                 .eachCount()
                 .filterValues { it > 1 }
                 .keys

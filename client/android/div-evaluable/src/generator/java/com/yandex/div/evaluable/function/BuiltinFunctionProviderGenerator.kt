@@ -10,10 +10,10 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import com.yandex.div.evaluable.Function
+import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.FunctionProvider
 import java.io.File
-
 
 object BuiltinFunctionProviderGenerator {
     private val nameAndFunctions = BuiltinFunctionProvider.exposedFunctions.entries
@@ -43,15 +43,20 @@ object BuiltinFunctionProviderGenerator {
             .addType(prepareTypeSpec())
             .build()
 
-
     private fun prepareTypeSpec(): TypeSpec =
         TypeSpec.objectBuilder("GeneratedBuiltinFunctionProvider")
             .addSuperinterface(FunctionProvider::class)
-            .addFunctions(listOf(prepareGetFunction(nameAndFunctions, "get"),
-                prepareGetFunction(nameAndMethods, "getMethod"), prepareWarmUpFunction()))
+            .addFunctions(listOf(
+                prepareGetFunction(nameAndFunctions, SignatureType.Function),
+                prepareGetFunction(nameAndMethods, SignatureType.Method),
+                prepareWarmUpFunction()
+            ))
             .build()
 
-    private fun prepareGetFunction(namesAndFunctions: List<Pair<String, List<ClassName>>>, funcName: String): FunSpec {
+    private fun prepareGetFunction(
+        namesAndFunctions: List<Pair<String, List<ClassName>>>,
+        type: SignatureType
+    ): FunSpec {
         val nameParameterSpec = ParameterSpec.builder("name", String::class).build()
         val argsParameterSpec = ParameterSpec.builder(
             "args",
@@ -93,6 +98,12 @@ object BuiltinFunctionProviderGenerator {
                         addStatement("return %T", function)
                         endControlFlow()
                     }
+                    code.addStatement(
+                        "throw %N(%N, %N)",
+                        FunSpec.builder("getFunctionArgumentsException").build(),
+                        nameParameterSpec,
+                        argsParameterSpec
+                    )
                 }.endControlFlow()
             }
 
@@ -103,13 +114,11 @@ object BuiltinFunctionProviderGenerator {
         }.endControlFlow()
 
         code.addStatement(
-            "throw %N(%N, %N)",
-            FunSpec.builder("getFunctionArgumentsException").build(),
-            nameParameterSpec,
-            argsParameterSpec
+            "throw %T(\"Unknown ${type.description} name: \$name.\")",
+            EvaluableException::class
         )
 
-        return FunSpec.builder(funcName)
+        return FunSpec.builder(type.getMethodName)
             .addModifiers(KModifier.OVERRIDE)
             .addParameter(nameParameterSpec)
             .addParameter(argsParameterSpec)
@@ -133,4 +142,12 @@ object BuiltinFunctionProviderGenerator {
             .addCode(code.build())
             .build()
     }
+}
+
+private enum class SignatureType(
+    val description: String,
+    val getMethodName: String
+) {
+    Function("function", "get"),
+    Method("method", "getMethod")
 }
