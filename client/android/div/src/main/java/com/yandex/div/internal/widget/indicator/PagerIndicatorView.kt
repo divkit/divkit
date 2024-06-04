@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.widget.indicator.animations.getIndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.getIndicatorDrawer
 import kotlin.math.min
@@ -96,7 +97,8 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
         stripDrawer?.onDraw(canvas)
     }
 
-    fun attachPager(newPager: ViewPager2) {
+    fun attachPager(divPager: DivPagerView) {
+        val newPager = divPager.viewPager
         if (pager === newPager) {
             return
         }
@@ -109,6 +111,9 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
         }
 
         stripDrawer?.update()
+        divPager.pagerOnItemsCountChange = DivPagerView.OnItemsUpdatedCallback {
+            stripDrawer?.update()
+        }
     }
 
     private fun IndicatorsStripDrawer.update() {

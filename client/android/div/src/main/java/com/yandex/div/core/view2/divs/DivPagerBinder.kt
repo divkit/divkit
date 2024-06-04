@@ -77,6 +77,7 @@ internal class DivPagerBinder @Inject constructor(
             if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache, divView)) {
                 adapter.notifyItemRangeChanged(0, adapter.itemCount)
             }
+            setCallbacks(divView, divActionBinder, view, div)
             return
         }
 
@@ -153,19 +154,7 @@ internal class DivPagerBinder @Inject constructor(
             applyDecorations(view, div, resolver)
         })
 
-        view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
-            divView = divView,
-            div = div,
-            divs = divItems,
-            divActionBinder = divActionBinder,
-        )
-
-        view.changePageCallbackForLogger = PageChangeCallback(
-            divView = divView,
-            divPager = div,
-            divs = divItems,
-            recyclerView = view.viewPager.getChildAt(0) as RecyclerView
-        )
+        setCallbacks(divView, divActionBinder, view, div)
 
         divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
@@ -189,6 +178,33 @@ internal class DivPagerBinder @Inject constructor(
         if (a11yEnabled) {
             view.enableAccessibility()
         }
+    }
+
+    private fun setCallbacks(
+        divView: Div2View,
+        divActionBinder: DivActionBinder,
+        view: DivPagerView,
+        div: DivPager,
+    ) {
+        val recyclerView = view.viewPager.getChildAt(0) as RecyclerView
+        val divItems = when (val adapter = recyclerView.adapter) {
+            is PagerAdapter -> adapter.items
+            else -> div.nonNullItems
+        }
+
+        view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
+            divView = divView,
+            div = div,
+            divs = divItems,
+            divActionBinder = divActionBinder,
+        )
+
+        view.changePageCallbackForLogger = PageChangeCallback(
+            divView = divView,
+            divPager = div,
+            divs = divItems,
+            recyclerView = view.viewPager.getChildAt(0) as RecyclerView
+        )
     }
 
     private fun setInfiniteScroll(view: DivPagerView) {
