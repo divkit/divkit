@@ -94,6 +94,13 @@ function getDictOptDict(ctx: EvalContext, dict: DictValue, ...path: StringValue[
     }
 }
 
+function containsKey(_ext: EvalContext, dict: DictValue, key: StringValue): BooleanValue {
+    return {
+        type: BOOLEAN,
+        value: key.value in dict.value ? 1 : 0
+    };
+}
+
 export function registerDict(): void {
     const STRING_VARARG = {
         type: STRING,
@@ -158,4 +165,5 @@ export function registerDict(): void {
     registerMethod('getColor', [DICT, STRING_VARARG], getDictColor);
     registerMethod('getArray', [DICT, STRING_VARARG], getDictArray);
     registerMethod('getDict', [DICT, STRING_VARARG], getDictDict);
+    registerMethod('containsKey', [DICT, STRING], containsKey);
 }
