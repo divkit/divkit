@@ -74,6 +74,7 @@ public final class TextInputBlock: BlockWithTraits {
   public weak var parentScrollView: ScrollView?
   public let validators: [TextInputValidator]?
   public let layoutDirection: UserInterfaceLayoutDirection
+  public let paddings: EdgeInsets?
   public let isEnabled: Bool
 
   public init(
@@ -98,6 +99,7 @@ public final class TextInputBlock: BlockWithTraits {
     layoutDirection: UserInterfaceLayoutDirection,
     textAlignmentHorizontal: TextAlignmentHorizontal = .start,
     textAlignmentVertical: TextAlignmentVertical = .center,
+    paddings: EdgeInsets? = nil,
     isEnabled: Bool = true
   ) {
     self.widthTrait = widthTrait
@@ -121,6 +123,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.layoutDirection = layoutDirection
     self.textAlignmentHorizontal = textAlignmentHorizontal
     self.textAlignmentVertical = textAlignmentVertical
+    self.paddings = paddings
     self.isEnabled = isEnabled
   }
 
@@ -140,15 +143,17 @@ public final class TextInputBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case let .intrinsic(_, minSize, maxSize):
+      let width = width - (paddings?.horizontalInsets.sum ?? 0)
+      let verticalPaddings = paddings?.verticalInsets.sum ?? 0
       guard let maxVisibleLines else {
         let textHeight = ceil(textForMeasuring.sizeForWidth(width).height)
-        return clamp(textHeight, min: minSize, max: maxSize)
+        return clamp(textHeight + verticalPaddings, min: minSize, max: maxSize)
       }
       let textHeight = ceil(
         textForMeasuring
           .heightForWidth(width, maxNumberOfLines: maxVisibleLines)
       )
-      return clamp(textHeight, min: minSize, max: maxSize)
+      return clamp(textHeight + verticalPaddings, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }
@@ -180,20 +185,23 @@ public final class TextInputBlock: BlockWithTraits {
 
 extension TextInputBlock {
   public static func ==(lhs: TextInputBlock, rhs: TextInputBlock) -> Bool {
-    lhs.widthTrait == rhs.widthTrait
-      && lhs.heightTrait == rhs.heightTrait
+    lhs.heightTrait == rhs.heightTrait
+      && lhs.highlightColor == rhs.highlightColor
       && lhs.hint == rhs.hint
+      && lhs.inputType == rhs.inputType
+      && lhs.isEnabled == rhs.isEnabled
+      && lhs.isFocused == rhs.isFocused
       && lhs.layoutDirection == rhs.layoutDirection
+      && lhs.maxVisibleLines == rhs.maxVisibleLines
+      && lhs.multiLineMode == rhs.multiLineMode
+      && lhs.paddings == rhs.paddings
+      && lhs.rawTextValue?.value == rhs.rawTextValue?.value
+      && lhs.selectAllOnFocus == rhs.selectAllOnFocus
       && lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
       && lhs.textAlignmentVertical == rhs.textAlignmentVertical
       && lhs.textTypo == rhs.textTypo
       && lhs.textValue.value == rhs.textValue.value
-      && lhs.rawTextValue?.value == rhs.rawTextValue?.value
-      && lhs.multiLineMode == rhs.multiLineMode
-      && lhs.maxVisibleLines == rhs.maxVisibleLines
-      && lhs.inputType == rhs.inputType
-      && lhs.selectAllOnFocus == rhs.selectAllOnFocus
-      && lhs.highlightColor == rhs.highlightColor
+      && lhs.widthTrait == rhs.widthTrait
   }
 }
 

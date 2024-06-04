@@ -13,6 +13,7 @@ extension DivInput: DivBlockModeling {
       to: { try makeBaseBlock(context: context, textBinding: textBinding) },
       context: context,
       actionsHolder: nil,
+      options: .noPaddings,
       customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
         accessibility?.resolveDescription(context.expressionResolver) ?? textBinding.value
       }
@@ -56,8 +57,8 @@ extension DivInput: DivBlockModeling {
     let isFocused = context.blockStateStorage.isFocused(path: inputPath)
 
     return TextInputBlock(
-      widthTrait: resolveContentWidthTrait(context),
-      heightTrait: resolveContentHeightTrait(context),
+      widthTrait: resolveWidthTrait(context),
+      heightTrait: resolveHeightTrait(context),
       hint: hintValue.with(typo: typo.with(color: resolveHintColor(expressionResolver))),
       textValue: textBinding,
       rawTextValue: mask?.makeRawVariable(context),
@@ -77,6 +78,7 @@ extension DivInput: DivBlockModeling {
       layoutDirection: context.layoutDirection,
       textAlignmentHorizontal: resolveTextAlignmentHorizontal(expressionResolver).textAlignment,
       textAlignmentVertical: resolveTextAlignmentVertical(expressionResolver).textAlignment,
+      paddings: paddings?.resolve(context),
       isEnabled: resolveIsEnabled(expressionResolver)
     )
   }
