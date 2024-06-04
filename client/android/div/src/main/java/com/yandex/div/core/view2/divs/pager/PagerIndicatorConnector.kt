@@ -22,7 +22,7 @@ internal class PagerIndicatorConnector @Inject constructor() {
     internal fun attach() {
         divPagers.forEach { (pagerId, pager) ->
             divIndicators[pagerId]?.forEach {
-                it.attachPager(pager.viewPager)
+                it.attachPager(pager)
             }
         }
         divPagers.clear()
