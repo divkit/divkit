@@ -64,6 +64,7 @@ class Separator internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -188,6 +189,10 @@ class Separator internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
+        /**
          * Element visibility.
          * Default value: `visible`.
          */
@@ -237,6 +242,7 @@ class Separator internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -326,6 +332,7 @@ class Separator internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -362,6 +369,7 @@ fun DivScope.separator(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -396,6 +404,7 @@ fun DivScope.separator(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -432,6 +441,7 @@ fun DivScope.separator(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -468,6 +478,7 @@ fun DivScope.separatorProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -501,6 +512,7 @@ fun DivScope.separatorProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -536,6 +548,7 @@ fun DivScope.separatorProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -572,6 +585,7 @@ fun TemplateScope.separatorRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -605,6 +619,7 @@ fun TemplateScope.separatorRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -640,6 +655,7 @@ fun TemplateScope.separatorRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -676,6 +692,7 @@ fun Separator.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -710,6 +727,7 @@ fun Separator.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -746,6 +764,7 @@ fun Separator.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -782,6 +801,7 @@ fun Separator.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -816,6 +836,7 @@ fun Separator.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -870,6 +891,7 @@ fun Separator.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -906,6 +928,7 @@ fun Separator.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -942,6 +965,7 @@ fun Component<Separator>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -977,6 +1001,7 @@ fun Component<Separator>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1013,6 +1038,7 @@ fun Component<Separator>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1049,6 +1075,7 @@ fun Component<Separator>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1084,6 +1111,7 @@ fun Component<Separator>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1139,6 +1167,7 @@ fun Component<Separator>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variables = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,

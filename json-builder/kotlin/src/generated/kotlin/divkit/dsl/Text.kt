@@ -87,6 +87,7 @@ class Text internal constructor(
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             truncate = additive.truncate ?: properties.truncate,
             underline = additive.underline ?: properties.underline,
+            variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -314,6 +315,10 @@ class Text internal constructor(
          */
         val underline: Property<LineStyle>?,
         /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
+        /**
          * Element visibility.
          * Default value: `visible`.
          */
@@ -386,6 +391,7 @@ class Text internal constructor(
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("truncate", truncate)
             result.tryPutProperty("underline", underline)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -720,6 +726,7 @@ class Text internal constructor(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -779,6 +786,7 @@ fun DivScope.text(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -836,6 +844,7 @@ fun DivScope.text(
         transitionTriggers = valueOrNull(transitionTriggers),
         truncate = valueOrNull(truncate),
         underline = valueOrNull(underline),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -894,6 +903,7 @@ fun DivScope.text(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -953,6 +963,7 @@ fun DivScope.textProps(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1009,6 +1020,7 @@ fun DivScope.textProps(
     transitionTriggers = valueOrNull(transitionTriggers),
     truncate = valueOrNull(truncate),
     underline = valueOrNull(underline),
+    variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -1066,6 +1078,7 @@ fun DivScope.textProps(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1125,6 +1138,7 @@ fun TemplateScope.textRefs(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1181,6 +1195,7 @@ fun TemplateScope.textRefs(
     transitionTriggers = transitionTriggers,
     truncate = truncate,
     underline = underline,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -1238,6 +1253,7 @@ fun TemplateScope.textRefs(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1297,6 +1313,7 @@ fun Text.override(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1354,6 +1371,7 @@ fun Text.override(
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         truncate = valueOrNull(truncate) ?: properties.truncate,
         underline = valueOrNull(underline) ?: properties.underline,
+        variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -1412,6 +1430,7 @@ fun Text.override(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1471,6 +1490,7 @@ fun Text.defer(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1528,6 +1548,7 @@ fun Text.defer(
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
         underline = underline ?: properties.underline,
+        variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -1642,6 +1663,7 @@ fun Text.evaluate(
         transitionTriggers = properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
         underline = underline ?: properties.underline,
+        variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -1700,6 +1722,7 @@ fun Text.evaluate(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1759,6 +1782,7 @@ fun Component<Text>.override(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1817,6 +1841,7 @@ fun Component<Text>.override(
         transitionTriggers = valueOrNull(transitionTriggers),
         truncate = valueOrNull(truncate),
         underline = valueOrNull(underline),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1875,6 +1900,7 @@ fun Component<Text>.override(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1934,6 +1960,7 @@ fun Component<Text>.defer(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1992,6 +2019,7 @@ fun Component<Text>.defer(
         transitionTriggers = transitionTriggers,
         truncate = truncate,
         underline = underline,
+        variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -2107,6 +2135,7 @@ fun Component<Text>.evaluate(
         transitionTriggers = null,
         truncate = truncate,
         underline = underline,
+        variables = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,

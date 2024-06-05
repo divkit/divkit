@@ -72,6 +72,7 @@ class Video internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variables = additive.variables ?: properties.variables,
             videoSources = additive.videoSources ?: properties.videoSources,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -232,6 +233,10 @@ class Video internal constructor(
          * Animation starting triggers. Default value: `[state_change, visibility_change]`.
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
+        /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
         val videoSources: Property<List<VideoSource>>?,
         /**
          * Element visibility.
@@ -291,6 +296,7 @@ class Video internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("video_sources", videoSources)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -338,6 +344,7 @@ class Video internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -382,6 +389,7 @@ fun DivScope.video(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -425,6 +433,7 @@ fun DivScope.video(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         videoSources = valueOrNull(videoSources),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -470,6 +479,7 @@ fun DivScope.video(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -514,6 +524,7 @@ fun DivScope.videoProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -556,6 +567,7 @@ fun DivScope.videoProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variables = valueOrNull(variables),
     videoSources = valueOrNull(videoSources),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -600,6 +612,7 @@ fun DivScope.videoProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -644,6 +657,7 @@ fun TemplateScope.videoRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -686,6 +700,7 @@ fun TemplateScope.videoRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     videoSources = videoSources,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -730,6 +745,7 @@ fun TemplateScope.videoRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -774,6 +790,7 @@ fun Video.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -817,6 +834,7 @@ fun Video.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variables = valueOrNull(variables) ?: properties.variables,
         videoSources = valueOrNull(videoSources) ?: properties.videoSources,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -862,6 +880,7 @@ fun Video.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -906,6 +925,7 @@ fun Video.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -949,6 +969,7 @@ fun Video.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variables = variables ?: properties.variables,
         videoSources = videoSources ?: properties.videoSources,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1024,6 +1045,7 @@ fun Video.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variables = properties.variables,
         videoSources = properties.videoSources,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1069,6 +1091,7 @@ fun Video.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1113,6 +1136,7 @@ fun Component<Video>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1157,6 +1181,7 @@ fun Component<Video>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         videoSources = valueOrNull(videoSources),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1202,6 +1227,7 @@ fun Component<Video>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1246,6 +1272,7 @@ fun Component<Video>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1290,6 +1317,7 @@ fun Component<Video>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variables = variables,
         videoSources = videoSources,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1366,6 +1394,7 @@ fun Component<Video>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variables = null,
         videoSources = null,
         visibility = visibility,
         visibilityAction = null,
