@@ -709,7 +709,7 @@
   },
   "div_font_feature_settings": {
     "en": "List of OpenType font features. The format is the same as the CSS font-feature-settings attribute: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop",
-    "ru": "Список функции шрифтов OpenType. Формат соответствует атрибуту CSS font-feature-settings: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop"
+    "ru": "Список свойств шрифтов OpenType. Формат соответствует атрибуту CSS font-feature-settings. Подробнее: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop"
   },
   "div_font_size": {
     "en": "Font size.",
@@ -1081,7 +1081,7 @@
   },
   "div_input_max_length": {
     "en": "The maximum number of characters that can be entered in the input field.",
-    "ru": "Максимальное количество символов, которое возможно ввести в поле ввода."
+    "ru": "Максимальное количество символов, которое можно ввести в поле ввода."
   },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
