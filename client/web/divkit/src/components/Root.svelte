@@ -78,7 +78,7 @@
     } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
-    import { arrayInsert, arrayRemove } from '../actions/array';
+    import { arrayInsert, arrayRemove, arraySet } from '../actions/array';
     import { dictSetValue } from '../actions/dict';
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
@@ -917,6 +917,9 @@
                     break;
                 case 'array_remove_value':
                     arrayRemove(variables, log, actionTyped);
+                    break;
+                case 'array_set_value':
+                    arraySet(variables, log, actionTyped);
                     break;
                 case 'copy_to_clipboard':
                     copyToClipboard(log, actionTyped);

@@ -1,4 +1,4 @@
-import type { ActionArrayInsertValue, ActionArrayRemoveValue, WrappedError } from '../../typings/common';
+import type { ActionArrayInsertValue, ActionArrayRemoveValue, ActionArraySetValue, WrappedError } from '../../typings/common';
 import type { ArrayVariable, Variable } from '../../typings/variables';
 import type { MaybeMissing } from '../expressions/json';
 import { wrapError } from '../utils/wrapError';
@@ -75,10 +75,44 @@ export function arrayRemove(
     });
 }
 
+export function arraySet(
+    variables: Map<string, Variable>,
+    logError: (error: WrappedError) => void,
+    actionTyped: MaybeMissing<ActionArraySetValue>
+): void {
+    const { variable_name: name, index, value } = actionTyped;
+
+    if (!value || typeof index !== 'number') {
+        logError(wrapError(new Error('Incorrect array_set_value action'), {
+            additional: {
+                name
+            }
+        }));
+        return;
+    }
+
+    handle(variables, logError, actionTyped, variableInstance => {
+        const list = variableInstance.getValue();
+        if (typeof index === 'number' && (index < 0 || index >= list.length)) {
+            logError(wrapError(new Error(`Index out of bound for mutation ${actionTyped.type}`), {
+                additional: {
+                    name,
+                    index,
+                    length: list.length
+                }
+            }));
+        } else {
+            const newList = list.slice();
+            newList[index] = value.value;
+            variableInstance.setValue(newList);
+        }
+    });
+}
+
 function handle(
     variables: Map<string, Variable>,
     logError: (error: WrappedError) => void,
-    actionTyped: MaybeMissing<ActionArrayRemoveValue | ActionArrayInsertValue>,
+    actionTyped: MaybeMissing<ActionArrayRemoveValue | ActionArrayInsertValue | ActionArraySetValue>,
     cb: (variableInstance: ArrayVariable) => void
 ): void {
     const { variable_name: name } = actionTyped;

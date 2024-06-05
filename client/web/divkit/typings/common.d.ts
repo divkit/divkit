@@ -193,8 +193,15 @@ export interface ActionDictSetValue {
     value?: TypedValue;
 }
 
+export interface ActionArraySetValue {
+    type: 'array_set_value';
+    variable_name: string;
+    index: number;
+    value: TypedValue;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
-    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue;
+    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue;
 
 export interface ActionBase {
     log_id: string;
