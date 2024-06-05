@@ -1,4 +1,10 @@
-## 30.3.0 (June 6, 2024)
+## 30.4.0 (June 10, 2024)
+
+* Added `dict_set_value` action.
+* Added `containsKey` method for dictionaries.
+
+
+## 30.3.0 (June 3, 2024)
 
 * Fixed an issue with the `text` property `top_offset` and ranges intersection.
 * Added new API's for the extensions: `processExpressions` and `execAction`.
