@@ -4,8 +4,10 @@ import 'package:equatable/equatable.dart';
 
 import 'div_action_array_insert_value.dart';
 import 'div_action_array_remove_value.dart';
+import 'div_action_array_set_value.dart';
 import 'div_action_clear_focus.dart';
 import 'div_action_copy_to_clipboard.dart';
+import 'div_action_dict_set_value.dart';
 import 'div_action_focus_element.dart';
 import 'div_action_set_variable.dart';
 
@@ -26,10 +28,16 @@ class DivActionTyped with EquatableMixin {
     if (value is DivActionArrayRemoveValue) {
       return value;
     }
+    if (value is DivActionArraySetValue) {
+      return value;
+    }
     if (value is DivActionClearFocus) {
       return value;
     }
     if (value is DivActionCopyToClipboard) {
+      return value;
+    }
+    if (value is DivActionDictSetValue) {
       return value;
     }
     if (value is DivActionFocusElement) {
@@ -45,8 +53,10 @@ class DivActionTyped with EquatableMixin {
   T map<T>({
     required T Function(DivActionArrayInsertValue) divActionArrayInsertValue,
     required T Function(DivActionArrayRemoveValue) divActionArrayRemoveValue,
+    required T Function(DivActionArraySetValue) divActionArraySetValue,
     required T Function(DivActionClearFocus) divActionClearFocus,
     required T Function(DivActionCopyToClipboard) divActionCopyToClipboard,
+    required T Function(DivActionDictSetValue) divActionDictSetValue,
     required T Function(DivActionFocusElement) divActionFocusElement,
     required T Function(DivActionSetVariable) divActionSetVariable,
   }) {
@@ -57,11 +67,17 @@ class DivActionTyped with EquatableMixin {
     if (value is DivActionArrayRemoveValue) {
       return divActionArrayRemoveValue(value);
     }
+    if (value is DivActionArraySetValue) {
+      return divActionArraySetValue(value);
+    }
     if (value is DivActionClearFocus) {
       return divActionClearFocus(value);
     }
     if (value is DivActionCopyToClipboard) {
       return divActionCopyToClipboard(value);
+    }
+    if (value is DivActionDictSetValue) {
+      return divActionDictSetValue(value);
     }
     if (value is DivActionFocusElement) {
       return divActionFocusElement(value);
@@ -76,8 +92,10 @@ class DivActionTyped with EquatableMixin {
   T maybeMap<T>({
     T Function(DivActionArrayInsertValue)? divActionArrayInsertValue,
     T Function(DivActionArrayRemoveValue)? divActionArrayRemoveValue,
+    T Function(DivActionArraySetValue)? divActionArraySetValue,
     T Function(DivActionClearFocus)? divActionClearFocus,
     T Function(DivActionCopyToClipboard)? divActionCopyToClipboard,
+    T Function(DivActionDictSetValue)? divActionDictSetValue,
     T Function(DivActionFocusElement)? divActionFocusElement,
     T Function(DivActionSetVariable)? divActionSetVariable,
     required T Function() orElse,
@@ -91,11 +109,17 @@ class DivActionTyped with EquatableMixin {
         divActionArrayRemoveValue != null) {
       return divActionArrayRemoveValue(value);
     }
+    if (value is DivActionArraySetValue && divActionArraySetValue != null) {
+      return divActionArraySetValue(value);
+    }
     if (value is DivActionClearFocus && divActionClearFocus != null) {
       return divActionClearFocus(value);
     }
     if (value is DivActionCopyToClipboard && divActionCopyToClipboard != null) {
       return divActionCopyToClipboard(value);
+    }
+    if (value is DivActionDictSetValue && divActionDictSetValue != null) {
+      return divActionDictSetValue(value);
     }
     if (value is DivActionFocusElement && divActionFocusElement != null) {
       return divActionFocusElement(value);
@@ -114,12 +138,20 @@ class DivActionTyped with EquatableMixin {
     DivActionArrayRemoveValue value,
   ) : _value = value;
 
+  const DivActionTyped.divActionArraySetValue(
+    DivActionArraySetValue value,
+  ) : _value = value;
+
   const DivActionTyped.divActionClearFocus(
     DivActionClearFocus value,
   ) : _value = value;
 
   const DivActionTyped.divActionCopyToClipboard(
     DivActionCopyToClipboard value,
+  ) : _value = value;
+
+  const DivActionTyped.divActionDictSetValue(
+    DivActionDictSetValue value,
   ) : _value = value;
 
   const DivActionTyped.divActionFocusElement(
@@ -139,14 +171,18 @@ class DivActionTyped with EquatableMixin {
         return DivActionTyped(DivActionArrayInsertValue.fromJson(json)!);
       case DivActionArrayRemoveValue.type:
         return DivActionTyped(DivActionArrayRemoveValue.fromJson(json)!);
-      case DivActionSetVariable.type:
-        return DivActionTyped(DivActionSetVariable.fromJson(json)!);
-      case DivActionFocusElement.type:
-        return DivActionTyped(DivActionFocusElement.fromJson(json)!);
+      case DivActionArraySetValue.type:
+        return DivActionTyped(DivActionArraySetValue.fromJson(json)!);
       case DivActionClearFocus.type:
         return DivActionTyped(DivActionClearFocus.fromJson(json)!);
       case DivActionCopyToClipboard.type:
         return DivActionTyped(DivActionCopyToClipboard.fromJson(json)!);
+      case DivActionDictSetValue.type:
+        return DivActionTyped(DivActionDictSetValue.fromJson(json)!);
+      case DivActionFocusElement.type:
+        return DivActionTyped(DivActionFocusElement.fromJson(json)!);
+      case DivActionSetVariable.type:
+        return DivActionTyped(DivActionSetVariable.fromJson(json)!);
     }
     return null;
   }

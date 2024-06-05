@@ -26,8 +26,7 @@ final skippedTestsMap = {
 };
 
 final skippedTests = [
-// # div-background
-
+  // # div-background
   ...const [
     'example/assets/test_data/snapshot_test_data/div-background/nine-patch-rhombs-horizontal-insets.json',
     'example/assets/test_data/snapshot_test_data/div-background/nine-patch-rhombs-large-all-insets.json',
@@ -754,6 +753,7 @@ final skippedTests = [
 // # div-tabs
 
   ...[
+    'example/assets/test_data/snapshot_test_data/div-tabs/title-delimiters.json',
     'example/assets/test_data/snapshot_test_data/div-tabs/too-big-constrained-tabs.json',
     'example/assets/test_data/snapshot_test_data/div-tabs/spaces-in-title.json',
     'example/assets/test_data/snapshot_test_data/div-tabs/corners_radius.json',

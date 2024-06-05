@@ -23,6 +23,7 @@ import 'div_size_unit.dart';
 import 'div_tooltip.dart';
 import 'div_transform.dart';
 import 'div_transition_trigger.dart';
+import 'div_variable.dart';
 import 'div_visibility.dart';
 import 'div_visibility_action.dart';
 import 'div_wrap_content_size.dart';
@@ -62,6 +63,7 @@ class DivSelect with EquatableMixin implements DivBase {
     this.transitionOut,
     this.transitionTriggers,
     required this.valueVariable,
+    this.variables,
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
@@ -157,6 +159,9 @@ class DivSelect with EquatableMixin implements DivBase {
   final List<DivTransitionTrigger>? transitionTriggers;
 
   final String valueVariable;
+
+  @override
+  final List<DivVariable>? variables;
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
@@ -205,6 +210,7 @@ class DivSelect with EquatableMixin implements DivBase {
         transitionOut,
         transitionTriggers,
         valueVariable,
+        variables,
         visibility,
         visibilityAction,
         visibilityActions,
@@ -375,6 +381,15 @@ class DivSelect with EquatableMixin implements DivBase {
       valueVariable: safeParseStr(
         json['value_variable']?.toString(),
       )!,
+      variables: safeParseObj(
+        (json['variables'] as List<dynamic>?)
+            ?.map(
+              (v) => safeParseObj(
+                DivVariable.fromJson(v),
+              )!,
+            )
+            .toList(),
+      ),
       visibility: safeParseStrEnumExpr(
         json['visibility'],
         parse: DivVisibility.fromJson,

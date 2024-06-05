@@ -1,3 +1,6 @@
+## 0.1.5-pre
+* Templater support: templates can be inherited, composited, links and transitive links to fields.
+
 ## 0.1.4
 * Correct README and add documentation.
 

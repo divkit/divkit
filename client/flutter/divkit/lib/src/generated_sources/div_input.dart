@@ -25,6 +25,7 @@ import 'div_size_unit.dart';
 import 'div_tooltip.dart';
 import 'div_transform.dart';
 import 'div_transition_trigger.dart';
+import 'div_variable.dart';
 import 'div_visibility.dart';
 import 'div_visibility_action.dart';
 import 'div_wrap_content_size.dart';
@@ -57,6 +58,7 @@ class DivInput with EquatableMixin implements DivBase {
     this.lineHeight,
     this.margins = const DivEdgeInsets(),
     this.mask,
+    this.maxLength,
     this.maxVisibleLines,
     this.nativeInterface,
     this.paddings = const DivEdgeInsets(),
@@ -76,6 +78,7 @@ class DivInput with EquatableMixin implements DivBase {
     this.transitionOut,
     this.transitionTriggers,
     this.validators,
+    this.variables,
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
@@ -147,6 +150,8 @@ class DivInput with EquatableMixin implements DivBase {
 
   final DivInputMask? mask;
   // constraint: number > 0
+  final Expression<int>? maxLength;
+  // constraint: number > 0
   final Expression<int>? maxVisibleLines;
 
   final DivInputNativeInterface? nativeInterface;
@@ -189,6 +194,9 @@ class DivInput with EquatableMixin implements DivBase {
   final List<DivTransitionTrigger>? transitionTriggers;
 
   final List<DivInputValidator>? validators;
+
+  @override
+  final List<DivVariable>? variables;
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
@@ -229,6 +237,7 @@ class DivInput with EquatableMixin implements DivBase {
         lineHeight,
         margins,
         mask,
+        maxLength,
         maxVisibleLines,
         nativeInterface,
         paddings,
@@ -246,6 +255,7 @@ class DivInput with EquatableMixin implements DivBase {
         transitionOut,
         transitionTriggers,
         validators,
+        variables,
         visibility,
         visibilityAction,
         visibilityActions,
@@ -367,6 +377,9 @@ class DivInput with EquatableMixin implements DivBase {
       mask: safeParseObj(
         DivInputMask.fromJson(json['mask']),
       ),
+      maxLength: safeParseIntExpr(
+        json['max_length'],
+      ),
       maxVisibleLines: safeParseIntExpr(
         json['max_visible_lines'],
       ),
@@ -447,6 +460,15 @@ class DivInput with EquatableMixin implements DivBase {
             ?.map(
               (v) => safeParseObj(
                 DivInputValidator.fromJson(v),
+              )!,
+            )
+            .toList(),
+      ),
+      variables: safeParseObj(
+        (json['variables'] as List<dynamic>?)
+            ?.map(
+              (v) => safeParseObj(
+                DivVariable.fromJson(v),
               )!,
             )
             .toList(),

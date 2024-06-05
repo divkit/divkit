@@ -31,6 +31,7 @@ import 'div_text_range_border.dart';
 import 'div_tooltip.dart';
 import 'div_transform.dart';
 import 'div_transition_trigger.dart';
+import 'div_variable.dart';
 import 'div_visibility.dart';
 import 'div_visibility_action.dart';
 import 'div_wrap_content_size.dart';
@@ -60,6 +61,7 @@ class DivText with EquatableMixin implements DivBase {
     this.focus,
     this.focusedTextColor,
     this.fontFamily,
+    this.fontFeatureSettings,
     this.fontSize = const ValueExpression(12),
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
@@ -94,6 +96,7 @@ class DivText with EquatableMixin implements DivBase {
     this.transitionTriggers,
     this.truncate = const ValueExpression(DivTextTruncate.end),
     this.underline = const ValueExpression(DivLineStyle.none),
+    this.variables,
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
@@ -147,6 +150,8 @@ class DivText with EquatableMixin implements DivBase {
   final Expression<Color>? focusedTextColor;
 
   final Expression<String>? fontFamily;
+
+  final Expression<String>? fontFeatureSettings;
   // constraint: number >= 0; default value: 12
   final Expression<int> fontSize;
   // default value: DivSizeUnit.sp
@@ -223,6 +228,9 @@ class DivText with EquatableMixin implements DivBase {
   final Expression<DivTextTruncate> truncate;
   // default value: DivLineStyle.none
   final Expression<DivLineStyle> underline;
+
+  @override
+  final List<DivVariable>? variables;
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
@@ -256,6 +264,7 @@ class DivText with EquatableMixin implements DivBase {
         focus,
         focusedTextColor,
         fontFamily,
+        fontFeatureSettings,
         fontSize,
         fontSizeUnit,
         fontWeight,
@@ -288,6 +297,7 @@ class DivText with EquatableMixin implements DivBase {
         transitionTriggers,
         truncate,
         underline,
+        variables,
         visibility,
         visibilityAction,
         visibilityActions,
@@ -393,6 +403,9 @@ class DivText with EquatableMixin implements DivBase {
       ),
       fontFamily: safeParseStrExpr(
         json['font_family']?.toString(),
+      ),
+      fontFeatureSettings: safeParseStrExpr(
+        json['font_feature_settings']?.toString(),
       ),
       fontSize: safeParseIntExpr(
         json['font_size'],
@@ -549,6 +562,15 @@ class DivText with EquatableMixin implements DivBase {
         parse: DivLineStyle.fromJson,
         fallback: DivLineStyle.none,
       )!,
+      variables: safeParseObj(
+        (json['variables'] as List<dynamic>?)
+            ?.map(
+              (v) => safeParseObj(
+                DivVariable.fromJson(v),
+              )!,
+            )
+            .toList(),
+      ),
       visibility: safeParseStrEnumExpr(
         json['visibility'],
         parse: DivVisibility.fromJson,
@@ -581,6 +603,7 @@ class DivTextRange with EquatableMixin {
     this.border,
     required this.end,
     this.fontFamily,
+    this.fontFeatureSettings,
     this.fontSize,
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
     this.fontWeight,
@@ -603,6 +626,8 @@ class DivTextRange with EquatableMixin {
   final Expression<int> end;
 
   final Expression<String>? fontFamily;
+
+  final Expression<String>? fontFeatureSettings;
   // constraint: number >= 0
   final Expression<int>? fontSize;
   // default value: DivSizeUnit.sp
@@ -633,6 +658,7 @@ class DivTextRange with EquatableMixin {
         border,
         end,
         fontFamily,
+        fontFeatureSettings,
         fontSize,
         fontSizeUnit,
         fontWeight,
@@ -671,6 +697,9 @@ class DivTextRange with EquatableMixin {
       )!,
       fontFamily: safeParseStrExpr(
         json['font_family']?.toString(),
+      ),
+      fontFeatureSettings: safeParseStrExpr(
+        json['font_feature_settings']?.toString(),
       ),
       fontSize: safeParseIntExpr(
         json['font_size'],

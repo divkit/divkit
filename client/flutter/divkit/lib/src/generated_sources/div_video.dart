@@ -22,6 +22,7 @@ import 'div_size.dart';
 import 'div_tooltip.dart';
 import 'div_transform.dart';
 import 'div_transition_trigger.dart';
+import 'div_variable.dart';
 import 'div_video_scale.dart';
 import 'div_video_source.dart';
 import 'div_visibility.dart';
@@ -66,6 +67,7 @@ class DivVideo with EquatableMixin implements DivBase {
     this.transitionIn,
     this.transitionOut,
     this.transitionTriggers,
+    this.variables,
     required this.videoSources,
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
@@ -168,6 +170,9 @@ class DivVideo with EquatableMixin implements DivBase {
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
+
+  @override
+  final List<DivVariable>? variables;
   // at least 1 elements
   final List<DivVideoSource> videoSources;
   // default value: DivVisibility.visible
@@ -221,6 +226,7 @@ class DivVideo with EquatableMixin implements DivBase {
         transitionIn,
         transitionOut,
         transitionTriggers,
+        variables,
         videoSources,
         visibility,
         visibilityAction,
@@ -419,6 +425,15 @@ class DivVideo with EquatableMixin implements DivBase {
               (v) => safeParseStrEnum(
                 v,
                 parse: DivTransitionTrigger.fromJson,
+              )!,
+            )
+            .toList(),
+      ),
+      variables: safeParseObj(
+        (json['variables'] as List<dynamic>?)
+            ?.map(
+              (v) => safeParseObj(
+                DivVariable.fromJson(v),
               )!,
             )
             .toList(),

@@ -17,6 +17,7 @@ import 'div_corners_radius.dart';
 import 'div_disappear_action.dart';
 import 'div_edge_insets.dart';
 import 'div_extension.dart';
+import 'div_fixed_size.dart';
 import 'div_focus.dart';
 import 'div_font_weight.dart';
 import 'div_match_parent_size.dart';
@@ -25,6 +26,7 @@ import 'div_size_unit.dart';
 import 'div_tooltip.dart';
 import 'div_transform.dart';
 import 'div_transition_trigger.dart';
+import 'div_variable.dart';
 import 'div_visibility.dart';
 import 'div_visibility_action.dart';
 import 'div_wrap_content_size.dart';
@@ -60,6 +62,7 @@ class DivTabs with EquatableMixin implements DivBase {
       top: ValueExpression(0),
     ),
     this.switchTabsByContentSwipeEnabled = const ValueExpression(true),
+    this.tabTitleDelimiter,
     this.tabTitleStyle = const DivTabsTabTitleStyle(),
     this.titlePaddings = const DivEdgeInsets(
       bottom: ValueExpression(8),
@@ -73,6 +76,7 @@ class DivTabs with EquatableMixin implements DivBase {
     this.transitionIn,
     this.transitionOut,
     this.transitionTriggers,
+    this.variables,
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
@@ -145,6 +149,8 @@ class DivTabs with EquatableMixin implements DivBase {
   // default value: true
   final Expression<bool> switchTabsByContentSwipeEnabled;
 
+  final DivTabsTabTitleDelimiter? tabTitleDelimiter;
+
   final DivTabsTabTitleStyle tabTitleStyle;
   // default value: const DivEdgeInsets(bottom: ValueExpression(8), left: ValueExpression(12), right: ValueExpression(12), top: ValueExpression(0),)
   final DivEdgeInsets titlePaddings;
@@ -166,6 +172,9 @@ class DivTabs with EquatableMixin implements DivBase {
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
+
+  @override
+  final List<DivVariable>? variables;
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
@@ -205,6 +214,7 @@ class DivTabs with EquatableMixin implements DivBase {
         separatorColor,
         separatorPaddings,
         switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter,
         tabTitleStyle,
         titlePaddings,
         tooltips,
@@ -213,6 +223,7 @@ class DivTabs with EquatableMixin implements DivBase {
         transitionIn,
         transitionOut,
         transitionTriggers,
+        variables,
         visibility,
         visibilityAction,
         visibilityActions,
@@ -346,6 +357,9 @@ class DivTabs with EquatableMixin implements DivBase {
         json['switch_tabs_by_content_swipe_enabled'],
         fallback: true,
       )!,
+      tabTitleDelimiter: safeParseObj(
+        DivTabsTabTitleDelimiter.fromJson(json['tab_title_delimiter']),
+      ),
       tabTitleStyle: safeParseObj(
         DivTabsTabTitleStyle.fromJson(json['tab_title_style']),
         fallback: const DivTabsTabTitleStyle(),
@@ -387,6 +401,15 @@ class DivTabs with EquatableMixin implements DivBase {
               (v) => safeParseStrEnum(
                 v,
                 parse: DivTransitionTrigger.fromJson,
+              )!,
+            )
+            .toList(),
+      ),
+      variables: safeParseObj(
+        (json['variables'] as List<dynamic>?)
+            ?.map(
+              (v) => safeParseObj(
+                DivVariable.fromJson(v),
               )!,
             )
             .toList(),
@@ -640,6 +663,53 @@ enum DivTabsTabTitleStyleAnimationType {
         return DivTabsTabTitleStyleAnimationType.none;
     }
     return null;
+  }
+}
+
+class DivTabsTabTitleDelimiter with EquatableMixin {
+  const DivTabsTabTitleDelimiter({
+    this.height = const DivFixedSize(
+      value: ValueExpression(12),
+    ),
+    required this.imageUrl,
+    this.width = const DivFixedSize(
+      value: ValueExpression(12),
+    ),
+  });
+
+  // default value: const DivFixedSize(value: ValueExpression(12),)
+  final DivFixedSize height;
+
+  final Expression<Uri> imageUrl;
+  // default value: const DivFixedSize(value: ValueExpression(12),)
+  final DivFixedSize width;
+
+  @override
+  List<Object?> get props => [
+        height,
+        imageUrl,
+        width,
+      ];
+
+  static DivTabsTabTitleDelimiter? fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return null;
+    }
+    return DivTabsTabTitleDelimiter(
+      height: safeParseObj(
+        DivFixedSize.fromJson(json['height']),
+        fallback: const DivFixedSize(
+          value: ValueExpression(12),
+        ),
+      )!,
+      imageUrl: safeParseUriExpr(json['image_url'])!,
+      width: safeParseObj(
+        DivFixedSize.fromJson(json['width']),
+        fallback: const DivFixedSize(
+          value: ValueExpression(12),
+        ),
+      )!,
+    );
   }
 }
 

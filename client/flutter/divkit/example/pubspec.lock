@@ -95,14 +95,14 @@ packages:
       path: "../../div_expressions_resolver"
       relative: true
     source: path
-    version: "0.4.0"
+    version: "0.4.1"
   divkit:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.1.3"
+    version: "0.1.5-pre"
   equatable:
     dependency: "direct main"
     description:

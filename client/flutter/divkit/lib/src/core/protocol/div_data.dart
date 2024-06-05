@@ -14,20 +14,20 @@ class DefaultDivKitData extends DivKitData with EquatableMixin {
   DefaultDivKitData.fromJson(
     Map<String, dynamic> json,
   ) : source = DivData.fromJson(
-          TemplatesResolver.fromTemplates(
+          TemplatesResolver(
             layout: json['card']!,
             templates: json['templates'],
-          ).merge().toGenericMap(),
+          ).merge(),
         );
 
   DefaultDivKitData.fromScheme({
     required Map<String, dynamic> card,
     Map<String, dynamic>? templates,
   }) : source = DivData.fromJson(
-          TemplatesResolver.fromTemplates(
+          TemplatesResolver(
             layout: card,
             templates: templates,
-          ).merge().toGenericMap(),
+          ).merge(),
         );
 
   @override
@@ -39,10 +39,10 @@ class DefaultLazyDivKitData extends DivKitData with EquatableMixin {
 
   @override
   DivData? get source => _source ??= DivData.fromJson(
-        TemplatesResolver.fromTemplates(
+        TemplatesResolver(
           layout: card,
           templates: templates,
-        ).merge().toGenericMap(),
+        ).merge(),
       );
 
   final Map<String, dynamic> card;

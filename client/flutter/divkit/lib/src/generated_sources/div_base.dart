@@ -18,6 +18,7 @@ import 'div_size.dart';
 import 'div_tooltip.dart';
 import 'div_transform.dart';
 import 'div_transition_trigger.dart';
+import 'div_variable.dart';
 import 'div_visibility.dart';
 import 'div_visibility_action.dart';
 import 'div_wrap_content_size.dart';
@@ -71,6 +72,8 @@ abstract class DivBase {
 
   // at least 1 elements
   List<DivTransitionTrigger>? get transitionTriggers;
+
+  List<DivVariable>? get variables;
 
   // default value: DivVisibility.visible
   Expression<DivVisibility> get visibility;

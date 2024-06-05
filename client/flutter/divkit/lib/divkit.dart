@@ -8,6 +8,7 @@ export 'src/core/divkit.dart';
 export 'src/core/expression/resolver.dart';
 export 'src/core/protocol/div_logger.dart';
 export 'src/core/protocol/protocol.dart';
+export 'src/core/template/templates_resolver.dart';
 export 'src/core/variable/variable.dart';
 export 'src/core/variable/variable_storage.dart';
 export 'src/core/widgets/widgets.dart';
