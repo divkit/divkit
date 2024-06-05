@@ -1,3 +1,24 @@
+## 30.4.0
+
+# Android Client:
+* Fixed `pager` page size evaluation. Now all the pages are the same size, the same as on other platforms.
+* Fixed scroll of `pager` when more then 2 pages is visible.
+* Added `array_set_value` action.
+* Added `dict_set_value` action.
+* Added `containsKey` method for dictionaries.
+
+# iOS Client:
+* Fixed `input` paddings.
+* Fixed comparing `scrollRange` in `GalleryViewState`.
+* Added `array_set_value` action.
+* Added `dict_set_value` action.
+* Added `containsKey` method for dictionaries.
+
+# Web Client:
+* Added `dict_set_value` action.
+* Added `containsKey` method for dictionaries.
+
+
 ## 30.3.0
 
 # Android Client:
