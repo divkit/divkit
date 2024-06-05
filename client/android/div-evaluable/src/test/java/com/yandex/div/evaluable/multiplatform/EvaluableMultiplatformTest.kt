@@ -109,7 +109,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     data class ExpressionTestCase(
         val fileName: String,
-        val name: String?,
+        val name: String,
         val expression: String,
         val variables: List<TestVariable>,
         val platform: List<String>,
@@ -132,7 +132,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                     is Exception -> "error"
                     else -> expectedValue.toString()
                 }
-                return name ?: "$formattedExpression -> $result"
+                return name.ifEmpty { "$formattedExpression -> $result" }
             }
 
         override fun toString(): String {

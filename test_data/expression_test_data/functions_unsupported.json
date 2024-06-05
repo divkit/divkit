@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "name": "undefinedFunc() => error",
       "expression": "@{undefinedFunc()}",
       "expected": {
         "type": "error",
@@ -15,7 +14,6 @@
       ]
     },
     {
-      "name": "unknownFunc(dict) => error",
       "expression": "@{unknownFunc(dict)}",
       "expected": {
         "type": "error",
@@ -34,7 +32,6 @@
       ]
     },
     {
-      "name": "round() => error",
       "expression": "@{round()}",
       "expected": {
         "type": "error",
@@ -47,7 +44,6 @@
       ]
     },
     {
-      "name": "round('string') => error",
       "expression": "@{round('string')}",
       "expected": {
         "type": "error",
@@ -60,7 +56,6 @@
       ]
     },
     {
-      "name": "round(dict_var) => error",
       "expression": "@{round(dict_var)}",
       "expected": {
         "type": "error",
@@ -79,7 +74,6 @@
       ]
     },
     {
-      "name": "round(1.5, 2.5) => error",
       "expression": "@{round(1.5, 2.5)}",
       "expected": {
         "type": "error",
@@ -92,7 +86,6 @@
       ]
     },
     {
-      "name": "getOptDictFromDict(dict_var) => error",
       "expression": "@{getOptDictFromDict(dict_var)}",
       "expected": {
         "type": "error",

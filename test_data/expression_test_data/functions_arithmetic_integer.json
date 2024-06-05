@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "name": "div(4, 2) => 2",
       "expression": "@{div(4, 2)}",
       "expected": {
         "type": "integer",
@@ -15,7 +14,6 @@
       ]
     },
     {
-      "name": "div(4000000000000000000, 2000000000) => 2000000000",
       "expression": "@{div(4000000000000000000, 2000000000)}",
       "expected": {
         "type": "integer",
@@ -29,7 +27,6 @@
       ]
     },
     {
-      "name": "div(0, 2) => 0",
       "expression": "@{div(0, 2)}",
       "expected": {
         "type": "integer",
@@ -43,7 +40,6 @@
       ]
     },
     {
-      "name": "div(2, 0) => error",
       "expression": "@{div(2, 0)}",
       "expected": {
         "type": "error",
@@ -57,7 +53,6 @@
       ]
     },
     {
-      "name": "div(1, 2) => 0",
       "expression": "@{div(1, 2)}",
       "expected": {
         "type": "integer",
@@ -71,7 +66,6 @@
       ]
     },
     {
-      "name": "div(1000000000, 2000000000) => 0",
       "expression": "@{div(1000000000, 2000000000)}",
       "expected": {
         "type": "integer",
@@ -85,7 +79,6 @@
       ]
     },
     {
-      "name": "div(-1, 2) => 0",
       "expression": "@{div(-1, 2)}",
       "expected": {
         "type": "integer",
@@ -99,7 +92,6 @@
       ]
     },
     {
-      "name": "div(-2, 2) => -1",
       "expression": "@{div(-2, 2)}",
       "expected": {
         "type": "integer",
@@ -113,7 +105,6 @@
       ]
     },
     {
-      "name": "div(2, -2) => -1",
       "expression": "@{div(2, -2)}",
       "expected": {
         "type": "integer",
@@ -127,7 +118,6 @@
       ]
     },
     {
-      "name": "mod(4, 2) => 0",
       "expression": "@{mod(4, 2)}",
       "expected": {
         "type": "integer",
@@ -141,7 +131,6 @@
       ]
     },
     {
-      "name": "mod(3, 2) => 1",
       "expression": "@{mod(3, 2)}",
       "expected": {
         "type": "integer",
@@ -155,7 +144,6 @@
       ]
     },
     {
-      "name": "mod(30000000000, 20000000000) => 10000000000",
       "expression": "@{mod(30000000000, 20000000000)}",
       "expected": {
         "type": "integer",
@@ -169,7 +157,6 @@
       ]
     },
     {
-      "name": "mod(2, 0) => error",
       "expression": "@{mod(2, 0)}",
       "expected": {
         "type": "error",
@@ -183,7 +170,6 @@
       ]
     },
     {
-      "name": "mod(0, 2) => 0",
       "expression": "@{mod(0, 2)}",
       "expected": {
         "type": "integer",
@@ -197,7 +183,6 @@
       ]
     },
     {
-      "name": "mod(-3, 2) => -1",
       "expression": "@{mod(-3, 2)}",
       "expected": {
         "type": "integer",
@@ -211,7 +196,6 @@
       ]
     },
     {
-      "name": "mod(-30000000000, 20000000000) => -10000000000",
       "expression": "@{mod(-30000000000, 20000000000)}",
       "expected": {
         "type": "integer",
@@ -225,7 +209,6 @@
       ]
     },
     {
-      "name": "mod(3, -2) => 1",
       "expression": "@{mod(3, -2)}",
       "expected": {
         "type": "integer",
@@ -239,7 +222,6 @@
       ]
     },
     {
-      "name": "mod(30000000000, -20000000000) => 10000000000",
       "expression": "@{mod(30000000000, -20000000000)}",
       "expected": {
         "type": "integer",
@@ -253,7 +235,6 @@
       ]
     },
     {
-      "name": "mod(-3, -2) => -1",
       "expression": "@{mod(-3, -2)}",
       "expected": {
         "type": "integer",
@@ -267,7 +248,6 @@
       ]
     },
     {
-      "name": "mod(-30000000000, -20000000000) => -10000000000",
       "expression": "@{mod(-30000000000, -20000000000)}",
       "expected": {
         "type": "integer",
@@ -281,7 +261,6 @@
       ]
     },
     {
-      "name": "mul(3, 2) => 6",
       "expression": "@{mul(3, 2)}",
       "expected": {
         "type": "integer",
@@ -295,7 +274,6 @@
       ]
     },
     {
-      "name": "toString(mul(3000000000, 2000000000)) => '6000000000000000000'",
       "expression": "@{toString(mul(3000000000, 2000000000))}",
       "expected": {
         "type": "string",
@@ -309,7 +287,6 @@
       ]
     },
     {
-      "name": "mul(3000000000, 5000000000) => error",
       "expression": "@{mul(3000000000, 5000000000)}",
       "expected": {
         "type": "error",
@@ -323,7 +300,6 @@
       ]
     },
     {
-      "name": "mul(1, -1) => -1",
       "expression": "@{mul(1, -1)}",
       "expected": {
         "type": "integer",
@@ -337,7 +313,6 @@
       ]
     },
     {
-      "name": "mul(-1, -1) => 1",
       "expression": "@{mul(-1, -1)}",
       "expected": {
         "type": "integer",
@@ -351,7 +326,6 @@
       ]
     },
     {
-      "name": "mul(1, 0) => 0",
       "expression": "@{mul(1, 0)}",
       "expected": {
         "type": "integer",
@@ -365,7 +339,6 @@
       ]
     },
     {
-      "name": "sub(3, 1) => 2",
       "expression": "@{sub(3, 1)}",
       "expected": {
         "type": "integer",
@@ -379,7 +352,6 @@
       ]
     },
     {
-      "name": "sub(5000000000, 2000000000) => 3000000000",
       "expression": "@{sub(5000000000, 2000000000)}",
       "expected": {
         "type": "integer",
@@ -393,7 +365,6 @@
       ]
     },
     {
-      "name": "sub(1, +1) => 0",
       "expression": "@{sub(1, +1)}",
       "expected": {
         "type": "integer",
@@ -407,7 +378,6 @@
       ]
     },
     {
-      "name": "sub(1, -1) => 2",
       "expression": "@{sub(1, -1)}",
       "expected": {
         "type": "integer",
@@ -421,7 +391,6 @@
       ]
     },
     {
-      "name": "sub(2000000000, -3000000000) => 5000000000",
       "expression": "@{sub(2000000000, -3000000000)}",
       "expected": {
         "type": "integer",
@@ -435,7 +404,6 @@
       ]
     },
     {
-      "name": "sub(7000000000000000000, -3000000000000000000) => error",
       "expression": "@{sub(7000000000000000000, -3000000000000000000)}",
       "expected": {
         "type": "error",
@@ -449,7 +417,6 @@
       ]
     },
     {
-      "name": "sub(0, -0) => 0",
       "expression": "@{sub(0, -0)}",
       "expected": {
         "type": "integer",
@@ -463,7 +430,6 @@
       ]
     },
     {
-      "name": "sum(1, 1) => 2",
       "expression": "@{sum(1, 1)}",
       "expected": {
         "type": "integer",
@@ -477,7 +443,6 @@
       ]
     },
     {
-      "name": "sum(3000000000, 2000000000) => 5000000000",
       "expression": "@{sum(3000000000, 2000000000)}",
       "expected": {
         "type": "integer",
@@ -491,7 +456,6 @@
       ]
     },
     {
-      "name": "sum(1, +1) => 2",
       "expression": "@{sum(1, +1)}",
       "expected": {
         "type": "integer",
@@ -505,7 +469,6 @@
       ]
     },
     {
-      "name": "sum(1, -1) => 0",
       "expression": "@{sum(1, -1)}",
       "expected": {
         "type": "integer",
@@ -519,7 +482,6 @@
       ]
     },
     {
-      "name": "sum(7000000000, -3000000000) => 4000000000",
       "expression": "@{sum(7000000000, -3000000000)}",
       "expected": {
         "type": "integer",
@@ -533,7 +495,6 @@
       ]
     },
     {
-      "name": "sum(7000000000000000000, 7000000000000000000) => error",
       "expression": "@{sum(7000000000000000000, 7000000000000000000)}",
       "expected": {
         "type": "error",
@@ -547,7 +508,6 @@
       ]
     },
     {
-      "name": "toString(maxInteger()) => '9223372036854775807'",
       "expression": "@{toString(maxInteger())}",
       "expected": {
         "type": "string",
@@ -561,7 +521,6 @@
       ]
     },
     {
-      "name": "toString(minInteger()) => '-9223372036854775808'",
       "expression": "@{toString(minInteger())}",
       "expected": {
         "type": "string",
@@ -575,7 +534,6 @@
       ]
     },
     {
-      "name": "minInteger() / minInteger() => 1",
       "expression": "@{minInteger() / minInteger()}",
       "expected": {
         "type": "integer",
@@ -589,7 +547,6 @@
       ]
     },
     {
-      "name": "abs(0) => 0",
       "expression": "@{abs(0)}",
       "expected": {
         "type": "integer",
@@ -603,7 +560,6 @@
       ]
     },
     {
-      "name": "abs(2147483647) => 2147483647",
       "expression": "@{abs(2147483647)}",
       "expected": {
         "type": "integer",
@@ -617,7 +573,6 @@
       ]
     },
     {
-      "name": "toString(abs(9223372036854775807)) => '9223372036854775807'",
       "expression": "@{toString(abs(9223372036854775807))}",
       "expected": {
         "type": "string",
@@ -631,7 +586,6 @@
       ]
     },
     {
-      "name": "abs(-2147483647) => 2147483647",
       "expression": "@{abs(-2147483647)}",
       "expected": {
         "type": "integer",
@@ -645,7 +599,6 @@
       ]
     },
     {
-      "name": "toString(abs(-9223372036854775807)) => '9223372036854775807'",
       "expression": "@{toString(abs(-9223372036854775807))}",
       "expected": {
         "type": "string",
@@ -659,7 +612,6 @@
       ]
     },
     {
-      "name": "abs(-9223372036854775808) => error",
       "expression": "@{abs(-9223372036854775808)}",
       "expected": {
         "type": "error",
@@ -673,7 +625,6 @@
       ]
     },
     {
-      "name": "signum(0) => 0",
       "expression": "@{signum(0)}",
       "expected": {
         "type": "integer",
@@ -687,7 +638,6 @@
       ]
     },
     {
-      "name": "signum(5) => 1",
       "expression": "@{signum(5)}",
       "expected": {
         "type": "integer",
@@ -701,7 +651,6 @@
       ]
     },
     {
-      "name": "signum(-5) => -1",
       "expression": "@{signum(-5)}",
       "expected": {
         "type": "integer",
@@ -715,7 +664,6 @@
       ]
     },
     {
-      "name": "copySign(7, -1) => -7",
       "expression": "@{copySign(7, -1)}",
       "expected": {
         "type": "integer",
@@ -729,7 +677,6 @@
       ]
     },
     {
-      "name": "copySign(7, 1) => 7",
       "expression": "@{copySign(7, 1)}",
       "expected": {
         "type": "integer",
@@ -743,7 +690,6 @@
       ]
     },
     {
-      "name": "copySign(7, 0) => 7",
       "expression": "@{copySign(7, 0)}",
       "expected": {
         "type": "integer",
@@ -757,7 +703,6 @@
       ]
     },
     {
-      "name": "copySign(-7, 0) => -7",
       "expression": "@{copySign(-7, 0)}",
       "expected": {
         "type": "integer",
@@ -771,7 +716,6 @@
       ]
     },
     {
-      "name": "copySign(0, 0) => 0",
       "expression": "@{copySign(0, 0)}",
       "expected": {
         "type": "integer",
@@ -785,7 +729,6 @@
       ]
     },
     {
-      "name": "copySign(0, 1) => 0",
       "expression": "@{copySign(0, 1)}",
       "expected": {
         "type": "integer",
@@ -799,7 +742,6 @@
       ]
     },
     {
-      "name": "copySign(0, -1) => 0",
       "expression": "@{copySign(0, -1)}",
       "expected": {
         "type": "integer",
@@ -813,7 +755,6 @@
       ]
     },
     {
-      "name": "copySign(-9223372036854775808, 1) => error",
       "expression": "@{copySign(-9223372036854775808, 1)}",
       "expected": {
         "type": "error",
@@ -827,7 +768,6 @@
       ]
     },
     {
-      "name": "copySign(-2147483648, -1) => -2147483648",
       "expression": "@{copySign(-2147483648, -1)}",
       "expected": {
         "type": "integer",
@@ -841,7 +781,6 @@
       ]
     },
     {
-      "name": "toString(copySign(-9223372036854775808, -1)) => '-9223372036854775808'",
       "expression": "@{toString(copySign(-9223372036854775808, -1))}",
       "expected": {
         "type": "string",
