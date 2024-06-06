@@ -568,20 +568,20 @@ class Div2View private constructor(
         rebindTask?.clear()?.let {
             rebindTask = null
         }
+        cancelImageLoads()
+        stopLoadAndSubscriptions() // Depends on children, should be called before removing them
         if (removeChildren) {
-            releaseAndRemoveChildren(this)
+            releaseAndRemoveChildren(this) // Removes children
         }
         viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
         divData = null
         dataTag = DivDataTag.INVALID
-        cancelImageLoads()
-        stopLoadAndSubscriptions()
     }
 
     private fun stopLoadAndSubscriptions() {
         viewToDivBindings.clear()
         propagatedAccessibilityModes.clear()
-        cancelTooltips()
+        cancelTooltips() // Depends on children, should be called before removing them
         clearSubscriptions()
         divDataChangedObservers.clear()
     }
