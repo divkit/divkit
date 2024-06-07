@@ -213,27 +213,26 @@ private enum ExpectedValue: Decodable {
   }
 
   var description: String {
-    let value: Any = switch self {
+    switch self {
     case let .string(value):
-      value
+      formatArgForError(value)
     case let .double(value):
-      value
+      formatArgForError(value)
     case let .integer(value):
-      value
+      formatArgForError(value)
     case let .bool(value):
-      value
+      formatArgForError(value)
     case let .color(value):
-      value
+      formatArgForError(value)
     case let .datetime(value):
-      value
+      formatArgForError(value)
     case let .array(value):
-      value
+      formatArgForError(value)
     case let .dict(value):
-      value
+      formatArgForError(value)
     case .error:
       "error"
     }
-    return formatArgForError(value)
   }
 
   private enum CodingKeys: String, CodingKey {

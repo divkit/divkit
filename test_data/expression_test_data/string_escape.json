@@ -129,6 +129,25 @@
                 "ios",
                 "web"
             ]
+        },
+        {
+            "expression": "\\@{var} = @{var}",
+            "expected": {
+                "type": "string",
+                "value": "@{var} = value"
+            },
+            "variables": [
+                {
+                    "name": "var",
+                    "type": "string",
+                    "value": "value"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
         }
     ]
 }

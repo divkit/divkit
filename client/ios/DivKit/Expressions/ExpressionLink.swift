@@ -22,13 +22,19 @@ public struct ExpressionLink<T> {
     errorTracker: ExpressionErrorTracker? = nil,
     resolveNested: Bool = true
   ) {
-    guard !rawValue.isEmpty else {
-      errorTracker?(ExpressionError("Empty expression"))
+    guard rawValue.contains(expressionPrefix) else {
       return nil
     }
-    guard rawValue.contains(expressionPrefix) else { return nil }
-    var index = rawValue.startIndex
+
     var items = [Item]()
+
+    func appendString(_ value: String) {
+      if let unescapedValue = ExpressionValueConverter.unescape(value, errorTracker: errorTracker) {
+        return items.append(.string(unescapedValue))
+      }
+    }
+
+    var index = rawValue.startIndex
     var variablesNames = [String]()
     var currentString = ""
     let endIndex = rawValue.endIndex
@@ -40,12 +46,10 @@ public struct ExpressionLink<T> {
           return nil
         }
         if !currentString.isEmpty {
-          items.append(.string(currentString))
+          appendString(currentString)
           currentString = ""
         }
-        if start > end {
-          items.append(.string(""))
-        } else {
+        if start <= end {
           let value = String(currentValue[start...end])
           if resolveNested, let link = ExpressionLink<String>(
             rawValue: value,
@@ -72,7 +76,7 @@ public struct ExpressionLink<T> {
           if currentString == rawValue {
             return nil
           }
-          items.append(.string(currentString))
+          appendString(currentString)
         }
       }
     }

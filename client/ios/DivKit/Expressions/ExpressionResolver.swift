@@ -116,39 +116,6 @@ public final class ExpressionResolver {
     resolveNumeric(expression)
   }
 
-  private func resolveEscaping<T>(_ value: T?) -> T? {
-    guard var value = value as? String, value.contains("\\") else {
-      return value
-    }
-
-    var index = value.startIndex
-    let escapingValues = ["@{", "'", "\\"]
-
-    while index < value.endIndex {
-      if value[index] == "\\" {
-        let nextIndex = value.index(index, offsetBy: 1)
-        let next = value[nextIndex...]
-
-        if let escaped = escapingValues.first(where: { next.starts(with: $0) }) {
-          let distance = value.distance(from: value.startIndex, to: index)
-          value.remove(at: index)
-          index = value.index(value.startIndex, offsetBy: distance + escaped.count)
-        } else {
-          if next.isEmpty {
-            errorTracker(ExpressionError("Error tokenizing '\(value)'.", expression: value))
-          } else {
-            errorTracker(ExpressionError("Incorrect string escape", expression: value))
-          }
-          return nil
-        }
-      } else {
-        index = value.index(after: index)
-      }
-    }
-
-    return value as? T
-  }
-
   private func resolveAnyLink(_ link: ExpressionLink<Any>) -> Any? {
     var result: Any?
 
@@ -301,11 +268,14 @@ public final class ExpressionResolver {
   ) -> T? {
     switch expression {
     case let .value(value):
-      resolveEscaping(value)
+      if let stringValue = value as? String {
+        return ExpressionValueConverter.unescape(stringValue, errorTracker: errorTracker) as? T
+      }
+      return value
     case let .link(link):
-      resolveStringBasedLink(link, initializer: initializer)
+      return resolveStringBasedLink(link, initializer: initializer)
     case .none:
-      nil
+      return nil
     }
   }
 }

@@ -325,12 +325,22 @@
             "expression": "",
             "expected": {
                 "type": "error",
+                "value": "Expression expected"
+            },
+            "deprecated": "Should not return error",
+            "platforms": [
+                "android"
+            ]
+        },
+        {
+            "expression": "",
+            "expected": {
+                "type": "string",
                 "value": ""
             },
-            "variables": [],
             "platforms": [
-                "android",
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {

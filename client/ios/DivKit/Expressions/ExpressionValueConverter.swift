@@ -59,6 +59,34 @@ enum ExpressionValueConverter {
       return "\(value)"
     }
   }
+  
+  static func unescape(_ value: String, errorTracker: ExpressionErrorTracker?) -> String? {
+    if !value.contains("\\") {
+      return value
+    }
+
+    var value = value
+    var index = value.startIndex
+    let escapingValues = ["@{", "'", "\\"]
+    while index < value.endIndex {
+      if value[index] != "\\" {
+        index = value.index(after: index)
+        continue
+      }
+      let nextIndex = value.index(index, offsetBy: 1)
+      let next = value[nextIndex...]
+      if let escaped = escapingValues.first(where: { next.starts(with: $0) }) {
+        let distance = value.distance(from: value.startIndex, to: index)
+        value.remove(at: index)
+        index = value.index(value.startIndex, offsetBy: distance + escaped.count)
+      } else {
+        let message = next.isEmpty ? "Error tokenizing '\(value)'." : "Incorrect string escape"
+        errorTracker?(ExpressionError(message, expression: value))
+        return nil
+      }
+    }
+    return value
+  }
 }
 
 extension AnyHashable {
