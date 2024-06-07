@@ -27,6 +27,8 @@ internal class DivHolderViewMixin<T: DivBase> : DivHolderView<T>,
 
     override fun release() {
         super.release()
+        div = null
+        bindingContext = null
         releaseBorderDrawer()
     }
 }
