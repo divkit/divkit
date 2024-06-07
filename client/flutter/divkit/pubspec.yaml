@@ -31,5 +31,5 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
   path: ^1.8.2
-  golden_toolkit: ^0.12.0
+  golden_toolkit: ^0.15.0
   fake_async: ^1.3.1
