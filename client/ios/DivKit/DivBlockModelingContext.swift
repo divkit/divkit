@@ -39,7 +39,7 @@ public struct DivBlockModelingContext {
   private let variableTracker: ExpressionResolver.VariableTracker
   public private(set) var parentPath: UIElementPath
   private(set) var sizeModifier: DivSizeModifier?
-  private(set) var prototypesStorage = [String: AnyHashable]()
+  private(set) var localValues = [String: AnyHashable]()
 
   public init(
     cardId: DivCardID,
@@ -230,16 +230,14 @@ public struct DivBlockModelingContext {
     )
     return Binding(name: variableName, value: valueProp)
   }
-}
 
-extension DivBlockModelingContext {
   func modifying(
     cardLogId: String? = nil,
     parentPath: UIElementPath? = nil,
     parentDivStatePath: DivStatePath? = nil,
     errorsStorage: DivErrorsStorage? = nil,
     sizeModifier: DivSizeModifier? = nil,
-    prototypesData: (String, [String: AnyHashable])? = nil
+    prototypeParams: PrototypeParams? = nil
   ) -> Self {
     var context = self
     if let cardLogId {
@@ -252,22 +250,23 @@ extension DivBlockModelingContext {
       context.sizeModifier = sizeModifier
     }
 
-    if parentPath == nil, errorsStorage == nil, prototypesData == nil {
+    if parentPath == nil, errorsStorage == nil, prototypeParams == nil {
       return context
     }
 
     let functionsProvider: FunctionsProvider
-    if let prototypesData {
-      var prototypesStorage = self.prototypesStorage
-      prototypesStorage[prototypesData.0] = prototypesData.1
+    if let prototypeParams {
+      var localValues = self.localValues
+      localValues[prototypeParams.variableName] = prototypeParams.value
+      localValues["index"] = prototypeParams.index
       functionsProvider = FunctionsProvider(
         cardId: cardId,
         variablesStorage: variablesStorage,
         variableTracker: variableTracker,
         persistentValuesStorage: persistentValuesStorage,
-        prototypesStorage: prototypesStorage
+        localValues: localValues
       )
-      context.prototypesStorage = prototypesStorage
+      context.localValues = localValues
       context.functionsProvider = functionsProvider
     } else {
       functionsProvider = self.functionsProvider
@@ -285,6 +284,12 @@ extension DivBlockModelingContext {
 
     return context
   }
+}
+
+struct PrototypeParams {
+  let index: Int
+  let variableName: String
+  let value: DivDictionary
 }
 
 private func makeExpressionResolver(

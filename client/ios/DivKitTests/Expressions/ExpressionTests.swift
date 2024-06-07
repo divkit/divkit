@@ -126,8 +126,8 @@ private struct ExpressionTestCase: Decodable {
     makeExpressionResolver().resolveArray(link(expression)) as? [AnyHashable]
   }
 
-  func resolveDict() -> [String: AnyHashable]? {
-    makeExpressionResolver().resolveDict(link(expression)) as? [String: AnyHashable]
+  func resolveDict() -> DivDictionary? {
+    makeExpressionResolver().resolveDict(link(expression)) as? DivDictionary
   }
 
   private func makeExpressionResolver(
@@ -158,7 +158,7 @@ private enum ExpectedValue: Decodable {
   case color(Color)
   case datetime(Date)
   case array([AnyHashable])
-  case dict([String: AnyHashable])
+  case dict(DivDictionary)
   case error(String)
 
   init(from decoder: Decoder) throws {
@@ -194,7 +194,7 @@ private enum ExpectedValue: Decodable {
       self = .array(array)
     case "dict":
       let value = try JSONObject(from: decoder).makeDictionary()
-      guard let dict = value?["value"] as? [String: AnyHashable] else {
+      guard let dict = value?["value"] as? DivDictionary else {
         fallthrough
       }
       self = .dict(dict)

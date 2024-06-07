@@ -16,7 +16,7 @@ extension DivAction {
       makeDivActionPayload(
         cardId: context.cardId,
         source: .tap,
-        prototypeVariables: context.prototypesStorage
+        localValues: context.localValues
       )
     }
 

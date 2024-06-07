@@ -107,7 +107,7 @@ public final class DivActionHandler {
       action,
       cardId: DivCardID(rawValue: params.cardId),
       source: params.source,
-      prototypeVariables: params.prototypeVariables,
+      localValues: params.localValues,
       sender: sender
     )
   }
@@ -116,12 +116,12 @@ public final class DivActionHandler {
     _ action: DivActionBase,
     cardId: DivCardID,
     source: UserInterfaceAction.DivActionSource,
-    prototypeVariables: [String: AnyHashable] = [:],
+    localValues: [String: AnyHashable] = [:],
     sender: AnyObject?
   ) {
     let expressionResolver = makeExpressionResolver(
       cardId: cardId,
-      prototypeVariables: prototypeVariables
+      localValues: localValues
     )
     let context = DivActionHandlingContext(
       cardId: cardId,
@@ -238,7 +238,7 @@ public final class DivActionHandler {
 
   private func makeExpressionResolver(
     cardId: DivCardID,
-    prototypeVariables: [String: AnyHashable]
+    localValues: [String: AnyHashable]
   ) -> ExpressionResolver {
     ExpressionResolver(
       functionsProvider: FunctionsProvider(
@@ -246,7 +246,7 @@ public final class DivActionHandler {
         variablesStorage: variablesStorage,
         variableTracker: { _ in },
         persistentValuesStorage: persistentValuesStorage,
-        prototypesStorage: prototypeVariables
+        localValues: localValues
       ),
       errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )

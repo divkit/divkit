@@ -308,7 +308,7 @@ extension Collection<DivVariable> {
       case let .dictVariable(dictVariable):
         let name = DivVariableName(rawValue: dictVariable.name)
         if variables.keys.contains(name) { return }
-        if let dictionary = NSDictionary(dictionary: dictVariable.value) as? [String: AnyHashable] {
+        if let dictionary = NSDictionary(dictionary: dictVariable.value) as? DivDictionary {
           variables[name] = .dict(dictionary)
         } else {
           DivKitLogger.error("Incorrect value for dict variable \(name): \(dictVariable.value)")

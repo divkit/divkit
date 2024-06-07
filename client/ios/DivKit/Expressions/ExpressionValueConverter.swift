@@ -49,7 +49,7 @@ enum ExpressionValueConverter {
       return dateFormatter.string(from: date)
     case let array as [AnyHashable]:
       return "[\(array.map { formatValue($0) }.joined(separator: ","))]"
-    case let dict as [String: AnyHashable]:
+    case let dict as DivDictionary:
       let properties = dict
         .keys.sorted()
         .map { "\"\($0)\":\(formatValue(dict[$0] ?? "null"))" }
@@ -99,7 +99,7 @@ func formatTypeForError(_ type: Any.Type) -> String {
     "DateTime"
   case is [AnyHashable].Type:
     "Array"
-  case is [String: AnyHashable].Type, is [AnyHashable: AnyHashable].Type:
+  case is DivDictionary.Type, is [AnyHashable: AnyHashable].Type:
     "Dict"
   default:
     String(describing: type)

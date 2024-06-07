@@ -1,0 +1,42 @@
+{
+  "description": "Container with item_builder using index value.",
+  "platforms": [
+    "ios"
+  ],
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "item_builder": {
+            "type": "prototype",
+            "data": [
+              {},
+              {},
+              {}
+            ],
+            "data_element_name": "item",
+            "prototypes": [
+              {
+                "div": {
+                  "type": "text",
+                  "text": "index = @{index}",
+                  "font_size": 16,
+                  "margins": {
+                    "left": 10,
+                    "right": 10,
+                    "top": 5,
+                    "bottom": 5
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

@@ -13,12 +13,16 @@ extension DivCollectionItemBuilder {
         parentPath: context.parentPath + index,
         sizeModifier: sizeModifier
       )
-      let item = (item as? [String: AnyHashable]) ?? [:]
+      let item = (item as? DivDictionary) ?? [:]
       do {
         return try modifyError({ DivBlockModelingError($0.message, path: itemContext.parentPath)
         }) {
           let prototypeContext = itemContext
-            .modifying(prototypesData: (dataElementName, item))
+            .modifying(prototypeParams: PrototypeParams(
+              index: index,
+              variableName: dataElementName,
+              value: item
+            ))
           let prototype = prototypes
             .first { $0.resolveSelector(prototypeContext.expressionResolver) }
           guard let prototype else {

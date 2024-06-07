@@ -39,7 +39,7 @@ struct ConstantFunction<R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -72,7 +72,7 @@ struct FunctionNullary<R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -93,9 +93,9 @@ struct FunctionUnary<T1, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          .init(type: .from(type: T1.self)),
+          .init(type: .from(T1.self)),
         ],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -117,10 +117,10 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          .init(type: .from(type: T1.self)),
-          .init(type: .from(type: T2.self)),
+          .init(type: .from(T1.self)),
+          .init(type: .from(T2.self)),
         ],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -145,11 +145,11 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          .init(type: .from(type: T1.self)),
-          .init(type: .from(type: T2.self)),
-          .init(type: .from(type: T3.self)),
+          .init(type: .from(T1.self)),
+          .init(type: .from(T2.self)),
+          .init(type: .from(T3.self)),
         ],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -175,12 +175,12 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          .init(type: .from(type: T1.self)),
-          .init(type: .from(type: T2.self)),
-          .init(type: .from(type: T3.self)),
-          .init(type: .from(type: T4.self)),
+          .init(type: .from(T1.self)),
+          .init(type: .from(T2.self)),
+          .init(type: .from(T3.self)),
+          .init(type: .from(T4.self)),
         ],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -207,9 +207,9 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          .init(type: .from(type: T1.self), vararg: true),
+          .init(type: .from(T1.self), vararg: true),
         ],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -231,10 +231,10 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          .init(type: .from(type: T1.self)),
-          .init(type: .from(type: T2.self), vararg: true),
+          .init(type: .from(T1.self)),
+          .init(type: .from(T2.self), vararg: true),
         ],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -259,11 +259,11 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          .init(type: .from(type: T1.self)),
-          .init(type: .from(type: T2.self)),
-          .init(type: .from(type: T3.self), vararg: true),
+          .init(type: .from(T1.self)),
+          .init(type: .from(T2.self)),
+          .init(type: .from(T3.self), vararg: true),
         ],
-        resultType: .from(type: R.self)
+        resultType: .from(R.self)
       )
     }
   }
@@ -293,7 +293,7 @@ struct OverloadedFunction: Function {
 
   func invoke(_ args: [Any]) throws -> Any {
     let arguments = try args.map {
-      try ArgumentSignature(type: .from(type: type(of: $0)))
+      try ArgumentSignature(type: .from(unwrapHashableType($0)))
     }
     var function = try getFunction(args: arguments) {
       $0.type == $1.type
@@ -356,7 +356,7 @@ enum ArgumentType: String, Decodable, CaseIterable {
     case .url:
       URL.self
     case .dict:
-      [String: AnyHashable].self
+      DivDictionary.self
     case .array:
       [AnyHashable].self
     }
@@ -374,7 +374,7 @@ enum ArgumentType: String, Decodable, CaseIterable {
     }
   }
 
-  static func from(type: Any.Type) throws -> ArgumentType {
+  static func from(_ type: Any.Type) throws -> ArgumentType {
     guard let type = allCases.first(where: { $0.swiftType == type }) else {
       throw ExpressionError("Type is not supported: \(type).")
     }
@@ -408,6 +408,14 @@ struct FunctionSignature: Decodable, Equatable {
     args.count == arguments.count ||
       (arguments.last?.vararg == true && args.count > arguments.count)
   }
+}
+
+private func unwrapHashableType(_ value: Any) -> Any.Type {
+  let valueType = type(of: value)
+  if valueType is AnyHashable.Type, let hashableValue = value as? AnyHashable {
+    return type(of: hashableValue.base)
+  }
+  return valueType
 }
 
 private func checkArgs(_ args: [Any], count: Int) throws {

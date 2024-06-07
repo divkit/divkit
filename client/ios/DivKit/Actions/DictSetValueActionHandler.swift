@@ -5,7 +5,7 @@ final class DictSetValueActionHandler {
     let expressionResolver = context.expressionResolver
     guard let variableName = action.resolveVariableName(expressionResolver),
           let key = action.resolveKey(expressionResolver),
-          var dict: [String: AnyHashable] = context.variablesStorage.getVariableValue(
+          var dict: DivDictionary = context.variablesStorage.getVariableValue(
             cardId: context.cardId,
             name: DivVariableName(rawValue: variableName)
           ) else {

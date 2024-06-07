@@ -20,10 +20,10 @@ final class FunctionsProvider {
     variablesStorage: DivVariablesStorage,
     variableTracker: @escaping ExpressionResolver.VariableTracker,
     persistentValuesStorage: DivPersistentValuesStorage,
-    prototypesStorage: [String: Any]? = nil
+    localValues: [String: AnyHashable]? = nil
   ) {
     self.variableValueProvider = {
-      if let value: Any = prototypesStorage?[$0] {
+      if let value = localValues?[$0] {
         return value
       }
       let variableName = DivVariableName(rawValue: $0)

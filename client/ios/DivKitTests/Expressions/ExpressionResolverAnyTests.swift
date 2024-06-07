@@ -101,7 +101,7 @@ final class ExpressionResolverAnyTests: XCTestCase {
 
     XCTAssertEqual(
       expressionResolver.resolve("@{var}") as? AnyHashable,
-      ["boolean": true, "integer": 123, "string": "value"] as [String: AnyHashable]
+      ["boolean": true, "integer": 123, "string": "value"] as DivDictionary
     )
   }
 

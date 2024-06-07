@@ -52,14 +52,33 @@ final class DivBlockModelingContextTests: XCTestCase {
     XCTAssertEqual(errorsStorage.errors.count, 1)
   }
 
-  func test_modifying_prototypesData_AddsVariablesToExpressionResolver() {
-    let prototypesData: (String, [String: AnyHashable]) = ("it", ["var1": "value"])
-    let context = DivBlockModelingContext()
-      .modifying(prototypesData: prototypesData)
+  func test_modifying_prototypeParams_AddsVariableToExpressionResolver() {
+    let context = DivBlockModelingContext().modifying(
+      prototypeParams: PrototypeParams(
+        index: 1,
+        variableName: "it",
+        value: ["key": "value"]
+      )
+    )
 
     XCTAssertEqual(
-      context.expressionResolver.resolveString(expression("@{getStringFromDict(it, 'var1')}")),
+      context.expressionResolver.resolveString(expression("@{it.getString('key')}")),
       "value"
+    )
+  }
+
+  func test_modifying_prototypeParams_AddsIndexVariableToExpressionResolver() {
+    let context = DivBlockModelingContext().modifying(
+      prototypeParams: PrototypeParams(
+        index: 1,
+        variableName: "it",
+        value: ["key": "value"]
+      )
+    )
+
+    XCTAssertEqual(
+      context.expressionResolver.resolveNumeric(expression("@{index}")),
+      1
     )
   }
 

@@ -237,7 +237,7 @@ final class DivActionHandlerTests: XCTestCase {
       )
     ))
 
-    XCTAssertEqual([String: AnyHashable](), getVariableValue("dict_var"))
+    XCTAssertEqual(DivDictionary(), getVariableValue("dict_var"))
   }
 
   func test_DictSetValueAction_DoesNothingForNotDictVar() {

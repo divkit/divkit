@@ -233,7 +233,7 @@ final class ExpressionResolverTests: XCTestCase {
 
   func test_ResolveDict_WithVariable() throws {
     XCTAssertEqual(
-      expressionResolver.resolveDict(expression("@{dict_var}")) as! [String: AnyHashable],
+      expressionResolver.resolveDict(expression("@{dict_var}")) as! DivDictionary,
       ["boolean": true, "integer": 1, "number": 1.0, "string": "value"]
     )
   }
