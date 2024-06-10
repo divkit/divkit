@@ -356,7 +356,7 @@ extension UnicodeScalarView {
   }
 
   private mutating func parseOperator() -> Subexpression? {
-    if let op = scanCharacters(isOperator)
+    if let op = scanCharacters({ "+-*/%=<>!&|?:".unicodeScalars.contains($0) })
       ?? scanCharacter({ "(.".unicodeScalars.contains($0) }) {
       return .symbol(.infix(op), [])
     }
@@ -629,11 +629,6 @@ private func takesPrecedence(_ lhs: String, over rhs: String) -> Bool {
   return p1 > p2
 }
 
-private func isOperator(_ char: UnicodeScalar) -> Bool {
-  // Strangely, this is faster than switching on value
-  "/=­+-!*%<>&|^~?:".unicodeScalars.contains(char)
-}
-
 private func isIdentifierHead(_ c: UnicodeScalar) -> Bool {
   switch c.value {
   case 0x5F, // _
@@ -652,15 +647,6 @@ private func isIdentifier(_ c: UnicodeScalar) -> Bool {
     true
   default:
     isIdentifierHead(c)
-  }
-}
-
-private func isIdentifierWithDot(_ c: UnicodeScalar) -> Bool {
-  switch c.value {
-  case 0x2E: // .
-    true
-  default:
-    isIdentifier(c)
   }
 }
 
