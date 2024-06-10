@@ -39,6 +39,11 @@ class TabContentsView: BlockView {
       dataSource.overscrollDelegate = overscrollDelegate
     }
   }
+  private weak var renderingDelegate: RenderingDelegate? {
+    didSet {
+      dataSource.renderingDelegate = renderingDelegate
+    }
+  }
 
   private(set) var selectedPageIndex: CGFloat = 0
 
@@ -87,6 +92,7 @@ class TabContentsView: BlockView {
     self.model = model
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
+    self.renderingDelegate = renderingDelegate
 
     if oldModel?.layoutDirection != model.layoutDirection {
       collectionView.semanticContentAttribute = model
