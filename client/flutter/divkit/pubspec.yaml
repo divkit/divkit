@@ -19,7 +19,7 @@ dependencies:
   logging: ^1.1.1
   clock: ^1.1.1
   collection: ^1.17.0
-  div_expressions_resolver: ^0.4.0
+  div_expressions_resolver: ^0.4.2
 
   cached_network_image: ^3.2.3
   flutter_cache_manager: ^3.3.1

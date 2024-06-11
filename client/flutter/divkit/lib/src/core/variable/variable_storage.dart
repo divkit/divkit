@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:divkit/src/core/variable/variable.dart';
 import 'package:equatable/equatable.dart';
@@ -52,27 +54,35 @@ class DefaultDivVariableStorage extends DivVariableStorage with EquatableMixin {
         };
 
   /// Caching the combined contextStream.
-  Stream<Map<String, DivVariable>>? _contextStream;
+  BehaviorSubject<Map<String, DivVariable>>? _contextStreamSubject;
+  StreamSubscription<Map<String, DivVariable>>? _contextStreamSubscription;
 
   @override
   Stream<Map<String, DivVariable>> get stream {
-    if (_contextStream == null) {
+    if (_contextStreamSubject == null) {
       final inheritedStream = inheritedStorage?.stream;
       if (inheritedStream != null) {
-        _contextStream = CombineLatestStream.combine2(
+        _contextStreamSubject = BehaviorSubject<Map<String, DivVariable>>();
+        _contextStreamSubscription ??= CombineLatestStream.combine2(
           inheritedStream,
           _storage.stream,
-          (Map inherited, Map local) => {
+          (
+            Map<String, DivVariable> inherited,
+            Map<String, DivVariable> local,
+          ) =>
+              {
             ...inherited,
             ...local,
           },
-        );
+        ).listen((value) {
+          _contextStreamSubject?.add(value);
+        });
       } else {
-        _contextStream = _storage.stream;
+        _contextStreamSubject = _storage;
       }
     }
 
-    return _contextStream!;
+    return _contextStreamSubject?.stream ?? const Stream.empty();
   }
 
   @override

@@ -276,6 +276,7 @@ class PassDivBackground {
   static Future<PassDivBackground> resolve(
     List<DivBackground> backgrounds, {
     required DivVariableContext context,
+    required double viewScale,
   }) async {
     Color? bgColor;
     Gradient? bgGradient;
@@ -314,7 +315,8 @@ class PassDivBackground {
             radius: await divRadialGradient.radius.map(
               divFixedSize: (divFixedSize) async =>
                   (await divFixedSize.value.resolveValue(context: context))
-                      .toDouble(),
+                      .toDouble() *
+                  viewScale,
               divRadialGradientRelativeRadius:
                   (divRadialGradientRelativeRadius) async {
                 throw UnimplementedError();
@@ -324,7 +326,8 @@ class PassDivBackground {
         },
         divLinearGradient: (divLinearGradient) async {
           final resolvedRadians =
-              await divLinearGradient.angle.resolveValue(context: context) /
+              await divLinearGradient.angle.resolveValue(context: context) *
+                  viewScale /
                   (-180 / math.pi);
           final angleAlignment = Alignment(
             math.cos(resolvedRadians),
@@ -366,6 +369,7 @@ class DivFilters {
   static Future<DivFilters> resolve({
     required List<DivFilter> filters,
     required DivVariableContext context,
+    required double viewScale,
   }) async {
     double? blurRadius;
     bool isRtl = false;
@@ -373,7 +377,8 @@ class DivFilters {
       await el.map(
         divBlur: (divBlur) async {
           blurRadius =
-              (await divBlur.radius.resolveValue(context: context)).toDouble();
+              (await divBlur.radius.resolveValue(context: context)).toDouble() *
+                  viewScale;
         },
         divFilterRtlMirror: (divFilterRtlMirror) {
           isRtl = true;
@@ -390,6 +395,7 @@ class DivFilters {
 extension PassDivEdgeInsets on DivEdgeInsets {
   Future<EdgeInsetsGeometry> resolve({
     required DivVariableContext context,
+    required double viewScale,
   }) async {
     final safeStart = await start?.resolveValue(context: context);
     final safeEnd = await end?.resolveValue(context: context);
@@ -400,17 +406,17 @@ extension PassDivEdgeInsets on DivEdgeInsets {
 
     if (safeStart != null || safeEnd != null) {
       return EdgeInsetsDirectional.fromSTEB(
-        safeStart?.toDouble() ?? 0,
-        safeTop.toDouble(),
-        safeEnd?.toDouble() ?? 0,
-        safeBottom.toDouble(),
+        (safeStart?.toDouble() ?? 0) * viewScale,
+        safeTop.toDouble() * viewScale,
+        (safeEnd?.toDouble() ?? 0) * viewScale,
+        safeBottom.toDouble() * viewScale,
       );
     }
     return EdgeInsets.fromLTRB(
-      safeLeft.toDouble(),
-      safeTop.toDouble(),
-      safeRight.toDouble(),
-      safeBottom.toDouble(),
+      safeLeft.toDouble() * viewScale,
+      safeTop.toDouble() * viewScale,
+      safeRight.toDouble() * viewScale,
+      safeBottom.toDouble() * viewScale,
     );
   }
 }
@@ -465,65 +471,84 @@ extension PassDivImageScale on DivImageScale {
 extension PassDivDimension on DivDimension {
   Future<double> resolveDimension({
     required DivVariableContext context,
+    required double viewScale,
   }) async =>
       (await value.resolveValue(context: context)) *
-      (await unit.resolveValue(context: context)).asPx;
+      (await unit.resolveValue(context: context)).asPx *
+      viewScale;
 }
 
 extension PassDivFixedSize on DivFixedSize {
   Future<double> resolveDimension({
     required DivVariableContext context,
+    required double viewScale,
   }) async =>
       (await value.resolveValue(context: context)) *
-      (await unit.resolveValue(context: context)).asPx;
+      (await unit.resolveValue(context: context)).asPx *
+      viewScale;
 }
 
 extension PassDivWrapContentSizeConstraintSize
     on DivWrapContentSizeConstraintSize {
   Future<double> resolveDimension({
     required DivVariableContext context,
+    required double viewScale,
   }) async =>
       (await value.resolveValue(context: context)) *
-      (await unit.resolveValue(context: context)).asPx;
+      (await unit.resolveValue(context: context)).asPx *
+      viewScale;
 }
 
 extension DivPointAsOffset on DivPoint {
   Future<Offset> resolveOffset({
     required DivVariableContext context,
+    required double viewScale,
   }) async =>
       Offset(
-        await x.resolveDimension(context: context),
-        await y.resolveDimension(context: context),
+        await x.resolveDimension(
+          context: context,
+          viewScale: viewScale,
+        ),
+        await y.resolveDimension(
+          context: context,
+          viewScale: viewScale,
+        ),
       );
 }
 
 extension PassDivBorder on DivBorder {
   Future<BorderRadius> resolveBorderRadius({
     required DivVariableContext context,
+    required double viewScale,
   }) async {
     final singleCornerRadius =
         await cornerRadius?.resolveValue(context: context);
+
     final multipleCornerRadius = cornersRadius;
 
     if (multipleCornerRadius != null) {
       // If corners_radius of any corner is null — should use corner_radius
       // https://divkit.tech/en/doc/overview/concepts/divs/2/div-border.html
       final resolvedTopLeft =
-          await multipleCornerRadius.topLeft?.resolveValue(context: context) ??
+          (await multipleCornerRadius.topLeft?.resolveValue(context: context) ??
+                  singleCornerRadius ??
+                  0) *
+              viewScale;
+      final resolvedTopRight = (await multipleCornerRadius.topRight
+                  ?.resolveValue(context: context) ??
               singleCornerRadius ??
-              0;
-      final resolvedTopRight =
-          await multipleCornerRadius.topRight?.resolveValue(context: context) ??
+              0) *
+          viewScale;
+      final resolvedBottomLeft = (await multipleCornerRadius.bottomLeft
+                  ?.resolveValue(context: context) ??
               singleCornerRadius ??
-              0;
-      final resolvedBottomLeft = await multipleCornerRadius.bottomLeft
-              ?.resolveValue(context: context) ??
-          singleCornerRadius ??
-          0;
-      final resolvedBottomRight = await multipleCornerRadius.bottomRight
-              ?.resolveValue(context: context) ??
-          singleCornerRadius ??
-          0;
+              0) *
+          viewScale;
+      final resolvedBottomRight = (await multipleCornerRadius.bottomRight
+                  ?.resolveValue(context: context) ??
+              singleCornerRadius ??
+              0) *
+          viewScale;
       return BorderRadius.only(
         topLeft: Radius.circular(resolvedTopLeft.toDouble()),
         topRight: Radius.circular(resolvedTopRight.toDouble()),
@@ -533,7 +558,7 @@ extension PassDivBorder on DivBorder {
     } else if (singleCornerRadius != null) {
       // corner_radius has lower priority than corners_radius
       return BorderRadius.circular(
-        singleCornerRadius.toDouble(),
+        singleCornerRadius.toDouble() * viewScale,
       );
     }
     return BorderRadius.zero;
@@ -541,13 +566,15 @@ extension PassDivBorder on DivBorder {
 
   Future<Border?> resolveBorder({
     required DivVariableContext context,
+    required double viewScale,
   }) async {
     final borderStroke = stroke;
     if (borderStroke != null) {
       return Border.all(
         width: ((await borderStroke.unit.resolveValue(context: context)).asPx) *
             (await borderStroke.width.resolveValue(context: context))
-                .toDouble(),
+                .toDouble() *
+            viewScale,
         color: Color(
           (await borderStroke.color.resolveValue(context: context)).value,
         ),
@@ -558,6 +585,7 @@ extension PassDivBorder on DivBorder {
 
   Future<List<BoxShadow>> resolveShadow({
     required DivVariableContext context,
+    required double viewScale,
   }) async {
     final borderShadow = shadow;
     if (borderShadow != null &&
@@ -571,8 +599,12 @@ extension PassDivBorder on DivBorder {
                 .toInt(),
           ),
           blurRadius: (await borderShadow.blur.resolveValue(context: context))
-              .toDouble(),
-          offset: await borderShadow.offset.resolveOffset(context: context),
+                  .toDouble() *
+              viewScale,
+          offset: await borderShadow.offset.resolveOffset(
+            context: context,
+            viewScale: viewScale,
+          ),
         ),
       ];
     }

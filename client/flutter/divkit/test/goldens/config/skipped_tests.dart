@@ -234,6 +234,7 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-container/item_builder/item-builder.json',
     'example/assets/test_data/snapshot_test_data/div-container/item_builder/non-unique-matched-selectors.json',
     'example/assets/test_data/snapshot_test_data/div-container/item_builder/nested-builders.json',
+    'example/assets/test_data/snapshot_test_data/div-container/item_builder/index.json'
   ].map(
     (e) => _SkipTest(
       e,

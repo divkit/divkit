@@ -3,7 +3,7 @@ description: DivKit expressions resolver plugin for Flutter. Wraps native iOS an
 homepage: https://github.com/divkit/divkit
 repository: https://github.com/divkit/divkit
 publish_to: 'none'
-version: 0.4.1
+version: 0.4.2
 
 environment:
   sdk: '>=2.17.0 <4.0.0'

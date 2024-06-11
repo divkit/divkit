@@ -23,6 +23,7 @@ import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:meta/meta.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 
 /// The main widget embedding DivKit BDUI in the Flutter host application.
 class DivKitView extends StatelessWidget {
@@ -62,6 +63,14 @@ class DivKitView extends StatelessWidget {
   @experimental
   final void Function(DivContext)? onInit;
 
+  /// Can be used for scaling ui
+  @experimental
+  final double viewScale;
+
+  /// Can be used for scaling text
+  @experimental
+  final double textScale;
+
   /// Use DivKitView inside your widget tree with layout passed by param "data":
   /// ```dart
   ///     DivKitView(
@@ -93,22 +102,30 @@ class DivKitView extends StatelessWidget {
     this.textDirection,
     this.showUnsupportedDivs = false,
     this.onInit,
+    this.viewScale = 1,
+    this.textScale = 1,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) => Directionality(
         textDirection: textDirection ?? Directionality.of(context),
-        child: DivKitProvider<ShowUnsupportedDivs>(
-          value: ShowUnsupportedDivs(showUnsupportedDivs),
-          child: FocusScope(
-            child: _DivKitView(
-              data: data,
-              variableStorage: variableStorage,
-              actionHandler: actionHandler,
-              customHandler: customHandler,
-              cacheManager: cacheManager,
-              onInit: onInit,
+        child: DivKitProvider<DivScalingModel>(
+          value: DivScalingModel(
+            textScale: textScale,
+            viewScale: viewScale,
+          ),
+          child: DivKitProvider<ShowUnsupportedDivs>(
+            value: ShowUnsupportedDivs(showUnsupportedDivs),
+            child: FocusScope(
+              child: _DivKitView(
+                data: data,
+                variableStorage: variableStorage,
+                actionHandler: actionHandler,
+                customHandler: customHandler,
+                cacheManager: cacheManager,
+                onInit: onInit,
+              ),
             ),
           ),
         ),

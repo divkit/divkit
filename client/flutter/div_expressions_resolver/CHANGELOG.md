@@ -1,3 +1,6 @@
+## 0.4.2
+* Fix duplicate FlutterError class name 
+
 ## 0.4.1
 * Correct README and add documentation.
 

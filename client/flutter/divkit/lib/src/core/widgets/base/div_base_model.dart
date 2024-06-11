@@ -7,6 +7,7 @@ import 'package:divkit/src/utils/provider.dart';
 import 'package:divkit/src/utils/size_converters.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 
 class DivBaseModel with EquatableMixin {
   final double opacity;
@@ -40,10 +41,14 @@ class DivBaseModel with EquatableMixin {
     final variables =
         DivKitProvider.watch<DivContext>(context)!.variableManager;
 
+    final divScalingModel = DivKitProvider.watch<DivScalingModel>(context);
+    final viewScale = divScalingModel?.viewScale ?? 1;
+
     return variables.watch<DivBaseModel>(
       (context) async {
         final margin = await data.margins.resolve(
           context: context,
+          viewScale: viewScale,
         );
 
         return DivBaseModel(
@@ -60,21 +65,26 @@ class DivBaseModel with EquatableMixin {
           width: await data.resolveWidth(
             context: context,
             extension: margin.horizontal,
+            viewScale: viewScale,
           ),
           height: await data.resolveHeight(
             context: context,
             extension: margin.vertical,
+            viewScale: viewScale,
           ),
           padding: await data.paddings.resolve(
             context: context,
+            viewScale: viewScale,
           ),
           margin: margin,
           boxDecoration: await data.resolveBoxDecoration(
             context: context,
+            viewScale: viewScale,
           ),
           divId: data.id,
           focusDecoration: await data.resolveFocusBoxDecoration(
             context: context,
+            viewScale: viewScale,
           ),
           isVisible: (await data.visibility.resolveValue(
                 context: context,
@@ -103,15 +113,26 @@ class DivBaseModel with EquatableMixin {
 extension PassDivBase on DivBase {
   Future<BoxDecoration> resolveBoxDecoration({
     required DivVariableContext context,
+    required double viewScale,
   }) async {
-    final boxBorder = await border.resolveBorder(context: context);
-    final borderRadius = await border.resolveBorderRadius(context: context);
-    final boxShadow = await border.resolveShadow(context: context);
+    final boxBorder = await border.resolveBorder(
+      context: context,
+      viewScale: viewScale,
+    );
+    final borderRadius = await border.resolveBorderRadius(
+      context: context,
+      viewScale: viewScale,
+    );
+    final boxShadow = await border.resolveShadow(
+      context: context,
+      viewScale: viewScale,
+    );
     final backgrounds = background;
     if (backgrounds != null) {
       final resolvedBackground = await PassDivBackground.resolve(
         backgrounds,
         context: context,
+        viewScale: viewScale,
       );
       return BoxDecoration(
         color: resolvedBackground.bgColor,
@@ -131,18 +152,24 @@ extension PassDivBase on DivBase {
 
   Future<BoxDecoration> resolveFocusBoxDecoration({
     required DivVariableContext context,
+    required double viewScale,
   }) async {
     final BoxDecoration focusDecoration;
     final focusBg = focus?.background;
     final focusBorder = focus?.border;
-    final resolvedFocusBorder =
-        await focusBorder?.resolveBorder(context: context);
-    final focusRadius =
-        await focusBorder?.resolveBorderRadius(context: context);
+    final resolvedFocusBorder = await focusBorder?.resolveBorder(
+      context: context,
+      viewScale: viewScale,
+    );
+    final focusRadius = await focusBorder?.resolveBorderRadius(
+      context: context,
+      viewScale: viewScale,
+    );
     if (focusBg != null) {
       final resolvedBackground = await PassDivBackground.resolve(
         focusBg,
         context: context,
+        viewScale: viewScale,
       );
       focusDecoration = BoxDecoration(
         color: resolvedBackground.bgColor,
@@ -173,23 +200,33 @@ extension PassDivBase on DivBase {
 
   Future<PassDivSize> resolveWidth({
     required DivVariableContext context,
+    required double viewScale,
     double extension = 0,
   }) async {
     if ((await visibility.resolveValue(context: context)).isGone) {
       return const FixedDivSize(0);
     } else {
-      return await width.resolve(context: context, extension: extension);
+      return await width.resolve(
+        context: context,
+        extension: extension,
+        viewScale: viewScale,
+      );
     }
   }
 
   Future<PassDivSize> resolveHeight({
     required DivVariableContext context,
+    required double viewScale,
     double extension = 0,
   }) async {
     if ((await visibility.resolveValue(context: context)).isGone) {
       return const FixedDivSize(0);
     } else {
-      return await height.resolve(context: context, extension: extension);
+      return await height.resolve(
+        context: context,
+        extension: extension,
+        viewScale: viewScale,
+      );
     }
   }
 }

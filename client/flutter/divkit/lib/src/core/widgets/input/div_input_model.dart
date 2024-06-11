@@ -6,6 +6,7 @@ import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 
 class DivInputModel with EquatableMixin {
   final TextStyle textStyle;
@@ -42,6 +43,10 @@ class DivInputModel with EquatableMixin {
     final variables =
         DivKitProvider.watch<DivContext>(buildContext)!.variableManager;
 
+    final divScalingModel = DivKitProvider.watch<DivScalingModel>(buildContext);
+    final viewScale = divScalingModel?.viewScale ?? 1;
+    final textScale = divScalingModel?.textScale ?? 1;
+
     controller.addListener(() {
       if (variables.context.current[data.textVariable] != controller.text) {
         variables.updateVariable(data.textVariable, controller.text);
@@ -57,16 +62,17 @@ class DivInputModel with EquatableMixin {
         context: context,
       );
       final fontSize = (await data.fontSize.resolveValue(
-        context: context,
-      ))
-          .toDouble();
+            context: context,
+          ))
+              .toDouble() *
+          textScale;
 
       final style = TextStyle(
         fontSize: fontSize * styleUnit,
         color: await data.textColor.resolveValue(
           context: context,
         ),
-        height: lineHeight != null ? lineHeight / fontSize : null,
+        height: lineHeight != null ? lineHeight * viewScale / fontSize : null,
         fontWeight: await data.fontWeight.resolve(
           context: context,
         ),

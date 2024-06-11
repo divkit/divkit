@@ -5,6 +5,7 @@ import 'package:divkit/src/utils/converters.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 
 extension PassDivDecaration on DivText {
   Future<TextDecoration?> resolveTextDecoration({
@@ -42,6 +43,10 @@ class DivTextModel with EquatableMixin {
     final variables =
         DivKitProvider.watch<DivContext>(context)!.variableManager;
 
+    final divScalingModel = DivKitProvider.watch<DivScalingModel>(context);
+    final textScale = divScalingModel?.textScale ?? 1;
+    final viewScale = divScalingModel?.viewScale ?? 1;
+
     return variables.watch<DivTextModel>((context) async {
       final alignment = PassDivAlignment(
         data.textAlignmentVertical,
@@ -60,7 +65,8 @@ class DivTextModel with EquatableMixin {
           (await data.fontSizeUnit.resolveValue(
             context: context,
           ))
-              .asPx;
+              .asPx *
+          textScale;
 
       final lineHeight = (await data.lineHeight?.resolveValue(
         context: context,
@@ -78,7 +84,8 @@ class DivTextModel with EquatableMixin {
                       (await data.fontSizeUnit.resolveValue(
                         context: context,
                       ))
-                          .asPx) /
+                          .asPx) *
+                  viewScale /
                   fontSize
               : null,
           color: await data.textColor.resolveValue(
