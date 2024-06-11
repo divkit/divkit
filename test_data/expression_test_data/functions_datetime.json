@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "name": "parseUnixTime(0) => 1970-01-01",
       "expression": "@{parseUnixTime(0)}",
       "expected": {
         "type": "datetime",
@@ -14,7 +13,6 @@
       ]
     },
     {
-      "name": "parseUnixTime(1 second)",
       "expression": "@{parseUnixTime(1)}",
       "expected": {
         "type": "datetime",
@@ -27,7 +25,6 @@
       ]
     },
     {
-      "name": "parseUnixTime(03h02m01s)",
       "expression": "@{parseUnixTime(10921)}",
       "expected": {
         "type": "datetime",
@@ -40,7 +37,6 @@
       ]
     },
     {
-      "name": "nowLocal() > parseUnixTime(0) => true",
       "expression": "@{nowLocal() > parseUnixTime(0)}",
       "expected": {
         "type": "boolean",
@@ -53,7 +49,6 @@
       ]
     },
     {
-      "name": "addMillis(parseUnixTime(0), 5000) => 1970-01-01 00:00:05",
       "expression": "@{addMillis(parseUnixTime(0), 5000)}",
       "expected": {
         "type": "datetime",
@@ -66,7 +61,6 @@
       ]
     },
     {
-      "name": "addMillis(parseUnixTime(0), 1000) < addMillis(parseUnixTime(0), 1001) => true",
       "expression": "@{addMillis(parseUnixTime(0), 1000) < addMillis(parseUnixTime(0), 1001) }",
       "expected": {
         "type": "boolean",
@@ -79,7 +73,6 @@
       ]
     },
     {
-      "name": "setYear(parseUnixTime(0), 2022) => 2022-01-01 00:00:00",
       "expression": "@{setYear(parseUnixTime(0), 2022)}",
       "expected": {
         "type": "datetime",
@@ -92,7 +85,6 @@
       ]
     },
     {
-      "name": "setMonth(parseUnixTime(0), 3) => 1970-10-01 00:00:00",
       "expression": "@{setMonth(parseUnixTime(0), 3)}",
       "expected": {
         "type": "datetime",
@@ -105,7 +97,6 @@
       ]
     },
     {
-      "name": "setMonth(parseUnixTime(0), 17) => error",
       "expression": "@{setMonth(parseUnixTime(0), 17)}",
       "expected": {
         "type": "error",
@@ -118,7 +109,6 @@
       ]
     },
     {
-      "name": "setMonth(parseUnixTime(0), -5) => error",
       "expression": "@{setMonth(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -131,7 +121,6 @@
       ]
     },
     {
-      "name": "setDay(parseUnixTime(0), 10) => 1970-01-10 00:00:00",
       "expression": "@{setDay(parseUnixTime(0), 10)}",
       "expected": {
         "type": "datetime",
@@ -144,7 +133,6 @@
       ]
     },
     {
-      "name": "setDay(setMonth(parseUnixTime(0), 2), 29) => error",
       "expression": "@{setDay(setMonth(parseUnixTime(0), 2), 29)}",
       "expected": {
         "type": "error",
@@ -157,7 +145,6 @@
       ]
     },
     {
-      "name": "setDay(parseUnixTime(0), 0) => error",
       "expression": "@{setDay(parseUnixTime(0), 0)}",
       "expected": {
         "type": "error",
@@ -170,7 +157,6 @@
       ]
     },
     {
-      "name": "setDay(parseUnixTime(0), -5) => error",
       "expression": "@{setDay(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -183,7 +169,6 @@
       ]
     },
     {
-      "name": "setDay(setMonth(parseUnixTime(0), 2), -1) => 1970-01-31 00:00:00",
       "expression": "@{setDay(setMonth(parseUnixTime(0), 2), -1)}",
       "expected": {
         "type": "datetime",
@@ -196,7 +181,6 @@
       ]
     },
     {
-      "name": "setHours(parseUnixTime(0), 10) => 1970-01-01 10:00:00",
       "expression": "@{setHours(parseUnixTime(0), 10)}",
       "expected": {
         "type": "datetime",
@@ -209,7 +193,6 @@
       ]
     },
     {
-      "name": "setHours(parseUnixTime(0), 77) => error",
       "expression": "@{setHours(parseUnixTime(0), 77)}",
       "expected": {
         "type": "error",
@@ -222,7 +205,6 @@
       ]
     },
     {
-      "name": "setHours(parseUnixTime(0), -5) => error",
       "expression": "@{setHours(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -235,7 +217,6 @@
       ]
     },
     {
-      "name": "setMinutes(parseUnixTime(0), 10) => 1970-01-01 00:10:00",
       "expression": "@{setMinutes(parseUnixTime(0), 10)}",
       "expected": {
         "type": "datetime",
@@ -248,7 +229,6 @@
       ]
     },
     {
-      "name": "setMinutes(parseUnixTime(0), 77) => error",
       "expression": "@{setMinutes(parseUnixTime(0), 77)}",
       "expected": {
         "type": "error",
@@ -261,7 +241,6 @@
       ]
     },
     {
-      "name": "setMinutes(parseUnixTime(0), -5) => error",
       "expression": "@{setMinutes(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -274,7 +253,6 @@
       ]
     },
     {
-      "name": "setSeconds(parseUnixTime(0), 10) => 1970-01-01 00:00:10",
       "expression": "@{setSeconds(parseUnixTime(0), 10)}",
       "expected": {
         "type": "datetime",
@@ -287,7 +265,6 @@
       ]
     },
     {
-      "name": "setSeconds(parseUnixTime(0), 77) => error",
       "expression": "@{setSeconds(parseUnixTime(0), 77)}",
       "expected": {
         "type": "error",
@@ -300,7 +277,6 @@
       ]
     },
     {
-      "name": "setSeconds(parseUnixTime(0), -10) => error",
       "expression": "@{setSeconds(parseUnixTime(0), -10)}",
       "expected": {
         "type": "error",
@@ -313,7 +289,6 @@
       ]
     },
     {
-      "name": "setMillis(parseUnixTime(0), 2) > setMillis(parseUnixTime(0), 1) => true",
       "expression": "@{setMillis(parseUnixTime(0), 2) > setMillis(parseUnixTime(0), 1)}",
       "expected": {
         "type": "boolean",
@@ -326,7 +301,6 @@
       ]
     },
     {
-      "name": "setMillis(parseUnixTime(0), 80988) => error",
       "expression": "@{setMillis(parseUnixTime(0), 80988)}",
       "expected": {
         "type": "error",
@@ -339,7 +313,6 @@
       ]
     },
     {
-      "name": "setMillis(parseUnixTime(0), -5) => error",
       "expression": "@{setMillis(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -352,7 +325,6 @@
       ]
     },
     {
-      "name": "getYear(setYear(parseUnixTime(0), 2022)) => 2022",
       "expression": "@{getYear(setYear(parseUnixTime(0), 2022))}",
       "expected": {
         "type": "integer",
@@ -365,7 +337,6 @@
       ]
     },
     {
-      "name": "getMonth(setMonth(parseUnixTime(0), 11)) => 11",
       "expression": "@{getMonth(setMonth(parseUnixTime(0), 11))}",
       "expected": {
         "type": "integer",
@@ -378,7 +349,6 @@
       ]
     },
     {
-      "name": "getDay(setDay(parseUnixTime(0), 13)) => 13",
       "expression": "@{getDay(setDay(parseUnixTime(0), 13))}",
       "expected": {
         "type": "integer",
@@ -391,7 +361,6 @@
       ]
     },
     {
-      "name": "getDayOfWeek(parseUnixTime(0)) => 4",
       "expression": "@{getDayOfWeek(parseUnixTime(0))}",
       "expected": {
         "type": "integer",
@@ -404,7 +373,6 @@
       ]
     },
     {
-      "name": "getDayOfWeek(parseUnixTime(259200)) => 7",
       "expression": "@{getDayOfWeek(parseUnixTime(259200))}",
       "expected": {
         "type": "integer",
@@ -417,7 +385,6 @@
       ]
     },
     {
-      "name": "getHours(setHours(parseUnixTime(0), 17)) => 17",
       "expression": "@{getHours(setHours(parseUnixTime(0), 17))}",
       "expected": {
         "type": "integer",
@@ -430,7 +397,6 @@
       ]
     },
     {
-      "name": "getMinutes(setMinutes(parseUnixTime(0), 23)) => 23",
       "expression": "@{getMinutes(setMinutes(parseUnixTime(0), 23))}",
       "expected": {
         "type": "integer",
@@ -443,7 +409,6 @@
       ]
     },
     {
-      "name": "getSeconds(setSeconds(parseUnixTime(0), 27)) => 27",
       "expression": "@{getSeconds(setSeconds(parseUnixTime(0), 27))}",
       "expected": {
         "type": "integer",
@@ -456,7 +421,6 @@
       ]
     },
     {
-      "name": "getMillis(setMillis(parseUnixTime(0), 31)) => 31",
       "expression": "@{getMillis(setMillis(parseUnixTime(0), 31))}",
       "expected": {
         "type": "integer",
@@ -469,7 +433,6 @@
       ]
     },
     {
-      "name": "getMillis(setHours(setMillis(parseUnixTime(0), 31), 17)) => 31",
       "expression": "@{getMillis(setHours(setMillis(parseUnixTime(0), 31), 17))}",
       "expected": {
         "type": "integer",

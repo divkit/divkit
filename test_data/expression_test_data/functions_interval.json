@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "name": "getIntervalSeconds(0) => 0",
       "expression": "@{getIntervalSeconds(0)}",
       "expected": {
         "type": "integer",
@@ -14,7 +13,6 @@
       ]
     },
     {
-      "name": "getIntervalSeconds(-1) => error",
       "expression": "@{getIntervalSeconds(-1)}",
       "expected": {
         "type": "error",
@@ -27,7 +25,6 @@
       ]
     },
     {
-      "name": "getIntervalSeconds(1) => 0",
       "expression": "@{getIntervalSeconds(1)}",
       "expected": {
         "type": "integer",
@@ -40,7 +37,6 @@
       ]
     },
     {
-      "name": "getIntervalSeconds(1000) => 1",
       "expression": "@{getIntervalSeconds(1000)}",
       "expected": {
         "type": "integer",
@@ -53,7 +49,6 @@
       ]
     },
     {
-      "name": "getIntervalSeconds(196330000) => 10",
       "expression": "@{getIntervalSeconds(196330000)}",
       "expected": {
         "type": "integer",
@@ -66,7 +61,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalSeconds(0) => 0",
       "expression": "@{getIntervalTotalSeconds(0)}",
       "expected": {
         "type": "integer",
@@ -79,7 +73,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalSeconds(-1) => error",
       "expression": "@{getIntervalTotalSeconds(-1)}",
       "expected": {
         "type": "error",
@@ -92,7 +85,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalSeconds(1) => 0",
       "expression": "@{getIntervalTotalSeconds(1)}",
       "expected": {
         "type": "integer",
@@ -105,7 +97,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalSeconds(1000) => 1",
       "expression": "@{getIntervalTotalSeconds(1000)}",
       "expected": {
         "type": "integer",
@@ -118,7 +109,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalSeconds(196330000) => 196330",
       "expression": "@{getIntervalTotalSeconds(196330000)}",
       "expected": {
         "type": "integer",
@@ -131,7 +121,6 @@
       ]
     },
     {
-      "name": "getIntervalMinutes(0) => 0",
       "expression": "@{getIntervalMinutes(0)}",
       "expected": {
         "type": "integer",
@@ -144,7 +133,6 @@
       ]
     },
     {
-      "name": "getIntervalMinutes(-1) => error",
       "expression": "@{getIntervalMinutes(-1)}",
       "expected": {
         "type": "error",
@@ -157,7 +145,6 @@
       ]
     },
     {
-      "name": "getIntervalMinutes(1) => 0",
       "expression": "@{getIntervalMinutes(1)}",
       "expected": {
         "type": "integer",
@@ -170,7 +157,6 @@
       ]
     },
     {
-      "name": "getIntervalMinutes(60000) => 1",
       "expression": "@{getIntervalMinutes(60000)}",
       "expected": {
         "type": "integer",
@@ -183,7 +169,6 @@
       ]
     },
     {
-      "name": "getIntervalMinutes(196330000) => 32",
       "expression": "@{getIntervalMinutes(196330000)}",
       "expected": {
         "type": "integer",
@@ -196,7 +181,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalMinutes(0) => 0",
       "expression": "@{getIntervalTotalMinutes(0)}",
       "expected": {
         "type": "integer",
@@ -209,7 +193,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalMinutes(-1) => error",
       "expression": "@{getIntervalTotalMinutes(-1)}",
       "expected": {
         "type": "error",
@@ -222,7 +205,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalMinutes(1) => 0",
       "expression": "@{getIntervalTotalMinutes(1)}",
       "expected": {
         "type": "integer",
@@ -235,7 +217,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalMinutes(60000) => 1",
       "expression": "@{getIntervalTotalMinutes(60000)}",
       "expected": {
         "type": "integer",
@@ -248,7 +229,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalMinutes(196330000) => 3272",
       "expression": "@{getIntervalTotalMinutes(196330000)}",
       "expected": {
         "type": "integer",
@@ -261,7 +241,6 @@
       ]
     },
     {
-      "name": "getIntervalHours(0) => 0",
       "expression": "@{getIntervalHours(0)}",
       "expected": {
         "type": "integer",
@@ -274,7 +253,6 @@
       ]
     },
     {
-      "name": "getIntervalHours(-1) => error",
       "expression": "@{getIntervalHours(-1)}",
       "expected": {
         "type": "error",
@@ -287,7 +265,6 @@
       ]
     },
     {
-      "name": "getIntervalHours(1) => 0",
       "expression": "@{getIntervalHours(1)}",
       "expected": {
         "type": "integer",
@@ -300,7 +277,6 @@
       ]
     },
     {
-      "name": "getIntervalHours(3600000) => 1",
       "expression": "@{getIntervalHours(3600000)}",
       "expected": {
         "type": "integer",
@@ -313,7 +289,6 @@
       ]
     },
     {
-      "name": "getIntervalHours(196330000) => 6",
       "expression": "@{getIntervalHours(196330000)}",
       "expected": {
         "type": "integer",
@@ -326,7 +301,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalHours(0) => 0",
       "expression": "@{getIntervalTotalHours(0)}",
       "expected": {
         "type": "integer",
@@ -339,7 +313,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalHours(-1) => error",
       "expression": "@{getIntervalTotalHours(-1)}",
       "expected": {
         "type": "error",
@@ -352,7 +325,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalHours(1) => 0",
       "expression": "@{getIntervalTotalHours(1)}",
       "expected": {
         "type": "integer",
@@ -365,7 +337,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalHours(3600000) => 1",
       "expression": "@{getIntervalTotalHours(3600000)}",
       "expected": {
         "type": "integer",
@@ -378,7 +349,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalHours(196330000) => 54",
       "expression": "@{getIntervalTotalHours(196330000)}",
       "expected": {
         "type": "integer",
@@ -391,7 +361,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalDays(0) => 0",
       "expression": "@{getIntervalTotalDays(0)}",
       "expected": {
         "type": "integer",
@@ -404,7 +373,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalDays(-1) => error",
       "expression": "@{getIntervalTotalDays(-1)}",
       "expected": {
         "type": "error",
@@ -417,7 +385,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalDays(1) => 0",
       "expression": "@{getIntervalTotalDays(1)}",
       "expected": {
         "type": "integer",
@@ -430,7 +397,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalDays(86400000) => 1",
       "expression": "@{getIntervalTotalDays(86400000)}",
       "expected": {
         "type": "integer",
@@ -443,7 +409,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalDays(196330000) => 2",
       "expression": "@{getIntervalTotalDays(196330000)}",
       "expected": {
         "type": "integer",
@@ -456,7 +421,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalWeeks(0) => 0",
       "expression": "@{getIntervalTotalWeeks(0)}",
       "expected": {
         "type": "integer",
@@ -469,7 +433,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalWeeks(-1) => error",
       "expression": "@{getIntervalTotalWeeks(-1)}",
       "expected": {
         "type": "error",
@@ -482,7 +445,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalWeeks(1) => 0",
       "expression": "@{getIntervalTotalWeeks(1)}",
       "expected": {
         "type": "integer",
@@ -495,7 +457,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalWeeks(604800000) => 1",
       "expression": "@{getIntervalTotalWeeks(604800000)}",
       "expected": {
         "type": "integer",
@@ -508,7 +469,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalWeeks(196330000) => 0",
       "expression": "@{getIntervalTotalWeeks(196330000)}",
       "expected": {
         "type": "integer",
@@ -521,7 +481,6 @@
       ]
     },
     {
-      "name": "getIntervalTotalWeeks(1296330000) => 2",
       "expression": "@{getIntervalTotalWeeks(1296330000)}",
       "expected": {
         "type": "integer",
@@ -534,7 +493,6 @@
       ]
     },
     {
-      "name": "@{getIntervalTotalHours(39010000)}:@{getIntervalMinutes(39010000)}:@{getIntervalSeconds(39010000)} => '10:50:10'",
       "expression": "@{getIntervalTotalHours(39010000)}:@{getIntervalMinutes(39010000)}:@{getIntervalSeconds(39010000)}",
       "expected": {
         "type": "string",

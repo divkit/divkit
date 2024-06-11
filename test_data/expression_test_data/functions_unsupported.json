@@ -6,7 +6,6 @@
         "type": "error",
         "value": "Failed to evaluate [undefinedFunc()]. Unknown function name: undefinedFunc."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -27,6 +26,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -37,8 +37,8 @@
         "type": "error",
         "value": "Failed to evaluate [round()]. Exactly 1 argument(s) expected."
       },
-      "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -49,26 +49,27 @@
         "type": "error",
         "value": "Failed to evaluate [round('string')]. Invalid argument type: expected Number, got String."
       },
-      "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
     },
     {
-      "expression": "@{round(dict_var)}",
+      "expression": "@{round(dict)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [round(<dict>)]. Invalid argument type: expected Number, got Dict."
       },
       "variables": [
         {
-          "name": "dict_var",
+          "name": "dict",
           "type": "dict",
           "value": {}
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -79,21 +80,21 @@
         "type": "error",
         "value": "Failed to evaluate [round(1.5, 2.5)]. Exactly 1 argument(s) expected."
       },
-      "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
     },
     {
-      "expression": "@{getOptDictFromDict(dict_var)}",
+      "expression": "@{getOptDictFromDict(dict)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [getOptDictFromDict(<dict>)]. At least 2 argument(s) expected."
       },
       "variables": [
         {
-          "name": "dict_var",
+          "name": "dict",
           "type": "dict",
           "value": {}
         }

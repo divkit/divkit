@@ -6,7 +6,6 @@
         "type": "boolean",
         "value": true
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -19,7 +18,6 @@
         "type": "boolean",
         "value": false
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

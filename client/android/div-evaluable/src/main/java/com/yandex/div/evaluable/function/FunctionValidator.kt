@@ -70,17 +70,15 @@ internal fun Function.withArgumentsValidation(args: List<EvaluableType>): Functi
     when (val result = matchesArguments(args)) {
         is Function.MatchResult.Ok -> return this
 
-        is Function.MatchResult.TooFewArguments -> {
-            throw EvaluableException("Too few arguments passed to function '$name': expected ${result.expected}, got ${result.actual}.")
-        }
-
-        is Function.MatchResult.TooManyArguments -> {
-            throw EvaluableException("Too many arguments passed to function '$name': expected ${result.expected}, got ${result.actual}.")
+        is Function.MatchResult.ArgCountMismatch -> {
+            throw EvaluableException("${if (hasVarArg) "At least" else "Exactly"} ${result.expected} argument(s) expected.")
         }
 
         is Function.MatchResult.ArgTypeMismatch -> {
-            if (matchesArgumentsWithCast(args) == Function.MatchResult.Ok) return this
-            else throw EvaluableException("Call of function '$name' has argument type mismatch: expected ${result.expected}, got ${result.actual}.")
+            if (matchesArgumentsWithCast(args) == Function.MatchResult.Ok) {
+                return this
+            }
+            throw EvaluableException("Invalid argument type: expected ${result.expected}, got ${result.actual}.")
         }
     }
 }

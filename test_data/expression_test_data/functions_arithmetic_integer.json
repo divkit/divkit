@@ -6,7 +6,6 @@
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -19,7 +18,6 @@
         "type": "integer",
         "value": 2000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -32,7 +30,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -45,7 +42,6 @@
         "type": "error",
         "value": "Failed to evaluate [div(2, 0)]. Division by zero is not supported."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -58,7 +54,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -71,7 +66,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -84,7 +78,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -97,7 +90,6 @@
         "type": "integer",
         "value": -1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -110,7 +102,6 @@
         "type": "integer",
         "value": -1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -123,7 +114,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -136,7 +126,6 @@
         "type": "integer",
         "value": 1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -149,7 +138,6 @@
         "type": "integer",
         "value": 10000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -162,7 +150,6 @@
         "type": "error",
         "value": "Failed to evaluate [mod(2, 0)]. Division by zero is not supported."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -175,7 +162,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -188,7 +174,6 @@
         "type": "integer",
         "value": -1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -201,7 +186,6 @@
         "type": "integer",
         "value": -10000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -214,7 +198,6 @@
         "type": "integer",
         "value": 1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -227,7 +210,6 @@
         "type": "integer",
         "value": 10000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -240,7 +222,6 @@
         "type": "integer",
         "value": -1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -253,7 +234,6 @@
         "type": "integer",
         "value": -10000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -266,7 +246,6 @@
         "type": "integer",
         "value": 6
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -279,7 +258,6 @@
         "type": "string",
         "value": "6000000000000000000"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -292,7 +270,6 @@
         "type": "error",
         "value": "Failed to evaluate [mul(3000000000, 5000000000)]. Integer overflow."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -305,7 +282,6 @@
         "type": "integer",
         "value": -1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -318,7 +294,6 @@
         "type": "integer",
         "value": 1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -331,7 +306,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -344,7 +318,6 @@
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -357,7 +330,6 @@
         "type": "integer",
         "value": 3000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -370,7 +342,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -383,7 +354,6 @@
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -396,7 +366,6 @@
         "type": "integer",
         "value": 5000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -409,7 +378,6 @@
         "type": "error",
         "value": "Failed to evaluate [sub(7000000000000000000, -3000000000000000000)]. Integer overflow."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -422,7 +390,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -435,7 +402,6 @@
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -448,7 +414,6 @@
         "type": "integer",
         "value": 5000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -461,7 +426,6 @@
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -474,7 +438,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -487,7 +450,6 @@
         "type": "integer",
         "value": 4000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -500,7 +462,6 @@
         "type": "error",
         "value": "Failed to evaluate [sum(7000000000000000000, 7000000000000000000)]. Integer overflow."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -513,7 +474,6 @@
         "type": "string",
         "value": "9223372036854775807"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -526,7 +486,6 @@
         "type": "string",
         "value": "-9223372036854775808"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -539,7 +498,6 @@
         "type": "integer",
         "value": 1
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -552,7 +510,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -565,7 +522,6 @@
         "type": "integer",
         "value": 2147483647
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -578,7 +534,6 @@
         "type": "string",
         "value": "9223372036854775807"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -591,7 +546,6 @@
         "type": "integer",
         "value": 2147483647
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -604,7 +558,6 @@
         "type": "string",
         "value": "9223372036854775807"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -617,7 +570,6 @@
         "type": "error",
         "value": "Failed to evaluate [abs(-9223372036854775808)]. Integer overflow."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -630,7 +582,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -643,7 +594,6 @@
         "type": "integer",
         "value": 1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -656,7 +606,6 @@
         "type": "integer",
         "value": -1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -669,7 +618,6 @@
         "type": "integer",
         "value": -7
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -682,7 +630,6 @@
         "type": "integer",
         "value": 7
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -695,7 +642,6 @@
         "type": "integer",
         "value": 7
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -708,7 +654,6 @@
         "type": "integer",
         "value": -7
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -721,7 +666,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -734,7 +678,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -747,7 +690,6 @@
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -760,7 +702,6 @@
         "type": "error",
         "value": "Failed to evaluate [copySign(-9223372036854775808, 1)]. Integer overflow."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -773,7 +714,6 @@
         "type": "integer",
         "value": -2147483648
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -786,7 +726,6 @@
         "type": "string",
         "value": "-9223372036854775808"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

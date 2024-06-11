@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "positive integer to string => string",
       "expression": "@{toString(1)}",
       "expected": {
         "type": "string",
         "value": "1"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,13 +13,11 @@
       ]
     },
     {
-      "name": "negative integer to string => string",
       "expression": "@{toString(-1)}",
       "expected": {
         "type": "string",
         "value": "-1"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -29,13 +25,11 @@
       ]
     },
     {
-      "name": "positive number to string => string",
       "expression": "@{toString(3.1415)}",
       "expected": {
         "type": "string",
         "value": "3.1415"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -43,13 +37,11 @@
       ]
     },
     {
-      "name": "negative number to string => string",
       "expression": "@{toString(-3.1415)}",
       "expected": {
         "type": "string",
         "value": "-3.1415"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -57,28 +49,25 @@
       ]
     },
     {
-      "name": "exponential number => string",
       "expression": "@{toString(1e23)}",
       "expected": {
         "type": "string",
         "value": "1.0E23"
       },
-      "variables": [],
       "platforms": [
         "web"
       ]
     },
     {
-      "name": "number variable => string",
-      "expression": "@{toString(val)}",
+      "expression": "@{toString(number_var)}",
       "expected": {
         "type": "string",
         "value": "123.0"
       },
       "variables": [
         {
+          "name": "number_var",
           "type": "number",
-          "name": "val",
           "value": 123
         }
       ],
@@ -89,13 +78,11 @@
       ]
     },
     {
-      "name": "true boolean to string => string",
       "expression": "@{toString(true)}",
       "expected": {
         "type": "string",
         "value": "true"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -103,13 +90,11 @@
       ]
     },
     {
-      "name": "false boolean to string => string",
       "expression": "@{toString(false)}",
       "expected": {
         "type": "string",
         "value": "false"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -117,16 +102,15 @@
       ]
     },
     {
-      "name": "color with format #RGB to string => string",
-      "expression": "@{toString(color)}",
+      "expression": "@{toString(rgb_color_var)}",
       "expected": {
         "type": "string",
         "value": "#FFFFCCEE"
       },
       "variables": [
         {
+          "name": "rgb_color_var",
           "type": "color",
-          "name": "color",
           "value": "#fce"
         }
       ],
@@ -138,15 +122,15 @@
     },
     {
       "name": "color with format #ARGB to string => string",
-      "expression": "@{toString(color)}",
+      "expression": "@{toString(argb_color_var)}",
       "expected": {
         "type": "string",
         "value": "#DDFFCCEE"
       },
       "variables": [
         {
+          "name": "argb_color_var",
           "type": "color",
-          "name": "color",
           "value": "#dfce"
         }
       ],
@@ -157,16 +141,15 @@
       ]
     },
     {
-      "name": "color with format #RRGGBB to string => string",
-      "expression": "@{toString(color)}",
+      "expression": "@{toString(rrggbb_color_var)}",
       "expected": {
         "type": "string",
         "value": "#FFFFCCEE"
       },
       "variables": [
         {
+          "name": "rrggbb_color_var",
           "type": "color",
-          "name": "color",
           "value": "#ffCCeE"
         }
       ],
@@ -177,16 +160,15 @@
       ]
     },
     {
-      "name": "color with format #AARRGGBB to string => string",
-      "expression": "@{toString(color)}",
+      "expression": "@{toString(aarrggbb_color_var)}",
       "expected": {
         "type": "string",
         "value": "#DDFFCCEE"
       },
       "variables": [
         {
+          "name": "aarrggbb_color_var",
           "type": "color",
-          "name": "color",
           "value": "#DdffCCeE"
         }
       ],
@@ -197,16 +179,15 @@
       ]
     },
     {
-      "name": "url to string => string",
-      "expression": "@{toString(url)}",
+      "expression": "@{toString(url_var)}",
       "expected": {
         "type": "string",
         "value": "https://ya.ru/?hello=1"
       },
       "variables": [
         {
+          "name": "url_var",
           "type": "url",
-          "name": "url",
           "value": "https://ya.ru/?hello=1"
         }
       ],
@@ -217,16 +198,15 @@
       ]
     },
     {
-      "name": "toString(array) => string",
-      "expression": "@{toString(array)}",
+      "expression": "@{toString(array_var)}",
       "expected": {
         "type": "string",
         "value": "[\"string\",[123,123.45,true]]"
       },
       "variables": [
         {
+          "name": "array_var",
           "type": "array",
-          "name": "array",
           "value": [
             "string",
             [
@@ -243,16 +223,15 @@
       ]
     },
     {
-      "name": "toString(dict) => string",
-      "expression": "@{toString(dict)}",
+      "expression": "@{toString(dict_var)}",
       "expected": {
         "type": "string",
         "value": "{\"boolean\":true,\"dict\":{\"integer\":123,\"number\":123.45},\"string\":\"value\"}"
       },
       "variables": [
         {
+          "name": "dict_var",
           "type": "dict",
-          "name": "dict",
           "value": {
             "boolean": true,
             "dict": {
@@ -269,13 +248,11 @@
       ]
     },
     {
-      "name": "toString('abc') => 'abc'",
       "expression": "@{toString('abc')}",
       "expected": {
         "type": "string",
         "value":  "abc"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -283,13 +260,11 @@
       ]
     },
     {
-      "name": "empty argument list => error",
       "expression": "@{toString()}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toString()]. Function requires non empty argument list."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -297,13 +272,11 @@
       ]
     },
     {
-      "name": "too many arguments => error",
       "expression": "@{toString(1, 1)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toString(1, 1)]. Function has no matching overload for given argument types: Integer, Integer."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

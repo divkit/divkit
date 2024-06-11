@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "getColorAlpha('#80000000') => 0.5019607843137255",
       "expression": "@{getColorAlpha('#80000000')}",
       "expected": {
         "type": "number",
         "value": 0.5019607843137255
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,7 +13,6 @@
       ]
     },
     {
-      "name": "getColorAlpha(color) => 0.5019607843137255",
       "expression": "@{getColorAlpha(color)}",
       "expected": {
         "type": "number",
@@ -23,8 +20,8 @@
       },
       "variables": [
         {
-          "type": "color",
           "name": "color",
+          "type": "color",
           "value": "#80000000"
         }
       ],
@@ -35,13 +32,11 @@
       ]
     },
     {
-      "name": "getColorAlpha('#FF000000') => 1.0",
       "expression": "@{getColorAlpha('#FF000000')}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -49,7 +44,6 @@
       ]
     },
     {
-      "name": "getColorAlpha(color) => 1.0",
       "expression": "@{getColorAlpha(color)}",
       "expected": {
         "type": "number",
@@ -57,8 +51,8 @@
       },
       "variables": [
         {
-          "type": "color",
           "name": "color",
+          "type": "color",
           "value": "#FF000000"
         }
       ],
@@ -69,13 +63,11 @@
       ]
     },
     {
-      "name": "getColorRed('#FF800000') => 0.5019607843137255",
       "expression": "@{getColorRed('#FF800000')}",
       "expected": {
         "type": "number",
         "value": 0.5019607843137255
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -83,7 +75,6 @@
       ]
     },
     {
-      "name": "getColorRed(color) => 0.5019607843137255",
       "expression": "@{getColorRed(color)}",
       "expected": {
         "type": "number",
@@ -91,8 +82,8 @@
       },
       "variables": [
         {
-          "type": "color",
           "name": "color",
+          "type": "color",
           "value": "#FF800000"
         }
       ],
@@ -103,13 +94,11 @@
       ]
     },
     {
-      "name": "getColorGreen('#FF008000') => 0.5019607843137255",
       "expression": "@{getColorGreen('#FF008000')}",
       "expected": {
         "type": "number",
         "value": 0.5019607843137255
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -117,7 +106,6 @@
       ]
     },
     {
-      "name": "getColorGreen(color) => 0.5019607843137255",
       "expression": "@{getColorGreen(color)}",
       "expected": {
         "type": "number",
@@ -125,8 +113,8 @@
       },
       "variables": [
         {
-          "type": "color",
           "name": "color",
+          "type": "color",
           "value": "#FF008000"
         }
       ],
@@ -137,13 +125,11 @@
       ]
     },
     {
-      "name": "getColorBlue('#FF000080') => 0.5019607843137255",
       "expression": "@{getColorBlue('#FF000080')}",
       "expected": {
         "type": "number",
         "value": 0.5019607843137255
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -151,7 +137,6 @@
       ]
     },
     {
-      "name": "getColorBlue(color) => 0.5019607843137255",
       "expression": "@{getColorBlue(color)}",
       "expected": {
         "type": "number",
@@ -159,8 +144,8 @@
       },
       "variables": [
         {
-          "type": "color",
           "name": "color",
+          "type": "color",
           "value": "#FF000080"
         }
       ],
@@ -171,13 +156,11 @@
       ]
     },
     {
-      "name": "getColorAlpha('not_color_text') => error",
-      "expression": "@{getColorAlpha('not_color_text')}",
+      "expression": "@{getColorAlpha('not_color')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getColorAlpha('not_color_text')]. Unable to convert value to Color, expected format #AARRGGBB."
+        "value": "Failed to evaluate [getColorAlpha('not_color')]. Unable to convert value to Color, expected format #AARRGGBB."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

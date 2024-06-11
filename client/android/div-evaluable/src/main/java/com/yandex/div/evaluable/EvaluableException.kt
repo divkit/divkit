@@ -2,6 +2,7 @@ package com.yandex.div.evaluable
 
 import com.yandex.div.evaluable.internal.Token
 import org.json.JSONArray
+import org.json.JSONObject
 
 internal const val REASON_DIVISION_BY_ZERO = "Division by zero is not supported."
 internal const val REASON_EMPTY_ARGUMENT_LIST = "Function requires non empty argument list."
@@ -94,6 +95,7 @@ internal fun List<Any>.toMessageFormat(): String {
 internal fun Any.toMessageFormat(): String {
     return when (this) {
         is JSONArray -> "<array>"
+        is JSONObject -> "<dict>"
         is String -> "'$this'"
         else -> toString()
     }

@@ -6,7 +6,6 @@
         "type": "boolean",
         "value": true
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -43,7 +42,6 @@
         "type": "boolean",
         "value": true
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -105,7 +103,6 @@
         "type": "number",
         "value": 15.9
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -214,7 +211,6 @@
         "type": "number",
         "value": 3.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

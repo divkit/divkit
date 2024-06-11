@@ -43,13 +43,13 @@ class FunctionTest {
             name = "func",
             declaredArgs = listOf(FunctionArgument(EvaluableType.INTEGER), FunctionArgument(EvaluableType.INTEGER))
         )
-        assertTooFewArguments(function, listOf(EvaluableType.INTEGER))
+        assertArgCountMismatch(function, listOf(EvaluableType.INTEGER))
     }
 
     @Test
     fun `too many arguments passed to function`() {
         val function = FunctionImpl("func", emptyList())
-        assertTooManyArguments(function, listOf(EvaluableType.INTEGER))
+        assertArgCountMismatch(function, listOf(EvaluableType.INTEGER))
     }
 
     @Test
@@ -86,12 +86,8 @@ class FunctionTest {
         assertEquals(Function.MatchResult.Ok, function.matchesArguments(argTypes))
     }
 
-    private fun assertTooFewArguments(function: Function, argTypes: List<EvaluableType>) {
-        assertTrue(function.matchesArguments(argTypes) is Function.MatchResult.TooFewArguments)
-    }
-
-    private fun assertTooManyArguments(function: Function, argTypes: List<EvaluableType>) {
-        assertTrue(function.matchesArguments(argTypes) is Function.MatchResult.TooManyArguments)
+    private fun assertArgCountMismatch(function: Function, argTypes: List<EvaluableType>) {
+        assertTrue(function.matchesArguments(argTypes) is Function.MatchResult.ArgCountMismatch)
     }
 
     private fun assertArgumentTypeMismatch(function: Function, argTypes: List<EvaluableType>) {

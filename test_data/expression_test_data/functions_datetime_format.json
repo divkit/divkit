@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "name": "formatDateAsUTC(addMillis(parseUnixTime(3933296), 789)) => 15/02/1970 12:34:56.789",
       "expression": "@{formatDateAsUTC(addMillis(parseUnixTime(3933296), 789), 'dd/MM/yyyy HH:mm:ss.SSS')}",
       "expected": {
         "type": "string",
@@ -14,7 +13,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(parseUnixTime(3933296)) => 015/02/70 012:034:056",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933296), 'ddd/MM/yy HHH:mmm:sss')}",
       "expected": {
         "type": "string",
@@ -27,7 +25,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(parseUnixTime(3933296)) => Year 1970, month 2, day 15",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933296), '\\'Year \\'y\\', month \\'M\\', day \\'d')}",
       "expected": {
         "type": "string",
@@ -40,7 +37,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(3933296), 'en-US') => Sun, Feb 15, 1970",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3933296), 'E, MMM d, y', 'en-US')}",
       "expected": {
         "type": "string",
@@ -53,7 +49,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(3933296), 'en-US') => Sunday, February 15, 1970",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3933296), 'EEEE, MMMM d, y', 'en-US')}",
       "expected": {
         "type": "string",
@@ -66,7 +61,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(7200), 'en-US') => 2:00 AM",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(7200), 'K:mm a', 'en-US')}",
       "expected": {
         "type": "string",
@@ -79,7 +73,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(3936896), 'en-US') => 1:34 PM",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3936896), 'K:mm a', 'en-US')}",
       "expected": {
         "type": "string",
@@ -92,7 +85,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(0), 'en-US') => 1970 AD",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'yyyy G', 'en-US')}",
       "expected": {
         "type": "string",
@@ -105,7 +97,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(setDay(parseUnixTime(0), 13), en-US) => 1970-01-01T00:00:00.000",
       "expression": "@{formatDateAsUTCWithLocale(setDay(parseUnixTime(0), 13), 'yyyy-MM-dd\\'T\\'HH:mm:ss.SSS', 'en-US')}",
       "expected": {
         "type": "string",
@@ -118,7 +109,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(3927600), 'en-US') => 1970-02-03, week of year 8",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3927600), 'yyyy-MM-dd\\', week of year \\'w', 'en-US')}",
       "expected": {
         "type": "string",
@@ -131,7 +121,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(3927600), 'ru-RU') => 1970-02-03, week of year 7",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3927600), 'yyyy-MM-dd\\', week of year \\'w', 'ru-RU')}",
       "platform_specific": {
         "web": {
@@ -149,7 +138,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(3927600), 'en-US') => 1970-02-03, week of month 3",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3927600), 'yyyy-MM-dd\\', week of month \\'W', 'en-US')}",
       "expected": {
         "type": "string",
@@ -162,7 +150,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(parseUnixTime(0)) => Year 1970, extended year 1970",
       "expression": "@{formatDateAsUTC(parseUnixTime(0), '\\'Year \\'y\\', extended year \\'u')}",
       "expected": {
         "type": "string",
@@ -174,7 +161,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(3933296), 'ru-RU') => 1970 января 01 н. э. чт",
       "expression": "@{toLowerCase(formatDateAsUTCWithLocale(parseUnixTime(3933296), 'E, d MMMM y G', 'ru-RU'))}",
       "expected": {
         "type": "string",
@@ -187,7 +173,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm Z') => 15/02/1970 12:34 +0000",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm Z')}",
       "expected": {
         "type": "string",
@@ -200,7 +185,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm z') => 15/02/1970 12:34 UTC",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm z')}",
       "unsupported_platforms": {
         "ios": "Platform-specific format"
@@ -215,7 +199,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz') => 15/02/1970 12:34 UTC",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz')}",
       "unsupported_platforms": {
         "ios": "Platform-specific format"
@@ -230,7 +213,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm z') => 15/02/1970 12:34 GMT",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm z')}",
       "unsupported_platforms": {
         "web": "Platform-specific format",
@@ -245,7 +227,6 @@
       ]
     },
     {
-      "name": "formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz') => 15/02/1970 12:34 UTC",
       "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz')}",
       "unsupported_platforms": {
         "web": "Platform-specific format",
