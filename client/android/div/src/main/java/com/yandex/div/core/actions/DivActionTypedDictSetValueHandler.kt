@@ -41,19 +41,28 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor()
                 return@setVariable variable
             }
 
-            val value = variable.getValue() as? JSONObject
-            if (value == null) {
+            val dict = variable.getValue() as? JSONObject
+            if (dict == null) {
                 view.logError(IllegalArgumentException("Invalid variable value"))
                 return@setVariable variable
             }
 
+            val newDict = dict.clone()
             if (newValue == null) {
-                value.remove(key)
-                variable.set(value)
+                newDict.remove(key)
+                variable.set(newDict)
             } else {
-                variable.set(value.put(key, newValue))
+                variable.set(newDict.put(key, newValue))
             }
             return@setVariable variable
         }
     }
+}
+
+private fun JSONObject.clone(): JSONObject {
+    val clone = JSONObject()
+    keys().forEach { key ->
+        clone.put(key, this[key])
+    }
+    return clone
 }

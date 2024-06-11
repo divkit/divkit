@@ -486,6 +486,24 @@ class DivActionHandlerTest {
         Assert.assertEquals(JSONArray().put("value"), getVariableValue("array_var"))
     }
 
+    @Test
+    fun `DictSetValue action does not change original value`() {
+        val dict = JSONObject().put("key", "value")
+        setVariable("dict_var", dict)
+
+        handleTypedAction(
+            DivActionTyped.DictSetValue(
+                DivActionDictSetValue(
+                    key = Expression.constant("key"),
+                    value = typedValue("new value"),
+                    variableName = Expression.constant("dict_var")
+                )
+            )
+        )
+
+        assertEquals(JSONObject().put("key", "value"), dict)
+    }
+
     private val String.path: DivStatePath get() = DivStatePath.parse(this)
 
     private fun assertEquals(expected: JSONObject, actual: Any?) {
