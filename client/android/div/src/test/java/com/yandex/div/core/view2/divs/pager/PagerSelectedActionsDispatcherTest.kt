@@ -2,11 +2,11 @@ package com.yandex.div.core.view2.divs.pager
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.divView
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivPager
@@ -34,13 +34,16 @@ class PagerSelectedActionsDispatcherTest {
         on { handleActions(any(), any(), any(), anyOrNull(), anyOrNull())  }.thenCallRealMethod()
     }
     private val divView = divView(logId = CARD_ID, divTag = CARD_ID)
-    private val bindingContext = BindingContext(divView, ExpressionResolver.EMPTY)
     private val bulkActionsArgumentCaptor = argumentCaptor<() -> Unit>()
 
     private val div = UnitTestData(PAGER_DIR, "pager_selected_actions.json").div
     private val divPager = div.value() as DivPager
 
-    private val underTest = PagerSelectedActionsDispatcher(bindingContext, ArrayList(divPager.items), divActionBinder)
+    private val underTest = PagerSelectedActionsDispatcher(
+        divView,
+        divPager.buildItems(ExpressionResolver.EMPTY),
+        divActionBinder
+    )
 
     @Before
     fun setUp() {
@@ -51,7 +54,11 @@ class PagerSelectedActionsDispatcherTest {
     fun `no actions dispatched when selected item has no selected actions`() {
         val divPager = UnitTestData(PAGER_DIR, "pager_default_item.json").div.value() as DivPager
 
-        val underTest = PagerSelectedActionsDispatcher(bindingContext, ArrayList(divPager.items), divActionBinder)
+        val underTest = PagerSelectedActionsDispatcher(
+            divView,
+            divPager.buildItems(ExpressionResolver.EMPTY),
+            divActionBinder
+        )
         underTest.whenAttached()
         underTest.whenPageSelected(0)
 

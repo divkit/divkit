@@ -2,38 +2,35 @@ package com.yandex.div.core.view2.divs
 
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div2.Div
 import com.yandex.div2.DivVisibility
 
-internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder, T: Any>(
-    items: List<T>,
-    private val bindingContext: BindingContext,
+internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
+    items: List<DivItemBuilderResult>,
 ) : RecyclerView.Adapter<VH>(),
-    DivAdapter<VH, T>,
     ExpressionSubscriber {
 
-    override val items = items.toMutableList()
+    val items = items.toMutableList()
 
-    private val _visibleItems = mutableListOf<IndexedValue<T>>()
-    override val visibleItems: List<T> = _visibleItems.dropIndex()
+    private val _visibleItems = mutableListOf<IndexedValue<DivItemBuilderResult>>()
+    val visibleItems: List<DivItemBuilderResult> = _visibleItems.dropIndex()
 
-    override val visibilityMap = mutableMapOf<T, Boolean>()
+    private val visibilityMap = mutableMapOf<DivItemBuilderResult, Boolean>()
 
     override val subscriptions = mutableListOf<Disposable>()
 
     init {
         updateVisibleItems()
+        subscribeOnElements()
     }
 
-    final override fun updateVisibleItems() {
+    fun updateVisibleItems() {
         _visibleItems.clear()
         visibilityMap.clear()
 
         indexedItems.forEach {
-            val isVisible = it.value.getVisibility(bindingContext).isVisible
+            val isVisible = it.value.div.value().visibility.evaluate(it.value.expressionResolver).isVisible
 
             visibilityMap[it.value] = isVisible
             if (isVisible) {
@@ -44,50 +41,44 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder, T: 
 
     fun subscribeOnElements() {
         indexedItems.forEach { item ->
-            val subscription = item.value.observeVisibility(bindingContext) { item.updateVisibility(it) }
+            val subscription = item.value.div.value().visibility.observe(item.value.expressionResolver) {
+                item.updateVisibility(it)
+            }
             addSubscription(subscription)
         }
     }
 
+    val DivItemBuilderResult.isVisible get() = visibilityMap[this] == true
+
+    protected open fun notifyRawItemRemoved(position: Int) = notifyItemRemoved(position)
+
+    protected open fun notifyRawItemInserted(position: Int) = notifyItemInserted(position)
+
+    protected open fun notifyRawItemRangeInserted(positionStart: Int, itemCount: Int) =
+        notifyItemRangeInserted(positionStart, itemCount)
+
     private val indexedItems
         get() = items.withIndex()
 
-    private fun IndexedValue<T>.updateVisibility(newVisibility: DivVisibility) {
+    private fun IndexedValue<DivItemBuilderResult>.updateVisibility(newVisibility: DivVisibility) {
         val wasVisible = visibilityMap[value] ?: false
         val isVisible = newVisibility.isVisible
 
         if (!wasVisible && isVisible) {
             val position = _visibleItems.insertionSortPass(this)
-            notifyItemInserted(position)
+            notifyRawItemInserted(position)
         } else if (wasVisible && !isVisible) {
             val position = _visibleItems.indexOf(this)
             _visibleItems.removeAt(position)
-            notifyItemRemoved(position)
+            notifyRawItemRemoved(position)
         }
 
         visibilityMap[value] = isVisible
     }
 
+    override fun getItemCount() = visibleItems.size
+
     companion object {
-        internal fun <T:Any> T.getVisibility(context: BindingContext): DivVisibility? {
-            return when (this) {
-                is Div -> value().visibility.evaluate(context.expressionResolver)
-                is DivItemBuilderResult -> div.value().visibility.evaluate(expressionResolver)
-                else -> null
-            }
-        }
-
-        internal fun <T:Any> T.observeVisibility(
-            context: BindingContext,
-            callback: (DivVisibility) -> Unit
-        ): Disposable {
-            return when (this) {
-                is Div -> value().visibility.observe(context.expressionResolver, callback)
-                is DivItemBuilderResult -> div.value().visibility.observe(expressionResolver, callback)
-                else -> Disposable.NULL
-            }
-        }
-
         internal val DivVisibility?.isVisible get() = this != null && this != DivVisibility.GONE
 
         private fun <T : Any> List<IndexedValue<T>>.dropIndex(): List<T> =

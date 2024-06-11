@@ -88,16 +88,15 @@ internal class ExistingToken(
     ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()
         val pager = (view as? DivPagerView)?.viewPager ?: return emptyList()
-        val adapter = (pager.adapter as? DivPagerAdapter<*>) ?: return emptyList()
-        val activeItems = adapter.visibleDivs
-        val activeHashes = activeItems.map { it.hash() }
+        val adapter = (pager.adapter as? DivPagerAdapter) ?: return emptyList()
+        val activeHashes = adapter.visibleItems.map { it.div.hash() }
 
-        items?.forEachIndexed { index, newItem ->
-            if (newItem.hash() in activeHashes) {
-                val childViewIndex = activeHashes.indexOf(newItem.hash())
+        buildItems(resolver).forEachIndexed { index, newItem ->
+            if (newItem.div.hash() in activeHashes) {
+                val childViewIndex = activeHashes.indexOf(newItem.div.hash())
                 val targetView = view.getPageView(childViewIndex) ?: return@forEachIndexed
                 val token = ExistingToken(
-                    item = newItem.toItemBuilderResult(resolver),
+                    item = newItem,
                     view = targetView,
                     childIndex = index,
                     parentToken = parentToken ?: this@ExistingToken,
@@ -114,15 +113,14 @@ internal class ExistingToken(
         parentToken: ExistingToken?
     ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()
-        val adapter = ((view as? DivRecyclerView)?.adapter as? DivGalleryAdapter<*>) ?: return emptyList()
-        val activeItems = adapter.visibleDivs
-        val activeHashes = activeItems.map { it.hash() }
+        val adapter = ((view as? DivRecyclerView)?.adapter as? DivGalleryAdapter) ?: return emptyList()
+        val activeHashes = adapter.visibleItems.map { it.div.hash() }
 
-        items?.forEachIndexed { index, newItem ->
-            if (newItem.hash() in activeHashes) {
+        buildItems(resolver).forEachIndexed { index, newItem ->
+            if (newItem.div.hash() in activeHashes) {
                 val targetView = view.getItemView(index) ?: return@forEachIndexed
                 val token = ExistingToken(
-                    item = newItem.toItemBuilderResult(resolver),
+                    item = newItem,
                     view = targetView,
                     childIndex = index,
                     parentToken = parentToken ?: this@ExistingToken,

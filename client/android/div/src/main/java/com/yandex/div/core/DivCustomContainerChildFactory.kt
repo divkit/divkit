@@ -3,7 +3,6 @@ package com.yandex.div.core
 import android.view.View
 import androidx.annotation.AnyThread
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -26,7 +25,7 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
     ): View {
 
         return divView.div2Component.div2Builder
-            .buildView(div, getBindingContext(divView, expressionResolver), divStatePath)
+            .buildView(div, divView.bindingContext.getFor(expressionResolver), divStatePath)
     }
 
     /**
@@ -41,7 +40,7 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         expressionResolver: ExpressionResolver = divView.expressionResolver
     ): View {
         return divView.div2Component.div2Builder
-            .createView(div, getBindingContext(divView, expressionResolver), divStatePath)
+            .createView(div, divView.bindingContext.getFor(expressionResolver), divStatePath)
     }
 
     /**
@@ -55,12 +54,6 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         expressionResolver: ExpressionResolver,
     ) {
         divView.div2Component.divBinder
-            .bind(getBindingContext(divView, expressionResolver), childView, div, divStatePath)
-    }
-
-    private fun getBindingContext(divView: Div2View, resolver: ExpressionResolver): BindingContext {
-        return divView.bindingContext.takeIf {
-            resolver == divView.expressionResolver
-        } ?: BindingContext(divView, resolver)
+            .bind(divView.bindingContext.getFor(expressionResolver), childView, div, divStatePath)
     }
 }

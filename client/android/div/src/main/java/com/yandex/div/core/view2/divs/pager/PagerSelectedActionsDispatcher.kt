@@ -4,10 +4,10 @@ import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.DivActionHandler.DivActionReason
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.internal.KLog
-import com.yandex.div2.Div
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div2.DivPager
 
 private const val TAG = "Ya:PagerSelectedActionsTracker"
@@ -16,8 +16,8 @@ private const val TAG = "Ya:PagerSelectedActionsTracker"
  * Responsible to dispatch item's `selected_actions` for [DivPager].
  */
 internal class PagerSelectedActionsDispatcher(
-    private val bindingContext: BindingContext,
-    private val divs: List<Div>,
+    private val divView: Div2View,
+    private val items: List<DivItemBuilderResult>,
     private val divActionBinder: DivActionBinder
 ) {
 
@@ -61,17 +61,17 @@ internal class PagerSelectedActionsDispatcher(
             while (selectedPages.isNotEmpty()) {
                 val page = selectedPages.removeFirst()
                 KLog.d(TAG) { "dispatch selected actions for page $page" }
-                dispatchSelectedActions(divs[page])
+                dispatchSelectedActions(items[page])
             }
         }
     }
 
-    private fun dispatchSelectedActions(div: Div) {
-        div.value().selectedActions?.let { actions ->
-            bindingContext.divView.bulkActions {
+    private fun dispatchSelectedActions(item: DivItemBuilderResult) {
+        item.div.value().selectedActions?.let { actions ->
+            divView.bulkActions {
                 divActionBinder.handleActions(
-                    bindingContext.divView,
-                    bindingContext.expressionResolver,
+                    divView,
+                    item.expressionResolver,
                     actions,
                     DivActionReason.SELECTION
                 )

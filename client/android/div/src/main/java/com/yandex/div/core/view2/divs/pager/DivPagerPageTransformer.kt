@@ -158,10 +158,8 @@ internal class DivPagerPageTransformer(
         recyclerView ?: return
 
         val adapterPosition = recyclerView.getChildAdapterPosition(this)
-        val div = when (val adapter = recyclerView.adapter) {
-            is DivPagerAdapter<*> -> adapter.getItemDiv(adapterPosition)
-            else -> return
-        }
+        val adapter = recyclerView.adapter as? DivPagerAdapter ?: return
+        val div = adapter.itemsToShow[adapterPosition].div
         val pageAlpha = div.value().alpha.evaluate(resolver)
 
         alpha = getInterpolation(pageAlpha, cornerAlpha, interpolatedValue).toFloat()

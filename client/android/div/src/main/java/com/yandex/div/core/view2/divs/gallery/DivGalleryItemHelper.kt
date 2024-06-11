@@ -14,10 +14,10 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.widget.makeAtMostSpec
 import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div.core.widget.makeUnspecifiedSpec
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivGallery
@@ -30,7 +30,7 @@ internal interface DivGalleryItemHelper {
 
     val childrenToRelayout: MutableSet<View>
 
-    fun getItemDiv(position: Int): Div
+    fun getItemDiv(position: Int): DivItemBuilderResult
 
     fun toLayoutManager(): RecyclerView.LayoutManager
 
@@ -54,12 +54,7 @@ internal interface DivGalleryItemHelper {
         bottom: Int,
         isRelayoutingChildren: Boolean = false
     ) {
-        val childDiv = runCatching { getItemDiv(child.getTag(R.id.div_gallery_item_index) as Int).value() }.getOrNull()
-
-        val resolver = bindingContext.expressionResolver
-        val parentAlignment = div.crossContentAlignment
         val orientation = getLayoutManagerOrientation()
-
         val shouldRelayout = (orientation == RecyclerView.VERTICAL && child.measuredWidth == 0) ||
                 (orientation == RecyclerView.HORIZONTAL && child.measuredHeight == 0)
 
@@ -71,6 +66,10 @@ internal interface DivGalleryItemHelper {
             return
         }
 
+        val childItem = runCatching { getItemDiv(child.getTag(R.id.div_gallery_item_index) as Int) }.getOrNull()
+        val childDiv = childItem?.div?.value()
+        val resolver = childItem?.expressionResolver ?: bindingContext.expressionResolver
+        val parentAlignment = div.crossContentAlignment
         val horizontalOffset = if (orientation == RecyclerView.VERTICAL) {
             val alignment = childDiv?.alignmentHorizontal.evaluateAlignment(resolver, parentAlignment) {
                 asCrossContentAlignment()
@@ -225,14 +224,17 @@ internal interface DivGalleryItemHelper {
 
         val container = (child as? ViewGroup) ?: return
         val itemView = container.children.firstOrNull() ?: return
-        val div = getItemDiv(position)
+        val item = getItemDiv(position)
+        val div = item.div
 
         val divView = bindingContext.divView
         if (clear) {
-            divView.div2Component.visibilityActionTracker.cancelTrackingViewsHierarchy(bindingContext, itemView, div)
+            divView.div2Component.visibilityActionTracker
+                .cancelTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), itemView, div)
             divView.unbindViewFromDiv(itemView)
         } else {
-            divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(bindingContext, itemView, div)
+            divView.div2Component.visibilityActionTracker
+                .startTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), itemView, div)
             divView.bindViewToDiv(itemView, div)
         }
     }

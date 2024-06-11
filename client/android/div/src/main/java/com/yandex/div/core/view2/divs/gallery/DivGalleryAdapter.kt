@@ -2,42 +2,40 @@ package com.yandex.div.core.view2.divs.gallery
 
 import android.view.View
 import android.view.ViewGroup
-import com.yandex.div.R
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
-import com.yandex.div.core.view2.divs.VisibilityAwareAdapter
+import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div2.Div
 import java.util.WeakHashMap
 
-internal abstract class DivGalleryAdapter<T: Any>(
-    items: List<T>,
+internal class DivGalleryAdapter(
+    items: List<DivItemBuilderResult>,
     private val bindingContext: BindingContext,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
     private val itemStateBinder: (itemView: View, div: Div) -> Unit,
-) : VisibilityAwareAdapter<DivGalleryBinder.GalleryViewHolder, T>(items, bindingContext) {
+    private val path: DivStatePath,
+) : DivCollectionAdapter<DivGalleryViewHolder>(items) {
 
-    private val ids = WeakHashMap<T, Long>()
+    private val ids = WeakHashMap<DivItemBuilderResult, Long>()
     private var lastItemId = 0L
 
     init {
-        @Suppress("LeakingThis")
         setHasStableIds(true)
-        subscribeOnElements()
     }
 
-    override fun onViewAttachedToWindow(holder: DivGalleryBinder.GalleryViewHolder) {
+    override fun onViewAttachedToWindow(holder: DivGalleryViewHolder) {
         super.onViewAttachedToWindow(holder)
-        holder.oldDiv?.let { div ->
-            itemStateBinder.invoke(holder.rootView, div)
-        }
+        holder.updateState()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryBinder.GalleryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryViewHolder {
         val view = DivViewWrapper(bindingContext.divView.context)
-        return DivGalleryBinder.GalleryViewHolder(view, divBinder, viewCreator)
+        return DivGalleryViewHolder(view, divBinder, viewCreator, itemStateBinder, path)
     }
 
     override fun getItemId(position: Int): Long {
@@ -45,11 +43,8 @@ internal abstract class DivGalleryAdapter<T: Any>(
         return ids[item] ?: (lastItemId++).also { ids[item] = it }
     }
 
-    override fun getItemCount() = visibleItems.size
-
-    override fun onBindViewHolder(holder: DivGalleryBinder.GalleryViewHolder, position: Int) {
-        holder.bindItem(position)
-        holder.rootView.setTag(R.id.div_gallery_item_index, position)
-        divBinder.attachIndicators()
+    override fun onBindViewHolder(holder: DivGalleryViewHolder, position: Int) {
+        val item = visibleItems[position]
+        holder.bind(bindingContext.getFor(item.expressionResolver), item.div, position)
     }
 }

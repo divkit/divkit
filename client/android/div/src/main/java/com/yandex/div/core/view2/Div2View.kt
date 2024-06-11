@@ -135,7 +135,7 @@ class Div2View private constructor(
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
 
-    internal var bindingContext: BindingContext = BindingContext(this, expressionResolver)
+    internal var bindingContext: BindingContext = BindingContext.createEmpty(this)
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
 
@@ -198,7 +198,7 @@ class Div2View private constructor(
         if (oldExpressionsRuntime != _expressionsRuntime) {
             oldExpressionsRuntime?.clearBinding()
         }
-        bindingContext = BindingContext(this, expressionResolver)
+        bindingContext = bindingContext.getFor(expressionResolver)
     }
 
     private fun attachVariableTriggers() {

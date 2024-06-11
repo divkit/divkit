@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
 import com.yandex.div.core.view2.divs.pager.DivPagerPageTransformer
 
 internal open class ViewPager2Wrapper @JvmOverloads constructor(
@@ -57,6 +58,7 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
             }
 
             viewPager.orientation = value
+            (viewPager.adapter as DivPagerAdapter?)?.orientation = value
 
             withRecyclerView {
                 // Sadly we need to clear pool cause it may

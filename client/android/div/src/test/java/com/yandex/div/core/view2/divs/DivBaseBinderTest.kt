@@ -6,7 +6,6 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTransitionTrigger
@@ -35,13 +34,12 @@ class DivBaseBinderTest {
     private val paddingsTop = DivEdgeInsets(top = 1L.asExpression())
 
     private val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock())
-    private val expressionResolver = mock<ExpressionResolver>()
     private val viewComponent = mock<Div2ViewComponent>()
     private val divView = mock<Div2View> {
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
         on { viewComponent } doReturn viewComponent
     }
-    private val context = BindingContext(divView, expressionResolver)
+    private val context = BindingContext.createEmpty(divView)
 
     @Test
     fun `do not apply paddings when same`() {

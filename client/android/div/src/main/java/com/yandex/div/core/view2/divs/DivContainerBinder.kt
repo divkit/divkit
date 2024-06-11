@@ -250,7 +250,7 @@ internal class DivContainerBinder @Inject constructor(
             if (patchShift > NO_PATCH_SHIFT) {
                 shift += patchShift
             } else {
-                val childBindingContext = BindingContext(bindingContext.divView, item.expressionResolver)
+                val childBindingContext = bindingContext.getFor(item.expressionResolver)
                 binder.bind(childBindingContext, childView, item.div, path)
                 childView.bindChildAlignment(
                     newDiv,
