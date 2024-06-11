@@ -70,7 +70,7 @@ class FunctionTest {
     @Test
     fun `no variadic arguments passed to function`() {
         val function = FunctionImpl("func", listOf(FunctionArgument(EvaluableType.INTEGER, isVariadic = true)))
-        assertMatchesArguments(function, emptyList())
+        assertArgCountMismatch(function, emptyList())
     }
 
     @Test

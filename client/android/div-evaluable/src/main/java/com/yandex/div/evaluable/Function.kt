@@ -39,7 +39,7 @@ abstract class Function {
         argTypes: List<EvaluableType>,
         matches: (type: EvaluableType, declaredType: EvaluableType) -> Boolean
     ): MatchResult {
-        val argumentMin = if (hasVarArg) declaredArgs.size - 1 else declaredArgs.size
+        val argumentMin = declaredArgs.size
         val argumentMax = if (hasVarArg) Int.MAX_VALUE else declaredArgs.size
         if (argTypes.size < argumentMin || argTypes.size > argumentMax) {
             return MatchResult.ArgCountMismatch(expected = argumentMin)
