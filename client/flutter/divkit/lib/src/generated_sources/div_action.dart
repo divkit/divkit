@@ -71,13 +71,11 @@ class DivAction with EquatableMixin {
       )!,
       logUrl: safeParseUriExpr(json['log_url']),
       menuItems: safeParseObj(
-        (json['menu_items'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivActionMenuItem.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['menu_items'],
+            (v) => safeParseObj(
+                  DivActionMenuItem.fromJson(v),
+                )!),
       ),
       payload: safeParseMap(
         json,
@@ -124,13 +122,11 @@ class DivActionMenuItem with EquatableMixin {
         DivAction.fromJson(json['action']),
       ),
       actions: safeParseObj(
-        (json['actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       text: safeParseStrExpr(
         json['text']?.toString(),

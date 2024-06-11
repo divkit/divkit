@@ -45,13 +45,11 @@ class DivFixedLengthInputMask with EquatableMixin implements DivInputMaskBase {
         json['pattern']?.toString(),
       )!,
       patternElements: safeParseObj(
-        (json['pattern_elements'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivFixedLengthInputMaskPatternElement.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['pattern_elements'],
+            (v) => safeParseObj(
+                  DivFixedLengthInputMaskPatternElement.fromJson(v),
+                )!),
       )!,
       rawTextVariable: safeParseStr(
         json['raw_text_variable']?.toString(),

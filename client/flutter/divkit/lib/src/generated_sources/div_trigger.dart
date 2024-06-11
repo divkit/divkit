@@ -32,13 +32,11 @@ class DivTrigger with EquatableMixin {
     }
     return DivTrigger(
       actions: safeParseObj(
-        (json['actions'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       )!,
       condition: safeParseBoolExpr(
         json['condition'],

@@ -68,13 +68,11 @@ class DivImageBackground with EquatableMixin {
         fallback: DivAlignmentVertical.center,
       )!,
       filters: safeParseObj(
-        (json['filters'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivFilter.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['filters'],
+            (v) => safeParseObj(
+                  DivFilter.fromJson(v),
+                )!),
       ),
       imageUrl: safeParseUriExpr(json['image_url'])!,
       preloadRequired: safeParseBoolExpr(

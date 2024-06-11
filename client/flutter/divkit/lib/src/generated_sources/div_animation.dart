@@ -66,13 +66,11 @@ class DivAnimation with EquatableMixin {
         fallback: DivAnimationInterpolator.spring,
       )!,
       items: safeParseObj(
-        (json['items'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAnimation.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  DivAnimation.fromJson(v),
+                )!),
       ),
       name: safeParseStrEnumExpr(
         json['name'],

@@ -51,22 +51,18 @@ class DivData with EquatableMixin {
         json['log_id']?.toString(),
       )!,
       states: safeParseObj(
-        (json['states'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivDataState.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['states'],
+            (v) => safeParseObj(
+                  DivDataState.fromJson(v),
+                )!),
       )!,
       timers: safeParseObj(
-        (json['timers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTimer.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['timers'],
+            (v) => safeParseObj(
+                  DivTimer.fromJson(v),
+                )!),
       ),
       transitionAnimationSelector: safeParseStrEnumExpr(
         json['transition_animation_selector'],
@@ -74,22 +70,18 @@ class DivData with EquatableMixin {
         fallback: DivTransitionSelector.none,
       )!,
       variableTriggers: safeParseObj(
-        (json['variable_triggers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTrigger.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['variable_triggers'],
+            (v) => safeParseObj(
+                  DivTrigger.fromJson(v),
+                )!),
       ),
       variables: safeParseObj(
-        (json['variables'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVariable.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['variables'],
+            (v) => safeParseObj(
+                  DivVariable.fromJson(v),
+                )!),
       ),
     );
   }

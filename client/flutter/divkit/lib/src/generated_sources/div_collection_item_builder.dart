@@ -38,13 +38,11 @@ class DivCollectionItemBuilder with EquatableMixin {
         fallback: "it",
       )!,
       prototypes: safeParseObj(
-        (json['prototypes'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivCollectionItemBuilderPrototype.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['prototypes'],
+            (v) => safeParseObj(
+                  DivCollectionItemBuilderPrototype.fromJson(v),
+                )!),
       )!,
     );
   }

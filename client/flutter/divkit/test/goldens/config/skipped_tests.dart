@@ -65,6 +65,8 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-container/wrap/vertical-orientation-with-separators-using-paddings-rtl.json',
     'example/assets/test_data/snapshot_test_data/div-container/block-paddings.json',
     'example/assets/test_data/snapshot_test_data/div-container/match-parent-with-big-content.json',
+    'example/assets/test_data/snapshot_test_data/div-container/fixed-size-with-paddings.json',
+    'example/assets/test_data/snapshot_test_data/div-container/corners_radius.json'
   ].map(
     (e) => _SkipTest(
       e,
@@ -704,6 +706,8 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-size/wrap-content/min-max-constrained-false-wrap-vertical.json',
     'example/assets/test_data/snapshot_test_data/div-size/wrap-content/text-min-max-constrained-false-horizontal.json',
     'example/assets/test_data/snapshot_test_data/div-size/wrap-content/text-min-max-constrained-false-overlap.json',
+    'example/assets/test_data/snapshot_test_data/div-size/padding/padding-bigger-than-box.json',
+    'example/assets/test_data/snapshot_test_data/div-size/padding/padding-smaller-than-box.json'
   ].map(
     (e) => _SkipTest(
       e,

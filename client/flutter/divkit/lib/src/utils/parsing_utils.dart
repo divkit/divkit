@@ -1,11 +1,31 @@
 import 'dart:convert';
 import 'dart:ui' show Color;
 
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/expression/expression.dart';
 
 export 'dart:ui' show Color;
 
 export 'package:divkit/src/core/expression/expression.dart';
+
+List<T>? safeListMap<T>(dynamic list, T Function(dynamic) mapper) {
+  if (list == null) {
+    return null;
+  }
+
+  final result = <T>[];
+  if (list is List<dynamic>) {
+    for (final l in list) {
+      try {
+        result.add(mapper(l));
+      } catch (e) {
+        logger.warning(e);
+      }
+    }
+  }
+
+  return result;
+}
 
 dynamic Function(dynamic source) safeParseNamed(String? name) {
   switch (name) {
@@ -269,6 +289,9 @@ int? safeParseInt(Object? source) {
   if (source is int) {
     return source;
   }
+  if (source is double) {
+    return source.round();
+  }
   if (source is String) {
     return int.tryParse(source);
   }
@@ -299,11 +322,11 @@ double? safeParseDouble(Object? source) {
   if (source is double) {
     return source;
   }
-  if (source is String) {
-    return double.tryParse(source);
-  }
   if (source is int) {
     return source.toDouble();
+  }
+  if (source is String) {
+    return double.tryParse(source);
   }
   return null;
 }
@@ -375,6 +398,15 @@ bool? safeParseBool(Object? source) {
         return false;
     }
   }
+
+  if (source is double) {
+    if (source == 1.0) {
+      return true;
+    } else if (source == 0.0) {
+      return false;
+    }
+  }
+
   if (source is String) {
     switch (source.toLowerCase()) {
       case 'true':

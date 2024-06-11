@@ -28,13 +28,11 @@ class DivPatch with EquatableMixin {
     }
     return DivPatch(
       changes: safeParseObj(
-        (json['changes'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivPatchChange.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['changes'],
+            (v) => safeParseObj(
+                  DivPatchChange.fromJson(v),
+                )!),
       )!,
       mode: safeParseStrEnumExpr(
         json['mode'],
@@ -117,13 +115,11 @@ class DivPatchChange with EquatableMixin {
         json['id']?.toString(),
       )!,
       items: safeParseObj(
-        (json['items'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                Div.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  Div.fromJson(v),
+                )!),
       ),
     );
   }

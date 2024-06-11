@@ -27,22 +27,18 @@ class DivDownloadCallbacks with EquatableMixin {
     }
     return DivDownloadCallbacks(
       onFailActions: safeParseObj(
-        (json['on_fail_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['on_fail_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       onSuccessActions: safeParseObj(
-        (json['on_success_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['on_success_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
     );
   }

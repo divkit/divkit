@@ -32,13 +32,11 @@ class DivLinearGradient with EquatableMixin {
         fallback: 0,
       )!,
       colors: safeParseObjExpr(
-        (json['colors'] as List<dynamic>)
-            .map(
-              (v) => safeParseColor(
-                v,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['colors'],
+            (v) => safeParseColor(
+                  v,
+                )!),
       )!,
     );
   }

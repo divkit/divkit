@@ -263,68 +263,56 @@ class DivVideo with EquatableMixin implements DivBase {
         fallback: false,
       )!,
       background: safeParseObj(
-        (json['background'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivBackground.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['background'],
+            (v) => safeParseObj(
+                  DivBackground.fromJson(v),
+                )!),
       ),
       border: safeParseObj(
         DivBorder.fromJson(json['border']),
         fallback: const DivBorder(),
       )!,
       bufferingActions: safeParseObj(
-        (json['buffering_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['buffering_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       columnSpan: safeParseIntExpr(
         json['column_span'],
       ),
       disappearActions: safeParseObj(
-        (json['disappear_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivDisappearAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['disappear_actions'],
+            (v) => safeParseObj(
+                  DivDisappearAction.fromJson(v),
+                )!),
       ),
       elapsedTimeVariable: safeParseStr(
         json['elapsed_time_variable']?.toString(),
       ),
       endActions: safeParseObj(
-        (json['end_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['end_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       extensions: safeParseObj(
-        (json['extensions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivExtension.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['extensions'],
+            (v) => safeParseObj(
+                  DivExtension.fromJson(v),
+                )!),
       ),
       fatalActions: safeParseObj(
-        (json['fatal_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['fatal_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       focus: safeParseObj(
         DivFocus.fromJson(json['focus']),
@@ -349,13 +337,11 @@ class DivVideo with EquatableMixin implements DivBase {
         fallback: const DivEdgeInsets(),
       )!,
       pauseActions: safeParseObj(
-        (json['pause_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['pause_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       playerSettingsPayload: safeParseMap(
         json,
@@ -372,13 +358,11 @@ class DivVideo with EquatableMixin implements DivBase {
         fallback: false,
       )!,
       resumeActions: safeParseObj(
-        (json['resume_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['resume_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       rowSpan: safeParseIntExpr(
         json['row_span'],
@@ -389,22 +373,18 @@ class DivVideo with EquatableMixin implements DivBase {
         fallback: DivVideoScale.fit,
       )!,
       selectedActions: safeParseObj(
-        (json['selected_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['selected_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       tooltips: safeParseObj(
-        (json['tooltips'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTooltip.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['tooltips'],
+            (v) => safeParseObj(
+                  DivTooltip.fromJson(v),
+                )!),
       ),
       transform: safeParseObj(
         DivTransform.fromJson(json['transform']),
@@ -420,32 +400,26 @@ class DivVideo with EquatableMixin implements DivBase {
         DivAppearanceTransition.fromJson(json['transition_out']),
       ),
       transitionTriggers: safeParseObj(
-        (json['transition_triggers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseStrEnum(
-                v,
-                parse: DivTransitionTrigger.fromJson,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['transition_triggers'],
+            (v) => safeParseStrEnum(
+                  v,
+                  parse: DivTransitionTrigger.fromJson,
+                )!),
       ),
       variables: safeParseObj(
-        (json['variables'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVariable.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['variables'],
+            (v) => safeParseObj(
+                  DivVariable.fromJson(v),
+                )!),
       ),
       videoSources: safeParseObj(
-        (json['video_sources'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivVideoSource.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['video_sources'],
+            (v) => safeParseObj(
+                  DivVideoSource.fromJson(v),
+                )!),
       )!,
       visibility: safeParseStrEnumExpr(
         json['visibility'],
@@ -456,13 +430,11 @@ class DivVideo with EquatableMixin implements DivBase {
         DivVisibilityAction.fromJson(json['visibility_action']),
       ),
       visibilityActions: safeParseObj(
-        (json['visibility_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVisibilityAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['visibility_actions'],
+            (v) => safeParseObj(
+                  DivVisibilityAction.fromJson(v),
+                )!),
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),

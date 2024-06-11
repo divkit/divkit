@@ -284,13 +284,11 @@ class DivInput with EquatableMixin implements DivBase {
         fallback: 1.0,
       )!,
       background: safeParseObj(
-        (json['background'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivBackground.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['background'],
+            (v) => safeParseObj(
+                  DivBackground.fromJson(v),
+                )!),
       ),
       border: safeParseObj(
         DivBorder.fromJson(json['border']),
@@ -300,22 +298,18 @@ class DivInput with EquatableMixin implements DivBase {
         json['column_span'],
       ),
       disappearActions: safeParseObj(
-        (json['disappear_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivDisappearAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['disappear_actions'],
+            (v) => safeParseObj(
+                  DivDisappearAction.fromJson(v),
+                )!),
       ),
       extensions: safeParseObj(
-        (json['extensions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivExtension.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['extensions'],
+            (v) => safeParseObj(
+                  DivExtension.fromJson(v),
+                )!),
       ),
       focus: safeParseObj(
         DivFocus.fromJson(json['focus']),
@@ -398,13 +392,11 @@ class DivInput with EquatableMixin implements DivBase {
         fallback: false,
       )!,
       selectedActions: safeParseObj(
-        (json['selected_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['selected_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       textAlignmentHorizontal: safeParseStrEnumExpr(
         json['text_alignment_horizontal'],
@@ -424,13 +416,11 @@ class DivInput with EquatableMixin implements DivBase {
         json['text_variable']?.toString(),
       )!,
       tooltips: safeParseObj(
-        (json['tooltips'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTooltip.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['tooltips'],
+            (v) => safeParseObj(
+                  DivTooltip.fromJson(v),
+                )!),
       ),
       transform: safeParseObj(
         DivTransform.fromJson(json['transform']),
@@ -446,32 +436,26 @@ class DivInput with EquatableMixin implements DivBase {
         DivAppearanceTransition.fromJson(json['transition_out']),
       ),
       transitionTriggers: safeParseObj(
-        (json['transition_triggers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseStrEnum(
-                v,
-                parse: DivTransitionTrigger.fromJson,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['transition_triggers'],
+            (v) => safeParseStrEnum(
+                  v,
+                  parse: DivTransitionTrigger.fromJson,
+                )!),
       ),
       validators: safeParseObj(
-        (json['validators'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivInputValidator.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['validators'],
+            (v) => safeParseObj(
+                  DivInputValidator.fromJson(v),
+                )!),
       ),
       variables: safeParseObj(
-        (json['variables'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVariable.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['variables'],
+            (v) => safeParseObj(
+                  DivVariable.fromJson(v),
+                )!),
       ),
       visibility: safeParseStrEnumExpr(
         json['visibility'],
@@ -482,13 +466,11 @@ class DivInput with EquatableMixin implements DivBase {
         DivVisibilityAction.fromJson(json['visibility_action']),
       ),
       visibilityActions: safeParseObj(
-        (json['visibility_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVisibilityAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['visibility_actions'],
+            (v) => safeParseObj(
+                  DivVisibilityAction.fromJson(v),
+                )!),
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),

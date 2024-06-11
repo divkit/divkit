@@ -1,8 +1,9 @@
-## 0.1.5-pre
+## 0.1.5
 * Templater support: templates can be inherited, composited, links and transitive links to fields.
 * Raised div_expressions_resolver to 0.4.2
 * Add scaling of views and texts
 * Fix impossibility of multiple inheritance of variable storage
+* Fix DTO entities creation from json
 
 ## 0.1.4
 * Correct README and add documentation.

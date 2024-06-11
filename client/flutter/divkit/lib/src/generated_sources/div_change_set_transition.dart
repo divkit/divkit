@@ -25,13 +25,11 @@ class DivChangeSetTransition with EquatableMixin {
     }
     return DivChangeSetTransition(
       items: safeParseObj(
-        (json['items'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivChangeTransition.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  DivChangeTransition.fromJson(v),
+                )!),
       )!,
     );
   }

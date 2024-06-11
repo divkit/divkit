@@ -226,9 +226,8 @@ class DartProperty(Property):
             else:
                 strategy = ""
 
-            return f"safeParseObj{expr}((json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
-                   f"{'?' if self.optional or self.has_default else ''}.map((v) => {strategy},)" \
-                   f".toList(),{fallback}){'' if self.optional or self.has_default else '!'}"
+            return f"safeParseObj{expr}(safeListMap(json['{self.name}'], (v) => {strategy})," \
+                   f"{fallback}){'' if self.optional or self.has_default else '!'}"
 
     @property
     def fallback_declaration(self) -> str:

@@ -48,25 +48,21 @@ class DivTimer with EquatableMixin {
         fallback: 0,
       )!,
       endActions: safeParseObj(
-        (json['end_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['end_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       id: safeParseStr(
         json['id']?.toString(),
       )!,
       tickActions: safeParseObj(
-        (json['tick_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['tick_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       tickInterval: safeParseIntExpr(
         json['tick_interval'],

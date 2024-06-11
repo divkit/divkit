@@ -65,13 +65,11 @@ class DivRadialGradient with EquatableMixin {
         )),
       )!,
       colors: safeParseObjExpr(
-        (json['colors'] as List<dynamic>)
-            .map(
-              (v) => safeParseColor(
-                v,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['colors'],
+            (v) => safeParseColor(
+                  v,
+                )!),
       )!,
       radius: safeParseObj(
         DivRadialGradientRadius.fromJson(json['radius']),

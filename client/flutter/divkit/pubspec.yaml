@@ -3,7 +3,7 @@ description: Open source SDUI framework for server-driven app updates, rapid UI 
 homepage: https://github.com/divkit/divkit
 repository: https://github.com/divkit/divkit
 publish_to: 'none'
-version: 0.1.5-pre
+version: 0.1.5
 
 environment:
   sdk: '>=2.17.0 <4.0.0'

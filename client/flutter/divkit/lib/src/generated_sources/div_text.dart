@@ -326,13 +326,11 @@ class DivText with EquatableMixin implements DivBase {
         ),
       )!,
       actions: safeParseObj(
-        (json['actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       alignmentHorizontal: safeParseStrEnumExpr(
         json['alignment_horizontal'],
@@ -350,13 +348,11 @@ class DivText with EquatableMixin implements DivBase {
         json['auto_ellipsize'],
       ),
       background: safeParseObj(
-        (json['background'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivBackground.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['background'],
+            (v) => safeParseObj(
+                  DivBackground.fromJson(v),
+                )!),
       ),
       border: safeParseObj(
         DivBorder.fromJson(json['border']),
@@ -366,34 +362,28 @@ class DivText with EquatableMixin implements DivBase {
         json['column_span'],
       ),
       disappearActions: safeParseObj(
-        (json['disappear_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivDisappearAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['disappear_actions'],
+            (v) => safeParseObj(
+                  DivDisappearAction.fromJson(v),
+                )!),
       ),
       doubletapActions: safeParseObj(
-        (json['doubletap_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['doubletap_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       ellipsis: safeParseObj(
         DivTextEllipsis.fromJson(json['ellipsis']),
       ),
       extensions: safeParseObj(
-        (json['extensions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivExtension.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['extensions'],
+            (v) => safeParseObj(
+                  DivExtension.fromJson(v),
+                )!),
       ),
       focus: safeParseObj(
         DivFocus.fromJson(json['focus']),
@@ -429,13 +419,11 @@ class DivText with EquatableMixin implements DivBase {
         json['id']?.toString(),
       ),
       images: safeParseObj(
-        (json['images'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTextImage.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['images'],
+            (v) => safeParseObj(
+                  DivTextImage.fromJson(v),
+                )!),
       ),
       letterSpacing: safeParseDoubleExpr(
         json['letter_spacing'],
@@ -445,13 +433,11 @@ class DivText with EquatableMixin implements DivBase {
         json['line_height'],
       ),
       longtapActions: safeParseObj(
-        (json['longtap_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['longtap_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       margins: safeParseObj(
         DivEdgeInsets.fromJson(json['margins']),
@@ -468,13 +454,11 @@ class DivText with EquatableMixin implements DivBase {
         fallback: const DivEdgeInsets(),
       )!,
       ranges: safeParseObj(
-        (json['ranges'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTextRange.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['ranges'],
+            (v) => safeParseObj(
+                  DivTextRange.fromJson(v),
+                )!),
       ),
       rowSpan: safeParseIntExpr(
         json['row_span'],
@@ -484,13 +468,11 @@ class DivText with EquatableMixin implements DivBase {
         fallback: false,
       )!,
       selectedActions: safeParseObj(
-        (json['selected_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['selected_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       strike: safeParseStrEnumExpr(
         json['strike'],
@@ -521,13 +503,11 @@ class DivText with EquatableMixin implements DivBase {
         DivShadow.fromJson(json['text_shadow']),
       ),
       tooltips: safeParseObj(
-        (json['tooltips'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTooltip.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['tooltips'],
+            (v) => safeParseObj(
+                  DivTooltip.fromJson(v),
+                )!),
       ),
       transform: safeParseObj(
         DivTransform.fromJson(json['transform']),
@@ -543,14 +523,12 @@ class DivText with EquatableMixin implements DivBase {
         DivAppearanceTransition.fromJson(json['transition_out']),
       ),
       transitionTriggers: safeParseObj(
-        (json['transition_triggers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseStrEnum(
-                v,
-                parse: DivTransitionTrigger.fromJson,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['transition_triggers'],
+            (v) => safeParseStrEnum(
+                  v,
+                  parse: DivTransitionTrigger.fromJson,
+                )!),
       ),
       truncate: safeParseStrEnumExpr(
         json['truncate'],
@@ -563,13 +541,11 @@ class DivText with EquatableMixin implements DivBase {
         fallback: DivLineStyle.none,
       )!,
       variables: safeParseObj(
-        (json['variables'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVariable.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['variables'],
+            (v) => safeParseObj(
+                  DivVariable.fromJson(v),
+                )!),
       ),
       visibility: safeParseStrEnumExpr(
         json['visibility'],
@@ -580,13 +556,11 @@ class DivText with EquatableMixin implements DivBase {
         DivVisibilityAction.fromJson(json['visibility_action']),
       ),
       visibilityActions: safeParseObj(
-        (json['visibility_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVisibilityAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['visibility_actions'],
+            (v) => safeParseObj(
+                  DivVisibilityAction.fromJson(v),
+                )!),
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
@@ -678,13 +652,11 @@ class DivTextRange with EquatableMixin {
     }
     return DivTextRange(
       actions: safeParseObj(
-        (json['actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       background: safeParseObj(
         DivTextRangeBackground.fromJson(json['background']),
@@ -851,31 +823,25 @@ class DivTextEllipsis with EquatableMixin {
     }
     return DivTextEllipsis(
       actions: safeParseObj(
-        (json['actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       images: safeParseObj(
-        (json['images'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTextImage.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['images'],
+            (v) => safeParseObj(
+                  DivTextImage.fromJson(v),
+                )!),
       ),
       ranges: safeParseObj(
-        (json['ranges'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTextRange.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['ranges'],
+            (v) => safeParseObj(
+                  DivTextRange.fromJson(v),
+                )!),
       ),
       text: safeParseStrExpr(
         json['text']?.toString(),

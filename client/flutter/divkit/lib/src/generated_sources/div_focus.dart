@@ -41,13 +41,11 @@ class DivFocus with EquatableMixin {
     }
     return DivFocus(
       background: safeParseObj(
-        (json['background'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivBackground.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['background'],
+            (v) => safeParseObj(
+                  DivBackground.fromJson(v),
+                )!),
       ),
       border: safeParseObj(
         DivBorder.fromJson(json['border']),
@@ -57,22 +55,18 @@ class DivFocus with EquatableMixin {
         DivFocusNextFocusIds.fromJson(json['next_focus_ids']),
       ),
       onBlur: safeParseObj(
-        (json['on_blur'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['on_blur'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       onFocus: safeParseObj(
-        (json['on_focus'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['on_focus'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
     );
   }

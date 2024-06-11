@@ -25,13 +25,11 @@ class DivAppearanceSetTransition with EquatableMixin {
     }
     return DivAppearanceSetTransition(
       items: safeParseObj(
-        (json['items'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivAppearanceTransition.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  DivAppearanceTransition.fromJson(v),
+                )!),
       )!,
     );
   }
