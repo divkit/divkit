@@ -6,7 +6,6 @@
         "type": "string",
         "value": "ab"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

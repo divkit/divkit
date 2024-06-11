@@ -63,7 +63,6 @@
         "type": "integer",
         "value": 3
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -76,7 +75,6 @@
         "type": "integer",
         "value": 3
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -89,7 +87,6 @@
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -102,7 +99,6 @@
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -134,7 +130,6 @@
         "type": "string",
         "value": "123"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",

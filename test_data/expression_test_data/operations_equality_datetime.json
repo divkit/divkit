@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "name": "date_a == date_a => true",
       "expression": "@{parseUnixTime(0) == parseUnixTime(0)}",
       "expected": {
         "type": "boolean",
@@ -14,7 +13,6 @@
       ]
     },
     {
-      "name": "date_a != date_a => false",
       "expression": "@{parseUnixTime(0) != parseUnixTime(0)}",
       "expected": {
         "type": "boolean",
@@ -26,8 +24,7 @@
         "web"
       ]
     },
-     {
-      "name": "date_a != date_b => true",
+    {
       "expression": "@{parseUnixTime(0) != parseUnixTime(1)}",
       "expected": {
         "type": "boolean",
@@ -40,7 +37,6 @@
       ]
     },
     {
-      "name": "date_a == date_b => false",
       "expression": "@{parseUnixTime(0) == parseUnixTime(1)}",
       "expected": {
         "type": "boolean",

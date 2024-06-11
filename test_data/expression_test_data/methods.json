@@ -6,7 +6,6 @@
         "type": "string",
         "value": "Hello!"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -19,7 +18,6 @@
         "type": "string",
         "value": "123"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -32,7 +30,6 @@
         "type": "string",
         "value": "123.45"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -45,7 +42,6 @@
         "type": "string",
         "value": "true"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -136,7 +132,6 @@
         "type": "string",
         "value": "Hello!"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -149,7 +144,6 @@
         "type": "string",
         "value": "123"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -181,7 +175,6 @@
         "type": "string",
         "value": "5"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -194,7 +187,6 @@
         "type": "string",
         "value": "true"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -207,7 +199,6 @@
         "type": "error",
         "value": "Failed to evaluate [!'false']. A Boolean is expected after a unary not."
       },
-      "variables": [],
       "platforms": [
         "ios",
         "web"

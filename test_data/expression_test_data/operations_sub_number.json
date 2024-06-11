@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "3.0 - 1.0 => 2.0",
       "expression": "@{3.0 - 1.0}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,13 +13,11 @@
       ]
     },
     {
-      "name": "3.0 - 1.0 - 2.0 => 0.0",
       "expression": "@{3.0 - 1.0 - 2.0}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -29,13 +25,11 @@
       ]
     },
     {
-      "name": "1.0 - +1.0 => 0.0",
       "expression": "@{1.0 - +1.0}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -43,13 +37,11 @@
       ]
     },
     {
-      "name": "1.0 - -1.0 => 2.0",
       "expression": "@{1.0 - -1.0}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -57,7 +49,6 @@
       ]
     },
     {
-      "name": "7.0 - b => 2.0",
       "expression": "@{7.0 - b}",
       "expected": {
         "type": "number",
@@ -77,7 +68,6 @@
       ]
     },
     {
-      "name": "a - b => 5.0",
       "expression": "@{a - b}",
       "expected": {
         "type": "number",
@@ -102,32 +92,6 @@
       ]
     },
     {
-      "name": "a - b => -7.0",
-      "expression": "@{a - b}",
-      "expected": {
-        "type": "number",
-        "value": -7.0
-      },
-      "variables": [
-        {
-          "type": "number",
-          "value": -10.0,
-          "name": "a"
-        },
-        {
-          "type": "number",
-          "value": -3.0,
-          "name": "b"
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "name": "a - +b => 5.0",
       "expression": "@{a - +b}",
       "expected": {
         "type": "number",

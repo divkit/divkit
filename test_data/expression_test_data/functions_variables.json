@@ -44,7 +44,6 @@
         "type": "integer",
         "value": 456
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -95,7 +94,6 @@
         "type": "number",
         "value": 456.78
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -146,7 +144,6 @@
         "type": "boolean",
         "value": false
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -197,7 +194,6 @@
         "type": "string",
         "value": "fallback"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -315,7 +311,6 @@
         "type": "color",
         "value": "#FFFFFFFF"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -366,7 +361,6 @@
         "type": "color",
         "value": "#FFFFFFFF"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -484,7 +478,6 @@
         "type": "url",
         "value": "https://fallback"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
