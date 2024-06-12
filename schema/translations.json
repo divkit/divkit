@@ -708,7 +708,7 @@
     "ru": "Семейство шрифта:<li>`text` — стандартный текстовый шрифт;</li><li>`display` — семейство для шрифтов с крупным кеглем.</li>"
   },
   "div_font_feature_settings": {
-    "en": "List of OpenType font features. The format is the same as the CSS font-feature-settings attribute: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop",
+    "en": "List of OpenType font features. The format matches the CSS attribute \"font-feature-settings\". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop",
     "ru": "Список свойств шрифтов OpenType. Формат соответствует атрибуту CSS font-feature-settings. Подробнее: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop"
   },
   "div_font_size": {
@@ -1080,7 +1080,7 @@
     "ru": "Имя переменной для хранения необработанного значения."
   },
   "div_input_max_length": {
-    "en": "The maximum number of characters that can be entered in the input field.",
+    "en": "Maximum number of characters that can be entered in the input field.",
     "ru": "Максимальное количество символов, которое можно ввести в поле ввода."
   },
   "div_input_max_visible_lines": {
