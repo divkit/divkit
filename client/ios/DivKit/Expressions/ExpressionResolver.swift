@@ -47,6 +47,22 @@ public final class ExpressionResolver {
     self.errorTracker = { errorTracker?($0) }
   }
 
+  init(
+    cardId: DivCardID,
+    variablesStorage: DivVariablesStorage,
+    persistentValuesStorage: DivPersistentValuesStorage,
+    reporter: DivReporter
+  ) {
+    self.functionsProvider = FunctionsProvider(
+      variableValueProvider: {
+        let variableName = DivVariableName(rawValue: $0)
+        return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
+      },
+      persistentValuesStorage: persistentValuesStorage
+    )
+    self.errorTracker = reporter.asExpressionErrorTracker(cardId: cardId)
+  }
+
   public func resolve(_ expression: String) -> Any? {
     if let link: ExpressionLink<Any> = makeLink(expression) {
       return resolveAnyLink(link)

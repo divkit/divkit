@@ -4,7 +4,6 @@ import BasePublic
 
 final class DivTimerController {
   typealias RunActions = ([DivAction]) -> Void
-  typealias UpdateVariable = (DivVariableName, String) -> Void
   typealias UpdateCard = () -> Void
 
   enum State {
@@ -18,8 +17,8 @@ final class DivTimerController {
   private let timerScheduler: Scheduling
   private let timeMeasuring: TimeMeasuring
   private let runActions: RunActions
-  private let updateVariable: UpdateVariable
   private let updateCard: UpdateCard
+  private let variablesStorage: DivVariablesStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let reporter: DivReporter
 
@@ -39,8 +38,8 @@ final class DivTimerController {
     timerScheduler: Scheduling,
     timeMeasuring: TimeMeasuring,
     runActions: @escaping RunActions,
-    updateVariable: @escaping UpdateVariable,
     updateCard: @escaping UpdateCard,
+    variablesStorage: DivVariablesStorage,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter
   ) {
@@ -49,21 +48,22 @@ final class DivTimerController {
     self.timerScheduler = timerScheduler
     self.timeMeasuring = timeMeasuring
     self.runActions = runActions
-    self.updateVariable = updateVariable
     self.updateCard = updateCard
+    self.variablesStorage = variablesStorage
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter
   }
 
-  public func start(variables: DivVariables = [:]) {
+  func start() {
     if state != .stopped {
       DivKitLogger.error("Timer '\(divTimer.id)' can't start because it has state '\(state)'.")
       return
     }
     let expressionResolver = ExpressionResolver(
-      variables: variables,
+      cardId: cardId,
+      variablesStorage: variablesStorage,
       persistentValuesStorage: persistentValuesStorage,
-      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
+      reporter: reporter
     )
     guard divTimer.parametersAreValid(expressionResolver) else {
       DivKitLogger.failure("Timer '\(divTimer.id)' is not valid.")
@@ -87,7 +87,7 @@ final class DivTimerController {
     makeEndTimer()
   }
 
-  public func stop() {
+  func stop() {
     if state == .stopped {
       DivKitLogger.error("Timer '\(divTimer.id)' already stopped.")
       return
@@ -100,7 +100,7 @@ final class DivTimerController {
     updateCard()
   }
 
-  public func pause() {
+  func pause() {
     if state != .started {
       DivKitLogger.error("Timer '\(divTimer.id)' can't pause because it has state '\(state)'.")
       return
@@ -110,7 +110,7 @@ final class DivTimerController {
     invalidateTimers()
   }
 
-  public func resume() {
+  func resume() {
     if state != .paused {
       DivKitLogger.error("Timer '\(divTimer.id)' can't resume because it has state '\(state)'.")
       return
@@ -122,14 +122,14 @@ final class DivTimerController {
     timeMeasuring.resume()
   }
 
-  public func cancel() {
+  func cancel() {
     state = .stopped
     invalidateTimers()
   }
 
-  public func reset(variables: DivVariables = [:]) {
+  func reset() {
     cancel()
-    start(variables: variables)
+    start()
   }
 
   private func makeEndTimer() {
@@ -209,9 +209,11 @@ final class DivTimerController {
 
   private func setVariable(_ value: TimeInterval) {
     if let variableName = divTimer.valueVariable {
-      let divVariableName = DivVariableName(rawValue: variableName)
-      let variableValue = String(format: "%.0f", value * 1000)
-      updateVariable(divVariableName, variableValue)
+      variablesStorage.update(
+        cardId: cardId,
+        name: DivVariableName(rawValue: variableName),
+        value: String(format: "%.0f", value * 1000)
+      )
     }
   }
 

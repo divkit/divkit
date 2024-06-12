@@ -49,11 +49,9 @@ public final class DivTriggersStorage {
       triggersByCard.removeAll { $0.cardId == cardId }
       triggersByCard.append(cardTriggers)
     }
-    let variables = variablesStorage.makeVariables(for: cardId)
     runActions(
       cardTriggers: cardTriggers,
-      changedVariablesNames: Set(variables.keys),
-      variables: variables
+      changedVariablesNames: nil
     )
   }
 
@@ -72,29 +70,34 @@ public final class DivTriggersStorage {
     for cardTriggers in triggers {
       runActions(
         cardTriggers: cardTriggers,
-        changedVariablesNames: event.changedVariables,
-        variables: event.newValues.makeVariables(for: cardTriggers.cardId)
+        changedVariablesNames: event.changedVariables
       )
     }
   }
 
   private func runActions(
     cardTriggers: CardTriggers,
-    changedVariablesNames: Set<DivVariableName>,
-    variables: DivVariables
+    changedVariablesNames: Set<DivVariableName>?
   ) {
     let cardId = cardTriggers.cardId
     for item in cardTriggers.items {
       let trigger = item.trigger
-      if trigger.condition.variablesNames.isDisjoint(with: changedVariablesNames) {
+      let triggerVariablesNames = trigger.condition.variablesNames
+      if triggerVariablesNames.isEmpty {
+        // conditions without variables is considered to be invalid
+        continue
+      }
+
+      if let changedVariablesNames, triggerVariablesNames.isDisjoint(with: changedVariablesNames) {
         continue
       }
 
       let oldCondition = item.condition
       let expressionResolver = ExpressionResolver(
-        variables: variables,
+        cardId: cardId,
+        variablesStorage: variablesStorage,
         persistentValuesStorage: persistentValuesStorage,
-        errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
+        reporter: reporter
       )
       item.condition = trigger.resolveCondition(expressionResolver) ?? false
       if !item.condition {

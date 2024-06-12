@@ -6,10 +6,6 @@ public final class DivVariablesStorage {
   public struct Values {
     public internal(set) var global: DivVariables = [:]
     public internal(set) var local: [DivCardID: DivVariables] = [:]
-
-    func makeVariables(for cardId: DivCardID) -> DivVariables {
-      global + (local[cardId] ?? [:])
-    }
   }
 
   public struct ChangeEvent {
@@ -20,6 +16,8 @@ public final class DivVariablesStorage {
     }
 
     public let kind: Kind
+
+    /// Deprecated. Use `DivVariablesStorage` directly to access the variable values.
     public let newValues: Values
 
     init(kind: Kind, newValues: Values) {

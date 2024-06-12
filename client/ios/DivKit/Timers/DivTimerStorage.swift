@@ -14,7 +14,7 @@ final class DivTimerStorage {
   private var cardsTimers = [DivCardID: [DivTimer]]()
   private var timerControllers = [String: DivTimerController]()
 
-  public init(
+  init(
     variablesStorage: DivVariablesStorage,
     actionHandler: DivActionHandler,
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
@@ -28,14 +28,14 @@ final class DivTimerStorage {
     self.reporter = reporter
   }
 
-  public func set(
+  func set(
     cardId: DivCardID,
     timers: [DivTimer]
   ) {
     cardsTimers[cardId] = timers
   }
 
-  public func perform(_ cardId: DivCardID, _ timerId: String, _ action: DivTimerAction) {
+  func perform(_ cardId: DivCardID, _ timerId: String, _ action: DivTimerAction) {
     switch action {
     case .start:
       start(cardId: cardId, timerId: timerId)
@@ -52,52 +52,50 @@ final class DivTimerStorage {
     }
   }
 
-  public func start(cardId: DivCardID, timerId: String) {
+  func start(cardId: DivCardID, timerId: String) {
     if let timer = getTimer(cardId: cardId, timerId: timerId) {
-      let variables = variablesStorage.makeVariables(for: cardId)
-      timer.start(variables: variables)
+      timer.start()
     }
   }
 
-  public func stop(cardId: DivCardID, timerId: String) {
+  func stop(cardId: DivCardID, timerId: String) {
     if let timer = getTimer(cardId: cardId, timerId: timerId) {
       timer.stop()
     }
   }
 
-  public func pause(cardId: DivCardID, timerId: String) {
+  func pause(cardId: DivCardID, timerId: String) {
     if let timer = getTimer(cardId: cardId, timerId: timerId) {
       timer.pause()
     }
   }
 
-  public func resume(cardId: DivCardID, timerId: String) {
+  func resume(cardId: DivCardID, timerId: String) {
     if let timer = getTimer(cardId: cardId, timerId: timerId) {
       timer.resume()
     }
   }
 
-  public func cancel(cardId: DivCardID, timerId: String) {
+  func cancel(cardId: DivCardID, timerId: String) {
     if let timer = getTimer(cardId: cardId, timerId: timerId) {
       timer.cancel()
     }
   }
 
-  public func reset(cardId: DivCardID, timerId: String) {
+  func reset(cardId: DivCardID, timerId: String) {
     if let timer = getTimer(cardId: cardId, timerId: timerId) {
-      let variables = variablesStorage.makeVariables(for: cardId)
-      timer.reset(variables: variables)
+      timer.reset()
     }
   }
 
-  public func reset() {
+  func reset() {
     for (_, timer) in timerControllers {
       timer.cancel()
     }
     timerControllers.removeAll()
   }
 
-  public func reset(cardId: DivCardID) {
+  func reset(cardId: DivCardID) {
     for (key, timer) in timerControllers {
       if key.starts(with: cardId.rawValue) {
         timer.cancel()
@@ -137,12 +135,10 @@ final class DivTimerStorage {
       runActions: { [weak self] actions in
         self?.runActions(cardId: cardId, actions: actions)
       },
-      updateVariable: { [weak self] name, value in
-        self?.updateVariable(cardId: cardId, name: name, value: value)
-      },
       updateCard: { [weak self] in
         self?.updateCard(.timer(cardId))
       },
+      variablesStorage: variablesStorage,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter
     )
@@ -157,9 +153,5 @@ final class DivTimerStorage {
         sender: nil
       )
     }
-  }
-
-  private func updateVariable(cardId: DivCardID, name: DivVariableName, value: String) {
-    variablesStorage.update(cardId: cardId, name: name, value: value)
   }
 }

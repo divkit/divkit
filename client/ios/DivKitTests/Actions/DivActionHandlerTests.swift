@@ -333,7 +333,7 @@ final class DivActionHandlerTests: XCTestCase {
   }
 
   private func getVariableValue<T>(_ name: DivVariableName) -> T? {
-    variablesStorage.makeVariables(for: cardId)[name]?.typedValue()
+    variablesStorage.getVariableValue(cardId: cardId, name: name)
   }
 
   private func setVariableValue(_ name: DivVariableName, _ value: DivVariableValue) {
