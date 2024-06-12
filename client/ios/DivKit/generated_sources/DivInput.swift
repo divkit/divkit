@@ -74,6 +74,7 @@ public final class DivInput: DivBase {
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let validators: [DivInputValidator]?
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -239,6 +240,7 @@ public final class DivInput: DivBase {
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
     validators: [DivInputValidator]? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -287,6 +289,7 @@ public final class DivInput: DivBase {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.validators = validators
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -397,12 +400,13 @@ extension DivInput: Equatable {
     }
     guard
       lhs.validators == rhs.validators,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.variables == rhs.variables,
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -460,6 +464,7 @@ extension DivInput: Serializable {
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["validators"] = validators?.map { $0.toDictionary() }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

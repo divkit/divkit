@@ -27,6 +27,7 @@ public protocol DivBase: DivBlockModeling {
   var transitionIn: DivAppearanceTransition? { get }
   var transitionOut: DivAppearanceTransition? { get }
   var transitionTriggers: [DivTransitionTrigger]? { get } // at least 1 elements
+  var variables: [DivVariable]? { get }
   var visibility: Expression<DivVisibility> { get } // default value: visible
   var visibilityAction: DivVisibilityAction? { get }
   var visibilityActions: [DivVisibilityAction]? { get }

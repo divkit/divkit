@@ -255,6 +255,7 @@ public final class DivText: DivBase {
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let underline: Expression<DivLineStyle> // default value: none
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -431,6 +432,7 @@ public final class DivText: DivBase {
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
     underline: Expression<DivLineStyle>? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -486,6 +488,7 @@ public final class DivText: DivBase {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.underline = underline ?? .value(.none)
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -611,13 +614,18 @@ extension DivText: Equatable {
     guard
       lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.underline == rhs.underline,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -681,6 +689,7 @@ extension DivText: Serializable {
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["underline"] = underline.toValidSerializationValue()
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }
