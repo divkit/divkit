@@ -54,7 +54,7 @@ extension DivContainer: DivBlockModeling {
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
 
-    let children = try makeChildren(
+    let children = makeChildren(
       context: context,
       mappedBy: { div, block, context in
         LayeredBlock.Child(
@@ -105,7 +105,7 @@ extension DivContainer: DivBlockModeling {
     case .wrap:
       ContainerBlock.CrossAlignment.leading
     }
-    let children: [ContainerBlock.Child] = try makeChildren(
+    let children: [ContainerBlock.Child] = makeChildren(
       context: context,
       mappedBy: { div, block, context in
         ContainerBlock.Child(

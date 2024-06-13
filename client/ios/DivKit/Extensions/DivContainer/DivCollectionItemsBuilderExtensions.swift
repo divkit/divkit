@@ -4,32 +4,31 @@ import LayoutKit
 extension DivCollectionItemBuilder {
   func makeBlocks<T>(
     context: DivBlockModelingContext,
-    sizeModifier: DivSizeModifier? = nil,
-    mappedBy modificator: (Div, Block, DivBlockModelingContext) throws -> T
-  ) rethrows -> [T] {
+    mappedBy modificator: (Div, Block, DivBlockModelingContext) -> T
+  ) -> [T] {
     let items = resolveData(context.expressionResolver) ?? []
     return items.iterativeFlatMap { item, index in
-      let itemContext = context.modifying(
-        parentPath: context.parentPath + index,
-        sizeModifier: sizeModifier
-      )
+      let path = context.parentPath + index
       let item = (item as? DivDictionary) ?? [:]
       do {
-        return try modifyError({ DivBlockModelingError($0.message, path: itemContext.parentPath)
+        return try modifyError({
+          DivBlockModelingError($0.message, path: path)
         }) {
-          let prototypeContext = itemContext
-            .modifying(prototypeParams: PrototypeParams(
+          let itemContext = context.modifying(
+            parentPath: path,
+            prototypeParams: PrototypeParams(
               index: index,
               variableName: dataElementName,
               value: item
-            ))
+            )
+          )
           let prototype = prototypes
-            .first { $0.resolveSelector(prototypeContext.expressionResolver) }
+            .first { $0.resolveSelector(itemContext.expressionResolver) }
           guard let prototype else {
             return nil
           }
-          let block = try prototype.div.value.makeBlock(context: prototypeContext)
-          return try modificator(prototype.div, block, prototypeContext)
+          let block = try prototype.div.value.makeBlock(context: itemContext)
+          return modificator(prototype.div, block, itemContext)
         }
       } catch {
         context.addError(error: error)

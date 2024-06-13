@@ -4,10 +4,10 @@ import LayoutKit
 extension DivContainer {
   func makeChildren<T>(
     context: DivBlockModelingContext,
-    mappedBy modificator: (Div, Block, DivBlockModelingContext) throws -> T
-  ) throws -> [T] {
+    mappedBy modificator: (Div, Block, DivBlockModelingContext) -> T
+  ) -> [T] {
     if let itemBuilder {
-      return try itemBuilder.makeBlocks(context: context, mappedBy: modificator)
+      return itemBuilder.makeBlocks(context: context, mappedBy: modificator)
     }
 
     let expressionResolver = context.expressionResolver
@@ -31,7 +31,7 @@ extension DivContainer {
       return true
     }
 
-    return try filtredItems.makeBlocks(
+    return filtredItems.makeBlocks(
       context: context,
       sizeModifier: DivContainerSizeModifier(
         context: context,
