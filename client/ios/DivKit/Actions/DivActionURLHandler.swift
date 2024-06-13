@@ -4,6 +4,7 @@ import Foundation
 import CommonCorePublic
 import LayoutKit
 
+/// Deprecated. Use `DivActionHandler`.
 public final class DivActionURLHandler {
   public typealias UpdateCardAction = (UpdateReason) -> Void
   public typealias ShowTooltipAction = (TooltipInfo) -> Void

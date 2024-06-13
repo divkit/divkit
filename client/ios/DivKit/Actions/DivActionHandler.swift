@@ -1,3 +1,5 @@
+import Foundation
+
 import BasePublic
 import LayoutKit
 import Serialization
@@ -23,31 +25,8 @@ public final class DivActionHandler {
   private let focusElementActionHandler = FocusElementActionHandler()
   private let setVariableActionHandler = SetVariableActionHandler()
 
-  init(
-    divActionURLHandler: DivActionURLHandler,
-    urlHandler: DivUrlHandler,
-    logger: DivActionLogger,
-    trackVisibility: @escaping TrackVisibility,
-    trackDisappear: @escaping TrackVisibility,
-    variablesStorage: DivVariablesStorage,
-    persistentValuesStorage: DivPersistentValuesStorage,
-    blockStateStorage: DivBlockStateStorage,
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
-    reporter: DivReporter
-  ) {
-    self.divActionURLHandler = divActionURLHandler
-    self.urlHandler = urlHandler
-    self.logger = logger
-    self.trackVisibility = trackVisibility
-    self.trackDisappear = trackDisappear
-    self.variablesStorage = variablesStorage
-    self.persistentValuesStorage = persistentValuesStorage
-    self.blockStateStorage = blockStateStorage
-    self.updateCard = updateCard
-    self.reporter = reporter
-  }
-
-  public convenience init(
+  /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
+  public init(
     stateUpdater: DivStateUpdater,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     patchProvider: DivPatchProvider,
@@ -63,8 +42,7 @@ public final class DivActionHandler {
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter? = nil
   ) {
-    self.init(
-      divActionURLHandler: DivActionURLHandler(
+    self.divActionURLHandler = DivActionURLHandler(
         stateUpdater: stateUpdater,
         blockStateStorage: blockStateStorage,
         patchProvider: patchProvider,
@@ -74,17 +52,16 @@ public final class DivActionHandler {
         tooltipActionPerformer: tooltipActionPerformer,
         performTimerAction: performTimerAction,
         persistentValuesStorage: persistentValuesStorage
-      ),
-      urlHandler: urlHandler,
-      logger: logger ?? EmptyDivActionLogger(),
-      trackVisibility: trackVisibility,
-      trackDisappear: trackDisappear,
-      variablesStorage: variablesStorage,
-      persistentValuesStorage: persistentValuesStorage,
-      blockStateStorage: blockStateStorage,
-      updateCard: updateCard,
-      reporter: reporter ?? DefaultDivReporter()
-    )
+      )
+    self.urlHandler = urlHandler
+    self.logger = logger ?? EmptyDivActionLogger()
+    self.trackVisibility = trackVisibility
+    self.trackDisappear = trackDisappear
+    self.variablesStorage = variablesStorage
+    self.persistentValuesStorage = persistentValuesStorage
+    self.blockStateStorage = blockStateStorage
+    self.updateCard = updateCard
+    self.reporter = reporter ?? DefaultDivReporter()
   }
 
   public func handle(
@@ -110,6 +87,11 @@ public final class DivActionHandler {
       localValues: params.localValues,
       sender: sender
     )
+  }
+
+  /// Deprecated. This method is intended for backward compatibility only. Do not use it.
+  public func handleDivActionUrl(_ url: URL, cardId: DivCardID) -> Bool {
+    divActionURLHandler.handleURL(url, cardId: cardId)
   }
 
   func handle(
