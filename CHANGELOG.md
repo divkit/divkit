@@ -8,6 +8,7 @@
 * Fix closing `tooltip` on cleanup.
 * Fixed `Div2View` state reset that resulted in broken expression subscriptions.
 * Fixed vararg functions matching.
+* Detach old indicators from pager on attach new ones.
 * `okhttp` library updated to version 4.11.0
 
 # iOS Client:
