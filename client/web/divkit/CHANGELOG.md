@@ -1,3 +1,8 @@
+## 30.5.0 (ADD DATE HERE)
+
+* Added `array_set_value` action.
+
+
 ## 30.4.0 (June 10, 2024)
 
 * Added `dict_set_value` action.

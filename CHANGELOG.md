@@ -1,3 +1,24 @@
+## 30.5.0
+
+# Android Client:
+* Implemented support for field `page_transformation` in `pager`.
+* Old visibility actions are no longer logged after Div2View was rebound by another DivData.
+* Fixed image drawing when its padding bigger than size.
+* Fixed showing of first and last elements in `pager` with infinite scroll after items changing.
+* Fix closing `tooltip` on cleanup.
+* Fixed `Div2View` state reset that resulted in broken expression subscriptions.
+* Fixed vararg functions matching.
+* Detach old indicators from pager on attach new ones.
+* `okhttp` library updated to version 4.11.0
+
+# iOS Client:
+* Introduced `index` variable for prototyped elements.
+* Fixed escaped strings resolving in expressions
+
+# Web Client:
+* Added `array_set_value` action.
+
+
 ## 30.4.0
 
 # Android Client:
