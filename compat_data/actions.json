@@ -70,6 +70,31 @@
             }
         }
     }, {
+        "id": "action_typed_array_set_value",
+        "name": "Typed action <code>array_set_value</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.4.0"
+            },
+            "ios": {
+                "version_added": "30.4.0"
+            }
+        }
+    }, {
+        "id": "action_typed_dict_set_value",
+        "name": "Typed action <code>dict_set_value</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.4.0"
+            },
+            "ios": {
+                "version_added": "30.4.0"
+            },
+            "web": {
+                "version_added": "30.4.0"
+            }
+        }
+    }, {
         "id": "action_is_enabled",
         "name": "Action <code>is_enabled</code> property",
         "compat": {
