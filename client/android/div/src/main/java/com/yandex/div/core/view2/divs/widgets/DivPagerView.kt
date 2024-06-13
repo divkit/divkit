@@ -34,6 +34,9 @@ internal class DivPagerView @JvmOverloads constructor(
             field = value
         }
 
+    private val changePageCallbacksForIndicators:
+        MutableList<ViewPager2.OnPageChangeCallback> = mutableListOf()
+
     internal var changePageCallbackForLogger: ViewPager2.OnPageChangeCallback? = null
         set(value) {
             field?.let(viewPager::unregisterOnPageChangeCallback)
@@ -91,6 +94,23 @@ internal class DivPagerView @JvmOverloads constructor(
     override fun dispatchDraw(canvas: Canvas) {
         drawChildrenShadows(canvas)
         dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
+    }
+
+    fun addChangePageCallbackForIndicators(callback: ViewPager2.OnPageChangeCallback) {
+        changePageCallbacksForIndicators.add(callback)
+        viewPager.registerOnPageChangeCallback(callback)
+    }
+
+    fun removeChangePageCallbackForIndicators(callback: ViewPager2.OnPageChangeCallback) {
+        changePageCallbacksForIndicators.remove(callback)
+        viewPager.unregisterOnPageChangeCallback(callback)
+    }
+
+    fun clearChangePageCallbackForIndicators() {
+        changePageCallbacksForIndicators.forEach {
+            viewPager.unregisterOnPageChangeCallback(it)
+        }
+        changePageCallbacksForIndicators.clear()
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {

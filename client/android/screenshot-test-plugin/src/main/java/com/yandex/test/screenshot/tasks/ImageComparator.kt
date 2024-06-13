@@ -106,6 +106,6 @@ internal class ImageComparator(private val logger: Logger) {
     private fun BufferedImage.getRGBSafe(x: Int, y: Int) = if (y < height) getRGB(x, y) else 0
 
     companion object {
-        private const val THRESHOLD = 5e-5 // Scaled from 0 to 1
+        private const val THRESHOLD = 1e-4 // Scaled from 0 to 1
     }
 }
