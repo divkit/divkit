@@ -127,11 +127,11 @@
             const builder = componentContext.json.item_builder;
             newItems = [];
 
-            $jsonItemBuilderData.forEach(it => {
+            $jsonItemBuilderData.forEach((it, index) => {
                 if (it === null || typeof it !== 'object') {
                     return;
                 }
-                const additionalVars = rootCtx.preparePrototypeVariables(builder.data_element_name || 'it', it as Record<string, unknown>);
+                const additionalVars = rootCtx.preparePrototypeVariables(builder.data_element_name || 'it', it as Record<string, unknown>, index);
 
                 let div: MaybeMissing<DivBaseData> | undefined;
                 for (let i = 0; i < builder.prototypes.length; ++i) {

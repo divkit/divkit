@@ -1,7 +1,8 @@
 {
   "description": "Container with item_builder using index value.",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "card": {
     "log_id": "test_card",

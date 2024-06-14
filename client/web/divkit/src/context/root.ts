@@ -47,7 +47,7 @@ export interface RootCtxValue {
     unregisterFocusable(id: string): void;
     addSvgFilter(color: string, mode: TintMode): string;
     removeSvgFilter(color: string | undefined, mode: TintMode): void;
-    preparePrototypeVariables(name: string, data: Record<string, unknown>): Map<string, Variable>;
+    preparePrototypeVariables(name: string, data: Record<string, unknown>, index: number): Map<string, Variable>;
     getStore<T>(id: string): Writable<T>;
     getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined;
     getBuiltinProtocols(): Set<string>;

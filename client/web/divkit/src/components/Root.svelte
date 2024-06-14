@@ -295,11 +295,18 @@
         return prepared.applyVars(vars, keepComplex);
     }
 
-    function preparePrototypeVariables(name: string, data: Record<string, unknown>): Map<string, Variable> {
+    function preparePrototypeVariables(
+        name: string,
+        data: Record<string, unknown>,
+        index: number
+    ): Map<string, Variable> {
         const map = new Map<string, Variable>();
 
         const dict = createConstVariable(name, 'dict', data);
         map.set(name, dict);
+
+        const indexVar = createConstVariable('index', 'integer', index);
+        map.set('index', indexVar);
 
         return map;
     }
