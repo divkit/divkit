@@ -136,6 +136,7 @@ public final class DivSliderTemplate: TemplateValue {
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
+    public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
     public let offset: Field<DivPointTemplate>?
     public let textColor: Field<Expression<Color>>? // default value: #FF000000
 
@@ -144,6 +145,7 @@ public final class DivSliderTemplate: TemplateValue {
         fontSize: dictionary.getOptionalExpressionField("font_size"),
         fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
         fontWeight: dictionary.getOptionalExpressionField("font_weight"),
+        fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
         offset: dictionary.getOptionalField("offset", templateToType: templateToType),
         textColor: dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:))
       )
@@ -153,12 +155,14 @@ public final class DivSliderTemplate: TemplateValue {
       fontSize: Field<Expression<Int>>? = nil,
       fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
       fontWeight: Field<Expression<DivFontWeight>>? = nil,
+      fontWeightValue: Field<Expression<Int>>? = nil,
       offset: Field<DivPointTemplate>? = nil,
       textColor: Field<Expression<Color>>? = nil
     ) {
       self.fontSize = fontSize
       self.fontSizeUnit = fontSizeUnit
       self.fontWeight = fontWeight
+      self.fontWeightValue = fontWeightValue
       self.offset = offset
       self.textColor = textColor
     }
@@ -167,12 +171,14 @@ public final class DivSliderTemplate: TemplateValue {
       let fontSizeValue = parent?.fontSize?.resolveValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
       let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue
       let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue
+      let fontWeightValueValue = parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue
       let offsetValue = parent?.offset?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       var errors = mergeErrors(
         fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
         fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
         fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
+        fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
         offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) }
       )
@@ -188,6 +194,7 @@ public final class DivSliderTemplate: TemplateValue {
         fontSize: fontSizeNonNil,
         fontSizeUnit: fontSizeUnitValue.value,
         fontWeight: fontWeightValue.value,
+        fontWeightValue: fontWeightValueValue.value,
         offset: offsetValue.value,
         textColor: textColorValue.value
       )
@@ -201,6 +208,7 @@ public final class DivSliderTemplate: TemplateValue {
       var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
       var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
       var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
+      var fontWeightValueValue: DeserializationResult<Expression<Int>> = parent?.fontWeightValue?.value() ?? .noValue
       var offsetValue: DeserializationResult<DivPoint> = .noValue
       var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
       context.templateData.forEach { key, __dictValue in
@@ -211,6 +219,8 @@ public final class DivSliderTemplate: TemplateValue {
           fontSizeUnitValue = deserialize(__dictValue).merged(with: fontSizeUnitValue)
         case "font_weight":
           fontWeightValue = deserialize(__dictValue).merged(with: fontWeightValue)
+        case "font_weight_value":
+          fontWeightValueValue = deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator).merged(with: fontWeightValueValue)
         case "offset":
           offsetValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self).merged(with: offsetValue)
         case "text_color":
@@ -221,6 +231,8 @@ public final class DivSliderTemplate: TemplateValue {
           fontSizeUnitValue = fontSizeUnitValue.merged(with: { deserialize(__dictValue) })
         case parent?.fontWeight?.link:
           fontWeightValue = fontWeightValue.merged(with: { deserialize(__dictValue) })
+        case parent?.fontWeightValue?.link:
+          fontWeightValueValue = fontWeightValueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator) })
         case parent?.offset?.link:
           offsetValue = offsetValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self) })
         case parent?.textColor?.link:
@@ -235,6 +247,7 @@ public final class DivSliderTemplate: TemplateValue {
         fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
         fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
         fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
+        fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
         offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) }
       )
@@ -250,6 +263,7 @@ public final class DivSliderTemplate: TemplateValue {
         fontSize: fontSizeNonNil,
         fontSizeUnit: fontSizeUnitValue.value,
         fontWeight: fontWeightValue.value,
+        fontWeightValue: fontWeightValueValue.value,
         offset: offsetValue.value,
         textColor: textColorValue.value
       )
@@ -267,6 +281,7 @@ public final class DivSliderTemplate: TemplateValue {
         fontSize: merged.fontSize,
         fontSizeUnit: merged.fontSizeUnit,
         fontWeight: merged.fontWeight,
+        fontWeightValue: merged.fontWeightValue,
         offset: merged.offset?.tryResolveParent(templates: templates),
         textColor: merged.textColor
       )

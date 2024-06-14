@@ -45,6 +45,7 @@ public final class DivInput: DivBase {
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
+  public let fontWeightValue: Expression<Int>? // constraint: number > 0
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let highlightColor: Expression<Color>?
   public let hintColor: Expression<Color> // default value: #73000000
@@ -110,6 +111,10 @@ public final class DivInput: DivBase {
 
   public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
     resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
+  }
+
+  public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumeric(fontWeightValue)
   }
 
   public func resolveHighlightColor(_ resolver: ExpressionResolver) -> Color? {
@@ -181,6 +186,9 @@ public final class DivInput: DivBase {
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let fontWeightValueValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 > 0 })
+
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -211,6 +219,7 @@ public final class DivInput: DivBase {
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
+    fontWeightValue: Expression<Int>? = nil,
     height: DivSize? = nil,
     highlightColor: Expression<Color>? = nil,
     hintColor: Expression<Color>? = nil,
@@ -260,6 +269,7 @@ public final class DivInput: DivBase {
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
+    self.fontWeightValue = fontWeightValue
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.highlightColor = highlightColor
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
@@ -331,83 +341,88 @@ extension DivInput: Equatable {
     guard
       lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.height == rhs.height
+      lhs.fontWeightValue == rhs.fontWeightValue
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.highlightColor == rhs.highlightColor,
-      lhs.hintColor == rhs.hintColor,
-      lhs.hintText == rhs.hintText
+      lhs.hintColor == rhs.hintColor
     else {
       return false
     }
     guard
+      lhs.hintText == rhs.hintText,
       lhs.id == rhs.id,
-      lhs.isEnabled == rhs.isEnabled,
-      lhs.keyboardType == rhs.keyboardType
+      lhs.isEnabled == rhs.isEnabled
     else {
       return false
     }
     guard
+      lhs.keyboardType == rhs.keyboardType,
       lhs.letterSpacing == rhs.letterSpacing,
-      lhs.lineHeight == rhs.lineHeight,
-      lhs.margins == rhs.margins
+      lhs.lineHeight == rhs.lineHeight
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.mask == rhs.mask,
-      lhs.maxLength == rhs.maxLength,
-      lhs.maxVisibleLines == rhs.maxVisibleLines
+      lhs.maxLength == rhs.maxLength
     else {
       return false
     }
     guard
+      lhs.maxVisibleLines == rhs.maxVisibleLines,
       lhs.nativeInterface == rhs.nativeInterface,
-      lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
       lhs.textAlignmentVertical == rhs.textAlignmentVertical,
-      lhs.textColor == rhs.textColor,
-      lhs.textVariable == rhs.textVariable
+      lhs.textColor == rhs.textColor
     else {
       return false
     }
     guard
+      lhs.textVariable == rhs.textVariable,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.validators == rhs.validators,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -435,6 +450,7 @@ extension DivInput: Serializable {
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
+    result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["highlight_color"] = highlightColor?.toValidSerializationValue()
     result["hint_color"] = hintColor.toValidSerializationValue()

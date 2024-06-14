@@ -39,6 +39,7 @@ public final class DivSlider: DivBase {
     public let fontSize: Expression<Int> // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight> // default value: regular
+    public let fontWeightValue: Expression<Int>? // constraint: number > 0
     public let offset: DivPoint?
     public let textColor: Expression<Color> // default value: #FF000000
 
@@ -54,6 +55,10 @@ public final class DivSlider: DivBase {
       resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
     }
 
+    public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+      resolver.resolveNumeric(fontWeightValue)
+    }
+
     public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
       resolver.resolveColor(textColor) ?? Color.colorWithARGBHexCode(0xFF000000)
     }
@@ -61,16 +66,21 @@ public final class DivSlider: DivBase {
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
 
+    static let fontWeightValueValidator: AnyValueValidator<Int> =
+      makeValueValidator(valueValidator: { $0 > 0 })
+
     init(
       fontSize: Expression<Int>,
       fontSizeUnit: Expression<DivSizeUnit>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
+      fontWeightValue: Expression<Int>? = nil,
       offset: DivPoint? = nil,
       textColor: Expression<Color>? = nil
     ) {
       self.fontSize = fontSize
       self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
       self.fontWeight = fontWeight ?? .value(.regular)
+      self.fontWeightValue = fontWeightValue
       self.offset = offset
       self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     }
@@ -436,6 +446,7 @@ extension DivSlider.TextStyle: Equatable {
       return false
     }
     guard
+      lhs.fontWeightValue == rhs.fontWeightValue,
       lhs.offset == rhs.offset,
       lhs.textColor == rhs.textColor
     else {
@@ -464,6 +475,7 @@ extension DivSlider.TextStyle: Serializable {
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
+    result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["offset"] = offset?.toDictionary()
     result["text_color"] = textColor.toValidSerializationValue()
     return result
