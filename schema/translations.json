@@ -723,6 +723,10 @@
     "en": "Style.",
     "ru": "Начертание."
   },
+  "div_font_weight_value": {
+    "en": "Style. Numeric value.",
+    "ru": "Начертание. Числовое значение."
+  },
   "div_gallery": {
     "en": "Gallery. It contains a horizontal or vertical set of cards that can be scrolled.",
     "ru": "Галерея. Содержит горизонтальный или вертикальный набор карточек, которые можно скроллить."

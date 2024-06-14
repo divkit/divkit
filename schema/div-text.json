@@ -59,6 +59,11 @@
           "$ref": "div-font-weight.json",
           "$description": "translations.json#/div_font_weight"
         },
+        "font_weight_value": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_font_weight_value",
+          "platforms": []
+        },
         "text_color": {
           "$ref": "common.json#/color",
           "$description": "translations.json#/div_text_color"
@@ -302,6 +307,11 @@
           "$ref": "div-font-weight.json",
           "default_value": "regular",
           "$description": "translations.json#/div_font_weight"
+        },
+        "font_weight_value": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_font_weight_value",
+          "platforms": []
         },
         "text_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",

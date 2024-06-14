@@ -21,6 +21,11 @@
           "default_value": "regular",
           "$description": "translations.json#/div_font_weight"
         },
+        "font_weight_value": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_font_weight_value",
+          "platforms": []
+        },
         "text_color": {
           "$ref": "common.json#/color",
           "default_value": "#FF000000",
