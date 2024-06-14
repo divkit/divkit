@@ -5,4 +5,4 @@ package com.yandex.div.core.annotations
  */
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)
-annotation class Mockable
+public annotation class Mockable

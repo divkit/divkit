@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id 'com.android.library'
     alias(libs.plugins.apiGenerator)
@@ -35,9 +37,9 @@ schemas {
     }
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
-        freeCompilerArgs += '-opt-in=com.yandex.div.data.DivModelInternalApi'
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+        freeCompilerArgs.add("-opt-in=com.yandex.div.data.DivModelInternalApi")
     }
 }

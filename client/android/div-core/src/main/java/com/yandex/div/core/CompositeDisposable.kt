@@ -3,19 +3,19 @@ package com.yandex.div.core
 /**
  * Aggregation of multiple [Disposable]s to be closed at one time.
  */
-class CompositeDisposable : Disposable {
+public class CompositeDisposable : Disposable {
 
     private val disposables = mutableListOf<Disposable>()
     private var closed = false
 
-    fun add(disposable: Disposable) {
+    public fun add(disposable: Disposable) {
         require(!closed) { "close() method was called" }
         if (disposable !== Disposable.NULL) {
             disposables += disposable
         }
     }
 
-    fun remove(disposable: Disposable) {
+    public fun remove(disposable: Disposable) {
         require(!closed) { "close() method was called" }
         if (disposable !== Disposable.NULL) {
             disposables -= disposable
@@ -29,6 +29,6 @@ class CompositeDisposable : Disposable {
     }
 }
 
-operator fun CompositeDisposable.plusAssign(disposable: Disposable) = add(disposable)
+public operator fun CompositeDisposable.plusAssign(disposable: Disposable): Unit = add(disposable)
 
-operator fun CompositeDisposable.minusAssign(disposable: Disposable) = remove(disposable)
+public operator fun CompositeDisposable.minusAssign(disposable: Disposable): Unit = remove(disposable)

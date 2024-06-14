@@ -5,4 +5,4 @@ package com.yandex.div.core.annotations
  */
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS)
-annotation class PublicApi
+public annotation class PublicApi

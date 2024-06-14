@@ -2,14 +2,14 @@ package com.yandex.div.core.images
 
 import androidx.annotation.IntDef
 
-@kotlin.annotation.Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.SOURCE)
 @IntDef(
     DivImagePriority.IMAGES_PRIORITY_DEFAULT,
     DivImagePriority.IMAGES_PRIORITY_PRELOAD
 )
-annotation class DivImagePriority {
-    companion object {
-        const val IMAGES_PRIORITY_PRELOAD = -1
-        const val IMAGES_PRIORITY_DEFAULT = 0
+public annotation class DivImagePriority {
+    public companion object {
+        public const val IMAGES_PRIORITY_PRELOAD: Int = -1
+        public const val IMAGES_PRIORITY_DEFAULT: Int = 0
     }
 }

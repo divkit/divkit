@@ -6,7 +6,7 @@ import java.io.Closeable
  * An object that may hold resources (such as file or socket handles) until it is closed.
  * In comparison with [Closeable] IOException is dropped from the [close] method.
  */
-fun interface Disposable : AutoCloseable, Closeable {
+public fun interface Disposable : AutoCloseable, Closeable {
     /**
      * Closes this resource, relinquishing any underlying resources.
      *
@@ -14,9 +14,9 @@ fun interface Disposable : AutoCloseable, Closeable {
      */
     override fun close()
 
-    companion object {
+    public companion object {
 
         @JvmField
-        val NULL: Disposable = Disposable { }
+        public val NULL: Disposable = Disposable { }
     }
 }
