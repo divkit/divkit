@@ -165,11 +165,25 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertEqual(variables, makeVariables())
   }
 
-  func test_update_SendsUpdateEvent() {
+  func test_update_SendsUpdateEvent_LocalVariable() {
     storage.set(cardId: cardId, variables: variables)
     storage.update(cardId: cardId, name: "string_var", value: "new value")
 
     XCTAssertEqual(.local(cardId, ["string_var"]), event?.kind)
+
+    let newValues = event?.newValues
+    XCTAssertEqual(makeVariables(), (newValues?.global ?? [:]) + (newValues?.local[cardId] ?? [:]))
+  }
+
+  func test_update_SendsUpdateEvent_GlobalVariable() {
+    storage.set(
+      variables: ["global_var": .string("global value")],
+      triggerUpdate: false
+    )
+
+    storage.update(cardId: cardId, name: "global_var", value: "new value")
+
+    XCTAssertEqual(.global(["global_var"]), event?.kind)
 
     let newValues = event?.newValues
     XCTAssertEqual(makeVariables(), (newValues?.global ?? [:]) + (newValues?.local[cardId] ?? [:]))
@@ -251,7 +265,7 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertNil(event)
   }
 
-  func test_appendGlobalVariables() {
+  func test_append_AppendsGlobalVariables() {
     storage.set(variables: variables, triggerUpdate: false)
 
     let newVariables: DivVariables = [
