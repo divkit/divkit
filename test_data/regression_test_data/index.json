@@ -2368,6 +2368,20 @@
       "file": "state_binding.json"
     },
     {
+      "title": "Multiple state switching with different root state",
+      "tags": [
+        "DivState"
+      ],
+      "steps": [
+        "Press button \"STATE 0 (INITIAL)\"",
+        "Press button \"STATE 1\""
+      ],
+      "expected_results": [
+        "Button with text \"STATE 0 (FINAL)\". No crashes at state change."
+      ],
+      "file": "state/multiple_root_state_switching.json"
+    },
+    {
       "title": "Input inside pager",
       "tags": [
         "DivPager",
