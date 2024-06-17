@@ -10,6 +10,7 @@
 * Fixed vararg functions matching.
 * Detach old indicators from pager on attach new ones.
 * `okhttp` library updated to version 4.11.0
+* Fixed `SynchronizedWeakHashMap.toMap()` due to race issues.
 
 # iOS Client:
 * Introduced `index` variable for prototyped elements.

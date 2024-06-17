@@ -27,5 +27,9 @@ internal class SynchronizedWeakHashMap<K: Any, N: Any>: WeakHashMap<K, N>() {
 
     override fun get(key: K?): N? = synchronized(lock) { super.get(key) }
 
-    fun createMap(): Map<K, N> = synchronized(lock) { this.toMap() }
+    fun createMap(): Map<K, N> = synchronized(lock) {
+        this.entries.associate {
+            it.key to it.value
+        }
+    }
 }
