@@ -38,6 +38,7 @@ public struct DivBlockModelingContext {
   private var functionsProvider: FunctionsProvider
   private let variableTracker: ExpressionResolver.VariableTracker
   public private(set) var parentPath: UIElementPath
+  private(set) var elementId: String?
   private(set) var sizeModifier: DivSizeModifier?
   private(set) var localValues = [String: AnyHashable]()
 
@@ -232,6 +233,7 @@ public struct DivBlockModelingContext {
   }
 
   func modifying(
+    elementId: String? = nil,
     cardLogId: String? = nil,
     parentPath: UIElementPath? = nil,
     parentDivStatePath: DivStatePath? = nil,
@@ -240,6 +242,7 @@ public struct DivBlockModelingContext {
     prototypeParams: PrototypeParams? = nil
   ) -> Self {
     var context = self
+    context.elementId = elementId
     if let cardLogId {
       context.cardLogId = cardLogId
     }

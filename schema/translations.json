@@ -427,6 +427,10 @@
     "en": "`Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.",
     "ru": "`Div`, из которого будут созданы элементы коллекции. В `Div` можно использовать выражения с использованием данных из `data`. Для обращения к очередному элементу `data` нужно использовать такой же префикс, как и в `data_element_prefix`."
   },
+  "div_collection_item_builder_prototypes_id": {
+    "en": "`id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`",
+    "ru": "`id` элемента, который будет сформирован из прототипа. В отличие от поля `div-base.id` может содержать выражения. Имеет более высокий приоритет, чем `div-base.id`."
+  },
   "div_collection_item_builder_prototypes_selector": {
     "en": "A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.",
     "ru": "Условие, которое используется для выбора прототипа для очередного элемента коллекции. В случае, если будет больше 1 истинного условия, будет выбран прототип, который находится раньше. Если не выполнено ни одно условие, элемент из `data` будет пропущен."

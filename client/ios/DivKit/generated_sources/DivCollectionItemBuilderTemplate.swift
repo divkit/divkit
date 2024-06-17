@@ -7,28 +7,34 @@ import Serialization
 public final class DivCollectionItemBuilderTemplate: TemplateValue {
   public final class PrototypeTemplate: TemplateValue {
     public let div: Field<DivTemplate>?
+    public let id: Field<Expression<String>>?
     public let selector: Field<Expression<Bool>>? // default value: true
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
         div: dictionary.getOptionalField("div", templateToType: templateToType),
+        id: dictionary.getOptionalExpressionField("id"),
         selector: dictionary.getOptionalExpressionField("selector")
       )
     }
 
     init(
       div: Field<DivTemplate>? = nil,
+      id: Field<Expression<String>>? = nil,
       selector: Field<Expression<Bool>>? = nil
     ) {
       self.div = div
+      self.id = id
       self.selector = selector
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: PrototypeTemplate?) -> DeserializationResult<DivCollectionItemBuilder.Prototype> {
       let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+      let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
       let selectorValue = parent?.selector?.resolveOptionalValue(context: context) ?? .noValue
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
+        idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
         selectorValue.errorsOrWarnings?.map { .nestedObjectError(field: "selector", error: $0) }
       )
       if case .noValue = divValue {
@@ -41,6 +47,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
       }
       let result = DivCollectionItemBuilder.Prototype(
         div: divNonNil,
+        id: idValue.value,
         selector: selectorValue.value
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
@@ -51,15 +58,20 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
         return resolveOnlyLinks(context: context, parent: parent)
       }
       var divValue: DeserializationResult<Div> = .noValue
+      var idValue: DeserializationResult<Expression<String>> = parent?.id?.value() ?? .noValue
       var selectorValue: DeserializationResult<Expression<Bool>> = parent?.selector?.value() ?? .noValue
       context.templateData.forEach { key, __dictValue in
         switch key {
         case "div":
           divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: divValue)
+        case "id":
+          idValue = deserialize(__dictValue).merged(with: idValue)
         case "selector":
           selectorValue = deserialize(__dictValue).merged(with: selectorValue)
         case parent?.div?.link:
           divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+        case parent?.id?.link:
+          idValue = idValue.merged(with: { deserialize(__dictValue) })
         case parent?.selector?.link:
           selectorValue = selectorValue.merged(with: { deserialize(__dictValue) })
         default: break
@@ -70,6 +82,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
       }
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
+        idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
         selectorValue.errorsOrWarnings?.map { .nestedObjectError(field: "selector", error: $0) }
       )
       if case .noValue = divValue {
@@ -82,6 +95,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
       }
       let result = DivCollectionItemBuilder.Prototype(
         div: divNonNil,
+        id: idValue.value,
         selector: selectorValue.value
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
@@ -96,6 +110,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
 
       return PrototypeTemplate(
         div: try merged.div?.resolveParent(templates: templates),
+        id: merged.id,
         selector: merged.selector
       )
     }

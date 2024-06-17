@@ -162,6 +162,58 @@ final class DivContainerExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_WithItemBuilderAndPrototypeId() throws {
+    let block = makeBlock(
+      divContainer(
+        itemBuilder: DivCollectionItemBuilder(
+          data: .value([
+            [],
+            [],
+          ]),
+          prototypes: [
+            DivCollectionItemBuilder.Prototype(
+              div: divText(
+                id: "must_be_overloaded",
+                textExpression: "Index = @{index}"
+              ),
+              id: expression("item_@{index}")
+            ),
+          ]
+        )
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: textBlock(text: "Index = 0"),
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Index = 0",
+                identifier: "item_0"
+              )
+            ),
+            DecoratingBlock(
+              child: textBlock(text: "Index = 1"),
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Index = 1",
+                identifier: "item_1"
+              )
+            ),
+          ]
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_ItemBuilder_HasHigherPriorityThanItems() throws {
     let block = makeBlock(
       divContainer(

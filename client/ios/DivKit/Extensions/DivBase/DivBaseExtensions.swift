@@ -86,7 +86,7 @@ extension DivBase {
 
     let accessibilityElement = (accessibility ?? DivAccessibility()).resolve(
       expressionResolver,
-      id: id,
+      id: context.elementId ?? id,
       customParams: customAccessibilityParams
     )
 
@@ -177,7 +177,7 @@ extension DivBase {
     context: DivBlockModelingContext,
     statePath: DivStatePath
   ) -> Block {
-    guard let id = self.id else {
+    guard let id = context.elementId ?? id else {
       return block
     }
 

@@ -7,7 +7,12 @@ import Serialization
 public final class DivCollectionItemBuilder {
   public final class Prototype {
     public let div: Div
+    public let id: Expression<String>?
     public let selector: Expression<Bool> // default value: true
+
+    public func resolveId(_ resolver: ExpressionResolver) -> String? {
+      resolver.resolveString(id)
+    }
 
     public func resolveSelector(_ resolver: ExpressionResolver) -> Bool {
       resolver.resolveNumeric(selector) ?? true
@@ -15,9 +20,11 @@ public final class DivCollectionItemBuilder {
 
     init(
       div: Div,
+      id: Expression<String>? = nil,
       selector: Expression<Bool>? = nil
     ) {
       self.div = div
+      self.id = id
       self.selector = selector ?? .value(true)
     }
   }
@@ -74,6 +81,7 @@ extension DivCollectionItemBuilder.Prototype: Equatable {
   public static func ==(lhs: DivCollectionItemBuilder.Prototype, rhs: DivCollectionItemBuilder.Prototype) -> Bool {
     guard
       lhs.div == rhs.div,
+      lhs.id == rhs.id,
       lhs.selector == rhs.selector
     else {
       return false
@@ -87,6 +95,7 @@ extension DivCollectionItemBuilder.Prototype: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["div"] = div.toDictionary()
+    result["id"] = id?.toValidSerializationValue()
     result["selector"] = selector.toValidSerializationValue()
     return result
   }

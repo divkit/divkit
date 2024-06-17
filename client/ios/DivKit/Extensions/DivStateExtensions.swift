@@ -18,7 +18,7 @@ extension DivState: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let id = divId ?? id ?? ""
+    let id = context.elementId ?? divId ?? id ?? ""
     if id == "" {
       context.addWarning(message: "DivState has no id")
     }
