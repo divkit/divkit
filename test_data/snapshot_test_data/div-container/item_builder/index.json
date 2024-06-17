@@ -1,6 +1,7 @@
 {
   "description": "Container with item_builder using index value.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

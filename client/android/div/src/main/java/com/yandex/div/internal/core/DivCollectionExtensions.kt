@@ -4,7 +4,7 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.variables.VariableSource
 import com.yandex.div.data.Variable
-import com.yandex.div.internal.util.mapNotNull
+import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
@@ -16,6 +16,8 @@ import com.yandex.div2.DivPager
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import org.json.JSONObject
+
+private const val INDEX_VARIABLE_NAME = "index"
 
 @InternalApi
 fun DivContainer.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
@@ -33,17 +35,21 @@ private fun buildItems(items: List<Div>?, itemBuilder: DivCollectionItemBuilder?
     items?.toDivItemBuilderResult(resolver) ?: itemBuilder?.build(resolver) ?: emptyList()
 
 internal fun DivCollectionItemBuilder.build(resolver: ExpressionResolver): List<DivItemBuilderResult> {
-    return data.evaluate(resolver).mapNotNull {
-        (it as? JSONObject)?.let { json -> buildItem(json, resolver) }
+    return data.evaluate(resolver).mapIndexedNotNull { i, obj ->
+        (obj as? JSONObject)?.let { json -> buildItem(json, i, resolver) }
     }
 }
 
 private fun DivCollectionItemBuilder.buildItem(
     data: JSONObject,
+    index: Int,
     resolver: ExpressionResolver,
 ): DivItemBuilderResult? {
     val localVariableSource = VariableSource(
-        mapOf(dataElementName to Variable.DictVariable(dataElementName, data)),
+        mapOf(
+            dataElementName to Variable.DictVariable(dataElementName, data),
+            INDEX_VARIABLE_NAME to Variable.IntegerVariable(INDEX_VARIABLE_NAME, index.toLong())
+        ),
         {},
         mutableListOf()
     )
