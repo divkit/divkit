@@ -29,7 +29,6 @@
           "type": "container",
           "orientation": "vertical",
           "item_builder": {
-            "type": "prototype",
             "data": "@{data}",
             "prototypes": [
               {
