@@ -26,7 +26,8 @@
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_font_weight_value",
           "platforms": [
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "text_color": {
@@ -65,7 +66,7 @@
         "margins": {
           "$ref": "div-edge-insets.json",
           "$description": "translations.json#/div_slider_range_margins"
-    
+
         }
       }
     }

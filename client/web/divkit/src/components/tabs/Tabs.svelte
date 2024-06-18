@@ -286,6 +286,7 @@
     $: {
         tabActiveFontWeight = correctFontWeight(
             tabStyle.active_font_weight || tabStyle.font_weight,
+            undefined,
             tabActiveFontWeight
         );
         if (tabStyle.font_family && typeof tabStyle.font_family === 'string') {
@@ -300,6 +301,7 @@
     $: {
         tabInactiveFontWeight = correctFontWeight(
             tabStyle.inactive_font_weight || tabStyle.font_weight,
+            undefined,
             tabInactiveFontWeight
         );
         if (tabStyle.font_family && typeof tabStyle.font_family === 'string') {

@@ -136,6 +136,7 @@
     $: jsonHintColor = componentContext.getDerivedFromVars(componentContext.json.hint_color);
     $: jsonFontSize = componentContext.getDerivedFromVars(componentContext.json.font_size);
     $: jsonFontWeight = componentContext.getDerivedFromVars(componentContext.json.font_weight);
+    $: jsonFontWeightValue = componentContext.getDerivedFromVars(componentContext.json.font_weight_value);
     $: jsonFontFamily = componentContext.getDerivedFromVars(componentContext.json.font_family);
     $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);
     $: jsonLetterSpacing = componentContext.getDerivedFromVars(componentContext.json.letter_spacing);
@@ -196,7 +197,7 @@
     }
 
     $: {
-        fontWeight = correctFontWeight($jsonFontWeight, fontWeight);
+        fontWeight = correctFontWeight($jsonFontWeight, $jsonFontWeightValue, fontWeight);
         if ($jsonFontFamily && typeof $jsonFontFamily === 'string') {
             fontFamily = rootCtx.typefaceProvider($jsonFontFamily, {
                 fontWeight: fontWeight || 400

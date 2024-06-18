@@ -21,6 +21,7 @@ export interface TextStyles {
     font_feature_settings?: string;
     letter_spacing?: number;
     font_weight?: FontWeight;
+    font_weight_value?: number;
     text_color?: string;
     underline?: LineStyle;
     strike?: LineStyle;

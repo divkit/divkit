@@ -84,7 +84,7 @@
     }
 
     $: {
-        fontWeight = correctFontWeight(textStyles.font_weight, fontWeight);
+        fontWeight = correctFontWeight(textStyles.font_weight, textStyles.font_weight_value, fontWeight);
         if (typeof textStyles.font_family === 'string' && textStyles.font_family) {
             fontFamily = rootCtx.typefaceProvider(textStyles.font_family, {
                 fontWeight: fontWeight || 400

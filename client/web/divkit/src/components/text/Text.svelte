@@ -90,6 +90,7 @@
         font_size: componentContext.json.font_size,
         letter_spacing: componentContext.json.letter_spacing,
         font_weight: componentContext.json.font_weight,
+        font_weight_value: componentContext.json.font_weight_value,
         font_family: componentContext.json.font_family,
         text_color: componentContext.json.text_color,
         underline: componentContext.json.underline,
