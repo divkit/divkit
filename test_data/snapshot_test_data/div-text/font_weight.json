@@ -1,0 +1,137 @@
+{
+  "description": "Text elements and text ranges with font_weight and font_weight_value",
+  "platforms": [
+    "ios"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "font_size": 16,
+      "margins": {
+        "left": 10,
+        "right": 10,
+        "top": 5,
+        "bottom": 5
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "item",
+              "text": "font_weight = light",
+              "font_weight": "light"
+            },
+            {
+              "type": "item",
+              "text": "font_weight = regular",
+              "font_weight": "regular"
+            },
+            {
+              "type": "item",
+              "text": "font_weight = medium",
+              "font_weight": "medium"
+            },
+            {
+              "type": "item",
+              "text": "font_weight = bold",
+              "font_weight": "bold"
+            },
+            {
+              "type": "item",
+              "text": "font_weight_value = 100",
+              "font_weight_value": 100
+            },
+            {
+              "type": "item",
+              "text": "font_weight_value = 300",
+              "font_weight_value": 300
+            },
+            {
+              "type": "item",
+              "text": "font_weight_value = 400",
+              "font_weight_value": 400
+            },
+            {
+              "type": "item",
+              "text": "font_weight_value = 450",
+              "font_weight_value": 450
+            },
+            {
+              "type": "item",
+              "text": "font_weight_value = 1000",
+              "font_weight_value": 1000
+            },
+            {
+              "type": "item",
+              "text": "font_weight = light / font_weight_value = 500",
+              "font_weight": "light",
+              "font_weight_value": 500
+            },
+            {
+              "type": "item",
+              "text": "font_weight = light",
+              "ranges": [
+                {
+                  "start": 14,
+                  "end": 19,
+                  "font_weight": "light"
+                }
+              ]
+            },
+            {
+              "type": "item",
+              "text": "font_weight = regular",
+              "ranges": [
+                {
+                  "start": 14,
+                  "end": 21,
+                  "font_weight": "regular"
+                }
+              ]
+            },
+            {
+              "type": "item",
+              "text": "font_weight = medium",
+              "ranges": [
+                {
+                  "start": 14,
+                  "end": 21,
+                  "font_weight": "medium"
+                }
+              ]
+            },
+            {
+              "type": "item",
+              "text": "font_weight = bold",
+              "ranges": [
+                {
+                  "start": 14,
+                  "end": 19,
+                  "font_weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "item",
+              "text": "font_weight_value = 500",
+              "ranges": [
+                {
+                  "start": 20,
+                  "end": 24,
+                  "font_weight_value": 500
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

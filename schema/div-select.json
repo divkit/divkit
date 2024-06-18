@@ -69,7 +69,9 @@
         "font_weight_value": {
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_font_weight_value",
-          "platforms": []
+          "platforms": [
+            "ios"
+          ]
         },
         "hint_text": {
           "type": "string",

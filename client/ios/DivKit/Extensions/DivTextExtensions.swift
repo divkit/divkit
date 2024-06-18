@@ -30,14 +30,8 @@ extension DivText: DivBlockModeling {
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
 
-    let fontParams = FontParams(
-      family: resolveFontFamily(expressionResolver) ?? "",
-      weight: resolveFontWeight(expressionResolver),
-      size: resolveFontSize(expressionResolver),
-      unit: resolveFontSizeUnit(expressionResolver),
-      featureSettings: resolveFontFeatureSettings(expressionResolver)
-    )
-    var typo = fontParams.makeTypo(fontProvider: context.fontProvider).allowHeightOverrun
+    let fontParams = resolveFontParams(expressionResolver)
+    var typo = Typo(font: context.fontProvider.font(fontParams)).allowHeightOverrun
 
     let alignment = resolveTextAlignmentHorizontal(expressionResolver)
       .makeTextAlignment(uiLayoutDirection: context.layoutDirection)
@@ -171,27 +165,23 @@ extension DivText: DivBlockModeling {
 
     let start = range.resolveStart(expressionResolver) ?? 0
     let end = range.resolveEnd(expressionResolver) ?? 0
-    guard end > start && start < CFAttributedStringGetLength(string) else {
+    guard end > start, start < CFAttributedStringGetLength(string) else {
       return
     }
 
-    let fontTypo: Typo?
-    if range.fontFamily != nil
-      || range.fontFeatureSettings != nil
-      || range.fontSize != nil
-      || range.fontWeight != nil {
-      let rangeFontParams = FontParams(
-        family: range.resolveFontFamily(expressionResolver) ?? fontParams.family,
-        weight: range.resolveFontWeight(expressionResolver) ?? fontParams.weight,
-        size: range.resolveFontSize(expressionResolver) ?? fontParams.size,
-        unit: range.resolveFontSizeUnit(expressionResolver),
-        featureSettings: range.resolveFontFeatureSettings(expressionResolver)
-          ?? fontParams.featureSettings
-      )
-      fontTypo = rangeFontParams.makeTypo(fontProvider: context.fontProvider)
-    } else {
-      fontTypo = nil
-    }
+    let rangeFontParams = FontParams(
+      family: range.resolveFontFamily(expressionResolver) ?? fontParams.family,
+      weight: range.resolveFontWeightValue(expressionResolver)
+        ?? range.resolveFontWeight(expressionResolver)?.toInt()
+        ?? fontParams.weight,
+      size: range.resolveFontSize(expressionResolver) ?? fontParams.size,
+      unit: range.resolveFontSizeUnit(expressionResolver),
+      featureSettings: range.resolveFontFeatureSettings(expressionResolver)
+        ?? fontParams.featureSettings
+    )
+    let fontTypo = rangeFontParams == fontParams
+      ? nil
+      : Typo(font: context.fontProvider.font(rangeFontParams))
     let colorTypo = range.resolveTextColor(expressionResolver)
       .map { Typo(color: $0) }
     let heightTypo = range.resolveLineHeight(expressionResolver)
@@ -242,25 +232,7 @@ extension DivText: DivBlockModeling {
   }
 }
 
-private struct FontParams {
-  let family: String
-  let weight: DivFontWeight
-  let size: Int
-  let unit: DivSizeUnit
-  let featureSettings: String?
-
-  func makeTypo(fontProvider: DivFontProvider) -> Typo {
-    var font = fontProvider.font(
-      family: family,
-      weight: weight,
-      size: unit.makeScaledValue(size)
-    )
-    if let featureSettings {
-      font = font.withFontFeatureSettings(featureSettings)
-    }
-    return Typo(font: font)
-  }
-}
+extension DivText: FontParamsProvider {}
 
 extension CFMutableAttributedString {
   fileprivate func apply(

@@ -26,12 +26,7 @@ extension DivInput: DivBlockModeling {
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
 
-    let font = context.fontProvider.font(
-      family: resolveFontFamily(expressionResolver) ?? "",
-      weight: resolveFontWeight(expressionResolver),
-      size: resolveFontSizeUnit(expressionResolver)
-        .makeScaledValue(resolveFontSize(expressionResolver))
-    )
+    let font = context.fontProvider.font(resolveFontParams(expressionResolver))
     var typo = Typo(font: font).allowHeightOverrun
 
     let kern = CGFloat(resolveLetterSpacing(expressionResolver))
@@ -82,10 +77,8 @@ extension DivInput: DivBlockModeling {
       isEnabled: resolveIsEnabled(expressionResolver)
     )
   }
-}
 
-extension DivInput {
-  fileprivate func makeValidators(_ context: DivBlockModelingContext) -> [TextInputValidator]? {
+  private func makeValidators(_ context: DivBlockModelingContext) -> [TextInputValidator]? {
     let expressionResolver = context.expressionResolver
     return validators?.compactMap { validator -> TextInputValidator? in
       switch validator {
@@ -140,6 +133,8 @@ extension DivInput {
     }
   }
 }
+
+extension DivInput: FontParamsProvider {}
 
 extension DivAlignmentHorizontal {
   fileprivate var textAlignment: TextInputBlock.TextAlignmentHorizontal {

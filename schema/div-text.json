@@ -62,7 +62,9 @@
         "font_weight_value": {
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_font_weight_value",
-          "platforms": []
+          "platforms": [
+            "ios"
+          ]
         },
         "text_color": {
           "$ref": "common.json#/color",
@@ -311,7 +313,9 @@
         "font_weight_value": {
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_font_weight_value",
-          "platforms": []
+          "platforms": [
+            "ios"
+          ]
         },
         "text_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",
