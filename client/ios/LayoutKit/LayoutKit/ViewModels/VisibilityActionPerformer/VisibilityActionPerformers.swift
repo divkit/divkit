@@ -18,7 +18,7 @@ final class VisibilityActionPerformers {
         requiredDuration: action.requiredDuration,
         targetVisibilityPercentage: action.targetPercentage,
         limiter: action.limiter,
-        action: {
+        action: { [unowned actionSender] in
           UIActionEvent(
             uiAction: action.uiAction,
             originalSender: actionSender
