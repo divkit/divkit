@@ -180,6 +180,11 @@ private final class StateBlockView: BlockView {
 
     childView?.frame = bounds
   }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result === self ? nil : result
+  }
 }
 
 extension StateBlockView: VisibleBoundsTrackingContainer {
