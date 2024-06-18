@@ -30,6 +30,13 @@ final class DivVariableStorageWithOuterStorageTest: XCTestCase {
     XCTAssertEqual("value", storage.getValue("string_var"))
   }
 
+  func test_hasValue_ReturnsTrueIfOuterStorageContainsVariable() {
+    storage.put(variables)
+    outerStorage.put(outerVariables)
+
+    XCTAssertTrue(storage.hasValue("outer_string_var"))
+  }
+
   func test_update_UpdatesOuterVariable() {
     storage.put(variables)
     outerStorage.put(outerVariables)

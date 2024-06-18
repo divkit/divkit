@@ -84,6 +84,13 @@ public final class DivVariablesStorage {
     return globalStorage.getValue(name)
   }
 
+  public func hasValue(cardId: DivCardID, name: DivVariableName) -> Bool {
+    let cardStorage = lock.withLock {
+      cardStorages[cardId]
+    }
+    return cardStorage?.hasValue(name) ?? globalStorage.hasValue(name)
+  }
+
   /// Replaces all card variables with new ones.
   /// Does not affect global variables.
   public func set(

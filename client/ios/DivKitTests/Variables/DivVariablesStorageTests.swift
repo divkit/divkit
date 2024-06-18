@@ -314,6 +314,27 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertNil(storage.getVariableValue(cardId: cardId, name: "unknown_var"))
   }
 
+  func test_hasValue_ReturnsTrueIfContainsLocalVariable() {
+    storage.set(cardId: cardId, variables: variables)
+
+    XCTAssertTrue(storage.hasValue(cardId: cardId, name: "string_var"))
+  }
+
+  func test_hasValue_ReturnsTrueIfContainsGlobalVariable() {
+    storage.set(
+      variables: ["global_var": .string("global value")],
+      triggerUpdate: false
+    )
+
+    XCTAssertTrue(storage.hasValue(cardId: cardId, name: "global_var"))
+  }
+
+  func test_hasValue_ReturnsFalseIfVariableIsNotAvailable() {
+    storage.set(cardId: cardId, variables: variables)
+
+    XCTAssertFalse(storage.hasValue(cardId: cardId, name: "unknown_var"))
+  }
+
   func test_reset_ResetsVariables() {
     storage.set(cardId: cardId, variables: variables)
 

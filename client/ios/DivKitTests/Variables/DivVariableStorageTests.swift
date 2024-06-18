@@ -66,6 +66,18 @@ final class DivVariableSorageTest: XCTestCase {
     XCTAssertNil(storage.getValue("unknown_var"))
   }
 
+  func test_hasValue_ReturnsTrueIfStorageContainsVariable() {
+    storage.put(variables)
+
+    XCTAssertTrue(storage.hasValue("string_var"))
+  }
+
+  func test_hasValue_ReturnsFalseIfVariableIsNotAvailable() {
+    storage.put(variables)
+
+    XCTAssertFalse(storage.hasValue("unknown_var"))
+  }
+
   func test_update_UpdatesStringVariable() {
     storage.put(variables)
 

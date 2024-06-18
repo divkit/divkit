@@ -63,6 +63,14 @@ public final class DivVariableStorage {
     return outerStorage?.getValue(name)
   }
 
+  /// Gets value indicating if variable with the given name is availabale.
+  public func hasValue(_ name: DivVariableName) -> Bool {
+    let variable = lock.withLock {
+      _values[name]
+    }
+    return variable != nil || outerStorage?.hasValue(name) ?? false
+  }
+
   /// Puts variable into the storage.
   /// Updates variable value if a variable with the given name already exists.
   /// Does not affect outer storage.
