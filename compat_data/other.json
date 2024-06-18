@@ -24,5 +24,13 @@
                 "version_added": "28.2.0"
             }
         }
+    }, {
+        "id": "item_builder_index_variable",
+        "name": "<code>index</code> variable inside <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.5.0"
+            }
+        }
     }]
 }

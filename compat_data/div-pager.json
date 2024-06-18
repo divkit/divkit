@@ -15,5 +15,13 @@
                 "version_added": "29.10.0"
             }
         }
+    }, {
+        "id": "pager_page_transformation",
+        "name": "Pager property <code>page_transformation</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.5.0"
+            }
+        }
     }]
 }
