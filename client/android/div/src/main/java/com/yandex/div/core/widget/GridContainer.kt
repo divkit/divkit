@@ -375,19 +375,27 @@ internal open class GridContainer @JvmOverloads constructor(
 
         var offset: Int = 0
 
+        var contentSize: Int = 0
+            private set
+
         var size: Int = 0
             private set
 
         var weight: Float = 0.0f
             private set
 
+        val marginSize: Int
+            get() = size - contentSize
+
         val isFlexible: Boolean
             get() = weight > DEFAULT_WEIGHT
 
         fun include(
+            contentSize: Int = 0,
             size: Int = 0,
             weight: Float = 0.0f
         ) {
+            this.contentSize = max(this.contentSize, contentSize)
             this.size = max(this.size, size)
             this.weight = max(this.weight, weight)
         }
@@ -576,7 +584,11 @@ internal open class GridContainer @JvmOverloads constructor(
                 val projected = projection(cell, child)
                 if (projected.span == 1) {
                     val measurement = lines[projected.index]
-                    measurement.include(size = projected.size, weight = projected.weight)
+                    measurement.include(
+                        contentSize = projected.contentSize,
+                        size = projected.size,
+                        weight = projected.weight
+                    )
                 } else {
                     val first = 0
                     val last = projected.span - 1
@@ -618,7 +630,7 @@ internal open class GridContainer @JvmOverloads constructor(
                     if (line.isFlexible) {
                         totalWeight += line.weight
                     } else {
-                        if (line.size == 0) unusedLineCount++
+                        if (line.contentSize == 0) unusedLineCount++
                         flexibleSize -= line.size
                     }
                 }
@@ -627,18 +639,20 @@ internal open class GridContainer @JvmOverloads constructor(
                         val line = lines[i]
                         if (line.isFlexible) {
                             val size = ceil(line.weight / totalWeight * flexibleSize).toInt()
-                            line.include(size = size)
+                            line.include(contentSize = size - line.marginSize, size = size)
                         }
                     }
                 } else if (undistributedSize > 0) {
                     for (i in first..last) {
                         val line = lines[i]
                         if (unusedLineCount > 0) {
-                            if (line.size == 0 && !line.isFlexible) {
-                                line.include(size = line.size + undistributedSize / unusedLineCount)
+                            if (line.contentSize == 0 && !line.isFlexible) {
+                                val extraSize = undistributedSize / unusedLineCount
+                                line.include(contentSize = line.contentSize + extraSize, size = line.size + extraSize)
                             }
                         } else {
-                            line.include(size = line.size + undistributedSize / projected.span)
+                            val extraSize = undistributedSize / projected.span
+                            line.include(contentSize = line.contentSize + extraSize, size = line.size + extraSize)
                         }
                     }
                 }
@@ -678,7 +692,7 @@ internal open class GridContainer @JvmOverloads constructor(
             lines.iterate { line ->
                 if (line.isFlexible) {
                     val size = ceil((line.weight * (weightedSize))).toInt()
-                    line.include(size = size)
+                    line.include(contentSize = size - line.marginSize, size = size)
                 }
             }
         }
