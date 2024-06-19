@@ -50,6 +50,7 @@ class Select internal constructor(
             fontSize = additive.fontSize ?: properties.fontSize,
             fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
             fontWeight = additive.fontWeight ?: properties.fontWeight,
+            fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
             height = additive.height ?: properties.height,
             hintColor = additive.hintColor ?: properties.hintColor,
             hintText = additive.hintText ?: properties.hintText,
@@ -138,6 +139,10 @@ class Select internal constructor(
          * Default value: `regular`.
          */
         val fontWeight: Property<FontWeight>?,
+        /**
+         * Style. Numeric value.
+         */
+        val fontWeightValue: Property<Int>?,
         /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
@@ -255,6 +260,7 @@ class Select internal constructor(
             result.tryPutProperty("font_size", fontSize)
             result.tryPutProperty("font_size_unit", fontSizeUnit)
             result.tryPutProperty("font_weight", fontWeight)
+            result.tryPutProperty("font_weight_value", fontWeightValue)
             result.tryPutProperty("height", height)
             result.tryPutProperty("hint_color", hintColor)
             result.tryPutProperty("hint_text", hintText)
@@ -342,6 +348,7 @@ class Select internal constructor(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -383,6 +390,7 @@ fun DivScope.select(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -423,6 +431,7 @@ fun DivScope.select(
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         height = valueOrNull(height),
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
@@ -465,6 +474,7 @@ fun DivScope.select(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -506,6 +516,7 @@ fun DivScope.selectProps(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -545,6 +556,7 @@ fun DivScope.selectProps(
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
+    fontWeightValue = valueOrNull(fontWeightValue),
     height = valueOrNull(height),
     hintColor = valueOrNull(hintColor),
     hintText = valueOrNull(hintText),
@@ -586,6 +598,7 @@ fun DivScope.selectProps(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -627,6 +640,7 @@ fun TemplateScope.selectRefs(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -666,6 +680,7 @@ fun TemplateScope.selectRefs(
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
+    fontWeightValue = fontWeightValue,
     height = height,
     hintColor = hintColor,
     hintText = hintText,
@@ -707,6 +722,7 @@ fun TemplateScope.selectRefs(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -748,6 +764,7 @@ fun Select.override(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -788,6 +805,7 @@ fun Select.override(
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
+        fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         height = valueOrNull(height) ?: properties.height,
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
         hintText = valueOrNull(hintText) ?: properties.hintText,
@@ -830,6 +848,7 @@ fun Select.override(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -871,6 +890,7 @@ fun Select.defer(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -911,6 +931,7 @@ fun Select.defer(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         height = height ?: properties.height,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
@@ -947,6 +968,7 @@ fun Select.defer(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param letterSpacing Spacing between characters.
@@ -966,6 +988,7 @@ fun Select.evaluate(
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -989,6 +1012,7 @@ fun Select.evaluate(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         height = properties.height,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
@@ -1031,6 +1055,7 @@ fun Select.evaluate(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -1072,6 +1097,7 @@ fun Component<Select>.override(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -1113,6 +1139,7 @@ fun Component<Select>.override(
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         height = valueOrNull(height),
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
@@ -1155,6 +1182,7 @@ fun Component<Select>.override(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -1196,6 +1224,7 @@ fun Component<Select>.defer(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -1237,6 +1266,7 @@ fun Component<Select>.defer(
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
         height = height,
         hintColor = hintColor,
         hintText = hintText,
@@ -1273,6 +1303,7 @@ fun Component<Select>.defer(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param letterSpacing Spacing between characters.
@@ -1292,6 +1323,7 @@ fun Component<Select>.evaluate(
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -1316,6 +1348,7 @@ fun Component<Select>.evaluate(
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
         height = null,
         hintColor = hintColor,
         hintText = hintText,

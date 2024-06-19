@@ -375,6 +375,7 @@ class Slider internal constructor(
                 fontSize = additive.fontSize ?: properties.fontSize,
                 fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
                 fontWeight = additive.fontWeight ?: properties.fontWeight,
+                fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
                 offset = additive.offset ?: properties.offset,
                 textColor = additive.textColor ?: properties.textColor,
             )
@@ -395,6 +396,10 @@ class Slider internal constructor(
              */
             val fontWeight: Property<FontWeight>?,
             /**
+             * Style. Numeric value.
+             */
+            val fontWeightValue: Property<Int>?,
+            /**
              * Shift relative to the center.
              */
             val offset: Property<Point>?,
@@ -410,6 +415,7 @@ class Slider internal constructor(
                 result.tryPutProperty("font_size", fontSize)
                 result.tryPutProperty("font_size_unit", fontSizeUnit)
                 result.tryPutProperty("font_weight", fontWeight)
+                result.tryPutProperty("font_weight_value", fontWeightValue)
                 result.tryPutProperty("offset", offset)
                 result.tryPutProperty("text_color", textColor)
                 return result
@@ -1638,6 +1644,7 @@ fun Slider.Range.asList() = listOf(this)
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1647,6 +1654,7 @@ fun DivScope.sliderTextStyle(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1654,6 +1662,7 @@ fun DivScope.sliderTextStyle(
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         offset = valueOrNull(offset),
         textColor = valueOrNull(textColor),
     )
@@ -1662,6 +1671,7 @@ fun DivScope.sliderTextStyle(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1671,12 +1681,14 @@ fun DivScope.sliderTextStyleProps(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ) = Slider.TextStyle.Properties(
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
+    fontWeightValue = valueOrNull(fontWeightValue),
     offset = valueOrNull(offset),
     textColor = valueOrNull(textColor),
 )
@@ -1684,6 +1696,7 @@ fun DivScope.sliderTextStyleProps(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1693,12 +1706,14 @@ fun TemplateScope.sliderTextStyleRefs(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
 ) = Slider.TextStyle.Properties(
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
+    fontWeightValue = fontWeightValue,
     offset = offset,
     textColor = textColor,
 )
@@ -1706,6 +1721,7 @@ fun TemplateScope.sliderTextStyleRefs(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1715,6 +1731,7 @@ fun Slider.TextStyle.override(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1722,6 +1739,7 @@ fun Slider.TextStyle.override(
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
+        fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         offset = valueOrNull(offset) ?: properties.offset,
         textColor = valueOrNull(textColor) ?: properties.textColor,
     )
@@ -1730,6 +1748,7 @@ fun Slider.TextStyle.override(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1739,6 +1758,7 @@ fun Slider.TextStyle.defer(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1746,6 +1766,7 @@ fun Slider.TextStyle.defer(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         offset = offset ?: properties.offset,
         textColor = textColor ?: properties.textColor,
     )
@@ -1754,6 +1775,7 @@ fun Slider.TextStyle.defer(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param textColor Text color.
  */
 @Generated
@@ -1762,12 +1784,14 @@ fun Slider.TextStyle.evaluate(
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     textColor: ExpressionProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         offset = properties.offset,
         textColor = textColor ?: properties.textColor,
     )
