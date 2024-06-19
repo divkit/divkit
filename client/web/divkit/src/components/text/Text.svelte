@@ -261,12 +261,13 @@
 
         ranges.forEach(range => {
             if (range.start !== undefined && range.end !== undefined) {
-                if (!range.top_offset) {
-                    range.top_offset = 0;
-                }
+                const rangeWithExplicitProps = {
+                    top_offset: 0,
+                    ...range
+                };
                 list.push({
                     index: range.start,
-                    range: range as typeof range & {
+                    range: rangeWithExplicitProps as typeof range & {
                         start: number;
                         end: number;
                     },
@@ -275,7 +276,7 @@
                 });
                 list.push({
                     index: range.end,
-                    range: range as typeof range & {
+                    range: rangeWithExplicitProps as typeof range & {
                         start: number;
                         end: number;
                     },
@@ -328,7 +329,10 @@
             let index = item.index;
 
             if (index > prevIndex) {
-                let textStyles = Object.assign({ ...rootTextStyles }, ...activeRanges as any[]) as TextStyles;
+                let textStyles = Object.assign({ ...rootTextStyles }, ...activeRanges as any[]) as TextRange;
+                if (activeRanges.length && activeRanges[activeRanges.length - 1].start !== prevIndex) {
+                    textStyles.top_offset = 0;
+                }
                 newRenderList.push({
                     text: content.substring(prevIndex, index),
                     textStyles,
@@ -340,9 +344,6 @@
                 activeRanges.push(range);
             } else if (item.type === 'rangeEnd') {
                 activeRanges = activeRanges.filter(range => range !== item.range);
-                if (activeRanges.length) {
-                    activeRanges[activeRanges.length - 1].top_offset = 0;
-                }
             } else if (item.type === 'image') {
                 let textStyles2 = Object.assign({ ...rootTextStyles }, ...activeRanges as any[]) as TextStyles;
                 let imageWidth = pxToEm(
