@@ -10,6 +10,7 @@ class DivBaseWidget extends StatefulWidget {
   final DivBase data;
 
   final List<DivAction> actions;
+  final List<DivAction> longtapActions;
 
   final Widget child;
 
@@ -18,10 +19,12 @@ class DivBaseWidget extends StatefulWidget {
     super.key,
     DivAction? action,
     List<DivAction>? actions,
+    List<DivAction>? longtapActions,
     required this.child,
-  }) : actions = action != null
+  })  : actions = action != null
             ? ((actions ?? const []) + [action])
-            : (actions ?? const []);
+            : (actions ?? const []),
+        longtapActions = longtapActions ?? [];
 
   @override
   State<DivBaseWidget> createState() => _DivBaseWidgetState();
@@ -70,6 +73,7 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
                   opacity: model.opacity,
                   child: DivTapActionEmitter(
                     actions: widget.actions,
+                    longtapActions: widget.longtapActions,
                     child: focusNode != null
                         ? AnimatedBuilder(
                             animation: focusNode,

@@ -49,6 +49,7 @@ class _DivImageWidgetState extends State<DivImageWidget> {
         data: widget.data,
         action: widget.data.action,
         actions: widget.data.actions,
+        longtapActions: widget.data.longtapActions,
         child: StreamBuilder<DivImageModel>(
           stream: stream,
           builder: (context, snapshot) {

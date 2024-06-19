@@ -1,5 +1,6 @@
 ## 0.1.6-pre
 * Correct interpretation of dict in variables context
+* Add support of longtap actions
 
 ## 0.1.5
 * Templater support: templates can be inherited, composited, links and transitive links to fields.

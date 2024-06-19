@@ -41,6 +41,7 @@ class _DivTextWidgetState extends State<DivTextWidget> {
         data: widget.data,
         action: widget.data.action,
         actions: widget.data.actions,
+        longtapActions: widget.data.longtapActions,
         child: StreamBuilder<DivTextModel>(
           stream: stream,
           builder: (context, snapshot) {

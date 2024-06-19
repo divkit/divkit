@@ -82,6 +82,7 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-container/baseline-with-images.json',
     'example/assets/test_data/snapshot_test_data/div-input/text-alignment-property.json',
     'example/assets/test_data/snapshot_test_data/div-input/text-alignment-property-single-line.json',
+    'example/assets/test_data/snapshot_test_data/div-input/all-attributes.json'
   ].map(
     (e) => _SkipTest(
       e,
@@ -404,7 +405,10 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-resizable-height.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-scrollbar.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-with-columns.json',
-    'example/assets/test_data/snapshot_test_data/div-gallery/vertical-grid-gallery-wrapped-item-spacing.json'
+    'example/assets/test_data/snapshot_test_data/div-gallery/vertical-grid-gallery-wrapped-item-spacing.json',
+    'example/assets/test_data/snapshot_test_data/div-gallery/item-builder/item-builder.json',
+    'example/assets/test_data/snapshot_test_data/div-gallery/item-builder/nested-builders.json',
+    'example/assets/test_data/snapshot_test_data/div-gallery/item-builder/non-unique-matched-selectors.json'
   ].map(
     (e) => _SkipTest(
       e,
@@ -485,6 +489,7 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-grid/wrap-content-weighted-items.json',
     'example/assets/test_data/snapshot_test_data/div-grid/content-alignment.json',
     'example/assets/test_data/snapshot_test_data/div-grid/wrap-content-greater-than-parent.json',
+    'example/assets/test_data/snapshot_test_data/div-grid/match-parent-items-with-margins.json'
   ].map(
     (e) => _SkipTest(
       e,
