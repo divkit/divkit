@@ -5,16 +5,25 @@ import CommonCorePublic
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 
 public final class ExpressionResolver {
+  /// Depreacated.
   public typealias VariableTracker = (Set<DivVariableName>) -> Void
 
   private let functionsProvider: FunctionsProvider
+  private let variableValueProvider: (String) -> Any?
   private let errorTracker: ExpressionErrorTracker
+
+  private lazy var context = ExpressionContext(
+    evaluators: functionsProvider.evaluators,
+    variableValueProvider: variableValueProvider
+  )
 
   init(
     functionsProvider: FunctionsProvider,
+    variableValueProvider: @escaping (String) -> Any?,
     errorTracker: @escaping ExpressionErrorTracker
   ) {
     self.functionsProvider = functionsProvider
+    self.variableValueProvider = variableValueProvider
     self.errorTracker = errorTracker
   }
 
@@ -24,12 +33,13 @@ public final class ExpressionResolver {
     errorTracker: @escaping ExpressionErrorTracker
   ) {
     self.functionsProvider = FunctionsProvider(
-      variableValueProvider: variableValueProvider,
       persistentValuesStorage: persistentValuesStorage
     )
+    self.variableValueProvider = variableValueProvider
     self.errorTracker = errorTracker
   }
 
+  /// Deprecated. Use another initailizer.
   public init(
     variables: DivVariables,
     persistentValuesStorage: DivPersistentValuesStorage,
@@ -37,13 +47,13 @@ public final class ExpressionResolver {
     variableTracker: @escaping VariableTracker = { _ in }
   ) {
     self.functionsProvider = FunctionsProvider(
-      variableValueProvider: {
-        let variableName = DivVariableName(rawValue: $0)
-        variableTracker([variableName])
-        return variables[variableName]?.typedValue()
-      },
       persistentValuesStorage: persistentValuesStorage
     )
+    self.variableValueProvider = {
+      let variableName = DivVariableName(rawValue: $0)
+      variableTracker([variableName])
+      return variables[variableName]?.typedValue()
+    }
     self.errorTracker = { errorTracker?($0) }
   }
 
@@ -54,12 +64,12 @@ public final class ExpressionResolver {
     reporter: DivReporter
   ) {
     self.functionsProvider = FunctionsProvider(
-      variableValueProvider: {
-        let variableName = DivVariableName(rawValue: $0)
-        return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
-      },
       persistentValuesStorage: persistentValuesStorage
     )
+    self.variableValueProvider = {
+      let variableName = DivVariableName(rawValue: $0)
+      return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
+    }
     self.errorTracker = reporter.asExpressionErrorTracker(cardId: cardId)
   }
 
@@ -242,7 +252,7 @@ public final class ExpressionResolver {
   }
 
   private func evaluate<T>(_ expression: CalcExpression) throws -> T? {
-    let value = try expression.evaluate(evaluators: functionsProvider.evaluators)
+    let value = try expression.evaluate(context)
     if let castedValue: T = ExpressionValueConverter.cast(value) {
       return castedValue
     }

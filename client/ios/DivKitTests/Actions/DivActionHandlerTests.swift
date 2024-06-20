@@ -50,6 +50,33 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertNil(handledUrl)
   }
 
+  func test_UrlWithExpression() {
+    variablesStorage.set(cardId: cardId, variables: ["host": .string("test.url")])
+
+    handle(
+      divAction(
+        logId: "test_log_id",
+        urlExpression: "https://@{host}"
+      )
+    )
+
+    XCTAssertEqual(url("https://test.url"), handledUrl)
+  }
+
+  func test_UrlWithExpressionWithLocalValues() {
+    variablesStorage.set(cardId: cardId, variables: ["host": .string("test.url")])
+
+    handle(
+      divAction(
+        logId: "test_log_id",
+        urlExpression: "https://@{host}"
+      ),
+      localValues: ["host": "localhost"]
+    )
+
+    XCTAssertEqual(url("https://localhost"), handledUrl)
+  }
+
   func test_ArrayInsertValueAction_AppendsValue() {
     setVariableValue("array_var", .array([1, "two"]))
 
@@ -314,11 +341,15 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertEqual(["key": "value"], reporter.lastActionInfo?.payload as! [String: AnyHashable])
   }
 
-  private func handle(_ action: DivActionBase) {
+  private func handle(
+    _ action: DivActionBase,
+    localValues: [String: AnyHashable] = [:]
+  ) {
     actionHandler.handle(
       action,
       cardId: cardId,
       source: .tap,
+      localValues: localValues,
       sender: nil
     )
   }

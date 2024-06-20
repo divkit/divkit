@@ -3,6 +3,11 @@
 import XCTest
 
 final class FunctionTests: XCTestCase {
+  private let context = ExpressionContext(
+    evaluators: { _ in nil },
+    variableValueProvider: { _ in nil }
+  )
+
   private var unaryFunction = FunctionUnary<String, Bool> { _ in true }
   private var binaryFunction: SimpleFunction!
 
@@ -16,41 +21,41 @@ final class FunctionTests: XCTestCase {
   }
 
   func test_invoke_FunctionBinary_WithoutCast() throws {
-    _ = try binaryFunction.invoke([1.2, 3.4])
+    _ = try binaryFunction.invoke([1.2, 3.4], context: context)
 
     checkLastArgs([1.2, 3.4])
   }
 
   func test_invoke_FunctionBinary_WithCast() throws {
-    _ = try binaryFunction.invoke([2, 3.4])
+    _ = try binaryFunction.invoke([2, 3.4], context: context)
 
     checkLastArgs([2.0, 3.4])
   }
 
   func test_invoke_FunctionBinary_WithInvalidArguments() throws {
     XCTAssertThrowsError(
-      _ = try binaryFunction.invoke([1.2, true]),
+      _ = try binaryFunction.invoke([1.2, true], context: context),
       ExpressionError("Invalid argument type: expected Number, got Boolean.")
     )
   }
 
   func test_invoke_FunctionBinary_WithWrongArgumentCount() throws {
     XCTAssertThrowsError(
-      _ = try binaryFunction.invoke([1.2]),
+      _ = try binaryFunction.invoke([1.2], context: context),
       ExpressionError("Exactly 2 argument(s) expected.")
     )
   }
 
   func test_invoke_FunctionUnary_WithInvalidArguments() throws {
     XCTAssertThrowsError(
-      _ = try unaryFunction.invoke([1]),
+      _ = try unaryFunction.invoke([1], context: context),
       ExpressionError("Invalid argument type: expected String, got Integer.")
     )
   }
 
   func test_invoke_FunctionUnary_WithWrongArgumentCount() throws {
     XCTAssertThrowsError(
-      _ = try unaryFunction.invoke(["one", "two"]),
+      _ = try unaryFunction.invoke(["one", "two"], context: context),
       ExpressionError("Exactly 1 argument(s) expected.")
     )
   }
@@ -71,7 +76,7 @@ final class FunctionTests: XCTestCase {
       ]
     )
 
-    _ = try function.invoke([1.2, 3.4])
+    _ = try function.invoke([1.2, 3.4], context: context)
 
     XCTAssertTrue(success)
   }
@@ -92,7 +97,7 @@ final class FunctionTests: XCTestCase {
       ]
     )
 
-    _ = try function.invoke([2, 3.4])
+    _ = try function.invoke([2, 3.4], context: context)
 
     XCTAssertTrue(success)
   }
@@ -111,7 +116,7 @@ final class FunctionTests: XCTestCase {
       ]
     )
 
-    XCTAssertThrowsError(try function.invoke([1.2, true])) {
+    XCTAssertThrowsError(try function.invoke([1.2, true], context: context)) {
       XCTAssertTrue($0 is NoMatchingSignatureError)
     }
   }
@@ -125,7 +130,7 @@ final class FunctionTests: XCTestCase {
     )
 
     XCTAssertThrowsError(
-      _ = try function.invoke([2, 3]),
+      _ = try function.invoke([2, 3], context: context),
       ExpressionError("Multiple matching overloads")
     )
   }

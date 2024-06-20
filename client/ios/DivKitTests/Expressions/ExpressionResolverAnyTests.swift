@@ -9,7 +9,9 @@ final class ExpressionResolverAnyTests: XCTestCase {
   private var variables: DivVariables = [:]
 
   private lazy var expressionResolver = ExpressionResolver(
-    variables: variables,
+    variableValueProvider: { [unowned self] in
+      self.variables[DivVariableName(rawValue: $0)]?.typedValue()
+    },
     persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
       error = $0.description

@@ -2,23 +2,17 @@ import Foundation
 
 import BasePublic
 
-typealias EvaluatorProvider = (CalcExpression.Symbol) -> Function?
-
 protocol Function {
-  func invoke(_ args: [Any]) throws -> Any
-
-  func invoke(
-    args: [Subexpression],
-    evaluators: EvaluatorProvider
-  ) throws -> Any
+  func invoke(_ args: [Any], context: ExpressionContext) throws -> Any
+  func invoke(args: [Subexpression], context: ExpressionContext) throws -> Any
 }
 
 extension Function {
-  func invoke(
-    args: [Subexpression],
-    evaluators: EvaluatorProvider
-  ) throws -> Any {
-    try invoke(args.map { try $0.evaluate(evaluators) })
+  func invoke(args: [Subexpression], context: ExpressionContext) throws -> Any {
+    try invoke(
+      args.map { try $0.evaluate(context) },
+      context: context
+    )
   }
 }
 
@@ -44,29 +38,29 @@ struct ConstantFunction<R>: SimpleFunction {
     }
   }
 
-  func invoke(_: [Any]) throws -> Any {
+  func invoke(_: [Any], context _: ExpressionContext) throws -> Any {
     value
   }
 }
 
 struct LazyFunction: Function {
-  private let impl: ([Subexpression], EvaluatorProvider) throws -> Any
+  private let impl: ([Subexpression], ExpressionContext) throws -> Any
 
-  init(_ impl: @escaping ([Subexpression], EvaluatorProvider) throws -> Any) {
+  init(_ impl: @escaping ([Subexpression], ExpressionContext) throws -> Any) {
     self.impl = impl
   }
 
-  func invoke(_: [Any]) throws -> Any {
+  func invoke(_: [Any], context _: ExpressionContext) throws -> Any {
     throw ExpressionError("Lazy function must be called with lazy args")
   }
 
-  func invoke(args: [Subexpression], evaluators: EvaluatorProvider) throws -> Any {
-    try impl(args, evaluators)
+  func invoke(args: [Subexpression], context: ExpressionContext) throws -> Any {
+    try impl(args, context)
   }
 }
 
 struct FunctionNullary<R>: SimpleFunction {
-  private let impl: () throws -> R
+  private let impl: (ExpressionContext) throws -> R
 
   var signature: FunctionSignature {
     get throws {
@@ -78,11 +72,15 @@ struct FunctionNullary<R>: SimpleFunction {
   }
 
   init(impl: @escaping () throws -> R) {
+    self.impl = { _ in try impl() }
+  }
+
+  init(impl: @escaping (ExpressionContext) throws -> R) {
     self.impl = impl
   }
 
-  func invoke(_: [Any]) throws -> Any {
-    try impl()
+  func invoke(_: [Any], context: ExpressionContext) throws -> Any {
+    try impl(context)
   }
 }
 
@@ -104,14 +102,14 @@ struct FunctionUnary<T1, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context _: ExpressionContext) throws -> Any {
     try checkArgs(args, count: 1)
     return try impl(castArg(args[0]))
   }
 }
 
 struct FunctionBinary<T1, T2, R>: SimpleFunction {
-  private let impl: (T1, T2) throws -> R
+  private let impl: (T1, T2, ExpressionContext) throws -> R
 
   var signature: FunctionSignature {
     get throws {
@@ -126,14 +124,19 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
   }
 
   init(impl: @escaping (T1, T2) throws -> R) {
+    self.impl = { arg1, arg2, _ in try impl(arg1, arg2) }
+  }
+
+  init(impl: @escaping (T1, T2, ExpressionContext) throws -> R) {
     self.impl = impl
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
     try checkArgs(args, count: 2)
     return try impl(
       castArg(args[0]),
-      castArg(args[1])
+      castArg(args[1]),
+      context
     )
   }
 }
@@ -158,7 +161,7 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context _: ExpressionContext) throws -> Any {
     try checkArgs(args, count: 3)
     return try impl(
       castArg(args[0]),
@@ -189,7 +192,7 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context _: ExpressionContext) throws -> Any {
     try checkArgs(args, count: 4)
     return try impl(
       castArg(args[0]),
@@ -218,7 +221,7 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context _: ExpressionContext) throws -> Any {
     try checkVarArgs(args, count: 1)
     return try impl(args.map { try castArg($0) })
   }
@@ -243,7 +246,7 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context _: ExpressionContext) throws -> Any {
     try checkVarArgs(args, count: 2)
     return try impl(
       castArg(args[0]),
@@ -272,7 +275,7 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
     self.impl = impl
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context _: ExpressionContext) throws -> Any {
     try checkVarArgs(args, count: 3)
     return try impl(
       castArg(args[0]),
@@ -291,7 +294,7 @@ struct OverloadedFunction: Function {
     self.makeError = makeError ?? { _ in NoMatchingSignatureError() }
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
     let arguments = try args.map {
       try ArgumentSignature(type: .from(unwrapHashableType($0)))
     }
@@ -304,7 +307,7 @@ struct OverloadedFunction: Function {
       }
     }
     if let function {
-      return try function.invoke(args)
+      return try function.invoke(args, context: context)
     }
     throw makeError(args)
   }

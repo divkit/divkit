@@ -134,7 +134,9 @@ private struct ExpressionTestCase: Decodable {
     errorTracker: ExpressionErrorTracker? = nil
   ) -> ExpressionResolver {
     ExpressionResolver(
-      variables: variables,
+      variableValueProvider: {
+        variables[DivVariableName(rawValue: $0)]?.typedValue()
+      },
       persistentValuesStorage: DivPersistentValuesStorage(),
       errorTracker: errorTracker ?? { XCTFail($0.description) }
     )

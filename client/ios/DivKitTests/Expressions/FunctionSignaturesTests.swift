@@ -26,7 +26,6 @@ private func makeTestCases() -> [(String, SignatureTestCase)] {
 
 private func runTest(_ testCase: SignatureTestCase) {
   let functionsProvider = FunctionsProvider(
-    variableValueProvider: { _ in nil },
     persistentValuesStorage: DivPersistentValuesStorage()
   )
   let functionName = testCase.functionName

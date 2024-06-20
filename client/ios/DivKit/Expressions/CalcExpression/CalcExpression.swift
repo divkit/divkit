@@ -52,8 +52,8 @@ struct CalcExpression {
     }
   }
 
-  func evaluate(evaluators: @escaping (Symbol) -> Function?) throws -> Any {
-    try root.evaluate(evaluators)
+  func evaluate(_ context: ExpressionContext) throws -> Any {
+    try root.evaluate(context)
   }
 }
 
@@ -75,15 +75,13 @@ enum Subexpression {
     }
   }
 
-  func evaluate(
-    _ evaluators: (CalcExpression.Symbol) -> Function?
-  ) throws -> Any {
+  func evaluate(_ context: ExpressionContext) throws -> Any {
     switch self {
     case let .literal(value):
       return value
     case let .symbol(symbol, args):
-      if let evaluator = evaluators(symbol) {
-        return try evaluator.invoke(args: args, evaluators: evaluators)
+      if let evaluator = context.evaluators(symbol) {
+        return try evaluator.invoke(args: args, context: context)
       }
       throw ExpressionError("Undefined symbol: \(symbol.name).")
     }

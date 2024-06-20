@@ -1,44 +1,18 @@
-import Foundation
-
 import CommonCorePublic
 
 final class FunctionsProvider {
-  private let variableValueProvider: (String) -> Any?
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let lock = AllocatedUnfairLock()
 
   init(
-    variableValueProvider: @escaping (String) -> Any?,
     persistentValuesStorage: DivPersistentValuesStorage
   ) {
-    self.variableValueProvider = variableValueProvider
-    self.persistentValuesStorage = persistentValuesStorage
-  }
-
-  init(
-    cardId: DivCardID,
-    variablesStorage: DivVariablesStorage,
-    variableTracker: @escaping ExpressionResolver.VariableTracker,
-    persistentValuesStorage: DivPersistentValuesStorage,
-    localValues: [String: AnyHashable]? = nil
-  ) {
-    self.variableValueProvider = {
-      if let value = localValues?[$0] {
-        return value
-      }
-      let variableName = DivVariableName(rawValue: $0)
-      variableTracker([variableName])
-      return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
-    }
     self.persistentValuesStorage = persistentValuesStorage
   }
 
   lazy var functions: [String: Function] =
     lock.withLock {
       var functions = staticFunctions
-      for item in GetValueFunctions.allCases {
-        functions[item.rawValue] = item.getFunction(variableValueProvider)
-      }
       for item in GetStoredValueFunctions.allCases {
         functions[item.rawValue] = item.getFunction(persistentValuesStorage.get)
       }
@@ -54,10 +28,10 @@ final class FunctionsProvider {
         case .variable("false"):
           return ConstantFunction(false)
         case let .variable(name):
-          if let value = self?.variableValueProvider(name) {
-            return ConstantFunction(value)
-          }
-          return FunctionNullary {
+          return FunctionNullary { context in
+            if let value = context.variableValueProvider(name) {
+              return value
+            }
             throw ExpressionError("Variable '\(name)' is missing.")
           }
         case .infix, .prefix:
@@ -85,7 +59,7 @@ private struct FunctionEvaluator: Function {
     self.functions = functions
   }
 
-  func invoke(_ args: [Any]) throws -> Any {
+  func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
     let name = symbol.name
     guard let function = functions[name] else {
       throw ExpressionError(
@@ -93,7 +67,7 @@ private struct FunctionEvaluator: Function {
       )
     }
     do {
-      return try function.invoke(args)
+      return try function.invoke(args, context: context)
     } catch {
       let message = "Failed to evaluate [\(symbol.formatExpression(args))]."
       let correctedArgs: [Any] = if case .method = symbol {
@@ -127,6 +101,7 @@ private let staticFunctions: [String: Function] = {
   functions.addColorFunctions()
   functions.addDateTimeFunctions()
   functions.addDictFunctions()
+  functions.addGetValueFunctions()
   functions.addIntervalFunctions()
   functions.addStringFunctions()
   functions.addToStringFunctions()

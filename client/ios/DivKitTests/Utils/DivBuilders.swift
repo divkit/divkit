@@ -7,14 +7,22 @@ func divAction(
   logId: String,
   payload: [String: Any]? = nil,
   typed: DivActionTyped? = nil,
-  url: String? = nil
+  url: String? = nil,
+  urlExpression: String? = nil
 ) -> DivAction {
-  DivAction(
+  let urlParam: Expression<URL>? = if let urlExpression {
+    expression(urlExpression)
+  } else if let url {
+    .value(URL(string: url)!)
+  } else {
+    nil
+  }
+  return DivAction(
     isEnabled: .value(isEnabled),
     logId: .value(logId),
     payload: payload,
     typed: typed,
-    url: url.flatMap { .value(URL(string: $0)!) }
+    url: urlParam
   )
 }
 

@@ -43,16 +43,16 @@ public final class DivActionHandler {
     reporter: DivReporter? = nil
   ) {
     self.divActionURLHandler = DivActionURLHandler(
-        stateUpdater: stateUpdater,
-        blockStateStorage: blockStateStorage,
-        patchProvider: patchProvider,
-        variableUpdater: variablesStorage,
-        updateCard: updateCard,
-        showTooltip: showTooltip,
-        tooltipActionPerformer: tooltipActionPerformer,
-        performTimerAction: performTimerAction,
-        persistentValuesStorage: persistentValuesStorage
-      )
+      stateUpdater: stateUpdater,
+      blockStateStorage: blockStateStorage,
+      patchProvider: patchProvider,
+      variableUpdater: variablesStorage,
+      updateCard: updateCard,
+      showTooltip: showTooltip,
+      tooltipActionPerformer: tooltipActionPerformer,
+      performTimerAction: performTimerAction,
+      persistentValuesStorage: persistentValuesStorage
+    )
     self.urlHandler = urlHandler
     self.logger = logger ?? EmptyDivActionLogger()
     self.trackVisibility = trackVisibility
@@ -224,12 +224,15 @@ public final class DivActionHandler {
   ) -> ExpressionResolver {
     ExpressionResolver(
       functionsProvider: FunctionsProvider(
-        cardId: cardId,
-        variablesStorage: variablesStorage,
-        variableTracker: { _ in },
-        persistentValuesStorage: persistentValuesStorage,
-        localValues: localValues
+        persistentValuesStorage: persistentValuesStorage
       ),
+      variableValueProvider: { [unowned variablesStorage] in
+        if let value = localValues[$0] {
+          return value
+        }
+        let variableName = DivVariableName(rawValue: $0)
+        return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
+      },
       errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )
   }

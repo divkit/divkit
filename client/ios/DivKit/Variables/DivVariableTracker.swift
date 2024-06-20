@@ -13,9 +13,9 @@ public final class DivVariableTracker {
     }
   }
 
-  func onVariablesUsed(id: DivViewId, variables: Set<DivVariableName>) {
+  func onVariableUsed(id: DivViewId, variable: DivVariableName) {
     usedVariables.accessWrite { value in
-      value[id] = (value[id] ?? []).union(variables)
+      value[id] = (value[id] ?? []).union([variable])
     }
   }
 

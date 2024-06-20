@@ -22,16 +22,17 @@ final class ExpressionResolverTests: XCTestCase {
   ]
 
   private lazy var expressionResolver = ExpressionResolver(
-    variables: variables,
+    variableValueProvider: { [unowned self] in
+      let varibleName = DivVariableName(rawValue: $0)
+      self.usedVariables.insert(varibleName)
+      return self.variables[varibleName]?.typedValue()
+    },
     persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
       error = $0.description
       if !self.isErrorExpected {
         XCTFail($0.description)
       }
-    },
-    variableTracker: { [unowned self] in
-      self.usedVariables = self.usedVariables.union($0)
     }
   )
 

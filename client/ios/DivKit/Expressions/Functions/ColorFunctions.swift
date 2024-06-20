@@ -65,7 +65,7 @@ private func _setColor(channel: Channel) -> Function {
           throw valueOutOfRangeError()
         }
         return color.set(value, for: channel)
-      }
+      },
     ]
   )
 }
