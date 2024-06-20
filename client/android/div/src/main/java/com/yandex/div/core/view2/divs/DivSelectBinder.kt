@@ -138,12 +138,14 @@ internal class DivSelectBinder @Inject constructor(
         val callback = { _: Any ->  applyTypeface(div, resolver) }
         div.fontFamily?.observeAndGet(resolver, callback)?.let { addSubscription(it) }
         addSubscription(div.fontWeight.observe(resolver, callback))
+        addSubscription(div.fontWeightValue?.observe(resolver, callback))
     }
 
     private fun DivSelectView.applyTypeface(div: DivSelect, resolver: ExpressionResolver) {
         typeface = typefaceResolver.getTypeface(
             div.fontFamily?.evaluate(resolver),
-            div.fontWeight.evaluate(resolver)
+            div.fontWeight.evaluate(resolver),
+            div.fontWeightValue?.evaluate(resolver)
         )
     }
 

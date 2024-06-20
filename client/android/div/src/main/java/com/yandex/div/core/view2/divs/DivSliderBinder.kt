@@ -366,7 +366,7 @@ internal class DivSliderBinder @Inject constructor(
         ): SliderTextStyle {
             return SliderTextStyle(
                 fontSize = fontSize.evaluate(resolver).fontSizeToPx(fontSizeUnit.evaluate(resolver), metrics),
-                fontWeight = getTypeface(fontWeight.evaluate(resolver), typefaceProvider),
+                fontWeight = getTypeface(getTypefaceValue(fontWeight.evaluate(resolver), fontWeightValue?.evaluate(resolver)), typefaceProvider),
                 offsetX = offset?.x?.toPx(metrics, resolver)?.toFloat() ?: 0f,
                 offsetY = offset?.y?.toPx(metrics, resolver)?.toFloat() ?: 0f,
                 textColor = textColor.evaluate(resolver)

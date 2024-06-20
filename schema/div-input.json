@@ -56,7 +56,8 @@
           "$description": "translations.json#/div_font_weight_value",
           "platforms": [
             "ios",
-            "web"
+            "web",
+            "android"
           ]
         },
         "text_color": {

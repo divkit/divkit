@@ -681,14 +681,18 @@ internal fun ViewGroup.trackVisibilityActions(
     }
 }
 
-internal fun getTypeface(fontWeight: DivFontWeight, typefaceProvider: DivTypefaceProvider): Typeface {
-    return when (fontWeight) {
-        DivFontWeight.LIGHT -> typefaceProvider.light ?: return Typeface.DEFAULT
-        DivFontWeight.REGULAR -> typefaceProvider.regular ?: return Typeface.DEFAULT
-        DivFontWeight.MEDIUM -> typefaceProvider.medium ?: return Typeface.DEFAULT
-        DivFontWeight.BOLD -> typefaceProvider.bold ?: return Typeface.DEFAULT_BOLD
-        else -> typefaceProvider.regular ?: return Typeface.DEFAULT
+internal fun getTypefaceValue(fontWeight: DivFontWeight?, fontWeightValue: Long?): Int {
+    return fontWeightValue?.toInt() ?: when (fontWeight) {
+        DivFontWeight.LIGHT -> 300
+        DivFontWeight.REGULAR -> 400
+        DivFontWeight.MEDIUM -> 500
+        DivFontWeight.BOLD -> 700
+        else -> 400
     }
+}
+
+internal fun getTypeface(fontWeight: Int, typefaceProvider: DivTypefaceProvider): Typeface {
+    return typefaceProvider.getTypefaceFor(fontWeight) ?: Typeface.DEFAULT
 }
 
 internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Float {

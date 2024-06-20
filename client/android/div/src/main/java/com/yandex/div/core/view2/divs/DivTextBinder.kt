@@ -301,24 +301,34 @@ internal class DivTextBinder @Inject constructor(
             return
         }
 
-        applyTypeface(newDiv.fontFamily?.evaluate(resolver), newDiv.fontWeight.evaluate(resolver))
+        applyTypeface(
+            newDiv.fontFamily?.evaluate(resolver),
+            newDiv.fontWeight.evaluate(resolver),
+            newDiv.fontWeightValue?.evaluate(resolver),
+        )
 
-        if (newDiv.fontFamily.isConstantOrNull() && newDiv.fontWeight.isConstant()) {
+        if (newDiv.fontFamily.isConstantOrNull() && newDiv.fontWeight.isConstant() && newDiv.fontWeightValue.isConstantOrNull()) {
             return
         }
 
         val callback = { _: Any ->
-            applyTypeface(newDiv.fontFamily?.evaluate(resolver), newDiv.fontWeight.evaluate(resolver))
+             applyTypeface(
+                newDiv.fontFamily?.evaluate(resolver),
+                newDiv.fontWeight.evaluate(resolver),
+                newDiv.fontWeightValue?.evaluate(resolver)
+            )
         }
         addSubscription(newDiv.fontFamily?.observe(resolver, callback))
         addSubscription(newDiv.fontWeight.observe(resolver, callback))
+        addSubscription(newDiv.fontWeightValue?.observe(resolver, callback))
     }
 
     private fun TextView.applyTypeface(
         fontFamily: String?,
         fontWeight: DivFontWeight,
+        fontWeightValue: Long?
     ) {
-        typeface = typefaceResolver.getTypeface(fontFamily, fontWeight)
+        typeface = typefaceResolver.getTypeface(fontFamily, fontWeight, fontWeightValue)
     }
 
     //endregion
@@ -681,6 +691,7 @@ internal class DivTextBinder @Inject constructor(
             addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
             addSubscription(range.fontWeight?.observe(resolver, callback))
+            addSubscription(range.fontWeightValue?.observe(resolver, callback))
             addSubscription(range.letterSpacing?.observe(resolver, callback))
             addSubscription(range.lineHeight?.observe(resolver, callback))
             addSubscription(range.strike?.observe(resolver, callback))
@@ -835,6 +846,7 @@ internal class DivTextBinder @Inject constructor(
             addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
             addSubscription(range.fontWeight?.observe(resolver, callback))
+            addSubscription(range.fontWeightValue?.observe(resolver, callback))
             addSubscription(range.letterSpacing?.observe(resolver, callback))
             addSubscription(range.lineHeight?.observe(resolver, callback))
             addSubscription(range.strike?.observe(resolver, callback))
@@ -1096,7 +1108,10 @@ internal class DivTextBinder @Inject constructor(
                 }
             }
             range.fontWeight?.let {
-                setSpan(TypefaceSpan(typefaceResolver.getTypeface(fontFamily, it.evaluate(resolver))), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                setSpan(TypefaceSpan(typefaceResolver.getTypeface(fontFamily, it.evaluate(resolver), range.fontWeightValue?.evaluate(resolver))), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            }
+            range.fontWeightValue?.let {
+                setSpan(TypefaceSpan(typefaceResolver.getTypeface(fontFamily, range.fontWeight?.evaluate(resolver), range.fontWeightValue?.evaluate(resolver))), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
             range.actions?.let {
                 textView.movementMethod = LinkMovementMethod.getInstance()

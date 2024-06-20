@@ -5,10 +5,8 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.actions.closeKeyboard
@@ -183,12 +181,14 @@ internal class DivInputBinder @Inject constructor(
         val callback = { _: Any ->  applyTypeface(div, resolver) }
         div.fontFamily?.observeAndGet(resolver, callback)?.let { addSubscription(it) }
         addSubscription(div.fontWeight.observe(resolver, callback))
+        addSubscription(div.fontWeightValue?.observe(resolver, callback))
     }
 
     private fun DivInputView.applyTypeface(div: DivInput, resolver: ExpressionResolver) {
         typeface = typefaceResolver.getTypeface(
             div.fontFamily?.evaluate(resolver),
-            div.fontWeight.evaluate(resolver)
+            div.fontWeight.evaluate(resolver),
+            div.fontWeightValue?.evaluate(resolver)
         )
     }
 

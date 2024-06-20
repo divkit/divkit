@@ -2,7 +2,8 @@
   "description": "Text elements and text ranges with font_weight and font_weight_value",
   "platforms": [
     "ios",
-    "web"
+    "web",
+    "android"
   ],
   "templates": {
     "item": {

@@ -25,7 +25,7 @@ class DivTextBinderTest : DivBinderTest() {
 
     @Before
     fun setUp() {
-        whenever(typefaceResolver.getTypeface(any(), any())).thenReturn(Typeface.DEFAULT)
+        whenever(typefaceResolver.getTypeface(any(), any(), any())).thenReturn(Typeface.DEFAULT)
         whenever(divView.resources).thenReturn(context.resources)
     }
 

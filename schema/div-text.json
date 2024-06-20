@@ -64,7 +64,8 @@
           "$description": "translations.json#/div_font_weight_value",
           "platforms": [
             "ios",
-            "web"
+            "web",
+            "android"
           ]
         },
         "text_color": {
@@ -315,7 +316,8 @@
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_font_weight_value",
           "platforms": [
-            "ios"
+            "ios",
+            "android"
           ]
         },
         "text_alignment_horizontal": {
