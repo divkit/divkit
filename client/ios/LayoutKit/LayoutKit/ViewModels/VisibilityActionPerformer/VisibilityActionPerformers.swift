@@ -19,10 +19,12 @@ final class VisibilityActionPerformers {
         targetVisibilityPercentage: action.targetPercentage,
         limiter: action.limiter,
         action: { [unowned actionSender] in
+          #if os(iOS)
           UIActionEvent(
             uiAction: action.uiAction,
             originalSender: actionSender
           ).sendFrom(actionSender)
+          #endif
         },
         type: action.actionType,
         timerScheduler: visibilityParams.scheduler

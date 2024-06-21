@@ -42,9 +42,11 @@ extension DivFontProvider {
       weight: params.weight,
       size: params.unit.makeScaledValue(params.size)
     )
+    #if os(iOS)
     if let featureSettings = params.featureSettings {
       return font.withFontFeatureSettings(featureSettings)
     }
+    #endif
     return font
   }
 }
