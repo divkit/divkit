@@ -102,10 +102,10 @@ internal class DivPagerAdapter(
                     OFFSET_TO_REAL_ITEM - originalPosition
                 )
             }
-            in visibleItems.size  until visibleItems.size + OFFSET_TO_REAL_ITEM -> {
+            in visibleItems.size - OFFSET_TO_REAL_ITEM  until visibleItems.size -> {
                 notifyItemRangeChanged(
-                    originalPosition - visibleItems.size,
-                    visibleItems.size + OFFSET_TO_REAL_ITEM - originalPosition
+                    originalPosition - visibleItems.size + OFFSET_TO_REAL_ITEM,
+                    OFFSET_TO_REAL_ITEM
                 )
             }
         }
