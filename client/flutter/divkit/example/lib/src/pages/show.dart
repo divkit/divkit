@@ -1,4 +1,5 @@
 import 'package:divkit/divkit.dart';
+import 'package:example/src/configuration/playground_custom_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -70,6 +71,7 @@ class _ShowPageState extends ConsumerState<ShowPage> {
         ],
       ),
       body: DivKitView(
+        customHandler: PlaygroundAppCustomHandler(),
         key: ObjectKey(reloadN),
         data: data,
       ),
