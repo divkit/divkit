@@ -69,6 +69,29 @@ public final class DivView: VisibleBoundsTrackingView {
 
   /// Sets the source of the ``DivView`` and updates the layout.
   /// - Parameters:
+  /// - source: The source of the ``DivView``, specified using `JSON` data, a `Data` object, or
+  /// ``DivData``.
+  /// - debugParams: Optional debug configurations for the ``DivView``.
+  /// - shouldResetPreviousCardData: Specifies whether to clear the data of the previous card when
+  /// updating the ``DivView`` with new content.
+  @_spi(Legacy)
+  public func setSource(
+    _ source: DivViewSource,
+    debugParams: DebugParams = DebugParams(),
+    shouldResetPreviousCardData: Bool = false
+  ) {
+    if shouldResetPreviousCardData, let blockProvider {
+      divKitComponents.reset(cardId: blockProvider.cardId)
+    }
+    blockProvider = preloader.blockProvider(for: source.id.cardId)
+    blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
+      self?.update(block: $0)
+    }
+    preloader.setSource(source, debugParams: debugParams)
+  }
+
+  /// Sets the source of the ``DivView`` and updates the layout.
+  /// - Parameters:
   /// - cardId: ID of the card to show. (The card will not be shown if it has not been previously
   /// uploaded to ``DivViewPreloader``)
   /// - shouldResetPreviousCardData: Specifies whether to clear the data of the previous card when

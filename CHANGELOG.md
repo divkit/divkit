@@ -1,3 +1,24 @@
+## 30.6.0
+
+# Android Client:
+* Fixed multiple state switching with different root state.
+* **Experimental API:** added new interfaces for data serialization.
+* Introduced `index` variable for prototyped elements.
+* Fixed grid cell size calculation when margins are set.
+
+# iOS Client:
+* Fixed inline image reusing in DivText.
+* Added `DivVariableStorage.hasValue` method.
+* Added `font_weight_value` support.
+* Added `id` property into `div-collection-item-builder.prototype`.
+* Fixed memory leak in VisibilityActionPerfromers.
+* Added `hitTest` implementation into `StateBlockView` to pass through touches.
+
+# Web Client:
+* Added support for the property `font_weight_value` in `text`, `input`, `slider` and `select`.
+* Introduced `index` variable for prototyped elements.
+
+
 ## 30.5.0
 
 # Android Client:

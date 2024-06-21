@@ -59,6 +59,25 @@ public final class DivViewPreloader {
     blockProviders[source.id.cardId] = blockProvider
   }
 
+  /// Sets the source for  ``DivViewPreloader`` and updates the layout.
+  /// - Parameters:
+  /// - source: The source of the ``DivView``.
+  /// - debugParams: Optional debug configurations for the ``DivView``.
+  @_spi(Legacy)
+  public func setSource(
+    _ source: DivViewSource,
+    debugParams: DebugParams = DebugParams()
+  ) {
+    let blockProvider: DivBlockProvider = blockProvider(for: source.id.cardId)
+
+    blockProvider.setSource(
+      source,
+      debugParams: debugParams
+    )
+
+    blockProviders[source.id.cardId] = blockProvider
+  }
+
   /// Sets the sources for  ``DivViewPreloader`` and updates the layout.
   /// - Parameters:
   /// - sources: The sources of the ``DivView``.

@@ -1,4 +1,10 @@
-## 30.5.0 (ADD DATE HERE)
+## 30.6.0 (June 24, 2024)
+
+* Added support for the property `font_weight_value` in `text`, `input`, `slider` and `select`.
+* Introduced `index` variable for prototyped elements.
+
+
+## 30.5.0 (June 17, 2024)
 
 * Added `array_set_value` action.
 
