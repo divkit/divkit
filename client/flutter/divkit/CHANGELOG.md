@@ -1,6 +1,7 @@
 ## 0.2.0-pre
 
 * Correct interpretation of dict in variables context
+* Add support no_animation type of animation
 * Add support of longtap actions
 * Remove dispose from public div-context
 * Provide DivContext in custom elements: you can use variables, actions, timers and states in

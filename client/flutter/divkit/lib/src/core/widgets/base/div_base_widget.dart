@@ -1,6 +1,7 @@
 import 'package:divkit/src/core/widgets/base/div_base_model.dart';
 import 'package:divkit/src/core/widgets/div_tap_action_emitter.dart';
 import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_animation.dart';
 import 'package:divkit/src/generated_sources/div_base.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:divkit/src/utils/size_converters.dart';
@@ -11,11 +12,13 @@ class DivBaseWidget extends StatefulWidget {
 
   final List<DivAction> actions;
   final List<DivAction> longtapActions;
+  final DivAnimation? actionAnimation;
 
   final Widget child;
 
   DivBaseWidget({
     required this.data,
+    this.actionAnimation,
     super.key,
     DivAction? action,
     List<DivAction>? actions,
@@ -73,6 +76,7 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
                   opacity: model.opacity,
                   child: DivTapActionEmitter(
                     actions: widget.actions,
+                    actionAnimation: widget.actionAnimation,
                     longtapActions: widget.longtapActions,
                     child: focusNode != null
                         ? AnimatedBuilder(

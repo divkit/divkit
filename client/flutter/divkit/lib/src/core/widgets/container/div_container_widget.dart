@@ -44,6 +44,7 @@ class _DivContainerWidgetState extends State<DivContainerWidget> {
         action: widget.data.action,
         actions: widget.data.actions,
         longtapActions: widget.data.longtapActions,
+        actionAnimation: widget.data.actionAnimation,
         child: StreamBuilder<DivContainerModel>(
           stream: stream,
           builder: (context, snapshot) {
