@@ -74,6 +74,23 @@ final class DivBlockProvider {
   func setSource(
     _ source: DivViewSource,
     debugParams: DebugParams
+  ) {
+    id = source.id
+    self.debugParams = debugParams
+
+    switch source.kind {
+    case let .data(data):
+      update(data: data)
+    case let .divData(divData):
+      update(divData: divData)
+    case let .json(json):
+      update(json: json)
+    }
+  }
+
+  func setSource(
+    _ source: DivViewSource,
+    debugParams: DebugParams
   ) async {
     id = source.id
     self.debugParams = debugParams
@@ -85,6 +102,22 @@ final class DivBlockProvider {
       update(divData: divData)
     case let .json(json):
       await update(json: json)
+    }
+  }
+
+  private func update(data: Data) {
+    dataErrors = []
+    do {
+      guard let jsonObj = try? JSONSerialization.jsonObject(with: data),
+            let jsonDict = jsonObj as? [String: Any] else {
+        throw DeserializationError.nestedObjectError(
+          field: cardId.rawValue,
+          error: .invalidJSONData(data: data)
+        )
+      }
+      update(json: jsonDict)
+    } catch {
+      block = handleError(error: error)
     }
   }
 
@@ -106,6 +139,17 @@ final class DivBlockProvider {
     case let .success(jsonDict):
       await update(json: jsonDict)
     case let .failure(error):
+      block = handleError(error: error)
+    }
+  }
+
+  private func update(json: [String: Any]) {
+    dataErrors = []
+    do {
+      let result = try parseDivDataWithTemplates(json, cardId: cardId)
+      dataErrors.append(contentsOf: result.errorsOrWarnings?.asArray() ?? [])
+      update(divData: result.value)
+    } catch {
       block = handleError(error: error)
     }
   }
@@ -206,6 +250,21 @@ final class DivBlockProvider {
       block = try block.updated(withStates: blockStates)
     } catch {
       block = handleError(error: error)
+    }
+  }
+
+  private func parseDivDataWithTemplates(
+    _ jsonDict: [String: Any],
+    cardId: DivCardID
+  ) throws -> DeserializationResult<DivData> {
+    let rawDivData = try RawDivData(dictionary: jsonDict)
+    let templates = try measurements.templateParsingTime.updateMeasure {
+      DivTemplates(dictionary: rawDivData.templates)
+    }
+    return try measurements.divDataParsingTime.updateMeasure {
+      templates
+        .parseValue(type: DivDataTemplate.self, from: rawDivData.card)
+        .asCardResult(cardId: cardId)
     }
   }
 
