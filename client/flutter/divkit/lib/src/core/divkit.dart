@@ -247,7 +247,7 @@ class _DivKitViewState extends State<_DivKitView> {
 
   @override
   void dispose() {
-    divContext.dispose();
+    divRootContext.dispose();
     triggerManager.dispose();
 
     loggerUse(loggerContext).debug("Dispose DivKitView $hashCode");

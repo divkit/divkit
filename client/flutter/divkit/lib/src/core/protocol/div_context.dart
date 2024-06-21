@@ -14,8 +14,6 @@ abstract class DivContext {
   DivTimerManager get timerManager;
 
   FocusNode? getFocusNode(String divId);
-
-  Future<void> dispose();
 }
 
 class DivRootContext extends DivContext {
@@ -61,7 +59,6 @@ class DivRootContext extends DivContext {
     return null;
   }
 
-  @override
   Future<void> dispose() async {
     _stateManager?.dispose();
     await _timerManager?.dispose();

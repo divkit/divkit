@@ -1,5 +1,5 @@
 PODS:
-  - div_expressions_resolver (0.4.1):
+  - div_expressions_resolver (0.4.2):
     - DivKit (~> 29.0)
     - Flutter
   - DivKit (29.15.1):
@@ -76,7 +76,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/darwin"
 
 SPEC CHECKSUMS:
-  div_expressions_resolver: 6734959e5feaf44241ea4d4888274eeca9557586
+  div_expressions_resolver: cfd6eedb1a599d16fbfed6b25d2709cf8b3807da
   DivKit: 96a1189bbb1286544119551819db721237edc49a
   DivKit_LayoutKit: d8cd3826a2d004b159517d514e1580467f89efc3
   DivKit_LayoutKitInterface: 805245d61e6525632171de529592afb880692cae
