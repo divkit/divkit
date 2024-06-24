@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.dpToPx
-import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivSize
 
@@ -57,7 +56,7 @@ internal class DivGridLayoutManager(
         super.calculateItemDecorationsForChild(child, outRect)
 
         val position = _getPosition(child)
-        val item = div.nonNullItems[position].value()
+        val item = getItemDiv(position).div.value()
 
         val isFixedHeight = item.height is DivSize.Fixed
         val isFixedWidth = item.width is DivSize.Fixed

@@ -1,7 +1,7 @@
 package com.yandex.div.core
 
-import android.net.Uri
 import android.graphics.drawable.PictureDrawable
+import android.net.Uri
 import com.yandex.div.core.DivPreloader.Callback
 import com.yandex.div.core.DivPreloader.PreloadReference
 import com.yandex.div.core.annotations.Mockable
@@ -92,12 +92,12 @@ class DivPreloader internal constructor(
         }
 
         override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
-            data.value.nonNullItems.forEach { visit(it, resolver) }
+            data.value.buildItems(resolver).forEach { (item, newResolver) -> visit(item, newResolver) }
             defaultVisit(data, resolver)
         }
 
         override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
-            data.value.nonNullItems.forEach { visit(it, resolver) }
+            data.value.buildItems(resolver).forEach { (item, newResolver) -> visit(item, newResolver) }
             defaultVisit(data, resolver)
         }
 
