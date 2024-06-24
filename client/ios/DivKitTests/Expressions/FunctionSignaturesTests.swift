@@ -49,22 +49,30 @@ private struct TestCases: Decodable {
 
 private struct SignatureTestCase: Decodable {
   let functionName: String
-  let arguments: [ArgumentSignature]?
-  let resultType: ArgumentType
+  let arguments: [ArgumentSignature]
+  let resultType: Any.Type
   let platforms: [Platform]
 
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    functionName = try container.decode(String.self, forKey: .functionName)
+    arguments = (try? container.decode([ArgumentSignature].self, forKey: .arguments)) ?? []
+    resultType = parseType(try container.decode(String.self, forKey: .resultType))
+    platforms = try container.decode([Platform].self, forKey: .platforms)
+  }
+
   var toSignature: FunctionSignature {
-    FunctionSignature(
-      arguments: arguments ?? [],
-      resultType: resultType
-    )
+    FunctionSignature(arguments: arguments, resultType: resultType)
   }
 
   var name: String {
-    let args = (arguments ?? [])
-      .map { $0.vararg == true ? "vararg \($0.type.rawValue)" : $0.type.rawValue }
+    let args = arguments
+      .map {
+        let type = formatTypeForError($0.type)
+        return $0.vararg ? "vararg \(type)" : type
+      }
       .joined(separator: ", ")
-    return "\(functionName)(\(args)) -> \(resultType)"
+    return "\(functionName)(\(args)) -> \(formatTypeForError(resultType))"
   }
 
   private enum CodingKeys: String, CodingKey {
@@ -79,11 +87,63 @@ extension Function {
   fileprivate func verify(signature: FunctionSignature) -> Bool {
     switch self {
     case let function as SimpleFunction:
-      (try? function.signature) == signature
+      function.signature == signature
     case let function as OverloadedFunction:
       function.functions.contains { $0.verify(signature: signature) }
     default:
       false
     }
+  }
+}
+
+extension FunctionSignature: Equatable {
+  public static func ==(lhs: FunctionSignature, rhs: FunctionSignature) -> Bool {
+    lhs.arguments == rhs.arguments && lhs.resultType == rhs.resultType
+  }
+}
+
+extension ArgumentSignature: Decodable {
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.init(
+      type: parseType(try container.decode(String.self, forKey: .type)),
+      vararg: (try? container.decode(Bool.self, forKey: .vararg)) ?? false
+    )
+  }
+
+  private enum CodingKeys: String, CodingKey {
+    case type
+    case vararg
+  }
+}
+
+extension ArgumentSignature: Equatable {
+  public static func ==(lhs: ArgumentSignature, rhs: ArgumentSignature) -> Bool {
+    lhs.type == rhs.type && lhs.vararg == rhs.vararg
+  }
+}
+
+private func parseType(_ type: String) -> Any.Type {
+  switch type {
+  case "array":
+    [AnyHashable].self
+  case "boolean":
+    Bool.self
+  case "color":
+    RGBAColor.self
+  case "datetime":
+    Date.self
+  case "dict":
+    [String: AnyHashable].self
+  case "integer":
+    Int.self
+  case "number":
+    Double.self
+  case "string":
+    String.self
+  case "url":
+    URL.self
+  default:
+    Error.self
   }
 }
