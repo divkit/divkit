@@ -5,6 +5,7 @@
 * **Experimental API:** added new interfaces for data serialization.
 * Introduced `index` variable for prototyped elements.
 * Fixed grid cell size calculation when margins are set.
+* Fixed div view state change happened before binding.
 
 # iOS Client:
 * Fixed inline image reusing in DivText.
