@@ -2,7 +2,6 @@
   "description": "Text with blurred image background",
   "platforms": [
     "android",
-    "ios",
     "web"
   ],
   "div_data": {
