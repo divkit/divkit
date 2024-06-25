@@ -241,6 +241,17 @@
       ]
     },
     {
+      "expression": "@{toNumber('')}",
+      "expected": {
+        "type": "error",
+        "value":  "Failed to evaluate [toNumber('')]. Unable to convert value to Number."
+      },
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
       "expression": "@{toNumber('hello')}",
       "expected": {
         "type": "error",
