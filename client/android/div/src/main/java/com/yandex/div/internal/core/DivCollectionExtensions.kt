@@ -54,32 +54,47 @@ private fun DivCollectionItemBuilder.buildItem(
         mutableListOf()
     )
     val newResolver = (resolver as? ExpressionResolverImpl)?.plus(localVariableSource) ?: resolver
-    return prototypes.find {
-        it.selector.evaluate(newResolver)
-    }?.div?.copy()?.toItemBuilderResult(newResolver)
+    val prototype = prototypes.find { it.selector.evaluate(newResolver) } ?: return null
+    return prototype.div.copy(prototype.id?.evaluate(newResolver)).toItemBuilderResult(newResolver)
 }
 
-private fun Div.copy(): Div {
+private fun Div.copy(id: String? = value().id): Div {
     return when (this) {
-        is Div.Image -> Div.Image(value.copy())
-        is Div.GifImage -> Div.GifImage(value.copy())
-        is Div.Text -> Div.Text(value.copy())
-        is Div.Separator -> Div.Separator(value.copy())
+        is Div.Image -> Div.Image(value.copy(id = id))
+        is Div.GifImage -> Div.GifImage(value.copy(id = id))
+        is Div.Text -> Div.Text(value.copy(id = id))
+        is Div.Separator -> Div.Separator(value.copy(id = id))
         is Div.Container -> Div.Container(value.copy(
-            itemBuilder = value.itemBuilder?.copy(),
+            id = id,
             items = value.items?.map { it.copy() },
         ))
-        is Div.Grid -> Div.Grid(value.copy(items = value.items?.map { it.copy() }))
-        is Div.Gallery -> Div.Gallery(value.copy(items = value.items?.map { it.copy() }))
-        is Div.Pager -> Div.Pager(value.copy(items = value.items?.map { it.copy() }))
-        is Div.Tabs -> Div.Tabs(value.copy(items = value.items.map { it.copy(div = it.div.copy()) }))
-        is Div.State -> Div.State(value.copy(states = value.states.map { it.copy(div = it.div?.copy()) }))
-        is Div.Custom -> Div.Custom(value.copy())
-        is Div.Indicator -> Div.Indicator(value.copy())
-        is Div.Slider -> Div.Slider(value.copy())
-        is Div.Input -> Div.Input(value.copy())
-        is Div.Select -> Div.Select(value.copy())
-        is Div.Video -> Div.Video(value.copy())
+        is Div.Grid -> Div.Grid(value.copy(
+            id = id,
+            items = value.items?.map { it.copy() }
+        ))
+        is Div.Gallery -> Div.Gallery(value.copy(
+            id = id,
+            items = value.items?.map { it.copy() }
+        ))
+        is Div.Pager -> Div.Pager(value.copy(
+            id = id,
+            items = value.items?.map { it.copy() }
+        ))
+        is Div.Tabs -> Div.Tabs(value.copy(
+            id = id,
+            items = value.items.map { it.copy(div = it.div.copy()) }
+        ))
+        is Div.State -> Div.State(value.copy(
+            id = id,
+            divId = id,
+            states = value.states.map { it.copy(div = it.div?.copy()) }
+        ))
+        is Div.Custom -> Div.Custom(value.copy(id = id))
+        is Div.Indicator -> Div.Indicator(value.copy(id = id))
+        is Div.Slider -> Div.Slider(value.copy(id = id))
+        is Div.Input -> Div.Input(value.copy(id = id))
+        is Div.Select -> Div.Select(value.copy(id = id))
+        is Div.Video -> Div.Video(value.copy(id = id))
     }
 }
 
