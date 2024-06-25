@@ -1213,10 +1213,10 @@ class Div2View private constructor(
 
         fun runBulkActions() {
             val newState = pendingState ?: return
-            if (newState.stateId == stateId) {
-                viewComponent.stateSwitcher.switchStates(newState, pendingPaths.immutableCopy(), expressionResolver)
-            } else {
+            if (newState.stateId != stateId) {
                 switchToState(newState.stateId, isPendingStateTemporary)
+            } else if (childCount > 0) {
+                viewComponent.stateSwitcher.switchStates(newState, pendingPaths.immutableCopy(), expressionResolver)
             }
             reset()
         }
