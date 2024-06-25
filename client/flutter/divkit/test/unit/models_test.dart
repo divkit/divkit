@@ -6,23 +6,23 @@ import 'package:divkit/src/core/expression/expression.dart';
 import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-const reference = Div(
+const reference = Div.divContainer(
   DivContainer(
     orientation: ValueExpression(DivContainerOrientation.vertical),
-    height: DivSize(DivWrapContentSize()),
-    width: DivSize(DivWrapContentSize()),
+    height: DivSize.divWrapContentSize(DivWrapContentSize()),
+    width: DivSize.divWrapContentSize(DivWrapContentSize()),
     background: [
-      DivBackground(
+      DivBackground.divSolidBackground(
         DivSolidBackground(color: ValueExpression(Color(0xFFFFFFFF))),
       ),
     ],
     layoutMode: ValueExpression(DivContainerLayoutMode.noWrap),
     items: [
-      Div(
+      Div.divText(
         DivText(
           text: ValueExpression("Linear container with baseline alignment:"),
-          height: DivSize(DivWrapContentSize()),
-          width: DivSize(DivWrapContentSize()),
+          height: DivSize.divWrapContentSize(DivWrapContentSize()),
+          width: DivSize.divWrapContentSize(DivWrapContentSize()),
           paddings: DivEdgeInsets(
             left: ValueExpression(10),
             top: ValueExpression(10),
@@ -30,7 +30,7 @@ const reference = Div(
           ),
         ),
       ),
-      Div(
+      Div.divContainer(
         DivContainer(
           border: DivBorder(
             stroke: DivStroke(
@@ -38,19 +38,19 @@ const reference = Div(
             ),
           ),
           orientation: ValueExpression(DivContainerOrientation.horizontal),
-          height: DivSize(DivWrapContentSize()),
-          width: DivSize(DivWrapContentSize()),
+          height: DivSize.divWrapContentSize(DivWrapContentSize()),
+          width: DivSize.divWrapContentSize(DivWrapContentSize()),
           contentAlignmentHorizontal:
               ValueExpression(DivContentAlignmentHorizontal.center),
           contentAlignmentVertical:
               ValueExpression(DivContentAlignmentVertical.center),
           layoutMode: ValueExpression(DivContainerLayoutMode.noWrap),
           items: [
-            Div(
+            Div.divText(
               DivText(
                 text: ValueExpression("External"),
-                height: DivSize(DivWrapContentSize()),
-                width: DivSize(DivWrapContentSize()),
+                height: DivSize.divWrapContentSize(DivWrapContentSize()),
+                width: DivSize.divWrapContentSize(DivWrapContentSize()),
                 alignmentVertical:
                     ValueExpression(DivAlignmentVertical.baseline),
                 paddings: DivEdgeInsets(
@@ -67,11 +67,11 @@ const reference = Div(
                 fontSize: ValueExpression(16),
               ),
             ),
-            Div(
+            Div.divText(
               DivText(
                 text: ValueExpression("container."),
-                height: DivSize(DivWrapContentSize()),
-                width: DivSize(DivWrapContentSize()),
+                height: DivSize.divWrapContentSize(DivWrapContentSize()),
+                width: DivSize.divWrapContentSize(DivWrapContentSize()),
                 alignmentVertical:
                     ValueExpression(DivAlignmentVertical.baseline),
                 paddings: DivEdgeInsets(
@@ -88,7 +88,7 @@ const reference = Div(
                 fontSize: ValueExpression(10),
               ),
             ),
-            Div(
+            Div.divContainer(
               DivContainer(
                 border: DivBorder(
                   stroke: DivStroke(
@@ -97,8 +97,8 @@ const reference = Div(
                 ),
                 orientation:
                     ValueExpression(DivContainerOrientation.horizontal),
-                height: DivSize(DivWrapContentSize()),
-                width: DivSize(DivWrapContentSize()),
+                height: DivSize.divWrapContentSize(DivWrapContentSize()),
+                width: DivSize.divWrapContentSize(DivWrapContentSize()),
                 alignmentVertical:
                     ValueExpression(DivAlignmentVertical.baseline),
                 contentAlignmentHorizontal:
@@ -107,11 +107,11 @@ const reference = Div(
                     ValueExpression(DivContentAlignmentVertical.baseline),
                 layoutMode: ValueExpression(DivContainerLayoutMode.noWrap),
                 items: [
-                  Div(
+                  Div.divText(
                     DivText(
                       text: ValueExpression("Inner"),
-                      height: DivSize(DivWrapContentSize()),
-                      width: DivSize(DivWrapContentSize()),
+                      height: DivSize.divWrapContentSize(DivWrapContentSize()),
+                      width: DivSize.divWrapContentSize(DivWrapContentSize()),
                       alignmentVertical:
                           ValueExpression(DivAlignmentVertical.baseline),
                       paddings: DivEdgeInsets(
@@ -128,11 +128,11 @@ const reference = Div(
                       fontSize: ValueExpression(16),
                     ),
                   ),
-                  Div(
+                  Div.divText(
                     DivText(
                       text: ValueExpression("container."),
-                      height: DivSize(DivWrapContentSize()),
-                      width: DivSize(DivWrapContentSize()),
+                      height: DivSize.divWrapContentSize(DivWrapContentSize()),
+                      width: DivSize.divWrapContentSize(DivWrapContentSize()),
                       alignmentVertical:
                           ValueExpression(DivAlignmentVertical.baseline),
                       paddings: DivEdgeInsets(
@@ -152,11 +152,12 @@ const reference = Div(
                 ],
               ),
             ),
-            Div(
+            Div.divText(
               DivText(
                 text: ValueExpression("Long long long text in multiline."),
-                height: DivSize(DivWrapContentSize()),
-                width: DivSize(DivFixedSize(value: ValueExpression(50))),
+                height: DivSize.divWrapContentSize(DivWrapContentSize()),
+                width: DivSize.divFixedSize(
+                    DivFixedSize(value: ValueExpression(50))),
                 alignmentVertical:
                     ValueExpression(DivAlignmentVertical.baseline),
                 paddings: DivEdgeInsets(
@@ -173,11 +174,11 @@ const reference = Div(
                 fontSize: ValueExpression(8),
               ),
             ),
-            Div(
+            Div.divText(
               DivText(
                 text: ValueExpression("Bottom alignment."),
-                height: DivSize(DivWrapContentSize()),
-                width: DivSize(DivWrapContentSize()),
+                height: DivSize.divWrapContentSize(DivWrapContentSize()),
+                width: DivSize.divWrapContentSize(DivWrapContentSize()),
                 alignmentVertical: ValueExpression(DivAlignmentVertical.bottom),
                 paddings: DivEdgeInsets(
                   left: ValueExpression(5),

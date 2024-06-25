@@ -6,37 +6,26 @@ import 'div_input_validator_expression.dart';
 import 'div_input_validator_regex.dart';
 
 class DivInputValidator with EquatableMixin {
-  const DivInputValidator(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivInputValidatorExpression) {
-      return value;
-    }
-    if (value is DivInputValidatorRegex) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivInputValidator");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivInputValidatorExpression)
         divInputValidatorExpression,
     required T Function(DivInputValidatorRegex) divInputValidatorRegex,
   }) {
-    final value = _value;
-    if (value is DivInputValidatorExpression) {
-      return divInputValidatorExpression(value);
-    }
-    if (value is DivInputValidatorRegex) {
-      return divInputValidatorRegex(value);
+    switch (_index!) {
+      case 0:
+        return divInputValidatorExpression(
+          value as DivInputValidatorExpression,
+        );
+      case 1:
+        return divInputValidatorRegex(
+          value as DivInputValidatorRegex,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivInputValidator");
@@ -47,34 +36,46 @@ class DivInputValidator with EquatableMixin {
     T Function(DivInputValidatorRegex)? divInputValidatorRegex,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivInputValidatorExpression &&
-        divInputValidatorExpression != null) {
-      return divInputValidatorExpression(value);
-    }
-    if (value is DivInputValidatorRegex && divInputValidatorRegex != null) {
-      return divInputValidatorRegex(value);
+    switch (_index!) {
+      case 0:
+        if (divInputValidatorExpression != null) {
+          return divInputValidatorExpression(
+            value as DivInputValidatorExpression,
+          );
+        }
+        break;
+      case 1:
+        if (divInputValidatorRegex != null) {
+          return divInputValidatorRegex(
+            value as DivInputValidatorRegex,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivInputValidator.divInputValidatorExpression(
-    DivInputValidatorExpression value,
-  ) : _value = value;
+    DivInputValidatorExpression obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivInputValidator.divInputValidatorRegex(
-    DivInputValidatorRegex value,
-  ) : _value = value;
+    DivInputValidatorRegex obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivInputValidator? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     switch (json['type']) {
-      case DivInputValidatorRegex.type:
-        return DivInputValidator(DivInputValidatorRegex.fromJson(json)!);
       case DivInputValidatorExpression.type:
-        return DivInputValidator(DivInputValidatorExpression.fromJson(json)!);
+        return DivInputValidator.divInputValidatorExpression(
+            DivInputValidatorExpression.fromJson(json)!);
+      case DivInputValidatorRegex.type:
+        return DivInputValidator.divInputValidatorRegex(
+            DivInputValidatorRegex.fromJson(json)!);
     }
     return null;
   }

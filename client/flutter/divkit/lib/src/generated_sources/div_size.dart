@@ -7,43 +7,30 @@ import 'div_match_parent_size.dart';
 import 'div_wrap_content_size.dart';
 
 class DivSize with EquatableMixin {
-  const DivSize(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivFixedSize) {
-      return value;
-    }
-    if (value is DivMatchParentSize) {
-      return value;
-    }
-    if (value is DivWrapContentSize) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivSize");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivFixedSize) divFixedSize,
     required T Function(DivMatchParentSize) divMatchParentSize,
     required T Function(DivWrapContentSize) divWrapContentSize,
   }) {
-    final value = _value;
-    if (value is DivFixedSize) {
-      return divFixedSize(value);
-    }
-    if (value is DivMatchParentSize) {
-      return divMatchParentSize(value);
-    }
-    if (value is DivWrapContentSize) {
-      return divWrapContentSize(value);
+    switch (_index!) {
+      case 0:
+        return divFixedSize(
+          value as DivFixedSize,
+        );
+      case 1:
+        return divMatchParentSize(
+          value as DivMatchParentSize,
+        );
+      case 2:
+        return divWrapContentSize(
+          value as DivWrapContentSize,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivSize");
@@ -55,30 +42,46 @@ class DivSize with EquatableMixin {
     T Function(DivWrapContentSize)? divWrapContentSize,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivFixedSize && divFixedSize != null) {
-      return divFixedSize(value);
-    }
-    if (value is DivMatchParentSize && divMatchParentSize != null) {
-      return divMatchParentSize(value);
-    }
-    if (value is DivWrapContentSize && divWrapContentSize != null) {
-      return divWrapContentSize(value);
+    switch (_index!) {
+      case 0:
+        if (divFixedSize != null) {
+          return divFixedSize(
+            value as DivFixedSize,
+          );
+        }
+        break;
+      case 1:
+        if (divMatchParentSize != null) {
+          return divMatchParentSize(
+            value as DivMatchParentSize,
+          );
+        }
+        break;
+      case 2:
+        if (divWrapContentSize != null) {
+          return divWrapContentSize(
+            value as DivWrapContentSize,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivSize.divFixedSize(
-    DivFixedSize value,
-  ) : _value = value;
+    DivFixedSize obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivSize.divMatchParentSize(
-    DivMatchParentSize value,
-  ) : _value = value;
+    DivMatchParentSize obj,
+  )   : value = obj,
+        _index = 1;
 
   const DivSize.divWrapContentSize(
-    DivWrapContentSize value,
-  ) : _value = value;
+    DivWrapContentSize obj,
+  )   : value = obj,
+        _index = 2;
 
   static DivSize? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -86,11 +89,11 @@ class DivSize with EquatableMixin {
     }
     switch (json['type']) {
       case DivFixedSize.type:
-        return DivSize(DivFixedSize.fromJson(json)!);
+        return DivSize.divFixedSize(DivFixedSize.fromJson(json)!);
       case DivMatchParentSize.type:
-        return DivSize(DivMatchParentSize.fromJson(json)!);
+        return DivSize.divMatchParentSize(DivMatchParentSize.fromJson(json)!);
       case DivWrapContentSize.type:
-        return DivSize(DivWrapContentSize.fromJson(json)!);
+        return DivSize.divWrapContentSize(DivWrapContentSize.fromJson(json)!);
     }
     return null;
   }

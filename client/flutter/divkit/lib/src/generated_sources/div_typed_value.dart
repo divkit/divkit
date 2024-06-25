@@ -12,43 +12,11 @@ import 'string_value.dart';
 import 'url_value.dart';
 
 class DivTypedValue with EquatableMixin {
-  const DivTypedValue(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is ArrayValue) {
-      return value;
-    }
-    if (value is BooleanValue) {
-      return value;
-    }
-    if (value is ColorValue) {
-      return value;
-    }
-    if (value is DictValue) {
-      return value;
-    }
-    if (value is IntegerValue) {
-      return value;
-    }
-    if (value is NumberValue) {
-      return value;
-    }
-    if (value is StringValue) {
-      return value;
-    }
-    if (value is UrlValue) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivTypedValue");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(ArrayValue) arrayValue,
@@ -60,30 +28,39 @@ class DivTypedValue with EquatableMixin {
     required T Function(StringValue) stringValue,
     required T Function(UrlValue) urlValue,
   }) {
-    final value = _value;
-    if (value is ArrayValue) {
-      return arrayValue(value);
-    }
-    if (value is BooleanValue) {
-      return booleanValue(value);
-    }
-    if (value is ColorValue) {
-      return colorValue(value);
-    }
-    if (value is DictValue) {
-      return dictValue(value);
-    }
-    if (value is IntegerValue) {
-      return integerValue(value);
-    }
-    if (value is NumberValue) {
-      return numberValue(value);
-    }
-    if (value is StringValue) {
-      return stringValue(value);
-    }
-    if (value is UrlValue) {
-      return urlValue(value);
+    switch (_index!) {
+      case 0:
+        return arrayValue(
+          value as ArrayValue,
+        );
+      case 1:
+        return booleanValue(
+          value as BooleanValue,
+        );
+      case 2:
+        return colorValue(
+          value as ColorValue,
+        );
+      case 3:
+        return dictValue(
+          value as DictValue,
+        );
+      case 4:
+        return integerValue(
+          value as IntegerValue,
+        );
+      case 5:
+        return numberValue(
+          value as NumberValue,
+        );
+      case 6:
+        return stringValue(
+          value as StringValue,
+        );
+      case 7:
+        return urlValue(
+          value as UrlValue,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivTypedValue");
@@ -100,87 +77,128 @@ class DivTypedValue with EquatableMixin {
     T Function(UrlValue)? urlValue,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is ArrayValue && arrayValue != null) {
-      return arrayValue(value);
-    }
-    if (value is BooleanValue && booleanValue != null) {
-      return booleanValue(value);
-    }
-    if (value is ColorValue && colorValue != null) {
-      return colorValue(value);
-    }
-    if (value is DictValue && dictValue != null) {
-      return dictValue(value);
-    }
-    if (value is IntegerValue && integerValue != null) {
-      return integerValue(value);
-    }
-    if (value is NumberValue && numberValue != null) {
-      return numberValue(value);
-    }
-    if (value is StringValue && stringValue != null) {
-      return stringValue(value);
-    }
-    if (value is UrlValue && urlValue != null) {
-      return urlValue(value);
+    switch (_index!) {
+      case 0:
+        if (arrayValue != null) {
+          return arrayValue(
+            value as ArrayValue,
+          );
+        }
+        break;
+      case 1:
+        if (booleanValue != null) {
+          return booleanValue(
+            value as BooleanValue,
+          );
+        }
+        break;
+      case 2:
+        if (colorValue != null) {
+          return colorValue(
+            value as ColorValue,
+          );
+        }
+        break;
+      case 3:
+        if (dictValue != null) {
+          return dictValue(
+            value as DictValue,
+          );
+        }
+        break;
+      case 4:
+        if (integerValue != null) {
+          return integerValue(
+            value as IntegerValue,
+          );
+        }
+        break;
+      case 5:
+        if (numberValue != null) {
+          return numberValue(
+            value as NumberValue,
+          );
+        }
+        break;
+      case 6:
+        if (stringValue != null) {
+          return stringValue(
+            value as StringValue,
+          );
+        }
+        break;
+      case 7:
+        if (urlValue != null) {
+          return urlValue(
+            value as UrlValue,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivTypedValue.arrayValue(
-    ArrayValue value,
-  ) : _value = value;
+    ArrayValue obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivTypedValue.booleanValue(
-    BooleanValue value,
-  ) : _value = value;
+    BooleanValue obj,
+  )   : value = obj,
+        _index = 1;
 
   const DivTypedValue.colorValue(
-    ColorValue value,
-  ) : _value = value;
+    ColorValue obj,
+  )   : value = obj,
+        _index = 2;
 
   const DivTypedValue.dictValue(
-    DictValue value,
-  ) : _value = value;
+    DictValue obj,
+  )   : value = obj,
+        _index = 3;
 
   const DivTypedValue.integerValue(
-    IntegerValue value,
-  ) : _value = value;
+    IntegerValue obj,
+  )   : value = obj,
+        _index = 4;
 
   const DivTypedValue.numberValue(
-    NumberValue value,
-  ) : _value = value;
+    NumberValue obj,
+  )   : value = obj,
+        _index = 5;
 
   const DivTypedValue.stringValue(
-    StringValue value,
-  ) : _value = value;
+    StringValue obj,
+  )   : value = obj,
+        _index = 6;
 
   const DivTypedValue.urlValue(
-    UrlValue value,
-  ) : _value = value;
+    UrlValue obj,
+  )   : value = obj,
+        _index = 7;
 
   static DivTypedValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     switch (json['type']) {
-      case StringValue.type:
-        return DivTypedValue(StringValue.fromJson(json)!);
-      case IntegerValue.type:
-        return DivTypedValue(IntegerValue.fromJson(json)!);
-      case NumberValue.type:
-        return DivTypedValue(NumberValue.fromJson(json)!);
-      case ColorValue.type:
-        return DivTypedValue(ColorValue.fromJson(json)!);
-      case BooleanValue.type:
-        return DivTypedValue(BooleanValue.fromJson(json)!);
-      case UrlValue.type:
-        return DivTypedValue(UrlValue.fromJson(json)!);
-      case DictValue.type:
-        return DivTypedValue(DictValue.fromJson(json)!);
       case ArrayValue.type:
-        return DivTypedValue(ArrayValue.fromJson(json)!);
+        return DivTypedValue.arrayValue(ArrayValue.fromJson(json)!);
+      case BooleanValue.type:
+        return DivTypedValue.booleanValue(BooleanValue.fromJson(json)!);
+      case ColorValue.type:
+        return DivTypedValue.colorValue(ColorValue.fromJson(json)!);
+      case DictValue.type:
+        return DivTypedValue.dictValue(DictValue.fromJson(json)!);
+      case IntegerValue.type:
+        return DivTypedValue.integerValue(IntegerValue.fromJson(json)!);
+      case NumberValue.type:
+        return DivTypedValue.numberValue(NumberValue.fromJson(json)!);
+      case StringValue.type:
+        return DivTypedValue.stringValue(StringValue.fromJson(json)!);
+      case UrlValue.type:
+        return DivTypedValue.urlValue(UrlValue.fromJson(json)!);
     }
     return null;
   }

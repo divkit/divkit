@@ -54,7 +54,7 @@ class DivGrid with EquatableMixin implements DivBase {
     this.doubletapActions,
     this.extensions,
     this.focus,
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     this.items,
     this.longtapActions,
@@ -72,7 +72,7 @@ class DivGrid with EquatableMixin implements DivBase {
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "grid";
@@ -120,7 +120,7 @@ class DivGrid with EquatableMixin implements DivBase {
 
   @override
   final DivFocus? focus;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -172,7 +172,7 @@ class DivGrid with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -309,7 +309,7 @@ class DivGrid with EquatableMixin implements DivBase {
       ),
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
@@ -398,7 +398,7 @@ class DivGrid with EquatableMixin implements DivBase {
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }

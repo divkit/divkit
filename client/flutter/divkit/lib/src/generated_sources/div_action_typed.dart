@@ -12,43 +12,11 @@ import 'div_action_focus_element.dart';
 import 'div_action_set_variable.dart';
 
 class DivActionTyped with EquatableMixin {
-  const DivActionTyped(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivActionArrayInsertValue) {
-      return value;
-    }
-    if (value is DivActionArrayRemoveValue) {
-      return value;
-    }
-    if (value is DivActionArraySetValue) {
-      return value;
-    }
-    if (value is DivActionClearFocus) {
-      return value;
-    }
-    if (value is DivActionCopyToClipboard) {
-      return value;
-    }
-    if (value is DivActionDictSetValue) {
-      return value;
-    }
-    if (value is DivActionFocusElement) {
-      return value;
-    }
-    if (value is DivActionSetVariable) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivActionTyped");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivActionArrayInsertValue) divActionArrayInsertValue,
@@ -60,30 +28,39 @@ class DivActionTyped with EquatableMixin {
     required T Function(DivActionFocusElement) divActionFocusElement,
     required T Function(DivActionSetVariable) divActionSetVariable,
   }) {
-    final value = _value;
-    if (value is DivActionArrayInsertValue) {
-      return divActionArrayInsertValue(value);
-    }
-    if (value is DivActionArrayRemoveValue) {
-      return divActionArrayRemoveValue(value);
-    }
-    if (value is DivActionArraySetValue) {
-      return divActionArraySetValue(value);
-    }
-    if (value is DivActionClearFocus) {
-      return divActionClearFocus(value);
-    }
-    if (value is DivActionCopyToClipboard) {
-      return divActionCopyToClipboard(value);
-    }
-    if (value is DivActionDictSetValue) {
-      return divActionDictSetValue(value);
-    }
-    if (value is DivActionFocusElement) {
-      return divActionFocusElement(value);
-    }
-    if (value is DivActionSetVariable) {
-      return divActionSetVariable(value);
+    switch (_index!) {
+      case 0:
+        return divActionArrayInsertValue(
+          value as DivActionArrayInsertValue,
+        );
+      case 1:
+        return divActionArrayRemoveValue(
+          value as DivActionArrayRemoveValue,
+        );
+      case 2:
+        return divActionArraySetValue(
+          value as DivActionArraySetValue,
+        );
+      case 3:
+        return divActionClearFocus(
+          value as DivActionClearFocus,
+        );
+      case 4:
+        return divActionCopyToClipboard(
+          value as DivActionCopyToClipboard,
+        );
+      case 5:
+        return divActionDictSetValue(
+          value as DivActionDictSetValue,
+        );
+      case 6:
+        return divActionFocusElement(
+          value as DivActionFocusElement,
+        );
+      case 7:
+        return divActionSetVariable(
+          value as DivActionSetVariable,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivActionTyped");
@@ -100,67 +77,106 @@ class DivActionTyped with EquatableMixin {
     T Function(DivActionSetVariable)? divActionSetVariable,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivActionArrayInsertValue &&
-        divActionArrayInsertValue != null) {
-      return divActionArrayInsertValue(value);
-    }
-    if (value is DivActionArrayRemoveValue &&
-        divActionArrayRemoveValue != null) {
-      return divActionArrayRemoveValue(value);
-    }
-    if (value is DivActionArraySetValue && divActionArraySetValue != null) {
-      return divActionArraySetValue(value);
-    }
-    if (value is DivActionClearFocus && divActionClearFocus != null) {
-      return divActionClearFocus(value);
-    }
-    if (value is DivActionCopyToClipboard && divActionCopyToClipboard != null) {
-      return divActionCopyToClipboard(value);
-    }
-    if (value is DivActionDictSetValue && divActionDictSetValue != null) {
-      return divActionDictSetValue(value);
-    }
-    if (value is DivActionFocusElement && divActionFocusElement != null) {
-      return divActionFocusElement(value);
-    }
-    if (value is DivActionSetVariable && divActionSetVariable != null) {
-      return divActionSetVariable(value);
+    switch (_index!) {
+      case 0:
+        if (divActionArrayInsertValue != null) {
+          return divActionArrayInsertValue(
+            value as DivActionArrayInsertValue,
+          );
+        }
+        break;
+      case 1:
+        if (divActionArrayRemoveValue != null) {
+          return divActionArrayRemoveValue(
+            value as DivActionArrayRemoveValue,
+          );
+        }
+        break;
+      case 2:
+        if (divActionArraySetValue != null) {
+          return divActionArraySetValue(
+            value as DivActionArraySetValue,
+          );
+        }
+        break;
+      case 3:
+        if (divActionClearFocus != null) {
+          return divActionClearFocus(
+            value as DivActionClearFocus,
+          );
+        }
+        break;
+      case 4:
+        if (divActionCopyToClipboard != null) {
+          return divActionCopyToClipboard(
+            value as DivActionCopyToClipboard,
+          );
+        }
+        break;
+      case 5:
+        if (divActionDictSetValue != null) {
+          return divActionDictSetValue(
+            value as DivActionDictSetValue,
+          );
+        }
+        break;
+      case 6:
+        if (divActionFocusElement != null) {
+          return divActionFocusElement(
+            value as DivActionFocusElement,
+          );
+        }
+        break;
+      case 7:
+        if (divActionSetVariable != null) {
+          return divActionSetVariable(
+            value as DivActionSetVariable,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivActionTyped.divActionArrayInsertValue(
-    DivActionArrayInsertValue value,
-  ) : _value = value;
+    DivActionArrayInsertValue obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivActionTyped.divActionArrayRemoveValue(
-    DivActionArrayRemoveValue value,
-  ) : _value = value;
+    DivActionArrayRemoveValue obj,
+  )   : value = obj,
+        _index = 1;
 
   const DivActionTyped.divActionArraySetValue(
-    DivActionArraySetValue value,
-  ) : _value = value;
+    DivActionArraySetValue obj,
+  )   : value = obj,
+        _index = 2;
 
   const DivActionTyped.divActionClearFocus(
-    DivActionClearFocus value,
-  ) : _value = value;
+    DivActionClearFocus obj,
+  )   : value = obj,
+        _index = 3;
 
   const DivActionTyped.divActionCopyToClipboard(
-    DivActionCopyToClipboard value,
-  ) : _value = value;
+    DivActionCopyToClipboard obj,
+  )   : value = obj,
+        _index = 4;
 
   const DivActionTyped.divActionDictSetValue(
-    DivActionDictSetValue value,
-  ) : _value = value;
+    DivActionDictSetValue obj,
+  )   : value = obj,
+        _index = 5;
 
   const DivActionTyped.divActionFocusElement(
-    DivActionFocusElement value,
-  ) : _value = value;
+    DivActionFocusElement obj,
+  )   : value = obj,
+        _index = 6;
 
   const DivActionTyped.divActionSetVariable(
-    DivActionSetVariable value,
-  ) : _value = value;
+    DivActionSetVariable obj,
+  )   : value = obj,
+        _index = 7;
 
   static DivActionTyped? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -168,21 +184,29 @@ class DivActionTyped with EquatableMixin {
     }
     switch (json['type']) {
       case DivActionArrayInsertValue.type:
-        return DivActionTyped(DivActionArrayInsertValue.fromJson(json)!);
+        return DivActionTyped.divActionArrayInsertValue(
+            DivActionArrayInsertValue.fromJson(json)!);
       case DivActionArrayRemoveValue.type:
-        return DivActionTyped(DivActionArrayRemoveValue.fromJson(json)!);
+        return DivActionTyped.divActionArrayRemoveValue(
+            DivActionArrayRemoveValue.fromJson(json)!);
       case DivActionArraySetValue.type:
-        return DivActionTyped(DivActionArraySetValue.fromJson(json)!);
+        return DivActionTyped.divActionArraySetValue(
+            DivActionArraySetValue.fromJson(json)!);
       case DivActionClearFocus.type:
-        return DivActionTyped(DivActionClearFocus.fromJson(json)!);
+        return DivActionTyped.divActionClearFocus(
+            DivActionClearFocus.fromJson(json)!);
       case DivActionCopyToClipboard.type:
-        return DivActionTyped(DivActionCopyToClipboard.fromJson(json)!);
+        return DivActionTyped.divActionCopyToClipboard(
+            DivActionCopyToClipboard.fromJson(json)!);
       case DivActionDictSetValue.type:
-        return DivActionTyped(DivActionDictSetValue.fromJson(json)!);
+        return DivActionTyped.divActionDictSetValue(
+            DivActionDictSetValue.fromJson(json)!);
       case DivActionFocusElement.type:
-        return DivActionTyped(DivActionFocusElement.fromJson(json)!);
+        return DivActionTyped.divActionFocusElement(
+            DivActionFocusElement.fromJson(json)!);
       case DivActionSetVariable.type:
-        return DivActionTyped(DivActionSetVariable.fromJson(json)!);
+        return DivActionTyped.divActionSetVariable(
+            DivActionSetVariable.fromJson(json)!);
     }
     return null;
   }

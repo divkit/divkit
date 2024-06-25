@@ -47,7 +47,7 @@ class DivIndicator with EquatableMixin implements DivBase {
     this.disappearActions,
     this.extensions,
     this.focus,
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     this.inactiveItemColor = const ValueExpression(const Color(0x33919CB5)),
     this.inactiveMinimumShape,
@@ -59,7 +59,8 @@ class DivIndicator with EquatableMixin implements DivBase {
     this.pagerId,
     this.rowSpan,
     this.selectedActions,
-    this.shape = const DivShape(DivRoundedRectangleShape()),
+    this.shape =
+        const DivShape.divRoundedRectangleShape(DivRoundedRectangleShape()),
     this.spaceBetweenCenters = const DivFixedSize(
       value: ValueExpression(15),
     ),
@@ -73,7 +74,7 @@ class DivIndicator with EquatableMixin implements DivBase {
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "indicator";
@@ -115,7 +116,7 @@ class DivIndicator with EquatableMixin implements DivBase {
 
   @override
   final DivFocus? focus;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -145,7 +146,7 @@ class DivIndicator with EquatableMixin implements DivBase {
 
   @override
   final List<DivAction>? selectedActions;
-  // default value: const DivShape(DivRoundedRectangleShape())
+  // default value: const DivShape.divRoundedRectangleShape(DivRoundedRectangleShape())
   final DivShape shape;
   // default value: const DivFixedSize(value: ValueExpression(15),)
   final DivFixedSize spaceBetweenCenters;
@@ -179,7 +180,7 @@ class DivIndicator with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -296,7 +297,7 @@ class DivIndicator with EquatableMixin implements DivBase {
       ),
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
@@ -341,7 +342,8 @@ class DivIndicator with EquatableMixin implements DivBase {
       ),
       shape: safeParseObj(
         DivShape.fromJson(json['shape']),
-        fallback: const DivShape(DivRoundedRectangleShape()),
+        fallback:
+            const DivShape.divRoundedRectangleShape(DivRoundedRectangleShape()),
       )!,
       spaceBetweenCenters: safeParseObj(
         DivFixedSize.fromJson(json['space_between_centers']),
@@ -401,7 +403,7 @@ class DivIndicator with EquatableMixin implements DivBase {
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }

@@ -46,7 +46,8 @@ class DivInput with EquatableMixin implements DivBase {
     this.fontSize = const ValueExpression(12),
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
-    this.height = const DivSize(DivWrapContentSize()),
+    this.fontWeightValue,
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.highlightColor,
     this.hintColor = const ValueExpression(const Color(0x73000000)),
     this.hintText,
@@ -82,7 +83,7 @@ class DivInput with EquatableMixin implements DivBase {
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "input";
@@ -124,7 +125,9 @@ class DivInput with EquatableMixin implements DivBase {
   final Expression<DivSizeUnit> fontSizeUnit;
   // default value: DivFontWeight.regular
   final Expression<DivFontWeight> fontWeight;
-  // default value: const DivSize(DivWrapContentSize())
+  // constraint: number > 0
+  final Expression<int>? fontWeightValue;
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -206,7 +209,7 @@ class DivInput with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -226,6 +229,7 @@ class DivInput with EquatableMixin implements DivBase {
         fontSize,
         fontSizeUnit,
         fontWeight,
+        fontWeightValue,
         height,
         highlightColor,
         hintColor,
@@ -331,9 +335,12 @@ class DivInput with EquatableMixin implements DivBase {
         parse: DivFontWeight.fromJson,
         fallback: DivFontWeight.regular,
       )!,
+      fontWeightValue: safeParseIntExpr(
+        json['font_weight_value'],
+      ),
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       highlightColor: safeParseColorExpr(
         json['highlight_color'],
@@ -474,7 +481,7 @@ class DivInput with EquatableMixin implements DivBase {
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }

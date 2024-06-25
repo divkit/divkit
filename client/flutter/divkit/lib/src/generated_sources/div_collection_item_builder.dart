@@ -51,16 +51,20 @@ class DivCollectionItemBuilder with EquatableMixin {
 class DivCollectionItemBuilderPrototype with EquatableMixin {
   const DivCollectionItemBuilderPrototype({
     required this.div,
+    this.id,
     this.selector = const ValueExpression(true),
   });
 
   final Div div;
+
+  final Expression<String>? id;
   // default value: true
   final Expression<bool> selector;
 
   @override
   List<Object?> get props => [
         div,
+        id,
         selector,
       ];
 
@@ -73,6 +77,9 @@ class DivCollectionItemBuilderPrototype with EquatableMixin {
       div: safeParseObj(
         Div.fromJson(json['div']),
       )!,
+      id: safeParseStrExpr(
+        json['id']?.toString(),
+      ),
       selector: safeParseBoolExpr(
         json['selector'],
         fallback: true,

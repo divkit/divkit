@@ -56,7 +56,7 @@ class DivGifImage with EquatableMixin implements DivBase {
     this.extensions,
     this.focus,
     required this.gifUrl,
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     this.longtapActions,
     this.margins = const DivEdgeInsets(),
@@ -77,7 +77,7 @@ class DivGifImage with EquatableMixin implements DivBase {
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "gif";
@@ -127,7 +127,7 @@ class DivGifImage with EquatableMixin implements DivBase {
   final DivFocus? focus;
 
   final Expression<Uri> gifUrl;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -185,7 +185,7 @@ class DivGifImage with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -327,7 +327,7 @@ class DivGifImage with EquatableMixin implements DivBase {
       gifUrl: safeParseUriExpr(json['gif_url'])!,
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
@@ -425,7 +425,7 @@ class DivGifImage with EquatableMixin implements DivBase {
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }

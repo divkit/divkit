@@ -6,36 +6,25 @@ import 'div_linear_gradient.dart';
 import 'div_radial_gradient.dart';
 
 class DivTextGradient with EquatableMixin {
-  const DivTextGradient(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivLinearGradient) {
-      return value;
-    }
-    if (value is DivRadialGradient) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivTextGradient");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivLinearGradient) divLinearGradient,
     required T Function(DivRadialGradient) divRadialGradient,
   }) {
-    final value = _value;
-    if (value is DivLinearGradient) {
-      return divLinearGradient(value);
-    }
-    if (value is DivRadialGradient) {
-      return divRadialGradient(value);
+    switch (_index!) {
+      case 0:
+        return divLinearGradient(
+          value as DivLinearGradient,
+        );
+      case 1:
+        return divRadialGradient(
+          value as DivRadialGradient,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivTextGradient");
@@ -46,23 +35,34 @@ class DivTextGradient with EquatableMixin {
     T Function(DivRadialGradient)? divRadialGradient,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivLinearGradient && divLinearGradient != null) {
-      return divLinearGradient(value);
-    }
-    if (value is DivRadialGradient && divRadialGradient != null) {
-      return divRadialGradient(value);
+    switch (_index!) {
+      case 0:
+        if (divLinearGradient != null) {
+          return divLinearGradient(
+            value as DivLinearGradient,
+          );
+        }
+        break;
+      case 1:
+        if (divRadialGradient != null) {
+          return divRadialGradient(
+            value as DivRadialGradient,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivTextGradient.divLinearGradient(
-    DivLinearGradient value,
-  ) : _value = value;
+    DivLinearGradient obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivTextGradient.divRadialGradient(
-    DivRadialGradient value,
-  ) : _value = value;
+    DivRadialGradient obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivTextGradient? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -70,9 +70,11 @@ class DivTextGradient with EquatableMixin {
     }
     switch (json['type']) {
       case DivLinearGradient.type:
-        return DivTextGradient(DivLinearGradient.fromJson(json)!);
+        return DivTextGradient.divLinearGradient(
+            DivLinearGradient.fromJson(json)!);
       case DivRadialGradient.type:
-        return DivTextGradient(DivRadialGradient.fromJson(json)!);
+        return DivTextGradient.divRadialGradient(
+            DivRadialGradient.fromJson(json)!);
     }
     return null;
   }

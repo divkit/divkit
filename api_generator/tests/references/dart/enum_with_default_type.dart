@@ -6,37 +6,19 @@ import 'with_default.dart';
 import 'without_default.dart';
 
 class EnumWithDefaultType with EquatableMixin {
-  const EnumWithDefaultType(
-    Object value
-  ) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if(value is WithDefault) {
-      return value;
-    }
-    if(value is WithoutDefault) {
-      return value;
-    }
-    throw Exception("Type ${value.runtimeType.toString()} is not generalized in EnumWithDefaultType");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(WithDefault) withDefault,
     required T Function(WithoutDefault) withoutDefault,
   }) {
-    final value = _value;
-    if(value is WithDefault) {
-      return withDefault(value);
-    }
-    if(value is WithoutDefault) {
-      return withoutDefault(value);
+    switch(_index!) {
+      case 0: return withDefault(value as WithDefault,);
+      case 1: return withoutDefault(value as WithoutDefault,);
     }
     throw Exception("Type ${value.runtimeType.toString()} is not generalized in EnumWithDefaultType");
   }
@@ -46,25 +28,30 @@ class EnumWithDefaultType with EquatableMixin {
     T Function(WithoutDefault)? withoutDefault,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if(value is WithDefault && withDefault != null) {
-     return withDefault(value);
-    }
-    if(value is WithoutDefault && withoutDefault != null) {
-     return withoutDefault(value);
+    switch(_index!) {
+    case 0:
+      if (withDefault != null) {
+        return withDefault(value as WithDefault,);
+      }
+      break;
+    case 1:
+      if (withoutDefault != null) {
+        return withoutDefault(value as WithoutDefault,);
+      }
+      break;
     }
     return orElse();
   }
 
   const EnumWithDefaultType.withDefault(
-    WithDefault value,
-  ) :
- _value = value;
+    WithDefault obj,
+  ) : value = obj,
+      _index = 0;
 
   const EnumWithDefaultType.withoutDefault(
-    WithoutDefault value,
-  ) :
- _value = value;
+    WithoutDefault obj,
+  ) : value = obj,
+      _index = 1;
 
 
   static EnumWithDefaultType? fromJson(Map<String, dynamic>? json) {
@@ -73,9 +60,9 @@ class EnumWithDefaultType with EquatableMixin {
     }
     switch (json['type']) {
       case WithDefault.type :
-        return EnumWithDefaultType(WithDefault.fromJson(json)!);
+        return EnumWithDefaultType.withDefault(WithDefault.fromJson(json)!);
       case WithoutDefault.type :
-        return EnumWithDefaultType(WithoutDefault.fromJson(json)!);
+        return EnumWithDefaultType.withoutDefault(WithoutDefault.fromJson(json)!);
     }
     return null;
   }

@@ -14,7 +14,7 @@ class DivAnimation with EquatableMixin {
     this.interpolator = const ValueExpression(DivAnimationInterpolator.spring),
     this.items,
     required this.name,
-    this.repeat = const DivCount(DivInfinityCount()),
+    this.repeat = const DivCount.divInfinityCount(DivInfinityCount()),
     this.startDelay = const ValueExpression(0),
     this.startValue,
   });
@@ -29,7 +29,7 @@ class DivAnimation with EquatableMixin {
   final List<DivAnimation>? items;
 
   final Expression<DivAnimationName> name;
-  // default value: const DivCount(DivInfinityCount())
+  // default value: const DivCount.divInfinityCount(DivInfinityCount())
   final DivCount repeat;
   // constraint: number >= 0; default value: 0
   final Expression<int> startDelay;
@@ -78,7 +78,7 @@ class DivAnimation with EquatableMixin {
       )!,
       repeat: safeParseObj(
         DivCount.fromJson(json['repeat']),
-        fallback: const DivCount(DivInfinityCount()),
+        fallback: const DivCount.divInfinityCount(DivInfinityCount()),
       )!,
       startDelay: safeParseIntExpr(
         json['start_delay'],

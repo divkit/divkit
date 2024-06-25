@@ -65,7 +65,8 @@ class DivText with EquatableMixin implements DivBase {
     this.fontSize = const ValueExpression(12),
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
-    this.height = const DivSize(DivWrapContentSize()),
+    this.fontWeightValue,
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     this.images,
     this.letterSpacing = const ValueExpression(0),
@@ -100,7 +101,7 @@ class DivText with EquatableMixin implements DivBase {
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "text";
@@ -158,7 +159,9 @@ class DivText with EquatableMixin implements DivBase {
   final Expression<DivSizeUnit> fontSizeUnit;
   // default value: DivFontWeight.regular
   final Expression<DivFontWeight> fontWeight;
-  // default value: const DivSize(DivWrapContentSize())
+  // constraint: number > 0
+  final Expression<int>? fontWeightValue;
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -240,7 +243,7 @@ class DivText with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -268,6 +271,7 @@ class DivText with EquatableMixin implements DivBase {
         fontSize,
         fontSizeUnit,
         fontWeight,
+        fontWeightValue,
         height,
         id,
         images,
@@ -411,9 +415,12 @@ class DivText with EquatableMixin implements DivBase {
         parse: DivFontWeight.fromJson,
         fallback: DivFontWeight.regular,
       )!,
+      fontWeightValue: safeParseIntExpr(
+        json['font_weight_value'],
+      ),
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
@@ -564,7 +571,7 @@ class DivText with EquatableMixin implements DivBase {
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }
@@ -581,6 +588,7 @@ class DivTextRange with EquatableMixin {
     this.fontSize,
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
     this.fontWeight,
+    this.fontWeightValue,
     this.letterSpacing,
     this.lineHeight,
     required this.start,
@@ -608,6 +616,8 @@ class DivTextRange with EquatableMixin {
   final Expression<DivSizeUnit> fontSizeUnit;
 
   final Expression<DivFontWeight>? fontWeight;
+  // constraint: number > 0
+  final Expression<int>? fontWeightValue;
 
   final Expression<double>? letterSpacing;
   // constraint: number >= 0
@@ -636,6 +646,7 @@ class DivTextRange with EquatableMixin {
         fontSize,
         fontSizeUnit,
         fontWeight,
+        fontWeightValue,
         letterSpacing,
         lineHeight,
         start,
@@ -684,6 +695,9 @@ class DivTextRange with EquatableMixin {
       fontWeight: safeParseStrEnumExpr(
         json['font_weight'],
         parse: DivFontWeight.fromJson,
+      ),
+      fontWeightValue: safeParseIntExpr(
+        json['font_weight_value'],
       ),
       letterSpacing: safeParseDoubleExpr(
         json['letter_spacing'],

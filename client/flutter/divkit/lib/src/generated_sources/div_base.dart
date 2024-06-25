@@ -46,7 +46,7 @@ abstract class DivBase {
 
   DivFocus? get focus;
 
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   DivSize get height;
 
   String? get id;
@@ -82,6 +82,6 @@ abstract class DivBase {
 
   List<DivVisibilityAction>? get visibilityActions;
 
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   DivSize get width;
 }

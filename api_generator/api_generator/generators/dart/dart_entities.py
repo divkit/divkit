@@ -392,7 +392,11 @@ class DartPropertyType(PropertyType):
                 if case_constructor is None:
                     return None
 
-                return f'const {get_full_name(self.object)}({case_constructor})'
+                if isinstance(self, Object) and prop_type.object is not None and isinstance(prop_type.object, DartEntity):
+                    entity = cast(DartEntity, prop_type.object)
+                    return f'const {get_full_name(self.object)}.{utils.lower_camel_case(entity.name)}({case_constructor})'
+
+                return f'const {get_full_name(self.object)}({case_constructor},)'
 
             if isinstance(self.object, DartEntity):
                 entity = cast(DartEntity, self.object)

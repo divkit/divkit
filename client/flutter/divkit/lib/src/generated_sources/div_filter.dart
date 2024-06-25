@@ -6,36 +6,25 @@ import 'div_blur.dart';
 import 'div_filter_rtl_mirror.dart';
 
 class DivFilter with EquatableMixin {
-  const DivFilter(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivBlur) {
-      return value;
-    }
-    if (value is DivFilterRtlMirror) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivFilter");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivBlur) divBlur,
     required T Function(DivFilterRtlMirror) divFilterRtlMirror,
   }) {
-    final value = _value;
-    if (value is DivBlur) {
-      return divBlur(value);
-    }
-    if (value is DivFilterRtlMirror) {
-      return divFilterRtlMirror(value);
+    switch (_index!) {
+      case 0:
+        return divBlur(
+          value as DivBlur,
+        );
+      case 1:
+        return divFilterRtlMirror(
+          value as DivFilterRtlMirror,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivFilter");
@@ -46,23 +35,34 @@ class DivFilter with EquatableMixin {
     T Function(DivFilterRtlMirror)? divFilterRtlMirror,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivBlur && divBlur != null) {
-      return divBlur(value);
-    }
-    if (value is DivFilterRtlMirror && divFilterRtlMirror != null) {
-      return divFilterRtlMirror(value);
+    switch (_index!) {
+      case 0:
+        if (divBlur != null) {
+          return divBlur(
+            value as DivBlur,
+          );
+        }
+        break;
+      case 1:
+        if (divFilterRtlMirror != null) {
+          return divFilterRtlMirror(
+            value as DivFilterRtlMirror,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivFilter.divBlur(
-    DivBlur value,
-  ) : _value = value;
+    DivBlur obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivFilter.divFilterRtlMirror(
-    DivFilterRtlMirror value,
-  ) : _value = value;
+    DivFilterRtlMirror obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivFilter? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -70,9 +70,9 @@ class DivFilter with EquatableMixin {
     }
     switch (json['type']) {
       case DivBlur.type:
-        return DivFilter(DivBlur.fromJson(json)!);
+        return DivFilter.divBlur(DivBlur.fromJson(json)!);
       case DivFilterRtlMirror.type:
-        return DivFilter(DivFilterRtlMirror.fromJson(json)!);
+        return DivFilter.divFilterRtlMirror(DivFilterRtlMirror.fromJson(json)!);
     }
     return null;
   }

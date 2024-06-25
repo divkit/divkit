@@ -5,29 +5,20 @@ import 'package:equatable/equatable.dart';
 import 'div_shape_drawable.dart';
 
 class DivDrawable with EquatableMixin {
-  const DivDrawable(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivShapeDrawable) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivDrawable");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivShapeDrawable) divShapeDrawable,
   }) {
-    final value = _value;
-    if (value is DivShapeDrawable) {
-      return divShapeDrawable(value);
+    switch (_index!) {
+      case 0:
+        return divShapeDrawable(
+          value as DivShapeDrawable,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivDrawable");
@@ -37,16 +28,22 @@ class DivDrawable with EquatableMixin {
     T Function(DivShapeDrawable)? divShapeDrawable,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivShapeDrawable && divShapeDrawable != null) {
-      return divShapeDrawable(value);
+    switch (_index!) {
+      case 0:
+        if (divShapeDrawable != null) {
+          return divShapeDrawable(
+            value as DivShapeDrawable,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivDrawable.divShapeDrawable(
-    DivShapeDrawable value,
-  ) : _value = value;
+    DivShapeDrawable obj,
+  )   : value = obj,
+        _index = 0;
 
   static DivDrawable? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -54,7 +51,7 @@ class DivDrawable with EquatableMixin {
     }
     switch (json['type']) {
       case DivShapeDrawable.type:
-        return DivDrawable(DivShapeDrawable.fromJson(json)!);
+        return DivDrawable.divShapeDrawable(DivShapeDrawable.fromJson(json)!);
     }
     return null;
   }

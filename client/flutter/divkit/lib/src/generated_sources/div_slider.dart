@@ -42,7 +42,7 @@ class DivSlider with EquatableMixin implements DivBase {
     this.disappearActions,
     this.extensions,
     this.focus,
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     this.margins = const DivEdgeInsets(),
     this.maxValue = const ValueExpression(100),
@@ -72,7 +72,7 @@ class DivSlider with EquatableMixin implements DivBase {
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "slider";
@@ -106,7 +106,7 @@ class DivSlider with EquatableMixin implements DivBase {
 
   @override
   final DivFocus? focus;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -182,7 +182,7 @@ class DivSlider with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -285,7 +285,7 @@ class DivSlider with EquatableMixin implements DivBase {
       ),
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
@@ -409,7 +409,7 @@ class DivSlider with EquatableMixin implements DivBase {
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }
@@ -420,6 +420,7 @@ class DivSliderTextStyle with EquatableMixin {
     required this.fontSize,
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
+    this.fontWeightValue,
     this.offset,
     this.textColor = const ValueExpression(const Color(0xFF000000)),
   });
@@ -430,6 +431,8 @@ class DivSliderTextStyle with EquatableMixin {
   final Expression<DivSizeUnit> fontSizeUnit;
   // default value: DivFontWeight.regular
   final Expression<DivFontWeight> fontWeight;
+  // constraint: number > 0
+  final Expression<int>? fontWeightValue;
 
   final DivPoint? offset;
   // default value: const Color(0xFF000000)
@@ -440,6 +443,7 @@ class DivSliderTextStyle with EquatableMixin {
         fontSize,
         fontSizeUnit,
         fontWeight,
+        fontWeightValue,
         offset,
         textColor,
       ];
@@ -462,6 +466,9 @@ class DivSliderTextStyle with EquatableMixin {
         parse: DivFontWeight.fromJson,
         fallback: DivFontWeight.regular,
       )!,
+      fontWeightValue: safeParseIntExpr(
+        json['font_weight_value'],
+      ),
       offset: safeParseObj(
         DivPoint.fromJson(json['offset']),
       ),

@@ -170,43 +170,27 @@ class DartGenerator(Generator):
 
         result += f'class {full_name} with EquatableMixin' + ' {'
 
-        result += f'  const {full_name}' + '('
-        result += f'    {interface_name} value'
-        result += '  ) : _value = value;'
-        result += EMPTY
-
-        result += f'  final {interface_name} _value;'
+        result += f'  final {interface_name} value;'
+        result += '  final int _index;'
         result += EMPTY
 
         # Equatable declaration
         if len(entity_enumeration.entities) != 0:
             result += '  @override'
-            result += '  List<Object?> get props => [_value];'
+            result += '  List<Object?> get props => [value];'
         else:
             result += '  @override'
             result += '  List<Object?> get props => [];'
-        result += EMPTY
-
-        result += '  /// It may not work correctly so use [map] or [maybeMap]!'
-        result += f'  {interface_name} get value ' + '{'
-        result += '    final value = _value;'
-        for n in sorted(entity_enumeration.entity_names):
-            result += f'    if(value is {utils.capitalize_camel_case(n)}) ' + '{'
-            result += '      return value;'
-            result += '    }'
-        result += '    throw Exception("Type ${value.runtimeType.toString()}' + f' is not generalized in {full_name}");'
-        result += '  }'
         result += EMPTY
 
         result += '  T map<T>(' + '{'
         for n in sorted(entity_enumeration.entity_names):
             result += f'    required T Function({utils.capitalize_camel_case(n)}) {utils.lower_camel_case(n)},'
         result += '  }) {'
-        result += '    final value = _value;'
-        for n in sorted(entity_enumeration.entity_names):
-            result += f'    if(value is {utils.capitalize_camel_case(n)}) ' + '{'
-            result += f'      return {utils.lower_camel_case(n)}(value);'
-            result += '    }'
+        result += '    switch(_index!) {'
+        for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
+            result += f'      case {i}: return {utils.lower_camel_case(n)}(value as {utils.capitalize_camel_case(n)},);'
+        result += '    }'
         result += '    throw Exception("Type ${value.runtimeType.toString()}' + f' is not generalized in {full_name}");'
         result += '  }'
         result += EMPTY
@@ -216,24 +200,25 @@ class DartGenerator(Generator):
             result += f'    T Function({utils.capitalize_camel_case(n)})? {utils.lower_camel_case(n)},'
         result += '    required T Function() orElse,'
         result += '  }) {'
-        result += '    final value = _value;'
-        for n in sorted(entity_enumeration.entity_names):
-            result += f'    if(value is {utils.capitalize_camel_case(n)} && {utils.lower_camel_case(n)} != null) ' + '{'
-            result += f'     return {utils.lower_camel_case(n)}(value);'
-            result += '    }'
+        result += '    switch(_index!) {'
+        for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
+            result += f'    case {i}:'
+            result += f'      if ({utils.lower_camel_case(n)} != null)' + ' {'
+            result += f'        return {utils.lower_camel_case(n)}(value as {utils.capitalize_camel_case(n)},);'
+            result += '      }'
+            result += '      break;'
+        result += '    }'
         result += '    return orElse();'
         result += '  }'
         result += EMPTY
 
-        for n in sorted(entity_enumeration.entity_names):
+        for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
             result += f'  const {full_name}.{utils.lower_camel_case(n)}('
-            result += f'    {utils.capitalize_camel_case(n)} value,'
-            result += '  ) :'
-            result += ' _value = value;'
-
+            result += f'    {utils.capitalize_camel_case(n)} obj,'
+            result += '  ) : value = obj,'
+            result += f'      _index = {i};'
             result += EMPTY
 
-        entity_len = len(entity_enumeration.entity_names)
         # Serializable declaration
         result += EMPTY
         result += f'  static {full_name}? fromJson(Map<String, dynamic>? json)' + ' {'
@@ -241,9 +226,9 @@ class DartGenerator(Generator):
         result += '      return null;'
         result += '    }'
         result += '    switch (json[\'type\']) {'
-        for i in range(entity_len):
-            result += f'      case {utils.capitalize_camel_case(entity_enumeration.entity_names[i])}.type :\n' \
-                      f'        return {full_name}({utils.capitalize_camel_case(entity_enumeration.entity_names[i])}.fromJson(json)!);'
+        for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
+            result += f'      case {utils.capitalize_camel_case(n)}.type :\n' \
+                      f'        return {full_name}.{utils.lower_camel_case(n)}({utils.capitalize_camel_case(n)}.fromJson(json)!);'
         result += '    }'
         result += '    return null;'
         result += '  }'

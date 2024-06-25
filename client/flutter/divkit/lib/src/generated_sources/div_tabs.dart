@@ -45,7 +45,7 @@ class DivTabs with EquatableMixin implements DivBase {
     this.extensions,
     this.focus,
     this.hasSeparator = const ValueExpression(false),
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     required this.items,
     this.margins = const DivEdgeInsets(),
@@ -80,7 +80,7 @@ class DivTabs with EquatableMixin implements DivBase {
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "tabs";
@@ -118,7 +118,7 @@ class DivTabs with EquatableMixin implements DivBase {
   final DivFocus? focus;
   // default value: false
   final Expression<bool> hasSeparator;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -184,7 +184,7 @@ class DivTabs with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -292,7 +292,7 @@ class DivTabs with EquatableMixin implements DivBase {
       )!,
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
@@ -415,7 +415,7 @@ class DivTabs with EquatableMixin implements DivBase {
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }

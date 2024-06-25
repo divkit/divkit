@@ -60,7 +60,7 @@ class DivImage with EquatableMixin implements DivBase {
     this.extensions,
     this.filters,
     this.focus,
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.highPriorityPreviewShow = const ValueExpression(false),
     this.id,
     required this.imageUrl,
@@ -85,7 +85,7 @@ class DivImage with EquatableMixin implements DivBase {
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "image";
@@ -137,7 +137,7 @@ class DivImage with EquatableMixin implements DivBase {
 
   @override
   final DivFocus? focus;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
   // default value: false
@@ -203,7 +203,7 @@ class DivImage with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -359,7 +359,7 @@ class DivImage with EquatableMixin implements DivBase {
       ),
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       highPriorityPreviewShow: safeParseBoolExpr(
         json['high_priority_preview_show'],
@@ -470,7 +470,7 @@ class DivImage with EquatableMixin implements DivBase {
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }
