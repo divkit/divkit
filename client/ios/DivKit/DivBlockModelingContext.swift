@@ -36,7 +36,7 @@ public struct DivBlockModelingContext {
   public let variablesStorage: DivVariablesStorage
   public private(set) var expressionResolver: ExpressionResolver
   private let functionsProvider: FunctionsProvider
-  private let variableTracker: DivVariableTracker?
+  public let variableTracker: DivVariableTracker?
   public private(set) var parentPath: UIElementPath
   private(set) var elementId: String?
   private(set) var sizeModifier: DivSizeModifier?

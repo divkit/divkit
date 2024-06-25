@@ -2,8 +2,16 @@ import Foundation
 
 import VGSL_Fundamentals_Tiny
 
+/// `DivVariableTracker` provides sets of variables used in a last `Block` modeling for a `DivCard`.
 public final class DivVariableTracker {
   private var usedVariables = Atomic<[DivViewId: Set<DivVariableName>]>(initialValue: [:])
+
+  /// Sets of variables used in a last `Block` modeling for a `DivCard`.
+  public var usedVariablesByCard: [DivCardID: Set<DivVariableName>] {
+    usedVariables.accessRead { value in
+      value.map(key: { $0.cardId }, value: { $0 })
+    }
+  }
 
   init() {}
 

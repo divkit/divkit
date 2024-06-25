@@ -55,6 +55,20 @@ final class DivVariableTrackerTests: XCTestCase {
     let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
     XCTAssertEqual(affectedCards, ["card1": ["Var1"]])
   }
+
+  func test_ProvidesUsedVariables() {
+    variableTracker.onVariableUsed(id: id1, variable: "Var1")
+    variableTracker.onVariableUsed(id: id2, variable: "Var2")
+    variableTracker.onVariableUsed(id: id2, variable: "Var3")
+
+    XCTAssertEqual(
+      variableTracker.usedVariablesByCard,
+      [
+        id1.cardId: ["Var1"],
+        id2.cardId: ["Var2", "Var3"]
+      ]
+    )
+  }
 }
 
 private let id1 = DivViewId(cardId: "card1", additionalId: nil)
