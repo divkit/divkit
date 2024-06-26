@@ -317,7 +317,8 @@
           "$description": "translations.json#/div_font_weight_value",
           "platforms": [
             "ios",
-            "android"
+            "android",
+            "web"
           ]
         },
         "text_alignment_horizontal": {
