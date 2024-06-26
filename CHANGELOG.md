@@ -1,3 +1,18 @@
+## 30.7.0
+
+# Android Client:
+* Add numeric value support for `fontWeightValue`
+* Supported `id` property in `div-collection-item-builder.prototype`.
+* Fixed div view state change happened before binding.
+
+# iOS Client:
+* Optimized `ExpressionResolver`.
+* `DivVariableTracker` state made public.
+
+# Web Client:
+* Fixed the `top_offset` mutation for incoming data in the `text` component.
+
+
 ## 30.6.0
 
 # Android Client:
