@@ -1,3 +1,8 @@
+## 30.7.0 (July 1, 2024)
+
+* Fixed the `top_offset` mutation for incoming data in the `text` component.
+
+
 ## 30.6.0 (June 24, 2024)
 
 * Added support for the property `font_weight_value` in `text`, `input`, `slider` and `select`.
