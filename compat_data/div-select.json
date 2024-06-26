@@ -1,0 +1,14 @@
+{
+    "features": [{
+        "id": "select_font_weight_value",
+        "name": "Select <code>font_weight_value</code> property",
+        "compat": {
+            "web": {
+                "version_added": "30.6.0"
+            },
+            "ios": {
+                "version_added": "30.6.0"
+            }
+        }
+    }]
+}
