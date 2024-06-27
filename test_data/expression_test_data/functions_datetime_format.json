@@ -199,7 +199,7 @@
       ]
     },
     {
-      "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz')}",
+      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz', 'en-US')}",
       "unsupported_platforms": {
         "ios": "Platform-specific format"
       },
@@ -227,7 +227,7 @@
       ]
     },
     {
-      "expression": "@{formatDateAsUTC(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz')}",
+      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(3933240), 'dd/MM/yyyy HH:mm zzzz', 'en-US')}",
       "unsupported_platforms": {
         "web": "Platform-specific format",
         "android": "Platform-specific format"
