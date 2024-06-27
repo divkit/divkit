@@ -110,5 +110,8 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
             }
         }
         start()
+        this.postDelayed({
+            stop()
+        }, 3000)
     }
 }

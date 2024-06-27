@@ -1,0 +1,140 @@
+{
+  "description": "Default state id",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "margins": {
+          "top": 16,
+          "bottom": 16,
+          "left": 16,
+          "right": 16
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alpha": 1.0,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center"
+      }
+    },
+    "card": {
+      "log_id": "card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "state",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "content_alignment_vertical": "center",
+            "id": "state_container",
+            "default_state_id": "default",
+            "states": [
+              {
+                "state_id": "nondefaut",
+                "div": {
+                  "type": "button",
+                  "text": "Nondefault state",
+                  "actions": [
+                    {
+                      "log_id": "default state",
+                      "url": "div-action://set_state?state_id=0/state_container/default"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "default",
+                "div": {
+                  "type": "button",
+                  "text": "Default state",
+                  "actions": [
+                    {
+                      "log_id": "nondefault state",
+                      "url": "div-action://set_state?state_id=0/state_container/nondefaut"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "empty"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "nondefault state",
+          "url": "div-action://set_state?state_id=0/state_container/nondefaut"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "default state",
+          "url": "div-action://set_state?state_id=0/state_container/default"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "nondefault state",
+          "url": "div-action://set_state?state_id=0/state_container/nondefaut"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "default state",
+          "url": "div-action://set_state?state_id=0/state_container/default"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

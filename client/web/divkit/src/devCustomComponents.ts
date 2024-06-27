@@ -53,7 +53,9 @@ class NewCustomCard extends HTMLElement {
             const minutes = Math.floor(this._counter / 60);
             const seconds = this._counter % 60;
             this._text.textContent = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-
+            if (this._counter > 1) {
+                return;
+            }
             this._tick();
         }, 1000);
     }

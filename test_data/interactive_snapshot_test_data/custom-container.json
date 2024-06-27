@@ -1,0 +1,67 @@
+{
+  "description": "Custom container",
+  "platforms": [
+    "android",
+    "web",
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "news_item_template": {
+        "type": "text",
+        "font_size": 16,
+        "line_height": 20,
+        "text_color": "#333",
+        "$text": "news_item_text",
+        "paddings": {
+          "left": 12,
+          "right": 12,
+          "top": 8
+        }
+      }
+    },
+    "card": {
+      "log_id": "custom_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "items": [
+              {
+                "type": "custom",
+                "id": "new_custom_container_1",
+                "items": [
+                  {
+                    "type": "news_item_template",
+                    "news_item_text": "This is div-text item 1"
+                  },
+                  {
+                    "type": "news_item_template",
+                    "news_item_text": "This is div-text item 2"
+                  },
+                  {
+                    "type": "news_item_template",
+                    "news_item_text": "This is div-text item 3"
+                  }
+                ],
+                "custom_type": "new_custom_container_1"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}
