@@ -75,6 +75,7 @@ dependencies {
     implementation project(path: ':div-gesture')
     implementation project(path: ':div-json')
     implementation project(path: ':div-lottie')
+    implementation project(path: ':div-markdown')
     implementation project(path: ':div-pinch-to-zoom')
     implementation project(path: ':div-rive')
     implementation project(path: ':div-shimmer')
@@ -102,6 +103,8 @@ dependencies {
     implementation libs.kotlin.reflect
 
     implementation libs.okhttp
+
+    implementation libs.markwon
 
     implementation(libs.appmetrica.lib) {
         exclude group: 'com.yandex.android', module: 'mobmetricalib-identifiers'

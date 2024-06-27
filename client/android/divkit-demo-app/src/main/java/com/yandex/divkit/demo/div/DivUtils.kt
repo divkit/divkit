@@ -11,6 +11,7 @@ import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.evaluable.types.Color
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.KLog
@@ -22,6 +23,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
+import com.yandex.div.markdown.DivMarkdownExtensionHandler
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
 import com.yandex.div.gesture.DivGestureExtensionHandler
 import com.yandex.div.gesture.ParsingErrorLoggerFactory
@@ -36,6 +38,8 @@ import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.regression.ScenarioLogDelegate
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.core.MarkwonTheme
 import org.json.JSONObject
 
 fun divConfiguration(
@@ -78,6 +82,7 @@ fun divConfiguration(
         .visualErrorsEnabled(true)
         .extension(DivSizeProviderExtensionHandler())
         .extension(createDivSwipeGestureExtensionHandler())
+        .extension(createMarkdownExtension(activity))
         .divPlayerFactory(ExoDivPlayerFactory(activity))
         .divPlayerPreloader(ExoPlayerVideoPreloader(activity))
 }
@@ -199,6 +204,16 @@ private fun createEnvironment(errorLogger: ParsingErrorLogger?, templates: JSONO
     }
 
     return environment
+}
+
+private fun createMarkdownExtension(context: Activity): DivMarkdownExtensionHandler {
+    val plugin = object : AbstractMarkwonPlugin() {
+        override fun configureTheme(builder: MarkwonTheme.Builder) {
+            builder.linkColor(Color.parse("#0000EE").value)
+            super.configureTheme(builder)
+        }
+    }
+    return DivMarkdownExtensionHandler(context, listOf(plugin))
 }
 
 internal fun ParsingEnvironment.createDivDataWithHistograms(data: JSONObject, componentName: String? = null): DivData {
