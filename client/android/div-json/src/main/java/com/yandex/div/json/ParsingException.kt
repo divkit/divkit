@@ -82,6 +82,16 @@ fun typeMismatch(
     )
 }
 
+fun typeMismatch(
+    index: Int,
+    value: Any
+): ParsingException {
+    return ParsingException(
+        reason = ParsingExceptionReason.TYPE_MISMATCH,
+        message = "Item builder data at $index position has wrong type: ${value.javaClass.name}"
+    )
+}
+
 fun templateNotFound(json: JSONObject, templateId: String): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.MISSING_TEMPLATE,

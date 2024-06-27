@@ -4,6 +4,7 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.variables.VariableSource
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -15,7 +16,6 @@ import com.yandex.div2.DivGrid
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
-import org.json.JSONObject
 
 private const val INDEX_VARIABLE_NAME = "index"
 
@@ -34,28 +34,42 @@ fun DivPager.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult
 private fun buildItems(items: List<Div>?, itemBuilder: DivCollectionItemBuilder?, resolver: ExpressionResolver) =
     items?.toDivItemBuilderResult(resolver) ?: itemBuilder?.build(resolver) ?: emptyList()
 
-internal fun DivCollectionItemBuilder.build(resolver: ExpressionResolver): List<DivItemBuilderResult> {
-    return data.evaluate(resolver).mapIndexedNotNull { i, obj ->
-        (obj as? JSONObject)?.let { json -> buildItem(json, i, resolver) }
-    }
-}
+internal fun DivCollectionItemBuilder.build(resolver: ExpressionResolver): List<DivItemBuilderResult> =
+    data.evaluate(resolver).mapIndexedNotNull { i, obj -> buildItem(obj, i, resolver) }
 
 private fun DivCollectionItemBuilder.buildItem(
-    data: JSONObject,
+    data: Any,
     index: Int,
     resolver: ExpressionResolver,
 ): DivItemBuilderResult? {
+    val newResolver = getItemResolver(data, index, resolver) ?: return null
+    val prototype = prototypes.find { it.selector.evaluate(newResolver) } ?: return null
+    return prototype.div.copy(prototype.id?.evaluate(newResolver)).toItemBuilderResult(newResolver)
+}
+
+internal fun DivCollectionItemBuilder.getItemResolver(resolver: ExpressionResolver): ExpressionResolver {
+    data.evaluate(resolver).forEach<Any> { i, obj ->
+        getItemResolver(obj, i, resolver)?.let { return it }
+    }
+    return resolver
+}
+
+private fun DivCollectionItemBuilder.getItemResolver(
+    dataElement: Any,
+    index: Int,
+    resolver: ExpressionResolver,
+): ExpressionResolver? {
+    val resolverImpl = resolver as? ExpressionResolverImpl ?: return resolver
+    val validElement = resolverImpl.validateItemBuilderDataElement(dataElement, index) ?: return null
     val localVariableSource = VariableSource(
         mapOf(
-            dataElementName to Variable.DictVariable(dataElementName, data),
+            dataElementName to Variable.DictVariable(dataElementName, validElement),
             INDEX_VARIABLE_NAME to Variable.IntegerVariable(INDEX_VARIABLE_NAME, index.toLong())
         ),
         {},
         mutableListOf()
     )
-    val newResolver = (resolver as? ExpressionResolverImpl)?.plus(localVariableSource) ?: resolver
-    val prototype = prototypes.find { it.selector.evaluate(newResolver) } ?: return null
-    return prototype.div.copy(prototype.id?.evaluate(newResolver)).toItemBuilderResult(newResolver)
+    return resolverImpl + localVariableSource
 }
 
 private fun Div.copy(id: String? = value().id): Div {

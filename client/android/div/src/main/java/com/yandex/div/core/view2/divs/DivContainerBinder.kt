@@ -37,6 +37,7 @@ import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.getItemResolver
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
@@ -135,14 +136,13 @@ internal class DivContainerBinder @Inject constructor(
                 }
             }
         }
-        bindItemBuilder(context, div, items, path, errorCollector)
+        bindItemBuilder(context, div, path, errorCollector)
         applyItems(context, div, oldDiv, items, oldItems, path, errorCollector)
     }
 
     private fun ViewGroup.bindItemBuilder(
         context: BindingContext,
         div: DivContainer,
-        items: List<DivItemBuilderResult>,
         path: DivStatePath,
         errorCollector: ErrorCollector,
     ) {
@@ -156,10 +156,9 @@ internal class DivContainerBinder @Inject constructor(
         }
         builder.data.observe(context.expressionResolver, callback)
 
-        if (items.isEmpty()) return
-
+        val itemResolver = builder.getItemResolver(context.expressionResolver)
         builder.prototypes.forEach {
-            it.selector.observe(items[0].expressionResolver, callback)
+            it.selector.observe(itemResolver, callback)
         }
     }
 

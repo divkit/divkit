@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.LinearContainerLayout
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div2.DivContainer
 
 internal class DivLinearLayout @JvmOverloads constructor(
@@ -14,10 +13,8 @@ internal class DivLinearLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearContainerLayout(context, attrs, defStyleAttr),
     DivHolderView<DivContainer> by DivHolderViewMixin(),
-    DivCollectionHolder,
+    DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
-
-    override var items: List<DivItemBuilderResult>? = null
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

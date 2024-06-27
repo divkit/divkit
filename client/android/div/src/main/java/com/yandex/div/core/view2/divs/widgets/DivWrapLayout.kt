@@ -4,16 +4,13 @@ import android.content.Context
 import android.graphics.Canvas
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.wraplayout.WrapContainerLayout
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div2.DivContainer
 
 internal class DivWrapLayout(context: Context) :
     WrapContainerLayout(context),
     DivHolderView<DivContainer> by DivHolderViewMixin(),
-    DivCollectionHolder,
+    DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
-
-    override var items: List<DivItemBuilderResult>? = null
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
