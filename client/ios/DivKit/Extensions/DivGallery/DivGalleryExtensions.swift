@@ -95,7 +95,7 @@ extension DivGallery.ScrollMode {
     case .default:
       .default
     case .paging:
-      .autoPaging
+      .autoPaging(inertionEnabled: true)
     }
   }
 }

@@ -39,7 +39,7 @@ final class DivGalleryExtensionsTests: XCTestCase {
     ) as? WrapperBlock
 
     let gallery = block?.child as? GalleryBlock
-    XCTAssertEqual(gallery?.model.scrollMode, .autoPaging)
+    XCTAssertEqual(gallery?.model.scrollMode, .autoPaging(inertionEnabled: true))
     XCTAssertEqual(gallery?.state.contentPosition, .paging(index: 0))
   }
 
@@ -47,7 +47,7 @@ final class DivGalleryExtensionsTests: XCTestCase {
     let block = try makeBlock(fromFile: "paging") as? WrapperBlock
 
     let gallery = block?.child as? GalleryBlock
-    XCTAssertEqual(gallery?.model.scrollMode, .autoPaging)
+    XCTAssertEqual(gallery?.model.scrollMode, .autoPaging(inertionEnabled: true))
   }
 
   func test_HorizontalGallery_WhenHasInstrinsicWidth_BuildsBlock() throws {

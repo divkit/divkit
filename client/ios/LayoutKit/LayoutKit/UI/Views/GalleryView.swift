@@ -278,15 +278,29 @@ extension GalleryView: ScrollDelegate {
   }
 
   public func onWillEndDragging(
-    _ scrollView: any ScrollView,
+    _: any ScrollView,
     withVelocity _: CGPoint,
     targetContentOffset: UnsafeMutablePointer<CGPoint>
   ) {
     switch model.scrollMode {
-    case .default:
+    case .default, .fixedPaging:
       break
-    case .autoPaging, .fixedPaging:
-      targetContentOffset.pointee = scrollView.contentOffset
+    case let .autoPaging(inertionEnabled):
+      guard !inertionEnabled else { return }
+      let isHorizontal = model.direction.isHorizontal
+      let resultOffset: CGPoint
+      if isHorizontal {
+        let delta = CGPoint(x: targetContentOffset.pointee.x - scrollStartOffset, y: 0)
+        let absoluteDelta = CGPoint(x: min(bounds.width, abs(delta.x)), y: 0)
+        let sign = CGPoint(x: delta.x == 0 ? 0 : delta.x / abs(delta.x), y: 1)
+        resultOffset = CGPoint(x: scrollStartOffset + absoluteDelta.x * sign.x, y: 0)
+      } else {
+        let delta = CGPoint(x: 0, y: targetContentOffset.pointee.y - scrollStartOffset)
+        let absoluteDelta = CGPoint(x: 0, y: min(bounds.height, abs(delta.y)))
+        let sign = CGPoint(x: 1, y: delta.y == 0 ? 0 : delta.y / abs(delta.y))
+        resultOffset = CGPoint(x: 0, y: scrollStartOffset + absoluteDelta.y * sign.y)
+      }
+      targetContentOffset.pointee = resultOffset
     }
   }
 
@@ -298,9 +312,11 @@ extension GalleryView: ScrollDelegate {
       origins: layout.blockFrames.map { model.direction.isHorizontal ? $0.minX : $0.minY }
     ) {
       offset = newPosition.offset
+      contentPager.flatMap { compoundScrollDelegate.remove($0) }
       compoundScrollDelegate.remove(self)
       updateContentOffset(to: .offset(newPosition.offset), animated: false)
       compoundScrollDelegate.add(self)
+      contentPager.flatMap { compoundScrollDelegate.add($0) }
       if !scrollView.isDragging {
         updateContentOffset(to: .paging(index: CGFloat(newPosition.page)), animated: true)
       }

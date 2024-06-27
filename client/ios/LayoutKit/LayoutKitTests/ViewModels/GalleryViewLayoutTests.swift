@@ -406,7 +406,7 @@ private enum Blocks {
     crossAlignment: .trailing
   )
   static let fixedPagingModel = makeModel(scrollMode: .fixedPaging(pageSize: boundsSize.width))
-  static let autoPagingModel = makeModel(scrollMode: .autoPaging)
+  static let autoPagingModel = makeModel(scrollMode: .autoPaging(inertionEnabled: true))
   static let fixedInsets = SideInsets(leading: 4, trailing: 10)
   static let resizableInsets = InsetMode.Resizable(minValue: 10, maxViewportSize: 14)
   static let horizontalResizableModel = makeModel(metrics: .resizableAxial)

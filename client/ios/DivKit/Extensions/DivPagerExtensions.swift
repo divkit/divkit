@@ -33,7 +33,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
         spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
         crossSpacing: 0,
         defaultAlignment: .center,
-        scrollMode: .autoPaging,
+        scrollMode: .autoPaging(inertionEnabled: false),
         infiniteScroll: resolveInfiniteScroll(expressionResolver)
       )
       return try PagerBlock(

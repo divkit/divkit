@@ -11,7 +11,7 @@ import UIKit
 public struct GalleryViewModel: Equatable {
   public enum ScrollMode: Equatable {
     case `default`
-    case autoPaging
+    case autoPaging(inertionEnabled: Bool)
     case fixedPaging(pageSize: CGFloat)
   }
 
