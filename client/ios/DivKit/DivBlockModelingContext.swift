@@ -151,7 +151,8 @@ public struct DivBlockModelingContext {
     self.debugParams = debugParams
     self.scheduler = scheduler ?? TimerScheduler()
     self.parentScrollView = parentScrollView
-    self.errorsStorage = errorsStorage ?? DivErrorsStorage(errors: [])
+    let errorsStorage = errorsStorage ?? DivErrorsStorage(errors: [])
+    self.errorsStorage = errorsStorage
     self.layoutDirection = layoutDirection
     self.variableTracker = variableTracker
     let persistentValuesStorage = persistentValuesStorage ?? DivPersistentValuesStorage()
@@ -164,9 +165,8 @@ public struct DivBlockModelingContext {
     )
     expressionResolver = makeExpressionResolver(
       functionsProvider: functionsProvider,
-      cardId: cardId,
       viewId: viewId,
-      parentPath: parentPath,
+      path: parentPath,
       variablesStorage: variablesStorage,
       localValues: nil,
       variableTracker: variableTracker,
@@ -215,13 +215,13 @@ public struct DivBlockModelingContext {
     let divVariableName = DivVariableName(rawValue: variableName)
     variableTracker?.onVariableUsed(id: viewId, variable: divVariableName)
     let value: T = variablesStorage
-      .getVariableValue(cardId: cardId, name: divVariableName) ?? defaultValue
+      .getVariableValue(path: parentPath, name: divVariableName) ?? defaultValue
     let valueProp = Property<T>(
       getter: { value },
       setter: {
         guard let newValue = DivVariableValue($0) else { return }
         self.variablesStorage.update(
-          cardId: cardId,
+          path: parentPath,
           name: divVariableName,
           value: newValue
         )
@@ -266,9 +266,8 @@ public struct DivBlockModelingContext {
     context.errorsStorage = errorsStorage ?? self.errorsStorage
     context.expressionResolver = makeExpressionResolver(
       functionsProvider: functionsProvider,
-      cardId: cardId,
       viewId: viewId,
-      parentPath: context.parentPath,
+      path: context.parentPath,
       variablesStorage: variablesStorage,
       localValues: context.localValues,
       variableTracker: variableTracker,
@@ -287,13 +286,12 @@ struct PrototypeParams {
 
 private func makeExpressionResolver(
   functionsProvider: FunctionsProvider,
-  cardId: DivCardID,
   viewId: DivViewId,
-  parentPath: UIElementPath,
+  path: UIElementPath,
   variablesStorage: DivVariablesStorage,
   localValues: [String: AnyHashable]?,
   variableTracker: DivVariableTracker?,
-  errorsStorage: DivErrorsStorage?
+  errorsStorage: DivErrorsStorage
 ) -> ExpressionResolver {
   ExpressionResolver(
     functionsProvider: functionsProvider,
@@ -303,10 +301,10 @@ private func makeExpressionResolver(
       }
       let variableName = DivVariableName(rawValue: $0)
       variableTracker?.onVariableUsed(id: viewId, variable: variableName)
-      return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
+      return variablesStorage.getVariableValue(path: path, name: variableName)
     },
-    errorTracker: { [weak errorsStorage] error in
-      errorsStorage?.add(DivExpressionError(error, path: parentPath))
+    errorTracker: { error in
+      errorsStorage.add(DivExpressionError(error, path: path))
     }
   )
 }

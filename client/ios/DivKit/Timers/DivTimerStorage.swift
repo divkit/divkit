@@ -148,7 +148,7 @@ final class DivTimerStorage {
     for action in actions {
       actionHandler.handle(
         action,
-        cardId: cardId,
+        path: cardId.path,
         source: .timer,
         sender: nil
       )

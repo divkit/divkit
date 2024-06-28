@@ -1,15 +1,13 @@
-@testable import DivKit
-import UIKit
-
 import Testing
+import UIKit
 
 import BaseUIPublic
 import CommonCorePublic
+@testable import DivKit
 import LayoutKit
 import NetworkingPublic
 
-let testCardId = "test_card_id"
-let testDivCardId = DivCardID(rawValue: testCardId)
+let testCardId = DivCardID(rawValue: "test_card_id")
 
 @MainActor
 final class SnapshotTestRunner {
@@ -45,7 +43,7 @@ final class SnapshotTestRunner {
     let view = DivView(divKitComponents: divKitComponents)
     try await view.setSource(DivViewSource(
       kind: .json(jsonDict.getOptionalField("div_data") ?? jsonDict),
-      cardId: testDivCardId
+      cardId: testCardId
     ))
 
     if let steps = try loadSteps(dictionary: jsonDict) {
@@ -53,7 +51,7 @@ final class SnapshotTestRunner {
         step.actions?.forEach { action in
           divKitComponents.actionHandler.handle(
             action,
-            cardId: testDivCardId,
+            path: testCardId.path,
             source: .tap,
             sender: nil
           )

@@ -13,7 +13,7 @@ extension DivDisappearAction {
     let path = context.parentPath + (resolveLogId(expressionResolver) ?? "")
     return VisibilityAction(
       uiAction: UserInterfaceAction(
-        payload: makeDivActionPayload(cardId: context.cardId, source: .disappear),
+        payload: makeDivActionPayload(path: context.parentPath, source: .disappear),
         path: path
       ),
       requiredDuration: TimeInterval(

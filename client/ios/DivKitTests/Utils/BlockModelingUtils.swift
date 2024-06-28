@@ -70,16 +70,20 @@ extension ActionAnimation {
 }
 
 extension UIElementPath {
-  static let root = UIElementPath(DivKitTests.cardId.rawValue)
+  static let root = DivKitTests.cardId.path
 }
 
 extension DivAction {
-  var uiAction: UserInterfaceAction? {
-    uiAction(context: .default)
+  func uiAction(path: UIElementPath) -> UserInterfaceAction? {
+    uiAction(context: .default.modifying(parentPath: path))
   }
 }
 
-func uiAction(logId: String, url: String) -> UserInterfaceAction {
+func uiAction(
+  logId: String,
+  path: UIElementPath = .root,
+  url: String
+) -> UserInterfaceAction {
   UserInterfaceAction(
     payload: divActionPayload(
       [
@@ -87,6 +91,7 @@ func uiAction(logId: String, url: String) -> UserInterfaceAction {
         "is_enabled": .bool(true),
         "url": .string(url),
       ],
+      path: path,
       url: url
     ),
     path: .root + logId
@@ -95,12 +100,13 @@ func uiAction(logId: String, url: String) -> UserInterfaceAction {
 
 func divActionPayload(
   _ json: JSONDictionary,
+  path: UIElementPath = .root,
   url: String? = nil
 ) -> UserInterfaceAction.Payload {
   .divAction(
     params: UserInterfaceAction.DivActionParams(
       action: .object(json),
-      cardId: DivKitTests.cardId.rawValue,
+      path: path,
       source: .tap,
       url: url.map { URL(string: $0)! },
       localValues: [:]

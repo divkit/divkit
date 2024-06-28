@@ -6,7 +6,7 @@ final class DictSetValueActionHandler {
     guard let variableName = action.resolveVariableName(expressionResolver),
           let key = action.resolveKey(expressionResolver),
           var dict: DivDictionary = context.variablesStorage.getVariableValue(
-            cardId: context.cardId,
+            path: context.path,
             name: DivVariableName(rawValue: variableName)
           ) else {
       return
@@ -19,7 +19,7 @@ final class DictSetValueActionHandler {
     }
 
     context.variablesStorage.update(
-      cardId: context.cardId,
+      path: context.path,
       name: DivVariableName(rawValue: variableName),
       value: .dict(dict)
     )

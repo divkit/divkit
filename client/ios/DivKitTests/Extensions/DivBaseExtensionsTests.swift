@@ -135,7 +135,7 @@ final class DivBaseExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: []
         ),
-        actions: NonEmptyArray(actions.compactMap(\.uiAction)),
+        actions: NonEmptyArray(actions.compactMap { $0.uiAction(path: .root + "0") }),
         actionAnimation: .default,
         accessibilityElement: .default
       ),
@@ -158,7 +158,7 @@ final class DivBaseExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: DecoratingBlock(
           child: separatorBlock(),
-          actions: NonEmptyArray(action.uiAction!),
+          actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
           actionAnimation: .default,
           accessibilityElement: .default
         ),
@@ -189,7 +189,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     let expectedBlock = StateBlock(
       child: DecoratingBlock(
         child: separatorBlock(),
-        actions: NonEmptyArray(action.uiAction!),
+        actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
         actionAnimation: .default,
         boundary: .clipCorner(CornerRadii(20)),
         border: BlockBorder(
@@ -242,7 +242,7 @@ final class DivBaseExtensionsTests: XCTestCase {
               color: color("#112233")
             )
           ),
-          actions: NonEmptyArray(action.uiAction!),
+          actions: NonEmptyArray(action.uiAction(path: .root + "0")!),
           actionAnimation: .default,
           boundary: .noClip
         ),

@@ -66,11 +66,11 @@ final class ArrayActionsHandler {
 
 extension DivActionHandlingContext {
   fileprivate func getVariableValue(_ name: DivVariableName) -> [AnyHashable]? {
-    variablesStorage.getVariableValue(cardId: cardId, name: name)
+    variablesStorage.getVariableValue(path: path, name: name)
   }
 
   fileprivate func setVariableValue(_ name: DivVariableName, _ value: [AnyHashable]) {
-    variablesStorage.update(cardId: cardId, name: name, value: .array(value))
+    variablesStorage.update(path: path, name: name, value: .array(value))
   }
 }
 

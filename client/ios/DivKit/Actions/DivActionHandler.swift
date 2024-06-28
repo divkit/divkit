@@ -82,7 +82,7 @@ public final class DivActionHandler {
 
     handle(
       action,
-      cardId: DivCardID(rawValue: params.cardId),
+      path: params.path,
       source: params.source,
       localValues: params.localValues,
       sender: sender
@@ -91,22 +91,32 @@ public final class DivActionHandler {
 
   /// Deprecated. This method is intended for backward compatibility only. Do not use it.
   public func handleDivActionUrl(_ url: URL, cardId: DivCardID) -> Bool {
-    divActionURLHandler.handleURL(url, cardId: cardId)
+    divActionURLHandler.handleURL(url, path: cardId.path)
   }
 
   func handle(
     _ action: DivActionBase,
-    cardId: DivCardID,
+    path: UIElementPath,
     source: UserInterfaceAction.DivActionSource,
     localValues: [String: AnyHashable] = [:],
     sender: AnyObject?
   ) {
-    let expressionResolver = makeExpressionResolver(
-      cardId: cardId,
-      localValues: localValues
+    let cardId = path.cardId
+    let expressionResolver = ExpressionResolver(
+      functionsProvider: FunctionsProvider(
+        persistentValuesStorage: persistentValuesStorage
+      ),
+      variableValueProvider: { [unowned variablesStorage] in
+        if let value = localValues[$0] {
+          return value
+        }
+        let variableName = DivVariableName(rawValue: $0)
+        return variablesStorage.getVariableValue(path: path, name: variableName)
+      },
+      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )
     let context = DivActionHandlingContext(
-      cardId: cardId,
+      path: path,
       expressionResolver: expressionResolver,
       variablesStorage: variablesStorage,
       blockStateStorage: blockStateStorage,
@@ -140,7 +150,7 @@ public final class DivActionHandler {
     let referer = action.resolveReferer(expressionResolver)
 
     let divActionInfo = DivActionInfo(
-      cardId: cardId,
+      path: path,
       logId: logId,
       url: action.resolveUrl(expressionResolver),
       logUrl: logUrl,
@@ -180,7 +190,7 @@ public final class DivActionHandler {
 
     let isDivActionURLHandled = divActionURLHandler.handleURL(
       url,
-      cardId: info.cardId,
+      path: info.path,
       completion: { [weak self] result in
         guard let self else {
           return
@@ -194,7 +204,7 @@ public final class DivActionHandler {
         for action in callbackActions {
           self.handle(
             action,
-            cardId: info.cardId,
+            path: info.path,
             source: info.source,
             sender: sender
           )
@@ -216,25 +226,6 @@ public final class DivActionHandler {
         )
       }
     }
-  }
-
-  private func makeExpressionResolver(
-    cardId: DivCardID,
-    localValues: [String: AnyHashable]
-  ) -> ExpressionResolver {
-    ExpressionResolver(
-      functionsProvider: FunctionsProvider(
-        persistentValuesStorage: persistentValuesStorage
-      ),
-      variableValueProvider: { [unowned variablesStorage] in
-        if let value = localValues[$0] {
-          return value
-        }
-        let variableName = DivVariableName(rawValue: $0)
-        return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
-      },
-      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
-    )
   }
 
   private func parseAction<T: TemplateValue>(

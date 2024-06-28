@@ -1,6 +1,7 @@
 import Foundation
 
 import CommonCorePublic
+import LayoutKit
 
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 
@@ -58,7 +59,7 @@ public final class ExpressionResolver {
   }
 
   init(
-    cardId: DivCardID,
+    path: UIElementPath,
     variablesStorage: DivVariablesStorage,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter
@@ -68,9 +69,9 @@ public final class ExpressionResolver {
     )
     self.variableValueProvider = {
       let variableName = DivVariableName(rawValue: $0)
-      return variablesStorage.getVariableValue(cardId: cardId, name: variableName)
+      return variablesStorage.getVariableValue(path: path, name: variableName)
     }
-    self.errorTracker = reporter.asExpressionErrorTracker(cardId: cardId)
+    self.errorTracker = reporter.asExpressionErrorTracker(cardId: path.cardId)
   }
 
   public func resolve(_ expression: String) -> Any? {

@@ -3,6 +3,7 @@
 import XCTest
 
 import BasePublic
+import LayoutKit
 
 final class DivVariablesStorageTest: XCTestCase {
   private let storage = DivVariablesStorage()
@@ -237,6 +238,30 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertEqual(.string("new value"), makeVariables(cardId: "another_card")["string_var"])
   }
 
+  func test_update_UpdatesLocalVariable() {
+    let path = cardId.path + "element_id"
+    storage.initializeIfNeeded(path: path, variables: variables)
+
+    storage.update(path: path, name: "string_var", value: "new value")
+
+    XCTAssertEqual(
+      "new value",
+      storage.getVariableValue(path: path, name: "string_var")
+    )
+  }
+
+  func test_update_UpdatesParentLocalVariable() {
+    let parentPath = cardId.path + "parent_id"
+    storage.initializeIfNeeded(path: parentPath, variables: variables)
+
+    storage.update(path: parentPath + "element_id", name: "string_var", value: "new value")
+
+    XCTAssertEqual(
+      "new value",
+      storage.getVariableValue(path: parentPath, name: "string_var")
+    )
+  }
+
   func test_setGlobalVariables_SendsUpdateEvent() {
     let globalVariables: DivVariables = [
       "global_var": .string("global value"),
@@ -279,7 +304,7 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertEqual(.global(["int_var", "new_var"]), event?.kind)
   }
 
-  func test_getVariableValue_ReturnsLocalVariableValue() {
+  func test_getVariableValue_ReturnsCardVariableValue() {
     storage.set(cardId: cardId, variables: variables)
 
     let expectedValue: String? = storage.getVariableValue(cardId: cardId, name: "string_var")
@@ -296,7 +321,7 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertEqual("global value", expectedValue)
   }
 
-  func test_getVariableValue_ReturnsLocalVariableValue_WhenHasGlobalVariable() {
+  func test_getVariableValue_ReturnsCardVariableValue_WhenHasGlobalVariable() {
     storage.set(cardId: cardId, variables: variables)
 
     let globalVariables: DivVariables = [
@@ -312,6 +337,52 @@ final class DivVariablesStorageTest: XCTestCase {
     storage.set(cardId: cardId, variables: variables)
 
     XCTAssertNil(storage.getVariableValue(cardId: cardId, name: "unknown_var"))
+  }
+
+  func test_getVariableValue_ReturnsLocalVariableValue() {
+    let path = UIElementPath("card_id") + "element_id"
+    storage.initializeIfNeeded(path: path, variables: variables)
+
+    XCTAssertEqual(
+      "value",
+      storage.getVariableValue(path: path, name: "string_var")
+    )
+  }
+
+  func test_getVariableValue_ReturnsShadowedLocalVariableValue() {
+    storage.set(cardId: "card_id", variables: variables)
+
+    let path = UIElementPath("card_id") + "element_id"
+    storage.initializeIfNeeded(path: path, variables: ["string_var": .string("local value")])
+
+    XCTAssertEqual(
+      "local value",
+      storage.getVariableValue(path: path, name: "string_var")
+    )
+  }
+
+  func test_getVariableValue_ReturnsParentVariableValueIfNoLocalVariables() {
+    let parentPath = UIElementPath("card_id") + "parent_id"
+    storage.initializeIfNeeded(path: parentPath, variables: variables)
+
+    XCTAssertEqual(
+      "value",
+      storage.getVariableValue(path: parentPath + "element_id", name: "string_var")
+    )
+  }
+
+  func test_getVariableValue_ReturnsParentVariableValueIfHasAnotherLocalVariables() {
+    let parentPath = UIElementPath("card_id") + "parent_id"
+    storage.initializeIfNeeded(path: parentPath, variables: variables)
+    storage.initializeIfNeeded(
+      path: parentPath + "element_id",
+      variables: ["local_var": .string("local value")]
+    )
+
+    XCTAssertEqual(
+      "value",
+      storage.getVariableValue(path: parentPath + "element_id", name: "string_var")
+    )
   }
 
   func test_hasValue_ReturnsTrueIfContainsLocalVariable() {
@@ -350,6 +421,19 @@ final class DivVariablesStorageTest: XCTestCase {
 
   func test_reset_ResetsVariablesByCardId() {
     storage.set(cardId: cardId, variables: variables)
+
+    let globalVariables: DivVariables = [
+      "global_var": .string("global value"),
+    ]
+    storage.set(variables: globalVariables, triggerUpdate: false)
+
+    storage.reset(cardId: cardId)
+
+    XCTAssertEqual(globalVariables, storage.makeVariables(for: cardId))
+  }
+
+  func test_reset_ResetsLocalVariablesByCardId() {
+    storage.initializeIfNeeded(path: cardId.path + "element_id", variables: variables)
 
     let globalVariables: DivVariables = [
       "global_var": .string("global value"),

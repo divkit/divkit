@@ -94,7 +94,7 @@ public final class DivTriggersStorage {
 
       let oldCondition = item.condition
       let expressionResolver = ExpressionResolver(
-        cardId: cardId,
+        path: cardId.path,
         variablesStorage: variablesStorage,
         persistentValuesStorage: persistentValuesStorage,
         reporter: reporter
@@ -110,7 +110,7 @@ public final class DivTriggersStorage {
       for action in trigger.actions {
         actionHandler?.handle(
           action,
-          cardId: cardId,
+          path: cardId.path,
           source: .trigger,
           sender: nil
         )

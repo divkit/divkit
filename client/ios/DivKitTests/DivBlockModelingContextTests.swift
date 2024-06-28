@@ -24,6 +24,22 @@ final class DivBlockModelingContextTests: XCTestCase {
     XCTAssertEqual(context.errorsStorage.errors[0].path, parentPath)
   }
 
+  func test_modifying_parentPath_ProvidesAccessToLocalVariables() {
+    let context = DivBlockModelingContext()
+    let elementPath = context.parentPath + "element_id"
+    context.variablesStorage.initializeIfNeeded(
+      path: elementPath,
+      variables: ["local_var": .string("value")]
+    )
+
+    let elementContext = context.modifying(parentPath: elementPath)
+
+    XCTAssertEqual(
+      "value",
+      elementContext.expressionResolver.resolveString(expression("@{local_var}"))
+    )
+  }
+
   func test_modifying_parentDivStatePath() {
     let divStatePath = DivStatePath.makeDivStatePath(from: "0/div_state")
     let context = DivBlockModelingContext()

@@ -60,7 +60,7 @@ final class DivTimerController {
       return
     }
     let expressionResolver = ExpressionResolver(
-      cardId: cardId,
+      path: cardId.path,
       variablesStorage: variablesStorage,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter

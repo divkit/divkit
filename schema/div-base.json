@@ -209,7 +209,9 @@
         "$ref": "div-variable.json"
       },
       "$description": "translations.json#/div_base_variables",
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     "transform": {
       "$ref": "div-transform.json",

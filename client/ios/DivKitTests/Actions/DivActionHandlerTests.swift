@@ -2,6 +2,8 @@
 
 import XCTest
 
+import LayoutKit
+
 final class DivActionHandlerTests: XCTestCase {
   private var actionHandler: DivActionHandler!
   private let logger = MockActionLogger()
@@ -254,6 +256,33 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertEqual(["key": ["new_key": "new value"]], getVariableValue("dict_var"))
   }
 
+  func test_DictSetValueAction_UpdatesParentLocalValue() {
+    let parentPath = cardId.path + "parent_id"
+    variablesStorage.initializeIfNeeded(
+      path: parentPath,
+      variables: ["dict_var": .dict(["key": "value"])]
+    )
+
+    actionHandler.handle(
+      divAction(
+        logId: "log_id",
+        typed: .divActionDictSetValue(DivActionDictSetValue(
+          key: .value("key"),
+          value: .dictValue(DictValue(value: ["new_key": "new value"])),
+          variableName: .value("dict_var")
+        ))
+      ),
+      path: parentPath + "element_id",
+      source: .tap,
+      sender: nil
+    )
+
+    XCTAssertEqual(
+      ["key": ["new_key": "new value"]],
+      variablesStorage.getVariableValue(path: parentPath, name: "dict_var")
+    )
+  }
+
   func test_DictSetValueAction_RemovesValue() {
     setVariableValue("dict_var", .dict(["key": "value"]))
 
@@ -307,6 +336,32 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertEqual(["value 1", "value 2"], getVariableValue("array_var"))
   }
 
+  func test_SetVariableAction_SetsLocalVariable() {
+    let path = cardId.path + "element_id"
+    variablesStorage.initializeIfNeeded(
+      path: path,
+      variables: ["local_var": .string("value")]
+    )
+
+    actionHandler.handle(
+      divAction(
+        logId: "log_id",
+        typed: .divActionSetVariable(DivActionSetVariable(
+          value: stringValue("new value"),
+          variableName: .value("local_var")
+        ))
+      ),
+      path: path,
+      source: .tap,
+      sender: nil
+    )
+
+    XCTAssertEqual(
+      "new value",
+      variablesStorage.getVariableValue(path: path, name: "local_var")
+    )
+  }
+
   func test_LoggerIsCalled() {
     handle(
       DivAction(
@@ -347,7 +402,7 @@ final class DivActionHandlerTests: XCTestCase {
   ) {
     actionHandler.handle(
       action,
-      cardId: cardId,
+      path: cardId.path,
       source: .tap,
       localValues: localValues,
       sender: nil
@@ -357,7 +412,7 @@ final class DivActionHandlerTests: XCTestCase {
   private func handle(_ action: DivActionTyped) {
     actionHandler.handle(
       divAction(logId: "log_id", typed: action),
-      cardId: cardId,
+      path: cardId.path,
       source: .tap,
       sender: nil
     )

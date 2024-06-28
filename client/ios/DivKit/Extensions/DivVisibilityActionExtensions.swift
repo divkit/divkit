@@ -13,7 +13,7 @@ extension DivVisibilityAction {
     let path = context.parentPath + (resolveLogId(expressionResolver) ?? "")
     return VisibilityAction(
       uiAction: UserInterfaceAction(
-        payload: makeDivActionPayload(cardId: context.cardId, source: .visibility),
+        payload: makeDivActionPayload(path: context.parentPath, source: .visibility),
         path: path
       ),
       requiredDuration: TimeInterval(

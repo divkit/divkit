@@ -14,7 +14,7 @@ public struct IdAndCardId: Hashable {
 
   public init(path: UIElementPath) {
     id = path.leaf
-    cardId = DivCardID(rawValue: path.root)
+    cardId = path.cardId
   }
 }
 

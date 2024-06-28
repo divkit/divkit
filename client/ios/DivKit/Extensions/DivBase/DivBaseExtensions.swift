@@ -13,12 +13,18 @@ extension DivBase {
     customAccessibilityParams: CustomAccessibilityParams = .default,
     clipToBounds: Bool = true
   ) throws -> Block {
+    let path = context.parentPath
+
+    context.variablesStorage.initializeIfNeeded(
+      path: path,
+      variables: variables?.extractDivVariableValues() ?? [:]
+    )
+
     let extensionHandlers = context.getExtensionHandlers(for: self)
     for extensionHandler in extensionHandlers {
       extensionHandler.accept(div: self, context: context)
     }
 
-    let path = context.parentPath
     let statePath = context.parentDivStatePath ?? DivData.rootPath
 
     let expressionResolver = context.expressionResolver

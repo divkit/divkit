@@ -1,11 +1,11 @@
+import Testing
+import UIKit
+import XCTest
+
 import BasePublic
-import DivKit
+@testable import DivKit
 import DivKitExtensions
 @testable import LayoutKit
-import Testing
-
-import UIKit
-import class XCTest.XCTestCase
 
 final class AllTests: XCTestCase {
   func testAll() async {
@@ -104,7 +104,7 @@ private let testPagerViewStates = [
   PagerViewState(numberOfPages: 11, floatCurrentPage: 10),
 ]
 
-private let pagerId = IdAndCardId(path: UIElementPath(testCardId) + "pager_id")
+private let pagerId = IdAndCardId(path: testCardId.path + "pager_id")
 
 extension String {
   var removingFileExtension: String {

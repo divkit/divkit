@@ -1428,6 +1428,20 @@
       "file": "variables/div_variable_trigger_loops.json"
     },
     {
+      "title": "Local variables",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "variables"
+      ],
+      "expected_results": [
+        "Click items",
+        "Corresponding varibale values change"
+      ],
+      "file": "variables/local.json"
+    },
+    {
       "title": "Sequential animations",
       "steps": [
         "Click on image"

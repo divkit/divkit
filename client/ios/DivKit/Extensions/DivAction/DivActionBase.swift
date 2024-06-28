@@ -18,7 +18,7 @@ public protocol DivActionBase: Serializable {
 
 extension DivActionBase {
   func makeDivActionPayload(
-    cardId: DivCardID,
+    path: UIElementPath,
     source: UserInterfaceAction.DivActionSource,
     localValues: [String: AnyHashable] = [:]
   ) -> UserInterfaceAction.Payload {
@@ -26,7 +26,7 @@ extension DivActionBase {
     // when all custom div-action handlers will be replaced
     let url: URL? = switch self.url {
     case let .value(value):
-      value.adding(cardId: cardId.rawValue)
+      value.adding(cardId: path.root)
     case .link, .none:
       nil
     }
@@ -34,7 +34,7 @@ extension DivActionBase {
     return .divAction(
       params: UserInterfaceAction.DivActionParams(
         action: .object(toDictionary().typedJSON()),
-        cardId: cardId.rawValue,
+        path: path,
         source: source,
         url: url,
         localValues: localValues
