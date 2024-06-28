@@ -1641,6 +1641,7 @@
                                 // and trigger mode matches
                                 (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                             ) {
+                                prevConditionResult = Boolean(conditionResult.value);
                                 const actionsToLog: Action[] = [];
                                 const actions = trigger.actions.map(action => getJsonWithVars(logError, action));
                                 for (const action of actions) {
@@ -1652,9 +1653,9 @@
                                 for (const action of actionsToLog) {
                                     logStat('trigger', action);
                                 }
+                            } else {
+                                prevConditionResult = Boolean(conditionResult.value);
                             }
-
-                            prevConditionResult = Boolean(conditionResult.value);
                         });
                     } catch (err) {
                         logError(wrapError(new Error('Unable to parse variable_trigger'), {
