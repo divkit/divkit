@@ -66,6 +66,7 @@
 		8C0E7396288AEF18009BEB3C /* YSText-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7392288AEF18009BEB3C /* YSText-Light.ttf */; };
 		8C0E7397288AEF18009BEB3C /* YSText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7393288AEF18009BEB3C /* YSText-Regular.ttf */; };
 		8C0E7398288AEF18009BEB3C /* YSText-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7394288AEF18009BEB3C /* YSText-Bold.ttf */; };
+		8C1233AB2C32F08600F534DC /* DivFontProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1233AA2C32F08600F534DC /* DivFontProviderTests.swift */; };
 		8C1A374928B4187B00A047C8 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A374828B4187B00A047C8 /* DeviceInfo.swift */; };
 		8C1A375028B4189E00A047C8 /* MetadataCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A374D28B4189E00A047C8 /* MetadataCaptureSession.swift */; };
 		8C1A375128B4189E00A047C8 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A374E28B4189E00A047C8 /* ScannerViewController.swift */; };
@@ -321,6 +322,7 @@
 		8C0E7392288AEF18009BEB3C /* YSText-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Light.ttf"; sourceTree = "<group>"; };
 		8C0E7393288AEF18009BEB3C /* YSText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Regular.ttf"; sourceTree = "<group>"; };
 		8C0E7394288AEF18009BEB3C /* YSText-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Bold.ttf"; sourceTree = "<group>"; };
+		8C1233AA2C32F08600F534DC /* DivFontProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivFontProviderTests.swift; sourceTree = "<group>"; };
 		8C1A374828B4187B00A047C8 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		8C1A374D28B4189E00A047C8 /* MetadataCaptureSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataCaptureSession.swift; sourceTree = "<group>"; };
 		8C1A374E28B4189E00A047C8 /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
@@ -914,16 +916,17 @@
 				8C7B1BEF2865C01C0036EF4C /* DivBlockStateStorageTests.swift */,
 				8CE488652B76F6BA00BDDAB9 /* DivDataParsingTests.swift */,
 				7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */,
+				8C1233AA2C32F08600F534DC /* DivFontProviderTests.swift */,
 				8C0DC7112865CA1100286F6B /* DivKitTests.swift */,
 				52907F652A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift */,
 				891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */,
 				8C7B1B302865C01C0036EF4C /* DivSerializationTests.swift */,
 				8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */,
 				8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */,
+				8CB9911A2B7EB74500577193 /* DivViewTests.swift */,
 				8CB960E528883B8E00D16E47 /* Platform.swift */,
 				5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */,
 				8C4DC3E72892946F000C0963 /* RuntimeTestCase.swift */,
-				8CB9911A2B7EB74500577193 /* DivViewTests.swift */,
 			);
 			path = DivKitTests;
 			sourceTree = "<group>";
@@ -1681,6 +1684,7 @@
 				8C23F43829DDB3810069F3F7 /* EntityWithoutPropertiesTemplate.swift in Sources */,
 				E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */,
 				8C0DC7122865CA1100286F6B /* DivKitTests.swift in Sources */,
+				8C1233AB2C32F08600F534DC /* DivFontProviderTests.swift in Sources */,
 				8C7B1BF62865C01C0036EF4C /* DivTextExtensionsTests.swift in Sources */,
 				8C23F41A29DDB3810069F3F7 /* EntityWithArrayTemplate.swift in Sources */,
 				8C23F41929DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift in Sources */,

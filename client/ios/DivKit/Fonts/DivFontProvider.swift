@@ -32,7 +32,7 @@ extension DivFontProvider {
 
   public func font(family: String, weight: Int, size: CGFloat) -> Font {
     let divFontWeight: DivFontWeight = switch weight {
-    case 0..<350:
+    case 1..<350:
       .light
     case 350..<450:
       .regular
