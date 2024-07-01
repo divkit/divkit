@@ -8,7 +8,7 @@ public final class GenericCollectionReusableView: UICollectionReusableView {
 
   private var view: BlockView? {
     didSet {
-      oldValue?.removeFromSuperview()
+      oldValue?.removeFrom(self)
       if let view {
         addSubview(view)
         setNeedsLayout()

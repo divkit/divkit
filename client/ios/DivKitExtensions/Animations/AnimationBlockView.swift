@@ -7,7 +7,7 @@ final class AnimationBlockView: BlockView {
   var animatableView: AnimatableView? {
     didSet {
       if let animatablView = animatableView {
-        oldValue?.removeFromSuperview()
+        oldValue?.removeFrom(self)
         addSubview(animatablView)
       }
     }

@@ -7,7 +7,7 @@ final class RiveContainerView: UIView {
   private var riveView: RiveView? {
     didSet {
       if let riveView {
-        oldValue?.removeFromSuperview()
+        oldValue?.removeFrom(self)
 
         addSubview(riveView)
         riveView.frame = bounds
