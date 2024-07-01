@@ -22,7 +22,7 @@ internal class DivGridLayoutManager(
 
     override val childrenToRelayout = HashSet<View>()
 
-    override fun getItemDiv(position: Int) = (view.adapter as DivGalleryAdapter).visibleItems[position]
+    override fun getItemDiv(position: Int) = (view.adapter as DivGalleryAdapter).visibleItems.getOrNull(position)
 
     private val itemSpacing
         get() = div.itemSpacing.evaluate(bindingContext.expressionResolver).dpToPx(view.resources.displayMetrics)
@@ -56,10 +56,13 @@ internal class DivGridLayoutManager(
         super.calculateItemDecorationsForChild(child, outRect)
 
         val position = _getPosition(child)
-        val item = getItemDiv(position).div.value()
+        if (position == RecyclerView.NO_POSITION) return
+        val item = getItemDiv(position) ?: return
 
-        val isFixedHeight = item.height is DivSize.Fixed
-        val isFixedWidth = item.width is DivSize.Fixed
+        val div = item.div.value()
+
+        val isFixedHeight = div.height is DivSize.Fixed
+        val isFixedWidth = div.width is DivSize.Fixed
 
         val isMultiSpan = spanCount > 1
 

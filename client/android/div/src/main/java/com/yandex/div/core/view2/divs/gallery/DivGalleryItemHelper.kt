@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.widget.makeAtMostSpec
 import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div.core.widget.makeUnspecifiedSpec
@@ -23,6 +24,7 @@ import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivGallery
 import kotlin.math.min
 
+@Suppress("FunctionName")
 internal interface DivGalleryItemHelper {
     val bindingContext: BindingContext
     val view: RecyclerView
@@ -30,7 +32,7 @@ internal interface DivGalleryItemHelper {
 
     val childrenToRelayout: MutableSet<View>
 
-    fun getItemDiv(position: Int): DivItemBuilderResult
+    fun getItemDiv(position: Int): DivItemBuilderResult?
 
     fun toLayoutManager(): RecyclerView.LayoutManager
 
@@ -66,7 +68,9 @@ internal interface DivGalleryItemHelper {
             return
         }
 
-        val childItem = runCatching { getItemDiv(child.getTag(R.id.div_gallery_item_index) as Int) }.getOrNull()
+        val childItem = (child.getTag(R.id.div_gallery_item_index) as Int?)?.let {
+            getItemDiv(it)
+        }
         val childDiv = childItem?.div?.value()
         val resolver = childItem?.expressionResolver ?: bindingContext.expressionResolver
         val parentAlignment = div.crossContentAlignment
@@ -184,7 +188,6 @@ internal interface DivGalleryItemHelper {
     }
 
     fun _onAttachedToWindow(view: RecyclerView) {
-
         view.forEach { child ->
             trackVisibilityAction(child)
         }
@@ -224,18 +227,18 @@ internal interface DivGalleryItemHelper {
 
         val container = (child as? ViewGroup) ?: return
         val itemView = container.children.firstOrNull() ?: return
-        val item = getItemDiv(position)
-        val div = item.div
 
         val divView = bindingContext.divView
         if (clear) {
-            divView.div2Component.visibilityActionTracker
-                .cancelTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), itemView, div)
+            val div = divView.takeBindingDiv(itemView) ?: return
+            val itemContext = (itemView as? DivHolderView<*>)?.bindingContext ?: return
+            divView.div2Component.visibilityActionTracker.cancelTrackingViewsHierarchy(itemContext, itemView, div)
             divView.unbindViewFromDiv(itemView)
         } else {
+            val item = getItemDiv(position) ?: return
             divView.div2Component.visibilityActionTracker
-                .startTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), itemView, div)
-            divView.bindViewToDiv(itemView, div)
+                .startTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), itemView, item.div)
+            divView.bindViewToDiv(itemView, item.div)
         }
     }
 
