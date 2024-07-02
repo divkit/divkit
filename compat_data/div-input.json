@@ -41,6 +41,9 @@
             },
             "ios": {
                 "version_added": "30.6.0"
+            },
+            "android": {
+                "version_added": "30.7.0"
             }
         }
     }]
