@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_pivot_fixed.dart';
-import 'div_pivot_percentage.dart';
+import 'package:divkit/src/generated_sources/div_pivot_fixed.dart';
+import 'package:divkit/src/generated_sources/div_pivot_percentage.dart';
 
 class DivPivot with EquatableMixin {
   final Object value;
@@ -16,7 +16,7 @@ class DivPivot with EquatableMixin {
     required T Function(DivPivotFixed) divPivotFixed,
     required T Function(DivPivotPercentage) divPivotPercentage,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divPivotFixed(
           value as DivPivotFixed,
@@ -35,7 +35,7 @@ class DivPivot with EquatableMixin {
     T Function(DivPivotPercentage)? divPivotPercentage,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divPivotFixed != null) {
           return divPivotFixed(

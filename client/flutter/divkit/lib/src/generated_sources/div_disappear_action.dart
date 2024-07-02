@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action_typed.dart';
-import 'div_download_callbacks.dart';
-import 'div_sight_action.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action_typed.dart';
+import 'package:divkit/src/generated_sources/div_download_callbacks.dart';
+import 'package:divkit/src/generated_sources/div_sight_action.dart';
 
 class DivDisappearAction with EquatableMixin implements DivSightAction {
   const DivDisappearAction({
@@ -63,6 +63,33 @@ class DivDisappearAction with EquatableMixin implements DivSightAction {
         url,
         visibilityPercentage,
       ];
+
+  DivDisappearAction copyWith({
+    Expression<int>? disappearDuration,
+    DivDownloadCallbacks? Function()? downloadCallbacks,
+    Expression<bool>? isEnabled,
+    Expression<String>? logId,
+    Expression<int>? logLimit,
+    Map<String, dynamic>? Function()? payload,
+    Expression<Uri>? Function()? referer,
+    DivActionTyped? Function()? typed,
+    Expression<Uri>? Function()? url,
+    Expression<int>? visibilityPercentage,
+  }) =>
+      DivDisappearAction(
+        disappearDuration: disappearDuration ?? this.disappearDuration,
+        downloadCallbacks: downloadCallbacks != null
+            ? downloadCallbacks.call()
+            : this.downloadCallbacks,
+        isEnabled: isEnabled ?? this.isEnabled,
+        logId: logId ?? this.logId,
+        logLimit: logLimit ?? this.logLimit,
+        payload: payload != null ? payload.call() : this.payload,
+        referer: referer != null ? referer.call() : this.referer,
+        typed: typed != null ? typed.call() : this.typed,
+        url: url != null ? url.call() : this.url,
+        visibilityPercentage: visibilityPercentage ?? this.visibilityPercentage,
+      );
 
   static DivDisappearAction? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

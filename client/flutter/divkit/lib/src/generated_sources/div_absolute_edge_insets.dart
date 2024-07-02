@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivAbsoluteEdgeInsets with EquatableMixin {
   const DivAbsoluteEdgeInsets({
@@ -28,6 +28,19 @@ class DivAbsoluteEdgeInsets with EquatableMixin {
         right,
         top,
       ];
+
+  DivAbsoluteEdgeInsets copyWith({
+    Expression<int>? bottom,
+    Expression<int>? left,
+    Expression<int>? right,
+    Expression<int>? top,
+  }) =>
+      DivAbsoluteEdgeInsets(
+        bottom: bottom ?? this.bottom,
+        left: left ?? this.left,
+        right: right ?? this.right,
+        top: top ?? this.top,
+      );
 
   static DivAbsoluteEdgeInsets? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

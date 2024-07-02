@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'content_text.dart';
-import 'content_url.dart';
+import 'package:divkit/src/generated_sources/content_text.dart';
+import 'package:divkit/src/generated_sources/content_url.dart';
 
 class DivActionCopyToClipboardContent with EquatableMixin {
   final Object value;
@@ -16,7 +16,7 @@ class DivActionCopyToClipboardContent with EquatableMixin {
     required T Function(ContentText) contentText,
     required T Function(ContentUrl) contentUrl,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return contentText(
           value as ContentText,
@@ -35,7 +35,7 @@ class DivActionCopyToClipboardContent with EquatableMixin {
     T Function(ContentUrl)? contentUrl,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (contentText != null) {
           return contentText(

@@ -2,39 +2,39 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_animation.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_blend_mode.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_fixed_size.dart';
-import 'div_focus.dart';
-import 'div_font_weight.dart';
-import 'div_line_style.dart';
-import 'div_match_parent_size.dart';
-import 'div_shadow.dart';
-import 'div_size.dart';
-import 'div_size_unit.dart';
-import 'div_text_gradient.dart';
-import 'div_text_range_background.dart';
-import 'div_text_range_border.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_variable.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_animation.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_blend_mode.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_font_weight.dart';
+import 'package:divkit/src/generated_sources/div_line_style.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_shadow.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
+import 'package:divkit/src/generated_sources/div_text_gradient.dart';
+import 'package:divkit/src/generated_sources/div_text_range_background.dart';
+import 'package:divkit/src/generated_sources/div_text_range_border.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivText with EquatableMixin implements DivBase {
   const DivText({
@@ -86,7 +86,7 @@ class DivText with EquatableMixin implements DivBase {
         const ValueExpression(DivAlignmentHorizontal.start),
     this.textAlignmentVertical =
         const ValueExpression(DivAlignmentVertical.top),
-    this.textColor = const ValueExpression(const Color(0xFF000000)),
+    this.textColor = const ValueExpression(Color(0xFF000000)),
     this.textGradient,
     this.textShadow,
     this.tooltips,
@@ -307,6 +307,159 @@ class DivText with EquatableMixin implements DivBase {
         visibilityActions,
         width,
       ];
+
+  DivText copyWith({
+    DivAccessibility? accessibility,
+    DivAction? Function()? action,
+    DivAnimation? actionAnimation,
+    List<DivAction>? Function()? actions,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    Expression<bool>? Function()? autoEllipsize,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    List<DivDisappearAction>? Function()? disappearActions,
+    List<DivAction>? Function()? doubletapActions,
+    DivTextEllipsis? Function()? ellipsis,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    Expression<Color>? Function()? focusedTextColor,
+    Expression<String>? Function()? fontFamily,
+    Expression<String>? Function()? fontFeatureSettings,
+    Expression<int>? fontSize,
+    Expression<DivSizeUnit>? fontSizeUnit,
+    Expression<DivFontWeight>? fontWeight,
+    Expression<int>? Function()? fontWeightValue,
+    DivSize? height,
+    String? Function()? id,
+    List<DivTextImage>? Function()? images,
+    Expression<double>? letterSpacing,
+    Expression<int>? Function()? lineHeight,
+    List<DivAction>? Function()? longtapActions,
+    DivEdgeInsets? margins,
+    Expression<int>? Function()? maxLines,
+    Expression<int>? Function()? minHiddenLines,
+    DivEdgeInsets? paddings,
+    List<DivTextRange>? Function()? ranges,
+    Expression<int>? Function()? rowSpan,
+    Expression<bool>? selectable,
+    List<DivAction>? Function()? selectedActions,
+    Expression<DivLineStyle>? strike,
+    Expression<String>? text,
+    Expression<DivAlignmentHorizontal>? textAlignmentHorizontal,
+    Expression<DivAlignmentVertical>? textAlignmentVertical,
+    Expression<Color>? textColor,
+    DivTextGradient? Function()? textGradient,
+    DivShadow? Function()? textShadow,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    Expression<DivTextTruncate>? truncate,
+    Expression<DivLineStyle>? underline,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivText(
+        accessibility: accessibility ?? this.accessibility,
+        action: action != null ? action.call() : this.action,
+        actionAnimation: actionAnimation ?? this.actionAnimation,
+        actions: actions != null ? actions.call() : this.actions,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        autoEllipsize:
+            autoEllipsize != null ? autoEllipsize.call() : this.autoEllipsize,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        doubletapActions: doubletapActions != null
+            ? doubletapActions.call()
+            : this.doubletapActions,
+        ellipsis: ellipsis != null ? ellipsis.call() : this.ellipsis,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        focusedTextColor: focusedTextColor != null
+            ? focusedTextColor.call()
+            : this.focusedTextColor,
+        fontFamily: fontFamily != null ? fontFamily.call() : this.fontFamily,
+        fontFeatureSettings: fontFeatureSettings != null
+            ? fontFeatureSettings.call()
+            : this.fontFeatureSettings,
+        fontSize: fontSize ?? this.fontSize,
+        fontSizeUnit: fontSizeUnit ?? this.fontSizeUnit,
+        fontWeight: fontWeight ?? this.fontWeight,
+        fontWeightValue: fontWeightValue != null
+            ? fontWeightValue.call()
+            : this.fontWeightValue,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        images: images != null ? images.call() : this.images,
+        letterSpacing: letterSpacing ?? this.letterSpacing,
+        lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
+        longtapActions: longtapActions != null
+            ? longtapActions.call()
+            : this.longtapActions,
+        margins: margins ?? this.margins,
+        maxLines: maxLines != null ? maxLines.call() : this.maxLines,
+        minHiddenLines: minHiddenLines != null
+            ? minHiddenLines.call()
+            : this.minHiddenLines,
+        paddings: paddings ?? this.paddings,
+        ranges: ranges != null ? ranges.call() : this.ranges,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        selectable: selectable ?? this.selectable,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        strike: strike ?? this.strike,
+        text: text ?? this.text,
+        textAlignmentHorizontal:
+            textAlignmentHorizontal ?? this.textAlignmentHorizontal,
+        textAlignmentVertical:
+            textAlignmentVertical ?? this.textAlignmentVertical,
+        textColor: textColor ?? this.textColor,
+        textGradient:
+            textGradient != null ? textGradient.call() : this.textGradient,
+        textShadow: textShadow != null ? textShadow.call() : this.textShadow,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        truncate: truncate ?? this.truncate,
+        underline: underline ?? this.underline,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivText? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -657,6 +810,52 @@ class DivTextRange with EquatableMixin {
         underline,
       ];
 
+  DivTextRange copyWith({
+    List<DivAction>? Function()? actions,
+    DivTextRangeBackground? Function()? background,
+    DivTextRangeBorder? Function()? border,
+    Expression<int>? end,
+    Expression<String>? Function()? fontFamily,
+    Expression<String>? Function()? fontFeatureSettings,
+    Expression<int>? Function()? fontSize,
+    Expression<DivSizeUnit>? fontSizeUnit,
+    Expression<DivFontWeight>? Function()? fontWeight,
+    Expression<int>? Function()? fontWeightValue,
+    Expression<double>? Function()? letterSpacing,
+    Expression<int>? Function()? lineHeight,
+    Expression<int>? start,
+    Expression<DivLineStyle>? Function()? strike,
+    Expression<Color>? Function()? textColor,
+    DivShadow? Function()? textShadow,
+    Expression<int>? Function()? topOffset,
+    Expression<DivLineStyle>? Function()? underline,
+  }) =>
+      DivTextRange(
+        actions: actions != null ? actions.call() : this.actions,
+        background: background != null ? background.call() : this.background,
+        border: border != null ? border.call() : this.border,
+        end: end ?? this.end,
+        fontFamily: fontFamily != null ? fontFamily.call() : this.fontFamily,
+        fontFeatureSettings: fontFeatureSettings != null
+            ? fontFeatureSettings.call()
+            : this.fontFeatureSettings,
+        fontSize: fontSize != null ? fontSize.call() : this.fontSize,
+        fontSizeUnit: fontSizeUnit ?? this.fontSizeUnit,
+        fontWeight: fontWeight != null ? fontWeight.call() : this.fontWeight,
+        fontWeightValue: fontWeightValue != null
+            ? fontWeightValue.call()
+            : this.fontWeightValue,
+        letterSpacing:
+            letterSpacing != null ? letterSpacing.call() : this.letterSpacing,
+        lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
+        start: start ?? this.start,
+        strike: strike != null ? strike.call() : this.strike,
+        textColor: textColor != null ? textColor.call() : this.textColor,
+        textShadow: textShadow != null ? textShadow.call() : this.textShadow,
+        topOffset: topOffset != null ? topOffset.call() : this.topOffset,
+        underline: underline != null ? underline.call() : this.underline,
+      );
+
   static DivTextRange? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -770,6 +969,25 @@ class DivTextImage with EquatableMixin {
         width,
       ];
 
+  DivTextImage copyWith({
+    DivFixedSize? height,
+    Expression<bool>? preloadRequired,
+    Expression<int>? start,
+    Expression<Color>? Function()? tintColor,
+    Expression<DivBlendMode>? tintMode,
+    Expression<Uri>? url,
+    DivFixedSize? width,
+  }) =>
+      DivTextImage(
+        height: height ?? this.height,
+        preloadRequired: preloadRequired ?? this.preloadRequired,
+        start: start ?? this.start,
+        tintColor: tintColor != null ? tintColor.call() : this.tintColor,
+        tintMode: tintMode ?? this.tintMode,
+        url: url ?? this.url,
+        width: width ?? this.width,
+      );
+
   static DivTextImage? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -830,6 +1048,19 @@ class DivTextEllipsis with EquatableMixin {
         ranges,
         text,
       ];
+
+  DivTextEllipsis copyWith({
+    List<DivAction>? Function()? actions,
+    List<DivTextImage>? Function()? images,
+    List<DivTextRange>? Function()? ranges,
+    Expression<String>? text,
+  }) =>
+      DivTextEllipsis(
+        actions: actions != null ? actions.call() : this.actions,
+        images: images != null ? images.call() : this.images,
+        ranges: ranges != null ? ranges.call() : this.ranges,
+        text: text ?? this.text,
+      );
 
   static DivTextEllipsis? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

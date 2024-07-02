@@ -2,34 +2,34 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_collection_item_builder.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_fixed_size.dart';
-import 'div_focus.dart';
-import 'div_match_parent_size.dart';
-import 'div_page_transformation.dart';
-import 'div_pager_layout_mode.dart';
-import 'div_size.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_variable.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_collection_item_builder.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_page_transformation.dart';
+import 'package:divkit/src/generated_sources/div_pager_layout_mode.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivPager with EquatableMixin implements DivBase {
   const DivPager({
@@ -213,6 +213,104 @@ class DivPager with EquatableMixin implements DivBase {
         visibilityActions,
         width,
       ];
+
+  DivPager copyWith({
+    DivAccessibility? accessibility,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    Expression<int>? defaultItem,
+    List<DivDisappearAction>? Function()? disappearActions,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    DivSize? height,
+    String? Function()? id,
+    Expression<bool>? infiniteScroll,
+    DivCollectionItemBuilder? Function()? itemBuilder,
+    DivFixedSize? itemSpacing,
+    List<Div>? Function()? items,
+    DivPagerLayoutMode? layoutMode,
+    DivEdgeInsets? margins,
+    Expression<DivPagerOrientation>? orientation,
+    DivEdgeInsets? paddings,
+    DivPageTransformation? Function()? pageTransformation,
+    Expression<bool>? restrictParentScroll,
+    Expression<int>? Function()? rowSpan,
+    List<DivAction>? Function()? selectedActions,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivPager(
+        accessibility: accessibility ?? this.accessibility,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        defaultItem: defaultItem ?? this.defaultItem,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        infiniteScroll: infiniteScroll ?? this.infiniteScroll,
+        itemBuilder:
+            itemBuilder != null ? itemBuilder.call() : this.itemBuilder,
+        itemSpacing: itemSpacing ?? this.itemSpacing,
+        items: items != null ? items.call() : this.items,
+        layoutMode: layoutMode ?? this.layoutMode,
+        margins: margins ?? this.margins,
+        orientation: orientation ?? this.orientation,
+        paddings: paddings ?? this.paddings,
+        pageTransformation: pageTransformation != null
+            ? pageTransformation.call()
+            : this.pageTransformation,
+        restrictParentScroll: restrictParentScroll ?? this.restrictParentScroll,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivPager? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

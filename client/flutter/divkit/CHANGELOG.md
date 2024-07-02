@@ -1,4 +1,4 @@
-## 0.2.0-pre.1
+## 0.2.0
 
 * Correct interpretation of dict in variables context
 * Add support no_animation type of animation
@@ -6,6 +6,16 @@
 * Remove dispose from public div-context
 * Provide DivContext in custom elements
 * Add enumeration indexed switching
+* Add div-patch feature
+* Add copyWith to DTO entities
+* Fix testing page in Playground
+* Fix error handling in div-action
+
+## Migration 0.1 → 0.2
+
+* Now DivContext specified in div-customs protocol, you need to change signature of function if it was used.
+  `-Widget createCustom(DivCustom div);`
+  `+Widget createCustom(DivCustom div, DivContext context)`
 
 ## 0.1.5
 

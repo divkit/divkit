@@ -2,34 +2,34 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_corners_radius.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_fixed_size.dart';
-import 'div_focus.dart';
-import 'div_font_weight.dart';
-import 'div_match_parent_size.dart';
-import 'div_size.dart';
-import 'div_size_unit.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_variable.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_corners_radius.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_font_weight.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivTabs with EquatableMixin implements DivBase {
   const DivTabs({
@@ -54,7 +54,7 @@ class DivTabs with EquatableMixin implements DivBase {
     this.rowSpan,
     this.selectedActions,
     this.selectedTab = const ValueExpression(0),
-    this.separatorColor = const ValueExpression(const Color(0x14000000)),
+    this.separatorColor = const ValueExpression(Color(0x14000000)),
     this.separatorPaddings = const DivEdgeInsets(
       bottom: ValueExpression(0),
       left: ValueExpression(12),
@@ -229,6 +229,108 @@ class DivTabs with EquatableMixin implements DivBase {
         visibilityActions,
         width,
       ];
+
+  DivTabs copyWith({
+    DivAccessibility? accessibility,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    List<DivDisappearAction>? Function()? disappearActions,
+    Expression<bool>? dynamicHeight,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    Expression<bool>? hasSeparator,
+    DivSize? height,
+    String? Function()? id,
+    List<DivTabsItem>? items,
+    DivEdgeInsets? margins,
+    DivEdgeInsets? paddings,
+    Expression<bool>? restrictParentScroll,
+    Expression<int>? Function()? rowSpan,
+    List<DivAction>? Function()? selectedActions,
+    Expression<int>? selectedTab,
+    Expression<Color>? separatorColor,
+    DivEdgeInsets? separatorPaddings,
+    Expression<bool>? switchTabsByContentSwipeEnabled,
+    DivTabsTabTitleDelimiter? Function()? tabTitleDelimiter,
+    DivTabsTabTitleStyle? tabTitleStyle,
+    DivEdgeInsets? titlePaddings,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivTabs(
+        accessibility: accessibility ?? this.accessibility,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        dynamicHeight: dynamicHeight ?? this.dynamicHeight,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        hasSeparator: hasSeparator ?? this.hasSeparator,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        items: items ?? this.items,
+        margins: margins ?? this.margins,
+        paddings: paddings ?? this.paddings,
+        restrictParentScroll: restrictParentScroll ?? this.restrictParentScroll,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        selectedTab: selectedTab ?? this.selectedTab,
+        separatorColor: separatorColor ?? this.separatorColor,
+        separatorPaddings: separatorPaddings ?? this.separatorPaddings,
+        switchTabsByContentSwipeEnabled: switchTabsByContentSwipeEnabled ??
+            this.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter: tabTitleDelimiter != null
+            ? tabTitleDelimiter.call()
+            : this.tabTitleDelimiter,
+        tabTitleStyle: tabTitleStyle ?? this.tabTitleStyle,
+        titlePaddings: titlePaddings ?? this.titlePaddings,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivTabs? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -423,9 +525,9 @@ class DivTabs with EquatableMixin implements DivBase {
 
 class DivTabsTabTitleStyle with EquatableMixin {
   const DivTabsTabTitleStyle({
-    this.activeBackgroundColor = const ValueExpression(const Color(0xFFFFDC60)),
+    this.activeBackgroundColor = const ValueExpression(Color(0xFFFFDC60)),
     this.activeFontWeight,
-    this.activeTextColor = const ValueExpression(const Color(0xCC000000)),
+    this.activeTextColor = const ValueExpression(Color(0xCC000000)),
     this.animationDuration = const ValueExpression(300),
     this.animationType =
         const ValueExpression(DivTabsTabTitleStyleAnimationType.slide),
@@ -437,7 +539,7 @@ class DivTabsTabTitleStyle with EquatableMixin {
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
     this.inactiveBackgroundColor,
     this.inactiveFontWeight,
-    this.inactiveTextColor = const ValueExpression(const Color(0x80000000)),
+    this.inactiveTextColor = const ValueExpression(Color(0x80000000)),
     this.itemSpacing = const ValueExpression(0),
     this.letterSpacing = const ValueExpression(0),
     this.lineHeight,
@@ -507,6 +609,56 @@ class DivTabsTabTitleStyle with EquatableMixin {
         lineHeight,
         paddings,
       ];
+
+  DivTabsTabTitleStyle copyWith({
+    Expression<Color>? activeBackgroundColor,
+    Expression<DivFontWeight>? Function()? activeFontWeight,
+    Expression<Color>? activeTextColor,
+    Expression<int>? animationDuration,
+    Expression<DivTabsTabTitleStyleAnimationType>? animationType,
+    Expression<int>? Function()? cornerRadius,
+    DivCornersRadius? Function()? cornersRadius,
+    Expression<String>? Function()? fontFamily,
+    Expression<int>? fontSize,
+    Expression<DivSizeUnit>? fontSizeUnit,
+    Expression<DivFontWeight>? fontWeight,
+    Expression<Color>? Function()? inactiveBackgroundColor,
+    Expression<DivFontWeight>? Function()? inactiveFontWeight,
+    Expression<Color>? inactiveTextColor,
+    Expression<int>? itemSpacing,
+    Expression<double>? letterSpacing,
+    Expression<int>? Function()? lineHeight,
+    DivEdgeInsets? paddings,
+  }) =>
+      DivTabsTabTitleStyle(
+        activeBackgroundColor:
+            activeBackgroundColor ?? this.activeBackgroundColor,
+        activeFontWeight: activeFontWeight != null
+            ? activeFontWeight.call()
+            : this.activeFontWeight,
+        activeTextColor: activeTextColor ?? this.activeTextColor,
+        animationDuration: animationDuration ?? this.animationDuration,
+        animationType: animationType ?? this.animationType,
+        cornerRadius:
+            cornerRadius != null ? cornerRadius.call() : this.cornerRadius,
+        cornersRadius:
+            cornersRadius != null ? cornersRadius.call() : this.cornersRadius,
+        fontFamily: fontFamily != null ? fontFamily.call() : this.fontFamily,
+        fontSize: fontSize ?? this.fontSize,
+        fontSizeUnit: fontSizeUnit ?? this.fontSizeUnit,
+        fontWeight: fontWeight ?? this.fontWeight,
+        inactiveBackgroundColor: inactiveBackgroundColor != null
+            ? inactiveBackgroundColor.call()
+            : this.inactiveBackgroundColor,
+        inactiveFontWeight: inactiveFontWeight != null
+            ? inactiveFontWeight.call()
+            : this.inactiveFontWeight,
+        inactiveTextColor: inactiveTextColor ?? this.inactiveTextColor,
+        itemSpacing: itemSpacing ?? this.itemSpacing,
+        letterSpacing: letterSpacing ?? this.letterSpacing,
+        lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
+        paddings: paddings ?? this.paddings,
+      );
 
   static DivTabsTabTitleStyle? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -673,6 +825,17 @@ class DivTabsTabTitleDelimiter with EquatableMixin {
         width,
       ];
 
+  DivTabsTabTitleDelimiter copyWith({
+    DivFixedSize? height,
+    Expression<Uri>? imageUrl,
+    DivFixedSize? width,
+  }) =>
+      DivTabsTabTitleDelimiter(
+        height: height ?? this.height,
+        imageUrl: imageUrl ?? this.imageUrl,
+        width: width ?? this.width,
+      );
+
   static DivTabsTabTitleDelimiter? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -714,6 +877,19 @@ class DivTabsItem with EquatableMixin {
         title,
         titleClickAction,
       ];
+
+  DivTabsItem copyWith({
+    Div? div,
+    Expression<String>? title,
+    DivAction? Function()? titleClickAction,
+  }) =>
+      DivTabsItem(
+        div: div ?? this.div,
+        title: title ?? this.title,
+        titleClickAction: titleClickAction != null
+            ? titleClickAction.call()
+            : this.titleClickAction,
+      );
 
   static DivTabsItem? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

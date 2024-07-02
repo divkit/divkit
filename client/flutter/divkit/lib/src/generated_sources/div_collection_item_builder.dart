@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
 
 class DivCollectionItemBuilder with EquatableMixin {
   const DivCollectionItemBuilder({
@@ -24,6 +24,17 @@ class DivCollectionItemBuilder with EquatableMixin {
         dataElementName,
         prototypes,
       ];
+
+  DivCollectionItemBuilder copyWith({
+    Expression<List<dynamic>>? data,
+    String? dataElementName,
+    List<DivCollectionItemBuilderPrototype>? prototypes,
+  }) =>
+      DivCollectionItemBuilder(
+        data: data ?? this.data,
+        dataElementName: dataElementName ?? this.dataElementName,
+        prototypes: prototypes ?? this.prototypes,
+      );
 
   static DivCollectionItemBuilder? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -67,6 +78,17 @@ class DivCollectionItemBuilderPrototype with EquatableMixin {
         id,
         selector,
       ];
+
+  DivCollectionItemBuilderPrototype copyWith({
+    Div? div,
+    Expression<String>? Function()? id,
+    Expression<bool>? selector,
+  }) =>
+      DivCollectionItemBuilderPrototype(
+        div: div ?? this.div,
+        id: id != null ? id.call() : this.id,
+        selector: selector ?? this.selector,
+      );
 
   static DivCollectionItemBuilderPrototype? fromJson(
       Map<String, dynamic>? json) {

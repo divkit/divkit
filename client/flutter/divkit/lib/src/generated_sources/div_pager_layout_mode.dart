@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_neighbour_page_size.dart';
-import 'div_page_size.dart';
+import 'package:divkit/src/generated_sources/div_neighbour_page_size.dart';
+import 'package:divkit/src/generated_sources/div_page_size.dart';
 
 class DivPagerLayoutMode with EquatableMixin {
   final Object value;
@@ -16,7 +16,7 @@ class DivPagerLayoutMode with EquatableMixin {
     required T Function(DivNeighbourPageSize) divNeighbourPageSize,
     required T Function(DivPageSize) divPageSize,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divNeighbourPageSize(
           value as DivNeighbourPageSize,
@@ -35,7 +35,7 @@ class DivPagerLayoutMode with EquatableMixin {
     T Function(DivPageSize)? divPageSize,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divNeighbourPageSize != null) {
           return divNeighbourPageSize(

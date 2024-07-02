@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_fixed_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
 
 class DivNeighbourPageSize with EquatableMixin {
   const DivNeighbourPageSize({
@@ -18,6 +18,13 @@ class DivNeighbourPageSize with EquatableMixin {
   List<Object?> get props => [
         neighbourPageWidth,
       ];
+
+  DivNeighbourPageSize copyWith({
+    DivFixedSize? neighbourPageWidth,
+  }) =>
+      DivNeighbourPageSize(
+        neighbourPageWidth: neighbourPageWidth ?? this.neighbourPageWidth,
+      );
 
   static DivNeighbourPageSize? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

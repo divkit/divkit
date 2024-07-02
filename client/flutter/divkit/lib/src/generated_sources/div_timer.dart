@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
 
 class DivTimer with EquatableMixin {
   const DivTimer({
@@ -37,6 +37,26 @@ class DivTimer with EquatableMixin {
         tickInterval,
         valueVariable,
       ];
+
+  DivTimer copyWith({
+    Expression<int>? duration,
+    List<DivAction>? Function()? endActions,
+    String? id,
+    List<DivAction>? Function()? tickActions,
+    Expression<int>? Function()? tickInterval,
+    String? Function()? valueVariable,
+  }) =>
+      DivTimer(
+        duration: duration ?? this.duration,
+        endActions: endActions != null ? endActions.call() : this.endActions,
+        id: id ?? this.id,
+        tickActions:
+            tickActions != null ? tickActions.call() : this.tickActions,
+        tickInterval:
+            tickInterval != null ? tickInterval.call() : this.tickInterval,
+        valueVariable:
+            valueVariable != null ? valueVariable.call() : this.valueVariable,
+      );
 
   static DivTimer? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

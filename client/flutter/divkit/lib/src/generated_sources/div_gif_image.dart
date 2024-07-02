@@ -2,32 +2,32 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_animation.dart';
-import 'div_appearance_transition.dart';
-import 'div_aspect.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_focus.dart';
-import 'div_image_scale.dart';
-import 'div_match_parent_size.dart';
-import 'div_size.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_variable.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_animation.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_aspect.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_image_scale.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivGifImage with EquatableMixin implements DivBase {
   const DivGifImage({
@@ -61,7 +61,7 @@ class DivGifImage with EquatableMixin implements DivBase {
     this.longtapActions,
     this.margins = const DivEdgeInsets(),
     this.paddings = const DivEdgeInsets(),
-    this.placeholderColor = const ValueExpression(const Color(0x14000000)),
+    this.placeholderColor = const ValueExpression(Color(0x14000000)),
     this.preloadRequired = const ValueExpression(false),
     this.preview,
     this.rowSpan,
@@ -232,6 +232,115 @@ class DivGifImage with EquatableMixin implements DivBase {
         visibilityActions,
         width,
       ];
+
+  DivGifImage copyWith({
+    DivAccessibility? accessibility,
+    DivAction? Function()? action,
+    DivAnimation? actionAnimation,
+    List<DivAction>? Function()? actions,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    DivAspect? Function()? aspect,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    Expression<DivAlignmentHorizontal>? contentAlignmentHorizontal,
+    Expression<DivAlignmentVertical>? contentAlignmentVertical,
+    List<DivDisappearAction>? Function()? disappearActions,
+    List<DivAction>? Function()? doubletapActions,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    Expression<Uri>? gifUrl,
+    DivSize? height,
+    String? Function()? id,
+    List<DivAction>? Function()? longtapActions,
+    DivEdgeInsets? margins,
+    DivEdgeInsets? paddings,
+    Expression<Color>? placeholderColor,
+    Expression<bool>? preloadRequired,
+    Expression<String>? Function()? preview,
+    Expression<int>? Function()? rowSpan,
+    Expression<DivImageScale>? scale,
+    List<DivAction>? Function()? selectedActions,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivGifImage(
+        accessibility: accessibility ?? this.accessibility,
+        action: action != null ? action.call() : this.action,
+        actionAnimation: actionAnimation ?? this.actionAnimation,
+        actions: actions != null ? actions.call() : this.actions,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        aspect: aspect != null ? aspect.call() : this.aspect,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        contentAlignmentHorizontal:
+            contentAlignmentHorizontal ?? this.contentAlignmentHorizontal,
+        contentAlignmentVertical:
+            contentAlignmentVertical ?? this.contentAlignmentVertical,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        doubletapActions: doubletapActions != null
+            ? doubletapActions.call()
+            : this.doubletapActions,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        gifUrl: gifUrl ?? this.gifUrl,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        longtapActions: longtapActions != null
+            ? longtapActions.call()
+            : this.longtapActions,
+        margins: margins ?? this.margins,
+        paddings: paddings ?? this.paddings,
+        placeholderColor: placeholderColor ?? this.placeholderColor,
+        preloadRequired: preloadRequired ?? this.preloadRequired,
+        preview: preview != null ? preview.call() : this.preview,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        scale: scale ?? this.scale,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivGifImage? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

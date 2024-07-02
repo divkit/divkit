@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_input_validator_expression.dart';
-import 'div_input_validator_regex.dart';
+import 'package:divkit/src/generated_sources/div_input_validator_expression.dart';
+import 'package:divkit/src/generated_sources/div_input_validator_regex.dart';
 
 class DivInputValidator with EquatableMixin {
   final Object value;
@@ -17,7 +17,7 @@ class DivInputValidator with EquatableMixin {
         divInputValidatorExpression,
     required T Function(DivInputValidatorRegex) divInputValidatorRegex,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divInputValidatorExpression(
           value as DivInputValidatorExpression,
@@ -36,7 +36,7 @@ class DivInputValidator with EquatableMixin {
     T Function(DivInputValidatorRegex)? divInputValidatorRegex,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divInputValidatorExpression != null) {
           return divInputValidatorExpression(

@@ -20,6 +20,12 @@ class EntityWithEntityProperty with EquatableMixin {
         entity,
       ];
 
+  EntityWithEntityProperty copyWith({
+      Entity?  entity,
+  }) => EntityWithEntityProperty(
+      entity: entity ?? this.entity,
+    );
+
   static EntityWithEntityProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_typed_value.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_typed_value.dart';
 
 class DivActionArraySetValue with EquatableMixin {
   const DivActionArraySetValue({
@@ -26,6 +26,17 @@ class DivActionArraySetValue with EquatableMixin {
         value,
         variableName,
       ];
+
+  DivActionArraySetValue copyWith({
+    Expression<int>? index,
+    DivTypedValue? value,
+    Expression<String>? variableName,
+  }) =>
+      DivActionArraySetValue(
+        index: index ?? this.index,
+        value: value ?? this.value,
+        variableName: variableName ?? this.variableName,
+      );
 
   static DivActionArraySetValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

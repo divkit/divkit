@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class UrlValue with EquatableMixin {
   const UrlValue({
@@ -17,6 +17,13 @@ class UrlValue with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  UrlValue copyWith({
+    Expression<Uri>? value,
+  }) =>
+      UrlValue(
+        value: value ?? this.value,
+      );
 
   static UrlValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

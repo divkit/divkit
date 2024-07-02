@@ -18,6 +18,12 @@ class EntityWithArrayOfExpressions with EquatableMixin {
         items,
       ];
 
+  EntityWithArrayOfExpressions copyWith({
+      Expression<List<String>>?  items,
+  }) => EntityWithArrayOfExpressions(
+      items: items ?? this.items,
+    );
+
   static EntityWithArrayOfExpressions? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

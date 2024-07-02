@@ -2,14 +2,14 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'array_variable.dart';
-import 'boolean_variable.dart';
-import 'color_variable.dart';
-import 'dict_variable.dart';
-import 'integer_variable.dart';
-import 'number_variable.dart';
-import 'string_variable.dart';
-import 'url_variable.dart';
+import 'package:divkit/src/generated_sources/array_variable.dart';
+import 'package:divkit/src/generated_sources/boolean_variable.dart';
+import 'package:divkit/src/generated_sources/color_variable.dart';
+import 'package:divkit/src/generated_sources/dict_variable.dart';
+import 'package:divkit/src/generated_sources/integer_variable.dart';
+import 'package:divkit/src/generated_sources/number_variable.dart';
+import 'package:divkit/src/generated_sources/string_variable.dart';
+import 'package:divkit/src/generated_sources/url_variable.dart';
 
 class DivVariable with EquatableMixin {
   final Object value;
@@ -28,7 +28,7 @@ class DivVariable with EquatableMixin {
     required T Function(StringVariable) stringVariable,
     required T Function(UrlVariable) urlVariable,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return arrayVariable(
           value as ArrayVariable,
@@ -77,7 +77,7 @@ class DivVariable with EquatableMixin {
     T Function(UrlVariable)? urlVariable,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (arrayVariable != null) {
           return arrayVariable(

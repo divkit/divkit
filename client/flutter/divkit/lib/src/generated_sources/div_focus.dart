@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action.dart';
-import 'div_background.dart';
-import 'div_border.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
 
 class DivFocus with EquatableMixin {
   const DivFocus({
@@ -34,6 +34,22 @@ class DivFocus with EquatableMixin {
         onBlur,
         onFocus,
       ];
+
+  DivFocus copyWith({
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    DivFocusNextFocusIds? Function()? nextFocusIds,
+    List<DivAction>? Function()? onBlur,
+    List<DivAction>? Function()? onFocus,
+  }) =>
+      DivFocus(
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        nextFocusIds:
+            nextFocusIds != null ? nextFocusIds.call() : this.nextFocusIds,
+        onBlur: onBlur != null ? onBlur.call() : this.onBlur,
+        onFocus: onFocus != null ? onFocus.call() : this.onFocus,
+      );
 
   static DivFocus? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -99,6 +115,21 @@ class DivFocusNextFocusIds with EquatableMixin {
         right,
         up,
       ];
+
+  DivFocusNextFocusIds copyWith({
+    Expression<String>? Function()? down,
+    Expression<String>? Function()? forward,
+    Expression<String>? Function()? left,
+    Expression<String>? Function()? right,
+    Expression<String>? Function()? up,
+  }) =>
+      DivFocusNextFocusIds(
+        down: down != null ? down.call() : this.down,
+        forward: forward != null ? forward.call() : this.forward,
+        left: left != null ? left.call() : this.left,
+        right: right != null ? right.call() : this.right,
+        up: up != null ? up.call() : this.up,
+      );
 
   static DivFocusNextFocusIds? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

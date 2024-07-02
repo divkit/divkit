@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_size_unit.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
 
 class DivStroke with EquatableMixin {
   const DivStroke({
@@ -16,7 +16,7 @@ class DivStroke with EquatableMixin {
   // default value: DivSizeUnit.dp
   final Expression<DivSizeUnit> unit;
   // constraint: number >= 0; default value: 1
-  final Expression<int> width;
+  final Expression<double> width;
 
   @override
   List<Object?> get props => [
@@ -24,6 +24,17 @@ class DivStroke with EquatableMixin {
         unit,
         width,
       ];
+
+  DivStroke copyWith({
+    Expression<Color>? color,
+    Expression<DivSizeUnit>? unit,
+    Expression<double>? width,
+  }) =>
+      DivStroke(
+        color: color ?? this.color,
+        unit: unit ?? this.unit,
+        width: width ?? this.width,
+      );
 
   static DivStroke? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -38,7 +49,7 @@ class DivStroke with EquatableMixin {
         parse: DivSizeUnit.fromJson,
         fallback: DivSizeUnit.dp,
       )!,
-      width: safeParseIntExpr(
+      width: safeParseDoubleExpr(
         json['width'],
         fallback: 1,
       )!,

@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_circle_shape.dart';
-import 'div_rounded_rectangle_shape.dart';
+import 'package:divkit/src/generated_sources/div_circle_shape.dart';
+import 'package:divkit/src/generated_sources/div_rounded_rectangle_shape.dart';
 
 class DivShape with EquatableMixin {
   final Object value;
@@ -16,7 +16,7 @@ class DivShape with EquatableMixin {
     required T Function(DivCircleShape) divCircleShape,
     required T Function(DivRoundedRectangleShape) divRoundedRectangleShape,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divCircleShape(
           value as DivCircleShape,
@@ -35,7 +35,7 @@ class DivShape with EquatableMixin {
     T Function(DivRoundedRectangleShape)? divRoundedRectangleShape,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divCircleShape != null) {
           return divCircleShape(

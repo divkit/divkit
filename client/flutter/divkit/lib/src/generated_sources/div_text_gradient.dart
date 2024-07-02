@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_linear_gradient.dart';
-import 'div_radial_gradient.dart';
+import 'package:divkit/src/generated_sources/div_linear_gradient.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient.dart';
 
 class DivTextGradient with EquatableMixin {
   final Object value;
@@ -16,7 +16,7 @@ class DivTextGradient with EquatableMixin {
     required T Function(DivLinearGradient) divLinearGradient,
     required T Function(DivRadialGradient) divRadialGradient,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divLinearGradient(
           value as DivLinearGradient,
@@ -35,7 +35,7 @@ class DivTextGradient with EquatableMixin {
     T Function(DivRadialGradient)? divRadialGradient,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divLinearGradient != null) {
           return divLinearGradient(

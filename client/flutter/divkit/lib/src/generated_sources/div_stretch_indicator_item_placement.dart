@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_fixed_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
 
 class DivStretchIndicatorItemPlacement with EquatableMixin {
   const DivStretchIndicatorItemPlacement({
@@ -24,6 +24,15 @@ class DivStretchIndicatorItemPlacement with EquatableMixin {
         itemSpacing,
         maxVisibleItems,
       ];
+
+  DivStretchIndicatorItemPlacement copyWith({
+    DivFixedSize? itemSpacing,
+    Expression<int>? maxVisibleItems,
+  }) =>
+      DivStretchIndicatorItemPlacement(
+        itemSpacing: itemSpacing ?? this.itemSpacing,
+        maxVisibleItems: maxVisibleItems ?? this.maxVisibleItems,
+      );
 
   static DivStretchIndicatorItemPlacement? fromJson(
       Map<String, dynamic>? json) {

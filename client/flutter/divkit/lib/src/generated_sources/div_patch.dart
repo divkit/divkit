@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
 
 class DivPatch with EquatableMixin {
   const DivPatch({
@@ -21,6 +21,15 @@ class DivPatch with EquatableMixin {
         changes,
         mode,
       ];
+
+  DivPatch copyWith({
+    List<DivPatchChange>? changes,
+    Expression<DivPatchMode>? mode,
+  }) =>
+      DivPatch(
+        changes: changes ?? this.changes,
+        mode: mode ?? this.mode,
+      );
 
   static DivPatch? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -105,6 +114,15 @@ class DivPatchChange with EquatableMixin {
         id,
         items,
       ];
+
+  DivPatchChange copyWith({
+    String? id,
+    List<Div>? Function()? items,
+  }) =>
+      DivPatchChange(
+        id: id ?? this.id,
+        items: items != null ? items.call() : this.items,
+      );
 
   static DivPatchChange? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

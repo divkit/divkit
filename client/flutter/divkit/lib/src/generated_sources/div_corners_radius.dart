@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivCornersRadius with EquatableMixin {
   const DivCornersRadius({
@@ -28,6 +28,20 @@ class DivCornersRadius with EquatableMixin {
         topLeft,
         topRight,
       ];
+
+  DivCornersRadius copyWith({
+    Expression<int>? Function()? bottomLeft,
+    Expression<int>? Function()? bottomRight,
+    Expression<int>? Function()? topLeft,
+    Expression<int>? Function()? topRight,
+  }) =>
+      DivCornersRadius(
+        bottomLeft: bottomLeft != null ? bottomLeft.call() : this.bottomLeft,
+        bottomRight:
+            bottomRight != null ? bottomRight.call() : this.bottomRight,
+        topLeft: topLeft != null ? topLeft.call() : this.topLeft,
+        topRight: topRight != null ? topRight.call() : this.topRight,
+      );
 
   static DivCornersRadius? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

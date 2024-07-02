@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_default_indicator_item_placement.dart';
-import 'div_stretch_indicator_item_placement.dart';
+import 'package:divkit/src/generated_sources/div_default_indicator_item_placement.dart';
+import 'package:divkit/src/generated_sources/div_stretch_indicator_item_placement.dart';
 
 class DivIndicatorItemPlacement with EquatableMixin {
   final Object value;
@@ -18,7 +18,7 @@ class DivIndicatorItemPlacement with EquatableMixin {
     required T Function(DivStretchIndicatorItemPlacement)
         divStretchIndicatorItemPlacement,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divDefaultIndicatorItemPlacement(
           value as DivDefaultIndicatorItemPlacement,
@@ -39,7 +39,7 @@ class DivIndicatorItemPlacement with EquatableMixin {
         divStretchIndicatorItemPlacement,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divDefaultIndicatorItemPlacement != null) {
           return divDefaultIndicatorItemPlacement(

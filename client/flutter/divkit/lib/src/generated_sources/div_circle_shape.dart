@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_fixed_size.dart';
-import 'div_stroke.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_stroke.dart';
 
 class DivCircleShape with EquatableMixin {
   const DivCircleShape({
@@ -29,6 +29,19 @@ class DivCircleShape with EquatableMixin {
         radius,
         stroke,
       ];
+
+  DivCircleShape copyWith({
+    Expression<Color>? Function()? backgroundColor,
+    DivFixedSize? radius,
+    DivStroke? Function()? stroke,
+  }) =>
+      DivCircleShape(
+        backgroundColor: backgroundColor != null
+            ? backgroundColor.call()
+            : this.backgroundColor,
+        radius: radius ?? this.radius,
+        stroke: stroke != null ? stroke.call() : this.stroke,
+      );
 
   static DivCircleShape? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

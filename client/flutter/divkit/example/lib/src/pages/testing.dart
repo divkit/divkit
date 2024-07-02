@@ -63,7 +63,12 @@ class _TestingPage extends State<TestingPage> {
                         child: SingleChildScrollView(
                           child: DivKitView(
                             showUnsupportedDivs: true,
-                            data: DefaultDivKitData.fromJson(data[index]),
+                            data: DefaultDivKitData.fromScheme(
+                              card: data[index].containsKey('card')
+                                  ? data[index]['card']
+                                  : data[index],
+                              templates: data[index]['templates'],
+                            ),
                           ),
                         ),
                       ),

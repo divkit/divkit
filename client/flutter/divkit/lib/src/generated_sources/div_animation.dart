@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_animation_interpolator.dart';
-import 'div_count.dart';
-import 'div_infinity_count.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_animation_interpolator.dart';
+import 'package:divkit/src/generated_sources/div_count.dart';
+import 'package:divkit/src/generated_sources/div_infinity_count.dart';
 
 class DivAnimation with EquatableMixin {
   const DivAnimation({
@@ -47,6 +47,27 @@ class DivAnimation with EquatableMixin {
         startDelay,
         startValue,
       ];
+
+  DivAnimation copyWith({
+    Expression<int>? duration,
+    Expression<double>? Function()? endValue,
+    Expression<DivAnimationInterpolator>? interpolator,
+    List<DivAnimation>? Function()? items,
+    Expression<DivAnimationName>? name,
+    DivCount? repeat,
+    Expression<int>? startDelay,
+    Expression<double>? Function()? startValue,
+  }) =>
+      DivAnimation(
+        duration: duration ?? this.duration,
+        endValue: endValue != null ? endValue.call() : this.endValue,
+        interpolator: interpolator ?? this.interpolator,
+        items: items != null ? items.call() : this.items,
+        name: name ?? this.name,
+        repeat: repeat ?? this.repeat,
+        startDelay: startDelay ?? this.startDelay,
+        startValue: startValue != null ? startValue.call() : this.startValue,
+      );
 
   static DivAnimation? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_fixed_size.dart';
-import 'div_match_parent_size.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivSize with EquatableMixin {
   final Object value;
@@ -18,7 +18,7 @@ class DivSize with EquatableMixin {
     required T Function(DivMatchParentSize) divMatchParentSize,
     required T Function(DivWrapContentSize) divWrapContentSize,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divFixedSize(
           value as DivFixedSize,
@@ -42,7 +42,7 @@ class DivSize with EquatableMixin {
     T Function(DivWrapContentSize)? divWrapContentSize,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divFixedSize != null) {
           return divFixedSize(

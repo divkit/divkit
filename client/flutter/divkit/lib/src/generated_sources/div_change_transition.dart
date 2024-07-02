@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_change_bounds_transition.dart';
-import 'div_change_set_transition.dart';
+import 'package:divkit/src/generated_sources/div_change_bounds_transition.dart';
+import 'package:divkit/src/generated_sources/div_change_set_transition.dart';
 
 class DivChangeTransition with EquatableMixin {
   final Object value;
@@ -16,7 +16,7 @@ class DivChangeTransition with EquatableMixin {
     required T Function(DivChangeBoundsTransition) divChangeBoundsTransition,
     required T Function(DivChangeSetTransition) divChangeSetTransition,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divChangeBoundsTransition(
           value as DivChangeBoundsTransition,
@@ -35,7 +35,7 @@ class DivChangeTransition with EquatableMixin {
     T Function(DivChangeSetTransition)? divChangeSetTransition,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divChangeBoundsTransition != null) {
           return divChangeBoundsTransition(

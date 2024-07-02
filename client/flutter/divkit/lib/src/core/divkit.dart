@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:divkit/src/core/action/handler/default_div_action_handler.dart';
+import 'package:divkit/src/core/data/data_provider.dart';
+import 'package:divkit/src/core/patch/patch_manager.dart';
 import 'package:divkit/src/core/protocol/div_action.dart';
 import 'package:divkit/src/core/protocol/div_context.dart';
 import 'package:divkit/src/core/protocol/div_custom.dart';
@@ -154,7 +156,6 @@ class _DivKitView extends StatefulWidget {
 }
 
 class _DivKitViewState extends State<_DivKitView> {
-  DivData? source;
   late DivLoggerContext loggerContext;
   late DivRootContext divRootContext;
   late DivTriggerManager triggerManager;
@@ -162,7 +163,7 @@ class _DivKitViewState extends State<_DivKitView> {
 
   DivContext get divContext => divRootContext;
 
-  DivData? init(DivKitData data) {
+  void init(DivKitData data) {
     final source = data.source;
 
     loggerContext = DefaultDivLoggerContext(source?.logId);
@@ -170,6 +171,7 @@ class _DivKitViewState extends State<_DivKitView> {
     if (source != null) {
       loggerUse(loggerContext).debug('Init DivKitView $hashCode');
       divRootContext = DivRootContext(buildContext: context)
+        ..dataProvider = DefaultDivDataProvider(source)
         ..variableManager = DefaultDivVariableManager(
           storage: DefaultDivVariableStorage(
             inheritedStorage: widget.variableStorage,
@@ -178,6 +180,9 @@ class _DivKitViewState extends State<_DivKitView> {
         )
         ..stateManager = DefaultDivStateManager()
         ..actionHandler = widget.actionHandler ?? DefaultDivActionHandler();
+
+      divRootContext.patchManager =
+          DefaultDivPatchManager(divRootContext.dataProvider!);
 
       final timerManager = DefaultDivTimerManager(divContext: divContext);
 
@@ -197,14 +202,12 @@ class _DivKitViewState extends State<_DivKitView> {
 
       customHandler = widget.customHandler ?? DivCustomHandler.none();
     }
-
-    return source;
   }
 
   @override
   void initState() {
     super.initState();
-    source = init(widget.data);
+    init(widget.data);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loggerUse(loggerContext).debug("First frame rendered $hashCode");
       widget.onInit?.call(divContext);
@@ -224,7 +227,7 @@ class _DivKitViewState extends State<_DivKitView> {
       loggerUse(loggerContext).debug(
         "Update DivKitView $hashCode [dataUpdated:$dataUpdated storageUpdated:$storageUpdated]",
       );
-      source = init(widget.data);
+      init(widget.data);
     }
 
     if (widget.actionHandler != oldWidget.actionHandler) {
@@ -240,7 +243,13 @@ class _DivKitViewState extends State<_DivKitView> {
           value: widget.cacheManager,
           child: DivKitProvider(
             value: customHandler,
-            child: DivCardStateWidget(source!),
+            child: StreamBuilder<DivData>(
+              initialData: divRootContext.dataProvider!.value,
+              stream: divRootContext.dataProvider!.stream,
+              builder: (context, snapshot) => DivCardStateWidget(
+                snapshot.requireData,
+              ),
+            ),
           ),
         ),
       );

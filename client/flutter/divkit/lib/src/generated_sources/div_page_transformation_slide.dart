@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_animation_interpolator.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_animation_interpolator.dart';
 
 class DivPageTransformationSlide with EquatableMixin {
   const DivPageTransformationSlide({
@@ -35,6 +35,21 @@ class DivPageTransformationSlide with EquatableMixin {
         previousPageAlpha,
         previousPageScale,
       ];
+
+  DivPageTransformationSlide copyWith({
+    Expression<DivAnimationInterpolator>? interpolator,
+    Expression<double>? nextPageAlpha,
+    Expression<double>? nextPageScale,
+    Expression<double>? previousPageAlpha,
+    Expression<double>? previousPageScale,
+  }) =>
+      DivPageTransformationSlide(
+        interpolator: interpolator ?? this.interpolator,
+        nextPageAlpha: nextPageAlpha ?? this.nextPageAlpha,
+        nextPageScale: nextPageScale ?? this.nextPageScale,
+        previousPageAlpha: previousPageAlpha ?? this.previousPageAlpha,
+        previousPageScale: previousPageScale ?? this.previousPageScale,
+      );
 
   static DivPageTransformationSlide? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

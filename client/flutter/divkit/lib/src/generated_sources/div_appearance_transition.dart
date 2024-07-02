@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_appearance_set_transition.dart';
-import 'div_fade_transition.dart';
-import 'div_scale_transition.dart';
-import 'div_slide_transition.dart';
+import 'package:divkit/src/generated_sources/div_appearance_set_transition.dart';
+import 'package:divkit/src/generated_sources/div_fade_transition.dart';
+import 'package:divkit/src/generated_sources/div_scale_transition.dart';
+import 'package:divkit/src/generated_sources/div_slide_transition.dart';
 
 class DivAppearanceTransition with EquatableMixin {
   final Object value;
@@ -20,7 +20,7 @@ class DivAppearanceTransition with EquatableMixin {
     required T Function(DivScaleTransition) divScaleTransition,
     required T Function(DivSlideTransition) divSlideTransition,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divAppearanceSetTransition(
           value as DivAppearanceSetTransition,
@@ -49,7 +49,7 @@ class DivAppearanceTransition with EquatableMixin {
     T Function(DivSlideTransition)? divSlideTransition,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divAppearanceSetTransition != null) {
           return divAppearanceSetTransition(

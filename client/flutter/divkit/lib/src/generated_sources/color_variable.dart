@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class ColorVariable with EquatableMixin {
   const ColorVariable({
@@ -21,6 +21,15 @@ class ColorVariable with EquatableMixin {
         name,
         value,
       ];
+
+  ColorVariable copyWith({
+    String? name,
+    Color? value,
+  }) =>
+      ColorVariable(
+        name: name ?? this.name,
+        value: value ?? this.value,
+      );
 
   static ColorVariable? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

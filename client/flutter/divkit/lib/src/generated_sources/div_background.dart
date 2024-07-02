@@ -2,11 +2,11 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_image_background.dart';
-import 'div_linear_gradient.dart';
-import 'div_nine_patch_background.dart';
-import 'div_radial_gradient.dart';
-import 'div_solid_background.dart';
+import 'package:divkit/src/generated_sources/div_image_background.dart';
+import 'package:divkit/src/generated_sources/div_linear_gradient.dart';
+import 'package:divkit/src/generated_sources/div_nine_patch_background.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient.dart';
+import 'package:divkit/src/generated_sources/div_solid_background.dart';
 
 class DivBackground with EquatableMixin {
   final Object value;
@@ -22,7 +22,7 @@ class DivBackground with EquatableMixin {
     required T Function(DivRadialGradient) divRadialGradient,
     required T Function(DivSolidBackground) divSolidBackground,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divImageBackground(
           value as DivImageBackground,
@@ -56,7 +56,7 @@ class DivBackground with EquatableMixin {
     T Function(DivSolidBackground)? divSolidBackground,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divImageBackground != null) {
           return divImageBackground(

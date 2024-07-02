@@ -19,6 +19,12 @@ class EntityWithArray with EquatableMixin {
         array,
       ];
 
+  EntityWithArray copyWith({
+      List<Entity>?  array,
+  }) => EntityWithArray(
+      array: array ?? this.array,
+    );
+
   static EntityWithArray? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

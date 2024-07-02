@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_shape_drawable.dart';
+import 'package:divkit/src/generated_sources/div_shape_drawable.dart';
 
 class DivDrawable with EquatableMixin {
   final Object value;
@@ -14,7 +14,7 @@ class DivDrawable with EquatableMixin {
   T map<T>({
     required T Function(DivShapeDrawable) divShapeDrawable,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divShapeDrawable(
           value as DivShapeDrawable,
@@ -28,7 +28,7 @@ class DivDrawable with EquatableMixin {
     T Function(DivShapeDrawable)? divShapeDrawable,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divShapeDrawable != null) {
           return divShapeDrawable(

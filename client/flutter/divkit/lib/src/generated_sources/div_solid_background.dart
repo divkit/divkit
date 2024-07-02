@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivSolidBackground with EquatableMixin {
   const DivSolidBackground({
@@ -17,6 +17,13 @@ class DivSolidBackground with EquatableMixin {
   List<Object?> get props => [
         color,
       ];
+
+  DivSolidBackground copyWith({
+    Expression<Color>? color,
+  }) =>
+      DivSolidBackground(
+        color: color ?? this.color,
+      );
 
   static DivSolidBackground? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

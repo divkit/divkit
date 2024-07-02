@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
 
 class DivDownloadCallbacks with EquatableMixin {
   const DivDownloadCallbacks({
@@ -20,6 +20,18 @@ class DivDownloadCallbacks with EquatableMixin {
         onFailActions,
         onSuccessActions,
       ];
+
+  DivDownloadCallbacks copyWith({
+    List<DivAction>? Function()? onFailActions,
+    List<DivAction>? Function()? onSuccessActions,
+  }) =>
+      DivDownloadCallbacks(
+        onFailActions:
+            onFailActions != null ? onFailActions.call() : this.onFailActions,
+        onSuccessActions: onSuccessActions != null
+            ? onSuccessActions.call()
+            : this.onSuccessActions,
+      );
 
   static DivDownloadCallbacks? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

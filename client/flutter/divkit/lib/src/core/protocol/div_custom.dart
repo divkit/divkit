@@ -4,6 +4,8 @@ import 'package:divkit/src/core/protocol/div_context.dart';
 
 /// Handles specific div-custom. Creates Flutter Widget from custom model
 abstract class DivCustomHandler {
+  const DivCustomHandler();
+
   /// Returns TRUE if custom widget can be handled.
   /// [type] — DivCustom.customType, custom alias to handle.
   /// [context] — DivContext to use variables, actions, timers and access stateManager

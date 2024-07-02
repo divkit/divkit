@@ -2,32 +2,32 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_appearance_transition.dart';
-import 'div_aspect.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_focus.dart';
-import 'div_match_parent_size.dart';
-import 'div_size.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_variable.dart';
-import 'div_video_scale.dart';
-import 'div_video_source.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_aspect.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_video_scale.dart';
+import 'package:divkit/src/generated_sources/div_video_source.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivVideo with EquatableMixin implements DivBase {
   const DivVideo({
@@ -233,6 +233,122 @@ class DivVideo with EquatableMixin implements DivBase {
         visibilityActions,
         width,
       ];
+
+  DivVideo copyWith({
+    DivAccessibility? accessibility,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    DivAspect? Function()? aspect,
+    Expression<bool>? autostart,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    List<DivAction>? Function()? bufferingActions,
+    Expression<int>? Function()? columnSpan,
+    List<DivDisappearAction>? Function()? disappearActions,
+    String? Function()? elapsedTimeVariable,
+    List<DivAction>? Function()? endActions,
+    List<DivExtension>? Function()? extensions,
+    List<DivAction>? Function()? fatalActions,
+    DivFocus? Function()? focus,
+    DivSize? height,
+    String? Function()? id,
+    DivEdgeInsets? margins,
+    Expression<bool>? muted,
+    DivEdgeInsets? paddings,
+    List<DivAction>? Function()? pauseActions,
+    Map<String, dynamic>? Function()? playerSettingsPayload,
+    Expression<bool>? preloadRequired,
+    Expression<String>? Function()? preview,
+    Expression<bool>? repeatable,
+    List<DivAction>? Function()? resumeActions,
+    Expression<int>? Function()? rowSpan,
+    Expression<DivVideoScale>? scale,
+    List<DivAction>? Function()? selectedActions,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    List<DivVideoSource>? videoSources,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivVideo(
+        accessibility: accessibility ?? this.accessibility,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        aspect: aspect != null ? aspect.call() : this.aspect,
+        autostart: autostart ?? this.autostart,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        bufferingActions: bufferingActions != null
+            ? bufferingActions.call()
+            : this.bufferingActions,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        elapsedTimeVariable: elapsedTimeVariable != null
+            ? elapsedTimeVariable.call()
+            : this.elapsedTimeVariable,
+        endActions: endActions != null ? endActions.call() : this.endActions,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        fatalActions:
+            fatalActions != null ? fatalActions.call() : this.fatalActions,
+        focus: focus != null ? focus.call() : this.focus,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        margins: margins ?? this.margins,
+        muted: muted ?? this.muted,
+        paddings: paddings ?? this.paddings,
+        pauseActions:
+            pauseActions != null ? pauseActions.call() : this.pauseActions,
+        playerSettingsPayload: playerSettingsPayload != null
+            ? playerSettingsPayload.call()
+            : this.playerSettingsPayload,
+        preloadRequired: preloadRequired ?? this.preloadRequired,
+        preview: preview != null ? preview.call() : this.preview,
+        repeatable: repeatable ?? this.repeatable,
+        resumeActions:
+            resumeActions != null ? resumeActions.call() : this.resumeActions,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        scale: scale ?? this.scale,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        videoSources: videoSources ?? this.videoSources,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivVideo? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

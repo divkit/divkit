@@ -2,31 +2,31 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_focus.dart';
-import 'div_font_weight.dart';
-import 'div_match_parent_size.dart';
-import 'div_size.dart';
-import 'div_size_unit.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_variable.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_font_weight.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivSelect with EquatableMixin implements DivBase {
   const DivSelect({
@@ -46,7 +46,7 @@ class DivSelect with EquatableMixin implements DivBase {
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
     this.fontWeightValue,
     this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
-    this.hintColor = const ValueExpression(const Color(0x73000000)),
+    this.hintColor = const ValueExpression(Color(0x73000000)),
     this.hintText,
     this.id,
     this.letterSpacing = const ValueExpression(0),
@@ -56,7 +56,7 @@ class DivSelect with EquatableMixin implements DivBase {
     this.paddings = const DivEdgeInsets(),
     this.rowSpan,
     this.selectedActions,
-    this.textColor = const ValueExpression(const Color(0xFF000000)),
+    this.textColor = const ValueExpression(Color(0xFF000000)),
     this.tooltips,
     this.transform = const DivTransform(),
     this.transitionChange,
@@ -220,6 +220,109 @@ class DivSelect with EquatableMixin implements DivBase {
         visibilityActions,
         width,
       ];
+
+  DivSelect copyWith({
+    DivAccessibility? accessibility,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    List<DivDisappearAction>? Function()? disappearActions,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    Expression<String>? Function()? fontFamily,
+    Expression<int>? fontSize,
+    Expression<DivSizeUnit>? fontSizeUnit,
+    Expression<DivFontWeight>? fontWeight,
+    Expression<int>? Function()? fontWeightValue,
+    DivSize? height,
+    Expression<Color>? hintColor,
+    Expression<String>? Function()? hintText,
+    String? Function()? id,
+    Expression<double>? letterSpacing,
+    Expression<int>? Function()? lineHeight,
+    DivEdgeInsets? margins,
+    List<DivSelectOption>? options,
+    DivEdgeInsets? paddings,
+    Expression<int>? Function()? rowSpan,
+    List<DivAction>? Function()? selectedActions,
+    Expression<Color>? textColor,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    String? valueVariable,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivSelect(
+        accessibility: accessibility ?? this.accessibility,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        fontFamily: fontFamily != null ? fontFamily.call() : this.fontFamily,
+        fontSize: fontSize ?? this.fontSize,
+        fontSizeUnit: fontSizeUnit ?? this.fontSizeUnit,
+        fontWeight: fontWeight ?? this.fontWeight,
+        fontWeightValue: fontWeightValue != null
+            ? fontWeightValue.call()
+            : this.fontWeightValue,
+        height: height ?? this.height,
+        hintColor: hintColor ?? this.hintColor,
+        hintText: hintText != null ? hintText.call() : this.hintText,
+        id: id != null ? id.call() : this.id,
+        letterSpacing: letterSpacing ?? this.letterSpacing,
+        lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
+        margins: margins ?? this.margins,
+        options: options ?? this.options,
+        paddings: paddings ?? this.paddings,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        textColor: textColor ?? this.textColor,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        valueVariable: valueVariable ?? this.valueVariable,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivSelect? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -419,6 +522,15 @@ class DivSelectOption with EquatableMixin {
         text,
         value,
       ];
+
+  DivSelectOption copyWith({
+    Expression<String>? Function()? text,
+    Expression<String>? value,
+  }) =>
+      DivSelectOption(
+        text: text != null ? text.call() : this.text,
+        value: value ?? this.value,
+      );
 
   static DivSelectOption? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

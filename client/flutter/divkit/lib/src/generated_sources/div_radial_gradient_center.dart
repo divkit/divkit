@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_radial_gradient_fixed_center.dart';
-import 'div_radial_gradient_relative_center.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient_fixed_center.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient_relative_center.dart';
 
 class DivRadialGradientCenter with EquatableMixin {
   final Object value;
@@ -18,7 +18,7 @@ class DivRadialGradientCenter with EquatableMixin {
     required T Function(DivRadialGradientRelativeCenter)
         divRadialGradientRelativeCenter,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divRadialGradientFixedCenter(
           value as DivRadialGradientFixedCenter,
@@ -38,7 +38,7 @@ class DivRadialGradientCenter with EquatableMixin {
         divRadialGradientRelativeCenter,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divRadialGradientFixedCenter != null) {
           return divRadialGradientFixedCenter(

@@ -18,6 +18,12 @@ class EntityWithArrayWithTransform with EquatableMixin {
         array,
       ];
 
+  EntityWithArrayWithTransform copyWith({
+      Expression<List<Color>>?  array,
+  }) => EntityWithArrayWithTransform(
+      array: array ?? this.array,
+    );
+
   static EntityWithArrayWithTransform? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

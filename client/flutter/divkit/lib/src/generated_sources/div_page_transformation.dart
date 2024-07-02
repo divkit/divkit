@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_page_transformation_overlap.dart';
-import 'div_page_transformation_slide.dart';
+import 'package:divkit/src/generated_sources/div_page_transformation_overlap.dart';
+import 'package:divkit/src/generated_sources/div_page_transformation_slide.dart';
 
 class DivPageTransformation with EquatableMixin {
   final Object value;
@@ -17,7 +17,7 @@ class DivPageTransformation with EquatableMixin {
         divPageTransformationOverlap,
     required T Function(DivPageTransformationSlide) divPageTransformationSlide,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divPageTransformationOverlap(
           value as DivPageTransformationOverlap,
@@ -36,7 +36,7 @@ class DivPageTransformation with EquatableMixin {
     T Function(DivPageTransformationSlide)? divPageTransformationSlide,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divPageTransformationOverlap != null) {
           return divPageTransformationOverlap(

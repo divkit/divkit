@@ -2,14 +2,14 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_action_array_insert_value.dart';
-import 'div_action_array_remove_value.dart';
-import 'div_action_array_set_value.dart';
-import 'div_action_clear_focus.dart';
-import 'div_action_copy_to_clipboard.dart';
-import 'div_action_dict_set_value.dart';
-import 'div_action_focus_element.dart';
-import 'div_action_set_variable.dart';
+import 'package:divkit/src/generated_sources/div_action_array_insert_value.dart';
+import 'package:divkit/src/generated_sources/div_action_array_remove_value.dart';
+import 'package:divkit/src/generated_sources/div_action_array_set_value.dart';
+import 'package:divkit/src/generated_sources/div_action_clear_focus.dart';
+import 'package:divkit/src/generated_sources/div_action_copy_to_clipboard.dart';
+import 'package:divkit/src/generated_sources/div_action_dict_set_value.dart';
+import 'package:divkit/src/generated_sources/div_action_focus_element.dart';
+import 'package:divkit/src/generated_sources/div_action_set_variable.dart';
 
 class DivActionTyped with EquatableMixin {
   final Object value;
@@ -28,7 +28,7 @@ class DivActionTyped with EquatableMixin {
     required T Function(DivActionFocusElement) divActionFocusElement,
     required T Function(DivActionSetVariable) divActionSetVariable,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divActionArrayInsertValue(
           value as DivActionArrayInsertValue,
@@ -77,7 +77,7 @@ class DivActionTyped with EquatableMixin {
     T Function(DivActionSetVariable)? divActionSetVariable,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divActionArrayInsertValue != null) {
           return divActionArrayInsertValue(

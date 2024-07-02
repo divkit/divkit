@@ -1,102 +1,104 @@
 {
-  "log_id": "transition/fade_full_dst",
-  "transition_animation_selector": "data_change",
-  "states": [
-    {
-      "state_id": 0,
-      "div": {
-        "type": "container",
-        "height": {
-          "type": "fixed",
-          "value": 320
-        },
-        "orientation": "vertical",
-        "items": [
-          {
-            "type": "text",
-            "width": {
-              "type": "match_parent"
-            },
-            "height": {
-              "type": "wrap_content"
-            },
-            "paddings": {
-              "left": 16,
-              "top": 16,
-              "right": 16,
-              "bottom": 16
-            },
-            "margins": {
-              "left": 16,
-              "top": 16,
-              "right": 16,
-              "bottom": 16
-            },
-            "border": {
-              "corner_radius": 8
-            },
-            "background": [
-              {
-                "type": "solid",
-                "color": "#0E000000"
-              }
-            ],
-            "font_size": 16,
-            "font_weight": "medium",
-            "text_alignment_vertical": "center",
-            "text_alignment_horizontal": "center",
-            "text_color": "#000000",
-            "alpha": 1.0,
-            "text": "Hide",
-            "actions": [
-              {
-                "log_id": "perform_forward_transition",
-                "url": "div-demo-action://set_data?path=animations/transition/fade_part_src.json"
-              }
-            ]
+  "card": {
+    "log_id": "transition/fade_full_dst",
+    "transition_animation_selector": "data_change",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 320
           },
-          {
-            "type": "text",
-            "text": " ",
-            "id": "lenna",
-            "width": {
-              "type": "fixed",
-              "value": 160
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#000000",
+              "alpha": 1.0,
+              "text": "Hide",
+              "actions": [
+                {
+                  "log_id": "perform_forward_transition",
+                  "url": "div-demo-action://set_data?path=animations/transition/fade_part_src.json"
+                }
+              ]
             },
-            "height": {
-              "type": "fixed",
-              "value": 160
-            },
-            "margins": {
-              "left": 16,
-              "top": 16,
-              "right": 16,
-              "bottom": 16
-            },
-            "border": {
-              "corner_radius": 12
-            },
-            "background": [
-              {
-                "type": "solid",
-                "color": "#FFCC00"
+            {
+              "type": "text",
+              "text": " ",
+              "id": "lenna",
+              "width": {
+                "type": "fixed",
+                "value": 160
+              },
+              "height": {
+                "type": "fixed",
+                "value": 160
+              },
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 12
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFCC00"
+                }
+              ],
+              "alignment_vertical": "center",
+              "alignment_horizontal": "center",
+              "transition_in": {
+                "type": "fade",
+                "alpha": 0.5,
+                "duration": 500
+              },
+              "transition_out": {
+                "type": "fade",
+                "alpha": 0.5,
+                "duration": 500
               }
-            ],
-            "alignment_vertical": "center",
-            "alignment_horizontal": "center",
-            "transition_in": {
-              "type": "fade",
-              "alpha": 0.5,
-              "duration": 500
-            },
-            "transition_out": {
-              "type": "fade",
-              "alpha": 0.5,
-              "duration": 500
             }
-          }
-        ]
+          ]
+        }
       }
-    }
-  ]
+    ]
+  }
 }

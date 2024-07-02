@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivVideoSource with EquatableMixin {
   const DivVideoSource({
@@ -29,6 +29,19 @@ class DivVideoSource with EquatableMixin {
         resolution,
         url,
       ];
+
+  DivVideoSource copyWith({
+    Expression<int>? Function()? bitrate,
+    Expression<String>? mimeType,
+    DivVideoSourceResolution? Function()? resolution,
+    Expression<Uri>? url,
+  }) =>
+      DivVideoSource(
+        bitrate: bitrate != null ? bitrate.call() : this.bitrate,
+        mimeType: mimeType ?? this.mimeType,
+        resolution: resolution != null ? resolution.call() : this.resolution,
+        url: url ?? this.url,
+      );
 
   static DivVideoSource? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -66,6 +79,15 @@ class DivVideoSourceResolution with EquatableMixin {
         height,
         width,
       ];
+
+  DivVideoSourceResolution copyWith({
+    Expression<int>? height,
+    Expression<int>? width,
+  }) =>
+      DivVideoSourceResolution(
+        height: height ?? this.height,
+        width: width ?? this.width,
+      );
 
   static DivVideoSourceResolution? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

@@ -152,50 +152,27 @@
                           }
                         },
                         {
-                          "items": [
+                          "type": "bubble_text",
+                          "text": "testing",
+                          "height": {
+                            "type": "match_parent"
+                          },
+                          "background": [
                             {
-                              "width": {
-                                "type": "match_parent"
-                              },
-                              "type": "image",
-                              "aspect": {
-                                "ratio": 1
-                              },
-                              "image_url": "divkit-asset://application/images/circle.png"
-                            },
-                            {
-                              "type": "bubble_text",
-                              "text": "testing",
-                              "width": {
-                                "type": "match_parent"
-                              },
-                              "height": {
-                                "type": "match_parent"
-                              }
+                              "color": "#CC2FD5",
+                              "type": "solid"
                             }
                           ],
-                          "margins": {
-                            "left": 8
-                          },
-                          "height": {
-                            "type": "wrap_content"
-                          },
-                          "alignment_vertical": "center",
                           "actions": [
                             {
                               "log_id": "open_regression",
                               "url": "div-action://open_screen?activity=regression"
                             }
                           ],
-                          "action_animation": {
-                            "name": "scale",
-                            "start_value": 1.0,
-                            "end_value": 0.95,
-                            "duration": 300,
-                            "interpolator": "ease_in_out"
-                          },
-                          "orientation": "overlap",
-                          "type": "container"
+                          "margins": {
+                            "left": 8,
+                            "bottom": 8
+                          }
                         }
                       ]
                     }

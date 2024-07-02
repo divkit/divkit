@@ -39,6 +39,12 @@ class _PlaygroundPage extends State<PlaygroundPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xffFFDCAE),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         title: const Text(
           'Playground',
           style: TextStyle(
@@ -46,6 +52,15 @@ class _PlaygroundPage extends State<PlaygroundPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.clear),
+            onPressed: () {
+              variableStorage
+                  .update(DivVariable(name: demoInputVariable, value: ''));
+            },
+          ),
+        ],
       ),
       backgroundColor: const Color(0xffFFDCAE),
       body: Column(
@@ -54,7 +69,7 @@ class _PlaygroundPage extends State<PlaygroundPage> {
             const Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                'Enter the link, JSON or scan QR-code to see your result',
+                'Enter the link, JSON or scan QR-code to see your result!',
                 style: TextStyle(fontSize: 18),
               ),
             ),

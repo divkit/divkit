@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_input_mask_base.dart';
-import 'div_currency_input_mask.dart';
-import 'div_fixed_length_input_mask.dart';
-import 'div_phone_input_mask.dart';
+import 'package:divkit/src/generated_sources/div_input_mask_base.dart';
+import 'package:divkit/src/generated_sources/div_currency_input_mask.dart';
+import 'package:divkit/src/generated_sources/div_fixed_length_input_mask.dart';
+import 'package:divkit/src/generated_sources/div_phone_input_mask.dart';
 
 class DivInputMask with EquatableMixin {
   final DivInputMaskBase value;
@@ -19,7 +19,7 @@ class DivInputMask with EquatableMixin {
     required T Function(DivFixedLengthInputMask) divFixedLengthInputMask,
     required T Function(DivPhoneInputMask) divPhoneInputMask,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divCurrencyInputMask(
           value as DivCurrencyInputMask,
@@ -43,7 +43,7 @@ class DivInputMask with EquatableMixin {
     T Function(DivPhoneInputMask)? divPhoneInputMask,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divCurrencyInputMask != null) {
           return divCurrencyInputMask(

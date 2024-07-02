@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import '../utils/parsing_utils.dart';
-import 'div_action_typed.dart';
-import 'div_download_callbacks.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action_typed.dart';
+import 'package:divkit/src/generated_sources/div_download_callbacks.dart';
 
 abstract class DivSightAction {
   DivDownloadCallbacks? get downloadCallbacks;

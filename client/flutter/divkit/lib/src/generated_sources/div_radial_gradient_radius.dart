@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_fixed_size.dart';
-import 'div_radial_gradient_relative_radius.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient_relative_radius.dart';
 
 class DivRadialGradientRadius with EquatableMixin {
   final Object value;
@@ -17,7 +17,7 @@ class DivRadialGradientRadius with EquatableMixin {
     required T Function(DivRadialGradientRelativeRadius)
         divRadialGradientRelativeRadius,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divFixedSize(
           value as DivFixedSize,
@@ -37,7 +37,7 @@ class DivRadialGradientRadius with EquatableMixin {
         divRadialGradientRelativeRadius,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divFixedSize != null) {
           return divFixedSize(

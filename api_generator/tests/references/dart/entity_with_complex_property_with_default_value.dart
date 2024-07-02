@@ -18,6 +18,12 @@ class EntityWithComplexPropertyWithDefaultValue with EquatableMixin {
         property,
       ];
 
+  EntityWithComplexPropertyWithDefaultValue copyWith({
+      EntityWithComplexPropertyWithDefaultValueProperty?  property,
+  }) => EntityWithComplexPropertyWithDefaultValue(
+      property: property ?? this.property,
+    );
+
   static EntityWithComplexPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -40,6 +46,12 @@ class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  EntityWithComplexPropertyWithDefaultValueProperty copyWith({
+      Expression<String>?  value,
+  }) => EntityWithComplexPropertyWithDefaultValueProperty(
+      value: value ?? this.value,
+    );
 
   static EntityWithComplexPropertyWithDefaultValueProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

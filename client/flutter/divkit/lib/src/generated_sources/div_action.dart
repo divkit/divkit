@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action_typed.dart';
-import 'div_download_callbacks.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action_typed.dart';
+import 'package:divkit/src/generated_sources/div_download_callbacks.dart';
 
 class DivAction with EquatableMixin {
   const DivAction({
@@ -53,6 +53,33 @@ class DivAction with EquatableMixin {
         typed,
         url,
       ];
+
+  DivAction copyWith({
+    DivDownloadCallbacks? Function()? downloadCallbacks,
+    Expression<bool>? isEnabled,
+    Expression<String>? logId,
+    Expression<Uri>? Function()? logUrl,
+    List<DivActionMenuItem>? Function()? menuItems,
+    Map<String, dynamic>? Function()? payload,
+    Expression<Uri>? Function()? referer,
+    Expression<DivActionTarget>? Function()? target,
+    DivActionTyped? Function()? typed,
+    Expression<Uri>? Function()? url,
+  }) =>
+      DivAction(
+        downloadCallbacks: downloadCallbacks != null
+            ? downloadCallbacks.call()
+            : this.downloadCallbacks,
+        isEnabled: isEnabled ?? this.isEnabled,
+        logId: logId ?? this.logId,
+        logUrl: logUrl != null ? logUrl.call() : this.logUrl,
+        menuItems: menuItems != null ? menuItems.call() : this.menuItems,
+        payload: payload != null ? payload.call() : this.payload,
+        referer: referer != null ? referer.call() : this.referer,
+        target: target != null ? target.call() : this.target,
+        typed: typed != null ? typed.call() : this.typed,
+        url: url != null ? url.call() : this.url,
+      );
 
   static DivAction? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -112,6 +139,17 @@ class DivActionMenuItem with EquatableMixin {
         actions,
         text,
       ];
+
+  DivActionMenuItem copyWith({
+    DivAction? Function()? action,
+    List<DivAction>? Function()? actions,
+    Expression<String>? text,
+  }) =>
+      DivActionMenuItem(
+        action: action != null ? action.call() : this.action,
+        actions: actions != null ? actions.call() : this.actions,
+        text: text ?? this.text,
+      );
 
   static DivActionMenuItem? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

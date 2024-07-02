@@ -7,12 +7,14 @@ class DivAction with EquatableMixin {
   final bool enabled;
   final DivActionTyped? typedAction;
   final Map<String, dynamic>? payload;
+  final DivDownloadCallbacks? downloadCallbacks;
 
   const DivAction({
     required this.enabled,
     this.url,
     this.typedAction,
     this.payload,
+    this.downloadCallbacks,
   });
 
   @override
@@ -21,6 +23,7 @@ class DivAction with EquatableMixin {
         enabled,
         typedAction,
         payload,
+        downloadCallbacks,
       ];
 
   Future<void> execute(DivContext context) async {
@@ -33,4 +36,21 @@ class DivAction with EquatableMixin {
       await handler.handleAction(context, this);
     }
   }
+}
+
+class DivDownloadCallbacks with EquatableMixin {
+  const DivDownloadCallbacks({
+    this.onFailActions,
+    this.onSuccessActions,
+  });
+
+  final List<DivAction>? onFailActions;
+
+  final List<DivAction>? onSuccessActions;
+
+  @override
+  List<Object?> get props => [
+        onFailActions,
+        onSuccessActions,
+      ];
 }

@@ -1,4 +1,6 @@
 import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/protocol/div_data_provider.dart';
+import 'package:divkit/src/core/protocol/div_patch.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:flutter/widgets.dart';
 
@@ -13,11 +15,15 @@ abstract class DivContext {
 
   DivTimerManager get timerManager;
 
+  DivPatchManager get patchManager;
+
   FocusNode? getFocusNode(String divId);
 }
 
 class DivRootContext extends DivContext {
   BuildContext? buildContext;
+
+  DivDataProvider? dataProvider;
 
   DivVariableManager? _variableManager;
 
@@ -47,6 +53,13 @@ class DivRootContext extends DivContext {
 
   set timerManager(DivTimerManager value) => _timerManager = value;
 
+  DivPatchManager? _patchManager;
+
+  @override
+  DivPatchManager get patchManager => _patchManager!;
+
+  set patchManager(DivPatchManager value) => _patchManager = value;
+
   DivRootContext({
     this.buildContext,
   });
@@ -63,12 +76,14 @@ class DivRootContext extends DivContext {
     _stateManager?.dispose();
     await _timerManager?.dispose();
     await _variableManager?.dispose();
+    await dataProvider?.dispose();
 
     buildContext = null;
     _stateManager = null;
     _timerManager = null;
     _variableManager = null;
     _actionHandler = null;
+    _patchManager = null;
 
     // Clear the expression resolver.
     await exprResolver.clearVariables();

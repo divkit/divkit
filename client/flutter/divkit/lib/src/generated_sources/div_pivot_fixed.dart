@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_size_unit.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
 
 class DivPivotFixed with EquatableMixin {
   const DivPivotFixed({
@@ -22,6 +22,15 @@ class DivPivotFixed with EquatableMixin {
         unit,
         value,
       ];
+
+  DivPivotFixed copyWith({
+    Expression<DivSizeUnit>? unit,
+    Expression<int>? Function()? value,
+  }) =>
+      DivPivotFixed(
+        unit: unit ?? this.unit,
+        value: value != null ? value.call() : this.value,
+      );
 
   static DivPivotFixed? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

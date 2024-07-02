@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_fixed_count.dart';
-import 'div_infinity_count.dart';
+import 'package:divkit/src/generated_sources/div_fixed_count.dart';
+import 'package:divkit/src/generated_sources/div_infinity_count.dart';
 
 class DivCount with EquatableMixin {
   final Object value;
@@ -16,7 +16,7 @@ class DivCount with EquatableMixin {
     required T Function(DivFixedCount) divFixedCount,
     required T Function(DivInfinityCount) divInfinityCount,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divFixedCount(
           value as DivFixedCount,
@@ -35,7 +35,7 @@ class DivCount with EquatableMixin {
     T Function(DivInfinityCount)? divInfinityCount,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divFixedCount != null) {
           return divFixedCount(

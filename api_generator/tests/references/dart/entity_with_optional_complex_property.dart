@@ -18,6 +18,12 @@ class EntityWithOptionalComplexProperty with EquatableMixin {
         property,
       ];
 
+  EntityWithOptionalComplexProperty copyWith({
+      EntityWithOptionalComplexPropertyProperty? Function()?  property,
+  }) => EntityWithOptionalComplexProperty(
+      property: property != null ? property.call() : this.property,
+    );
+
   static EntityWithOptionalComplexProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -40,6 +46,12 @@ class EntityWithOptionalComplexPropertyProperty with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  EntityWithOptionalComplexPropertyProperty copyWith({
+      Expression<Uri>?  value,
+  }) => EntityWithOptionalComplexPropertyProperty(
+      value: value ?? this.value,
+    );
 
   static EntityWithOptionalComplexPropertyProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_size_unit.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
 
 class DivFixedSize with EquatableMixin {
   const DivFixedSize({
@@ -22,6 +22,15 @@ class DivFixedSize with EquatableMixin {
         unit,
         value,
       ];
+
+  DivFixedSize copyWith({
+    Expression<DivSizeUnit>? unit,
+    Expression<int>? value,
+  }) =>
+      DivFixedSize(
+        unit: unit ?? this.unit,
+        value: value ?? this.value,
+      );
 
   static DivFixedSize? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

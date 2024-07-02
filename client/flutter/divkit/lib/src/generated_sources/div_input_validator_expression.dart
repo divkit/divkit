@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivInputValidatorExpression with EquatableMixin {
   const DivInputValidatorExpression({
@@ -29,6 +29,19 @@ class DivInputValidatorExpression with EquatableMixin {
         labelId,
         variable,
       ];
+
+  DivInputValidatorExpression copyWith({
+    Expression<bool>? allowEmpty,
+    Expression<bool>? condition,
+    Expression<String>? labelId,
+    String? variable,
+  }) =>
+      DivInputValidatorExpression(
+        allowEmpty: allowEmpty ?? this.allowEmpty,
+        condition: condition ?? this.condition,
+        labelId: labelId ?? this.labelId,
+        variable: variable ?? this.variable,
+      );
 
   static DivInputValidatorExpression? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

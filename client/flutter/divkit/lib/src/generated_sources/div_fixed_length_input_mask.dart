@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_input_mask_base.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_input_mask_base.dart';
 
 class DivFixedLengthInputMask with EquatableMixin implements DivInputMaskBase {
   const DivFixedLengthInputMask({
@@ -31,6 +31,19 @@ class DivFixedLengthInputMask with EquatableMixin implements DivInputMaskBase {
         patternElements,
         rawTextVariable,
       ];
+
+  DivFixedLengthInputMask copyWith({
+    Expression<bool>? alwaysVisible,
+    Expression<String>? pattern,
+    List<DivFixedLengthInputMaskPatternElement>? patternElements,
+    String? rawTextVariable,
+  }) =>
+      DivFixedLengthInputMask(
+        alwaysVisible: alwaysVisible ?? this.alwaysVisible,
+        pattern: pattern ?? this.pattern,
+        patternElements: patternElements ?? this.patternElements,
+        rawTextVariable: rawTextVariable ?? this.rawTextVariable,
+      );
 
   static DivFixedLengthInputMask? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -78,6 +91,17 @@ class DivFixedLengthInputMaskPatternElement with EquatableMixin {
         placeholder,
         regex,
       ];
+
+  DivFixedLengthInputMaskPatternElement copyWith({
+    Expression<String>? key,
+    Expression<String>? placeholder,
+    Expression<String>? Function()? regex,
+  }) =>
+      DivFixedLengthInputMaskPatternElement(
+        key: key ?? this.key,
+        placeholder: placeholder ?? this.placeholder,
+        regex: regex != null ? regex.call() : this.regex,
+      );
 
   static DivFixedLengthInputMaskPatternElement? fromJson(
       Map<String, dynamic>? json) {

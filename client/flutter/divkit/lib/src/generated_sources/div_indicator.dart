@@ -2,39 +2,38 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_fixed_size.dart';
-import 'div_focus.dart';
-import 'div_indicator_item_placement.dart';
-import 'div_match_parent_size.dart';
-import 'div_rounded_rectangle_shape.dart';
-import 'div_rounded_rectangle_shape.dart';
-import 'div_shape.dart';
-import 'div_size.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_variable.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_indicator_item_placement.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_rounded_rectangle_shape.dart';
+import 'package:divkit/src/generated_sources/div_shape.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivIndicator with EquatableMixin implements DivBase {
   const DivIndicator({
     this.accessibility = const DivAccessibility(),
-    this.activeItemColor = const ValueExpression(const Color(0xFFFFDC60)),
+    this.activeItemColor = const ValueExpression(Color(0xFFFFDC60)),
     this.activeItemSize = const ValueExpression(1.3),
     this.activeShape,
     this.alignmentHorizontal,
@@ -49,7 +48,7 @@ class DivIndicator with EquatableMixin implements DivBase {
     this.focus,
     this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
-    this.inactiveItemColor = const ValueExpression(const Color(0x33919CB5)),
+    this.inactiveItemColor = const ValueExpression(Color(0x33919CB5)),
     this.inactiveMinimumShape,
     this.inactiveShape,
     this.itemsPlacement,
@@ -226,6 +225,113 @@ class DivIndicator with EquatableMixin implements DivBase {
         visibilityActions,
         width,
       ];
+
+  DivIndicator copyWith({
+    DivAccessibility? accessibility,
+    Expression<Color>? activeItemColor,
+    Expression<double>? activeItemSize,
+    DivRoundedRectangleShape? Function()? activeShape,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    Expression<DivIndicatorAnimation>? animation,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    List<DivDisappearAction>? Function()? disappearActions,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    DivSize? height,
+    String? Function()? id,
+    Expression<Color>? inactiveItemColor,
+    DivRoundedRectangleShape? Function()? inactiveMinimumShape,
+    DivRoundedRectangleShape? Function()? inactiveShape,
+    DivIndicatorItemPlacement? Function()? itemsPlacement,
+    DivEdgeInsets? margins,
+    Expression<double>? minimumItemSize,
+    DivEdgeInsets? paddings,
+    String? Function()? pagerId,
+    Expression<int>? Function()? rowSpan,
+    List<DivAction>? Function()? selectedActions,
+    DivShape? shape,
+    DivFixedSize? spaceBetweenCenters,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivIndicator(
+        accessibility: accessibility ?? this.accessibility,
+        activeItemColor: activeItemColor ?? this.activeItemColor,
+        activeItemSize: activeItemSize ?? this.activeItemSize,
+        activeShape:
+            activeShape != null ? activeShape.call() : this.activeShape,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        animation: animation ?? this.animation,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        inactiveItemColor: inactiveItemColor ?? this.inactiveItemColor,
+        inactiveMinimumShape: inactiveMinimumShape != null
+            ? inactiveMinimumShape.call()
+            : this.inactiveMinimumShape,
+        inactiveShape:
+            inactiveShape != null ? inactiveShape.call() : this.inactiveShape,
+        itemsPlacement: itemsPlacement != null
+            ? itemsPlacement.call()
+            : this.itemsPlacement,
+        margins: margins ?? this.margins,
+        minimumItemSize: minimumItemSize ?? this.minimumItemSize,
+        paddings: paddings ?? this.paddings,
+        pagerId: pagerId != null ? pagerId.call() : this.pagerId,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        shape: shape ?? this.shape,
+        spaceBetweenCenters: spaceBetweenCenters ?? this.spaceBetweenCenters,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivIndicator? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

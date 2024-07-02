@@ -118,6 +118,29 @@ class DartGenerator(Generator):
             result += '  @override'
             result += '  List<Object?> get props => [];'
 
+        # CopyWith
+        if len(entity.instance_properties) != 0:
+            result += EMPTY
+            result += f'  {full_name} copyWith(' + '{'
+            for prop in entity.instance_properties:
+                type_decl = prop.type_declaration
+                if type_decl.endswith('?'):
+                    result += f"      {type_decl} Function()?  {utils.lower_camel_case(prop.name)},"
+                else:
+                    result += f"      {type_decl}?  {utils.lower_camel_case(prop.name)},"
+            result += '  }) => ' + f'{full_name}('
+            for prop in entity.instance_properties:
+                type_decl = prop.type_declaration
+                name_decl = utils.lower_camel_case(prop.name)
+                if type_decl.endswith('?'):
+                    result += f"      {name_decl}: {name_decl} != null ? {name_decl}.call() : this.{name_decl},"
+                else:
+                    result += f"      {name_decl}: {name_decl} ?? this.{name_decl},"
+            result += '    );'
+        else:
+            result += EMPTY
+            result += f'  {full_name}? copyWith() => this;'
+
         # Serializable declaration
         if len(entity.instance_properties) != 0:
             result += EMPTY

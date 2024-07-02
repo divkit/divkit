@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action_copy_to_clipboard_content.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action_copy_to_clipboard_content.dart';
 
 class DivActionCopyToClipboard with EquatableMixin {
   const DivActionCopyToClipboard({
@@ -18,6 +18,13 @@ class DivActionCopyToClipboard with EquatableMixin {
   List<Object?> get props => [
         content,
       ];
+
+  DivActionCopyToClipboard copyWith({
+    DivActionCopyToClipboardContent? content,
+  }) =>
+      DivActionCopyToClipboard(
+        content: content ?? this.content,
+      );
 
   static DivActionCopyToClipboard? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

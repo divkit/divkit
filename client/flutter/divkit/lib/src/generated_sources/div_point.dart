@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_dimension.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_dimension.dart';
 
 class DivPoint with EquatableMixin {
   const DivPoint({
@@ -20,6 +20,15 @@ class DivPoint with EquatableMixin {
         x,
         y,
       ];
+
+  DivPoint copyWith({
+    DivDimension? x,
+    DivDimension? y,
+  }) =>
+      DivPoint(
+        x: x ?? this.x,
+        y: y ?? this.y,
+      );
 
   static DivPoint? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

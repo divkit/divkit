@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivRadialGradientRelativeCenter with EquatableMixin {
   const DivRadialGradientRelativeCenter({
@@ -17,6 +17,13 @@ class DivRadialGradientRelativeCenter with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  DivRadialGradientRelativeCenter copyWith({
+    Expression<double>? value,
+  }) =>
+      DivRadialGradientRelativeCenter(
+        value: value ?? this.value,
+      );
 
   static DivRadialGradientRelativeCenter? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

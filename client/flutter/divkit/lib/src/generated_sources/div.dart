@@ -2,23 +2,23 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_base.dart';
-import 'div_container.dart';
-import 'div_custom.dart';
-import 'div_gallery.dart';
-import 'div_gif_image.dart';
-import 'div_grid.dart';
-import 'div_image.dart';
-import 'div_indicator.dart';
-import 'div_input.dart';
-import 'div_pager.dart';
-import 'div_select.dart';
-import 'div_separator.dart';
-import 'div_slider.dart';
-import 'div_state.dart';
-import 'div_tabs.dart';
-import 'div_text.dart';
-import 'div_video.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_container.dart';
+import 'package:divkit/src/generated_sources/div_custom.dart';
+import 'package:divkit/src/generated_sources/div_gallery.dart';
+import 'package:divkit/src/generated_sources/div_gif_image.dart';
+import 'package:divkit/src/generated_sources/div_grid.dart';
+import 'package:divkit/src/generated_sources/div_image.dart';
+import 'package:divkit/src/generated_sources/div_indicator.dart';
+import 'package:divkit/src/generated_sources/div_input.dart';
+import 'package:divkit/src/generated_sources/div_pager.dart';
+import 'package:divkit/src/generated_sources/div_select.dart';
+import 'package:divkit/src/generated_sources/div_separator.dart';
+import 'package:divkit/src/generated_sources/div_slider.dart';
+import 'package:divkit/src/generated_sources/div_state.dart';
+import 'package:divkit/src/generated_sources/div_tabs.dart';
+import 'package:divkit/src/generated_sources/div_text.dart';
+import 'package:divkit/src/generated_sources/div_video.dart';
 
 class Div with EquatableMixin {
   final DivBase value;
@@ -45,7 +45,7 @@ class Div with EquatableMixin {
     required T Function(DivText) divText,
     required T Function(DivVideo) divVideo,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divContainer(
           value as DivContainer,
@@ -134,7 +134,7 @@ class Div with EquatableMixin {
     T Function(DivVideo)? divVideo,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divContainer != null) {
           return divContainer(

@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_corners_radius.dart';
-import 'div_shadow.dart';
-import 'div_stroke.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_corners_radius.dart';
+import 'package:divkit/src/generated_sources/div_shadow.dart';
+import 'package:divkit/src/generated_sources/div_stroke.dart';
 
 class DivBorder with EquatableMixin {
   const DivBorder({
@@ -35,6 +35,23 @@ class DivBorder with EquatableMixin {
         shadow,
         stroke,
       ];
+
+  DivBorder copyWith({
+    Expression<int>? Function()? cornerRadius,
+    DivCornersRadius? Function()? cornersRadius,
+    Expression<bool>? hasShadow,
+    DivShadow? Function()? shadow,
+    DivStroke? Function()? stroke,
+  }) =>
+      DivBorder(
+        cornerRadius:
+            cornerRadius != null ? cornerRadius.call() : this.cornerRadius,
+        cornersRadius:
+            cornersRadius != null ? cornersRadius.call() : this.cornersRadius,
+        hasShadow: hasShadow ?? this.hasShadow,
+        shadow: shadow != null ? shadow.call() : this.shadow,
+        stroke: stroke != null ? stroke.call() : this.stroke,
+      );
 
   static DivBorder? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

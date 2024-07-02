@@ -12,6 +12,8 @@ class WithDefault with EquatableMixin {
   @override
   List<Object?> get props => [];
 
+  WithDefault? copyWith() => this;
+
   static WithDefault? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_solid_background.dart';
+import 'package:divkit/src/generated_sources/div_solid_background.dart';
 
 class DivTextRangeBackground with EquatableMixin {
   final Object value;
@@ -14,7 +14,7 @@ class DivTextRangeBackground with EquatableMixin {
   T map<T>({
     required T Function(DivSolidBackground) divSolidBackground,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divSolidBackground(
           value as DivSolidBackground,
@@ -28,7 +28,7 @@ class DivTextRangeBackground with EquatableMixin {
     T Function(DivSolidBackground)? divSolidBackground,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divSolidBackground != null) {
           return divSolidBackground(

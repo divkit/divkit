@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_fixed_size.dart';
-import 'div_stroke.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_stroke.dart';
 
 class DivRoundedRectangleShape with EquatableMixin {
   const DivRoundedRectangleShape({
@@ -41,6 +41,23 @@ class DivRoundedRectangleShape with EquatableMixin {
         itemWidth,
         stroke,
       ];
+
+  DivRoundedRectangleShape copyWith({
+    Expression<Color>? Function()? backgroundColor,
+    DivFixedSize? cornerRadius,
+    DivFixedSize? itemHeight,
+    DivFixedSize? itemWidth,
+    DivStroke? Function()? stroke,
+  }) =>
+      DivRoundedRectangleShape(
+        backgroundColor: backgroundColor != null
+            ? backgroundColor.call()
+            : this.backgroundColor,
+        cornerRadius: cornerRadius ?? this.cornerRadius,
+        itemHeight: itemHeight ?? this.itemHeight,
+        itemWidth: itemWidth ?? this.itemWidth,
+        stroke: stroke != null ? stroke.call() : this.stroke,
+      );
 
   static DivRoundedRectangleShape? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

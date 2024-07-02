@@ -2,33 +2,33 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_disappear_action.dart';
-import 'div_drawable.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_focus.dart';
-import 'div_font_weight.dart';
-import 'div_match_parent_size.dart';
-import 'div_point.dart';
-import 'div_size.dart';
-import 'div_size_unit.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_variable.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_drawable.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_font_weight.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_point.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivSlider with EquatableMixin implements DivBase {
   const DivSlider({
@@ -231,6 +231,126 @@ class DivSlider with EquatableMixin implements DivBase {
         width,
       ];
 
+  DivSlider copyWith({
+    DivAccessibility? accessibility,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    List<DivDisappearAction>? Function()? disappearActions,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    DivSize? height,
+    String? Function()? id,
+    DivEdgeInsets? margins,
+    Expression<int>? maxValue,
+    Expression<int>? minValue,
+    DivEdgeInsets? paddings,
+    List<DivSliderRange>? Function()? ranges,
+    Expression<int>? Function()? rowSpan,
+    DivAccessibility? secondaryValueAccessibility,
+    List<DivAction>? Function()? selectedActions,
+    DivDrawable? Function()? thumbSecondaryStyle,
+    DivSliderTextStyle? Function()? thumbSecondaryTextStyle,
+    String? Function()? thumbSecondaryValueVariable,
+    DivDrawable? thumbStyle,
+    DivSliderTextStyle? Function()? thumbTextStyle,
+    String? Function()? thumbValueVariable,
+    DivDrawable? Function()? tickMarkActiveStyle,
+    DivDrawable? Function()? tickMarkInactiveStyle,
+    List<DivTooltip>? Function()? tooltips,
+    DivDrawable? trackActiveStyle,
+    DivDrawable? trackInactiveStyle,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivSlider(
+        accessibility: accessibility ?? this.accessibility,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        margins: margins ?? this.margins,
+        maxValue: maxValue ?? this.maxValue,
+        minValue: minValue ?? this.minValue,
+        paddings: paddings ?? this.paddings,
+        ranges: ranges != null ? ranges.call() : this.ranges,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        secondaryValueAccessibility:
+            secondaryValueAccessibility ?? this.secondaryValueAccessibility,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        thumbSecondaryStyle: thumbSecondaryStyle != null
+            ? thumbSecondaryStyle.call()
+            : this.thumbSecondaryStyle,
+        thumbSecondaryTextStyle: thumbSecondaryTextStyle != null
+            ? thumbSecondaryTextStyle.call()
+            : this.thumbSecondaryTextStyle,
+        thumbSecondaryValueVariable: thumbSecondaryValueVariable != null
+            ? thumbSecondaryValueVariable.call()
+            : this.thumbSecondaryValueVariable,
+        thumbStyle: thumbStyle ?? this.thumbStyle,
+        thumbTextStyle: thumbTextStyle != null
+            ? thumbTextStyle.call()
+            : this.thumbTextStyle,
+        thumbValueVariable: thumbValueVariable != null
+            ? thumbValueVariable.call()
+            : this.thumbValueVariable,
+        tickMarkActiveStyle: tickMarkActiveStyle != null
+            ? tickMarkActiveStyle.call()
+            : this.tickMarkActiveStyle,
+        tickMarkInactiveStyle: tickMarkInactiveStyle != null
+            ? tickMarkInactiveStyle.call()
+            : this.tickMarkInactiveStyle,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        trackActiveStyle: trackActiveStyle ?? this.trackActiveStyle,
+        trackInactiveStyle: trackInactiveStyle ?? this.trackInactiveStyle,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
+
   static DivSlider? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -422,7 +542,7 @@ class DivSliderTextStyle with EquatableMixin {
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
     this.fontWeightValue,
     this.offset,
-    this.textColor = const ValueExpression(const Color(0xFF000000)),
+    this.textColor = const ValueExpression(Color(0xFF000000)),
   });
 
   // constraint: number >= 0
@@ -447,6 +567,25 @@ class DivSliderTextStyle with EquatableMixin {
         offset,
         textColor,
       ];
+
+  DivSliderTextStyle copyWith({
+    Expression<int>? fontSize,
+    Expression<DivSizeUnit>? fontSizeUnit,
+    Expression<DivFontWeight>? fontWeight,
+    Expression<int>? Function()? fontWeightValue,
+    DivPoint? Function()? offset,
+    Expression<Color>? textColor,
+  }) =>
+      DivSliderTextStyle(
+        fontSize: fontSize ?? this.fontSize,
+        fontSizeUnit: fontSizeUnit ?? this.fontSizeUnit,
+        fontWeight: fontWeight ?? this.fontWeight,
+        fontWeightValue: fontWeightValue != null
+            ? fontWeightValue.call()
+            : this.fontWeightValue,
+        offset: offset != null ? offset.call() : this.offset,
+        textColor: textColor ?? this.textColor,
+      );
 
   static DivSliderTextStyle? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -507,6 +646,25 @@ class DivSliderRange with EquatableMixin {
         trackActiveStyle,
         trackInactiveStyle,
       ];
+
+  DivSliderRange copyWith({
+    Expression<int>? Function()? end,
+    DivEdgeInsets? margins,
+    Expression<int>? Function()? start,
+    DivDrawable? Function()? trackActiveStyle,
+    DivDrawable? Function()? trackInactiveStyle,
+  }) =>
+      DivSliderRange(
+        end: end != null ? end.call() : this.end,
+        margins: margins ?? this.margins,
+        start: start != null ? start.call() : this.start,
+        trackActiveStyle: trackActiveStyle != null
+            ? trackActiveStyle.call()
+            : this.trackActiveStyle,
+        trackInactiveStyle: trackInactiveStyle != null
+            ? trackInactiveStyle.call()
+            : this.trackInactiveStyle,
+      );
 
   static DivSliderRange? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

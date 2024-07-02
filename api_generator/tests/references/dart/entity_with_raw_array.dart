@@ -18,6 +18,12 @@ class EntityWithRawArray with EquatableMixin {
         array,
       ];
 
+  EntityWithRawArray copyWith({
+      Expression<List<dynamic>>?  array,
+  }) => EntityWithRawArray(
+      array: array ?? this.array,
+    );
+
   static EntityWithRawArray? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

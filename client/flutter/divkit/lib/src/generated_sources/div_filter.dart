@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_blur.dart';
-import 'div_filter_rtl_mirror.dart';
+import 'package:divkit/src/generated_sources/div_blur.dart';
+import 'package:divkit/src/generated_sources/div_filter_rtl_mirror.dart';
 
 class DivFilter with EquatableMixin {
   final Object value;
@@ -16,7 +16,7 @@ class DivFilter with EquatableMixin {
     required T Function(DivBlur) divBlur,
     required T Function(DivFilterRtlMirror) divFilterRtlMirror,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         return divBlur(
           value as DivBlur,
@@ -35,7 +35,7 @@ class DivFilter with EquatableMixin {
     T Function(DivFilterRtlMirror)? divFilterRtlMirror,
     required T Function() orElse,
   }) {
-    switch (_index!) {
+    switch (_index) {
       case 0:
         if (divBlur != null) {
           return divBlur(

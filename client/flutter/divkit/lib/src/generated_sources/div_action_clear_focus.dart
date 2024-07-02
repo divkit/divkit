@@ -2,8 +2,6 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-
 class DivActionClearFocus with EquatableMixin {
   const DivActionClearFocus();
 
@@ -11,6 +9,8 @@ class DivActionClearFocus with EquatableMixin {
 
   @override
   List<Object?> get props => [];
+
+  DivActionClearFocus? copyWith() => this;
 
   static DivActionClearFocus? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

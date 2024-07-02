@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_input_mask_base.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_input_mask_base.dart';
 
 class DivPhoneInputMask with EquatableMixin implements DivInputMaskBase {
   const DivPhoneInputMask({
@@ -19,6 +19,13 @@ class DivPhoneInputMask with EquatableMixin implements DivInputMaskBase {
   List<Object?> get props => [
         rawTextVariable,
       ];
+
+  DivPhoneInputMask copyWith({
+    String? rawTextVariable,
+  }) =>
+      DivPhoneInputMask(
+        rawTextVariable: rawTextVariable ?? this.rawTextVariable,
+      );
 
   static DivPhoneInputMask? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

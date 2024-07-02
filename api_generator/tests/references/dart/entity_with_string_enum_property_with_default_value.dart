@@ -18,6 +18,12 @@ class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
         value,
       ];
 
+  EntityWithStringEnumPropertyWithDefaultValue copyWith({
+      Expression<EntityWithStringEnumPropertyWithDefaultValueValue>?  value,
+  }) => EntityWithStringEnumPropertyWithDefaultValue(
+      value: value ?? this.value,
+    );
+
   static EntityWithStringEnumPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
