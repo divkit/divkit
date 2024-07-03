@@ -1,11 +1,21 @@
 package com.yandex.div.core.expression.variables
 
+import android.app.Activity
 import android.os.Looper
+import com.yandex.div.DivDataTag
+import com.yandex.div.core.Div2Context
+import com.yandex.div.core.DivConfiguration
+import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.view2.Div2View
+import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
+import com.yandex.div2.DivAction
+import com.yandex.div2.DivData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -14,7 +24,9 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import java.lang.AssertionError
 
 /**
  * Tests for [DivVariableController].
@@ -23,6 +35,8 @@ import org.robolectric.RobolectricTestRunner
 class DivVariableControllerTest {
     private val internalVariableController = DivVariableController()
     private val underTest = DivVariableController(internalVariableController)
+    private val parsingEnvironment = DivParsingEnvironment({ e -> throw AssertionError(e) })
+    private val divJson = JSONObject("{\"log_id\":\"div2_sample_card\",\"states\":[{\"state_id\":0,\"div\":{\"type\":\"container\",\"items\":[]}}]}")
 
     @Test
     fun `putting variables with same name will update value of original one`() {
@@ -175,5 +189,50 @@ class DivVariableControllerTest {
 
         verify(observer).invoke(firstVar.name)
         verify(observer).invoke(secondVar.name)
+    }
+
+    @Test
+    fun `nested variables are accessible via Div2View`() {
+        val internalVariable = Variable.StringVariable("str_internal", "internal_value")
+        internalVariableController.declare(internalVariable)
+
+        val div2View = createDiv2View()
+
+        val result = evaluateExpression(div2View, "@{${internalVariable.name}}")
+        Assert.assertEquals(internalVariable.getValue(), result)
+    }
+
+    @Test
+    fun `original variables are accessible via Div2View`() {
+        val variable = Variable.StringVariable("str_original", "original_value")
+        underTest.declare(variable)
+
+        val div2View = createDiv2View()
+
+        val result = evaluateExpression(div2View, "@{${variable.name}}")
+        Assert.assertEquals(variable.getValue(), result)
+    }
+
+    private fun evaluateExpression(div2View: Div2View, expression: String): Any {
+        val actionWithInternalVariable = DivAction(
+            parsingEnvironment,
+            JSONObject("{\"url\":\"link\",\"log_id\":\"$expression\"}"))
+        return actionWithInternalVariable.logId.evaluate(div2View.expressionResolver)
+    }
+
+    private fun createDiv2View(): Div2View {
+        val divImageLoader = mock<DivImageLoader>()
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val div2Context = Div2Context(
+            activity,
+            DivConfiguration.Builder(divImageLoader)
+                .divVariableController(underTest)
+                .build()
+        )
+
+        val view = Div2View(div2Context)
+        val data = DivData(parsingEnvironment, divJson)
+        view.setData(data, DivDataTag("test"))
+        return view
     }
 }
