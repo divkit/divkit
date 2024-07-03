@@ -258,7 +258,7 @@ private class BackgroundDrawer(
 
         if (border?.stroke == null) return
         val rect = RectF()
-        val halfWidth = border.stroke!!.widthPx(resolver, metrics) / 2f
+        val halfWidth = border.stroke!!.widthPx(resolver, metrics)/2
 
         rect.set( max(0f, start + halfWidth),
             max(0f, top + halfWidth),
