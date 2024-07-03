@@ -130,6 +130,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     if let elapsedTime = model.elapsedTime?.value,
        elapsedTime != previousTime {
       player?.seek(to: CMTime(value: elapsedTime))
+      previousTime = elapsedTime
     }
   }
 
