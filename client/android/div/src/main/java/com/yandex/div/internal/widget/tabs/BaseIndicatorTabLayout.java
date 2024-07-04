@@ -231,7 +231,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
         setHorizontalScrollBarEnabled(false);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TabLayout,
-                                                      defStyleAttr, R.style.Widget_Div_BaseIndicatorTabLayout);
+                                                      defStyleAttr, R.style.Div_Tabs_IndicatorTabLayout);
 
         TypedArray b = context.obtainStyledAttributes(attrs, R.styleable.BaseIndicatorTabLayout, 0, 0);
         int indicatorPaddingTop = b.getDimensionPixelSize(R.styleable.BaseIndicatorTabLayout_tabIndicatorPaddingTop, 0);
@@ -266,7 +266,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
                                                     mTabPaddingBottom);
 
         mTabTextAppearance = a.getResourceId(R.styleable.TabLayout_tabTextAppearance,
-                                             R.style.TextAppearance_Div_Tab);
+                                             R.style.Div_Tabs_IndicatorTabLayout_Text);
 
         // Text colors/sizes come from the text appearance first
         final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
