@@ -460,7 +460,7 @@ class DivVideo with EquatableMixin implements DivBase {
                 )!),
       ),
       playerSettingsPayload: safeParseMap(
-        json,
+        json['player_settings_payload'],
       ),
       preloadRequired: safeParseBoolExpr(
         json['preload_required'],

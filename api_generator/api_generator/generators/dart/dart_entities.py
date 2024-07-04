@@ -190,7 +190,7 @@ class DartProperty(Property):
         elif isinstance(prop_type, (String, StaticString)):
             return f"safeParseStr{expr}(json['{self.name}']?.toString(),{fallback}){required}"
         elif isinstance(prop_type, Dictionary):
-            return f"safeParseMap{expr}(json,{fallback}){required}"
+            return f"safeParseMap{expr}(json['{self.name}'],{fallback}){required}"
         elif isinstance(prop_type, RawArray):
             return f"safeParseList{expr}(json['{self.name}'],{fallback}){required}"
         elif isinstance(prop_type, Url):
@@ -202,7 +202,6 @@ class DartProperty(Property):
         elif prop_type.is_list():
             list_item_type = prop_type.get_list_inner_class()
             list_item_decl = list_item_type.declaration()
-
             if isinstance(list_item_type, Int):
                 strategy = "safeParseInt(v,)!"
             elif isinstance(list_item_type, Color):

@@ -1,3 +1,7 @@
+## 0.2.1-pre
+
+* Fix object parsing in DTO
+
 ## 0.2.0
 
 * Correct interpretation of dict in variables context

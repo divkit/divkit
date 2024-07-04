@@ -38,7 +38,7 @@ class DivExtension with EquatableMixin {
         json['id']?.toString(),
       )!,
       params: safeParseMap(
-        json,
+        json['params'],
       ),
     );
   }

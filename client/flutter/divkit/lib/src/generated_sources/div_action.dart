@@ -105,7 +105,7 @@ class DivAction with EquatableMixin {
                 )!),
       ),
       payload: safeParseMap(
-        json,
+        json['payload'],
       ),
       referer: safeParseUriExpr(json['referer']),
       target: safeParseStrEnumExpr(

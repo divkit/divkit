@@ -42,7 +42,7 @@ extension PassDivVariable on dto.DivVariable {
         ),
         dictVariable: (data) => DivVariable(
           name: data.name,
-          value: data.value['value'],
+          value: data.value,
           safeParse: safeParseMap,
         ),
       );

@@ -40,7 +40,7 @@ class DictVariable with EquatableMixin {
         json['name']?.toString(),
       )!,
       value: safeParseMap(
-        json,
+        json['value'],
       )!,
     );
   }

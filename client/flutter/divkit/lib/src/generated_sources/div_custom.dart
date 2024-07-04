@@ -304,7 +304,7 @@ class DivCustom with EquatableMixin implements DivBase {
         json['column_span'],
       ),
       customProps: safeParseMap(
-        json,
+        json['custom_props'],
       ),
       customType: safeParseStr(
         json['custom_type']?.toString(),

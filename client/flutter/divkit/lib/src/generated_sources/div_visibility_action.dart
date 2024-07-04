@@ -110,7 +110,7 @@ class DivVisibilityAction with EquatableMixin implements DivSightAction {
         fallback: 1,
       )!,
       payload: safeParseMap(
-        json,
+        json['payload'],
       ),
       referer: safeParseUriExpr(json['referer']),
       typed: safeParseObj(

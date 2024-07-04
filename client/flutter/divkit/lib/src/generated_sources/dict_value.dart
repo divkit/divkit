@@ -31,7 +31,7 @@ class DictValue with EquatableMixin {
     }
     return DictValue(
       value: safeParseMap(
-        json,
+        json['value'],
       )!,
     );
   }
