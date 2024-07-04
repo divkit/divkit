@@ -706,8 +706,10 @@ internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Floa
 internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
     for (i in 0 until children.count()) {
         children.elementAt(i).let { child ->
-            canvas.withTranslation(child.x, child.y) {
-                (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
+            if (child.visibility == View.VISIBLE) {
+                canvas.withTranslation(child.x, child.y) {
+                    (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
+                }
             }
         }
     }
