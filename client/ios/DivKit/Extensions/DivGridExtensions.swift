@@ -3,11 +3,15 @@ import LayoutKit
 
 extension DivGrid: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
-      to: { try makeBaseBlock(context: context) },
-      context: context,
-      actionsHolder: self
-    )
+    let path = context.parentPath + (id ?? DivGrid.type)
+    let gridContext = context.modifying(parentPath: path)
+    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
+      try applyBaseProperties(
+        to: { try makeBaseBlock(context: gridContext) },
+        context: gridContext,
+        actionsHolder: self
+      )
+    }
   }
 
   var nonNilItems: [Div] {
@@ -15,40 +19,34 @@ extension DivGrid: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let gridPath = context.parentPath + DivGrid.type
-    let gridContext = context.modifying(parentPath: gridPath)
-    let gridItemsContext = gridContext.modifying(errorsStorage: DivErrorsStorage(errors: []))
-    let gridItems = nonNilItems.enumerated().compactMap { tuple in
-      let itemContext = gridItemsContext.modifying(
-        parentPath: gridItemsContext.parentPath + tuple.offset
-      )
+    let path = context.parentPath
+    let itemsContext = context.modifying(errorsStorage: DivErrorsStorage(errors: []))
+    let items = nonNilItems.enumerated().compactMap { tuple in
+      let itemContext = itemsContext.modifying(parentPath: path + tuple.offset)
       do {
-        return try tuple.element.value.makeGridItem(
-          context: itemContext
-        )
+        return try tuple.element.value.makeGridItem(context: itemContext)
       } catch {
         itemContext.addError(error: error)
         return nil
       }
     }
-    if nonNilItems.count != gridItems.count {
+
+    if nonNilItems.count != items.count {
       throw DivBlockModelingError(
         "Unable to form grid",
-        path: gridPath,
-        causes: gridItemsContext.errorsStorage.errors
+        path: path,
+        causes: itemsContext.errorsStorage.errors
       )
     }
 
-    let expressionResolver = gridContext.expressionResolver
-    return try modifyError({ DivBlockModelingError($0.message, path: gridPath) }) {
-      try GridBlock(
-        widthTrait: resolveContentWidthTrait(gridContext),
-        heightTrait: resolveContentHeightTrait(gridContext),
-        contentAlignment: resolveContentAlignment(expressionResolver),
-        items: gridItems,
-        columnCount: resolveColumnCount(expressionResolver) ?? 0
-      )
-    }
+    let expressionResolver = context.expressionResolver
+    return try GridBlock(
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context),
+      contentAlignment: resolveContentAlignment(expressionResolver),
+      items: items,
+      columnCount: resolveColumnCount(expressionResolver) ?? 0
+    )
   }
 
   private func resolveContentAlignment(

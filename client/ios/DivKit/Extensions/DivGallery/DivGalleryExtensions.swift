@@ -6,40 +6,37 @@ import LayoutKit
 
 extension DivGallery: DivBlockModeling, DivGalleryProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
-      to: { try makeBaseBlock(context: context) },
-      context: context,
-      actionsHolder: nil,
-      applyPaddings: false
-    )
+    let path = context.parentPath + (id ?? DivGallery.type)
+    let galleryContext = context.modifying(parentPath: path)
+    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
+      try applyBaseProperties(
+        to: { try makeBaseBlock(context: galleryContext) },
+        context: galleryContext,
+        actionsHolder: nil,
+        applyPaddings: false
+      )
+    }
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let galleryPath = context.parentPath + (id ?? DivGallery.type)
     let expressionResolver = context.expressionResolver
-    let galleryContext = context.modifying(parentPath: galleryPath)
-    let defaultAlignment = resolveCrossContentAlignment(expressionResolver)
-      .blockAlignment
     let itemSpacing = resolveItemSpacing(expressionResolver)
-
-    return try modifyError({ DivBlockModelingError($0.message, path: galleryPath) }) {
-      let model = try makeGalleryModel(
-        context: galleryContext,
-        direction: resolveOrientation(expressionResolver).direction,
-        spacing: CGFloat(itemSpacing),
-        crossSpacing: CGFloat(resolveCrossSpacing(expressionResolver) ?? itemSpacing),
-        defaultAlignment: defaultAlignment,
-        scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,
-        columnCount: resolveColumnCount(expressionResolver),
-        scrollbar: resolveScrollbar(expressionResolver).blockScrollbar
-      )
-      return try GalleryBlock(
-        model: model,
-        state: getState(context: galleryContext, itemsCount: model.items.count),
-        widthTrait: resolveWidthTrait(context),
-        heightTrait: resolveHeightTrait(context)
-      )
-    }
+    let model = try makeGalleryModel(
+      context: context,
+      direction: resolveOrientation(expressionResolver).direction,
+      spacing: CGFloat(itemSpacing),
+      crossSpacing: CGFloat(resolveCrossSpacing(expressionResolver) ?? itemSpacing),
+      defaultAlignment: resolveCrossContentAlignment(expressionResolver).blockAlignment,
+      scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,
+      columnCount: resolveColumnCount(expressionResolver),
+      scrollbar: resolveScrollbar(expressionResolver).blockScrollbar
+    )
+    return try GalleryBlock(
+      model: model,
+      state: getState(context: context, itemsCount: model.items.count),
+      widthTrait: resolveWidthTrait(context),
+      heightTrait: resolveHeightTrait(context)
+    )
   }
 
   private func getState(
