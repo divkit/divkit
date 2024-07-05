@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 import type { Node } from './ast';
 import type { VariableValue } from './variable';
 import type { Store } from '../../typings/store';
@@ -9,6 +10,7 @@ import { LogError, wrapError } from '../utils/wrapError';
 import { parseColor } from '../utils/correctColor';
 import { MAX_INT32, MIN_INT32 } from './const';
 import { simpleUnescapeString } from './simpleUnescapeString';
+import { cacheGet, cacheSet } from './parserCache';
 
 class ExpressionBinding {
     private readonly ast: Node;
@@ -143,9 +145,10 @@ function prepareVarsObj<T>(
 
                 if (process.env.ENABLE_EXPRESSIONS || process.env.ENABLE_EXPRESSIONS === undefined) {
                     try {
-                        const ast = parse(jsonProp, {
+                        const ast = cacheGet(jsonProp) || parse(jsonProp, {
                             startRule: 'JsonStringContents'
                         });
+                        cacheSet(jsonProp, ast);
                         const propVars = gatherVarsFromAst(ast);
                         store.vars.push(...propVars);
 
