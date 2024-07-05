@@ -10,7 +10,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: nil,
-      options: .noPaddings
+      applyPaddings: false
     )
   }
 

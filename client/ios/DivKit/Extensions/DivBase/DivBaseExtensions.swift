@@ -9,8 +9,8 @@ extension DivBase {
     to block: () throws -> Block,
     context: DivBlockModelingContext,
     actionsHolder: DivActionsHolder?,
-    options: BasePropertiesOptions = [],
     customAccessibilityParams: CustomAccessibilityParams = .default,
+    applyPaddings: Bool = true,
     clipToBounds: Bool = true
   ) throws -> Block {
     let path = context.parentPath
@@ -49,10 +49,10 @@ extension DivBase {
       block = extensionHandler.applyBeforeBaseProperties(to: block, div: self, context: context)
     }
 
-    let internalInsets = options.contains(.noPaddings)
-      ? .zero
-      : paddings.resolve(context)
-    block = block.addingEdgeInsets(internalInsets, clipsToBounds: clipToBounds)
+    block = block.addingEdgeInsets(
+      applyPaddings ? paddings.resolve(context): .zero,
+      clipsToBounds: clipToBounds
+    )
 
     let externalInsets = margins.resolve(context)
     if visibility == .invisible {
