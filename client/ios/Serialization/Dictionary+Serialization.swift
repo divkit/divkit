@@ -5,21 +5,6 @@ import CommonCorePublic
 
 // MARK: Utils
 
-extension DeserializationResult {
-  fileprivate func toThrows() throws -> T {
-    switch self {
-    case let .success(value):
-      return value
-    case let .partialSuccess(value, _):
-      return value
-    case let .failure(errors):
-      throw errors.last
-    case .noValue:
-      throw DeserializationError.noData
-    }
-  }
-}
-
 @usableFromInline
 func invalidFieldErrorForKey(
   _ key: [some Any],
@@ -93,7 +78,7 @@ extension Dictionary where Key == String {
     transform: (T) throws -> U,
     validator: AnyArrayValueValidator<U>?
   ) throws -> [U] {
-    try getArray(key, transform: transform, validator: validator).toThrows()
+    try getArray(key, transform: transform, validator: validator).unwrap()
   }
 
   @usableFromInline
@@ -245,11 +230,7 @@ extension Dictionary where Key == String {
     transform: (T) -> U?,
     validator: AnyArrayValueValidator<U>?
   ) throws -> [U] {
-    try getArray(
-      key,
-      transform: transform,
-      validator: validator
-    ).toThrows()
+    try getArray(key, transform: transform, validator: validator).unwrap()
   }
 
   @usableFromInline
