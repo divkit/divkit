@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.MainThread
-import androidx.core.graphics.withTranslation
+import androidx.core.graphics.withSave
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
@@ -704,15 +704,15 @@ internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Floa
 }
 
 internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
-    for (i in 0 until children.count()) {
-        children.elementAt(i).let { child ->
-            if (child.visibility == View.VISIBLE) {
-                canvas.withTranslation(child.x, child.y) {
-                    (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
-                }
+    children
+        .filter { it.visibility == View.VISIBLE }
+        .forEach { child ->
+            canvas.withSave {
+                translate(child.x, child.y)
+                rotate(child.rotation, child.pivotX, child.pivotY)
+                (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
             }
         }
-    }
 }
 
 internal fun View.extractParentContentAlignmentVertical(
