@@ -1,3 +1,8 @@
+## 30.8.0 (July 8, 2024)
+
+* Fixed several issues with `variable_triggers` evaluation.
+
+
 ## 30.7.0 (July 1, 2024)
 
 * Fixed the `top_offset` mutation for incoming data in the `text` component.

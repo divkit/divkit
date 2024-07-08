@@ -1,3 +1,22 @@
+## 30.8.0
+
+# Android Client:
+* Implemented `DivMarkdownExtensionHandler` to support `markdown` extension for `text`.
+* Fixed crash after removing child in `gallery`.
+* Fixed drawing shadows when view is invisible or gone.
+* Fixed NPE at `shimmer` extension
+* Fix issue when Div2View could not access variable via nested DivVariableController.
+
+# iOS Client:
+* Added local variables support.
+* Fixed infinity pager scroll.
+* Opening tooltips in new window.
+* Fixed multiple `player.seek` call in `VideoBlock`.
+
+# Web Client:
+* Fixed several issues with `variable_triggers` evaluation.
+
+
 ## 30.7.0
 
 # Android Client:
