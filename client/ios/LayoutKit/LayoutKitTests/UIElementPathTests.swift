@@ -43,6 +43,26 @@ final class UIElementPathTests: XCTestCase {
     XCTAssertEqual("root", path.leaf)
   }
 
+  func test_starts_TrueForRoot() {
+    let path = UIElementPath("root") + "container" + "element"
+    XCTAssertTrue(path.starts(with: "root"))
+  }
+
+  func test_starts_TrueForParent() {
+    let path = UIElementPath("root") + "container" + "element"
+    XCTAssertTrue(path.starts(with: "root" + "container"))
+  }
+
+  func test_starts_TrueForSelf() {
+    let path = UIElementPath("root") + "container" + "element"
+    XCTAssertTrue(path.starts(with: "root" + "container" + "element"))
+  }
+
+  func test_starts_FalseForNotParentPath() {
+    let path = UIElementPath("root") + "container" + "element"
+    XCTAssertFalse(path.starts(with: "container"))
+  }
+
   func test_parse() {
     let path = UIElementPath.parse("root/container/element")
     XCTAssertEqual("root", path.root)

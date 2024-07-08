@@ -44,6 +44,13 @@ public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral
     address.value
   }
 
+  public func starts(with path: UIElementPath) -> Bool {
+    if path == self {
+      return true
+    }
+    return parent?.starts(with: path) == true
+  }
+
   public static func parse(_ path: String) -> UIElementPath {
     let split = path.split(separator: "/")
     if let first = split.first {
@@ -121,7 +128,7 @@ extension ListNode: Equatable {
     if lhs === rhs {
       return true
     }
-    return lhs.value == rhs.value && lhs.next == rhs.next
+    return lhs.nextHash == rhs.nextHash && lhs.value == rhs.value && lhs.next == rhs.next
   }
 }
 

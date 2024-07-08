@@ -22,11 +22,10 @@ public final class DivLastVisibleBoundsCache {
     }
   }
 
-  func dropVisibleBounds(forMatchingPrefix prefix: UIElementPath) {
-    let prefix = prefix.description + "/"
+  func dropVisibleBounds(prefix: UIElementPath) {
     lock.withLock {
       for item in storage {
-        if (item.key.description + "/").starts(with: prefix) {
+        if item.key.starts(with: prefix) {
           storage[item.key] = nil
         }
       }

@@ -30,7 +30,7 @@ final class DivLastVisibleBoundsCacheTests: XCTestCase {
     cache.updateLastVisibleArea(for: "root" + "child", area: 34)
     cache.updateLastVisibleArea(for: "root" + "child" + "nested_child", area: 45)
 
-    cache.dropVisibleBounds(forMatchingPrefix: "root")
+    cache.dropVisibleBounds(prefix: "root")
 
     XCTAssertEqual(cache.lastVisibleArea(for: "root"), 0)
     XCTAssertEqual(cache.lastVisibleArea(for: "root" + "child"), 0)

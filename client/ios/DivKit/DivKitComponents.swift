@@ -214,7 +214,7 @@ public final class DivKitComponents {
 
   public func reset(cardId: DivCardID) {
     blockStateStorage.reset(cardId: cardId)
-    lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: UIElementPath(cardId.rawValue))
+    lastVisibleBoundsCache.dropVisibleBounds(prefix: UIElementPath(cardId.rawValue))
     stateManagement.reset(cardId: cardId)
     variablesStorage.reset(cardId: cardId)
     visibilityCounter.reset(cardId: cardId)
