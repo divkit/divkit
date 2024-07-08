@@ -1,6 +1,7 @@
 ## 0.2.1-pre
 
 * Fix object parsing in DTO
+* Add ranges in div-text
 
 ## 0.2.0
 

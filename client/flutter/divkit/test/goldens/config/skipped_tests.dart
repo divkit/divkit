@@ -817,16 +817,24 @@ final skippedTests = [
 
   ...[
     'example/assets/test_data/snapshot_test_data/div-text/ranges-line-height-top-offset.json',
-    'example/assets/test_data/snapshot_test_data/div-text/strike.json',
-    'example/assets/test_data/snapshot_test_data/div-text/underline.json',
-    'example/assets/test_data/snapshot_test_data/div-text/ranges-background-text.json',
     'example/assets/test_data/snapshot_test_data/div-text/ranges.json',
+  ].map(
+    (e) => _SkipTest(
+      e,
+      _Reason.crashesOnRenderFlexOverflow,
+      'Overflow in wrap content size',
+    ),
+  ),
+
+  ...[
+    'example/assets/test_data/snapshot_test_data/div-text/ranges-line-height-top-offset.json',
+    'example/assets/test_data/snapshot_test_data/div-text/ranges-background-text.json',
     'example/assets/test_data/snapshot_test_data/div-text/gradient-color-with-ranges.json',
   ].map(
     (e) => _SkipTest(
       e,
       _Reason.divNotSupported,
-      'Ranges not supported yet',
+      'Not supported by platform',
     ),
   ),
 
