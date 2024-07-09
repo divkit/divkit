@@ -1914,6 +1914,19 @@
       "file": "container/aspect.json"
     },
     {
+      "title": "LayoutProvider",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "LayoutProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size"
+      ],
+      "file": "layout_provider.json"
+    },
+    {
       "title": "SizeProvider extension",
       "platforms": [
         "android",

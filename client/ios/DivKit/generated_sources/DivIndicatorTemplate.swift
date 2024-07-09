@@ -29,6 +29,7 @@ public final class DivIndicatorTemplate: TemplateValue {
   public let inactiveMinimumShape: Field<DivRoundedRectangleShapeTemplate>?
   public let inactiveShape: Field<DivRoundedRectangleShapeTemplate>?
   public let itemsPlacement: Field<DivIndicatorItemPlacementTemplate>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let minimumItemSize: Field<Expression<Double>>? // constraint: number > 0; default value: 0.5
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -72,6 +73,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       inactiveMinimumShape: dictionary.getOptionalField("inactive_minimum_shape", templateToType: templateToType),
       inactiveShape: dictionary.getOptionalField("inactive_shape", templateToType: templateToType),
       itemsPlacement: dictionary.getOptionalField("items_placement", templateToType: templateToType),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       minimumItemSize: dictionary.getOptionalExpressionField("minimum_item_size"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -116,6 +118,7 @@ public final class DivIndicatorTemplate: TemplateValue {
     inactiveMinimumShape: Field<DivRoundedRectangleShapeTemplate>? = nil,
     inactiveShape: Field<DivRoundedRectangleShapeTemplate>? = nil,
     itemsPlacement: Field<DivIndicatorItemPlacementTemplate>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     minimumItemSize: Field<Expression<Double>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -157,6 +160,7 @@ public final class DivIndicatorTemplate: TemplateValue {
     self.inactiveMinimumShape = inactiveMinimumShape
     self.inactiveShape = inactiveShape
     self.itemsPlacement = itemsPlacement
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.minimumItemSize = minimumItemSize
     self.paddings = paddings
@@ -199,6 +203,7 @@ public final class DivIndicatorTemplate: TemplateValue {
     let inactiveMinimumShapeValue = parent?.inactiveMinimumShape?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let inactiveShapeValue = parent?.inactiveShape?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let itemsPlacementValue = parent?.itemsPlacement?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let minimumItemSizeValue = parent?.minimumItemSize?.resolveOptionalValue(context: context, validator: ResolvedValue.minimumItemSizeValidator) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -239,6 +244,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       inactiveMinimumShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_minimum_shape", error: $0) },
       inactiveShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_shape", error: $0) },
       itemsPlacementValue.errorsOrWarnings?.map { .nestedObjectError(field: "items_placement", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       minimumItemSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "minimum_item_size", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -280,6 +286,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       inactiveMinimumShape: inactiveMinimumShapeValue.value,
       inactiveShape: inactiveShapeValue.value,
       itemsPlacement: itemsPlacementValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       minimumItemSize: minimumItemSizeValue.value,
       paddings: paddingsValue.value,
@@ -327,6 +334,7 @@ public final class DivIndicatorTemplate: TemplateValue {
     var inactiveMinimumShapeValue: DeserializationResult<DivRoundedRectangleShape> = .noValue
     var inactiveShapeValue: DeserializationResult<DivRoundedRectangleShape> = .noValue
     var itemsPlacementValue: DeserializationResult<DivIndicatorItemPlacement> = .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var minimumItemSizeValue: DeserializationResult<Expression<Double>> = parent?.minimumItemSize?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -388,6 +396,8 @@ public final class DivIndicatorTemplate: TemplateValue {
         inactiveShapeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRoundedRectangleShapeTemplate.self).merged(with: inactiveShapeValue)
       case "items_placement":
         itemsPlacementValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivIndicatorItemPlacementTemplate.self).merged(with: itemsPlacementValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "minimum_item_size":
@@ -466,6 +476,8 @@ public final class DivIndicatorTemplate: TemplateValue {
         inactiveShapeValue = inactiveShapeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRoundedRectangleShapeTemplate.self) })
       case parent?.itemsPlacement?.link:
         itemsPlacementValue = itemsPlacementValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivIndicatorItemPlacementTemplate.self) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.minimumItemSize?.link:
@@ -519,6 +531,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       inactiveMinimumShapeValue = inactiveMinimumShapeValue.merged(with: { parent.inactiveMinimumShape?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       inactiveShapeValue = inactiveShapeValue.merged(with: { parent.inactiveShape?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsPlacementValue = itemsPlacementValue.merged(with: { parent.itemsPlacement?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -555,6 +568,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       inactiveMinimumShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_minimum_shape", error: $0) },
       inactiveShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_shape", error: $0) },
       itemsPlacementValue.errorsOrWarnings?.map { .nestedObjectError(field: "items_placement", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       minimumItemSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "minimum_item_size", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -596,6 +610,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       inactiveMinimumShape: inactiveMinimumShapeValue.value,
       inactiveShape: inactiveShapeValue.value,
       itemsPlacement: itemsPlacementValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       minimumItemSize: minimumItemSizeValue.value,
       paddings: paddingsValue.value,
@@ -648,6 +663,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       inactiveMinimumShape: inactiveMinimumShape ?? mergedParent.inactiveMinimumShape,
       inactiveShape: inactiveShape ?? mergedParent.inactiveShape,
       itemsPlacement: itemsPlacement ?? mergedParent.itemsPlacement,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       minimumItemSize: minimumItemSize ?? mergedParent.minimumItemSize,
       paddings: paddings ?? mergedParent.paddings,
@@ -695,6 +711,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       inactiveMinimumShape: merged.inactiveMinimumShape?.tryResolveParent(templates: templates),
       inactiveShape: merged.inactiveShape?.tryResolveParent(templates: templates),
       itemsPlacement: merged.itemsPlacement?.tryResolveParent(templates: templates),
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       minimumItemSize: merged.minimumItemSize,
       paddings: merged.paddings?.tryResolveParent(templates: templates),

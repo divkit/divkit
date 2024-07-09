@@ -688,6 +688,7 @@ public final class DivTextTemplate: TemplateValue {
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
   public let images: Field<[ImageTemplate]>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let longtapActions: Field<[DivActionTemplate]>?
@@ -748,6 +749,7 @@ public final class DivTextTemplate: TemplateValue {
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       images: dictionary.getOptionalArray("images", templateToType: templateToType),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
       lineHeight: dictionary.getOptionalExpressionField("line_height"),
       longtapActions: dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
@@ -809,6 +811,7 @@ public final class DivTextTemplate: TemplateValue {
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     images: Field<[ImageTemplate]>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     letterSpacing: Field<Expression<Double>>? = nil,
     lineHeight: Field<Expression<Int>>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
@@ -867,6 +870,7 @@ public final class DivTextTemplate: TemplateValue {
     self.height = height
     self.id = id
     self.images = images
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing
     self.lineHeight = lineHeight
     self.longtapActions = longtapActions
@@ -926,6 +930,7 @@ public final class DivTextTemplate: TemplateValue {
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let imagesValue = parent?.images?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -983,6 +988,7 @@ public final class DivTextTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
@@ -1049,6 +1055,7 @@ public final class DivTextTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       images: imagesValue.value,
+      layoutProvider: layoutProviderValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       longtapActions: longtapActionsValue.value,
@@ -1113,6 +1120,7 @@ public final class DivTextTemplate: TemplateValue {
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var imagesValue: DeserializationResult<[DivText.Image]> = .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var letterSpacingValue: DeserializationResult<Expression<Double>> = parent?.letterSpacing?.value() ?? .noValue
     var lineHeightValue: DeserializationResult<Expression<Int>> = parent?.lineHeight?.value() ?? .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -1197,6 +1205,8 @@ public final class DivTextTemplate: TemplateValue {
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "images":
         imagesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.self).merged(with: imagesValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "letter_spacing":
         letterSpacingValue = deserialize(__dictValue).merged(with: letterSpacingValue)
       case "line_height":
@@ -1309,6 +1319,8 @@ public final class DivTextTemplate: TemplateValue {
         idValue = idValue.merged(with: { deserialize(__dictValue) })
       case parent?.images?.link:
         imagesValue = imagesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.self) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.letterSpacing?.link:
         letterSpacingValue = letterSpacingValue.merged(with: { deserialize(__dictValue) })
       case parent?.lineHeight?.link:
@@ -1386,6 +1398,7 @@ public final class DivTextTemplate: TemplateValue {
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       imagesValue = imagesValue.merged(with: { parent.images?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -1430,6 +1443,7 @@ public final class DivTextTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
@@ -1496,6 +1510,7 @@ public final class DivTextTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       images: imagesValue.value,
+      layoutProvider: layoutProviderValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       longtapActions: longtapActionsValue.value,
@@ -1565,6 +1580,7 @@ public final class DivTextTemplate: TemplateValue {
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       images: images ?? mergedParent.images,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       letterSpacing: letterSpacing ?? mergedParent.letterSpacing,
       lineHeight: lineHeight ?? mergedParent.lineHeight,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
@@ -1629,6 +1645,7 @@ public final class DivTextTemplate: TemplateValue {
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       images: merged.images?.tryResolveParent(templates: templates),
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       letterSpacing: merged.letterSpacing,
       lineHeight: merged.lineHeight,
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),

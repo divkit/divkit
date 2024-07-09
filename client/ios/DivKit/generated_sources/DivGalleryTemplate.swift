@@ -34,6 +34,7 @@ public final class DivGalleryTemplate: TemplateValue {
   public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
   public let itemSpacing: Field<Expression<Int>>? // constraint: number >= 0; default value: 8
   public let items: Field<[DivTemplate]>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let orientation: Field<Expression<Orientation>>? // default value: horizontal
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -76,6 +77,7 @@ public final class DivGalleryTemplate: TemplateValue {
       itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
       itemSpacing: dictionary.getOptionalExpressionField("item_spacing"),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       orientation: dictionary.getOptionalExpressionField("orientation"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -119,6 +121,7 @@ public final class DivGalleryTemplate: TemplateValue {
     itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
     itemSpacing: Field<Expression<Int>>? = nil,
     items: Field<[DivTemplate]>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     orientation: Field<Expression<Orientation>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -159,6 +162,7 @@ public final class DivGalleryTemplate: TemplateValue {
     self.itemBuilder = itemBuilder
     self.itemSpacing = itemSpacing
     self.items = items
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.orientation = orientation
     self.paddings = paddings
@@ -200,6 +204,7 @@ public final class DivGalleryTemplate: TemplateValue {
     let itemBuilderValue = parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.itemSpacingValidator) ?? .noValue
     let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let orientationValue = parent?.orientation?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -239,6 +244,7 @@ public final class DivGalleryTemplate: TemplateValue {
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -279,6 +285,7 @@ public final class DivGalleryTemplate: TemplateValue {
       itemBuilder: itemBuilderValue.value,
       itemSpacing: itemSpacingValue.value,
       items: itemsValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
@@ -325,6 +332,7 @@ public final class DivGalleryTemplate: TemplateValue {
     var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
     var itemSpacingValue: DeserializationResult<Expression<Int>> = parent?.itemSpacing?.value() ?? .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var orientationValue: DeserializationResult<Expression<DivGallery.Orientation>> = parent?.orientation?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -384,6 +392,8 @@ public final class DivGalleryTemplate: TemplateValue {
         itemSpacingValue = deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator).merged(with: itemSpacingValue)
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "orientation":
@@ -460,6 +470,8 @@ public final class DivGalleryTemplate: TemplateValue {
         itemSpacingValue = itemSpacingValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator) })
       case parent?.items?.link:
         itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.orientation?.link:
@@ -511,6 +523,7 @@ public final class DivGalleryTemplate: TemplateValue {
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemBuilderValue = itemBuilderValue.merged(with: { parent.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -544,6 +557,7 @@ public final class DivGalleryTemplate: TemplateValue {
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -584,6 +598,7 @@ public final class DivGalleryTemplate: TemplateValue {
       itemBuilder: itemBuilderValue.value,
       itemSpacing: itemSpacingValue.value,
       items: itemsValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
@@ -635,6 +650,7 @@ public final class DivGalleryTemplate: TemplateValue {
       itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
       itemSpacing: itemSpacing ?? mergedParent.itemSpacing,
       items: items ?? mergedParent.items,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       orientation: orientation ?? mergedParent.orientation,
       paddings: paddings ?? mergedParent.paddings,
@@ -681,6 +697,7 @@ public final class DivGalleryTemplate: TemplateValue {
       itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
       itemSpacing: merged.itemSpacing,
       items: merged.items?.tryResolveParent(templates: templates),
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       orientation: merged.orientation,
       paddings: merged.paddings?.tryResolveParent(templates: templates),

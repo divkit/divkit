@@ -27,6 +27,7 @@ public final class DivGridTemplate: TemplateValue {
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
   public let items: Field<[DivTemplate]>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let longtapActions: Field<[DivActionTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -67,6 +68,7 @@ public final class DivGridTemplate: TemplateValue {
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       longtapActions: dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -108,6 +110,7 @@ public final class DivGridTemplate: TemplateValue {
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     items: Field<[DivTemplate]>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -146,6 +149,7 @@ public final class DivGridTemplate: TemplateValue {
     self.height = height
     self.id = id
     self.items = items
+    self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
     self.margins = margins
     self.paddings = paddings
@@ -185,6 +189,7 @@ public final class DivGridTemplate: TemplateValue {
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -222,6 +227,7 @@ public final class DivGridTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -268,6 +274,7 @@ public final class DivGridTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       items: itemsValue.value,
+      layoutProvider: layoutProviderValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
@@ -312,6 +319,7 @@ public final class DivGridTemplate: TemplateValue {
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -370,6 +378,8 @@ public final class DivGridTemplate: TemplateValue {
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "longtap_actions":
         longtapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: longtapActionsValue)
       case "margins":
@@ -442,6 +452,8 @@ public final class DivGridTemplate: TemplateValue {
         idValue = idValue.merged(with: { deserialize(__dictValue) })
       case parent?.items?.link:
         itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.longtapActions?.link:
         longtapActionsValue = longtapActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
       case parent?.margins?.link:
@@ -490,6 +502,7 @@ public final class DivGridTemplate: TemplateValue {
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -525,6 +538,7 @@ public final class DivGridTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -571,6 +585,7 @@ public final class DivGridTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       items: itemsValue.value,
+      layoutProvider: layoutProviderValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
@@ -620,6 +635,7 @@ public final class DivGridTemplate: TemplateValue {
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       items: items ?? mergedParent.items,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
       margins: margins ?? mergedParent.margins,
       paddings: paddings ?? mergedParent.paddings,
@@ -664,6 +680,7 @@ public final class DivGridTemplate: TemplateValue {
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       items: merged.items?.tryResolveParent(templates: templates),
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),

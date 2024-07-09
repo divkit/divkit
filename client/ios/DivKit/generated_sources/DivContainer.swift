@@ -76,6 +76,7 @@ public final class DivContainer: DivBase {
   public let itemBuilder: DivCollectionItemBuilder?
   public let items: [Div]?
   public let layoutMode: Expression<LayoutMode> // default value: no_wrap
+  public let layoutProvider: DivLayoutProvider?
   public let lineSeparator: Separator?
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets?
@@ -176,6 +177,7 @@ public final class DivContainer: DivBase {
     itemBuilder: DivCollectionItemBuilder?,
     items: [Div]?,
     layoutMode: Expression<LayoutMode>?,
+    layoutProvider: DivLayoutProvider?,
     lineSeparator: Separator?,
     longtapActions: [DivAction]?,
     margins: DivEdgeInsets?,
@@ -219,6 +221,7 @@ public final class DivContainer: DivBase {
     self.itemBuilder = itemBuilder
     self.items = items
     self.layoutMode = layoutMode ?? .value(.noWrap)
+    self.layoutProvider = layoutProvider
     self.lineSeparator = lineSeparator
     self.longtapActions = longtapActions
     self.margins = margins
@@ -296,48 +299,53 @@ extension DivContainer: Equatable {
     guard
       lhs.items == rhs.items,
       lhs.layoutMode == rhs.layoutMode,
-      lhs.lineSeparator == rhs.lineSeparator
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.lineSeparator == rhs.lineSeparator,
       lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.separator == rhs.separator,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -374,6 +382,7 @@ extension DivContainer: Serializable {
     result["item_builder"] = itemBuilder?.toDictionary()
     result["items"] = items?.map { $0.toDictionary() }
     result["layout_mode"] = layoutMode.toValidSerializationValue()
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["line_separator"] = lineSeparator?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins?.toDictionary()

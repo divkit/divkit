@@ -105,6 +105,7 @@ public final class DivInputTemplate: TemplateValue {
   public let id: Field<String>?
   public let isEnabled: Field<Expression<Bool>>? // default value: true
   public let keyboardType: Field<Expression<KeyboardType>>? // default value: multi_line_text
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let margins: Field<DivEdgeInsetsTemplate>?
@@ -158,6 +159,7 @@ public final class DivInputTemplate: TemplateValue {
       id: dictionary.getOptionalField("id"),
       isEnabled: dictionary.getOptionalExpressionField("is_enabled"),
       keyboardType: dictionary.getOptionalExpressionField("keyboard_type"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
       lineHeight: dictionary.getOptionalExpressionField("line_height"),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
@@ -212,6 +214,7 @@ public final class DivInputTemplate: TemplateValue {
     id: Field<String>? = nil,
     isEnabled: Field<Expression<Bool>>? = nil,
     keyboardType: Field<Expression<KeyboardType>>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     letterSpacing: Field<Expression<Double>>? = nil,
     lineHeight: Field<Expression<Int>>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
@@ -263,6 +266,7 @@ public final class DivInputTemplate: TemplateValue {
     self.id = id
     self.isEnabled = isEnabled
     self.keyboardType = keyboardType
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing
     self.lineHeight = lineHeight
     self.margins = margins
@@ -315,6 +319,7 @@ public final class DivInputTemplate: TemplateValue {
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue
     let keyboardTypeValue = parent?.keyboardType?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -365,6 +370,7 @@ public final class DivInputTemplate: TemplateValue {
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       keyboardTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "keyboard_type", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
@@ -424,6 +430,7 @@ public final class DivInputTemplate: TemplateValue {
       id: idValue.value,
       isEnabled: isEnabledValue.value,
       keyboardType: keyboardTypeValue.value,
+      layoutProvider: layoutProviderValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
@@ -481,6 +488,7 @@ public final class DivInputTemplate: TemplateValue {
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
     var keyboardTypeValue: DeserializationResult<Expression<DivInput.KeyboardType>> = parent?.keyboardType?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var letterSpacingValue: DeserializationResult<Expression<Double>> = parent?.letterSpacing?.value() ?? .noValue
     var lineHeightValue: DeserializationResult<Expression<Int>> = parent?.lineHeight?.value() ?? .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -554,6 +562,8 @@ public final class DivInputTemplate: TemplateValue {
         isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
       case "keyboard_type":
         keyboardTypeValue = deserialize(__dictValue).merged(with: keyboardTypeValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "letter_spacing":
         letterSpacingValue = deserialize(__dictValue).merged(with: letterSpacingValue)
       case "line_height":
@@ -652,6 +662,8 @@ public final class DivInputTemplate: TemplateValue {
         isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
       case parent?.keyboardType?.link:
         keyboardTypeValue = keyboardTypeValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.letterSpacing?.link:
         letterSpacingValue = letterSpacingValue.merged(with: { deserialize(__dictValue) })
       case parent?.lineHeight?.link:
@@ -717,6 +729,7 @@ public final class DivInputTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       maskValue = maskValue.merged(with: { parent.mask?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       nativeInterfaceValue = nativeInterfaceValue.merged(with: { parent.nativeInterface?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -756,6 +769,7 @@ public final class DivInputTemplate: TemplateValue {
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       keyboardTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "keyboard_type", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
@@ -815,6 +829,7 @@ public final class DivInputTemplate: TemplateValue {
       id: idValue.value,
       isEnabled: isEnabledValue.value,
       keyboardType: keyboardTypeValue.value,
+      layoutProvider: layoutProviderValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
@@ -877,6 +892,7 @@ public final class DivInputTemplate: TemplateValue {
       id: id ?? mergedParent.id,
       isEnabled: isEnabled ?? mergedParent.isEnabled,
       keyboardType: keyboardType ?? mergedParent.keyboardType,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       letterSpacing: letterSpacing ?? mergedParent.letterSpacing,
       lineHeight: lineHeight ?? mergedParent.lineHeight,
       margins: margins ?? mergedParent.margins,
@@ -934,6 +950,7 @@ public final class DivInputTemplate: TemplateValue {
       id: merged.id,
       isEnabled: merged.isEnabled,
       keyboardType: merged.keyboardType,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       letterSpacing: merged.letterSpacing,
       lineHeight: merged.lineHeight,
       margins: merged.margins?.tryResolveParent(templates: templates),

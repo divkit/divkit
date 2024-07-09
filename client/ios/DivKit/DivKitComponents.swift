@@ -41,6 +41,7 @@ public final class DivKitComponents {
 
   private let disposePool = AutodisposePool()
   private let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
+  private let layoutProviderHandler: DivLayoutProviderHandler
   private let persistentValuesStorage = DivPersistentValuesStorage()
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
@@ -123,6 +124,8 @@ public final class DivKitComponents {
 
     let updateCardActionSignalPipe = SignalPipe<[DivActionURLHandler.UpdateReason]>()
     self.updateCardPipe = updateCardActionSignalPipe
+
+    layoutProviderHandler = DivLayoutProviderHandler(variablesStorage: variablesStorage)
 
     safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
@@ -300,7 +303,8 @@ public final class DivKitComponents {
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
-      tooltipViewFactory: DivTooltipViewFactory(divKitComponents: self, cardId: cardId)
+      tooltipViewFactory: DivTooltipViewFactory(divKitComponents: self, cardId: cardId),
+      layoutProviderHandler: layoutProviderHandler
     )
   }
 

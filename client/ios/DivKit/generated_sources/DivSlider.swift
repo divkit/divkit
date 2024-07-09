@@ -99,6 +99,7 @@ public final class DivSlider: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let maxValue: Expression<Int> // default value: 100
   public let minValue: Expression<Int> // default value: 0
@@ -186,6 +187,7 @@ public final class DivSlider: DivBase {
     focus: DivFocus? = nil,
     height: DivSize? = nil,
     id: String? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     margins: DivEdgeInsets? = nil,
     maxValue: Expression<Int>? = nil,
     minValue: Expression<Int>? = nil,
@@ -228,6 +230,7 @@ public final class DivSlider: DivBase {
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.maxValue = maxValue ?? .value(100)
     self.minValue = minValue ?? .value(0)
@@ -292,69 +295,70 @@ extension DivSlider: Equatable {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.maxValue == rhs.maxValue,
-      lhs.minValue == rhs.minValue
+      lhs.maxValue == rhs.maxValue
     else {
       return false
     }
     guard
+      lhs.minValue == rhs.minValue,
       lhs.paddings == rhs.paddings,
-      lhs.ranges == rhs.ranges,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.ranges == rhs.ranges
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle,
       lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle,
-      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable,
-      lhs.thumbStyle == rhs.thumbStyle
+      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable
     else {
       return false
     }
     guard
+      lhs.thumbStyle == rhs.thumbStyle,
       lhs.thumbTextStyle == rhs.thumbTextStyle,
-      lhs.thumbValueVariable == rhs.thumbValueVariable,
-      lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle
+      lhs.thumbValueVariable == rhs.thumbValueVariable
     else {
       return false
     }
     guard
+      lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle,
       lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle,
-      lhs.tooltips == rhs.tooltips,
-      lhs.trackActiveStyle == rhs.trackActiveStyle
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.trackActiveStyle == rhs.trackActiveStyle,
       lhs.trackInactiveStyle == rhs.trackInactiveStyle,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -381,6 +385,7 @@ extension DivSlider: Serializable {
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["max_value"] = maxValue.toValidSerializationValue()
     result["min_value"] = minValue.toValidSerializationValue()

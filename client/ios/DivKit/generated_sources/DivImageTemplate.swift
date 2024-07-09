@@ -30,6 +30,7 @@ public final class DivImageTemplate: TemplateValue {
   public let highPriorityPreviewShow: Field<Expression<Bool>>? // default value: false
   public let id: Field<String>?
   public let imageUrl: Field<Expression<URL>>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let longtapActions: Field<[DivActionTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -79,6 +80,7 @@ public final class DivImageTemplate: TemplateValue {
       highPriorityPreviewShow: dictionary.getOptionalExpressionField("high_priority_preview_show"),
       id: dictionary.getOptionalField("id"),
       imageUrl: dictionary.getOptionalExpressionField("image_url", transform: URL.init(string:)),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       longtapActions: dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -129,6 +131,7 @@ public final class DivImageTemplate: TemplateValue {
     highPriorityPreviewShow: Field<Expression<Bool>>? = nil,
     id: Field<String>? = nil,
     imageUrl: Field<Expression<URL>>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -176,6 +179,7 @@ public final class DivImageTemplate: TemplateValue {
     self.highPriorityPreviewShow = highPriorityPreviewShow
     self.id = id
     self.imageUrl = imageUrl
+    self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
     self.margins = margins
     self.paddings = paddings
@@ -224,6 +228,7 @@ public final class DivImageTemplate: TemplateValue {
     let highPriorityPreviewShowValue = parent?.highPriorityPreviewShow?.resolveOptionalValue(context: context) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -270,6 +275,7 @@ public final class DivImageTemplate: TemplateValue {
       highPriorityPreviewShowValue.errorsOrWarnings?.map { .nestedObjectError(field: "high_priority_preview_show", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -325,6 +331,7 @@ public final class DivImageTemplate: TemplateValue {
       highPriorityPreviewShow: highPriorityPreviewShowValue.value,
       id: idValue.value,
       imageUrl: imageUrlNonNil,
+      layoutProvider: layoutProviderValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
@@ -378,6 +385,7 @@ public final class DivImageTemplate: TemplateValue {
     var highPriorityPreviewShowValue: DeserializationResult<Expression<Bool>> = parent?.highPriorityPreviewShow?.value() ?? .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var imageUrlValue: DeserializationResult<Expression<URL>> = parent?.imageUrl?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -448,6 +456,8 @@ public final class DivImageTemplate: TemplateValue {
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "image_url":
         imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "longtap_actions":
         longtapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: longtapActionsValue)
       case "margins":
@@ -538,6 +548,8 @@ public final class DivImageTemplate: TemplateValue {
         idValue = idValue.merged(with: { deserialize(__dictValue) })
       case parent?.imageUrl?.link:
         imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.longtapActions?.link:
         longtapActionsValue = longtapActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
       case parent?.margins?.link:
@@ -600,6 +612,7 @@ public final class DivImageTemplate: TemplateValue {
       filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -638,6 +651,7 @@ public final class DivImageTemplate: TemplateValue {
       highPriorityPreviewShowValue.errorsOrWarnings?.map { .nestedObjectError(field: "high_priority_preview_show", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -693,6 +707,7 @@ public final class DivImageTemplate: TemplateValue {
       highPriorityPreviewShow: highPriorityPreviewShowValue.value,
       id: idValue.value,
       imageUrl: imageUrlNonNil,
+      layoutProvider: layoutProviderValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
@@ -751,6 +766,7 @@ public final class DivImageTemplate: TemplateValue {
       highPriorityPreviewShow: highPriorityPreviewShow ?? mergedParent.highPriorityPreviewShow,
       id: id ?? mergedParent.id,
       imageUrl: imageUrl ?? mergedParent.imageUrl,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
       margins: margins ?? mergedParent.margins,
       paddings: paddings ?? mergedParent.paddings,
@@ -804,6 +820,7 @@ public final class DivImageTemplate: TemplateValue {
       highPriorityPreviewShow: merged.highPriorityPreviewShow,
       id: merged.id,
       imageUrl: merged.imageUrl,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),

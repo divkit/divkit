@@ -26,6 +26,7 @@ public final class DivGrid: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let items: [Div]?
+  public let layoutProvider: DivLayoutProvider?
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
@@ -115,6 +116,7 @@ public final class DivGrid: DivBase {
     height: DivSize?,
     id: String?,
     items: [Div]?,
+    layoutProvider: DivLayoutProvider?,
     longtapActions: [DivAction]?,
     margins: DivEdgeInsets?,
     paddings: DivEdgeInsets?,
@@ -152,6 +154,7 @@ public final class DivGrid: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.items = items
+    self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
     self.margins = margins
     self.paddings = paddings
@@ -219,41 +222,46 @@ extension DivGrid: Equatable {
     guard
       lhs.id == rhs.id,
       lhs.items == rhs.items,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -287,6 +295,7 @@ extension DivGrid: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["items"] = items?.map { $0.toDictionary() }
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()

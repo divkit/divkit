@@ -26,6 +26,7 @@ public final class DivGifImage: DivBase {
   public let gifUrl: Expression<URL>
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
+  public let layoutProvider: DivLayoutProvider?
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
@@ -132,6 +133,7 @@ public final class DivGifImage: DivBase {
     gifUrl: Expression<URL>,
     height: DivSize? = nil,
     id: String? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     longtapActions: [DivAction]? = nil,
     margins: DivEdgeInsets? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -173,6 +175,7 @@ public final class DivGifImage: DivBase {
     self.gifUrl = gifUrl
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
     self.margins = margins
     self.paddings = paddings
@@ -244,53 +247,54 @@ extension DivGifImage: Equatable {
     guard
       lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings,
-      lhs.placeholderColor == rhs.placeholderColor
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.placeholderColor == rhs.placeholderColor,
       lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.preview == rhs.preview
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -324,6 +328,7 @@ extension DivGifImage: Serializable {
     result["gif_url"] = gifUrl.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["id"] = id
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()

@@ -129,6 +129,10 @@ extension DivBase {
         alpha: CGFloat(resolveAlpha(expressionResolver))
       )
 
+    if let layoutProvider {
+      block = layoutProvider.apply(block: block, context: context)
+    }
+
     return applyExtensionHandlersAfterBaseProperties(
       to: block,
       extensionHandlers: extensionHandlers,

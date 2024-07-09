@@ -46,6 +46,7 @@ public final class DivSelect: DivBase {
   public let hintColor: Expression<Color> // default value: #73000000
   public let hintText: Expression<String>?
   public let id: String?
+  public let layoutProvider: DivLayoutProvider?
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let margins: DivEdgeInsets?
@@ -175,6 +176,7 @@ public final class DivSelect: DivBase {
     hintColor: Expression<Color>? = nil,
     hintText: Expression<String>? = nil,
     id: String? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     letterSpacing: Expression<Double>? = nil,
     lineHeight: Expression<Int>? = nil,
     margins: DivEdgeInsets? = nil,
@@ -215,6 +217,7 @@ public final class DivSelect: DivBase {
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
     self.hintText = hintText
     self.id = id
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
     self.margins = margins
@@ -285,49 +288,54 @@ extension DivSelect: Equatable {
     }
     guard
       lhs.id == rhs.id,
-      lhs.letterSpacing == rhs.letterSpacing,
-      lhs.lineHeight == rhs.lineHeight
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.letterSpacing == rhs.letterSpacing
     else {
       return false
     }
     guard
+      lhs.lineHeight == rhs.lineHeight,
       lhs.margins == rhs.margins,
-      lhs.options == rhs.options,
-      lhs.paddings == rhs.paddings
+      lhs.options == rhs.options
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.textColor == rhs.textColor
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.textColor == rhs.textColor,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.valueVariable == rhs.valueVariable,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -360,6 +368,7 @@ extension DivSelect: Serializable {
     result["hint_color"] = hintColor.toValidSerializationValue()
     result["hint_text"] = hintText?.toValidSerializationValue()
     result["id"] = id
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["margins"] = margins?.toDictionary()

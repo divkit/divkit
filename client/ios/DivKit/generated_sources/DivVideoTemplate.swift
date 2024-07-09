@@ -25,6 +25,7 @@ public final class DivVideoTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let muted: Field<Expression<Bool>>? // default value: false
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -71,6 +72,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       muted: dictionary.getOptionalExpressionField("muted"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -118,6 +120,7 @@ public final class DivVideoTemplate: TemplateValue {
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     muted: Field<Expression<Bool>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -162,6 +165,7 @@ public final class DivVideoTemplate: TemplateValue {
     self.focus = focus
     self.height = height
     self.id = id
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.muted = muted
     self.paddings = paddings
@@ -207,6 +211,7 @@ public final class DivVideoTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let mutedValue = parent?.muted?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -250,6 +255,7 @@ public final class DivVideoTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       mutedValue.errorsOrWarnings?.map { .nestedObjectError(field: "muted", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -302,6 +308,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       muted: mutedValue.value,
       paddings: paddingsValue.value,
@@ -352,6 +359,7 @@ public final class DivVideoTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var mutedValue: DeserializationResult<Expression<Bool>> = parent?.muted?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -414,6 +422,8 @@ public final class DivVideoTemplate: TemplateValue {
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "muted":
@@ -498,6 +508,8 @@ public final class DivVideoTemplate: TemplateValue {
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.id?.link:
         idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.muted?.link:
@@ -561,6 +573,7 @@ public final class DivVideoTemplate: TemplateValue {
       fatalActionsValue = fatalActionsValue.merged(with: { parent.fatalActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       pauseActionsValue = pauseActionsValue.merged(with: { parent.pauseActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -596,6 +609,7 @@ public final class DivVideoTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       mutedValue.errorsOrWarnings?.map { .nestedObjectError(field: "muted", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -648,6 +662,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       muted: mutedValue.value,
       paddings: paddingsValue.value,
@@ -703,6 +718,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       muted: muted ?? mergedParent.muted,
       paddings: paddings ?? mergedParent.paddings,
@@ -753,6 +769,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       muted: merged.muted,
       paddings: merged.paddings?.tryResolveParent(templates: templates),

@@ -241,6 +241,7 @@ public final class DivText: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let images: [Image]?
+  public let layoutProvider: DivLayoutProvider?
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let longtapActions: [DivAction]?
@@ -426,6 +427,7 @@ public final class DivText: DivBase {
     height: DivSize? = nil,
     id: String? = nil,
     images: [Image]? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     letterSpacing: Expression<Double>? = nil,
     lineHeight: Expression<Int>? = nil,
     longtapActions: [DivAction]? = nil,
@@ -483,6 +485,7 @@ public final class DivText: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.images = images
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
     self.longtapActions = longtapActions
@@ -578,74 +581,75 @@ extension DivText: Equatable {
     guard
       lhs.id == rhs.id,
       lhs.images == rhs.images,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.maxLines == rhs.maxLines,
-      lhs.minHiddenLines == rhs.minHiddenLines,
-      lhs.paddings == rhs.paddings
+      lhs.minHiddenLines == rhs.minHiddenLines
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.ranges == rhs.ranges,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectable == rhs.selectable
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectable == rhs.selectable,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.strike == rhs.strike,
-      lhs.text == rhs.text
+      lhs.strike == rhs.strike
     else {
       return false
     }
     guard
+      lhs.text == rhs.text,
       lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
-      lhs.textColor == rhs.textColor
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical
     else {
       return false
     }
     guard
+      lhs.textColor == rhs.textColor,
       lhs.textGradient == rhs.textGradient,
-      lhs.textShadow == rhs.textShadow,
-      lhs.tooltips == rhs.tooltips
+      lhs.textShadow == rhs.textShadow
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.underline == rhs.underline
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.underline == rhs.underline,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -686,6 +690,7 @@ extension DivText: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["images"] = images?.map { $0.toDictionary() }
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }

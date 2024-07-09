@@ -17,6 +17,7 @@ public protocol DivBase: DivBlockModeling {
   var focus: DivFocus? { get }
   var height: DivSize { get } // default value: .divWrapContentSize(DivWrapContentSize())
   var id: String? { get }
+  var layoutProvider: DivLayoutProvider? { get }
   var margins: DivEdgeInsets? { get }
   var paddings: DivEdgeInsets? { get }
   var rowSpan: Expression<Int>? { get } // constraint: number >= 0

@@ -1155,6 +1155,18 @@
     "en": "Enter data manually using a keyboard.",
     "ru": "Ввод данных с клавиатуры."
   },
+  "div_layout_provider": {
+    "en": "Provides element real size values after a layout cycle.",
+    "ru": "Предоставляет данные о реальном размере элемента."
+  },
+  "div_layout_provider_width_variable_name": {
+    "en": "Variable name to store element width.",
+    "ru": "Название переменной для хранения ширины элемента."
+  },
+  "div_layout_provider_height_variable_name": {
+    "en": "Variable name to store element height.",
+    "ru": "Название переменной для хранения высоты элемента."
+  },
   "div_line_style": {
     "en": "Line style.",
     "ru": "Стиль линий."

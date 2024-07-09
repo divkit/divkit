@@ -50,6 +50,7 @@ public final class DivGallery: DivBase {
   public let itemBuilder: DivCollectionItemBuilder?
   public let itemSpacing: Expression<Int> // constraint: number >= 0; default value: 8
   public let items: [Div]?
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: horizontal
   public let paddings: DivEdgeInsets?
@@ -174,6 +175,7 @@ public final class DivGallery: DivBase {
     itemBuilder: DivCollectionItemBuilder?,
     itemSpacing: Expression<Int>?,
     items: [Div]?,
+    layoutProvider: DivLayoutProvider?,
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
@@ -213,6 +215,7 @@ public final class DivGallery: DivBase {
     self.itemBuilder = itemBuilder
     self.itemSpacing = itemSpacing ?? .value(8)
     self.items = items
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.orientation = orientation ?? .value(.horizontal)
     self.paddings = paddings
@@ -282,47 +285,48 @@ extension DivGallery: Equatable {
     }
     guard
       lhs.items == rhs.items,
-      lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.scrollMode == rhs.scrollMode,
-      lhs.scrollbar == rhs.scrollbar,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.scrollbar == rhs.scrollbar
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -356,6 +360,7 @@ extension DivGallery: Serializable {
     result["item_builder"] = itemBuilder?.toDictionary()
     result["item_spacing"] = itemSpacing.toValidSerializationValue()
     result["items"] = items?.map { $0.toDictionary() }
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()

@@ -30,6 +30,7 @@ public final class DivPager: DivBase {
   public let itemSpacing: DivFixedSize // default value: DivFixedSize(value: .value(0))
   public let items: [Div]?
   public let layoutMode: DivPagerLayoutMode
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: horizontal
   public let paddings: DivEdgeInsets?
@@ -123,6 +124,7 @@ public final class DivPager: DivBase {
     itemSpacing: DivFixedSize?,
     items: [Div]?,
     layoutMode: DivPagerLayoutMode,
+    layoutProvider: DivLayoutProvider?,
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
@@ -160,6 +162,7 @@ public final class DivPager: DivBase {
     self.itemSpacing = itemSpacing ?? DivFixedSize(value: .value(0))
     self.items = items
     self.layoutMode = layoutMode
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.orientation = orientation ?? .value(.horizontal)
     self.paddings = paddings
@@ -227,43 +230,48 @@ extension DivPager: Equatable {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings
+      lhs.orientation == rhs.orientation
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.pageTransformation == rhs.pageTransformation,
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -295,6 +303,7 @@ extension DivPager: Serializable {
     result["item_spacing"] = itemSpacing.toDictionary()
     result["items"] = items?.map { $0.toDictionary() }
     result["layout_mode"] = layoutMode.toDictionary()
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()

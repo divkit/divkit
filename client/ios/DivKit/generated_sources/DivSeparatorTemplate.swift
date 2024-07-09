@@ -98,6 +98,7 @@ public final class DivSeparatorTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let longtapActions: Field<[DivActionTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -135,6 +136,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       longtapActions: dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -173,6 +175,7 @@ public final class DivSeparatorTemplate: TemplateValue {
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -208,6 +211,7 @@ public final class DivSeparatorTemplate: TemplateValue {
     self.focus = focus
     self.height = height
     self.id = id
+    self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
     self.margins = margins
     self.paddings = paddings
@@ -244,6 +248,7 @@ public final class DivSeparatorTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -278,6 +283,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -313,6 +319,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
@@ -354,6 +361,7 @@ public final class DivSeparatorTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -406,6 +414,8 @@ public final class DivSeparatorTemplate: TemplateValue {
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "longtap_actions":
         longtapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: longtapActionsValue)
       case "margins":
@@ -472,6 +482,8 @@ public final class DivSeparatorTemplate: TemplateValue {
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.id?.link:
         idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.longtapActions?.link:
         longtapActionsValue = longtapActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
       case parent?.margins?.link:
@@ -520,6 +532,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -552,6 +565,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -587,6 +601,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
@@ -633,6 +648,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
       margins: margins ?? mergedParent.margins,
       paddings: paddings ?? mergedParent.paddings,
@@ -674,6 +690,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),

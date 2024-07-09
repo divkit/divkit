@@ -114,6 +114,7 @@ public final class DivSelectTemplate: TemplateValue {
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
   public let hintText: Field<Expression<String>>?
   public let id: Field<String>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let margins: Field<DivEdgeInsetsTemplate>?
@@ -157,6 +158,7 @@ public final class DivSelectTemplate: TemplateValue {
       hintColor: dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:)),
       hintText: dictionary.getOptionalExpressionField("hint_text"),
       id: dictionary.getOptionalField("id"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
       lineHeight: dictionary.getOptionalExpressionField("line_height"),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
@@ -201,6 +203,7 @@ public final class DivSelectTemplate: TemplateValue {
     hintColor: Field<Expression<Color>>? = nil,
     hintText: Field<Expression<String>>? = nil,
     id: Field<String>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     letterSpacing: Field<Expression<Double>>? = nil,
     lineHeight: Field<Expression<Int>>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
@@ -242,6 +245,7 @@ public final class DivSelectTemplate: TemplateValue {
     self.hintColor = hintColor
     self.hintText = hintText
     self.id = id
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing
     self.lineHeight = lineHeight
     self.margins = margins
@@ -284,6 +288,7 @@ public final class DivSelectTemplate: TemplateValue {
     let hintColorValue = parent?.hintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let hintTextValue = parent?.hintText?.resolveOptionalValue(context: context) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -324,6 +329,7 @@ public final class DivSelectTemplate: TemplateValue {
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
@@ -377,6 +383,7 @@ public final class DivSelectTemplate: TemplateValue {
       hintColor: hintColorValue.value,
       hintText: hintTextValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
@@ -424,6 +431,7 @@ public final class DivSelectTemplate: TemplateValue {
     var hintColorValue: DeserializationResult<Expression<Color>> = parent?.hintColor?.value() ?? .noValue
     var hintTextValue: DeserializationResult<Expression<String>> = parent?.hintText?.value() ?? .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var letterSpacingValue: DeserializationResult<Expression<Double>> = parent?.letterSpacing?.value() ?? .noValue
     var lineHeightValue: DeserializationResult<Expression<Int>> = parent?.lineHeight?.value() ?? .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -484,6 +492,8 @@ public final class DivSelectTemplate: TemplateValue {
         hintTextValue = deserialize(__dictValue).merged(with: hintTextValue)
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "letter_spacing":
         letterSpacingValue = deserialize(__dictValue).merged(with: letterSpacingValue)
       case "line_height":
@@ -562,6 +572,8 @@ public final class DivSelectTemplate: TemplateValue {
         hintTextValue = hintTextValue.merged(with: { deserialize(__dictValue) })
       case parent?.id?.link:
         idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.letterSpacing?.link:
         letterSpacingValue = letterSpacingValue.merged(with: { deserialize(__dictValue) })
       case parent?.lineHeight?.link:
@@ -613,6 +625,7 @@ public final class DivSelectTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       optionsValue = optionsValue.merged(with: { parent.options?.resolveValue(context: context, validator: ResolvedValue.optionsValidator, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -647,6 +660,7 @@ public final class DivSelectTemplate: TemplateValue {
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
@@ -700,6 +714,7 @@ public final class DivSelectTemplate: TemplateValue {
       hintColor: hintColorValue.value,
       hintText: hintTextValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
@@ -752,6 +767,7 @@ public final class DivSelectTemplate: TemplateValue {
       hintColor: hintColor ?? mergedParent.hintColor,
       hintText: hintText ?? mergedParent.hintText,
       id: id ?? mergedParent.id,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       letterSpacing: letterSpacing ?? mergedParent.letterSpacing,
       lineHeight: lineHeight ?? mergedParent.lineHeight,
       margins: margins ?? mergedParent.margins,
@@ -799,6 +815,7 @@ public final class DivSelectTemplate: TemplateValue {
       hintColor: merged.hintColor,
       hintText: merged.hintText,
       id: merged.id,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       letterSpacing: merged.letterSpacing,
       lineHeight: merged.lineHeight,
       margins: merged.margins?.tryResolveParent(templates: templates),

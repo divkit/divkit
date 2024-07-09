@@ -208,6 +208,7 @@ public final class DivTabs: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let items: [Item] // at least 1 elements
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
   public let restrictParentScroll: Expression<Bool> // default value: false
@@ -314,6 +315,7 @@ public final class DivTabs: DivBase {
     height: DivSize?,
     id: String?,
     items: [Item],
+    layoutProvider: DivLayoutProvider?,
     margins: DivEdgeInsets?,
     paddings: DivEdgeInsets?,
     restrictParentScroll: Expression<Bool>?,
@@ -353,6 +355,7 @@ public final class DivTabs: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.items = items
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.paddings = paddings
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
@@ -418,55 +421,56 @@ extension DivTabs: Equatable {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.selectedTab == rhs.selectedTab
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.selectedTab == rhs.selectedTab,
       lhs.separatorColor == rhs.separatorColor,
-      lhs.separatorPaddings == rhs.separatorPaddings,
-      lhs.switchTabsByContentSwipeEnabled == rhs.switchTabsByContentSwipeEnabled
+      lhs.separatorPaddings == rhs.separatorPaddings
     else {
       return false
     }
     guard
+      lhs.switchTabsByContentSwipeEnabled == rhs.switchTabsByContentSwipeEnabled,
       lhs.tabTitleDelimiter == rhs.tabTitleDelimiter,
-      lhs.tabTitleStyle == rhs.tabTitleStyle,
-      lhs.titlePaddings == rhs.titlePaddings
+      lhs.tabTitleStyle == rhs.tabTitleStyle
     else {
       return false
     }
     guard
+      lhs.titlePaddings == rhs.titlePaddings,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -496,6 +500,7 @@ extension DivTabs: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["items"] = items.map { $0.toDictionary() }
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()

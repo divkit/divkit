@@ -165,6 +165,7 @@ public final class DivStateTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
@@ -201,6 +202,7 @@ public final class DivStateTemplate: TemplateValue {
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
@@ -238,6 +240,7 @@ public final class DivStateTemplate: TemplateValue {
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
@@ -272,6 +275,7 @@ public final class DivStateTemplate: TemplateValue {
     self.focus = focus
     self.height = height
     self.id = id
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.paddings = paddings
     self.rowSpan = rowSpan
@@ -307,6 +311,7 @@ public final class DivStateTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
@@ -340,6 +345,7 @@ public final class DivStateTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -382,6 +388,7 @@ public final class DivStateTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
       rowSpan: rowSpanValue.value,
@@ -422,6 +429,7 @@ public final class DivStateTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
@@ -470,6 +478,8 @@ public final class DivStateTemplate: TemplateValue {
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "paddings":
@@ -534,6 +544,8 @@ public final class DivStateTemplate: TemplateValue {
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.id?.link:
         idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.paddings?.link:
@@ -581,6 +593,7 @@ public final class DivStateTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -610,6 +623,7 @@ public final class DivStateTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
@@ -652,6 +666,7 @@ public final class DivStateTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
       rowSpan: rowSpanValue.value,
@@ -697,6 +712,7 @@ public final class DivStateTemplate: TemplateValue {
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       paddings: paddings ?? mergedParent.paddings,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
@@ -737,6 +753,7 @@ public final class DivStateTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       rowSpan: merged.rowSpan,

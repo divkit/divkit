@@ -41,6 +41,7 @@ public struct DivBlockModelingContext {
   private(set) var elementId: String?
   private(set) var sizeModifier: DivSizeModifier?
   private(set) var localValues = [String: AnyHashable]()
+  let layoutProviderHandler: DivLayoutProviderHandler?
 
   public init(
     cardId: DivCardID,
@@ -67,7 +68,8 @@ public struct DivBlockModelingContext {
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     variableTracker: DivVariableTracker? = nil,
     persistentValuesStorage: DivPersistentValuesStorage? = nil,
-    tooltipViewFactory: DivTooltipViewFactory? = nil
+    tooltipViewFactory: DivTooltipViewFactory? = nil,
+    layoutProviderHandler: DivLayoutProviderHandler? = nil
   ) {
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     for extensionHandler in extensionHandlers {
@@ -102,7 +104,8 @@ public struct DivBlockModelingContext {
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
-      tooltipViewFactory: tooltipViewFactory
+      tooltipViewFactory: tooltipViewFactory,
+      layoutProviderHandler: layoutProviderHandler
     )
   }
 
@@ -130,7 +133,8 @@ public struct DivBlockModelingContext {
     layoutDirection: UserInterfaceLayoutDirection,
     variableTracker: DivVariableTracker?,
     persistentValuesStorage: DivPersistentValuesStorage?,
-    tooltipViewFactory: DivTooltipViewFactory?
+    tooltipViewFactory: DivTooltipViewFactory?,
+    layoutProviderHandler: DivLayoutProviderHandler?
   ) {
     self.viewId = viewId
     self.cardLogId = cardLogId
@@ -160,6 +164,7 @@ public struct DivBlockModelingContext {
     self.tooltipViewFactory = tooltipViewFactory
     self.variablesStorage = variablesStorage
     self.extensionHandlers = extensionHandlers
+    self.layoutProviderHandler = layoutProviderHandler
     self.functionsProvider = FunctionsProvider(
       persistentValuesStorage: persistentValuesStorage
     )

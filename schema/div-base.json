@@ -221,6 +221,13 @@
         "ios",
         "web"
       ]
+    },
+    "layout_provider": {
+      "$ref": "div-layout-provider.json",
+      "$description": "translations.json#/div_layout_provider",
+      "platforms": [
+        "ios"
+      ]
     }
   }
 }

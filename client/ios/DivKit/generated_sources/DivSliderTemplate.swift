@@ -302,6 +302,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let maxValue: Field<Expression<Int>>? // default value: 100
   public let minValue: Field<Expression<Int>>? // default value: 0
@@ -347,6 +348,7 @@ public final class DivSliderTemplate: TemplateValue {
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       maxValue: dictionary.getOptionalExpressionField("max_value"),
       minValue: dictionary.getOptionalExpressionField("min_value"),
@@ -393,6 +395,7 @@ public final class DivSliderTemplate: TemplateValue {
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     maxValue: Field<Expression<Int>>? = nil,
     minValue: Field<Expression<Int>>? = nil,
@@ -436,6 +439,7 @@ public final class DivSliderTemplate: TemplateValue {
     self.focus = focus
     self.height = height
     self.id = id
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.maxValue = maxValue
     self.minValue = minValue
@@ -480,6 +484,7 @@ public final class DivSliderTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let maxValueValue = parent?.maxValue?.resolveOptionalValue(context: context) ?? .noValue
     let minValueValue = parent?.minValue?.resolveOptionalValue(context: context) ?? .noValue
@@ -522,6 +527,7 @@ public final class DivSliderTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       maxValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_value", error: $0) },
       minValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_value", error: $0) },
@@ -581,6 +587,7 @@ public final class DivSliderTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       maxValue: maxValueValue.value,
       minValue: minValueValue.value,
@@ -630,6 +637,7 @@ public final class DivSliderTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var maxValueValue: DeserializationResult<Expression<Int>> = parent?.maxValue?.value() ?? .noValue
     var minValueValue: DeserializationResult<Expression<Int>> = parent?.minValue?.value() ?? .noValue
@@ -685,6 +693,8 @@ public final class DivSliderTemplate: TemplateValue {
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "max_value":
@@ -767,6 +777,8 @@ public final class DivSliderTemplate: TemplateValue {
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.id?.link:
         idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.maxValue?.link:
@@ -836,6 +848,7 @@ public final class DivSliderTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       rangesValue = rangesValue.merged(with: { parent.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -872,6 +885,7 @@ public final class DivSliderTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       maxValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_value", error: $0) },
       minValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_value", error: $0) },
@@ -931,6 +945,7 @@ public final class DivSliderTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       maxValue: maxValueValue.value,
       minValue: minValueValue.value,
@@ -985,6 +1000,7 @@ public final class DivSliderTemplate: TemplateValue {
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       maxValue: maxValue ?? mergedParent.maxValue,
       minValue: minValue ?? mergedParent.minValue,
@@ -1034,6 +1050,7 @@ public final class DivSliderTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       maxValue: merged.maxValue,
       minValue: merged.minValue,

@@ -176,6 +176,7 @@ public final class DivContainerTemplate: TemplateValue {
   public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
   public let items: Field<[DivTemplate]>?
   public let layoutMode: Field<Expression<LayoutMode>>? // default value: no_wrap
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let lineSeparator: Field<SeparatorTemplate>?
   public let longtapActions: Field<[DivActionTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
@@ -222,6 +223,7 @@ public final class DivContainerTemplate: TemplateValue {
       itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
       layoutMode: dictionary.getOptionalExpressionField("layout_mode"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       lineSeparator: dictionary.getOptionalField("line_separator", templateToType: templateToType),
       longtapActions: dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
@@ -269,6 +271,7 @@ public final class DivContainerTemplate: TemplateValue {
     itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
     items: Field<[DivTemplate]>? = nil,
     layoutMode: Field<Expression<LayoutMode>>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     lineSeparator: Field<SeparatorTemplate>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
@@ -313,6 +316,7 @@ public final class DivContainerTemplate: TemplateValue {
     self.itemBuilder = itemBuilder
     self.items = items
     self.layoutMode = layoutMode
+    self.layoutProvider = layoutProvider
     self.lineSeparator = lineSeparator
     self.longtapActions = longtapActions
     self.margins = margins
@@ -358,6 +362,7 @@ public final class DivContainerTemplate: TemplateValue {
     let itemBuilderValue = parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let layoutModeValue = parent?.layoutMode?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let lineSeparatorValue = parent?.lineSeparator?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -401,6 +406,7 @@ public final class DivContainerTemplate: TemplateValue {
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       lineSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_separator", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
@@ -445,6 +451,7 @@ public final class DivContainerTemplate: TemplateValue {
       itemBuilder: itemBuilderValue.value,
       items: itemsValue.value,
       layoutMode: layoutModeValue.value,
+      layoutProvider: layoutProviderValue.value,
       lineSeparator: lineSeparatorValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
@@ -495,6 +502,7 @@ public final class DivContainerTemplate: TemplateValue {
     var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
     var layoutModeValue: DeserializationResult<Expression<DivContainer.LayoutMode>> = parent?.layoutMode?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var lineSeparatorValue: DeserializationResult<DivContainer.Separator> = .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -562,6 +570,8 @@ public final class DivContainerTemplate: TemplateValue {
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
       case "layout_mode":
         layoutModeValue = deserialize(__dictValue).merged(with: layoutModeValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "line_separator":
         lineSeparatorValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivContainerTemplate.SeparatorTemplate.self).merged(with: lineSeparatorValue)
       case "longtap_actions":
@@ -646,6 +656,8 @@ public final class DivContainerTemplate: TemplateValue {
         itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
       case parent?.layoutMode?.link:
         layoutModeValue = layoutModeValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.lineSeparator?.link:
         lineSeparatorValue = lineSeparatorValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivContainerTemplate.SeparatorTemplate.self) })
       case parent?.longtapActions?.link:
@@ -702,6 +714,7 @@ public final class DivContainerTemplate: TemplateValue {
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemBuilderValue = itemBuilderValue.merged(with: { parent.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       lineSeparatorValue = lineSeparatorValue.merged(with: { parent.lineSeparator?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -742,6 +755,7 @@ public final class DivContainerTemplate: TemplateValue {
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       lineSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_separator", error: $0) },
       longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
@@ -786,6 +800,7 @@ public final class DivContainerTemplate: TemplateValue {
       itemBuilder: itemBuilderValue.value,
       items: itemsValue.value,
       layoutMode: layoutModeValue.value,
+      layoutProvider: layoutProviderValue.value,
       lineSeparator: lineSeparatorValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
@@ -841,6 +856,7 @@ public final class DivContainerTemplate: TemplateValue {
       itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
       items: items ?? mergedParent.items,
       layoutMode: layoutMode ?? mergedParent.layoutMode,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       lineSeparator: lineSeparator ?? mergedParent.lineSeparator,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
       margins: margins ?? mergedParent.margins,
@@ -891,6 +907,7 @@ public final class DivContainerTemplate: TemplateValue {
       itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
       items: merged.items?.tryResolveParent(templates: templates),
       layoutMode: merged.layoutMode,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       lineSeparator: merged.lineSeparator?.tryResolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
