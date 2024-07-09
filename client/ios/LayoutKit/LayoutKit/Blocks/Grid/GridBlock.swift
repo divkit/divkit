@@ -47,7 +47,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
 
     public init(
       span: Span = .default,
-      weight: Weight = Weight(),
+      weight: Weight,
       contents: Block,
       alignment: BlockAlignment2D = .default
     ) {
@@ -222,6 +222,7 @@ extension GridBlock {
     let newItems = try items.map {
       try GridBlock.Item(
         span: $0.span,
+        weight: $0.weight,
         contents: $0.contents.updated(withStates: states),
         alignment: $0.alignment
       )
@@ -245,6 +246,7 @@ extension GridBlock {
 extension GridBlock.Item {
   public static func ==(lhs: GridBlock.Item, rhs: GridBlock.Item) -> Bool {
     lhs.span == rhs.span
+      && lhs.weight == rhs.weight
       && lhs.contents == rhs.contents
       && lhs.alignment == rhs.alignment
   }
