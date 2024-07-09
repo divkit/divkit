@@ -7,6 +7,7 @@ public final class DivLastVisibleBoundsCache {
   private let lock = AllocatedUnfairLock()
 
   private var storage: [UIElementPath: Int] = [:]
+  private var invisibleElements = Set<UIElementPath>()
 
   init() {}
 
@@ -24,10 +25,21 @@ public final class DivLastVisibleBoundsCache {
 
   func dropVisibleBounds(prefix: UIElementPath) {
     lock.withLock {
-      for item in storage {
-        if item.key.starts(with: prefix) {
-          storage[item.key] = nil
-        }
+      _dropVisibleBounds(prefix: prefix)
+    }
+  }
+
+  func onBecomeVisible(_ path: UIElementPath) {
+    lock.withLock {
+      _ = invisibleElements.remove(path)
+    }
+  }
+
+  func onBecomeInvisible(_ path: UIElementPath) {
+    lock.withLock {
+      if !invisibleElements.contains(path) {
+        _dropVisibleBounds(prefix: path)
+        invisibleElements.insert(path)
       }
     }
   }
@@ -35,6 +47,14 @@ public final class DivLastVisibleBoundsCache {
   func reset() {
     lock.withLock {
       storage.removeAll()
+    }
+  }
+
+  private func _dropVisibleBounds(prefix: UIElementPath) {
+    for (path, _) in storage {
+      if path.starts(with: prefix) {
+        storage[path] = nil
+      }
     }
   }
 }

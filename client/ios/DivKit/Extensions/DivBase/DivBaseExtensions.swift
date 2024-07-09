@@ -39,7 +39,7 @@ extension DivBase {
           visibilityParams: visibilityParams
         )
       }
-      context.lastVisibleBoundsCache.dropVisibleBounds(prefix: path)
+      context.lastVisibleBoundsCache.onBecomeInvisible(path)
       return EmptyBlock.zeroSized
     }
 
@@ -56,7 +56,7 @@ extension DivBase {
 
     let externalInsets = margins.resolve(context)
     if visibility == .invisible {
-      context.lastVisibleBoundsCache.dropVisibleBounds(prefix: path)
+      context.lastVisibleBoundsCache.onBecomeInvisible(path)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       block = applyExtensionHandlersAfterBaseProperties(
         to: block.addingEdgeInsets(externalInsets, clipsToBounds: clipToBounds),
@@ -65,6 +65,8 @@ extension DivBase {
       )
       return block.addingDecorations(alpha: 0)
     }
+
+    context.lastVisibleBoundsCache.onBecomeVisible(path)
 
     // We can't put container properties into single container.
     // Properties should be applied in specific order.
