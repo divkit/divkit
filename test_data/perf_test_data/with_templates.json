@@ -457,7 +457,7 @@
             "top": 10
           },
           "line_height": 16,
-          "text": "empty_action: '@{empty_action}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'"
+          "text": "counter: @{counter}\nempty_action: '@{empty_action}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'"
         },
         {
           "type": "base_text",
@@ -618,9 +618,9 @@
     "log_id": "benchmark",
     "variables": [
       {
-        "name": "button_text",
-        "type": "string",
-        "value": "Press the button"
+        "name": "counter",
+        "type": "integer",
+        "value": 1
       },
       {
         "name": "empty_action",
@@ -694,7 +694,7 @@
         "div": {
           "type": "benchmark_card",
           "header_text": "Benchmark card",
-          "button_text": "@{button_text}",
+          "button_text": "Counter: @{counter}",
           "button_action": {
             "log_id": "benchmark/button",
             "url": "@{empty_action}"
