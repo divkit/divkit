@@ -1,3 +1,17 @@
+## 30.9.0
+
+# Android Client:
+* Fix `shadow` rotation if `div` uses `transform`.
+
+# iOS Client:
+* Fixed element paths for `div-gallery`.
+* Added `div-base.layout_provider`.
+* Optimized `DivLastVisibleBoundsCache`.
+
+# Web Client:
+* Performance optimizations.
+
+
 ## 30.8.0
 
 # Android Client:
