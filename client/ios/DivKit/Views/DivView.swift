@@ -64,6 +64,7 @@ public final class DivView: VisibleBoundsTrackingView {
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
+    preloader.setSourceTask?.cancel()
     await preloader.setSource(source, debugParams: debugParams)
   }
 
