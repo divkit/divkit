@@ -2,7 +2,8 @@ name: divkit
 description: Open source SDUI framework for server-driven app updates, rapid UI prototyping, and cross-platform layouts.
 homepage: https://github.com/divkit/divkit
 repository: https://github.com/divkit/divkit
-version: 0.2.1-pre
+publish_to: 'https://dart-unpub.taxi.yandex-team.ru/'
+version: 0.3.0-pre
 
 environment:
   sdk: '>=2.17.0 <4.0.0'
