@@ -23,5 +23,16 @@
                 "version_added": "30.5.0"
             }
         }
+    }, {
+        "id": "pager_infinite_scroll",
+        "name": "Pager property <code>infinite_scroll</code>",
+        "compat": {
+            "android": {
+                "version_added": "28.9.0"
+            },
+            "ios": {
+                "version_added": "28.11.0"
+            }
+        }
     }]
 }

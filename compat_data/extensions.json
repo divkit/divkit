@@ -60,5 +60,13 @@
                 "version_added": "30.3.0"
             }
         }
+    }, {
+        "id": "ext_markdown",
+        "name": "<code>markdown</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "30.8.0"
+            }
+        }
     }]
 }

@@ -1,0 +1,11 @@
+{
+    "features": [{
+        "id": "base_component_variables",
+        "name": "Base component property <code>variables</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.8.0"
+            }
+        }
+    }]
+}
