@@ -24,6 +24,7 @@ import com.yandex.div.core.view2.ShadowCache
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.spToPx
+import com.yandex.div.core.view2.divs.spToPxF
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -114,7 +115,7 @@ internal class DivBorderDrawer(
     private fun applyBorder(border: DivBorder?, resolver: ExpressionResolver) {
         val metrics = displayMetrics
 
-        strokeWidth = border?.stroke?.widthPx(resolver, metrics)?.toFloat() ?: DEFAULT_STROKE_WIDTH
+        strokeWidth = border?.stroke?.widthPx(resolver, metrics) ?: DEFAULT_STROKE_WIDTH
         hasBorder = strokeWidth > 0
         if (hasBorder) {
             val borderColor = border?.stroke?.color?.evaluate(resolver)
@@ -340,12 +341,12 @@ internal class DivBorderDrawer(
 }
 
 @Px
-internal fun DivStroke?.widthPx(expressionResolver: ExpressionResolver, metrics: DisplayMetrics): Int {
+internal fun DivStroke?.widthPx(expressionResolver: ExpressionResolver, metrics: DisplayMetrics): Float {
     return when(this?.unit?.evaluate(expressionResolver)) {
-        DivSizeUnit.DP -> width.evaluate(expressionResolver).dpToPx(metrics)
-        DivSizeUnit.SP -> width.evaluate(expressionResolver).spToPx(metrics)
-        DivSizeUnit.PX -> width.evaluate(expressionResolver).toIntSafely()
-        else -> this?.width?.evaluate(expressionResolver)?.toIntSafely() ?: 0
+        DivSizeUnit.DP -> width.evaluate(expressionResolver).dpToPxF(metrics)
+        DivSizeUnit.SP -> width.evaluate(expressionResolver).spToPxF(metrics)
+        DivSizeUnit.PX -> width.evaluate(expressionResolver).toFloat()
+        else -> this?.width?.evaluate(expressionResolver)?.toFloat() ?: 0f
     }
 }
 
