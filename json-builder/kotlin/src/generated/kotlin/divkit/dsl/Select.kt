@@ -55,6 +55,7 @@ class Select internal constructor(
             hintColor = additive.hintColor ?: properties.hintColor,
             hintText = additive.hintText ?: properties.hintText,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
             margins = additive.margins ?: properties.margins,
@@ -162,6 +163,10 @@ class Select internal constructor(
          */
         val id: Property<String>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * Spacing between characters.
          * Default value: `0`.
          */
@@ -265,6 +270,7 @@ class Select internal constructor(
             result.tryPutProperty("hint_color", hintColor)
             result.tryPutProperty("hint_text", hintText)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
             result.tryPutProperty("margins", margins)
@@ -353,6 +359,7 @@ class Select internal constructor(
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -395,6 +402,7 @@ fun DivScope.select(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -436,6 +444,7 @@ fun DivScope.select(
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
@@ -479,6 +488,7 @@ fun DivScope.select(
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -521,6 +531,7 @@ fun DivScope.selectProps(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -561,6 +572,7 @@ fun DivScope.selectProps(
     hintColor = valueOrNull(hintColor),
     hintText = valueOrNull(hintText),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
     margins = valueOrNull(margins),
@@ -603,6 +615,7 @@ fun DivScope.selectProps(
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -645,6 +658,7 @@ fun TemplateScope.selectRefs(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -685,6 +699,7 @@ fun TemplateScope.selectRefs(
     hintColor = hintColor,
     hintText = hintText,
     id = id,
+    layoutProvider = layoutProvider,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
     margins = margins,
@@ -727,6 +742,7 @@ fun TemplateScope.selectRefs(
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -769,6 +785,7 @@ fun Select.override(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -810,6 +827,7 @@ fun Select.override(
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
         hintText = valueOrNull(hintText) ?: properties.hintText,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         margins = valueOrNull(margins) ?: properties.margins,
@@ -853,6 +871,7 @@ fun Select.override(
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -895,6 +914,7 @@ fun Select.defer(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -936,6 +956,7 @@ fun Select.defer(
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = margins ?: properties.margins,
@@ -1017,6 +1038,7 @@ fun Select.evaluate(
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = properties.margins,
@@ -1060,6 +1082,7 @@ fun Select.evaluate(
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1102,6 +1125,7 @@ fun Component<Select>.override(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -1144,6 +1168,7 @@ fun Component<Select>.override(
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
@@ -1187,6 +1212,7 @@ fun Component<Select>.override(
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1229,6 +1255,7 @@ fun Component<Select>.defer(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1271,6 +1298,7 @@ fun Component<Select>.defer(
         hintColor = hintColor,
         hintText = hintText,
         id = id,
+        layoutProvider = layoutProvider,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = margins,
@@ -1353,6 +1381,7 @@ fun Component<Select>.evaluate(
         hintColor = hintColor,
         hintText = hintText,
         id = null,
+        layoutProvider = null,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = null,

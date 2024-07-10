@@ -63,6 +63,7 @@ class Text internal constructor(
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             images = additive.images ?: properties.images,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
@@ -210,6 +211,10 @@ class Text internal constructor(
          * Images embedded in text.
          */
         val images: Property<List<Image>>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * Spacing between characters.
          * Default value: `0`.
@@ -372,6 +377,7 @@ class Text internal constructor(
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("images", images)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
             result.tryPutProperty("longtap_actions", longtapActions)
@@ -714,6 +720,7 @@ class Text internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -775,6 +782,7 @@ fun DivScope.text(
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     longtapActions: List<Action>? = null,
@@ -834,6 +842,7 @@ fun DivScope.text(
         height = valueOrNull(height),
         id = valueOrNull(id),
         images = valueOrNull(images),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         longtapActions = valueOrNull(longtapActions),
@@ -894,6 +903,7 @@ fun DivScope.text(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -955,6 +965,7 @@ fun DivScope.textProps(
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     longtapActions: List<Action>? = null,
@@ -1013,6 +1024,7 @@ fun DivScope.textProps(
     height = valueOrNull(height),
     id = valueOrNull(id),
     images = valueOrNull(images),
+    layoutProvider = valueOrNull(layoutProvider),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
     longtapActions = valueOrNull(longtapActions),
@@ -1072,6 +1084,7 @@ fun DivScope.textProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1133,6 +1146,7 @@ fun TemplateScope.textRefs(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1191,6 +1205,7 @@ fun TemplateScope.textRefs(
     height = height,
     id = id,
     images = images,
+    layoutProvider = layoutProvider,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
     longtapActions = longtapActions,
@@ -1250,6 +1265,7 @@ fun TemplateScope.textRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1311,6 +1327,7 @@ fun Text.override(
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     longtapActions: List<Action>? = null,
@@ -1370,6 +1387,7 @@ fun Text.override(
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         images = valueOrNull(images) ?: properties.images,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
@@ -1430,6 +1448,7 @@ fun Text.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1491,6 +1510,7 @@ fun Text.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1550,6 +1570,7 @@ fun Text.defer(
         height = height ?: properties.height,
         id = id ?: properties.id,
         images = images ?: properties.images,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         longtapActions = longtapActions ?: properties.longtapActions,
@@ -1668,6 +1689,7 @@ fun Text.evaluate(
         height = properties.height,
         id = properties.id,
         images = properties.images,
+        layoutProvider = properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         longtapActions = properties.longtapActions,
@@ -1728,6 +1750,7 @@ fun Text.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1789,6 +1812,7 @@ fun Component<Text>.override(
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     longtapActions: List<Action>? = null,
@@ -1849,6 +1873,7 @@ fun Component<Text>.override(
         height = valueOrNull(height),
         id = valueOrNull(id),
         images = valueOrNull(images),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         longtapActions = valueOrNull(longtapActions),
@@ -1909,6 +1934,7 @@ fun Component<Text>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1970,6 +1996,7 @@ fun Component<Text>.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -2030,6 +2057,7 @@ fun Component<Text>.defer(
         height = height,
         id = id,
         images = images,
+        layoutProvider = layoutProvider,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         longtapActions = longtapActions,
@@ -2149,6 +2177,7 @@ fun Component<Text>.evaluate(
         height = null,
         id = null,
         images = null,
+        layoutProvider = null,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         longtapActions = null,

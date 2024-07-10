@@ -58,6 +58,7 @@ class Input internal constructor(
             id = additive.id ?: properties.id,
             isEnabled = additive.isEnabled ?: properties.isEnabled,
             keyboardType = additive.keyboardType ?: properties.keyboardType,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
             margins = additive.margins ?: properties.margins,
@@ -185,6 +186,10 @@ class Input internal constructor(
          * Default value: `multi_line_text`.
          */
         val keyboardType: Property<KeyboardType>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * Spacing between characters.
          * Default value: `0`.
@@ -326,6 +331,7 @@ class Input internal constructor(
             result.tryPutProperty("id", id)
             result.tryPutProperty("is_enabled", isEnabled)
             result.tryPutProperty("keyboard_type", keyboardType)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
             result.tryPutProperty("margins", margins)
@@ -426,6 +432,7 @@ class Input internal constructor(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -479,6 +486,7 @@ fun DivScope.input(
     id: String? = null,
     isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -530,6 +538,7 @@ fun DivScope.input(
         id = valueOrNull(id),
         isEnabled = valueOrNull(isEnabled),
         keyboardType = valueOrNull(keyboardType),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
@@ -583,6 +592,7 @@ fun DivScope.input(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -636,6 +646,7 @@ fun DivScope.inputProps(
     id: String? = null,
     isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -686,6 +697,7 @@ fun DivScope.inputProps(
     id = valueOrNull(id),
     isEnabled = valueOrNull(isEnabled),
     keyboardType = valueOrNull(keyboardType),
+    layoutProvider = valueOrNull(layoutProvider),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
     margins = valueOrNull(margins),
@@ -738,6 +750,7 @@ fun DivScope.inputProps(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -791,6 +804,7 @@ fun TemplateScope.inputRefs(
     id: ReferenceProperty<String>? = null,
     isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -841,6 +855,7 @@ fun TemplateScope.inputRefs(
     id = id,
     isEnabled = isEnabled,
     keyboardType = keyboardType,
+    layoutProvider = layoutProvider,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
     margins = margins,
@@ -893,6 +908,7 @@ fun TemplateScope.inputRefs(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -946,6 +962,7 @@ fun Input.override(
     id: String? = null,
     isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -997,6 +1014,7 @@ fun Input.override(
         id = valueOrNull(id) ?: properties.id,
         isEnabled = valueOrNull(isEnabled) ?: properties.isEnabled,
         keyboardType = valueOrNull(keyboardType) ?: properties.keyboardType,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         margins = valueOrNull(margins) ?: properties.margins,
@@ -1050,6 +1068,7 @@ fun Input.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1103,6 +1122,7 @@ fun Input.defer(
     id: ReferenceProperty<String>? = null,
     isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1154,6 +1174,7 @@ fun Input.defer(
         id = id ?: properties.id,
         isEnabled = isEnabled ?: properties.isEnabled,
         keyboardType = keyboardType ?: properties.keyboardType,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = margins ?: properties.margins,
@@ -1261,6 +1282,7 @@ fun Input.evaluate(
         id = properties.id,
         isEnabled = isEnabled ?: properties.isEnabled,
         keyboardType = keyboardType ?: properties.keyboardType,
+        layoutProvider = properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = properties.margins,
@@ -1314,6 +1336,7 @@ fun Input.evaluate(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1367,6 +1390,7 @@ fun Component<Input>.override(
     id: String? = null,
     isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -1419,6 +1443,7 @@ fun Component<Input>.override(
         id = valueOrNull(id),
         isEnabled = valueOrNull(isEnabled),
         keyboardType = valueOrNull(keyboardType),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
@@ -1472,6 +1497,7 @@ fun Component<Input>.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1525,6 +1551,7 @@ fun Component<Input>.defer(
     id: ReferenceProperty<String>? = null,
     isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1577,6 +1604,7 @@ fun Component<Input>.defer(
         id = id,
         isEnabled = isEnabled,
         keyboardType = keyboardType,
+        layoutProvider = layoutProvider,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = margins,
@@ -1685,6 +1713,7 @@ fun Component<Input>.evaluate(
         id = null,
         isEnabled = isEnabled,
         keyboardType = keyboardType,
+        layoutProvider = null,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = null,

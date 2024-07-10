@@ -60,6 +60,7 @@ class Container internal constructor(
             itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
             items = additive.items ?: properties.items,
             layoutMode = additive.layoutMode ?: properties.layoutMode,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             lineSeparator = additive.lineSeparator ?: properties.lineSeparator,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
@@ -188,6 +189,10 @@ class Container internal constructor(
          */
         val layoutMode: Property<LayoutMode>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
          */
         val lineSeparator: Property<Separator>?,
@@ -289,6 +294,7 @@ class Container internal constructor(
             result.tryPutProperty("item_builder", itemBuilder)
             result.tryPutProperty("items", items)
             result.tryPutProperty("layout_mode", layoutMode)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("line_separator", lineSeparator)
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
@@ -415,6 +421,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -460,6 +467,7 @@ fun DivScope.row(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -503,6 +511,7 @@ fun DivScope.row(
     itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -548,6 +557,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -593,6 +603,7 @@ fun DivScope.row(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -636,6 +647,7 @@ fun DivScope.row(
     itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -681,6 +693,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -726,6 +739,7 @@ fun DivScope.column(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -769,6 +783,7 @@ fun DivScope.column(
     itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -814,6 +829,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -859,6 +875,7 @@ fun DivScope.column(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -902,6 +919,7 @@ fun DivScope.column(
     itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -947,6 +965,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -992,6 +1011,7 @@ fun DivScope.stack(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1035,6 +1055,7 @@ fun DivScope.stack(
     itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -1080,6 +1101,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1125,6 +1147,7 @@ fun DivScope.stack(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1168,6 +1191,7 @@ fun DivScope.stack(
     itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -1214,6 +1238,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1260,6 +1285,7 @@ fun DivScope.container(
     itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1304,6 +1330,7 @@ fun DivScope.container(
         itemBuilder = valueOrNull(itemBuilder),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
+        layoutProvider = valueOrNull(layoutProvider),
         lineSeparator = valueOrNull(lineSeparator),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
@@ -1351,6 +1378,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1397,6 +1425,7 @@ fun DivScope.containerProps(
     itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1440,6 +1469,7 @@ fun DivScope.containerProps(
     itemBuilder = valueOrNull(itemBuilder),
     items = valueOrNull(items),
     layoutMode = valueOrNull(layoutMode),
+    layoutProvider = valueOrNull(layoutProvider),
     lineSeparator = valueOrNull(lineSeparator),
     longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
@@ -1486,6 +1516,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1532,6 +1563,7 @@ fun TemplateScope.containerRefs(
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1575,6 +1607,7 @@ fun TemplateScope.containerRefs(
     itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -1621,6 +1654,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1667,6 +1701,7 @@ fun Container.override(
     itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1711,6 +1746,7 @@ fun Container.override(
         itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
         items = valueOrNull(items) ?: properties.items,
         layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         lineSeparator = valueOrNull(lineSeparator) ?: properties.lineSeparator,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
@@ -1758,6 +1794,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1804,6 +1841,7 @@ fun Container.defer(
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1848,6 +1886,7 @@ fun Container.defer(
         itemBuilder = itemBuilder ?: properties.itemBuilder,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         lineSeparator = lineSeparator ?: properties.lineSeparator,
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
@@ -1922,6 +1961,7 @@ fun Container.evaluate(
         itemBuilder = properties.itemBuilder,
         items = properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
+        layoutProvider = properties.layoutProvider,
         lineSeparator = properties.lineSeparator,
         longtapActions = properties.longtapActions,
         margins = properties.margins,
@@ -1969,6 +2009,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -2015,6 +2056,7 @@ fun Component<Container>.override(
     itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -2060,6 +2102,7 @@ fun Component<Container>.override(
         itemBuilder = valueOrNull(itemBuilder),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
+        layoutProvider = valueOrNull(layoutProvider),
         lineSeparator = valueOrNull(lineSeparator),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
@@ -2107,6 +2150,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -2153,6 +2197,7 @@ fun Component<Container>.defer(
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -2198,6 +2243,7 @@ fun Component<Container>.defer(
         itemBuilder = itemBuilder,
         items = items,
         layoutMode = layoutMode,
+        layoutProvider = layoutProvider,
         lineSeparator = lineSeparator,
         longtapActions = longtapActions,
         margins = margins,
@@ -2273,6 +2319,7 @@ fun Component<Container>.evaluate(
         itemBuilder = null,
         items = null,
         layoutMode = layoutMode,
+        layoutProvider = null,
         lineSeparator = null,
         longtapActions = null,
         margins = null,

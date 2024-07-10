@@ -56,6 +56,7 @@ class GifImage internal constructor(
             gifUrl = additive.gifUrl ?: properties.gifUrl,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
@@ -166,6 +167,10 @@ class GifImage internal constructor(
          */
         val id: Property<String>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
          */
         val longtapActions: Property<List<Action>>?,
@@ -274,6 +279,7 @@ class GifImage internal constructor(
             result.tryPutProperty("gif_url", gifUrl)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
@@ -320,6 +326,7 @@ class GifImage internal constructor(
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -364,6 +371,7 @@ fun DivScope.gifImage(
     gifUrl: Url? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -406,6 +414,7 @@ fun DivScope.gifImage(
         gifUrl = valueOrNull(gifUrl),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -450,6 +459,7 @@ fun DivScope.gifImage(
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -494,6 +504,7 @@ fun DivScope.gifImageProps(
     gifUrl: Url? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -535,6 +546,7 @@ fun DivScope.gifImageProps(
     gifUrl = valueOrNull(gifUrl),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
@@ -578,6 +590,7 @@ fun DivScope.gifImageProps(
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -622,6 +635,7 @@ fun TemplateScope.gifImageRefs(
     gifUrl: ReferenceProperty<Url>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -663,6 +677,7 @@ fun TemplateScope.gifImageRefs(
     gifUrl = gifUrl,
     height = height,
     id = id,
+    layoutProvider = layoutProvider,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -706,6 +721,7 @@ fun TemplateScope.gifImageRefs(
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -750,6 +766,7 @@ fun GifImage.override(
     gifUrl: Url? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -792,6 +809,7 @@ fun GifImage.override(
         gifUrl = valueOrNull(gifUrl) ?: properties.gifUrl,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -836,6 +854,7 @@ fun GifImage.override(
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -880,6 +899,7 @@ fun GifImage.defer(
     gifUrl: ReferenceProperty<Url>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -922,6 +942,7 @@ fun GifImage.defer(
         gifUrl = gifUrl ?: properties.gifUrl,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
@@ -998,6 +1019,7 @@ fun GifImage.evaluate(
         gifUrl = gifUrl ?: properties.gifUrl,
         height = properties.height,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         longtapActions = properties.longtapActions,
         margins = properties.margins,
         paddings = properties.paddings,
@@ -1042,6 +1064,7 @@ fun GifImage.evaluate(
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1086,6 +1109,7 @@ fun Component<GifImage>.override(
     gifUrl: Url? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -1129,6 +1153,7 @@ fun Component<GifImage>.override(
         gifUrl = valueOrNull(gifUrl),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -1173,6 +1198,7 @@ fun Component<GifImage>.override(
  * @param gifUrl Direct URL to a GIF image.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1217,6 +1243,7 @@ fun Component<GifImage>.defer(
     gifUrl: ReferenceProperty<Url>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1260,6 +1287,7 @@ fun Component<GifImage>.defer(
         gifUrl = gifUrl,
         height = height,
         id = id,
+        layoutProvider = layoutProvider,
         longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
@@ -1337,6 +1365,7 @@ fun Component<GifImage>.evaluate(
         gifUrl = gifUrl,
         height = null,
         id = null,
+        layoutProvider = null,
         longtapActions = null,
         margins = null,
         paddings = null,

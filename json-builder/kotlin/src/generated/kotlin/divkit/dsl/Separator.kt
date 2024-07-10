@@ -53,6 +53,7 @@ class Separator internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
@@ -145,6 +146,10 @@ class Separator internal constructor(
          */
         val id: Property<String>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
          */
         val longtapActions: Property<List<Action>>?,
@@ -231,6 +236,7 @@ class Separator internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
@@ -321,6 +327,7 @@ class Separator internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -358,6 +365,7 @@ fun DivScope.separator(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -393,6 +401,7 @@ fun DivScope.separator(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -430,6 +439,7 @@ fun DivScope.separator(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -467,6 +477,7 @@ fun DivScope.separatorProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -501,6 +512,7 @@ fun DivScope.separatorProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
@@ -537,6 +549,7 @@ fun DivScope.separatorProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -574,6 +587,7 @@ fun TemplateScope.separatorRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -608,6 +622,7 @@ fun TemplateScope.separatorRefs(
     focus = focus,
     height = height,
     id = id,
+    layoutProvider = layoutProvider,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -644,6 +659,7 @@ fun TemplateScope.separatorRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -681,6 +697,7 @@ fun Separator.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -716,6 +733,7 @@ fun Separator.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -753,6 +771,7 @@ fun Separator.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -790,6 +809,7 @@ fun Separator.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -825,6 +845,7 @@ fun Separator.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
@@ -880,6 +901,7 @@ fun Separator.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         longtapActions = properties.longtapActions,
         margins = properties.margins,
         paddings = properties.paddings,
@@ -917,6 +939,7 @@ fun Separator.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -954,6 +977,7 @@ fun Component<Separator>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -990,6 +1014,7 @@ fun Component<Separator>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -1027,6 +1052,7 @@ fun Component<Separator>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1064,6 +1090,7 @@ fun Component<Separator>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1100,6 +1127,7 @@ fun Component<Separator>.defer(
         focus = focus,
         height = height,
         id = id,
+        layoutProvider = layoutProvider,
         longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
@@ -1156,6 +1184,7 @@ fun Component<Separator>.evaluate(
         focus = null,
         height = null,
         id = null,
+        layoutProvider = null,
         longtapActions = null,
         margins = null,
         paddings = null,

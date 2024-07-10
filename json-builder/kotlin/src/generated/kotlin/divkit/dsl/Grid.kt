@@ -56,6 +56,7 @@ class Grid internal constructor(
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             items = additive.items ?: properties.items,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
@@ -162,6 +163,10 @@ class Grid internal constructor(
          */
         val items: Property<List<Div>>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
          */
         val longtapActions: Property<List<Action>>?,
@@ -251,6 +256,7 @@ class Grid internal constructor(
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("items", items)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
@@ -293,6 +299,7 @@ class Grid internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Contents.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -333,6 +340,7 @@ fun DivScope.grid(
     height: Size? = null,
     id: String? = null,
     items: List<Div>? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -371,6 +379,7 @@ fun DivScope.grid(
         height = valueOrNull(height),
         id = valueOrNull(id),
         items = valueOrNull(items),
+        layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -411,6 +420,7 @@ fun DivScope.grid(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Contents.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -451,6 +461,7 @@ fun DivScope.gridProps(
     height: Size? = null,
     id: String? = null,
     items: List<Div>? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -488,6 +499,7 @@ fun DivScope.gridProps(
     height = valueOrNull(height),
     id = valueOrNull(id),
     items = valueOrNull(items),
+    layoutProvider = valueOrNull(layoutProvider),
     longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
@@ -527,6 +539,7 @@ fun DivScope.gridProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Contents.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -567,6 +580,7 @@ fun TemplateScope.gridRefs(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Div>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -604,6 +618,7 @@ fun TemplateScope.gridRefs(
     height = height,
     id = id,
     items = items,
+    layoutProvider = layoutProvider,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -643,6 +658,7 @@ fun TemplateScope.gridRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Contents.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -683,6 +699,7 @@ fun Grid.override(
     height: Size? = null,
     id: String? = null,
     items: List<Div>? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -721,6 +738,7 @@ fun Grid.override(
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         items = valueOrNull(items) ?: properties.items,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -761,6 +779,7 @@ fun Grid.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Contents.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -801,6 +820,7 @@ fun Grid.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Div>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -839,6 +859,7 @@ fun Grid.defer(
         height = height ?: properties.height,
         id = id ?: properties.id,
         items = items ?: properties.items,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
@@ -903,6 +924,7 @@ fun Grid.evaluate(
         height = properties.height,
         id = properties.id,
         items = properties.items,
+        layoutProvider = properties.layoutProvider,
         longtapActions = properties.longtapActions,
         margins = properties.margins,
         paddings = properties.paddings,
@@ -943,6 +965,7 @@ fun Grid.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Contents.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -983,6 +1006,7 @@ fun Component<Grid>.override(
     height: Size? = null,
     id: String? = null,
     items: List<Div>? = null,
+    layoutProvider: LayoutProvider? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -1022,6 +1046,7 @@ fun Component<Grid>.override(
         height = valueOrNull(height),
         id = valueOrNull(id),
         items = valueOrNull(items),
+        layoutProvider = valueOrNull(layoutProvider),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -1062,6 +1087,7 @@ fun Component<Grid>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Contents.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1102,6 +1128,7 @@ fun Component<Grid>.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Div>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1141,6 +1168,7 @@ fun Component<Grid>.defer(
         height = height,
         id = id,
         items = items,
+        layoutProvider = layoutProvider,
         longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
@@ -1206,6 +1234,7 @@ fun Component<Grid>.evaluate(
         height = null,
         id = null,
         items = null,
+        layoutProvider = null,
         longtapActions = null,
         margins = null,
         paddings = null,

@@ -51,6 +51,7 @@ class Custom internal constructor(
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             items = additive.items ?: properties.items,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -133,6 +134,10 @@ class Custom internal constructor(
          */
         val items: Property<List<Div>>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * External margins from the element stroke.
          */
         val margins: Property<EdgeInsets>?,
@@ -213,6 +218,7 @@ class Custom internal constructor(
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("items", items)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("row_span", rowSpan)
@@ -249,6 +255,7 @@ class Custom internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -283,6 +290,7 @@ fun DivScope.custom(
     height: Size? = null,
     id: String? = null,
     items: List<Div>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
@@ -315,6 +323,7 @@ fun DivScope.custom(
         height = valueOrNull(height),
         id = valueOrNull(id),
         items = valueOrNull(items),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         rowSpan = valueOrNull(rowSpan),
@@ -349,6 +358,7 @@ fun DivScope.custom(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -383,6 +393,7 @@ fun DivScope.customProps(
     height: Size? = null,
     id: String? = null,
     items: List<Div>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
@@ -414,6 +425,7 @@ fun DivScope.customProps(
     height = valueOrNull(height),
     id = valueOrNull(id),
     items = valueOrNull(items),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
     rowSpan = valueOrNull(rowSpan),
@@ -447,6 +459,7 @@ fun DivScope.customProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -481,6 +494,7 @@ fun TemplateScope.customRefs(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Div>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -512,6 +526,7 @@ fun TemplateScope.customRefs(
     height = height,
     id = id,
     items = items,
+    layoutProvider = layoutProvider,
     margins = margins,
     paddings = paddings,
     rowSpan = rowSpan,
@@ -545,6 +560,7 @@ fun TemplateScope.customRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -579,6 +595,7 @@ fun Custom.override(
     height: Size? = null,
     id: String? = null,
     items: List<Div>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
@@ -611,6 +628,7 @@ fun Custom.override(
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         items = valueOrNull(items) ?: properties.items,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -645,6 +663,7 @@ fun Custom.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -679,6 +698,7 @@ fun Custom.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Div>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -711,6 +731,7 @@ fun Custom.defer(
         height = height ?: properties.height,
         id = id ?: properties.id,
         items = items ?: properties.items,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -763,6 +784,7 @@ fun Custom.evaluate(
         height = properties.height,
         id = properties.id,
         items = properties.items,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         paddings = properties.paddings,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -797,6 +819,7 @@ fun Custom.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -831,6 +854,7 @@ fun Component<Custom>.override(
     height: Size? = null,
     id: String? = null,
     items: List<Div>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
@@ -864,6 +888,7 @@ fun Component<Custom>.override(
         height = valueOrNull(height),
         id = valueOrNull(id),
         items = valueOrNull(items),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         rowSpan = valueOrNull(rowSpan),
@@ -898,6 +923,7 @@ fun Component<Custom>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -932,6 +958,7 @@ fun Component<Custom>.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Div>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -965,6 +992,7 @@ fun Component<Custom>.defer(
         height = height,
         id = id,
         items = items,
+        layoutProvider = layoutProvider,
         margins = margins,
         paddings = paddings,
         rowSpan = rowSpan,
@@ -1018,6 +1046,7 @@ fun Component<Custom>.evaluate(
         height = null,
         id = null,
         items = null,
+        layoutProvider = null,
         margins = null,
         paddings = null,
         rowSpan = rowSpan,

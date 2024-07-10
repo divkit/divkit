@@ -48,6 +48,7 @@ class Slider internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             maxValue = additive.maxValue ?: properties.maxValue,
             minValue = additive.minValue ?: properties.minValue,
@@ -131,6 +132,10 @@ class Slider internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * External margins from the element stroke.
          */
@@ -267,6 +272,7 @@ class Slider internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("max_value", maxValue)
             result.tryPutProperty("min_value", minValue)
@@ -438,6 +444,7 @@ class Slider internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -483,6 +490,7 @@ fun DivScope.slider(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
     minValue: Int? = null,
@@ -526,6 +534,7 @@ fun DivScope.slider(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         maxValue = valueOrNull(maxValue),
         minValue = valueOrNull(minValue),
@@ -571,6 +580,7 @@ fun DivScope.slider(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -616,6 +626,7 @@ fun DivScope.sliderProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
     minValue: Int? = null,
@@ -658,6 +669,7 @@ fun DivScope.sliderProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     maxValue = valueOrNull(maxValue),
     minValue = valueOrNull(minValue),
@@ -702,6 +714,7 @@ fun DivScope.sliderProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -747,6 +760,7 @@ fun TemplateScope.sliderRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
@@ -789,6 +803,7 @@ fun TemplateScope.sliderRefs(
     focus = focus,
     height = height,
     id = id,
+    layoutProvider = layoutProvider,
     margins = margins,
     maxValue = maxValue,
     minValue = minValue,
@@ -833,6 +848,7 @@ fun TemplateScope.sliderRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -878,6 +894,7 @@ fun Slider.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
     minValue: Int? = null,
@@ -921,6 +938,7 @@ fun Slider.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         maxValue = valueOrNull(maxValue) ?: properties.maxValue,
         minValue = valueOrNull(minValue) ?: properties.minValue,
@@ -966,6 +984,7 @@ fun Slider.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1011,6 +1030,7 @@ fun Slider.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
@@ -1054,6 +1074,7 @@ fun Slider.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
@@ -1121,6 +1142,7 @@ fun Slider.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
@@ -1166,6 +1188,7 @@ fun Slider.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1211,6 +1234,7 @@ fun Component<Slider>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
     minValue: Int? = null,
@@ -1255,6 +1279,7 @@ fun Component<Slider>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         maxValue = valueOrNull(maxValue),
         minValue = valueOrNull(minValue),
@@ -1300,6 +1325,7 @@ fun Component<Slider>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1345,6 +1371,7 @@ fun Component<Slider>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
@@ -1389,6 +1416,7 @@ fun Component<Slider>.defer(
         focus = focus,
         height = height,
         id = id,
+        layoutProvider = layoutProvider,
         margins = margins,
         maxValue = maxValue,
         minValue = minValue,
@@ -1457,6 +1485,7 @@ fun Component<Slider>.evaluate(
         focus = null,
         height = null,
         id = null,
+        layoutProvider = null,
         margins = null,
         maxValue = maxValue,
         minValue = minValue,

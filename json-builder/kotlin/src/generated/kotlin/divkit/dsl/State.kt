@@ -50,6 +50,7 @@ class State internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
@@ -131,6 +132,10 @@ class State internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * External margins from the element stroke.
          */
@@ -225,6 +230,7 @@ class State internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("row_span", rowSpan)
@@ -325,6 +331,7 @@ class State internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -361,6 +368,7 @@ fun DivScope.state(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
@@ -395,6 +403,7 @@ fun DivScope.state(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         rowSpan = valueOrNull(rowSpan),
@@ -431,6 +440,7 @@ fun DivScope.state(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -467,6 +477,7 @@ fun DivScope.stateProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
@@ -500,6 +511,7 @@ fun DivScope.stateProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
     rowSpan = valueOrNull(rowSpan),
@@ -535,6 +547,7 @@ fun DivScope.stateProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -571,6 +584,7 @@ fun TemplateScope.stateRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -604,6 +618,7 @@ fun TemplateScope.stateRefs(
     focus = focus,
     height = height,
     id = id,
+    layoutProvider = layoutProvider,
     margins = margins,
     paddings = paddings,
     rowSpan = rowSpan,
@@ -639,6 +654,7 @@ fun TemplateScope.stateRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -675,6 +691,7 @@ fun State.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
@@ -709,6 +726,7 @@ fun State.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
@@ -745,6 +763,7 @@ fun State.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -781,6 +800,7 @@ fun State.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -815,6 +835,7 @@ fun State.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -873,6 +894,7 @@ fun State.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         paddings = properties.paddings,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -909,6 +931,7 @@ fun State.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -945,6 +968,7 @@ fun Component<State>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
@@ -980,6 +1004,7 @@ fun Component<State>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         rowSpan = valueOrNull(rowSpan),
@@ -1016,6 +1041,7 @@ fun Component<State>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1052,6 +1078,7 @@ fun Component<State>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
@@ -1087,6 +1114,7 @@ fun Component<State>.defer(
         focus = focus,
         height = height,
         id = id,
+        layoutProvider = layoutProvider,
         margins = margins,
         paddings = paddings,
         rowSpan = rowSpan,
@@ -1146,6 +1174,7 @@ fun Component<State>.evaluate(
         focus = null,
         height = null,
         id = null,
+        layoutProvider = null,
         margins = null,
         paddings = null,
         rowSpan = rowSpan,

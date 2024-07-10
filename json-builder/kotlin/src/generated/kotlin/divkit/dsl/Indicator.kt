@@ -56,6 +56,7 @@ class Indicator internal constructor(
             inactiveMinimumShape = additive.inactiveMinimumShape ?: properties.inactiveMinimumShape,
             inactiveShape = additive.inactiveShape ?: properties.inactiveShape,
             itemsPlacement = additive.itemsPlacement ?: properties.itemsPlacement,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             minimumItemSize = additive.minimumItemSize ?: properties.minimumItemSize,
             paddings = additive.paddings ?: properties.paddings,
@@ -169,6 +170,10 @@ class Indicator internal constructor(
          */
         val itemsPlacement: Property<IndicatorItemPlacement>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * External margins from the element stroke.
          */
         val margins: Property<EdgeInsets>?,
@@ -276,6 +281,7 @@ class Indicator internal constructor(
             result.tryPutProperty("inactive_minimum_shape", inactiveMinimumShape)
             result.tryPutProperty("inactive_shape", inactiveShape)
             result.tryPutProperty("items_placement", itemsPlacement)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("minimum_item_size", minimumItemSize)
             result.tryPutProperty("paddings", paddings)
@@ -329,6 +335,7 @@ class Indicator internal constructor(
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
@@ -372,6 +379,7 @@ fun DivScope.indicator(
     inactiveMinimumShape: RoundedRectangleShape? = null,
     inactiveShape: RoundedRectangleShape? = null,
     itemsPlacement: IndicatorItemPlacement? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     minimumItemSize: Double? = null,
     paddings: EdgeInsets? = null,
@@ -413,6 +421,7 @@ fun DivScope.indicator(
         inactiveMinimumShape = valueOrNull(inactiveMinimumShape),
         inactiveShape = valueOrNull(inactiveShape),
         itemsPlacement = valueOrNull(itemsPlacement),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         minimumItemSize = valueOrNull(minimumItemSize),
         paddings = valueOrNull(paddings),
@@ -456,6 +465,7 @@ fun DivScope.indicator(
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
@@ -499,6 +509,7 @@ fun DivScope.indicatorProps(
     inactiveMinimumShape: RoundedRectangleShape? = null,
     inactiveShape: RoundedRectangleShape? = null,
     itemsPlacement: IndicatorItemPlacement? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     minimumItemSize: Double? = null,
     paddings: EdgeInsets? = null,
@@ -539,6 +550,7 @@ fun DivScope.indicatorProps(
     inactiveMinimumShape = valueOrNull(inactiveMinimumShape),
     inactiveShape = valueOrNull(inactiveShape),
     itemsPlacement = valueOrNull(itemsPlacement),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     minimumItemSize = valueOrNull(minimumItemSize),
     paddings = valueOrNull(paddings),
@@ -581,6 +593,7 @@ fun DivScope.indicatorProps(
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
@@ -624,6 +637,7 @@ fun TemplateScope.indicatorRefs(
     inactiveMinimumShape: ReferenceProperty<RoundedRectangleShape>? = null,
     inactiveShape: ReferenceProperty<RoundedRectangleShape>? = null,
     itemsPlacement: ReferenceProperty<IndicatorItemPlacement>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     minimumItemSize: ReferenceProperty<Double>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -664,6 +678,7 @@ fun TemplateScope.indicatorRefs(
     inactiveMinimumShape = inactiveMinimumShape,
     inactiveShape = inactiveShape,
     itemsPlacement = itemsPlacement,
+    layoutProvider = layoutProvider,
     margins = margins,
     minimumItemSize = minimumItemSize,
     paddings = paddings,
@@ -706,6 +721,7 @@ fun TemplateScope.indicatorRefs(
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
@@ -749,6 +765,7 @@ fun Indicator.override(
     inactiveMinimumShape: RoundedRectangleShape? = null,
     inactiveShape: RoundedRectangleShape? = null,
     itemsPlacement: IndicatorItemPlacement? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     minimumItemSize: Double? = null,
     paddings: EdgeInsets? = null,
@@ -790,6 +807,7 @@ fun Indicator.override(
         inactiveMinimumShape = valueOrNull(inactiveMinimumShape) ?: properties.inactiveMinimumShape,
         inactiveShape = valueOrNull(inactiveShape) ?: properties.inactiveShape,
         itemsPlacement = valueOrNull(itemsPlacement) ?: properties.itemsPlacement,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         minimumItemSize = valueOrNull(minimumItemSize) ?: properties.minimumItemSize,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -833,6 +851,7 @@ fun Indicator.override(
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
@@ -876,6 +895,7 @@ fun Indicator.defer(
     inactiveMinimumShape: ReferenceProperty<RoundedRectangleShape>? = null,
     inactiveShape: ReferenceProperty<RoundedRectangleShape>? = null,
     itemsPlacement: ReferenceProperty<IndicatorItemPlacement>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     minimumItemSize: ReferenceProperty<Double>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -917,6 +937,7 @@ fun Indicator.defer(
         inactiveMinimumShape = inactiveMinimumShape ?: properties.inactiveMinimumShape,
         inactiveShape = inactiveShape ?: properties.inactiveShape,
         itemsPlacement = itemsPlacement ?: properties.itemsPlacement,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         minimumItemSize = minimumItemSize ?: properties.minimumItemSize,
         paddings = paddings ?: properties.paddings,
@@ -988,6 +1009,7 @@ fun Indicator.evaluate(
         inactiveMinimumShape = properties.inactiveMinimumShape,
         inactiveShape = properties.inactiveShape,
         itemsPlacement = properties.itemsPlacement,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         minimumItemSize = minimumItemSize ?: properties.minimumItemSize,
         paddings = properties.paddings,
@@ -1031,6 +1053,7 @@ fun Indicator.evaluate(
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
@@ -1074,6 +1097,7 @@ fun Component<Indicator>.override(
     inactiveMinimumShape: RoundedRectangleShape? = null,
     inactiveShape: RoundedRectangleShape? = null,
     itemsPlacement: IndicatorItemPlacement? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     minimumItemSize: Double? = null,
     paddings: EdgeInsets? = null,
@@ -1116,6 +1140,7 @@ fun Component<Indicator>.override(
         inactiveMinimumShape = valueOrNull(inactiveMinimumShape),
         inactiveShape = valueOrNull(inactiveShape),
         itemsPlacement = valueOrNull(itemsPlacement),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         minimumItemSize = valueOrNull(minimumItemSize),
         paddings = valueOrNull(paddings),
@@ -1159,6 +1184,7 @@ fun Component<Indicator>.override(
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
@@ -1202,6 +1228,7 @@ fun Component<Indicator>.defer(
     inactiveMinimumShape: ReferenceProperty<RoundedRectangleShape>? = null,
     inactiveShape: ReferenceProperty<RoundedRectangleShape>? = null,
     itemsPlacement: ReferenceProperty<IndicatorItemPlacement>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     minimumItemSize: ReferenceProperty<Double>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1244,6 +1271,7 @@ fun Component<Indicator>.defer(
         inactiveMinimumShape = inactiveMinimumShape,
         inactiveShape = inactiveShape,
         itemsPlacement = itemsPlacement,
+        layoutProvider = layoutProvider,
         margins = margins,
         minimumItemSize = minimumItemSize,
         paddings = paddings,
@@ -1316,6 +1344,7 @@ fun Component<Indicator>.evaluate(
         inactiveMinimumShape = null,
         inactiveShape = null,
         itemsPlacement = null,
+        layoutProvider = null,
         margins = null,
         minimumItemSize = minimumItemSize,
         paddings = null,

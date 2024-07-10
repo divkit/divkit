@@ -51,6 +51,7 @@ class Tabs internal constructor(
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             items = additive.items ?: properties.items,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
             restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
@@ -142,6 +143,10 @@ class Tabs internal constructor(
          * Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
          */
         val items: Property<List<Item>>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * External margins from the element stroke.
          */
@@ -261,6 +266,7 @@ class Tabs internal constructor(
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("items", items)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
@@ -562,6 +568,7 @@ class Tabs internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -604,6 +611,7 @@ fun DivScope.tabs(
     height: Size? = null,
     id: String? = null,
     items: List<Tabs.Item>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -644,6 +652,7 @@ fun DivScope.tabs(
         height = valueOrNull(height),
         id = valueOrNull(id),
         items = valueOrNull(items),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         restrictParentScroll = valueOrNull(restrictParentScroll),
@@ -686,6 +695,7 @@ fun DivScope.tabs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -728,6 +738,7 @@ fun DivScope.tabsProps(
     height: Size? = null,
     id: String? = null,
     items: List<Tabs.Item>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -767,6 +778,7 @@ fun DivScope.tabsProps(
     height = valueOrNull(height),
     id = valueOrNull(id),
     items = valueOrNull(items),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
     restrictParentScroll = valueOrNull(restrictParentScroll),
@@ -808,6 +820,7 @@ fun DivScope.tabsProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -850,6 +863,7 @@ fun TemplateScope.tabsRefs(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Tabs.Item>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
@@ -889,6 +903,7 @@ fun TemplateScope.tabsRefs(
     height = height,
     id = id,
     items = items,
+    layoutProvider = layoutProvider,
     margins = margins,
     paddings = paddings,
     restrictParentScroll = restrictParentScroll,
@@ -930,6 +945,7 @@ fun TemplateScope.tabsRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -972,6 +988,7 @@ fun Tabs.override(
     height: Size? = null,
     id: String? = null,
     items: List<Tabs.Item>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -1012,6 +1029,7 @@ fun Tabs.override(
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         items = valueOrNull(items) ?: properties.items,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
@@ -1054,6 +1072,7 @@ fun Tabs.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -1096,6 +1115,7 @@ fun Tabs.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Tabs.Item>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
@@ -1136,6 +1156,7 @@ fun Tabs.defer(
         height = height ?: properties.height,
         id = id ?: properties.id,
         items = items ?: properties.items,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
@@ -1208,6 +1229,7 @@ fun Tabs.evaluate(
         height = properties.height,
         id = properties.id,
         items = properties.items,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         paddings = properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
@@ -1250,6 +1272,7 @@ fun Tabs.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -1292,6 +1315,7 @@ fun Component<Tabs>.override(
     height: Size? = null,
     id: String? = null,
     items: List<Tabs.Item>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -1333,6 +1357,7 @@ fun Component<Tabs>.override(
         height = valueOrNull(height),
         id = valueOrNull(id),
         items = valueOrNull(items),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         restrictParentScroll = valueOrNull(restrictParentScroll),
@@ -1375,6 +1400,7 @@ fun Component<Tabs>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -1417,6 +1443,7 @@ fun Component<Tabs>.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Tabs.Item>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
@@ -1458,6 +1485,7 @@ fun Component<Tabs>.defer(
         height = height,
         id = id,
         items = items,
+        layoutProvider = layoutProvider,
         margins = margins,
         paddings = paddings,
         restrictParentScroll = restrictParentScroll,
@@ -1531,6 +1559,7 @@ fun Component<Tabs>.evaluate(
         height = null,
         id = null,
         items = null,
+        layoutProvider = null,
         margins = null,
         paddings = null,
         restrictParentScroll = restrictParentScroll,

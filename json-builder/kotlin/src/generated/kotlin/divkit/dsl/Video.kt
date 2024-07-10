@@ -54,6 +54,7 @@ class Video internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             muted = additive.muted ?: properties.muted,
             paddings = additive.paddings ?: properties.paddings,
@@ -157,6 +158,10 @@ class Video internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * External margins from the element stroke.
          */
@@ -278,6 +283,7 @@ class Video internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("muted", muted)
             result.tryPutProperty("paddings", paddings)
@@ -326,6 +332,7 @@ class Video internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -371,6 +378,7 @@ fun DivScope.video(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
@@ -415,6 +423,7 @@ fun DivScope.video(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         muted = valueOrNull(muted),
         paddings = valueOrNull(paddings),
@@ -461,6 +470,7 @@ fun DivScope.video(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -506,6 +516,7 @@ fun DivScope.videoProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
@@ -549,6 +560,7 @@ fun DivScope.videoProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     muted = valueOrNull(muted),
     paddings = valueOrNull(paddings),
@@ -594,6 +606,7 @@ fun DivScope.videoProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -639,6 +652,7 @@ fun TemplateScope.videoRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -682,6 +696,7 @@ fun TemplateScope.videoRefs(
     focus = focus,
     height = height,
     id = id,
+    layoutProvider = layoutProvider,
     margins = margins,
     muted = muted,
     paddings = paddings,
@@ -727,6 +742,7 @@ fun TemplateScope.videoRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -772,6 +788,7 @@ fun Video.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
@@ -816,6 +833,7 @@ fun Video.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         muted = valueOrNull(muted) ?: properties.muted,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -862,6 +880,7 @@ fun Video.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -907,6 +926,7 @@ fun Video.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -951,6 +971,7 @@ fun Video.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         muted = muted ?: properties.muted,
         paddings = paddings ?: properties.paddings,
@@ -1027,6 +1048,7 @@ fun Video.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         muted = muted ?: properties.muted,
         paddings = properties.paddings,
@@ -1073,6 +1095,7 @@ fun Video.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1118,6 +1141,7 @@ fun Component<Video>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
@@ -1163,6 +1187,7 @@ fun Component<Video>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         muted = valueOrNull(muted),
         paddings = valueOrNull(paddings),
@@ -1209,6 +1234,7 @@ fun Component<Video>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1254,6 +1280,7 @@ fun Component<Video>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1299,6 +1326,7 @@ fun Component<Video>.defer(
         focus = focus,
         height = height,
         id = id,
+        layoutProvider = layoutProvider,
         margins = margins,
         muted = muted,
         paddings = paddings,
@@ -1376,6 +1404,7 @@ fun Component<Video>.evaluate(
         focus = null,
         height = null,
         id = null,
+        layoutProvider = null,
         margins = null,
         muted = muted,
         paddings = null,
