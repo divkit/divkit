@@ -1,3 +1,8 @@
+## 30.9.0 (July 15, 2024)
+
+* Performance optimizations.
+
+
 ## 30.8.0 (July 8, 2024)
 
 * Fixed several issues with `variable_triggers` evaluation.
