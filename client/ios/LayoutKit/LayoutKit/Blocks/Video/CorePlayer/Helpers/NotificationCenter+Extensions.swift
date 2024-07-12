@@ -1,5 +1,5 @@
-import BasePublic
 import Foundation
+import VGSL
 
 extension NotificationCenter {
   func observe(

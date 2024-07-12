@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivGifImage: DivBlockModeling, DivImageProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

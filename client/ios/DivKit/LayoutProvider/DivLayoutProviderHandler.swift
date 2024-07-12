@@ -1,5 +1,5 @@
-import BasePublic
 import LayoutKit
+import VGSL
 
 public final class DivLayoutProviderHandler {
   private let variablesStorage: DivVariablesStorage

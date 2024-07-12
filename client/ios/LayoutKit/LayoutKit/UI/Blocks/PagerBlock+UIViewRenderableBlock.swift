@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 extension PagerBlock {
   public static func makeBlockView() -> BlockView {

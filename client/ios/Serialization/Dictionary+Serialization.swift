@@ -1,7 +1,7 @@
 import CoreFoundation
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 // MARK: Utils
 

@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BasePublic
-import BaseUIPublic
+import VGSL
 
 struct TabContentsViewLayout: Equatable {
   let pageFrames: [CGRect]

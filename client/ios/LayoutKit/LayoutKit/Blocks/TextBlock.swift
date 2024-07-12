@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 @_implementationOnly import CoreText
 
@@ -179,7 +178,7 @@ extension TextBlock.InlineImage {
   public static func ==(lhs: TextBlock.InlineImage, rhs: TextBlock.InlineImage) -> Bool {
     lhs.size == rhs.size
       && lhs.location == rhs.location
-      && lhs.holder == rhs.holder
+      && compare(lhs.holder, rhs.holder)
   }
 }
 

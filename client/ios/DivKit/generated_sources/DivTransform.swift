@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivTransform {
   public let pivotX: DivPivot // default value: .divPivotPercentage(DivPivotPercentage(value: .value(50)))

@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivDimensionTemplate: TemplateValue {
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp

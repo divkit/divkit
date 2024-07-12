@@ -5,7 +5,7 @@ import UIKit
 import class XCTest.XCTAttachment
 import class XCTest.XCTContext
 
-import CommonCorePublic
+import VGSL
 
 enum TestMode {
   case update

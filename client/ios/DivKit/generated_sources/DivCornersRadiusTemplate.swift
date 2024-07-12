@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivCornersRadiusTemplate: TemplateValue {
   public let bottomLeft: Field<Expression<Int>>? // constraint: number >= 0

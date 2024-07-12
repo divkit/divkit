@@ -1,11 +1,9 @@
 import Testing
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
 @testable import DivKit
 import LayoutKit
-import NetworkingPublic
+import VGSL
 
 let testCardId = DivCardID(rawValue: "test_card_id")
 

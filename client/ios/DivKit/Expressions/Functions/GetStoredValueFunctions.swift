@@ -1,5 +1,5 @@
-import BaseTinyPublic
 import Foundation
+import VGSL
 
 enum GetStoredValueFunctions: String, CaseIterable {
   case getStoredIntegerValue

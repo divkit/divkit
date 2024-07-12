@@ -1,7 +1,7 @@
-import BasePublic
 import DivKit
 import LayoutKit
 import Serialization
+import VGSL
 
 /// Deprecated. Use `div-base.layout_provider`.
 public final class SizeProviderExtensionHandler: DivExtensionHandler {

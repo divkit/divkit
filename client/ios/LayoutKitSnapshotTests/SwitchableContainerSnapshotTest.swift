@@ -1,8 +1,7 @@
 import CoreGraphics
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class SwitchableContainerSnapshotTest: LayoutKitSnapshotTest {
   func test_LeftSideSelected() {

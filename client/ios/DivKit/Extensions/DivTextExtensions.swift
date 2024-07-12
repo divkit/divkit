@@ -2,9 +2,8 @@ import CoreFoundation
 import CoreGraphics
 import Foundation
 
-import BasePublic
-import BaseUIPublic
 import LayoutKit
+import VGSL
 
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

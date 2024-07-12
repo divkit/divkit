@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension GestureBlock {
   public static func makeBlockView() -> BlockView {
@@ -32,10 +32,10 @@ extension GestureBlock {
 
 private final class GestureView: BlockView {
   private var childView: BlockView!
-  private var upActions: [UserInterfaceAction]? = nil
-  private var downActions: [UserInterfaceAction]? = nil
-  private var leftActions: [UserInterfaceAction]? = nil
-  private var rightActions: [UserInterfaceAction]? = nil
+  private var upActions: [UserInterfaceAction]?
+  private var downActions: [UserInterfaceAction]?
+  private var leftActions: [UserInterfaceAction]?
+  private var rightActions: [UserInterfaceAction]?
 
   private var swipeRecognizers: [UIGestureRecognizer]? {
     didSet {

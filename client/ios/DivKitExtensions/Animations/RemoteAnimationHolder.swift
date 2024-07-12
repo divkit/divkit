@@ -1,7 +1,6 @@
 import Foundation
 
-import BasePublic
-import NetworkingPublic
+import VGSL
 
 public final class RemoteAnimationHolder: AnimationHolder {
   public enum AnimationType {

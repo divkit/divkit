@@ -2,8 +2,8 @@
 
 import XCTest
 
-import BasePublic
 import LayoutKit
+import VGSL
 
 final class DivVariablesStorageTest: XCTestCase {
   private let storage = DivVariablesStorage()

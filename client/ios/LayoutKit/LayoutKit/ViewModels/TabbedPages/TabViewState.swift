@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 public struct TabViewState: ElementState, Equatable {
   public let selectedPageIndex: CGFloat

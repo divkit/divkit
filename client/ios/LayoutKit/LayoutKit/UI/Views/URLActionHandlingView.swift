@@ -1,6 +1,6 @@
 import UIKit
 
-import BasePublic
+import VGSL
 
 public final class URLActionHandlingView: UIView, UIActionEventPerforming {
   private let handler: UrlOpener

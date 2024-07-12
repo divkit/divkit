@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 
-import BaseUIPublic
 import LayoutKitInterface
+import VGSL
 
 extension Menu {
   public func makeActionSheetModel(

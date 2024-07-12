@@ -1,6 +1,6 @@
-import BasePublic
 import CoreMedia
 import Foundation
+import VGSL
 
 protocol CorePlayer: VideoEngineProvider {
   static func isMIMETypeSupported(_ mimeType: String) -> Bool

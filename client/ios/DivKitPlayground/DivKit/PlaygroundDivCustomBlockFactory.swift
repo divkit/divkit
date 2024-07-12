@@ -1,6 +1,6 @@
-import BasePublic
 import DivKit
 import LayoutKit
+import VGSL
 
 struct PlaygroundDivCustomBlockFactory: DivCustomBlockFactory {
   private let requester: URLResourceRequesting

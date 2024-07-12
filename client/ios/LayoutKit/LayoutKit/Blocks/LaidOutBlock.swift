@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 final class LaidOutBlock<T: BlockWithLayout>: Block {
   public let block: T

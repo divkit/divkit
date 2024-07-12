@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivSizeUnit {
   func makeScaledValue(_ value: Int) -> CGFloat {

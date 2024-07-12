@@ -1,7 +1,7 @@
 import Foundation
 
-import BasePublic
 import LayoutKit
+import VGSL
 
 public final class DivVariablesStorage {
   public struct Values {

@@ -1,4 +1,4 @@
-import BasePublic
+import VGSL
 
 public protocol DivStateUpdater: AnyObject {
   func set(

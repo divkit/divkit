@@ -1,8 +1,7 @@
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class BlockWithFixedWrapContent: BlockWithTraits {
   var width: CGFloat
@@ -49,7 +48,7 @@ extension BlockWithFixedWrapContent {
   func configureBlockView(
     _: LayoutKit.BlockView,
     observer _: LayoutKit.ElementStateObserver?,
-    overscrollDelegate _: BasePublic.ScrollDelegate?,
+    overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: LayoutKit.RenderingDelegate?
   ) {}
 
@@ -67,7 +66,7 @@ extension BlockWithFixedWrapContent {
     false
   }
 
-  func getImageHolders() -> [BasePublic.ImageHolder] {
+  func getImageHolders() -> [ImageHolder] {
     []
   }
 }

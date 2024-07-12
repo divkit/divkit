@@ -1,6 +1,6 @@
 import AVFoundation
-import BasePublic
 import Foundation
+import VGSL
 
 final class CorePlayerImpl: CorePlayer {
   static func isMIMETypeSupported(_ mimeType: String) -> Bool {

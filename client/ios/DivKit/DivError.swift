@@ -1,6 +1,6 @@
-import BasePublic
 import LayoutKit
 import Serialization
+import VGSL
 
 public protocol DivError: CustomStringConvertible {
   var kind: DivErrorKind { get }

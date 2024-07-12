@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 public enum TestMode {
   case update

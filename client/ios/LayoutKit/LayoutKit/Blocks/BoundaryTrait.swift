@@ -1,7 +1,7 @@
 import CoreGraphics
 import QuartzCore
 
-import CommonCorePublic
+import VGSL
 
 public enum BoundaryTrait: Equatable {
   case noClip

@@ -1,7 +1,7 @@
 import UIKit
 
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 public protocol AnalyticsTouchEventHandling {
   func handle(touchEvent: AnalyticsTouchEvent, from sender: AnyObject)

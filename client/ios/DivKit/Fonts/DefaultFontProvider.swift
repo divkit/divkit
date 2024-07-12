@@ -1,7 +1,6 @@
 import CoreGraphics
 
-import BasePublic
-import BaseUIPublic
+import VGSL
 
 final class DefaultFontProvider: DivFontProvider {
   func font(family: String, weight: DivFontWeight, size: CGFloat) -> Font {
@@ -11,7 +10,7 @@ final class DefaultFontProvider: DivFontProvider {
 }
 
 extension DivFontWeight {
-  fileprivate var vgslFontWeight: BaseUIPublic.FontWeight {
+  fileprivate var vgslFontWeight: FontWeight {
     switch self {
     case .light:
       .light

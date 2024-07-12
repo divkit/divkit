@@ -1,4 +1,4 @@
-import BaseUIPublic
+import VGSL
 
 public protocol AccessibilityContaining {
   var accessibilityElement: AccessibilityElement? { get }

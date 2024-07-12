@@ -1,7 +1,6 @@
-import BaseUIPublic
-import CommonCorePublic
 import DivKit
 import LayoutKit
+import VGSL
 
 public final class TextExtensionHandler: DivExtensionHandler {
   public let id: String

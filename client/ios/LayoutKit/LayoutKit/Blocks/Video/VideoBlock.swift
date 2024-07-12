@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 public final class VideoBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait

@@ -1,5 +1,4 @@
-import BasePublic
-import CommonCorePublic
+import VGSL
 
 #if os(iOS)
 import UIKit
@@ -64,7 +63,7 @@ public final class DefaultTooltipManager: TooltipManager {
     public let view: VisibleBoundsTrackingView
   }
 
-  public var shownTooltips: BasePublic.Property<Set<String>>
+  public var shownTooltips: Property<Set<String>>
 
   private let handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
@@ -72,7 +71,7 @@ public final class DefaultTooltipManager: TooltipManager {
   private var tooltipWindow: UIWindow?
 
   public init(
-    shownTooltips: BasePublic.Property<Set<String>>,
+    shownTooltips: Property<Set<String>>,
     handleAction: @escaping (UIActionEvent) -> Void
   ) {
     self.handleAction = handleAction
@@ -91,7 +90,7 @@ public final class DefaultTooltipManager: TooltipManager {
       tooltipView: tooltip.view,
       tooltipID: tooltip.id,
       handleAction: handleAction,
-      onCloseAction: { [weak self] in 
+      onCloseAction: { [weak self] in
         self?.showingTooltips.removeValue(forKey: tooltip.id)
         self?.tooltipWindow?.isHidden = true
       }
@@ -124,7 +123,8 @@ public final class DefaultTooltipManager: TooltipManager {
     if #available(iOS 13.0, *) {
       if tooltipWindow == nil {
         guard let windowScene = UIApplication.shared.connectedScenes
-          .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene else { return }
+          .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+        else { return }
         tooltipWindow = UIWindow(windowScene: windowScene)
         tooltipWindow?.windowLevel = UIWindow.Level.alert + 1
         tooltipWindow?.isHidden = true

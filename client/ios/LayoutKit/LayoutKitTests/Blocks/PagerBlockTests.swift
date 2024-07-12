@@ -1,7 +1,7 @@
 import XCTest
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class PagerBlockTests: XCTestCase {
   func test_WhenFixedHeight_IntrinsicContentHeightReturnsFixedHeight() {

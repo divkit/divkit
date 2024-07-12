@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import Serialization
+import VGSL
 
 public struct DivTemplates: Deserializable {
   public let templates: [TemplateName: Any]

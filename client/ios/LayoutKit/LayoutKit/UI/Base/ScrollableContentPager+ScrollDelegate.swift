@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension ScrollableContentPager: ScrollDelegate {
   public func onWillBeginDragging(_ scrollView: ScrollView) {

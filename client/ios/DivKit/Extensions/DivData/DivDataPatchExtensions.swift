@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 extension DivData {
   public func applyPatch(_ patch: DivPatch) -> DivData {

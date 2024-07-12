@@ -1,7 +1,7 @@
 import XCTest
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class GridBlockTests: XCTestCase {
   func test_WhenUpdatesState_SendsStatesToChildren() throws {

@@ -1,6 +1,5 @@
-import BasePublic
-import BaseTinyPublic
 import Foundation
+import VGSL
 
 final class RunLoopCardUpdateAggregator {
   private var enabled: Bool = true

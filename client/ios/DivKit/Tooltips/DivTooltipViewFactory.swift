@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 public struct DivTooltipViewFactory {
   private let divKitComponents: DivKitComponents

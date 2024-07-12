@@ -1,7 +1,7 @@
 import Foundation
 
-import BaseTinyPublic
 import LayoutKit
+import VGSL
 
 public struct IdAndCardId: Hashable {
   let id: String

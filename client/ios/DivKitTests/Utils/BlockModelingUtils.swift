@@ -3,8 +3,7 @@
 
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 func makeBlock(
   _ div: Div,

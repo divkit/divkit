@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
   public let bottom: Field<Expression<Int>>? // constraint: number >= 0; default value: 0

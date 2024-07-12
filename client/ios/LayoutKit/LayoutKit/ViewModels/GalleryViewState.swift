@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 public struct GalleryViewState: ElementState, Equatable {
   @frozen
@@ -96,9 +96,9 @@ public struct GalleryViewState: ElementState, Equatable {
     let accuracy = CGFloat(1e-4)
 
     let areScrollRangesEqual = switch (lhs.scrollRange, rhs.scrollRange) {
-      case (.none, .none): true
-      case (.some, .none), (.none, .some): false
-      case let (.some(lhs), .some(rhs)): lhs.isApproximatelyEqualTo(rhs, withAccuracy: accuracy)
+    case (.none, .none): true
+    case (.some, .none), (.none, .some): false
+    case let (.some(lhs), .some(rhs)): lhs.isApproximatelyEqualTo(rhs, withAccuracy: accuracy)
     }
 
     return lhs.contentPosition == rhs.contentPosition

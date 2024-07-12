@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 /// Stores variables.
 /// Use ``DivVariableStorage`` to provide external variables into `DivKit`.

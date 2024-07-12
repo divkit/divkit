@@ -1,9 +1,8 @@
 import Foundation
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 extension SwitchableContainerBlock {
   public static func makeBlockView() -> BlockView { SwitchableContainerView() }

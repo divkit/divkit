@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 public final class GridBlock: BlockWithTraits, BlockWithLayout {
   public struct Span: Equatable {

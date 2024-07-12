@@ -1,6 +1,6 @@
-import CommonCorePublic
 import DivKit
 import LayoutKit
+import VGSL
 
 public final class ImageExtensionHandler: DivExtensionHandler {
   public let id: String

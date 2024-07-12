@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 final class LayeredBlockLayoutTests: XCTestCase {
   func test_WhenChildIsHorizontallyResizable_FrameWidthIsEqualToBoundsWidth() {

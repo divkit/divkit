@@ -1,5 +1,5 @@
-import BaseTinyPublic
 import Foundation
+import VGSL
 
 public protocol MaskFormatter {
   func formatted(rawText: String, rawCursorPosition: CursorData?) -> InputData

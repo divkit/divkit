@@ -1,7 +1,7 @@
 import Foundation
 
-import BasePublic
 import LayoutKit
+import VGSL
 
 public protocol AnimatableViewFactory: AnyObject {
   func createAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float)

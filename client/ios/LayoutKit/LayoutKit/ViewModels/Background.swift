@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 public enum Background: Equatable {
   case solidColor(Color)

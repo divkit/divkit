@@ -3,7 +3,7 @@
 
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 final class DivSeparatorExtensionsTests: XCTestCase {
   func test_WithDelimiterStyle() throws {

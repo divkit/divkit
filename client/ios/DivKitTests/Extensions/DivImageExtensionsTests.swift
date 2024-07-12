@@ -3,7 +3,7 @@
 
 import XCTest
 
-import BasePublic
+import VGSL
 
 final class DivImageExtensionsTests: XCTestCase {
   func test_WithImageUrl() {

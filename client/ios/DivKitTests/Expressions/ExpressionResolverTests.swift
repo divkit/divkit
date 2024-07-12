@@ -2,12 +2,12 @@ import XCTest
 
 @testable import DivKit
 
-import CommonCorePublic
 import Serialization
+import VGSL
 
 final class ExpressionResolverTests: XCTestCase {
   private var isErrorExpected = false
-  private var error: String? = nil
+  private var error: String?
 
   private var variables: DivVariables = [
     "array_var": .array(["value", [true, 123, 123.45] as [AnyHashable]]),

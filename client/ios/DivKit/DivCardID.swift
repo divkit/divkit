@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 public enum CardIDTag {}
 public typealias DivCardID = Tagged<CardIDTag, String>

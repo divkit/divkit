@@ -1,9 +1,7 @@
 import CoreGraphics
 
-import BasePublic
-import BaseUIPublic
 import LayoutKit
-import NetworkingPublic
+import VGSL
 
 #if os(iOS)
 import UIKit

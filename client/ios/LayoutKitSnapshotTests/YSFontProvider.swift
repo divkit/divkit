@@ -1,6 +1,6 @@
 import UIKit
 
-import BaseUIPublic
+import VGSL
 
 final class YSFontProvider: FontSpecifying {
   func font(weight: FontWeight, size: CGFloat) -> UIFont {

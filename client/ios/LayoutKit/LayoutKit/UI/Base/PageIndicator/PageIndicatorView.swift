@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 final class PageIndicatorView: UIView {
   var currentIndexPosition: CGFloat {

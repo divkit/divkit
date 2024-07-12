@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   private var sliderModel: SliderModel = .empty

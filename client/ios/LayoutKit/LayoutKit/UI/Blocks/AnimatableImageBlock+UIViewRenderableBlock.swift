@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension AnimatableImageBlock {
   public static func makeBlockView() -> BlockView { AnimatableImageContainer(frame: .zero) }
@@ -81,7 +81,7 @@ private class AnimatableImageView: UIImageView {
   override class var layerClass: AnyClass { AnimatableImageLayer.self }
 
   var animatableImageLayer: AnimatableImageLayer? {
-    return layer as? AnimatableImageLayer
+    layer as? AnimatableImageLayer
   }
 
   public override init(frame: CGRect) {

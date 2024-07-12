@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 extension [String: Function] {
   mutating func addCastFunctions() {

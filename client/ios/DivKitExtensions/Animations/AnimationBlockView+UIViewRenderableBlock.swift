@@ -1,9 +1,9 @@
 import AVFoundation
 import UIKit
 
-import CommonCorePublic
 import DivKit
 import LayoutKit
+import VGSL
 
 extension LottieAnimationBlock {
   static func makeBlockView() -> BlockView {

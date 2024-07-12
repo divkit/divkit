@@ -2,9 +2,7 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import BasePublic
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 extension ContainerBlock {
   public static func makeBlockView() -> BlockView { ContainerBlockView() }

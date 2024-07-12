@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 public class DivStateManager {
   public struct Item: Equatable {

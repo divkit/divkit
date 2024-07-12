@@ -2,7 +2,7 @@ import AVFoundation
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension VideoBlockLegacy {
   public static func makeBlockView() -> BlockView {

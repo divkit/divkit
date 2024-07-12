@@ -1,5 +1,5 @@
-import CommonCorePublic
 import Serialization
+import VGSL
 
 public protocol TemplateValue {
   associatedtype ResolvedValue

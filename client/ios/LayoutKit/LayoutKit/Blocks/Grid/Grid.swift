@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 struct Grid {
   typealias GridItem = GridBlock.Item

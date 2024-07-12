@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 extension [String: Function] {
   mutating func addGetValueFunctions() {

@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BasePublic
+import VGSL
 
 final class VisibilityActionPerformers {
   private let visibilityParams: VisibilityParams

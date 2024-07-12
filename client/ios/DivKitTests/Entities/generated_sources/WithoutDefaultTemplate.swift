@@ -2,9 +2,9 @@
 
 @testable import DivKit
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class WithoutDefaultTemplate: TemplateValue {
   public static let type: String = "non_default"

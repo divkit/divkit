@@ -1,8 +1,7 @@
 import CoreGraphics
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivPager: DivBlockModeling, DivGalleryProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

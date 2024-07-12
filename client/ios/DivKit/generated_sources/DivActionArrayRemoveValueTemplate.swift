@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivActionArrayRemoveValueTemplate: TemplateValue {
   public static let type: String = "array_remove_value"

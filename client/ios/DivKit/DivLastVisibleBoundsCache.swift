@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 public final class DivLastVisibleBoundsCache {
   private let lock = AllocatedUnfairLock()

@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivDisappearAction {
   func makeDisappearAction(context: DivBlockModelingContext) -> VisibilityAction? {

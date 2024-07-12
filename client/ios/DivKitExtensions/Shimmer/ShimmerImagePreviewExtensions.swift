@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 
-import BasePublic
 import DivKit
 import LayoutKit
+import VGSL
 
 public final class ShimmerImagePreviewExtension: DivExtensionHandler {
   public let id: String = extensionID

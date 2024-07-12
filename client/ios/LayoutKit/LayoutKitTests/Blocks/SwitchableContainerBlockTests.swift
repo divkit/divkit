@@ -1,8 +1,7 @@
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class SwitchableContainerBlockTests: XCTestCase {
   func test_WhenUpdatesState_UsesIt() throws {

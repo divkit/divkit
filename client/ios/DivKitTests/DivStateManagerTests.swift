@@ -2,8 +2,8 @@
 
 import XCTest
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class DivStateManagerTests: XCTestCase {
   private let stateManager = DivStateManager()

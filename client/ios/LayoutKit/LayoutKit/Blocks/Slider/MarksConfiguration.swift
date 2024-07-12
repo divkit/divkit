@@ -1,5 +1,5 @@
-import BaseTinyPublic
 import Foundation
+import VGSL
 
 public struct MarksConfiguration: Equatable {
   let minValue: CGFloat

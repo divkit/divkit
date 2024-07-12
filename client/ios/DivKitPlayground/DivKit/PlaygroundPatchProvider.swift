@@ -1,8 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import DivKit
-import NetworkingPublic
+import VGSL
 
 struct PlaygroundPatchProvider: DivPatchProvider {
   private let downloader: DivPatchDownloader

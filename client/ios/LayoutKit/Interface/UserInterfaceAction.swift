@@ -1,7 +1,6 @@
 import Foundation
 
-import BaseTinyPublic
-import BaseUIPublic
+import VGSL
 
 public struct UserInterfaceAction: Equatable, Codable {
   @frozen

@@ -1,6 +1,6 @@
-import BasePublic
 import Foundation
 import UIKit
+import VGSL
 
 public class MaskedInputViewModel {
   public enum Action: Equatable {

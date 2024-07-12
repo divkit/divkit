@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 public protocol GalleryViewLayouting {
   var pageOrigins: [CGFloat] { get }

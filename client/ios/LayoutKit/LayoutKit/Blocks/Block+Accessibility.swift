@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
+import VGSL
 
 extension Block {
   public func addingAccessibilityID(_ id: @autoclosure () -> String?) -> Block {

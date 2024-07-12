@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 public final class RiveAnimationBlock: BlockWithTraits {
   let animationHolder: AnimationHolder

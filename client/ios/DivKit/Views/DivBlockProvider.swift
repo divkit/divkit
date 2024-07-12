@@ -1,9 +1,8 @@
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
 import Serialization
+import VGSL
 
 @MainActor
 final class DivBlockProvider {

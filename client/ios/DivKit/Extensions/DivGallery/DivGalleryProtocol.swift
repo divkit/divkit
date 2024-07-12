@@ -1,8 +1,7 @@
 import CoreGraphics
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 protocol DivGalleryProtocol: DivBase {
   var items: [Div]? { get }

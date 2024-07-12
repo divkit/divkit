@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivContainer {
   func makeChildren<T>(

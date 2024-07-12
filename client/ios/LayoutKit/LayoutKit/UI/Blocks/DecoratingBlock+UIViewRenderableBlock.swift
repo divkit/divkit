@@ -2,9 +2,8 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 extension DecoratingBlock {
   static func makeBlockView() -> BlockView {

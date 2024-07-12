@@ -1,7 +1,7 @@
 import UIKit
 
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 public protocol PagerEventHandling {
   func handle(event: PagerSelectedPageChangedEvent, from sender: AnyObject)

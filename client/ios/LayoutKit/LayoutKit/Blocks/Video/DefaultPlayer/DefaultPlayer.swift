@@ -1,6 +1,6 @@
 import AVFoundation
-import BasePublic
 import Foundation
+import VGSL
 
 final class DefaultPlayer: Player {
   private let eventPipe = SignalPipe<PlayerEvent>()

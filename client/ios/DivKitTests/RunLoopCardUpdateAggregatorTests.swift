@@ -1,5 +1,5 @@
-import BasePublic
 @testable import DivKit
+import VGSL
 import XCTest
 
 final class RunLoopCardUpdateAggregatorTests: XCTestCase {

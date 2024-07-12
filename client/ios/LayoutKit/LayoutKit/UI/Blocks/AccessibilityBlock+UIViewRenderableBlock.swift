@@ -1,9 +1,7 @@
 import UIKit
 
-import BasePublic
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 #if INTERNAL_BUILD
 extension AccessibilityBlock {

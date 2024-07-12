@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension Background: UIViewRenderable {
   public static func makeBlockView() -> BlockView {
@@ -162,7 +162,7 @@ extension BackgroundView {
         tintColor: nil,
         effects: image.effects
       )
-      if imageViewContainer.imageHolder != image.imageHolder {
+      if !compare(imageViewContainer.imageHolder, image.imageHolder) {
         imageViewContainer.imageHolder = image.imageHolder
       }
 
@@ -221,7 +221,7 @@ extension BackgroundView {
       let imageViewContainer = innerView as! RemoteImageViewContainer
       let imageView = imageViewContainer.contentView as! NinePatchImageView
       imageView.capInsets = image.insets
-      if imageViewContainer.imageHolder != image.imageHolder {
+      if !compare(imageViewContainer.imageHolder, image.imageHolder) {
         imageViewContainer.imageHolder = image.imageHolder
       }
     }

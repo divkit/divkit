@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 final class DivTimerController {
   typealias RunActions = ([DivAction]) -> Void

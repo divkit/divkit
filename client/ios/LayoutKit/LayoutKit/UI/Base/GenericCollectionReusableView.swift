@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 public final class GenericCollectionReusableView: UICollectionReusableView {
   public private(set) var model: UIViewRenderable!

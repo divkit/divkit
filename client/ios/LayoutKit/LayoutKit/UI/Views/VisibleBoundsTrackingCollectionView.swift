@@ -1,7 +1,6 @@
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysCollectionView,
   VisibleBoundsTrackingContainer {

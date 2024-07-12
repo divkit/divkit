@@ -2,9 +2,9 @@
 
 @testable import DivKit
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue {
   public typealias Property = EntityWithOptionalStringEnumProperty.Property

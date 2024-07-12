@@ -1,7 +1,7 @@
 import Foundation
 
-import BasePublic
 import LayoutKit
+import VGSL
 
 public protocol AnimationHolder: AnyObject, CustomDebugStringConvertible {
   var animation: AnimationSourceType? { get }

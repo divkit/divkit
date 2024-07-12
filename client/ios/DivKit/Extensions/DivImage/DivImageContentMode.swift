@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 protocol DivImageContentMode {
   func resolveScale(_ expressionResolver: ExpressionResolver) -> DivImageScale

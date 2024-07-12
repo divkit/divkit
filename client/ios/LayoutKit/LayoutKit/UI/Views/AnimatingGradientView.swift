@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 public final class AnimatingGradientView: UIView {
   private let gradientView: LinearGradientView

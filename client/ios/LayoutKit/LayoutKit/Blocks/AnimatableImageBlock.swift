@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 public final class AnimatableImageBlock: ImageBaseBlock {
   public let imageHolder: ImageHolder
@@ -35,7 +34,7 @@ public final class AnimatableImageBlock: ImageBaseBlock {
 }
 
 public func ==(lhs: AnimatableImageBlock, rhs: AnimatableImageBlock) -> Bool {
-  lhs.imageHolder == rhs.imageHolder &&
+  compare(lhs.imageHolder, rhs.imageHolder) &&
     lhs.widthTrait == rhs.widthTrait &&
     lhs.height == rhs.height &&
     lhs.contentMode == rhs.contentMode &&

@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
 import DivKit
+import VGSL
 
 extension String {
   func withTypo(size: CGFloat, weight: DivFontWeight = .regular) -> NSAttributedString {

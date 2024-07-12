@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivBorder {
   public let cornerRadius: Expression<Int>? // constraint: number >= 0

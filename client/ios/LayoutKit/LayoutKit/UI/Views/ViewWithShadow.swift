@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 open class ViewWithShadow: UIView {
   public var contentView: UIView {

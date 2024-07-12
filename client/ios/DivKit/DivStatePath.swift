@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 public enum DivDataStateIDTag {}
 public typealias DivDataStateID = Tagged<DivDataStateIDTag, Int>

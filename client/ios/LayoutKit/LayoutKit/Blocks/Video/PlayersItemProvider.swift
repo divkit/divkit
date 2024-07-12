@@ -1,6 +1,6 @@
 import AVKit
 import Foundation
-import NetworkingPublic
+import VGSL
 
 public protocol PlayerItemsProvider: AnyObject {
   func getAVPlayerItem(from url: URL, completion: @escaping (AVPlayerItem) -> Void)

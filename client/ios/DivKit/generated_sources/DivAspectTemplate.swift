@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivAspectTemplate: TemplateValue {
   public let ratio: Field<Expression<Double>>? // constraint: number > 0

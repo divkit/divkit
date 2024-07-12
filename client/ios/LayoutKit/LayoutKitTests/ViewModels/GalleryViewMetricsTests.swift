@@ -1,8 +1,7 @@
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class GalleryViewMetricsTests: XCTestCase {
   func test_WhenCreated_TurnsSideGapsIntoFixedAxialInsets() {
