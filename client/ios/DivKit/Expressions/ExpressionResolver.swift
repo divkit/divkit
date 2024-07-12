@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 

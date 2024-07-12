@@ -1,7 +1,6 @@
-import BaseTinyPublic
-import CommonCorePublic
 import Foundation
 import UIKit
+import VGSL
 
 public final class TooltipContainerView: UIView, UIActionEventPerforming {
   private let tooltipView: VisibleBoundsTrackingView

@@ -2,8 +2,7 @@ import AVFoundation
 import CoreGraphics
 import Foundation
 
-import BasePublic
-import CommonCorePublic
+import VGSL
 
 public final class VideoBlockLegacy: BlockWithTraits {
   public struct VideoAssetHolder {

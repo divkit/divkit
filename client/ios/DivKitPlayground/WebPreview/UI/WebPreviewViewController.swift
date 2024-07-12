@@ -1,8 +1,8 @@
 import SwiftUI
 import UIKit
 
-import CommonCorePublic
 import DivKit
+import VGSL
 
 typealias ScreenshotCallback = (ScreenshotInfo) -> Void
 

@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 enum ExpressionValueConverter {
   static func cast<T>(_ anyValue: Any) -> T? {
@@ -59,7 +59,7 @@ enum ExpressionValueConverter {
       return "\(value)"
     }
   }
-  
+
   static func unescape(_ value: String, errorTracker: ExpressionErrorTracker?) -> String? {
     if !value.contains("\\") {
       return value

@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue {
   public static let type: String = "stretch"

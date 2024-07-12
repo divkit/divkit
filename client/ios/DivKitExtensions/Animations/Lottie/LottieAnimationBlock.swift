@@ -1,10 +1,9 @@
 import CoreGraphics
 import Foundation
 
-import BasePublic
-import CommonCorePublic
 import DivKit
 import LayoutKit
+import VGSL
 
 final class LottieAnimationBlock: SizeForwardingBlock {
   let animatableView: Lazy<AnimatableView>

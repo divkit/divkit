@@ -4,7 +4,7 @@ import Foundation
 import PackageDescription
 
 let vgsl = {
-  let version = Version("5.0.0")
+  let version = Version("6.0.0")
   return (
     package: Package.Dependency.package(url: "https://github.com/yandex/vgsl.git", from: version),
     packageName: "vgsl"
@@ -33,8 +33,7 @@ let package = Package(
       name: "DivKit",
       dependencies: [
         "LayoutKit",
-        .product(name: "CommonCorePublic", package: vgsl.packageName),
-        .product(name: "NetworkingPublic", package: vgsl.packageName),
+        .product(name: "VGSL", package: vgsl.packageName),
         "Serialization",
       ],
       path: "DivKit",
@@ -55,8 +54,7 @@ let package = Package(
     .target(
       name: "LayoutKit",
       dependencies: [
-        .product(name: "NetworkingPublic", package: vgsl.packageName),
-        .product(name: "CommonCorePublic", package: vgsl.packageName),
+        .product(name: "VGSL", package: vgsl.packageName),
         "LayoutKitInterface",
       ],
       path: "LayoutKit/LayoutKit",
@@ -65,7 +63,7 @@ let package = Package(
     .target(
       name: "LayoutKitInterface",
       dependencies: [
-        .product(name: "BasePublic", package: vgsl.packageName),
+        .product(name: "VGSL", package: vgsl.packageName),
       ],
       path: "LayoutKit/Interface",
       swiftSettings: swiftSettings
@@ -73,7 +71,7 @@ let package = Package(
     .target(
       name: "Serialization",
       dependencies: [
-        .product(name: "CommonCorePublic", package: vgsl.packageName),
+        .product(name: "VGSL", package: vgsl.packageName),
       ],
       path: "Serialization",
       swiftSettings: swiftSettings

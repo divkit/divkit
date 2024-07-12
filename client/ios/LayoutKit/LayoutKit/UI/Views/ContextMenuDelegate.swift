@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
   private let contextMenu: ContextMenu

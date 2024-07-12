@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension EmptyBlock {
   public static func makeBlockView() -> BlockView { EmptyBlockView() }

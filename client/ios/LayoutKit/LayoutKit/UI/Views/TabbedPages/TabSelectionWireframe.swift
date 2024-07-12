@@ -1,7 +1,7 @@
 import UIKit
 
-import BasePublic
 import LayoutKitInterface
+import VGSL
 
 final class TabSelectionWireframe {
   private weak var tabListView: TabListView?

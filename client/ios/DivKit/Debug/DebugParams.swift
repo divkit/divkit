@@ -4,8 +4,8 @@ import UIKit
 import AppKit
 #endif
 
-import BasePublic
 import LayoutKit
+import VGSL
 
 public struct DebugParams {
   public struct Measurements {

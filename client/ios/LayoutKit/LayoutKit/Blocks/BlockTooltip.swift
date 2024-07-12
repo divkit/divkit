@@ -1,5 +1,5 @@
-import CommonCorePublic
 import CoreGraphics
+import VGSL
 
 #if os(iOS)
 public typealias TooltipViewFactory = Variable<VisibleBoundsTrackingView?>

@@ -1,4 +1,4 @@
 {
   "lang": "swift",
-  "header": "// Generated code. Do not modify.\n\nimport CommonCorePublic\nimport Foundation\nimport Serialization\n"
+  "header": "// Generated code. Do not modify.\n\nimport Foundation\nimport Serialization\nimport VGSL\n"
 }

@@ -1,6 +1,5 @@
 import Foundation
-
-import VGSL_Fundamentals_Tiny
+import VGSL
 
 /// `DivVariableTracker` provides sets of variables used in a last `Block` modeling for a `DivCard`.
 public final class DivVariableTracker {

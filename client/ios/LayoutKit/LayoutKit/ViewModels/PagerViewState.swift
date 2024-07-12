@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 public struct PagerViewState: ElementState, Equatable {
   public let numberOfPages: Int

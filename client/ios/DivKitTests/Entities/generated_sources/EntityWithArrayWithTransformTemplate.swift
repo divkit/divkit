@@ -2,9 +2,9 @@
 
 @testable import DivKit
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class EntityWithArrayWithTransformTemplate: TemplateValue {
   public static let type: String = "entity_with_array_with_transform"

@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 extension CalcExpression {
   enum Symbol: Hashable {

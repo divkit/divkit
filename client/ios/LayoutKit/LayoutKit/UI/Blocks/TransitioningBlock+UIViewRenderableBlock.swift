@@ -2,8 +2,7 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import BasePublic
-import CommonCorePublic
+import VGSL
 
 extension TransitioningBlock {
   public static func makeBlockView() -> BlockView {

@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 final class ExpressionTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {

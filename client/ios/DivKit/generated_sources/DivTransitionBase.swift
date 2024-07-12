@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public protocol DivTransitionBase {
   var duration: Expression<Int> { get } // constraint: number >= 0; default value: 200

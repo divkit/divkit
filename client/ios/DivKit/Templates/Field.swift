@@ -1,8 +1,8 @@
 import CoreFoundation
 import Foundation
 
-import CommonCorePublic
 import Serialization
+import VGSL
 
 @frozen
 public indirect enum Field<T> {

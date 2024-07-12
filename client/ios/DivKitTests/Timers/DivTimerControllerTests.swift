@@ -3,7 +3,7 @@
 import Foundation
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 final class DivTimerControllerTests: XCTestCase {
   private let tickActions = [divAction(logId: "Tick action")]

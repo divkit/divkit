@@ -1,5 +1,5 @@
-import BasePublic
 import LayoutKit
+import VGSL
 
 /// Deprecated. Use `DivVariablesStorage`.
 public protocol DivVariableUpdater {

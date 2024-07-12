@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 final class FunctionsProvider {
   private let persistentValuesStorage: DivPersistentValuesStorage

@@ -2,8 +2,8 @@
 
 import XCTest
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class DivActionExtensionsTests: XCTestCase {
   func test_uiAction_AddsCardLogIdFromContext() {

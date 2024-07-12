@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 public struct ChangeBoundsTransition: Equatable {
   public let duration: Duration

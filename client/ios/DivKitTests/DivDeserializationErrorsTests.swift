@@ -1,5 +1,5 @@
-import CommonCorePublic
 @testable import DivKit
+import VGSL
 
 import XCTest
 

@@ -1,6 +1,5 @@
 import Foundation
-
-import BaseTinyPublic
+import VGSL
 
 enum EqualityOperators: String, CaseIterable {
   case equals = "=="

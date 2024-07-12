@@ -1,4 +1,4 @@
-import BaseTinyPublic
+import VGSL
 
 public struct VideoBlockViewModel: Equatable {
   public let videoData: VideoData

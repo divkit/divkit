@@ -3,7 +3,7 @@
 import Foundation
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 public final class TestTimer: TimerType {
   public let timeInterval: TimeInterval

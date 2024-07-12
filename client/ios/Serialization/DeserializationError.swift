@@ -1,6 +1,5 @@
 import Foundation
-
-import CommonCorePublic
+import VGSL
 
 @frozen
 public indirect enum DeserializationError: Error, CustomStringConvertible {

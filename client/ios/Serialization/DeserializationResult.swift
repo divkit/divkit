@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 @frozen
 public indirect enum DeserializationResult<T> {

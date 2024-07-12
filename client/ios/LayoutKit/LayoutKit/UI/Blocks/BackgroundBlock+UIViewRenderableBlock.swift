@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension BackgroundBlock {
   public static func makeBlockView() -> BlockView {

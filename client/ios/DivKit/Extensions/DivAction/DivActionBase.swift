@@ -1,8 +1,8 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
 import Serialization
+import VGSL
 
 public protocol DivActionBase: Serializable {
   var downloadCallbacks: DivDownloadCallbacks? { get }

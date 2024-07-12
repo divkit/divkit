@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 public struct BlockShadow: Equatable {
   public enum Defaults {

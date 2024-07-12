@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import Serialization
+import VGSL
 
 @inlinable
 func expressionTransform<T, U>(

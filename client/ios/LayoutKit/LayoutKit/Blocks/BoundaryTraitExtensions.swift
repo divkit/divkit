@@ -1,6 +1,6 @@
 import QuartzCore
 
-import CommonCorePublic
+import VGSL
 
 typealias BoundaryInfo = (radius: CGFloat, corners: CACornerMask, layer: CALayer?)
 

@@ -2,8 +2,8 @@ import CoreFoundation
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivState: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

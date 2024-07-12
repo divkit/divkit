@@ -1,8 +1,7 @@
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 typealias ImageBlockTestModels = BlockTestsModels.Image
 typealias TextBlockTestModels = BlockTestsModels.Text
@@ -80,7 +79,7 @@ enum BlockTestsModels {
 
   enum Image {
     static let imageSize = CGSize(width: 80, height: 60)
-    static let image = BaseTinyPublic.Image.imageWithSolidColor(.black, size: imageSize)!
+    static let image = VGSL.Image.imageWithSolidColor(.black, size: imageSize)!
   }
 
   enum SwitchableContainer {

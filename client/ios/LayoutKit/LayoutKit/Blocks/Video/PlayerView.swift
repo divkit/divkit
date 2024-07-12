@@ -2,8 +2,8 @@ import Foundation
 
 #if os(iOS)
 
-import CommonCorePublic
 import UIKit
+import VGSL
 
 public protocol PlayerView: VisibleBoundsTrackingView {
   func attach(player: Player)

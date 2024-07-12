@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import BasePublic
 import LayoutKitInterface
+import VGSL
 
 #if canImport(UIKit)
 import UIKit

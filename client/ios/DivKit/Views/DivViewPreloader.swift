@@ -1,6 +1,5 @@
-import BasePublic
-import BaseTinyPublic
 import Foundation
+import VGSL
 
 /// Utility for preloading the contents of `DivView'.
 ///

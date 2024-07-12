@@ -1,8 +1,7 @@
 import CoreGraphics
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class AnchorBlockTests: LayoutKitSnapshotTest {
   func test_OnlyCenter_Fits() {

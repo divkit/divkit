@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 extension SliderBlock: UIViewRenderable {
   public static func makeBlockView() -> BlockView {

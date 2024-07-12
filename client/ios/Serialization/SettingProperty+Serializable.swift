@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 extension SettingProperty where T: Serializable & Deserializable {
   @usableFromInline

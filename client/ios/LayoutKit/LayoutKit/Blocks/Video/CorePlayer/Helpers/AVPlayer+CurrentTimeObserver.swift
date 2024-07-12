@@ -1,6 +1,6 @@
 import AVFoundation
-import BasePublic
 import Foundation
+import VGSL
 
 extension AVPlayer {
   func addPeriodicCurrentTimeObserver(

@@ -2,7 +2,7 @@ import CoreMedia
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension VideoBlock {
   public static func makeBlockView() -> BlockView {
@@ -28,7 +28,7 @@ extension VideoBlock {
 }
 
 private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
-  var visibleBoundsTrackingSubviews: [CommonCorePublic.VisibleBoundsTrackingView] {
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     [videoView].compactMap { $0 }
   }
 

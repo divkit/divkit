@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 extension ContainerBlock: ImageRenderableBlock {
   public func drawInRect(_ rect: CGRect, context: CGContext) {

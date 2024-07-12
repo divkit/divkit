@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 enum ExpectedEntities {
   static let withRequiredProperty = EntityWithRequiredProperty(

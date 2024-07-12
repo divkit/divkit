@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivVisibilityAction {
   func makeVisibilityAction(context: DivBlockModelingContext) -> VisibilityAction? {

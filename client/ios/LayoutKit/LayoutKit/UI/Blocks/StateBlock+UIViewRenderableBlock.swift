@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension StateBlock {
   public static func makeBlockView() -> BlockView {

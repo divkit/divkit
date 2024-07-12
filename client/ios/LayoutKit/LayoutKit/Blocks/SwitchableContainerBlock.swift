@@ -1,9 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 public final class SwitchableContainerBlock: Block {
   public enum Selection: Int, Equatable {

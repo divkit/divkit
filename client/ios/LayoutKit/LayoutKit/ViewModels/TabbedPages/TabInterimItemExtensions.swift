@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 extension [CGFloat] {
   func interim(at index: CGFloat) -> CGFloat {

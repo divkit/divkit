@@ -1,7 +1,7 @@
 import UIKit
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension SizeProviderBlock {
   static func makeBlockView() -> BlockView {

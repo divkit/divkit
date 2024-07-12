@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 /// Deprecated. Use `DivActionHandler`.
 public final class DivActionURLHandler {

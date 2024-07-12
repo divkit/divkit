@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BasePublic
-import BaseUIPublic
+import VGSL
 
 extension Gradient.Linear {
   init?(colors: [Color], angle: Int) {

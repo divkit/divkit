@@ -1,7 +1,7 @@
 import XCTest
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class GridBlockTests: XCTestCase {
   func test_WhenUpdatesState_SendsStatesToChildren() throws {
@@ -80,16 +80,16 @@ final class GridBlockTests: XCTestCase {
 }
 
 private final class AlwaysRecreatedTestBlock: BlockWithTraits {
-  var widthTrait: LayoutKit.LayoutTrait
-  var heightTrait: LayoutKit.LayoutTrait
+  var widthTrait: LayoutTrait
+  var heightTrait: LayoutTrait
 
   let state: AlwaysRecreatedTestBlockState
   var debugDescription = ""
 
   init(
-    widthTrait: LayoutKit.LayoutTrait,
+    widthTrait: LayoutTrait,
 
-    heightTrait: LayoutKit.LayoutTrait,
+    heightTrait: LayoutTrait,
     state: AlwaysRecreatedTestBlockState
   ) {
     self.widthTrait = widthTrait
@@ -98,10 +98,10 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
   }
 
   func configureBlockView(
-    _: LayoutKit.BlockView,
-    observer _: LayoutKit.ElementStateObserver? = nil,
-    overscrollDelegate _: BasePublic.ScrollDelegate? = nil,
-    renderingDelegate _: LayoutKit.RenderingDelegate? = nil
+    _: BlockView,
+    observer _: ElementStateObserver? = nil,
+    overscrollDelegate _: ScrollDelegate? = nil,
+    renderingDelegate _: RenderingDelegate? = nil
   ) {}
 
   var intrinsicContentWidth: CGFloat {
@@ -124,7 +124,7 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
     }
   }
 
-  func equals(_ other: LayoutKit.Block) -> Bool {
+  func equals(_ other: Block) -> Bool {
     guard let otherBlock = other as? AlwaysRecreatedTestBlock else {
       return false
     }
@@ -132,17 +132,17 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
     return self.state == otherBlock.state
   }
 
-  static func makeBlockView() -> LayoutKit.BlockView {
+  static func makeBlockView() -> BlockView {
     AlwaysRecreatedTestBlockView()
   }
 
-  func canConfigureBlockView(_ view: LayoutKit.BlockView) -> Bool {
+  func canConfigureBlockView(_ view: BlockView) -> Bool {
     view is AlwaysRecreatedTestBlockView
   }
 
-  func getImageHolders() -> [BasePublic.ImageHolder] { [] }
+  func getImageHolders() -> [ImageHolder] { [] }
 
-  func updated(withStates _: LayoutKit.BlocksState) throws -> Self {
+  func updated(withStates _: BlocksState) throws -> Self {
     Self(
       widthTrait: widthTrait,
       heightTrait: heightTrait,
@@ -155,7 +155,7 @@ private final class AlwaysRecreatedTestBlock: BlockWithTraits {
   }
 
   private final class AlwaysRecreatedTestBlockView: BlockView, VisibleBoundsTrackingContainer {
-    var visibleBoundsTrackingSubviews: [CommonCorePublic.VisibleBoundsTrackingView] = []
+    var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] = []
 
     func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
 

@@ -1,8 +1,7 @@
 import CoreGraphics
 
-import BasePublic
-import BaseUIPublic
 import LayoutKit
+import VGSL
 
 extension DivBase {
   func applyBaseProperties(

@@ -2,8 +2,7 @@
 
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 final class GalleryViewLayoutTests: XCTestCase {
   func test_ProducesEqualToModelBlocksCountNumberOfFrames() {

@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 public final class BackgroundBlock: BlockWithLayout, WrapperBlock {
   typealias Layout = CGRect

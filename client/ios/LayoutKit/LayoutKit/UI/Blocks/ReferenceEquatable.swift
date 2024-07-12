@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 protocol ReferenceEquatable: Equatable {
   var source: Variable<AnyObject?> { get }

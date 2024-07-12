@@ -1,6 +1,5 @@
 import Foundation
-
-import BaseTinyPublic
+import VGSL
 
 public final class TimeMeasure {
   private var startTime: Date?

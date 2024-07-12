@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 protocol DivImageProtocol: DivBase, DivImageContentMode {
   var aspect: DivAspect? { get }

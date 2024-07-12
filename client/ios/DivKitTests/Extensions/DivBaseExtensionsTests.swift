@@ -3,8 +3,7 @@
 
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 final class DivBaseExtensionsTests: XCTestCase {
   private let timer = TestTimerScheduler()

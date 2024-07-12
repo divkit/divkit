@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 
-import BasePublic
 import LayoutKit
+import VGSL
 
 public final class ShimmerViewProvider: ViewProvider {
   private var view: UIView?
@@ -16,7 +16,7 @@ public final class ShimmerViewProvider: ViewProvider {
     self.path = path
   }
 
-  public func loadView() -> BasePublic.ViewType {
+  public func loadView() -> ViewType {
     if let view {
       return view
     }

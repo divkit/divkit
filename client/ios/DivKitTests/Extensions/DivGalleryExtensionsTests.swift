@@ -2,8 +2,8 @@
 
 import XCTest
 
-import BaseUIPublic
 import LayoutKit
+import VGSL
 
 final class DivGalleryExtensionsTests: XCTestCase {
   func test_WhenContextContainsGalleryState_RestoresIt() throws {

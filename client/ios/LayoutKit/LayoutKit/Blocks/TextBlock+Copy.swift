@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 extension TextBlock {
   public convenience init?(copyingAttributesFrom block: TextBlock, text: String) {

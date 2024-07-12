@@ -1,5 +1,5 @@
-import CommonCorePublic
 import DivKit
+import VGSL
 
 struct Palette {
   private let json: [String: Any]

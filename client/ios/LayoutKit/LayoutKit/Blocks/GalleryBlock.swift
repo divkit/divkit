@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 public final class GalleryBlock: BlockWithTraits {
   private lazy var contentSize: CGSize = model.intrinsicSize

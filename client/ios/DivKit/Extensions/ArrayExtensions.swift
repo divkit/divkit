@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension [Div] {
   func makeBlocks<T>(

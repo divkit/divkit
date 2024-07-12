@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 public protocol CollectionCellModel: UIViewRenderable, AccessibilityContaining {
   var reuseID: String { get }

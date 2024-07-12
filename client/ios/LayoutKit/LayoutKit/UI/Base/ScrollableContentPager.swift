@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 public final class ScrollableContentPager: NSObject {
   private var indexedPageOrigins: [(origin: CGFloat, index: Int)] = []

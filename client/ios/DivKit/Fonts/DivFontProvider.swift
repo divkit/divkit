@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import BasePublic
+import VGSL
 
 /// The `DivFontProvider` protocol is used to enable the transfer of custom fonts used in your
 /// application. By implementing this protocol, you can specify a custom font provider object that

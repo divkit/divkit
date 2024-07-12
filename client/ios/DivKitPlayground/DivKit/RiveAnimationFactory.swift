@@ -1,11 +1,10 @@
 import Foundation
 
-import BasePublic
 import DivKit
 import DivKitExtensions
 import LayoutKit
-import NetworkingPublic
 import RiveRuntime
+import VGSL
 
 final class RiveAnimationFactory: DivCustomBlockFactory {
   private let requester: URLResourceRequesting

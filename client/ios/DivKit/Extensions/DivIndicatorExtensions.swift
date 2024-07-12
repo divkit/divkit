@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivIndicator: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

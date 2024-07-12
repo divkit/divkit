@@ -1,7 +1,7 @@
 import Foundation
 
-import BasePublic
 import Serialization
+import VGSL
 
 extension [String: Any] {
   func getOptionalExpressionField<T: RawRepresentable>(

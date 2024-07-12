@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 public protocol TooltipEventPerforming {
   func perform(tooltipEvent event: TooltipEvent, from sender: AnyObject)

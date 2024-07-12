@@ -1,6 +1,6 @@
 import CoreFoundation
 
-import CommonCorePublic
+import VGSL
 
 @inlinable
 public func deserialize<T: ValidSerializationValue>(

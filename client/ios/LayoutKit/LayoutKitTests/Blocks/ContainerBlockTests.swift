@@ -1,7 +1,7 @@
 import XCTest
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class ContainerBlockTests: XCTestCase {
   func test_WhenUpdatesState_SendsStatesToChildren() throws {

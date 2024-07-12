@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 public typealias DivDictionary = [String: AnyHashable]
 

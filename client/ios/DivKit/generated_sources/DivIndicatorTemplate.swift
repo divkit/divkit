@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivIndicatorTemplate: TemplateValue {
   public typealias Animation = DivIndicator.Animation

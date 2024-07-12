@@ -1,8 +1,8 @@
 import Foundation
 
-import CommonCorePublic
 import DivKit
 import LayoutKit
+import VGSL
 
 public final class ImageThemeExtensionHandler: DivExtensionHandler {
   public let id = extensionID

@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 public enum DivVariableNameTag {}
 public typealias DivVariableName = Tagged<DivVariableNameTag, String>

@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivCustom: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

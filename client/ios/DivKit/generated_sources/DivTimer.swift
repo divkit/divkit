@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivTimer {
   public let duration: Expression<Int> // constraint: number >= 0; default value: 0

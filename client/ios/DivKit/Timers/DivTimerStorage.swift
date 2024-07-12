@@ -1,7 +1,7 @@
 import Foundation
 
-import BasePublic
 import LayoutKit
+import VGSL
 
 final class DivTimerStorage {
   private let variablesStorage: DivVariablesStorage

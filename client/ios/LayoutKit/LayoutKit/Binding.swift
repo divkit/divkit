@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 public struct Binding<T: Equatable>: Equatable {
   private let name: String

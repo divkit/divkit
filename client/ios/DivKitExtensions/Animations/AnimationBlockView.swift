@@ -1,7 +1,7 @@
 import UIKit
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class AnimationBlockView: BlockView {
   var animatableView: AnimatableView? {

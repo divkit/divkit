@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class ColorVariableTemplate: TemplateValue {
   public static let type: String = "color"

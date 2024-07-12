@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivGrid: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

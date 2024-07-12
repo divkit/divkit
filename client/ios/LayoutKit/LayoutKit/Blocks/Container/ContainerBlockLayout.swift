@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 struct ContainerBlockLayout {
   private enum ContentFitting {

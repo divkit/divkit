@@ -1,6 +1,6 @@
 import Foundation
 
-import NetworkingPublic
+import VGSL
 
 public class DivPatchDownloader: DivPatchProvider {
   private let requestPerformer: URLRequestPerforming

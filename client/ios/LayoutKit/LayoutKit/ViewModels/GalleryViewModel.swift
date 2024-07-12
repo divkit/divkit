@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
 import LayoutKitInterface
+import VGSL
 
 #if canImport(UIKit)
 import UIKit

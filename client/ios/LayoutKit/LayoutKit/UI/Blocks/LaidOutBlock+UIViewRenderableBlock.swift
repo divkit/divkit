@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension LaidOutBlock where T: BlockWithLayout {
   static func makeBlockView() -> BlockView {

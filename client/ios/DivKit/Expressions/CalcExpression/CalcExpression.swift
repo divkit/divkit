@@ -33,7 +33,7 @@
 
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 struct CalcExpression {
   static func parse(_ expression: String) throws -> CalcExpression {

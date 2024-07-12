@@ -1,6 +1,5 @@
-import BasePublic
-import CommonCorePublic
 import Foundation
+import VGSL
 
 /// The `DivStateManagement` protocol provides essential functionality for managing card states.
 ///

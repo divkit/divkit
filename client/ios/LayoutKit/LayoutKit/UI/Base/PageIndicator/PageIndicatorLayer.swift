@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 typealias Scale = (x: CGFloat, y: CGFloat)
 

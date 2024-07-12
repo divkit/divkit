@@ -1,6 +1,6 @@
 import AVFoundation
-import BasePublic
 import Foundation
+import VGSL
 
 public protocol Player {
   var signal: Signal<PlayerEvent> { get }

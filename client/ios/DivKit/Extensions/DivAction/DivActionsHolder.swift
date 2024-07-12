@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 protocol DivActionsHolder {
   var action: DivAction? { get }

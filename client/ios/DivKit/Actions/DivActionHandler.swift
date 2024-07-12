@@ -1,8 +1,8 @@
 import Foundation
 
-import BasePublic
 import LayoutKit
 import Serialization
+import VGSL
 
 public final class DivActionHandler {
   public typealias TrackVisibility = (_ logId: String, _ cardId: DivCardID) -> Void

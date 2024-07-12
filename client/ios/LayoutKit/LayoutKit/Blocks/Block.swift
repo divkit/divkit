@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 #if os(iOS)
 public typealias BlockRenderingImpl = UIViewRenderable

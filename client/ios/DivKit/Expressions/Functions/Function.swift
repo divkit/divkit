@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 protocol Function {
   func invoke(_ args: [Any], context: ExpressionContext) throws -> Any
@@ -293,7 +293,7 @@ struct OverloadedFunction: Function {
 struct ArgumentSignature {
   let type: Any.Type
   let vararg: Bool
-  
+
   init(type: Any.Type, vararg: Bool = false) {
     self.type = type
     self.vararg = vararg
@@ -314,7 +314,8 @@ struct FunctionSignature {
 
     let expectedArgs: [ArgumentSignature]
     if let last = arguments.last, last.vararg {
-      let extraArgs = Array(repeating: last, times: UInt(args.count - arguments.count))
+      let extraArgs = [ArgumentSignature]
+        .init(repeating: last, times: UInt(args.count - arguments.count))
       expectedArgs = (arguments + extraArgs).map { ArgumentSignature(type: $0.type) }
     } else {
       expectedArgs = arguments

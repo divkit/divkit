@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivInputValidatorBase {
   public let allowEmpty: Expression<Bool> // default value: false

@@ -1,5 +1,4 @@
-import BasePublic
-import BaseUIPublic
+import VGSL
 
 struct FontParams: Hashable {
   let family: String

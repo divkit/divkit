@@ -1,7 +1,6 @@
 import Foundation
 
-import BasePublic
-import NetworkingPublic
+import VGSL
 
 /// Loads images for `DivKit` views.
 public protocol DivImageHolderFactory {

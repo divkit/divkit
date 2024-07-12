@@ -3,7 +3,7 @@
 import Foundation
 import XCTest
 
-import BasePublic
+import VGSL
 
 final class DivStateManagementTests: XCTestCase {
   private var stateManagement: DivStateManagement!

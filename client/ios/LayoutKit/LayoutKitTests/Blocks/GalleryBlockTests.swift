@@ -1,7 +1,7 @@
 import XCTest
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class GalleryBlockTests: XCTestCase {
   func test_WhenUpdatesState_UsesIt() throws {

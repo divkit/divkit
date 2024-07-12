@@ -2,10 +2,10 @@ import Testing
 import UIKit
 import XCTest
 
-import BasePublic
 @testable import DivKit
 import DivKitExtensions
 @testable import LayoutKit
+import VGSL
 
 final class AllTests: XCTestCase {
   func testAll() async {
@@ -70,7 +70,7 @@ private let labelImagePreviewExtension = CustomImagePreviewExtensionHandler(
 private class LabelImagePreviewProvider: ViewProvider {
   private var label: UILabel?
 
-  func loadView() -> BasePublic.ViewType {
+  func loadView() -> ViewType {
     if let label {
       return label
     }
@@ -85,7 +85,7 @@ private class LabelImagePreviewProvider: ViewProvider {
     return label
   }
 
-  func equals(other: BasePublic.ViewProvider) -> Bool {
+  func equals(other: ViewProvider) -> Bool {
     loadView() == other.loadView()
   }
 }

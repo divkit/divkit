@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 extension AspectBlock {
   public static func makeBlockView() -> BlockView {

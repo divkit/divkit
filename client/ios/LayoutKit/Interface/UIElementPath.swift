@@ -1,6 +1,6 @@
 import Foundation
 
-import BaseTinyPublic
+import VGSL
 
 public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral, Codable {
   private let address: ListNode

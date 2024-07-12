@@ -1,5 +1,5 @@
-import BaseTinyPublic
 import Foundation
+import VGSL
 
 public final class DivSafeAreaManager {
   private let storage: DivVariablesStorage

@@ -1,7 +1,6 @@
 import UIKit
 
-import BasePublic
-import CommonCorePublic
+import VGSL
 
 public final class NinePatchImageView: UIView, RemoteImageViewContentProtocol {
   private var image: UIImage?
