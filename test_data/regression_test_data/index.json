@@ -490,6 +490,10 @@
       "tags": [
         "Accessibility"
       ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "steps": [
         "Turn on Screen reader",
         "Tap on elements"
@@ -518,6 +522,10 @@
       "tags": [
         "Accessibility"
       ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "steps": [
         "Turn on Screen reader",
         "Focus on items from top to bottom"
@@ -533,6 +541,10 @@
       "title": "Merge Accessibility mode",
       "tags": [
         "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "ios"
       ],
       "steps": [
         "Turn on Screen reader",
@@ -550,6 +562,10 @@
       "title": "Exclude Accessibility mode",
       "tags": [
         "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "ios"
       ],
       "steps": [
         "Turn on Screen reader",
