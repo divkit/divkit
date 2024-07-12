@@ -8,6 +8,8 @@ import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.util.toBoolean
+import com.yandex.div.json.JSONSerializable
+import com.yandex.div2.BoolVariable
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -291,5 +293,20 @@ sealed class Variable {
         } catch (e: JSONException) {
             throw VariableMutationException(cause = e)
         }
+    }
+
+    fun writeToJSON(): JSONObject {
+        val serializable: JSONSerializable = when (this) {
+            is ArrayVariable -> com.yandex.div2.ArrayVariable(this.name, this.value)
+            is BooleanVariable -> BoolVariable(this.name, this.value)
+            is ColorVariable -> com.yandex.div2.ColorVariable(this.name, this.value.value)
+            is DictVariable -> com.yandex.div2.DictVariable(this.name, this.value)
+            is DoubleVariable -> com.yandex.div2.NumberVariable(this.name, this.value)
+            is IntegerVariable -> com.yandex.div2.IntegerVariable(this.name, this.value)
+            is StringVariable -> com.yandex.div2.StrVariable(this.name, this.value)
+            is UrlVariable -> com.yandex.div2.UrlVariable(this.name, this.value)
+        }
+
+        return serializable.writeToJSON()
     }
 }

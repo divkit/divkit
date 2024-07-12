@@ -195,4 +195,8 @@ class DivVariableController(
         internalVariableController?.receiveVariablesUpdates(observer)
     }
 
+    internal fun captureAllVariables(): List<Variable> {
+        return variables.values + (internalVariableController?.captureAllVariables() ?: emptyList())
+    }
+
 }

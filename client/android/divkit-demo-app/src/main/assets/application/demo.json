@@ -106,7 +106,7 @@
               "font_weight": "medium",
               "text_color": "#000000",
               "text_variable": "div2activity_text",
-              "hint_text": "enter link or JSON...",
+              "hint_text": "enter link or JSON\n\nSupported JSON formats:\n- Card-only: '{ \"states\": [ ... ] }' \n- Card with templates: \n    '{ \"card\": { ... }, \"templates\": { ... } }'\n- Card and global variables:\n    '{\n         \"card\": { ... },\n         \"templates\": { ... },\n         \"variables\": [ ... ]\n    }'",
               "hint_color": "#88000000",
               "highlight_color": "#1DFF9000",
               "line_height": 28,

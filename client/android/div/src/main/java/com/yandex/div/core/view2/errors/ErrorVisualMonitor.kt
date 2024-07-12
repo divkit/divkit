@@ -6,6 +6,7 @@ import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.VISUAL_ERRORS_ENABLED
 import com.yandex.div.core.view2.Binding
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewBindingProvider
 import com.yandex.div.json.ParsingException
 import org.json.JSONArray
@@ -17,6 +18,7 @@ private const val SHOW_LIMIT = 25
 @DivViewScope
 internal class ErrorVisualMonitor @Inject constructor(
     errorCollectors: ErrorCollectors,
+    divView: Div2View,
     @ExperimentFlag(VISUAL_ERRORS_ENABLED) private val enabledByConfiguration: Boolean,
     private val bindingProvider: ViewBindingProvider,
 ) {
@@ -26,7 +28,7 @@ internal class ErrorVisualMonitor @Inject constructor(
             connectOrDisconnect()
         }
 
-    private val errorModel = ErrorModel(errorCollectors)
+    private val errorModel = ErrorModel(errorCollectors, divView)
     private var lastConnectionView: ViewGroup? = null
     private var errorView: ErrorView? = null
 
@@ -56,7 +58,10 @@ internal class ErrorVisualMonitor @Inject constructor(
     }
 }
 
-internal class ErrorModel(private val errorCollectors: ErrorCollectors) {
+internal class ErrorModel(
+    private val errorCollectors: ErrorCollectors,
+    private val div2View: Div2View,
+    ) {
     fun bind(binding: Binding) {
             existingSubscription?.close()
             existingSubscription = errorCollectors
@@ -147,7 +152,26 @@ internal class ErrorModel(private val errorCollectors: ErrorCollectors) {
             results.put("warnings", warnings)
         }
 
+        results.put("card", dumpCardWithContextVariables())
         return results.toString(/*indentSpaces*/ 4)
+    }
+
+    private fun dumpCardWithContextVariables() = JSONObject().apply {
+        // Let's dump in format that is suitable for playground apps.
+        put("templates", JSONObject())
+        put("card", div2View.divData?.writeToJSON())
+        put("variables", dumpGlobalVariables())
+    }
+
+    private fun dumpGlobalVariables(): JSONArray {
+        val result = JSONArray()
+        div2View.div2Component.divVariableController.captureAllVariables().forEach {
+            result.put(it.writeToJSON())
+        }
+        div2View.div2Component.globalVariableController.captureAllVariables().forEach {
+            result.put(it.writeToJSON())
+        }
+        return result
     }
 
     private var state = ErrorViewModel()

@@ -129,4 +129,8 @@ class GlobalVariableController {
     fun removeVariableRequestObserver(observer: VariableRequestObserver) {
         externalVariableRequestObservers.remove(observer)
     }
+
+    internal fun captureAllVariables(): List<Variable> {
+        return variables.values.toList()
+    }
 }
