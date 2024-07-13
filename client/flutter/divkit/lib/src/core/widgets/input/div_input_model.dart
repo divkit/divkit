@@ -7,12 +7,14 @@ import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:divkit/src/utils/div_scaling_model.dart';
+import 'package:flutter/services.dart';
 
 class DivInputModel with EquatableMixin {
   final TextStyle textStyle;
   final TextStyle hintStyle;
   final String? hintText;
   final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
   final int? maxLines;
   final bool obscureText;
   final void Function()? onForwardFocus;
@@ -25,6 +27,7 @@ class DivInputModel with EquatableMixin {
     required this.textStyle,
     required this.hintStyle,
     required this.keyboardType,
+    required this.inputFormatters,
     required this.onBlurActions,
     required this.onFocusActions,
     required this.textAlignVertical,
@@ -87,6 +90,12 @@ class DivInputModel with EquatableMixin {
       final keyboardType = await data.keyboardType.resolveValue(
         context: context,
       );
+
+      final inputFormatters = data.inputFormatters != null
+          ? (await data.inputFormatters!.resolveValue(context: context))
+              .toTextInputFormatterList()
+          : <TextInputFormatter>[];
+
       if (variables.context.current[data.textVariable] != controller.text) {
         controller.text = variables.context.current[data.textVariable] ?? '';
       }
@@ -124,6 +133,7 @@ class DivInputModel with EquatableMixin {
           uri: () => TextInputType.url,
           password: () => null,
         ),
+        inputFormatters: inputFormatters,
         onForwardFocus: newFocusNodeId != null
             ? () => _onForwardFocus(buildContext, newFocusNodeId)
             : null,
