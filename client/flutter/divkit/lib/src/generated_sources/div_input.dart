@@ -1,6 +1,7 @@
 // Generated code. Do not modify.
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:divkit/src/generated_sources/div_accessibility.dart';
@@ -55,6 +56,7 @@ class DivInput with EquatableMixin implements DivBase {
     this.isEnabled = const ValueExpression(true),
     this.keyboardType =
         const ValueExpression(DivInputKeyboardType.multiLineText),
+    this.inputFormatters,
     this.letterSpacing = const ValueExpression(0),
     this.lineHeight,
     this.margins = const DivEdgeInsets(),
@@ -143,6 +145,8 @@ class DivInput with EquatableMixin implements DivBase {
   final Expression<bool> isEnabled;
   // default value: DivInputKeyboardType.multiLineText
   final Expression<DivInputKeyboardType> keyboardType;
+  // default value: DivInputFormatters.none
+  final Expression<DivInputFormatters>? inputFormatters;
   // default value: 0
   final Expression<double> letterSpacing;
   // constraint: number >= 0
@@ -237,6 +241,7 @@ class DivInput with EquatableMixin implements DivBase {
         id,
         isEnabled,
         keyboardType,
+        inputFormatters,
         letterSpacing,
         lineHeight,
         margins,
@@ -289,6 +294,7 @@ class DivInput with EquatableMixin implements DivBase {
     String? Function()? id,
     Expression<bool>? isEnabled,
     Expression<DivInputKeyboardType>? keyboardType,
+    Expression<DivInputFormatters>? inputFormatters,
     Expression<double>? letterSpacing,
     Expression<int>? Function()? lineHeight,
     DivEdgeInsets? margins,
@@ -350,6 +356,7 @@ class DivInput with EquatableMixin implements DivBase {
         id: id != null ? id.call() : this.id,
         isEnabled: isEnabled ?? this.isEnabled,
         keyboardType: keyboardType ?? this.keyboardType,
+        inputFormatters: inputFormatters ?? this.inputFormatters,
         letterSpacing: letterSpacing ?? this.letterSpacing,
         lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
         margins: margins ?? this.margins,
@@ -494,6 +501,11 @@ class DivInput with EquatableMixin implements DivBase {
         json['keyboard_type'],
         parse: DivInputKeyboardType.fromJson,
         fallback: DivInputKeyboardType.multiLineText,
+      )!,
+      inputFormatters: safeParseStrEnumExpr(
+        json['keyboard_type'],
+        parse: DivInputFormatters.fromJson,
+        fallback: DivInputFormatters.none,
       )!,
       letterSpacing: safeParseDoubleExpr(
         json['letter_spacing'],
@@ -738,5 +750,36 @@ enum DivInputKeyboardType {
         return DivInputKeyboardType.password;
     }
     return null;
+  }
+}
+
+enum DivInputFormatters {
+  digitsOnly('number'),
+  none('none'); // Default for normal string input
+
+  final String value;
+
+  const DivInputFormatters(this.value);
+
+  static DivInputFormatters? fromJson(String? json) {
+    if (json == null) {
+      return null;
+    }
+    switch (json) {
+      case 'number':
+        return DivInputFormatters.digitsOnly;
+      case 'none':
+      default:
+        return DivInputFormatters.none;
+    }
+  }
+
+  List<TextInputFormatter>? toTextInputFormatterList() {
+    switch (this) {
+      case DivInputFormatters.digitsOnly:
+        return [FilteringTextInputFormatter.digitsOnly];
+      default:
+        [];
+    }
   }
 }
