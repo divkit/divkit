@@ -1,8 +1,8 @@
 import 'package:divkit/src/core/timer/timer.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart' as dto;
+import 'package:divkit/src/generated_sources/generated_sources.dart';
 
-extension PassDivTimer on dto.DivTimer {
-  DivTimer get pass => DivTimer(
+extension PassDivTimer on DivTimer {
+  DivTimerModel get pass => DivTimerModel(
         id: id,
         duration: duration,
         tickInterval: tickInterval,

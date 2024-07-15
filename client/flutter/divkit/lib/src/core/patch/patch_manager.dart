@@ -13,7 +13,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
   const DefaultDivPatchManager(this.dataProvider);
 
   @override
-  Future<bool> applyPatch(DivPatch patch) async {
+  Future<bool> applyPatch(DivPatchModel patch) async {
     final current = dataProvider.value;
     final states = <DivDataState>[];
     for (final state in current.states) {
@@ -33,7 +33,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
 
   /// Apply [patch] changes to single [div], throws Exception if try change to multiple items.
   /// [root] - If true, not support deletion via null.
-  Div? _updateSingle(Div div, DivPatch patch, [bool root = false]) {
+  Div? _updateSingle(Div div, DivPatchModel patch, [bool root = false]) {
     for (var change in patch.changes) {
       if (div.value.id == change.id) {
         if (!root && change.items == null) {
@@ -57,7 +57,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
   static List<T>? _toList<T>(T? obj) => obj == null ? null : [obj];
 
   /// Replace [div] to items form [patch] changes in parent witch support multiple items.
-  List<Div>? _updateMultiple(Div div, DivPatch patch) {
+  List<Div>? _updateMultiple(Div div, DivPatchModel patch) {
     for (var change in patch.changes) {
       if (div.value.id == change.id) {
         return change.items;
@@ -67,7 +67,8 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
   }
 
   /// Distribution of updates strategy depending on the type of div.
-  Div? _update(Div div, DivPatch patch, [bool root = false]) => _updateSingle(
+  Div? _update(Div div, DivPatchModel patch, [bool root = false]) =>
+      _updateSingle(
         div.maybeMap(
           divContainer: (v) => Div.divContainer(_updateContainer(v, patch)),
           divGallery: (v) => Div.divGallery(_updateGallery(v, patch)),
@@ -81,7 +82,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
         root,
       );
 
-  DivContainer _updateContainer(DivContainer div, DivPatch patch) =>
+  DivContainer _updateContainer(DivContainer div, DivPatchModel patch) =>
       div.copyWith(
         items: () =>
             div.items
@@ -92,7 +93,8 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
             [],
       );
 
-  DivGallery _updateGallery(DivGallery div, DivPatch patch) => div.copyWith(
+  DivGallery _updateGallery(DivGallery div, DivPatchModel patch) =>
+      div.copyWith(
         items: () =>
             div.items
                 ?.map((e) => _updateMultiple(e, patch))
@@ -102,7 +104,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
             [],
       );
 
-  DivGrid _updateGrid(DivGrid div, DivPatch patch) => div.copyWith(
+  DivGrid _updateGrid(DivGrid div, DivPatchModel patch) => div.copyWith(
         items: () =>
             div.items
                 ?.map((e) => _updateMultiple(e, patch))
@@ -112,7 +114,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
             [],
       );
 
-  DivPager _updatePager(DivPager div, DivPatch patch) => div.copyWith(
+  DivPager _updatePager(DivPager div, DivPatchModel patch) => div.copyWith(
         items: () =>
             div.items
                 ?.map((e) => _updateMultiple(e, patch))
@@ -122,7 +124,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
             [],
       );
 
-  DivState _updateState(DivState div, DivPatch patch) => div.copyWith(
+  DivState _updateState(DivState div, DivPatchModel patch) => div.copyWith(
         states: div.states
             .map(
               (e) => e.div != null
@@ -132,7 +134,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
             .toList(),
       );
 
-  DivTabs _updateTabs(DivTabs div, DivPatch patch) => div.copyWith(
+  DivTabs _updateTabs(DivTabs div, DivPatchModel patch) => div.copyWith(
         items: div.items
             .map((e) => e.copyWith(div: _update(e.div, patch)))
             .toList(),

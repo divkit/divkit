@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:divkit/src/core/action/action.dart' as resolved_action;
+import 'package:divkit/src/core/action/action.dart';
 import 'package:divkit/src/core/action/action_converter.dart';
 import 'package:divkit/src/core/expression/expression.dart';
 import 'package:divkit/src/core/expression/resolver.dart';
@@ -683,10 +683,10 @@ extension PassDivBlendMode on DivBlendMode {
 }
 
 extension PassActions on DivFocus {
-  Future<List<resolved_action.DivAction>> resolveOnBlurActions({
+  Future<List<DivActionModel>> resolveOnBlurActions({
     required DivVariableContext context,
   }) async {
-    List<resolved_action.DivAction> result = [];
+    List<DivActionModel> result = [];
     final blurAction = onBlur;
     if (blurAction != null) {
       for (final action in blurAction) {
@@ -699,10 +699,10 @@ extension PassActions on DivFocus {
     return result;
   }
 
-  Future<List<resolved_action.DivAction>> resolveOnFocusActions({
+  Future<List<DivActionModel>> resolveOnFocusActions({
     required DivVariableContext context,
   }) async {
-    List<resolved_action.DivAction> result = [];
+    List<DivActionModel> result = [];
     final blurAction = onFocus;
     if (blurAction != null) {
       for (final action in blurAction) {

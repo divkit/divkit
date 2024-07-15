@@ -16,8 +16,8 @@ class DivInputModel with EquatableMixin {
   final int? maxLines;
   final bool obscureText;
   final void Function()? onForwardFocus;
-  final List<DivAction> onBlurActions;
-  final List<DivAction> onFocusActions;
+  final List<DivActionModel> onBlurActions;
+  final List<DivActionModel> onFocusActions;
   final TextAlign textAlign;
   final TextAlignVertical textAlignVertical;
 

@@ -118,7 +118,7 @@ class DefaultDivVariableManager extends DivVariableManager with EquatableMixin {
     } else {
       // Create new variable
       storage.put(
-        DivVariable(
+        DivVariableModel(
           name: name,
           value: value,
           safeParse: safeParseTyped(value.runtimeType),

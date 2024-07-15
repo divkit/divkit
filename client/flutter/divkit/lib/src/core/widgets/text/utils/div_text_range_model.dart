@@ -22,7 +22,7 @@ class DivTextRangeModel with EquatableMixin {
 class DivTextRangeOptionModel with EquatableMixin {
   final TextStyle? style;
 
-  final List<DivAction> actions;
+  final List<DivActionModel> actions;
 
   final int? topOffset;
 

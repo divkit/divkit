@@ -12,7 +12,7 @@ void main() {
           [divWithId('some_div')],
         ),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -30,7 +30,7 @@ void main() {
     });
     test('When replacing root div replaces div', () {
       final original = data(divWithId('div_to_replace'));
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -48,7 +48,7 @@ void main() {
     });
     test('When replacing div with different type replaces div', () {
       final original = data(divWithId('div_to_replace'));
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -67,7 +67,7 @@ void main() {
     // Why don't we allow the structure to be patched from the base?
     test('When deleting root div does nothing', () {
       final original = data(divWithId('div_to_delete'));
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_delete",
@@ -85,7 +85,7 @@ void main() {
     });
     test('When replacing root div with multiple divs does nothing', () {
       final original = data(divWithId('div_to_replace'));
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -109,7 +109,7 @@ void main() {
           separator,
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -139,7 +139,7 @@ void main() {
           separator,
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -170,7 +170,7 @@ void main() {
           separator,
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_delete",
@@ -200,7 +200,7 @@ void main() {
           separator,
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -235,7 +235,7 @@ void main() {
           separator,
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -266,7 +266,7 @@ void main() {
           separator,
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_delete",
@@ -296,7 +296,7 @@ void main() {
           separator,
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -332,7 +332,7 @@ void main() {
           separator,
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -365,7 +365,7 @@ void main() {
           divWithId('div_to_replace'),
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -391,7 +391,7 @@ void main() {
           divWithId('div_to_delete'),
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_delete",
@@ -418,7 +418,7 @@ void main() {
           divWithId('div_to_replace'),
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -440,7 +440,7 @@ void main() {
           divWithId('div_to_replace'),
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_replace",
@@ -466,7 +466,7 @@ void main() {
           divWithId('div_to_delete'),
         ]),
       );
-      const patch = DivPatch(
+      const patch = DivPatchModel(
         changes: [
           DivPatchChange(
             id: "div_to_delete",

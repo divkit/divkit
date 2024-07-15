@@ -1,8 +1,8 @@
 import 'package:divkit/src/generated_sources/div_patch.dart';
 import 'package:equatable/equatable.dart';
 
-class DivPatch with EquatableMixin {
-  const DivPatch({
+class DivPatchModel with EquatableMixin {
+  const DivPatchModel({
     required this.changes,
     this.mode = DivPatchMode.partial,
   });

@@ -22,7 +22,7 @@ class _PlaygroundPage extends State<PlaygroundPage> {
   @override
   void initState() {
     super.initState();
-    variableStorage.put(DivVariable(name: demoInputVariable, value: ''));
+    variableStorage.put(DivVariableModel(name: demoInputVariable, value: ''));
   }
 
   Future<Map<String, dynamic>> loadJson() async {
@@ -57,7 +57,7 @@ class _PlaygroundPage extends State<PlaygroundPage> {
             icon: const Icon(Icons.clear),
             onPressed: () {
               variableStorage
-                  .update(DivVariable(name: demoInputVariable, value: ''));
+                  .update(DivVariableModel(name: demoInputVariable, value: ''));
             },
           ),
         ],

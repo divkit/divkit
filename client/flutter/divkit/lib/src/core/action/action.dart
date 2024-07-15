@@ -2,14 +2,14 @@ import 'package:divkit/src/core/protocol/div_context.dart';
 import 'package:divkit/src/generated_sources/div_action_typed.dart';
 import 'package:equatable/equatable.dart';
 
-class DivAction with EquatableMixin {
+class DivActionModel with EquatableMixin {
   final Uri? url;
   final bool enabled;
   final DivActionTyped? typedAction;
   final Map<String, dynamic>? payload;
-  final DivDownloadCallbacks? downloadCallbacks;
+  final DivDownloadCallbacksModel? downloadCallbacks;
 
-  const DivAction({
+  const DivActionModel({
     required this.enabled,
     this.url,
     this.typedAction,
@@ -38,15 +38,15 @@ class DivAction with EquatableMixin {
   }
 }
 
-class DivDownloadCallbacks with EquatableMixin {
-  const DivDownloadCallbacks({
+class DivDownloadCallbacksModel with EquatableMixin {
+  const DivDownloadCallbacksModel({
     this.onFailActions,
     this.onSuccessActions,
   });
 
-  final List<DivAction>? onFailActions;
+  final List<DivActionModel>? onFailActions;
 
-  final List<DivAction>? onSuccessActions;
+  final List<DivActionModel>? onSuccessActions;
 
   @override
   List<Object?> get props => [

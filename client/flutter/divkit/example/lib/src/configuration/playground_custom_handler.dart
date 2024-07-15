@@ -76,28 +76,23 @@ class PlaygroundAppCustomHandler implements DivCustomHandler {
 
   /// An example of using variables and actions inside a custom
   Widget _createRefreshIndicator(DivCustom div, DivContext context) {
-    final props = div.customProps?['custom_props'];
-
-    final valueName = props['var'] as String;
-    final value = context.variableManager.context.current[valueName] as bool;
-
-    final actions = props['actions'] as List;
-    final actionList = actions
-        .map(
-          (action) => DivAction(
-            enabled: true,
-            url: Uri.parse(
-              action['url'].toString() + (!value).toString(),
-            ),
-          ),
-        )
-        .toList();
+    final props = div.customProps;
+    final actions = props?['actions'] as List;
+    final actionList = <Future<DivActionModel>>[];
+    for (var action in actions) {
+      final actionModel = DivAction.fromJson(action)?.resolve(
+        context: context.variableManager.context,
+      );
+      if (actionModel != null) {
+        actionList.add(actionModel);
+      }
+    }
     return RefreshIndicator(
       onRefresh: () async {
         for (final action in actionList) {
           context.actionHandler.handleAction(
             context,
-            action,
+            await action,
           );
         }
       },

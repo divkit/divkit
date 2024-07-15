@@ -12,7 +12,7 @@ class DefaultDivTimerManager extends DivTimerManager {
   });
 
   Future<void> init({
-    Iterable<DivTimer>? timers,
+    Iterable<DivTimerModel>? timers,
     void Function()? onEnd,
   }) async {
     if (timers != null) {

@@ -52,7 +52,7 @@ class _DivTextWidgetState extends State<DivTextWidget> {
     );
     if (divContext != null) {
       final actions = item.optionModel.actions;
-      for (DivAction action in actions) {
+      for (DivActionModel action in actions) {
         await action.execute(divContext);
       }
     }

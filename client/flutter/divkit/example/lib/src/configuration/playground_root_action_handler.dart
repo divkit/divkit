@@ -27,7 +27,7 @@ class PlaygroundAppRootActionHandler implements DivActionHandler {
   }) : _navigator = navigator;
 
   @override
-  bool canHandle(DivContext context, DivAction action) {
+  bool canHandle(DivContext context, DivActionModel action) {
     if (_typedHandler.canHandle(context, action)) {
       return true;
     }
@@ -52,7 +52,7 @@ class PlaygroundAppRootActionHandler implements DivActionHandler {
   @override
   FutureOr<bool> handleAction(
     DivContext context,
-    DivAction action,
+    DivActionModel action,
   ) async {
     if (_typedHandler.canHandle(context, action)) {
       return _typedHandler.handleAction(context, action);

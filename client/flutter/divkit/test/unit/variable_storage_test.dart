@@ -28,41 +28,41 @@ Map<String, dynamic> afterUpdateOuter(Map<String, dynamic>? update) => {
       ...(update ?? {}),
     };
 
-List<DivVariable> createNewVars() => [
-      DivVariable(
+List<DivVariableModel> createNewVars() => [
+      DivVariableModel(
         name: "string_var",
         value: "value",
         safeParse: safeParseStr,
       ),
-      DivVariable(
+      DivVariableModel(
         name: "int_var",
         value: 100,
         safeParse: safeParseInt,
       ),
-      DivVariable(
+      DivVariableModel(
         name: "number_var",
         value: 123.34,
         safeParse: safeParseDouble,
       ),
-      DivVariable(
+      DivVariableModel(
         name: "bool_var",
         value: true,
         safeParse: safeParseBool,
       ),
-      DivVariable(
+      DivVariableModel(
         name: "url_var",
         value: safeParseUri("https://test.url"),
         safeParse: safeParseUri,
       ),
     ];
 
-List<DivVariable> createNewVarsOuter() => [
-      DivVariable(
+List<DivVariableModel> createNewVarsOuter() => [
+      DivVariableModel(
         name: "outer_string_var",
         value: "outer value",
         safeParse: safeParseStr,
       ),
-      DivVariable(
+      DivVariableModel(
         name: "outer_int_var",
         value: 200,
         safeParse: safeParseInt,
@@ -225,7 +225,7 @@ void main() {
         () async {
           final outerStorage = DefaultDivVariableStorage(
             variables: [
-              DivVariable(
+              DivVariableModel(
                 name: "string_var",
                 value: "outer value",
                 safeParse: safeParseStr,
@@ -318,7 +318,7 @@ void main() {
 
           final variables = DefaultDivVariableManager(storage: storage);
 
-          outerStorage.put(DivVariable(name: "global", value: 0));
+          outerStorage.put(DivVariableModel(name: "global", value: 0));
 
           expect(afterUpdateOuter({"global": 0}), variables.context.current);
 
@@ -346,7 +346,8 @@ void main() {
           final first = await stream.first;
           expect(afterUpdateOuter(null), first);
 
-          outerStorage.update(DivVariable(name: "outer_int_var", value: 0));
+          outerStorage
+              .update(DivVariableModel(name: "outer_int_var", value: 0));
 
           final second = await stream.first;
           expect(afterUpdateOuter({"outer_int_var": 0}), second);
@@ -404,7 +405,7 @@ void main() {
           final first = await stream.first;
           expect(afterUpdateOuter(null), first);
 
-          outerStorage.put(DivVariable(name: "new_int_var", value: 0));
+          outerStorage.put(DivVariableModel(name: "new_int_var", value: 0));
 
           final second = await stream.first;
           expect(afterUpdateOuter({"new_int_var": 0}), second);

@@ -1,17 +1,17 @@
 import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart' as dto;
+import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:equatable/equatable.dart';
 
-class DivTrigger with EquatableMixin {
-  final List<dto.DivAction> actions;
+class DivTriggerModel with EquatableMixin {
+  final List<DivAction> actions;
 
   final Expression<bool> condition;
 
   bool prevConditionResult = false;
 
-  final Expression<dto.DivTriggerMode> mode;
+  final Expression<DivTriggerMode> mode;
 
-  DivTrigger({
+  DivTriggerModel({
     required this.actions,
     required this.condition,
     required this.mode,

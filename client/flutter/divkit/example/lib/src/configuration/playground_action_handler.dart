@@ -27,7 +27,7 @@ class PlaygroundActionHandler implements DivActionHandler {
   }) : _navigator = navigator;
 
   @override
-  bool canHandle(DivContext context, DivAction action) {
+  bool canHandle(DivContext context, DivActionModel action) {
     final uri = action.url;
     if (uri != null) {
       if (uri.scheme == _schemeDivAction &&
@@ -47,7 +47,7 @@ class PlaygroundActionHandler implements DivActionHandler {
   @override
   FutureOr<bool> handleAction(
     DivContext context,
-    DivAction action,
+    DivActionModel action,
   ) async {
     final uri = action.url;
     if (uri == null) {

@@ -12,7 +12,7 @@ class DefaultDivActionHandler implements DivActionHandler {
   final urlHandler = DefaultDivActionHandlerUrl();
 
   @override
-  bool canHandle(DivContext context, DivAction action) {
+  bool canHandle(DivContext context, DivActionModel action) {
     try {
       if (typedHandler.canHandle(context, action)) {
         return true;
@@ -29,7 +29,7 @@ class DefaultDivActionHandler implements DivActionHandler {
   }
 
   @override
-  FutureOr<bool> handleAction(DivContext context, DivAction action) async {
+  FutureOr<bool> handleAction(DivContext context, DivActionModel action) async {
     try {
       if (typedHandler.canHandle(context, action)) {
         return typedHandler.handleAction(context, action);

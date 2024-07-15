@@ -1,15 +1,21 @@
-## 0.3.0-pre
+## 0.3.0-pre+1
 
 * Fix object parsing in DTO
 * Add ranges in div-text
+* Open access to the classes DivAction, DivTimer, DivVariable, DivPatch, DivDownloadCallbacks and
+  converters in the public api
 
-## Migration 0.2 → 0.3
+## Migration 0.2 → 0.3.0-pre+1
 
 * Now we have fixed the error and extract the value of dict type values when parsing.
   This change affected the following structures: dict_value, dict_variable, div_action, div_custom,
   div_disappear_action, div_extension, div_video, div_visibility_action.
   `-action.payload['payload']`
   `+action.payload`
+* The naming of the classes of the public api was changed so as not to conflict with the dto
+  classes:
+  `-DivAction, DivTimer, DivVariable, DivPatch, DivDownloadCallbacks`
+  `+DivActionModel, DivTimerModel, DivVariableModel, DivPatchModel, DivDownloadCallbacksModel`
 
 ## 0.2.0
 
@@ -26,7 +32,8 @@
 
 ## Migration 0.1 → 0.2
 
-* Now DivContext specified in div-customs protocol,  you need to change signature of function if it was used.
+* Now DivContext specified in div-customs protocol, you need to change signature of function if it
+  was used.
   `-Widget createCustom(DivCustom div);`
   `+Widget createCustom(DivCustom div, DivContext context)`
 

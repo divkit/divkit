@@ -5,7 +5,7 @@ import 'package:divkit/src/generated_sources/div_text.dart';
 import 'package:divkit/src/utils/converters.dart';
 import 'package:divkit/src/generated_sources/div_line_style.dart';
 import 'package:flutter/material.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart' as dto;
+import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:divkit/src/core/action/action_converter.dart';
 import 'package:divkit/src/core/action/action.dart';
 
@@ -105,8 +105,8 @@ class DivRangeHelper {
       context: context,
     );
 
-    List<DivAction> actions = [];
-    List<dto.DivAction>? actionsDto = [...?divTextRange.actions];
+    List<DivActionModel> actions = [];
+    List<DivAction>? actionsDto = [...?divTextRange.actions];
     for (final action in actionsDto) {
       final resAction = await action.resolve(
         context: context,

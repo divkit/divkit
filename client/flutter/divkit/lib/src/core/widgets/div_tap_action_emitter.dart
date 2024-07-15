@@ -1,16 +1,15 @@
 import 'package:divkit/src/core/action/action.dart';
 import 'package:divkit/src/core/action/action_converter.dart';
 import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/generated_sources/div_animation.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart' as dto;
+import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:divkit/src/utils/tap_builder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
 class DivTapActionModel with EquatableMixin {
-  final List<DivAction> actions;
-  final List<DivAction> longtapActions;
+  final List<DivActionModel> actions;
+  final List<DivActionModel> longtapActions;
   final bool enabled;
   final bool enabledAnimation;
 
@@ -23,15 +22,15 @@ class DivTapActionModel with EquatableMixin {
 
   static Stream<DivTapActionModel> from(
     BuildContext context,
-    List<dto.DivAction> actions,
-    List<dto.DivAction> longtapActions,
-    dto.DivAnimation? divAnimation,
+    List<DivAction> actions,
+    List<DivAction> longtapActions,
+    DivAnimation? divAnimation,
   ) {
     final variables =
         DivKitProvider.watch<DivContext>(context)!.variableManager;
 
     return variables.watch<DivTapActionModel>((context) async {
-      List<DivAction> a = [];
+      List<DivActionModel> a = [];
       for (final action in actions) {
         final rAction = await action.resolve(
           context: context,
@@ -41,7 +40,7 @@ class DivTapActionModel with EquatableMixin {
         }
       }
 
-      List<DivAction> la = [];
+      List<DivActionModel> la = [];
       for (final action in longtapActions) {
         final rAction = await action.resolve(
           context: context,
@@ -73,8 +72,8 @@ class DivTapActionModel with EquatableMixin {
 
 /// A wrapper for sending actions.
 class DivTapActionEmitter extends StatefulWidget {
-  final List<dto.DivAction> actions;
-  final List<dto.DivAction> longtapActions;
+  final List<DivAction> actions;
+  final List<DivAction> longtapActions;
   final DivAnimation? actionAnimation;
 
   final Widget child;
