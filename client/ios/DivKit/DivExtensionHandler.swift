@@ -1,7 +1,6 @@
 import Foundation
 
 import LayoutKit
-import VGSL
 
 /// The `DivExtensionHandler` protocol enables you to extend the functionality of an existing block
 /// in `DivKit`.

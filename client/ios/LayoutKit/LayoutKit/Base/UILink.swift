@@ -1,6 +1,5 @@
 import Foundation
 
-import LayoutKitInterface
 import VGSL
 
 public struct UILink: Equatable {

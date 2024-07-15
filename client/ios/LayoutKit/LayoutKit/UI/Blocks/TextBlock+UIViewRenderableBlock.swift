@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 
-import LayoutKitInterface
 import VGSL
 
 extension TextBlock {

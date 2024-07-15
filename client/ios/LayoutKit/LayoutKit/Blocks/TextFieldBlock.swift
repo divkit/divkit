@@ -1,7 +1,6 @@
 import CoreGraphics
 import Foundation
 
-import LayoutKitInterface
 import VGSL
 
 public final class TextFieldBlock: Block {

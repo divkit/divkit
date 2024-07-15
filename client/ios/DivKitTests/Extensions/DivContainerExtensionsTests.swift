@@ -3,8 +3,6 @@
 
 import XCTest
 
-import VGSL
-
 final class DivContainerExtensionsTests: XCTestCase {
   func test_NilItems() throws {
     let block = makeBlock(

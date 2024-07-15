@@ -1,7 +1,5 @@
 import Foundation
 
-import LayoutKitInterface
-
 public protocol ElementState {}
 
 public typealias BlocksState = [UIElementPath: ElementState]

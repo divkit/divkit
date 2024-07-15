@@ -2,8 +2,7 @@ import CoreGraphics
 import Foundation
 import Testing
 import UIKit
-import class XCTest.XCTAttachment
-import class XCTest.XCTContext
+import XCTest
 
 import VGSL
 

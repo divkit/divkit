@@ -3,8 +3,6 @@
 
 import XCTest
 
-import VGSL
-
 final class DivDataExtensionsTests: XCTestCase {
   func test_WhenStateIsNil_TakesFirstState() throws {
     let block = try data

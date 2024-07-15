@@ -1,6 +1,5 @@
 import CoreGraphics
 
-import LayoutKitInterface
 import VGSL
 
 #if canImport(UIKit)

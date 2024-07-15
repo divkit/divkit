@@ -1,7 +1,6 @@
 import UIKit
 
 import DivKit
-import VGSL
 
 final class YSFontProvider: DivFontProvider {
   func font(family _: String, weight: DivFontWeight, size: CGFloat) -> UIFont {

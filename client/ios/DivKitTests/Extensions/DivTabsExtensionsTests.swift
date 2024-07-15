@@ -2,7 +2,6 @@ import XCTest
 
 import DivKit
 import LayoutKit
-import VGSL
 
 final class DivTabsExtensionsTests: XCTestCase {
   func test_WhenSwitchByContentTabsIsDisabled_ScrollingDisabledInContentsModel() throws {

@@ -1,7 +1,5 @@
 import UIKit
 
-import LayoutKitInterface
-
 final class ClickableView: UIView {
   var action: UserInterfaceAction
 

@@ -1,4 +1,3 @@
-import LayoutKitInterface
 import VGSL
 
 public enum Background: Equatable {

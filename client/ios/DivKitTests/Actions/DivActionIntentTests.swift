@@ -2,8 +2,6 @@
 
 import XCTest
 
-import LayoutKitInterface
-
 final class DivActionIntentTests: XCTestCase {
   func test_Download() {
     switch makeIntent("div-action://download?url=https://download.url") {

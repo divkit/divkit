@@ -3,8 +3,6 @@
 
 import XCTest
 
-import VGSL
-
 final class DivSeparatorExtensionsTests: XCTestCase {
   func test_WithDelimiterStyle() throws {
     let block = makeBlock(

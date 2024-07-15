@@ -1,6 +1,5 @@
 import UIKit
 
-import LayoutKitInterface
 import VGSL
 
 final class TabSelectionWireframe {

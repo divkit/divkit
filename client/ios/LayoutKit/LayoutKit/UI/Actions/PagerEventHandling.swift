@@ -1,6 +1,5 @@
 import UIKit
 
-import LayoutKitInterface
 import VGSL
 
 public protocol PagerEventHandling {

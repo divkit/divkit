@@ -1,7 +1,6 @@
-@testable import DivKit
-
 import XCTest
 
+@testable import DivKit
 import LayoutKit
 import VGSL
 

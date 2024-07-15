@@ -1,7 +1,6 @@
 import CoreGraphics
 import Foundation
 
-import LayoutKitInterface
 import VGSL
 
 final class DecoratingBlock: WrapperBlock {

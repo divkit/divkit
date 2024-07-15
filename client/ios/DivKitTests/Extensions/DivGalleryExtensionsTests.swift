@@ -1,9 +1,7 @@
-@testable import DivKit
-
 import XCTest
 
+@testable import DivKit
 import LayoutKit
-import VGSL
 
 final class DivGalleryExtensionsTests: XCTestCase {
   func test_WhenContextContainsGalleryState_RestoresIt() throws {
@@ -87,5 +85,3 @@ private func makeBlock(
     context: context
   )
 }
-
-private let expectedInsets = SideInsets(leading: 12, trailing: 24)
