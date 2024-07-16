@@ -7,5 +7,13 @@
                 "version_added": "30.8.0"
             }
         }
+    }, {
+        "id": "base_component_layout_provider",
+        "name": "Base component property <code>layout_provider</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.9.0"
+            }
+        }
     }]
 }
