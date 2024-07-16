@@ -33,7 +33,8 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       crossSpacing: 0,
       defaultAlignment: .center,
       scrollMode: .autoPaging(inertionEnabled: false),
-      infiniteScroll: resolveInfiniteScroll(expressionResolver)
+      infiniteScroll: resolveInfiniteScroll(expressionResolver),
+      transformation: pageTransformation?.resolve(expressionResolver)
     )
     return try PagerBlock(
       pagerPath: pagerPath,
@@ -64,7 +65,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
 }
 
 extension DivPager.Orientation {
-  var direction: GalleryViewModel.Direction {
+  var direction: ScrollDirection {
     switch self {
     case .horizontal: .horizontal
     case .vertical: .vertical
@@ -93,5 +94,26 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> [UserInterfaceAction] {
     selectedActions?.uiActions(context: context) ?? []
+  }
+}
+
+extension DivPageTransformation {
+  fileprivate func resolve(_ resolver: ExpressionResolver) -> ElementsTransformation {
+    switch self {
+    case let .divPageTransformationSlide(transformation):
+      return .init(
+        nextElementAlpha: transformation.resolveNextPageAlpha(resolver),
+        previousElementAlpha: transformation.resolvePreviousPageAlpha(resolver),
+        nextElementScale: transformation.resolveNextPageScale(resolver),
+        previousElementScale: transformation.resolvePreviousPageScale(resolver)
+      )
+    case .divPageTransformationOverlap:
+      return .init(
+        nextElementAlpha: 1,
+        previousElementAlpha: 1,
+        nextElementScale: 1,
+        previousElementScale: 1
+      )
+    }
   }
 }

@@ -14,14 +14,15 @@ extension DivGalleryProtocol {
 
   func makeGalleryModel(
     context: DivBlockModelingContext,
-    direction: GalleryViewModel.Direction,
+    direction: ScrollDirection,
     spacing: CGFloat,
     crossSpacing: CGFloat,
     defaultAlignment: Alignment,
     scrollMode: GalleryViewModel.ScrollMode,
     columnCount: Int? = nil,
     infiniteScroll: Bool = false,
-    scrollbar: GalleryViewModel.Scrollbar = .none
+    scrollbar: GalleryViewModel.Scrollbar = .none,
+    transformation: ElementsTransformation? = nil
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
     var children: [GalleryViewModel.Item] = nonNilItems.makeBlocks(
@@ -66,7 +67,8 @@ extension DivGalleryProtocol {
       direction: direction,
       columnCount: columnCount ?? 1,
       infiniteScroll: infiniteScroll,
-      scrollbar: scrollbar
+      scrollbar: scrollbar,
+      transformation: transformation
     )
   }
 
@@ -74,7 +76,7 @@ extension DivGalleryProtocol {
     spacing: CGFloat,
     crossSpacing: CGFloat,
     childrenCount: Int,
-    direction: GalleryViewModel.Direction,
+    direction: ScrollDirection,
     with expressionResolver: ExpressionResolver
   ) throws -> GalleryViewMetrics {
     let spacings = [CGFloat](

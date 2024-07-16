@@ -353,7 +353,7 @@ private enum Blocks {
   )
 
   static func makeModel(
-    direction: GalleryViewModel.Direction = .horizontal,
+    direction: ScrollDirection = .horizontal,
     metrics: GalleryViewMetrics = .fixed,
     crossAlignment: Alignment = .center,
     scrollMode: GalleryViewModel.ScrollMode = .default

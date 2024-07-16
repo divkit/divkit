@@ -75,7 +75,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
 }
 
 extension DivGallery.Orientation {
-  fileprivate var direction: GalleryViewModel.Direction {
+  fileprivate var direction: ScrollDirection {
     switch self {
     case .horizontal:
       .horizontal

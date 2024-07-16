@@ -26,6 +26,14 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
     blockPages.map(\.origin)
   }
 
+  public var transformation: ElementsTransformation? {
+    model.transformation
+  }
+
+  public var scrollDirection: ScrollDirection {
+    model.direction
+  }
+
   public init(
     model: GalleryViewModel,
     pageIndex: Int,
@@ -262,7 +270,7 @@ extension Alignment {
 }
 
 extension CGPoint {
-  fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
+  fileprivate func dimension(in direction: ScrollDirection) -> CGFloat {
     switch direction {
     case .horizontal:
       x
@@ -273,7 +281,7 @@ extension CGPoint {
 }
 
 extension CGSize {
-  fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
+  fileprivate func dimension(in direction: ScrollDirection) -> CGFloat {
     switch direction {
     case .horizontal:
       width

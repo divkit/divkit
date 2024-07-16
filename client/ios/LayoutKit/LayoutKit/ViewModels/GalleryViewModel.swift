@@ -14,21 +14,6 @@ public struct GalleryViewModel: Equatable {
     case fixedPaging(pageSize: CGFloat)
   }
 
-  @frozen
-  public enum Direction: Equatable {
-    case horizontal
-    case vertical
-
-    public var isHorizontal: Bool {
-      switch self {
-      case .horizontal:
-        true
-      case .vertical:
-        false
-      }
-    }
-  }
-
   public struct Item: Equatable {
     public let crossAlignment: Alignment
     public var content: Block
@@ -58,13 +43,14 @@ public struct GalleryViewModel: Equatable {
   public let metrics: GalleryViewMetrics
   public let scrollMode: ScrollMode
   public let path: UIElementPath
-  public let direction: Direction
+  public let direction: ScrollDirection
   public let columnCount: Int
   public let areEmptySpaceTouchesEnabled: Bool
   public let alwaysBounceVertical: Bool
   public let bounces: Bool
   public let infiniteScroll: Bool
   public let scrollbar: Scrollbar
+  public let transformation: ElementsTransformation?
 
   public init(
     blocks: [Block],
@@ -72,14 +58,15 @@ public struct GalleryViewModel: Equatable {
     metrics: GalleryViewMetrics,
     scrollMode: ScrollMode = .default,
     path: UIElementPath,
-    direction: Direction = .horizontal,
+    direction: ScrollDirection = .horizontal,
     columnCount: Int = 1,
     crossAlignment: Alignment = .leading,
     areEmptySpaceTouchesEnabled: Bool = true,
     alwaysBounceVertical: Bool = false,
     bounces: Bool = true,
     infiniteScroll: Bool = false,
-    scrollbar: Scrollbar = .none
+    scrollbar: Scrollbar = .none,
+    transformation: ElementsTransformation? = nil
   ) {
     self.init(
       items: blocks.map { Item(crossAlignment: crossAlignment, content: $0) },
@@ -93,7 +80,8 @@ public struct GalleryViewModel: Equatable {
       alwaysBounceVertical: alwaysBounceVertical,
       bounces: bounces,
       infiniteScroll: infiniteScroll,
-      scrollbar: scrollbar
+      scrollbar: scrollbar,
+      transformation: transformation
     )
   }
 
@@ -103,13 +91,14 @@ public struct GalleryViewModel: Equatable {
     metrics: GalleryViewMetrics,
     scrollMode: ScrollMode = .default,
     path: UIElementPath,
-    direction: Direction = .horizontal,
+    direction: ScrollDirection = .horizontal,
     columnCount: Int = 1,
     areEmptySpaceTouchesEnabled: Bool = true,
     alwaysBounceVertical: Bool = false,
     bounces: Bool = true,
     infiniteScroll: Bool = false,
-    scrollbar: Scrollbar = .none
+    scrollbar: Scrollbar = .none,
+    transformation: ElementsTransformation? = nil
   ) {
     validateContent(of: items, with: direction)
 
@@ -127,6 +116,7 @@ public struct GalleryViewModel: Equatable {
     self.bounces = bounces
     self.infiniteScroll = infiniteScroll
     self.scrollbar = scrollbar
+    self.transformation = transformation
   }
 
   public func modifying(
@@ -134,7 +124,7 @@ public struct GalleryViewModel: Equatable {
     metrics: GalleryViewMetrics? = nil,
     scrollMode: ScrollMode? = nil,
     path: UIElementPath? = nil,
-    direction: Direction? = nil,
+    direction: ScrollDirection? = nil,
     areEmptySpaceTouchesEnabled: Bool? = nil
   ) -> GalleryViewModel {
     GalleryViewModel(
@@ -164,7 +154,7 @@ extension GalleryViewModel.Item {
 
 private func validateContent(
   of items: [GalleryViewModel.Item],
-  with direction: GalleryViewModel.Direction
+  with direction: ScrollDirection
 ) {
   let blocks = items.map(\.content)
   switch direction {

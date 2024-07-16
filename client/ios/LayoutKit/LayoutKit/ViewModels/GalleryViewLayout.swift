@@ -7,6 +7,8 @@ public protocol GalleryViewLayouting {
   var pageOrigins: [CGFloat] { get }
   var blockFrames: [CGRect] { get }
   var contentSize: CGSize { get }
+  var transformation: ElementsTransformation? { get }
+  var scrollDirection: ScrollDirection { get }
 
   func contentOffset(pageIndex: CGFloat) -> CGFloat
   func pageIndex(forContentOffset contentOffset: CGFloat) -> CGFloat
@@ -30,6 +32,14 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
   public let blockFrames: [CGRect]
   public let blockPages: [Page]
   public let contentSize: CGSize
+
+  public var transformation: ElementsTransformation? {
+    model.transformation
+  }
+
+  public var scrollDirection: ScrollDirection {
+    model.direction
+  }
 
   public var pageOrigins: [CGFloat] {
     blockPages.map(\.origin)
@@ -274,7 +284,7 @@ extension Alignment {
 }
 
 extension CGPoint {
-  fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
+  fileprivate func dimension(in direction: ScrollDirection) -> CGFloat {
     switch direction {
     case .horizontal:
       x
@@ -285,7 +295,7 @@ extension CGPoint {
 }
 
 extension CGSize {
-  fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
+  fileprivate func dimension(in direction: ScrollDirection) -> CGFloat {
     switch direction {
     case .horizontal:
       width

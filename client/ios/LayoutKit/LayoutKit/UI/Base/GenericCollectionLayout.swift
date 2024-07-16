@@ -6,14 +6,31 @@ import VGSL
 public struct GenericCollectionLayout {
   public let frames: [CGRect]
   public let contentSize: CGSize
+  public let transformation: ElementsTransformation?
+  public let collectionDirection: ScrollDirection
 
-  public init(frames: [CGRect], contentSize: CGSize = .zero) {
+  public init(
+    frames: [CGRect],
+    contentSize: CGSize = .zero,
+    transformation: ElementsTransformation? = nil,
+    collectionDirection: ScrollDirection
+  ) {
     self.frames = frames
     self.contentSize = contentSize
+    self.transformation = transformation
+    self.collectionDirection = collectionDirection
   }
 
-  public init(frames: [CGRect], pageSize: CGSize) {
+  public init(
+    frames: [CGRect],
+
+    pageSize: CGSize,
+    transformation: ElementsTransformation? = nil,
+    collectionDirection: ScrollDirection
+  ) {
     self.frames = frames
+    self.transformation = transformation
+    self.collectionDirection = collectionDirection
 
     self.contentSize = modified(VGSLUI.contentSize(for: frames)) {
       if pageSize.width > 0 {

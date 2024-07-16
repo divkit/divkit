@@ -65,7 +65,8 @@ final class TabContentsView: BlockView {
         contentSize.height = 0
         return GenericCollectionLayout(
           frames: $0.pageFrames,
-          contentSize: contentSize
+          contentSize: contentSize,
+          collectionDirection: .horizontal
         )
       }
     }

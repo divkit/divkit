@@ -25,6 +25,10 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
     )
   }
 
+  public override func shouldInvalidateLayout(forBoundsChange _: CGRect) -> Bool {
+    layout?.transformation != nil
+  }
+
   public override func layoutAttributesForElements(in rect: CGRect)
     -> [UICollectionViewLayoutAttributes]? {
     guard let frames = layout?.frames else {
@@ -32,6 +36,46 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
     }
     return filter(frames: frames, intersecting: rect)
       .map { UICollectionViewLayoutAttributes(index: $0.index, frame: $0.frame) }
+      .map { self.transformLayoutAttributes($0) }
+  }
+
+  fileprivate func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes)
+    -> UICollectionViewLayoutAttributes {
+    guard let collectionView = self.collectionView,
+          let transformation = layout?.transformation,
+          let direction = layout?.collectionDirection else { return attributes }
+    let collectionCenter = collectionView.frame.size.width / 2
+
+    let normalizedCenter = if direction == .horizontal {
+      attributes.center.x - collectionView.contentOffset.x
+    } else {
+      attributes.center.y - collectionView.contentOffset.y
+    }
+
+    let maxDistance = if direction == .horizontal {
+      attributes.frame.width
+    } else {
+      attributes.frame.height
+    }
+    let sign = (normalizedCenter - collectionCenter) > 0 ? 1 : -1
+    let distance = min(abs(collectionCenter - normalizedCenter), maxDistance)
+    let ratio = (maxDistance - distance) / maxDistance
+
+    let alpha: CGFloat
+    let scale: CGFloat
+    if sign > 0 {
+      alpha = transformation.nextElementAlpa + ratio * (1 - transformation.nextElementAlpa)
+      scale = transformation.nextElementScale + ratio * (1 - transformation.nextElementScale)
+    } else {
+      alpha = transformation
+        .previousElementAlpha + ratio * (1 - transformation.previousElementAlpha)
+      scale = transformation
+        .previousElementScale + ratio * (1 - transformation.previousElementScale)
+    }
+    attributes.alpha = alpha
+    attributes.transform3D = CATransform3DScale(CATransform3DIdentity, scale, scale, 1)
+
+    return attributes
   }
 
   public override var flipsHorizontallyInOppositeLayoutDirection: Bool {

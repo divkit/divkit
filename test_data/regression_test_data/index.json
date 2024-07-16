@@ -2709,7 +2709,8 @@
         "scroll"
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "steps": [
         "Swipe a bit both of pagers"
