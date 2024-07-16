@@ -17,7 +17,8 @@ Future<void> runTests(List<GoldenTestFile> testEntries) async {
         description: testCaseName,
         fileName: testFileName,
         builder: () => DivKitView(
-          textDirection: TextDirection.ltr,
+          textDirection:
+              _textDirectionFromString(testEntry.testCase.layoutDirection),
           data: DefaultDivKitData.fromScheme(
             card: testEntry.testCase.testData,
             templates: testEntry.testCase.testTemplates,
@@ -30,4 +31,11 @@ Future<void> runTests(List<GoldenTestFile> testEntries) async {
       });
     }
   }
+}
+
+TextDirection _textDirectionFromString(String? layoutDirection) {
+  if (layoutDirection == null) {
+    return TextDirection.ltr;
+  }
+  return layoutDirection == "rtl" ? TextDirection.rtl : TextDirection.ltr;
 }

@@ -92,24 +92,6 @@ final skippedTests = [
   ),
 
   ...const [
-    'example/assets/test_data/snapshot_test_data/div-container/container-alignment-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/container-horizontal-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/container-overlap-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/block-paddings-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/block-margins-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/block-alignment-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-input/rtl-input.json',
-    'example/assets/test_data/snapshot_test_data/div-text/text-alignment-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/block-paddings-rtl.json',
-  ].map(
-    (e) => _SkipTest(
-      e,
-      _Reason.divNotSupported,
-      'RTL is not configurable in tests yet',
-    ),
-  ),
-
-  ...const [
     /// TODO: pass border (stroke) to inside of container
     'example/assets/test_data/snapshot_test_data/div-container/border-box-model.json',
     'example/assets/test_data/snapshot_test_data/div-text/border-with-stoke.json',
@@ -398,7 +380,6 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-gallery/horizontal-gallery-scrollbar.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/horizontal-gallery-vertical-shrinking.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/horizontal-gallery-with-columns.json',
-    'example/assets/test_data/snapshot_test_data/div-gallery/rtl_gallery.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-fixed-height.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-items-not-fit.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-items-resizable-height.json',
@@ -412,7 +393,7 @@ final skippedTests = [
   ].map(
     (e) => _SkipTest(
       e,
-      _Reason.divNotSupported,
+      _Reason.unknown,
     ),
   ),
 
