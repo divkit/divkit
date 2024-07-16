@@ -28,6 +28,7 @@ class EntityWithOptionalStringEnumProperty(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             (property?.hashCode() ?: 0)
         _hash = hash
         return hash

@@ -28,6 +28,7 @@ class EntityWithEntityProperty(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             entity.hash()
         _hash = hash
         return hash

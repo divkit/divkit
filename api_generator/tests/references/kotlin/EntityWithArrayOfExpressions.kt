@@ -28,7 +28,7 @@ class EntityWithArrayOfExpressions(
         _propertiesHash?.let {
             return it
         }
-        val propertiesHash = javaClass.hashCode()
+        val propertiesHash = this::class.hashCode()
         _propertiesHash = propertiesHash
         return propertiesHash
     }

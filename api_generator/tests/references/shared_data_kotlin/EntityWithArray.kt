@@ -15,6 +15,7 @@ class EntityWithArray(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             array.sumOf { it.hash() }
         _hash = hash
         return hash

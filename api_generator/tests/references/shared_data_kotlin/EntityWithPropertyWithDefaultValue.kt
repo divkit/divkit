@@ -17,6 +17,7 @@ class EntityWithPropertyWithDefaultValue(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             int.hashCode() +
             (nested?.hash() ?: 0) +
             url.hashCode()
@@ -58,6 +59,7 @@ class EntityWithPropertyWithDefaultValue(
                 return it
             }
             val hash = 
+                this::class.hashCode() +
                 int.hashCode() +
                 nonOptional.hashCode() +
                 url.hashCode()

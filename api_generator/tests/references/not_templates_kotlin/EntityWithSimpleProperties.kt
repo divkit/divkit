@@ -36,6 +36,7 @@ class EntityWithSimpleProperties(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             (boolean?.hashCode() ?: 0) +
             (booleanInt?.hashCode() ?: 0) +
             (color?.hashCode() ?: 0) +

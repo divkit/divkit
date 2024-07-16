@@ -15,6 +15,7 @@ class EntityWithRawArray(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             array.hashCode()
         _hash = hash
         return hash

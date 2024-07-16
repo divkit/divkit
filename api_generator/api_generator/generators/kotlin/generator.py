@@ -339,13 +339,13 @@ class KotlinGenerator(Generator):
         result += f'        _{hash_type}?.let {{'
         result += '            return it'
         result += '        }'
-        result += '        return when(this) {'
-        for i, decl in enumerate(entity_declarations, start=1):
+        result += f'        val {hash_type} = this::class.hashCode() + when(this) {{'
+        for decl in entity_declarations:
             naming = entity_enumeration.format_case_naming(decl)
-            result += f'            is {naming} -> {i * 31} + this.value.{hash_type}()'
-        result += '        }.also {'
-        result += f'            _{hash_type} = it'
+            result += f'            is {naming} -> this.value.{hash_type}()'
         result += '        }'
+        result += f'       _{hash_type} = {hash_type}'
+        result += f'       return {hash_type}'
         result += '    }'
         return result
 
