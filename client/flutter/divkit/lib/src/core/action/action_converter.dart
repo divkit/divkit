@@ -1,6 +1,7 @@
-import 'package:divkit/src/core/action/action.dart';
+import 'package:divkit/src/core/action/models/action.dart';
 import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:divkit/src/generated_sources/generated_sources.dart';
+import 'package:divkit/src/core/action/models/download_callbacks.dart';
 
 extension PassDivAction on DivAction {
   Future<DivActionModel> resolve({
@@ -11,6 +12,7 @@ extension PassDivAction on DivAction {
         enabled: await isEnabled.resolveValue(context: context),
         typedAction: typed,
         payload: payload,
+        logId: await logId.resolveValue(context: context),
         downloadCallbacks: await downloadCallbacks?.resolve(context: context),
       );
 }

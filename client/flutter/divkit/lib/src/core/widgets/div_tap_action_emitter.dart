@@ -1,4 +1,4 @@
-import 'package:divkit/src/core/action/action.dart';
+import 'package:divkit/src/core/action/models/action.dart';
 import 'package:divkit/src/core/action/action_converter.dart';
 import 'package:divkit/src/core/protocol/div_context.dart';
 import 'package:divkit/src/generated_sources/generated_sources.dart';

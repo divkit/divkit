@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/action/action.dart';
+import 'package:divkit/src/core/action/models/action.dart';
 import 'package:divkit/src/core/action/handler/div_action_handler_typed.dart';
 import 'package:divkit/src/core/action/handler/div_action_handler_url.dart';
 import 'package:divkit/src/core/protocol/div_action.dart';

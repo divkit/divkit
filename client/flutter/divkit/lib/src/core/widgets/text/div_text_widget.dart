@@ -5,7 +5,7 @@ import 'package:divkit/src/generated_sources/div_text.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:divkit/src/core/action/action.dart';
+import 'package:divkit/src/core/action/models/action.dart';
 
 import 'utils/div_text_range_model.dart';
 

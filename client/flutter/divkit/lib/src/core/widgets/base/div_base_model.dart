@@ -1,5 +1,6 @@
 import 'package:divkit/src/core/protocol/div_context.dart';
 import 'package:divkit/src/core/protocol/div_variable.dart';
+import 'package:divkit/src/core/visibility/visibility_action_converter.dart';
 import 'package:divkit/src/generated_sources/div_base.dart';
 import 'package:divkit/src/generated_sources/div_visibility.dart';
 import 'package:divkit/src/utils/converters.dart';
@@ -8,6 +9,7 @@ import 'package:divkit/src/utils/size_converters.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:divkit/src/utils/div_scaling_model.dart';
+import 'package:divkit/src/core/visibility/models/visibility_action.dart';
 
 class DivBaseModel with EquatableMixin {
   final double opacity;
@@ -19,15 +21,17 @@ class DivBaseModel with EquatableMixin {
   final BoxDecoration? boxDecoration;
   final BoxDecoration focusDecoration;
   final String? divId;
-  final bool isVisible;
+  final DivVisibility divVisibility;
+  final List<DivVisibilityActionModel> visibilityActions;
 
   const DivBaseModel({
     required this.width,
     required this.height,
     required this.alignment,
     required this.focusDecoration,
-    required this.isVisible,
+    required this.divVisibility,
     this.opacity = 1.0,
+    this.visibilityActions = const [],
     this.padding,
     this.margin,
     this.boxDecoration,
@@ -51,6 +55,22 @@ class DivBaseModel with EquatableMixin {
           viewScale: viewScale,
         );
 
+        final List<DivVisibilityActionModel> visibilityActionsList = [];
+        final dtoVisibilityActionsList = [
+          ...?data.visibilityActions,
+        ];
+        final visibilityAction = data.visibilityAction;
+        if (data.visibilityActions == null && visibilityAction != null) {
+          dtoVisibilityActionsList.add(visibilityAction);
+        }
+        for (final dtoAction in dtoVisibilityActionsList) {
+          visibilityActionsList.add(
+            await dtoAction.resolve(
+              context: context,
+            ),
+          );
+        }
+
         return DivBaseModel(
           opacity: (await data.resolveOpacity(
             context: context,
@@ -72,6 +92,7 @@ class DivBaseModel with EquatableMixin {
             extension: margin.vertical,
             viewScale: viewScale,
           ),
+          visibilityActions: visibilityActionsList,
           padding: await data.paddings.resolve(
             context: context,
             viewScale: viewScale,
@@ -86,10 +107,9 @@ class DivBaseModel with EquatableMixin {
             context: context,
             viewScale: viewScale,
           ),
-          isVisible: (await data.visibility.resolveValue(
-                context: context,
-              )) ==
-              DivVisibility.visible,
+          divVisibility: (await data.visibility.resolveValue(
+            context: context,
+          )),
         );
       },
     ).distinct(); // The widget is redrawn when the model changes.
@@ -106,7 +126,8 @@ class DivBaseModel with EquatableMixin {
         boxDecoration,
         focusDecoration,
         divId,
-        isVisible,
+        divVisibility,
+        visibilityActions,
       ];
 }
 

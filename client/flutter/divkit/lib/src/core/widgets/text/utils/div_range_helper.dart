@@ -7,7 +7,7 @@ import 'package:divkit/src/generated_sources/div_line_style.dart';
 import 'package:flutter/material.dart';
 import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:divkit/src/core/action/action_converter.dart';
-import 'package:divkit/src/core/action/action.dart';
+import 'package:divkit/src/core/action/models/action.dart';
 
 class DivRangeHelper {
   static Future<List<DivTextRangeModel>> getRangeItems(

@@ -1,9 +1,13 @@
+## 0.3.0-pre+2
+* Add visibility triggers feature
+
 ## 0.3.0-pre+1
 
 * Fix object parsing in DTO
 * Add ranges in div-text
 * Open access to the classes DivAction, DivTimer, DivVariable, DivPatch, DivDownloadCallbacks and
   converters in the public api
+* Add visibility triggers feature
 
 ## Migration 0.2 → 0.3.0-pre+1
 

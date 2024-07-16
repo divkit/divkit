@@ -3,7 +3,7 @@ description: Open source SDUI framework for server-driven app updates, rapid UI 
 homepage: https://github.com/divkit/divkit
 repository: https://github.com/divkit/divkit
 publish_to: 'https://dart-unpub.taxi.yandex-team.ru/'
-version: 0.3.0-pre+1
+version: 0.3.0-pre+2
 
 environment:
   sdk: '>=2.17.0 <4.0.0'
@@ -20,6 +20,7 @@ dependencies:
   clock: ^1.1.1
   collection: ^1.17.0
   div_expressions_resolver: ^0.4.2
+  visibility_detector: ^0.4.0+2
 
   cached_network_image: ^3.2.3
   flutter_cache_manager: ^3.3.1

@@ -1,13 +1,12 @@
 import 'dart:math' as math;
 import 'dart:ui';
-
-import 'package:divkit/src/core/action/action.dart';
 import 'package:divkit/src/core/action/action_converter.dart';
 import 'package:divkit/src/core/expression/expression.dart';
 import 'package:divkit/src/core/expression/resolver.dart';
 import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:flutter/widgets.dart';
+import 'package:divkit/src/core/action/models/action.dart';
 
 enum DivAxisAlignment {
   start,

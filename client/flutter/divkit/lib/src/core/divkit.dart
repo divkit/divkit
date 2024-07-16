@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:divkit/src/core/visibility/default_div_visibility_action_manager.dart';
 import 'package:divkit/src/core/action/handler/default_div_action_handler.dart';
 import 'package:divkit/src/core/data/data_provider.dart';
 import 'package:divkit/src/core/patch/patch_manager.dart';
@@ -172,6 +173,7 @@ class _DivKitViewState extends State<_DivKitView> {
       loggerUse(loggerContext).debug('Init DivKitView $hashCode');
       divRootContext = DivRootContext(buildContext: context)
         ..dataProvider = DefaultDivDataProvider(source)
+        ..visibilityActionManager = DefaultDivVisibilityActionManager()
         ..variableManager = DefaultDivVariableManager(
           storage: DefaultDivVariableStorage(
             inheritedStorage: widget.variableStorage,
