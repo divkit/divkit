@@ -228,6 +228,14 @@
       "platforms": [
         "ios"
       ]
+    },
+    "reuse_id": {
+      "type": "string",
+      "$description": "translations.json#/div_reuse_id",
+      "platforms": [ ],
+      "unsupported_platforms": {
+        "web": "No need for reuse identifier"
+      }
     }
   }
 }

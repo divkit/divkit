@@ -1379,6 +1379,10 @@
     "en": "Type of the relative radius of the gradient transition.",
     "ru": "Тип относительного радиуса градиентного перехода."
   },
+  "div_reuse_id": {
+    "en": "Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](reuse/reuse.md)",
+    "ru": "Id для структуры div-объекта. Используется для более оптимального переиспользования блоков. См. [переиспользование блоков](reuse/reuse.md)"
+  },
   "div_rounded_rectangle_shape": {
     "en": "A rectangle with rounded corners.",
     "ru": "Прямоугольник со скругленными углами."
