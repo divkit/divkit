@@ -39,6 +39,7 @@ internal class DivGalleryViewHolder(
                 } == true
             } ?: createChildView(context, div)
 
+        oldDiv = div
         rootView.setTag(R.id.div_gallery_item_index, position)
         divBinder.bind(context, divView, div, path)
         divBinder.attachIndicators()
