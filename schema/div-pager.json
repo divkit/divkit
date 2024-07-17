@@ -65,7 +65,8 @@
         "page_transformation": {
           "$ref": "div-page-transformation.json",
           "platforms": [
-            "android"
+            "android",
+            "ios"
           ],
           "$description": "translations.json#/div_pager_page_transformation"
         },
