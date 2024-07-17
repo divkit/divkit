@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Removes focus from focused item.
+ * Removes focus from an element.
  * 
  * Can be created using the method [actionClearFocus].
  * 
