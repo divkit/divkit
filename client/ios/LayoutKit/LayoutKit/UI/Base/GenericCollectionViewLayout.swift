@@ -42,8 +42,7 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
   fileprivate func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes)
     -> UICollectionViewLayoutAttributes {
     guard let collectionView = self.collectionView,
-          let transformation = layout?.transformation,
-          let direction = layout?.collectionDirection else { return attributes }
+          let transformation = layout?.transformation else { return attributes }
 
     let originalCenter = attributes.center
 
@@ -56,13 +55,13 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
 
     let collectionCenter = collectionView.frame.size.width / 2
 
-    let normalizedCenter = if direction == .horizontal {
+    let normalizedCenter = if transformation.scrollDirection == .horizontal {
       originalCenter.x - collectionView.contentOffset.x
     } else {
       originalCenter.y - collectionView.contentOffset.y
     }
 
-    let maxDistance = if direction == .horizontal {
+    let maxDistance = if transformation.scrollDirection == .horizontal {
       attributes.frame.width
     } else {
       attributes.frame.height

@@ -11,18 +11,21 @@ public struct ElementsTransformation: Equatable {
   public let nextElementScale: CGFloat
   public let previousElementScale: CGFloat
   public let style: Style
+  public let scrollDirection: ScrollDirection
 
   public init(
     nextElementAlpha: CGFloat,
     previousElementAlpha: CGFloat,
     nextElementScale: CGFloat,
     previousElementScale: CGFloat,
-    style: Style
+    style: Style,
+    scrollDirection: ScrollDirection
   ) {
     self.nextElementAlpa = nextElementAlpha
     self.previousElementAlpha = previousElementAlpha
     self.nextElementScale = nextElementScale
     self.previousElementScale = previousElementScale
     self.style = style
+    self.scrollDirection = scrollDirection
   }
 }
