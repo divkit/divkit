@@ -43,6 +43,10 @@
     "en": "Deletes a value from the array",
     "ru": "Удаляет значение из массива"
   },
+  "div_action_array_set_value": {
+    "en": "Sets value in the array",
+    "ru": "Устанавливает значение в массиве по индексу"
+  },
   "div_action_base_download_callbacks": {
     "en": "Callbacks that are called after [data loading](../../interaction#loading-data).",
     "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction#loading-data)."
@@ -68,12 +72,16 @@
     "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction)."
   },
   "div_action_clear_focus": {
-    "en": "Removes focus from focused item.",
-    "ru": "Снимает фокус со сфокусированного элемента."
+    "en": "Removes focus from an element.",
+    "ru": "Снимает фокус с элемента."
   },
   "div_action_copy_to_clipboard": {
     "en": "Copies data to the clipboard.",
     "ru": "Копирует данные в буфер обмена."
+  },
+  "div_action_dict_set_value": {
+    "en": "Sets value in dictionary for the given key. Removes key if the value is not defined.",
+    "ru": "Устанавливает значение в словаре по заданному ключу. Удаляет ключ, если значение на задано."
   },
   "div_action_focus_element": {
     "en": "Requests focus for an element. May require a user action on the web.",
@@ -303,6 +311,10 @@
     "en": "Animation starting triggers. Default value: `[state_change, visibility_change]`.",
     "ru": "Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`."
   },
+  "div_base_variables": {
+    "en": "Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.",
+    "ru": "Объявление переменных, которые могут использоваться внутри элемента. Переменные, объявленные в данном массиве могут использоваться только внутри самого элемента и его дочерних элементов."
+  },
   "div_base_visibility": {
     "en": "Element visibility.",
     "ru": "Видимость элемента."
@@ -414,6 +426,10 @@
   "div_collection_item_builder_prototypes_div": {
     "en": "`Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.",
     "ru": "`Div`, из которого будут созданы элементы коллекции. В `Div` можно использовать выражения с использованием данных из `data`. Для обращения к очередному элементу `data` нужно использовать такой же префикс, как и в `data_element_prefix`."
+  },
+  "div_collection_item_builder_prototypes_id": {
+    "en": "`id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`",
+    "ru": "`id` элемента, который будет сформирован из прототипа. В отличие от поля `div-base.id` может содержать выражения. Имеет более высокий приоритет, чем `div-base.id`."
   },
   "div_collection_item_builder_prototypes_selector": {
     "en": "A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.",
@@ -695,6 +711,10 @@
     "en": "Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>",
     "ru": "Семейство шрифта:<li>`text` — стандартный текстовый шрифт;</li><li>`display` — семейство для шрифтов с крупным кеглем.</li>"
   },
+  "div_font_feature_settings": {
+    "en": "List of OpenType font features. The format matches the CSS attribute \"font-feature-settings\". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop",
+    "ru": "Список свойств шрифтов OpenType. Формат соответствует атрибуту CSS font-feature-settings. Подробнее: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop"
+  },
   "div_font_size": {
     "en": "Font size.",
     "ru": "Размер шрифта."
@@ -706,6 +726,10 @@
   "div_font_weight": {
     "en": "Style.",
     "ru": "Начертание."
+  },
+  "div_font_weight_value": {
+    "en": "Style. Numeric value.",
+    "ru": "Начертание. Числовое значение."
   },
   "div_gallery": {
     "en": "Gallery. It contains a horizontal or vertical set of cards that can be scrolled.",
@@ -1063,6 +1087,10 @@
     "en": "Name of the variable to store the unprocessed value.",
     "ru": "Имя переменной для хранения необработанного значения."
   },
+  "div_input_max_length": {
+    "en": "Maximum number of characters that can be entered in the input field.",
+    "ru": "Максимальное количество символов, которое можно ввести в поле ввода."
+  },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
     "ru": "Максимальное количество строк, которое будет видно в поле ввода."
@@ -1126,6 +1154,18 @@
   "div_keyboard_input": {
     "en": "Enter data manually using a keyboard.",
     "ru": "Ввод данных с клавиатуры."
+  },
+  "div_layout_provider": {
+    "en": "Provides element real size values after a layout cycle.",
+    "ru": "Предоставляет данные о реальном размере элемента."
+  },
+  "div_layout_provider_height_variable_name": {
+    "en": "Variable name to store element height.",
+    "ru": "Название переменной для хранения высоты элемента."
+  },
+  "div_layout_provider_width_variable_name": {
+    "en": "Variable name to store element width.",
+    "ru": "Название переменной для хранения ширины элемента."
   },
   "div_line_style": {
     "en": "Line style.",
@@ -1338,6 +1378,10 @@
   "div_radial_gradient_relative_radius_value": {
     "en": "Type of the relative radius of the gradient transition.",
     "ru": "Тип относительного радиуса градиентного перехода."
+  },
+  "div_reuse_id": {
+    "en": "Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](reuse/reuse.md)",
+    "ru": "Id для структуры div-объекта. Используется для более оптимального переиспользования блоков. См. [переиспользование блоков](reuse/reuse.md)"
   },
   "div_rounded_rectangle_shape": {
     "en": "A rectangle with rounded corners.",
@@ -1730,6 +1774,22 @@
   "div_tabs_switch_tabs_by_content_swipe_enabled": {
     "en": "Switching tabs by scrolling through the contents.",
     "ru": "Переключение табов скроллом по содержимому."
+  },
+  "div_tabs_tab_title_delimiter_delimiter_style": {
+    "en": "Style of delimiters between tab titles.",
+    "ru": "Стиль оформления разделителей между заголовками табов."
+  },
+  "div_tabs_tab_title_delimiter_style_background_color": {
+    "en": "Background color of delimiter.",
+    "ru": "Цвет фона разделителей."
+  },
+  "div_tabs_tab_title_delimiter_style_corner_radius": {
+    "en": "Delimiters corner rounding radii. If the parameter isn't specified, the rounding is maximum (half of the smallest size). Not used if the `corners_radius` parameter is set.",
+    "ru": "Радиус скругления углов разделителей. Если параметр не задан, то максимальное скругление (половина от наименьшего размера). Не используется, если задан параметр `corners_radius`."
+  },
+  "div_tabs_tab_title_delimiter_style_corners_radius": {
+    "en": "Rounding radii of corners of delimiters. Empty values are replaced by 0.",
+    "ru": "Радиусы скругления углов разделителей. Пустые значения будут заменены на 0."
   },
   "div_tabs_tab_title_style": {
     "en": "Design style of tab titles.",

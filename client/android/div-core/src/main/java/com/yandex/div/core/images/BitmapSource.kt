@@ -1,6 +1,6 @@
 package com.yandex.div.core.images
 
-enum class BitmapSource {
+public enum class BitmapSource {
     NETWORK,
     DISK,
     MEMORY

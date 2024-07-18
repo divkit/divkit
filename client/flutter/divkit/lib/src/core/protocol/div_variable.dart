@@ -110,16 +110,16 @@ abstract class DivVariableStorage {
 
   /// Update an existing variable.
   /// If successful, it will return true
-  bool update(DivVariable variable);
+  bool update(DivVariableModel variable);
 
   /// Update if it exists and will create otherwise.
-  void put(DivVariable variable);
+  void put(DivVariableModel variable);
 
   /// The current snapshot of the raw representation of the storage.
-  Map<String, DivVariable> get value;
+  Map<String, DivVariableModel> get value;
 
   /// The raw data stream of storage changes.
-  Stream<Map<String, DivVariable>> get stream;
+  Stream<Map<String, DivVariableModel>> get stream;
 
   /// Safely destroy storage.
   Future<void> dispose();

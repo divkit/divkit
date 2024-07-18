@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivIndicator: DivBase {
   @frozen
@@ -33,6 +33,7 @@ public final class DivIndicator: DivBase {
   public let inactiveMinimumShape: DivRoundedRectangleShape?
   public let inactiveShape: DivRoundedRectangleShape?
   public let itemsPlacement: DivIndicatorItemPlacement?
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let minimumItemSize: Expression<Double> // constraint: number > 0; default value: 0.5
   public let paddings: DivEdgeInsets?
@@ -47,6 +48,7 @@ public final class DivIndicator: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -135,6 +137,7 @@ public final class DivIndicator: DivBase {
     inactiveMinimumShape: DivRoundedRectangleShape? = nil,
     inactiveShape: DivRoundedRectangleShape? = nil,
     itemsPlacement: DivIndicatorItemPlacement? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     margins: DivEdgeInsets? = nil,
     minimumItemSize: Expression<Double>? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -149,6 +152,7 @@ public final class DivIndicator: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -174,6 +178,7 @@ public final class DivIndicator: DivBase {
     self.inactiveMinimumShape = inactiveMinimumShape
     self.inactiveShape = inactiveShape
     self.itemsPlacement = itemsPlacement
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.minimumItemSize = minimumItemSize ?? .value(0.5)
     self.paddings = paddings
@@ -188,6 +193,7 @@ public final class DivIndicator: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -243,47 +249,53 @@ extension DivIndicator: Equatable {
     guard
       lhs.inactiveShape == rhs.inactiveShape,
       lhs.itemsPlacement == rhs.itemsPlacement,
-      lhs.margins == rhs.margins
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.minimumItemSize == rhs.minimumItemSize,
-      lhs.paddings == rhs.paddings,
-      lhs.pagerId == rhs.pagerId
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.pagerId == rhs.pagerId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.shape == rhs.shape
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.shape == rhs.shape,
       lhs.spaceBetweenCenters == rhs.spaceBetweenCenters,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibility == rhs.visibility,
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -317,6 +329,7 @@ extension DivIndicator: Serializable {
     result["inactive_minimum_shape"] = inactiveMinimumShape?.toDictionary()
     result["inactive_shape"] = inactiveShape?.toDictionary()
     result["items_placement"] = itemsPlacement?.toDictionary()
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["minimum_item_size"] = minimumItemSize.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
@@ -331,6 +344,7 @@ extension DivIndicator: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

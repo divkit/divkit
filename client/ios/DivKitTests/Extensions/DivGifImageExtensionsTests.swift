@@ -3,7 +3,7 @@
 
 import XCTest
 
-import BasePublic
+import VGSL
 
 final class DivGifImageExtensionsTests: XCTestCase {
   func test_WithGifUrl() {

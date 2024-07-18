@@ -1,182 +1,165 @@
 {
-    "cases": [
+  "cases": [
+    {
+      "expression": "@{3 < a + 1 ? 1 : 'some string'}",
+      "expected": {
+        "type": "string",
+        "value": "some string"
+      },
+      "variables": [
         {
-            "name": "2 > a + 1 ? 1 : 'some string' => some string",
-            "expression": "@{2 > a + 1 ? 1 : 'some string'}",
-            "expected": {
-                "type": "string",
-                "value": "some string"
-            },
-            "variables": [
-                {
-                    "name": "a",
-                    "type": "integer",
-                    "value": 1
-                }
-            ],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "2 > a + 1 ? 1 : 'some string' => 1",
-            "expression": "@{2 > a + 1 ? 1 : 'some string'}",
-            "expected": {
-                "type": "integer",
-                "value": 1
-            },
-            "variables": [
-                {
-                    "name": "a",
-                    "type": "integer",
-                    "value": 0
-                }
-            ],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "isTrue ? 'It is true' : 'It is false' => It is false",
-            "expression": "@{isTrue ? 'It is true' : 'It is false'}",
-            "expected": {
-                "type": "string",
-                "value": "It is false"
-            },
-            "variables": [
-                {
-                    "name": "isTrue",
-                    "type": "boolean",
-                    "value": false
-                }
-            ],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "isTrue ? 'It is true' : 'It is false' => It is true",
-            "expression": "@{isTrue ? 'It is true' : 'It is false'}",
-            "expected": {
-                "type": "string",
-                "value": "It is true"
-            },
-            "variables": [
-                {
-                    "name": "isTrue",
-                    "type": "boolean",
-                    "value": true
-                }
-            ],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "true ? (3 + 1) * -2 : false || (true && false) => -8",
-            "expression": "@{true ? (3 + 1) * -2 : false || (true && false)}",
-            "expected": {
-                "type": "integer",
-                "value": -8
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "false ? (3 + 1) * -2 : false || (true && false) => false",
-            "expression": "@{false ? (3 + 1) * -2 : false || (true && false)}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "2 ? 1 : 0 => error",
-            "expression": "@{2 ? 1 : 0}",
-            "expected": {
-                "type": "error",
-                "value": "Failed to evaluate [2 ? 1 : 0]. Ternary must be called with a Boolean value as a condition."
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "true ? 0 : true ? 1 : 2 => 0",
-            "expression": "@{true ? 0 : true ? 1 : 2}",
-            "expected": {
-                "type": "integer",
-                "value": 0
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "true ? false ? 1 : 2 : 0 => 2",
-            "expression": "@{true ? false ? 1 : 2 : 0}",
-            "expected": {
-                "type": "integer",
-                "value": 2
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-        },
-        {
-            "name": "false ? 1 : false ? 2 : false ? 3 : 4",
-            "expression": "@{false ? 1 : false ? 2 : false ? 3 : 4}",
-            "expected": {
-                "type": "integer",
-                "value": 4
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
-          },
-          {
-            "name": "false?1.2:3.4 => 3.4",
-            "expression": "@{false?1.2:3.4}",
-            "expected": {
-                "type": "number",
-                "value": 3.4
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "web",
-                "ios"
-            ]
+          "name": "a",
+          "type": "integer",
+          "value": 1
         }
-    ]
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{3 > a + 1 ? 1 : 'some string'}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "name": "a",
+          "type": "integer",
+          "value": 1
+        }
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{false_var ? 'true' : 'false'}",
+      "expected": {
+        "type": "string",
+        "value": "false"
+      },
+      "variables": [
+        {
+          "name": "false_var",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{true_var ? 'true' : 'false'}",
+      "expected": {
+        "type": "string",
+        "value": "true"
+      },
+      "variables": [
+        {
+          "name": "true_var",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{true ? (3 + 1) * -2 : false || (true && false)}",
+      "expected": {
+        "type": "integer",
+        "value": -8
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "false ? (3 + 1) * -2 : false || (true && false) => false",
+      "expression": "@{false ? (3 + 1) * -2 : false || (true && false)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{2 ? 1 : 0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [2 ? 1 : 0]. Ternary must be called with a Boolean value as a condition."
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{true ? 0 : true ? 1 : 2}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{true ? false ? 1 : 2 : 0}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{false ? 1 : false ? 2 : false ? 3 : 4}",
+      "expected": {
+        "type": "integer",
+        "value": 4
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{false?1.2:3.4}",
+      "expected": {
+        "type": "number",
+        "value": 3.4
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    }
+  ]
 }

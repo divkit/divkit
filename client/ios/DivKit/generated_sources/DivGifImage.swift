@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivGifImage: DivBase {
   public static let type: String = "gif"
@@ -26,6 +26,7 @@ public final class DivGifImage: DivBase {
   public let gifUrl: Expression<URL>
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
+  public let layoutProvider: DivLayoutProvider?
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
@@ -41,6 +42,7 @@ public final class DivGifImage: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -131,6 +133,7 @@ public final class DivGifImage: DivBase {
     gifUrl: Expression<URL>,
     height: DivSize? = nil,
     id: String? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     longtapActions: [DivAction]? = nil,
     margins: DivEdgeInsets? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -146,6 +149,7 @@ public final class DivGifImage: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -171,6 +175,7 @@ public final class DivGifImage: DivBase {
     self.gifUrl = gifUrl
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
     self.margins = margins
     self.paddings = paddings
@@ -186,6 +191,7 @@ public final class DivGifImage: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -241,47 +247,53 @@ extension DivGifImage: Equatable {
     guard
       lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings,
-      lhs.placeholderColor == rhs.placeholderColor
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.placeholderColor == rhs.placeholderColor,
       lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.preview == rhs.preview
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
-      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.variables == rhs.variables,
+      lhs.visibility == rhs.visibility,
+      lhs.visibilityAction == rhs.visibilityAction
+    else {
+      return false
+    }
+    guard
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -316,6 +328,7 @@ extension DivGifImage: Serializable {
     result["gif_url"] = gifUrl.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["id"] = id
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
@@ -331,6 +344,7 @@ extension DivGifImage: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

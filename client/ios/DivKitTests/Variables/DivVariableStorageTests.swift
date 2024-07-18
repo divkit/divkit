@@ -1,7 +1,7 @@
 import XCTest
 
-import BasePublic
 import DivKit
+import VGSL
 
 final class DivVariableSorageTest: XCTestCase {
   private let storage = DivVariableStorage()
@@ -64,6 +64,18 @@ final class DivVariableSorageTest: XCTestCase {
     storage.put(variables)
 
     XCTAssertNil(storage.getValue("unknown_var"))
+  }
+
+  func test_hasValue_ReturnsTrueIfStorageContainsVariable() {
+    storage.put(variables)
+
+    XCTAssertTrue(storage.hasValue("string_var"))
+  }
+
+  func test_hasValue_ReturnsFalseIfVariableIsNotAvailable() {
+    storage.put(variables)
+
+    XCTAssertFalse(storage.hasValue("unknown_var"))
   }
 
   func test_update_UpdatesStringVariable() {

@@ -8,9 +8,6 @@
   "templates": {
     "text_block": {
       "type": "text",
-      "width": {
-        "type": "wrap_content"
-      },
       "paddings": {
         "left": 4,
         "top": 4,
@@ -23,7 +20,7 @@
           "$color": "background_color"
         }
       ],
-      "font_size": 14
+      "font_size": 12
     }
   },
   "card": {
@@ -38,12 +35,12 @@
             {
               "type": "text_block",
               "background_color": "#F8F8F8",
-              "text": "Lorem ipsum",
+              "text": "Text with font size range",
               "ranges": [
                 {
-                  "start": 0,
-                  "end": 5,
-                  "font_size": 24,
+                  "start": 10,
+                  "end": 19,
+                  "font_size": 20,
                   "font_weight": "bold"
                 }
               ]
@@ -51,13 +48,13 @@
             {
               "type": "text_block",
               "background_color": "#E0E0E0",
-              "line_height": 16,
-              "text": "Lorem ipsum",
+              "line_height": 14,
+              "text": "Text with font size range and overall line height",
               "ranges": [
                 {
-                  "start": 0,
-                  "end": 5,
-                  "font_size": 24,
+                  "start": 10,
+                  "end": 19,
+                  "font_size": 20,
                   "font_weight": "bold"
                 }
               ]
@@ -65,15 +62,15 @@
             {
               "type": "text_block",
               "background_color": "#F8F8F8",
-              "line_height": 16,
-              "text": "Lorem ipsum",
+              "line_height": 14,
+              "text": "Text with line height range and overall line height",
               "ranges": [
                 {
-                  "start": 0,
-                  "end": 5,
-                  "font_size": 24,
+                  "start": 10,
+                  "end": 21,
+                  "font_size": 20,
                   "font_weight": "bold",
-                  "line_height": 28
+                  "line_height": 24
                 }
               ]
             }

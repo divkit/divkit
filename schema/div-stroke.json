@@ -3,7 +3,7 @@
   "$description": "translations.json#/div_stroke",
   "properties": {
     "width": {
-      "$ref": "common.json#/non_negative_integer",
+      "$ref": "common.json#/non_negative_number",
       "default_value": "1",
       "$description": "translations.json#/div_stroke_width"
     },

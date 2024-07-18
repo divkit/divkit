@@ -14,7 +14,7 @@ void main() {
     );
 
     test("clockwork can not sync init", () async {
-      final timer = DivTimer(
+      final timer = DivTimerModel(
         id: 'Test',
         duration: const ValueExpression(1000),
         endActions: [
@@ -37,7 +37,7 @@ void main() {
     });
 
     test("clockwork has async init", () async {
-      final timer = DivTimer(
+      final timer = DivTimerModel(
         id: 'Test',
         duration: const ValueExpression(1000),
         endActions: [

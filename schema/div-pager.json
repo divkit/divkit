@@ -64,14 +64,20 @@
         },
         "page_transformation": {
           "$ref": "div-page-transformation.json",
-          "platforms": [],
+          "platforms": [
+            "android",
+            "ios"
+          ],
           "$description": "translations.json#/div_pager_page_transformation"
         },
         "infinite_scroll": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
           "$description": "translations.json#/div_pager_infinite_scroll",
-          "platforms": [ "android" ]
+          "platforms": [
+            "android",
+            "ios"
+          ]
         }
       }
     }

@@ -1,10 +1,9 @@
 import CoreGraphics
 import Foundation
 
-import BasePublic
-import BaseUIPublic
+import VGSL
+
 import LayoutKit
-import NetworkingPublic
 
 extension DivBackground {
   func makeBlockBackground(

@@ -1,5 +1,4 @@
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 public class TabPageViewModel {
   public let block: Block

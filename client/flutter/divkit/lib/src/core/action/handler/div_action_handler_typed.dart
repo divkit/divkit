@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/action/action.dart';
+import 'package:divkit/src/core/action/models/action.dart';
 import 'package:divkit/src/core/protocol/div_action.dart';
 import 'package:divkit/src/core/protocol/div_context.dart';
 import 'package:divkit/src/core/protocol/div_logger.dart';
@@ -12,11 +12,11 @@ class DefaultDivActionHandlerTyped implements DivActionHandler {
   final setVariableHandler = DivSetVariableHandlerTyped();
 
   @override
-  bool canHandle(DivContext context, DivAction action) =>
+  bool canHandle(DivContext context, DivActionModel action) =>
       action.typedAction != null;
 
   @override
-  FutureOr<bool> handleAction(DivContext context, DivAction action) {
+  FutureOr<bool> handleAction(DivContext context, DivActionModel action) {
     final typedAction = action.typedAction;
     if (typedAction != null) {
       return typedAction.maybeMap(

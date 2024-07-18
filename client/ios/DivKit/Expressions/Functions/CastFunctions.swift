@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 extension [String: Function] {
   mutating func addCastFunctions() {
@@ -33,7 +33,7 @@ private let _toBoolean = OverloadedFunction(
       default:
         throw ExpressionError("Unable to convert value to Boolean.")
       }
-    }
+    },
   ]
 )
 
@@ -51,7 +51,7 @@ private let _toInteger = OverloadedFunction(
         throw ExpressionError("Unable to convert value to Integer.")
       }
       return number
-    }
+    },
   ]
 )
 
@@ -70,7 +70,7 @@ private let _toNumber = OverloadedFunction(
         throw ExpressionError("Unable to convert value to Number.")
       }
       return number
-    }
+    },
   ]
 )
 

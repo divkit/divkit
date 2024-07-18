@@ -1,8 +1,7 @@
 import Foundation
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackingContainer {
   public private(set) var model: UIViewRenderable!

@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivAspect {
   public let ratio: Expression<Double> // constraint: number > 0

@@ -19,12 +19,18 @@ class EntityWithArray with EquatableMixin {
         array,
       ];
 
+  EntityWithArray copyWith({
+      List<Entity>?  array,
+  }) => EntityWithArray(
+      array: array ?? this.array,
+    );
+
   static EntityWithArray? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return EntityWithArray(
-      array: safeParseObj((json['array'] as List<dynamic>).map((v) => safeParseObj(Entity.fromJson(v),)!,).toList(),)!,
+      array: safeParseObj(safeListMap(json['array'], (v) => safeParseObj(Entity.fromJson(v),)!),)!,
     );
   }
 }

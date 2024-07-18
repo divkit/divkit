@@ -2,8 +2,7 @@
 
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 final class TabListSelectionDataSourceImplTests: XCTestCase {
   private var tabListSelectionDataSource: TabListSelectionDataSourceImpl!

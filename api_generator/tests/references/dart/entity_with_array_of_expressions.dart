@@ -18,12 +18,18 @@ class EntityWithArrayOfExpressions with EquatableMixin {
         items,
       ];
 
+  EntityWithArrayOfExpressions copyWith({
+      Expression<List<String>>?  items,
+  }) => EntityWithArrayOfExpressions(
+      items: items ?? this.items,
+    );
+
   static EntityWithArrayOfExpressions? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return EntityWithArrayOfExpressions(
-      items: safeParseObjExpr((json['items'] as List<dynamic>).map((v) => safeParseStr(v?.toString(),)!,).toList(),)!,
+      items: safeParseObjExpr(safeListMap(json['items'], (v) => safeParseStr(v?.toString(),)!),)!,
     );
   }
 }

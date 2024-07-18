@@ -1,158 +1,148 @@
 {
-    "cases": [
-        {
-            "name": "unsigned integer literal",
-            "expression": "@{3}",
-            "expected": {
-                "type": "integer",
-                "value": 3
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "positive integer literal",
-            "expression": "@{+3}",
-            "expected": {
-                "type": "integer",
-                "value": 3
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "negative integer literal",
-            "expression": "@{-3}",
-            "expected": {
-                "type": "integer",
-                "value": -3
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "unsigned max integer literal",
-            "expression": "@{toString(9223372036854775807)}",
-            "expected": {
-                "type": "string",
-                "value": "9223372036854775807"
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "positive max integer literal",
-            "expression": "@{toString(+9223372036854775807)}",
-            "expected": {
-                "type": "string",
-                "value": "9223372036854775807"
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "negative min integer literal",
-            "expression": "@{toString(-9223372036854775808)}",
-            "expected": {
-                "type": "string",
-                "value": "-9223372036854775808"
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "value in brackets is overflowed",
-            "expression": "@{-(9223372036854775808)}",
-            "expected": {
-                "type": "error",
-                "value": "Value 9223372036854775808 can't be converted to Integer type."
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "unsigned overflow integer literal",
-            "expression": "@{9223372036854775808}",
-            "expected": {
-                "type": "error",
-                "value": "Value 9223372036854775808 can't be converted to Integer type."
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "positive overflow integer literal",
-            "expression": "@{+9223372036854775808}",
-            "expected": {
-                "type": "error",
-                "value": "Value 9223372036854775808 can't be converted to Integer type."
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "negative overflow integer literal",
-            "expression": "@{-9223372036854775809}",
-            "expected": {
-                "type": "error",
-                "value": "Value -9223372036854775809 can't be converted to Integer type."
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "underscore symbol unsupported in integer literals",
-            "expression": "@{2_147}",
-            "expected": {
-                "type": "error",
-                "value": ""
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        }
-    ]
+  "cases": [
+    {
+      "expression": "@{3}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{+3}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-3}",
+      "expected": {
+        "type": "integer",
+        "value": -3
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toString(9223372036854775807)}",
+      "expected": {
+        "type": "string",
+        "value": "9223372036854775807"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toString(+9223372036854775807)}",
+      "expected": {
+        "type": "string",
+        "value": "9223372036854775807"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toString(-9223372036854775808)}",
+      "expected": {
+        "type": "string",
+        "value": "-9223372036854775808"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-(9223372036854775808)}",
+      "expected": {
+        "type": "error",
+        "value": "Value 9223372036854775808 can't be converted to Integer type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{9223372036854775808}",
+      "expected": {
+        "type": "error",
+        "value": "Value 9223372036854775808 can't be converted to Integer type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{+9223372036854775808}",
+      "expected": {
+        "type": "error",
+        "value": "Value 9223372036854775808 can't be converted to Integer type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-9223372036854775809}",
+      "expected": {
+        "type": "error",
+        "value": "Value -9223372036854775809 can't be converted to Integer type."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{2_147}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{0xFF}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
 }

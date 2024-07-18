@@ -1,9 +1,16 @@
 import Foundation
+import VGSL
 
-import VGSL_Fundamentals_Tiny
-
+/// `DivVariableTracker` provides sets of variables used in a last `Block` modeling for a `DivCard`.
 public final class DivVariableTracker {
   private var usedVariables = Atomic<[DivViewId: Set<DivVariableName>]>(initialValue: [:])
+
+  /// Sets of variables used in a last `Block` modeling for a `DivCard`.
+  public var usedVariablesByCard: [DivCardID: Set<DivVariableName>] {
+    usedVariables.accessRead { value in
+      value.map(key: { $0.cardId }, value: { $0 })
+    }
+  }
 
   init() {}
 
@@ -13,9 +20,9 @@ public final class DivVariableTracker {
     }
   }
 
-  func onVariablesUsed(id: DivViewId, variables: Set<DivVariableName>) {
+  func onVariableUsed(id: DivViewId, variable: DivVariableName) {
     usedVariables.accessWrite { value in
-      value[id] = (value[id] ?? []).union(variables)
+      value[id] = (value[id] ?? []).union([variable])
     }
   }
 

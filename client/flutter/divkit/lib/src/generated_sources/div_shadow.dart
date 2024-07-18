@@ -2,14 +2,14 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_point.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_point.dart';
 
 class DivShadow with EquatableMixin {
   const DivShadow({
     this.alpha = const ValueExpression(0.19),
     this.blur = const ValueExpression(2),
-    this.color = const ValueExpression(const Color(0xFF000000)),
+    this.color = const ValueExpression(Color(0xFF000000)),
     required this.offset,
   });
 
@@ -29,6 +29,19 @@ class DivShadow with EquatableMixin {
         color,
         offset,
       ];
+
+  DivShadow copyWith({
+    Expression<double>? alpha,
+    Expression<int>? blur,
+    Expression<Color>? color,
+    DivPoint? offset,
+  }) =>
+      DivShadow(
+        alpha: alpha ?? this.alpha,
+        blur: blur ?? this.blur,
+        color: color ?? this.color,
+        offset: offset ?? this.offset,
+      );
 
   static DivShadow? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

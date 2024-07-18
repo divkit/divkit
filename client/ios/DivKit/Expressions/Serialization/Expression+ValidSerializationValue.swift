@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import Serialization
+import VGSL
 
 extension Expression where T == Bool {
   func toValidSerializationValue() -> ValidSerializationValue {

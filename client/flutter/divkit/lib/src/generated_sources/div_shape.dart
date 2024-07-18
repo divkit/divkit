@@ -2,40 +2,29 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_circle_shape.dart';
-import 'div_rounded_rectangle_shape.dart';
+import 'package:divkit/src/generated_sources/div_circle_shape.dart';
+import 'package:divkit/src/generated_sources/div_rounded_rectangle_shape.dart';
 
 class DivShape with EquatableMixin {
-  const DivShape(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivCircleShape) {
-      return value;
-    }
-    if (value is DivRoundedRectangleShape) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivShape");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivCircleShape) divCircleShape,
     required T Function(DivRoundedRectangleShape) divRoundedRectangleShape,
   }) {
-    final value = _value;
-    if (value is DivCircleShape) {
-      return divCircleShape(value);
-    }
-    if (value is DivRoundedRectangleShape) {
-      return divRoundedRectangleShape(value);
+    switch (_index) {
+      case 0:
+        return divCircleShape(
+          value as DivCircleShape,
+        );
+      case 1:
+        return divRoundedRectangleShape(
+          value as DivRoundedRectangleShape,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivShape");
@@ -46,33 +35,45 @@ class DivShape with EquatableMixin {
     T Function(DivRoundedRectangleShape)? divRoundedRectangleShape,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivCircleShape && divCircleShape != null) {
-      return divCircleShape(value);
-    }
-    if (value is DivRoundedRectangleShape && divRoundedRectangleShape != null) {
-      return divRoundedRectangleShape(value);
+    switch (_index) {
+      case 0:
+        if (divCircleShape != null) {
+          return divCircleShape(
+            value as DivCircleShape,
+          );
+        }
+        break;
+      case 1:
+        if (divRoundedRectangleShape != null) {
+          return divRoundedRectangleShape(
+            value as DivRoundedRectangleShape,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivShape.divCircleShape(
-    DivCircleShape value,
-  ) : _value = value;
+    DivCircleShape obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivShape.divRoundedRectangleShape(
-    DivRoundedRectangleShape value,
-  ) : _value = value;
+    DivRoundedRectangleShape obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivShape? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     switch (json['type']) {
-      case DivRoundedRectangleShape.type:
-        return DivShape(DivRoundedRectangleShape.fromJson(json)!);
       case DivCircleShape.type:
-        return DivShape(DivCircleShape.fromJson(json)!);
+        return DivShape.divCircleShape(DivCircleShape.fromJson(json)!);
+      case DivRoundedRectangleShape.type:
+        return DivShape.divRoundedRectangleShape(
+            DivRoundedRectangleShape.fromJson(json)!);
     }
     return null;
   }

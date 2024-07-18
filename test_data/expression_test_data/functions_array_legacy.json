@@ -1,16 +1,15 @@
 {
   "cases": [
     {
-      "name": "getArrayString(array, 'index_out_of_bounds') => error",
-      "expression": "@{getArrayString(array, 0)}",
+      "expression": "@{getArrayString(emptyArray, 0)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [getArrayString(<array>, 0)]. Requested index (0) out of bounds array size (0)."
       },
       "variables": [
         {
+          "name": "emptyArray",
           "type": "array",
-          "name": "array",
           "value": []
         }
       ],
@@ -21,7 +20,6 @@
       ]
     },
     {
-      "name": "getArrayInteger(array, 0) => integer",
       "expression": "@{getArrayInteger(array, 0)}",
       "expected": {
         "type": "integer",
@@ -29,8 +27,8 @@
       },
       "variables": [
         {
-          "type": "array",
           "name": "array",
+          "type": "array",
           "value": [
             123
           ]

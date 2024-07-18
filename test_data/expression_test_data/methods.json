@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "'Hello!'.toString() => 'Hello!'",
       "expression": "@{'Hello!'.toString()}",
       "expected": {
         "type": "string",
         "value": "Hello!"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,13 +13,11 @@
       ]
     },
     {
-      "name": "123.toString() => '123'",
       "expression": "@{123.toString()}",
       "expected": {
         "type": "string",
         "value": "123"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -29,13 +25,11 @@
       ]
     },
     {
-      "name": "123.45.toString() => '123.45'",
       "expression": "@{123.45.toString()}",
       "expected": {
         "type": "string",
         "value": "123.45"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -43,13 +37,11 @@
       ]
     },
     {
-      "name": "true.toString() => 'true'",
       "expression": "@{true.toString()}",
       "expected": {
         "type": "string",
         "value": "true"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -57,7 +49,6 @@
       ]
     },
     {
-      "name": "color_var.toString() => '#FFAABBCC'",
       "expression": "@{color_var.toString()}",
       "expected": {
         "type": "string",
@@ -77,7 +68,6 @@
       ]
     },
     {
-      "name": "url_var.toString() => 'https://some.url'",
       "expression": "@{url_var.toString()}",
       "expected": {
         "type": "string",
@@ -97,7 +87,6 @@
       ]
     },
     {
-      "name": "array_var.toString() => string",
       "expression": "@{array_var.toString()}",
       "expected": {
         "type": "string",
@@ -118,7 +107,6 @@
       ]
     },
     {
-      "name": "dict_var.toString() => string",
       "expression": "@{dict_var.toString()}",
       "expected": {
         "type": "string",
@@ -139,13 +127,11 @@
       ]
     },
     {
-      "name": "'Hello!'.toString().toString() => 'Hello!'",
       "expression": "@{'Hello!'.toString().toString()}",
       "expected": {
         "type": "string",
         "value": "Hello!"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -153,13 +139,11 @@
       ]
     },
     {
-      "name": "toString(123).toString() => '123'",
       "expression": "@{toString(123).toString()}",
       "expected": {
         "type": "string",
         "value": "123"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -167,7 +151,6 @@
       ]
     },
     {
-      "name": "string.var.toString() => 'Hello!'",
       "expression": "@{string.var.toString()}",
       "expected": {
         "type": "string",
@@ -187,13 +170,11 @@
       ]
     },
     {
-      "name": "(2 + 3).toString() => '5'",
       "expression": "@{(2 + 3).toString()}",
       "expected": {
         "type": "string",
         "value": "5"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -201,13 +182,11 @@
       ]
     },
     {
-      "name": "(!false).toString() => 'true'",
       "expression": "@{(!false).toString()}",
       "expected": {
         "type": "string",
         "value": "true"
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -215,20 +194,17 @@
       ]
     },
     {
-      "name": "!false.toString() => error",
       "expression": "@{!false.toString()}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [!'false']. A Boolean is expected after a unary not."
       },
-      "variables": [],
       "platforms": [
         "ios",
         "web"
       ]
     },
     {
-      "name": "'Hello!' .toString() => 'Hello!'",
       "expression": "@{'Hello!' .toString()}",
       "expected": {
         "type": "string",
@@ -241,7 +217,6 @@
       ]
     },
     {
-      "name": "'Hello!'. toString() => 'Hello!'",
       "expression": "@{'Hello!'. toString()}",
       "expected": {
         "type": "string",
@@ -254,7 +229,6 @@
       ]
     },
     {
-      "name": "'Hello!'.toString () => 'Hello!'",
       "expression": "@{'Hello!'.toString ()}",
       "expected": {
         "type": "string",
@@ -267,7 +241,6 @@
       ]
     },
     {
-      "name": "'Hello!'.toString => error",
       "expression": "@{'Hello!'.toString}",
       "expected": {
         "type": "error",
@@ -280,7 +253,6 @@
       ]
     },
     {
-      "name": "'#FFAABBCCC'.getColorAlpha() => error",
       "expression": "@{'#FFAABBCCC'.getColorAlpha()}",
       "expected": {
         "type": "error",

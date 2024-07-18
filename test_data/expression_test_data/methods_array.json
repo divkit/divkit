@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "name": "array_var.getArray(1) => array",
       "expression": "@{array_var.getArray(1)}",
       "expected": {
         "type": "array",
@@ -29,7 +28,6 @@
       ]
     },
     {
-      "name": "array_var.getBoolean(1) => true",
       "expression": "@{array_var.getBoolean(1)}",
       "expected": {
         "type": "boolean",
@@ -51,7 +49,6 @@
       ]
     },
     {
-      "name": "array_var.getColor(1) => #AABBCC",
       "expression": "@{array_var.getColor(1)}",
       "expected": {
         "type": "color",
@@ -73,7 +70,6 @@
       ]
     },
     {
-      "name": "array_var.getDict(1) => dict",
       "expression": "@{array_var.getDict(1)}",
       "expected": {
         "type": "dict",
@@ -101,7 +97,6 @@
       ]
     },
     {
-      "name": "array_var.getInteger(1) => 123",
       "expression": "@{array_var.getInteger(1)}",
       "expected": {
         "type": "integer",
@@ -123,7 +118,6 @@
       ]
     },
     {
-      "name": "array_var.getNumber(1) => 123.45",
       "expression": "@{array_var.getNumber(1)}",
       "expected": {
         "type": "number",
@@ -145,7 +139,6 @@
       ]
     },
     {
-      "name": "array_var.getString(1) => 'one'",
       "expression": "@{array_var.getString(1)}",
       "expected": {
         "type": "string",
@@ -167,7 +160,6 @@
       ]
     },
     {
-      "name": "array_var.getUrl(1) => https://some.url",
       "expression": "@{array_var.getUrl(1)}",
       "expected": {
         "type": "url",
@@ -189,7 +181,6 @@
       ]
     },
     {
-      "name": "array_var.getBoolean(0) => error",
       "expression": "@{array_var.getBoolean(0)}",
       "expected": {
         "type": "error",
@@ -210,7 +201,6 @@
       ]
     },
     {
-      "name": "array_var.getInteger(0) => error",
       "expression": "@{array_var.getInteger(0)}",
       "expected": {
         "type": "error",
@@ -231,7 +221,6 @@
       ]
     },
     {
-      "name": "array_var.getString(2) => error",
       "expression": "@{array_var.getString(2)}",
       "expected": {
         "type": "error",

@@ -540,6 +540,10 @@
       "tags": [
         "Accessibility"
       ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "steps": [
         "Turn on Screen reader",
         "Tap on elements"
@@ -568,6 +572,10 @@
       "tags": [
         "Accessibility"
       ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "steps": [
         "Turn on Screen reader",
         "Focus on items from top to bottom"
@@ -583,6 +591,10 @@
       "title": "Merge Accessibility mode",
       "tags": [
         "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "ios"
       ],
       "steps": [
         "Turn on Screen reader",
@@ -600,6 +612,10 @@
       "title": "Exclude Accessibility mode",
       "tags": [
         "Accessibility"
+      ],
+      "platforms": [
+        "android",
+        "ios"
       ],
       "steps": [
         "Turn on Screen reader",
@@ -1510,6 +1526,20 @@
       "file": "variables/div_variable_trigger_loops.json"
     },
     {
+      "title": "Local variables",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "variables"
+      ],
+      "expected_results": [
+        "Click items",
+        "Corresponding varibale values change"
+      ],
+      "file": "variables/local.json"
+    },
+    {
       "title": "Sequential animations",
       "steps": [
         "Click on image"
@@ -2067,6 +2097,19 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "title": "LayoutProvider",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "LayoutProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size"
+      ],
+      "file": "layout_provider.json"
     },
     {
       "title": "SizeProvider extension",
@@ -2652,6 +2695,20 @@
       "file": "state_binding.json"
     },
     {
+      "title": "Multiple state switching with different root state",
+      "tags": [
+        "DivState"
+      ],
+      "steps": [
+        "Press button \"STATE 0 (INITIAL)\"",
+        "Press button \"STATE 1\""
+      ],
+      "expected_results": [
+        "Button with text \"STATE 0 (FINAL)\". No crashes at state change."
+      ],
+      "file": "state/multiple_root_state_switching.json"
+    },
+    {
       "title": "Input inside pager",
       "tags": [
         "DivPager",
@@ -2701,7 +2758,8 @@
       "title": "Gesture (extension)",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "extensions"
@@ -2936,6 +2994,26 @@
         "Test behaves the same with and without \"Complex Rebind\" flag activated"
       ],
       "file": "rebind/custom/custom-container.json"
+    },
+    {
+      "title": "Pager page transformation",
+      "tags": [
+        "DivPager",
+        "scroll"
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "steps": [
+        "Swipe a bit both of pagers"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "On swipe on the top pager pages change alpha and size",
+        "On swipe on the bottom pager pages change alpha, size and stack in the middle of screen"
+      ],
+      "file": "pager/pagers-with-page-transformation.json"
     }
   ]
 }

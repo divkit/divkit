@@ -60,6 +60,7 @@ class Container internal constructor(
             itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
             items = additive.items ?: properties.items,
             layoutMode = additive.layoutMode ?: properties.layoutMode,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             lineSeparator = additive.lineSeparator ?: properties.lineSeparator,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
@@ -73,6 +74,7 @@ class Container internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -187,6 +189,10 @@ class Container internal constructor(
          */
         val layoutMode: Property<LayoutMode>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
          */
         val lineSeparator: Property<Separator>?,
@@ -239,6 +245,10 @@ class Container internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
+        /**
          * Element visibility.
          * Default value: `visible`.
          */
@@ -284,6 +294,7 @@ class Container internal constructor(
             result.tryPutProperty("item_builder", itemBuilder)
             result.tryPutProperty("items", items)
             result.tryPutProperty("layout_mode", layoutMode)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("line_separator", lineSeparator)
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
@@ -297,6 +308,7 @@ class Container internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -409,6 +421,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -422,6 +435,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -453,6 +467,7 @@ fun DivScope.row(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -466,6 +481,7 @@ fun DivScope.row(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -495,6 +511,7 @@ fun DivScope.row(
     itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -508,6 +525,7 @@ fun DivScope.row(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -539,6 +557,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -552,6 +571,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -583,6 +603,7 @@ fun DivScope.row(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -596,6 +617,7 @@ fun DivScope.row(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -625,6 +647,7 @@ fun DivScope.row(
     itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -638,6 +661,7 @@ fun DivScope.row(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -669,6 +693,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -682,6 +707,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -713,6 +739,7 @@ fun DivScope.column(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -726,6 +753,7 @@ fun DivScope.column(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -755,6 +783,7 @@ fun DivScope.column(
     itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -768,6 +797,7 @@ fun DivScope.column(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -799,6 +829,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -812,6 +843,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -843,6 +875,7 @@ fun DivScope.column(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -856,6 +889,7 @@ fun DivScope.column(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -885,6 +919,7 @@ fun DivScope.column(
     itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -898,6 +933,7 @@ fun DivScope.column(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -929,6 +965,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -942,6 +979,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -973,6 +1011,7 @@ fun DivScope.stack(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -986,6 +1025,7 @@ fun DivScope.stack(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1015,6 +1055,7 @@ fun DivScope.stack(
     itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -1028,6 +1069,7 @@ fun DivScope.stack(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -1059,6 +1101,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1072,6 +1115,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1103,6 +1147,7 @@ fun DivScope.stack(
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1116,6 +1161,7 @@ fun DivScope.stack(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1145,6 +1191,7 @@ fun DivScope.stack(
     itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -1158,6 +1205,7 @@ fun DivScope.stack(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -1190,6 +1238,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1203,6 +1252,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1235,6 +1285,7 @@ fun DivScope.container(
     itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1248,6 +1299,7 @@ fun DivScope.container(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1278,6 +1330,7 @@ fun DivScope.container(
         itemBuilder = valueOrNull(itemBuilder),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
+        layoutProvider = valueOrNull(layoutProvider),
         lineSeparator = valueOrNull(lineSeparator),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
@@ -1291,6 +1344,7 @@ fun DivScope.container(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1324,6 +1378,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1337,6 +1392,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1369,6 +1425,7 @@ fun DivScope.containerProps(
     itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1382,6 +1439,7 @@ fun DivScope.containerProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1411,6 +1469,7 @@ fun DivScope.containerProps(
     itemBuilder = valueOrNull(itemBuilder),
     items = valueOrNull(items),
     layoutMode = valueOrNull(layoutMode),
+    layoutProvider = valueOrNull(layoutProvider),
     lineSeparator = valueOrNull(lineSeparator),
     longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
@@ -1424,6 +1483,7 @@ fun DivScope.containerProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -1456,6 +1516,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1469,6 +1530,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1501,6 +1563,7 @@ fun TemplateScope.containerRefs(
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1514,6 +1577,7 @@ fun TemplateScope.containerRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1543,6 +1607,7 @@ fun TemplateScope.containerRefs(
     itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
+    layoutProvider = layoutProvider,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
@@ -1556,6 +1621,7 @@ fun TemplateScope.containerRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -1588,6 +1654,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1601,6 +1668,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1633,6 +1701,7 @@ fun Container.override(
     itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1646,6 +1715,7 @@ fun Container.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1676,6 +1746,7 @@ fun Container.override(
         itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
         items = valueOrNull(items) ?: properties.items,
         layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         lineSeparator = valueOrNull(lineSeparator) ?: properties.lineSeparator,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
@@ -1689,6 +1760,7 @@ fun Container.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -1722,6 +1794,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1735,6 +1808,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1767,6 +1841,7 @@ fun Container.defer(
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1780,6 +1855,7 @@ fun Container.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1810,6 +1886,7 @@ fun Container.defer(
         itemBuilder = itemBuilder ?: properties.itemBuilder,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         lineSeparator = lineSeparator ?: properties.lineSeparator,
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
@@ -1823,6 +1900,7 @@ fun Container.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -1883,6 +1961,7 @@ fun Container.evaluate(
         itemBuilder = properties.itemBuilder,
         items = properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
+        layoutProvider = properties.layoutProvider,
         lineSeparator = properties.lineSeparator,
         longtapActions = properties.longtapActions,
         margins = properties.margins,
@@ -1896,6 +1975,7 @@ fun Container.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -1929,6 +2009,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -1942,6 +2023,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1974,6 +2056,7 @@ fun Component<Container>.override(
     itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
+    layoutProvider: LayoutProvider? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
@@ -1987,6 +2070,7 @@ fun Component<Container>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -2018,6 +2102,7 @@ fun Component<Container>.override(
         itemBuilder = valueOrNull(itemBuilder),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
+        layoutProvider = valueOrNull(layoutProvider),
         lineSeparator = valueOrNull(lineSeparator),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
@@ -2031,6 +2116,7 @@ fun Component<Container>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -2064,6 +2150,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
@@ -2077,6 +2164,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -2109,6 +2197,7 @@ fun Component<Container>.defer(
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -2122,6 +2211,7 @@ fun Component<Container>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -2153,6 +2243,7 @@ fun Component<Container>.defer(
         itemBuilder = itemBuilder,
         items = items,
         layoutMode = layoutMode,
+        layoutProvider = layoutProvider,
         lineSeparator = lineSeparator,
         longtapActions = longtapActions,
         margins = margins,
@@ -2166,6 +2257,7 @@ fun Component<Container>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -2227,6 +2319,7 @@ fun Component<Container>.evaluate(
         itemBuilder = null,
         items = null,
         layoutMode = layoutMode,
+        layoutProvider = null,
         lineSeparator = null,
         longtapActions = null,
         margins = null,
@@ -2240,6 +2333,7 @@ fun Component<Container>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variables = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,

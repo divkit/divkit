@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 public struct VisibilityParams: Equatable {
   public let actions: [VisibilityAction]

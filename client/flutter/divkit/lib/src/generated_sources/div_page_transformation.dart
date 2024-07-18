@@ -2,41 +2,30 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_page_transformation_overlap.dart';
-import 'div_page_transformation_slide.dart';
+import 'package:divkit/src/generated_sources/div_page_transformation_overlap.dart';
+import 'package:divkit/src/generated_sources/div_page_transformation_slide.dart';
 
 class DivPageTransformation with EquatableMixin {
-  const DivPageTransformation(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivPageTransformationOverlap) {
-      return value;
-    }
-    if (value is DivPageTransformationSlide) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivPageTransformation");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivPageTransformationOverlap)
         divPageTransformationOverlap,
     required T Function(DivPageTransformationSlide) divPageTransformationSlide,
   }) {
-    final value = _value;
-    if (value is DivPageTransformationOverlap) {
-      return divPageTransformationOverlap(value);
-    }
-    if (value is DivPageTransformationSlide) {
-      return divPageTransformationSlide(value);
+    switch (_index) {
+      case 0:
+        return divPageTransformationOverlap(
+          value as DivPageTransformationOverlap,
+        );
+      case 1:
+        return divPageTransformationSlide(
+          value as DivPageTransformationSlide,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivPageTransformation");
@@ -47,37 +36,46 @@ class DivPageTransformation with EquatableMixin {
     T Function(DivPageTransformationSlide)? divPageTransformationSlide,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivPageTransformationOverlap &&
-        divPageTransformationOverlap != null) {
-      return divPageTransformationOverlap(value);
-    }
-    if (value is DivPageTransformationSlide &&
-        divPageTransformationSlide != null) {
-      return divPageTransformationSlide(value);
+    switch (_index) {
+      case 0:
+        if (divPageTransformationOverlap != null) {
+          return divPageTransformationOverlap(
+            value as DivPageTransformationOverlap,
+          );
+        }
+        break;
+      case 1:
+        if (divPageTransformationSlide != null) {
+          return divPageTransformationSlide(
+            value as DivPageTransformationSlide,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivPageTransformation.divPageTransformationOverlap(
-    DivPageTransformationOverlap value,
-  ) : _value = value;
+    DivPageTransformationOverlap obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivPageTransformation.divPageTransformationSlide(
-    DivPageTransformationSlide value,
-  ) : _value = value;
+    DivPageTransformationSlide obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivPageTransformation? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     switch (json['type']) {
-      case DivPageTransformationSlide.type:
-        return DivPageTransformation(
-            DivPageTransformationSlide.fromJson(json)!);
       case DivPageTransformationOverlap.type:
-        return DivPageTransformation(
+        return DivPageTransformation.divPageTransformationOverlap(
             DivPageTransformationOverlap.fromJson(json)!);
+      case DivPageTransformationSlide.type:
+        return DivPageTransformation.divPageTransformationSlide(
+            DivPageTransformationSlide.fromJson(json)!);
     }
     return null;
   }

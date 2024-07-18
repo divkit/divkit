@@ -16,6 +16,7 @@ export interface DivSelectData extends DivBaseData {
     // font_size_unit
     font_family?: string;
     font_weight?: FontWeight;
+    font_weight_value?: number;
     hint_text?: string;
     hint_color?: string;
     line_height?: number;

@@ -1,9 +1,12 @@
 import 'dart:async';
 
 abstract class DivStateManager {
+  const DivStateManager();
+
   /// Adds a state to the manager. Then it is available for updating.
   void registerState(String divId, [String? stateId]);
 
+  /// Change state of div with [divId] to [stateId].
   void updateState(String divId, String? stateId);
 
   /// Creates a state stream of a state-dependent model.

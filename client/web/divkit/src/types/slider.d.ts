@@ -13,6 +13,7 @@ export interface SliderTextStyle {
     font_size: number;
     // font_size_unit;
     font_weight?: FontWeight;
+    font_weight_value?: number;
     text_color?: string;
     offset?: Point;
 }

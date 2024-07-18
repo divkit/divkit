@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivPager: DivBase {
   @frozen
@@ -26,9 +26,11 @@ public final class DivPager: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let infiniteScroll: Expression<Bool> // default value: false
+  public let itemBuilder: DivCollectionItemBuilder?
   public let itemSpacing: DivFixedSize // default value: DivFixedSize(value: .value(0))
   public let items: [Div]?
   public let layoutMode: DivPagerLayoutMode
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: horizontal
   public let paddings: DivEdgeInsets?
@@ -42,6 +44,7 @@ public final class DivPager: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -117,9 +120,11 @@ public final class DivPager: DivBase {
     height: DivSize?,
     id: String?,
     infiniteScroll: Expression<Bool>?,
+    itemBuilder: DivCollectionItemBuilder?,
     itemSpacing: DivFixedSize?,
     items: [Div]?,
     layoutMode: DivPagerLayoutMode,
+    layoutProvider: DivLayoutProvider?,
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
@@ -133,6 +138,7 @@ public final class DivPager: DivBase {
     transitionIn: DivAppearanceTransition?,
     transitionOut: DivAppearanceTransition?,
     transitionTriggers: [DivTransitionTrigger]?,
+    variables: [DivVariable]?,
     visibility: Expression<DivVisibility>?,
     visibilityAction: DivVisibilityAction?,
     visibilityActions: [DivVisibilityAction]?,
@@ -152,9 +158,11 @@ public final class DivPager: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.infiniteScroll = infiniteScroll ?? .value(false)
+    self.itemBuilder = itemBuilder
     self.itemSpacing = itemSpacing ?? DivFixedSize(value: .value(0))
     self.items = items
     self.layoutMode = layoutMode
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.orientation = orientation ?? .value(.horizontal)
     self.paddings = paddings
@@ -168,6 +176,7 @@ public final class DivPager: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -209,42 +218,49 @@ extension DivPager: Equatable {
     guard
       lhs.id == rhs.id,
       lhs.infiniteScroll == rhs.infiniteScroll,
-      lhs.itemSpacing == rhs.itemSpacing
+      lhs.itemBuilder == rhs.itemBuilder
     else {
       return false
     }
     guard
+      lhs.itemSpacing == rhs.itemSpacing,
       lhs.items == rhs.items,
-      lhs.layoutMode == rhs.layoutMode,
-      lhs.margins == rhs.margins
+      lhs.layoutMode == rhs.layoutMode
     else {
       return false
     }
     guard
-      lhs.orientation == rhs.orientation,
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.margins == rhs.margins,
+      lhs.orientation == rhs.orientation
+    else {
+      return false
+    }
+    guard
       lhs.paddings == rhs.paddings,
-      lhs.pageTransformation == rhs.pageTransformation
+      lhs.pageTransformation == rhs.pageTransformation,
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectedActions == rhs.selectedActions,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
@@ -283,9 +299,11 @@ extension DivPager: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["infinite_scroll"] = infiniteScroll.toValidSerializationValue()
+    result["item_builder"] = itemBuilder?.toDictionary()
     result["item_spacing"] = itemSpacing.toDictionary()
     result["items"] = items?.map { $0.toDictionary() }
     result["layout_mode"] = layoutMode.toDictionary()
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
@@ -299,6 +317,7 @@ extension DivPager: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

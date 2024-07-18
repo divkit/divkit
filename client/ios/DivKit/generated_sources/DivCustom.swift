@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivCustom: DivBase {
   public static let type: String = "custom"
@@ -21,6 +21,7 @@ public final class DivCustom: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let items: [Div]?
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
@@ -31,6 +32,7 @@ public final class DivCustom: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -88,6 +90,7 @@ public final class DivCustom: DivBase {
     height: DivSize? = nil,
     id: String? = nil,
     items: [Div]? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     margins: DivEdgeInsets? = nil,
     paddings: DivEdgeInsets? = nil,
     rowSpan: Expression<Int>? = nil,
@@ -98,6 +101,7 @@ public final class DivCustom: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -118,6 +122,7 @@ public final class DivCustom: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.items = items
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.paddings = paddings
     self.rowSpan = rowSpan
@@ -128,6 +133,7 @@ public final class DivCustom: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -170,39 +176,41 @@ extension DivCustom: Equatable {
     guard
       lhs.id == rhs.id,
       lhs.items == rhs.items,
-      lhs.margins == rhs.margins
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.visibility == rhs.visibility,
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variables == rhs.variables,
+      lhs.visibility == rhs.visibility
+    else {
+      return false
+    }
+    guard
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
-    else {
-      return false
-    }
-    guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -231,6 +239,7 @@ extension DivCustom: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["items"] = items?.map { $0.toDictionary() }
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()
@@ -241,6 +250,7 @@ extension DivCustom: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

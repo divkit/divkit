@@ -1,11 +1,11 @@
-import BasePublic
-import DivKit
+import Testing
+import UIKit
+import XCTest
+
+@testable import DivKit
 import DivKitExtensions
 @testable import LayoutKit
-import Testing
-
-import UIKit
-import class XCTest.XCTestCase
+import VGSL
 
 final class AllTests: XCTestCase {
   func testAll() async {
@@ -70,7 +70,7 @@ private let labelImagePreviewExtension = CustomImagePreviewExtensionHandler(
 private class LabelImagePreviewProvider: ViewProvider {
   private var label: UILabel?
 
-  func loadView() -> BasePublic.ViewType {
+  func loadView() -> ViewType {
     if let label {
       return label
     }
@@ -85,7 +85,7 @@ private class LabelImagePreviewProvider: ViewProvider {
     return label
   }
 
-  func equals(other: BasePublic.ViewProvider) -> Bool {
+  func equals(other: ViewProvider) -> Bool {
     loadView() == other.loadView()
   }
 }
@@ -104,7 +104,7 @@ private let testPagerViewStates = [
   PagerViewState(numberOfPages: 11, floatCurrentPage: 10),
 ]
 
-private let pagerId = IdAndCardId(path: UIElementPath(testCardId) + "pager_id")
+private let pagerId = IdAndCardId(path: testCardId.path + "pager_id")
 
 extension String {
   var removingFileExtension: String {

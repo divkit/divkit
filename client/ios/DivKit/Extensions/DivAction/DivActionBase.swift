@@ -1,8 +1,8 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
 import Serialization
+import VGSL
 
 public protocol DivActionBase: Serializable {
   var downloadCallbacks: DivDownloadCallbacks? { get }
@@ -18,15 +18,15 @@ public protocol DivActionBase: Serializable {
 
 extension DivActionBase {
   func makeDivActionPayload(
-    cardId: DivCardID,
+    path: UIElementPath,
     source: UserInterfaceAction.DivActionSource,
-    prototypeVariables: [String: AnyHashable] = [:]
+    localValues: [String: AnyHashable] = [:]
   ) -> UserInterfaceAction.Payload {
     // url parameter is used for backward compatibility, it should be removed
     // when all custom div-action handlers will be replaced
     let url: URL? = switch self.url {
     case let .value(value):
-      value.adding(cardId: cardId.rawValue)
+      value.adding(cardId: path.root)
     case .link, .none:
       nil
     }
@@ -34,10 +34,10 @@ extension DivActionBase {
     return .divAction(
       params: UserInterfaceAction.DivActionParams(
         action: .object(toDictionary().typedJSON()),
-        cardId: cardId.rawValue,
+        path: path,
         source: source,
         url: url,
-        prototypeVariables: prototypeVariables
+        localValues: localValues
       )
     )
   }

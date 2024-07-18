@@ -1,18 +1,17 @@
 {
   "cases": [
     {
-      "name": "getStringFromDict(dict, 'prop') => 'val'",
-      "expression": "@{getStringFromDict(dict, 'prop')}",
+      "expression": "@{getStringFromDict(dict, 'string_prop')}",
       "expected": {
         "type": "string",
-        "value": "val"
+        "value": "value"
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "val"
+            "string_prop": "value"
           }
         }
       ],
@@ -23,7 +22,6 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'missing_prop') => error",
       "expression": "@{getStringFromDict(dict, 'missing_prop')}",
       "expected": {
         "type": "error",
@@ -43,11 +41,10 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'dict_prop', 'string_prop') => 'val'",
       "expression": "@{getStringFromDict(dict, 'dict_prop', 'string_prop')}",
       "expected": {
         "type": "string",
-        "value": "val"
+        "value": "value"
       },
       "variables": [
         {
@@ -55,7 +52,7 @@
           "name": "dict",
           "value": {
             "dict_prop": {
-              "string_prop": "val"
+              "string_prop": "value"
             }
           }
         }
@@ -67,11 +64,10 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'dict_prop', 'dict_prop', 'string_prop') => 'val'",
       "expression": "@{getStringFromDict(dict, 'dict_prop', 'dict_prop', 'string_prop')}",
       "expected": {
         "type": "string",
-        "value": "val"
+        "value": "value"
       },
       "variables": [
         {
@@ -80,7 +76,7 @@
           "value": {
             "dict_prop": {
               "dict_prop": {
-                "string_prop": "val"
+                "string_prop": "value"
               }
             }
           }
@@ -93,7 +89,6 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'dict_prop', 'missing_prop') => error",
       "expression": "@{getStringFromDict(dict, 'dict_prop', 'missing_prop')}",
       "expected": {
         "type": "error",
@@ -115,18 +110,17 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'prop', 'wrong_prop_type') => error",
-      "expression": "@{getStringFromDict(dict, 'prop', 'wrong_prop_type')}",
+      "expression": "@{getStringFromDict(dict, 'string_prop', 'missing_prop')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getStringFromDict(<dict>, 'prop', 'wrong_prop_type')]. Missing property \"wrong_prop_type\" in the dict."
+        "value": "Failed to evaluate [getStringFromDict(<dict>, 'string_prop', 'missing_prop')]. Missing property \"missing_prop\" in the dict."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "val"
+            "string_prop": "value"
           }
         }
       ],
@@ -137,7 +131,6 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'dict_prop') => error",
       "expression": "@{getStringFromDict(dict, 'dict_prop')}",
       "expected": {
         "type": "error",
@@ -159,7 +152,6 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'array_prop') => error",
       "expression": "@{getStringFromDict(dict, 'array_prop')}",
       "expected": {
         "type": "error",
@@ -181,7 +173,6 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'number_prop') => error",
       "expression": "@{getStringFromDict(dict, 'number_prop')}",
       "expected": {
         "type": "error",
@@ -203,7 +194,6 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'boolean_prop') => error",
       "expression": "@{getStringFromDict(dict, 'boolean_prop')}",
       "expected": {
         "type": "error",
@@ -225,7 +215,6 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'null_prop') => error",
       "expression": "@{getStringFromDict(dict, 'null_prop')}",
       "expected": {
         "type": "error",
@@ -247,7 +236,6 @@
       ]
     },
     {
-      "name": "getStringFromDict(dict, 'null_prop', 'missing_prop') => error",
       "expression": "@{getStringFromDict(dict, 'null_prop', 'missing_prop')}",
       "expected": {
         "type": "error",
@@ -269,8 +257,7 @@
       ]
     },
     {
-      "name": "getNumberFromDict(dict, 'prop') => 123.4",
-      "expression": "@{getNumberFromDict(dict, 'prop')}",
+      "expression": "@{getNumberFromDict(dict, 'number_prop')}",
       "expected": {
         "type": "number",
         "value": 123.4
@@ -280,7 +267,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123.4
+            "number_prop": 123.4
           }
         }
       ],
@@ -291,8 +278,7 @@
       ]
     },
     {
-      "name": "getNumberFromDict(dict, 'prop') => 123.0",
-      "expression": "@{getNumberFromDict(dict, 'prop')}",
+      "expression": "@{getNumberFromDict(dict, 'integer_prop')}",
       "expected": {
         "type": "number",
         "value": 123.0
@@ -302,7 +288,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123
+            "integer_prop": 123
           }
         }
       ],
@@ -313,7 +299,6 @@
       ]
     },
     {
-      "name": "getNumberFromDict(dict, 'boolean_prop') => error",
       "expression": "@{getNumberFromDict(dict, 'boolean_prop')}",
       "expected": {
         "type": "error",
@@ -335,7 +320,6 @@
       ]
     },
     {
-      "name": "getNumberFromDict(dict, 'string_prop') => error",
       "expression": "@{getNumberFromDict(dict, 'string_prop')}",
       "expected": {
         "type": "error",
@@ -346,7 +330,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "string_prop": "val"
+            "string_prop": "value"
           }
         }
       ],
@@ -357,8 +341,7 @@
       ]
     },
     {
-      "name": "getIntegerFromDict(dict, 'prop') => 123",
-      "expression": "@{getIntegerFromDict(dict, 'prop')}",
+      "expression": "@{getIntegerFromDict(dict, 'integer_prop')}",
       "expected": {
         "type": "integer",
         "value": 123
@@ -368,7 +351,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123
+            "integer_prop": 123
           }
         }
       ],
@@ -379,7 +362,6 @@
       ]
     },
     {
-      "name": "getIntegerFromDict(dict, 'number_prop') => error",
       "expression": "@{getIntegerFromDict(dict, 'number_prop')}",
       "expected": {
         "type": "error",
@@ -401,7 +383,6 @@
       ]
     },
     {
-      "name": "getIntegerFromDict(dict, 'boolean_prop') => error",
       "expression": "@{getIntegerFromDict(dict, 'boolean_prop')}",
       "expected": {
         "type": "error",
@@ -423,40 +404,17 @@
       ]
     },
     {
-      "name": "getIntegerFromDict(dict, 'prop') => 12345678901",
-      "expression": "@{getIntegerFromDict(dict, 'prop')}",
-      "expected": {
-        "type": "integer",
-        "value": 12345678901
-      },
-      "variables": [
-        {
-          "type": "dict",
-          "name": "dict",
-          "value": {
-            "prop": 12345678901
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "name": "getIntegerFromDict(dict, 'prop') => error (3)",
-      "expression": "@{getIntegerFromDict(dict, 'prop')}",
+      "expression": "@{getIntegerFromDict(dict, 'overflowed_integer_prop')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getIntegerFromDict(<dict>, 'prop')]. Integer overflow."
+        "value": "Failed to evaluate [getIntegerFromDict(<dict>, 'overflowed_integer_prop')]. Integer overflow."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 9223372036854775808000000000000000000000
+            "overflowed_integer_prop": 9223372036854775808000000000000000000000
           }
         }
       ],
@@ -467,8 +425,7 @@
       ]
     },
     {
-      "name": "getBooleanFromDict(dict, 'prop') => true",
-      "expression": "@{getBooleanFromDict(dict, 'prop')}",
+      "expression": "@{getBooleanFromDict(dict, 'boolean_prop')}",
       "expected": {
         "type": "boolean",
         "value": true
@@ -478,7 +435,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": true
+            "boolean_prop": true
           }
         }
       ],
@@ -489,18 +446,17 @@
       ]
     },
     {
-      "name": "getBooleanFromDict(dict, 'number_prop') => error",
-      "expression": "@{getBooleanFromDict(dict, 'number_prop')}",
+      "expression": "@{getBooleanFromDict(dict, 'number1_prop')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getBooleanFromDict(<dict>, 'number_prop')]. Incorrect value type: expected Boolean, got Number."
+        "value": "Failed to evaluate [getBooleanFromDict(<dict>, 'number1_prop')]. Incorrect value type: expected Boolean, got Number."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "number_prop": 1.0
+            "number1_prop": 1.0
           }
         }
       ],
@@ -511,18 +467,17 @@
       ]
     },
     {
-      "name": "getBooleanFromDict(dict, 'number_prop') => error (2)",
-      "expression": "@{getBooleanFromDict(dict, 'number_prop')}",
+      "expression": "@{getBooleanFromDict(dict, 'number0_prop')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getBooleanFromDict(<dict>, 'number_prop')]. Incorrect value type: expected Boolean, got Number."
+        "value": "Failed to evaluate [getBooleanFromDict(<dict>, 'number0_prop')]. Incorrect value type: expected Boolean, got Number."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "number_prop": 0.0
+            "number0_prop": 0.0
           }
         }
       ],
@@ -533,7 +488,6 @@
       ]
     },
     {
-      "name": "getBooleanFromDict(dict, 'number_prop') => error (3)",
       "expression": "@{getBooleanFromDict(dict, 'number_prop')}",
       "expected": {
         "type": "error",
@@ -555,8 +509,7 @@
       ]
     },
     {
-      "name": "getColorFromDict(dict, 'prop') => '#FFFFFFFF'",
-      "expression": "@{getColorFromDict(dict, 'prop')}",
+      "expression": "@{getColorFromDict(dict, 'color_prop')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -566,7 +519,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "#fff"
+            "color_prop": "#fff"
           }
         }
       ],
@@ -577,18 +530,17 @@
       ]
     },
     {
-      "name": "getColorFromDict(dict, 'prop') => error",
-      "expression": "@{getColorFromDict(dict, 'prop')}",
+      "expression": "@{getColorFromDict(dict, 'invalid_color_prop')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getColorFromDict(<dict>, 'prop')]. Unable to convert value to Color, expected format #AARRGGBB."
+        "value": "Failed to evaluate [getColorFromDict(<dict>, 'invalid_color_prop')]. Unable to convert value to Color, expected format #AARRGGBB."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "fff"
+            "invalid_color_prop": "fff"
           }
         }
       ],
@@ -599,8 +551,7 @@
       ]
     },
     {
-      "name": "getUrlFromDict(dict, 'prop') => 'https://ya.ru'",
-      "expression": "@{getUrlFromDict(dict, 'prop')}",
+      "expression": "@{getUrlFromDict(dict, 'url_prop')}",
       "expected": {
         "type": "url",
         "value": "https://ya.ru"
@@ -610,7 +561,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "https://ya.ru"
+            "url_prop": "https://ya.ru"
           }
         }
       ],
@@ -621,7 +572,6 @@
       ]
     },
     {
-      "name": "getUrlFromDict(dict, 'number_prop') => error",
       "expression": "@{getUrlFromDict(dict, 'number_prop')}",
       "expected": {
         "type": "error",
@@ -643,18 +593,17 @@
       ]
     },
     {
-      "name": "getOptStringFromDict('fallback', dict, 'prop') => 'val'",
-      "expression": "@{getOptStringFromDict('fallback', dict, 'prop')}",
+      "expression": "@{getOptStringFromDict('fallback', dict, 'string_prop')}",
       "expected": {
         "type": "string",
-        "value": "val"
+        "value": "value"
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "val"
+            "string_prop": "value"
           }
         }
       ],
@@ -665,7 +614,6 @@
       ]
     },
     {
-      "name": "getOptString('fallback', dict, 'missing_prop') => 'fallback'",
       "expression": "@{getOptStringFromDict('fallback', dict, 'missing_prop')}",
       "expected": {
         "type": "string",
@@ -676,7 +624,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "val"
+            "prop": "value"
           }
         }
       ],
@@ -687,7 +635,6 @@
       ]
     },
     {
-      "name": "getOptStringFromDict('fallback', dict, 'dict_prop', 'missing_prop') => 'fallback'",
       "expression": "@{getOptStringFromDict('fallback', dict, 'dict_prop', 'missing_prop')}",
       "expected": {
         "type": "string",
@@ -709,8 +656,7 @@
       ]
     },
     {
-      "name": "getOptStringFromDict('fallback', dict, 'string_prop', 'wrong_prop_type') => 'fallback'",
-      "expression": "@{getOptStringFromDict('fallback', dict, 'string_prop', 'wrong_prop_type')}",
+      "expression": "@{getOptStringFromDict('fallback', dict, 'string_prop', 'missing_prop')}",
       "expected": {
         "type": "string",
         "value": "fallback"
@@ -720,7 +666,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "string_prop": "val"
+            "string_prop": "value"
           }
         }
       ],
@@ -731,7 +677,6 @@
       ]
     },
     {
-      "name": "getOptStringFromDict('fallback', dict, 'dict_prop') => 'fallback'",
       "expression": "@{getOptStringFromDict('fallback', dict, 'dict_prop')}",
       "expected": {
         "type": "string",
@@ -753,7 +698,6 @@
       ]
     },
     {
-      "name": "getOptStringFromDict('fallback', dict, 'integer_prop') => 'fallback'",
       "expression": "@{getOptStringFromDict('fallback', dict, 'integer_prop')}",
       "expected": {
         "type": "string",
@@ -775,7 +719,6 @@
       ]
     },
     {
-      "name": "getOptStringFromDict('fallback', dict, 'boolean_prop') => 'fallback'",
       "expression": "@{getOptStringFromDict('fallback', dict, 'boolean_prop')}",
       "expected": {
         "type": "string",
@@ -797,7 +740,6 @@
       ]
     },
     {
-      "name": "getOptStringFromDict('fallback', dict, 'null_prop') => 'fallback'",
       "expression": "@{getOptStringFromDict('fallback', dict, 'null_prop')}",
       "expected": {
         "type": "string",
@@ -819,7 +761,6 @@
       ]
     },
     {
-      "name": "getOptStringFromDict('fallback', dict, 'null_prop', 'missing_prop') => 'fallback'",
       "expression": "@{getOptStringFromDict('fallback', dict, 'null_prop', 'missing_prop')}",
       "expected": {
         "type": "string",
@@ -841,8 +782,7 @@
       ]
     },
     {
-      "name": "getOptNumberFromDict(7.0, dict, 'prop') => 123.4",
-      "expression": "@{getOptNumberFromDict(7.0, dict, 'prop')}",
+      "expression": "@{getOptNumberFromDict(7.0, dict, 'number_prop')}",
       "expected": {
         "type": "number",
         "value": 123.4
@@ -852,7 +792,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123.4
+            "number_prop": 123.4
           }
         }
       ],
@@ -863,8 +803,7 @@
       ]
     },
     {
-      "name": "getOptNumberFromDict(7.0, dict, 'prop') => 123.0",
-      "expression": "@{getOptNumberFromDict(7.0, dict, 'prop')}",
+      "expression": "@{getOptNumberFromDict(7.0, dict, 'integer_prop')}",
       "expected": {
         "type": "number",
         "value": 123.0
@@ -874,7 +813,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123
+            "integer_prop": 123
           }
         }
       ],
@@ -885,8 +824,7 @@
       ]
     },
     {
-      "name": "getOptNumberFromDict(7.0, dict, 'prop') => 7.0",
-      "expression": "@{getOptNumberFromDict(7.0, dict, 'prop')}",
+      "expression": "@{getOptNumberFromDict(7.0, dict, 'boolean_prop')}",
       "expected": {
         "type": "number",
         "value": 7.0
@@ -896,7 +834,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": true
+            "boolean_prop": true
           }
         }
       ],
@@ -907,8 +845,7 @@
       ]
     },
     {
-      "name": "getOptIntegerFromDict(7, dict, 'prop') => 123",
-      "expression": "@{getOptIntegerFromDict(7, dict, 'prop')}",
+      "expression": "@{getOptIntegerFromDict(7, dict, 'integer_prop')}",
       "expected": {
         "type": "integer",
         "value": 123
@@ -918,7 +855,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123
+            "integer_prop": 123
           }
         }
       ],
@@ -929,8 +866,7 @@
       ]
     },
     {
-      "name": "getOptIntegerFromDict(7, dict, 'prop') => 7",
-      "expression": "@{getOptIntegerFromDict(7, dict, 'prop')}",
+      "expression": "@{getOptIntegerFromDict(7, dict, 'number_prop')}",
       "expected": {
         "type": "integer",
         "value": 7
@@ -940,7 +876,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123.4
+            "number_prop": 123.4
           }
         }
       ],
@@ -951,8 +887,7 @@
       ]
     },
     {
-      "name": "getOptIntegerFromDict(7, dict, 'prop') => 12345678901",
-      "expression": "@{getOptIntegerFromDict(7, dict, 'prop')}",
+      "expression": "@{getOptIntegerFromDict(7, dict, 'big_integer_prop')}",
       "expected": {
         "type": "integer",
         "value": 12345678901
@@ -962,7 +897,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 12345678901
+            "big_integer_prop": 12345678901
           }
         }
       ],
@@ -973,8 +908,7 @@
       ]
     },
     {
-      "name": "getOptIntegerFromDict(7, dict, 'prop') => 7 (2)",
-      "expression": "@{getOptIntegerFromDict(7, dict, 'prop')}",
+      "expression": "@{getOptIntegerFromDict(7, dict, 'overflowed_integer_prop')}",
       "expected": {
         "type": "integer",
         "value": 7
@@ -984,7 +918,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 922337203685477580800
+            "overflowed_integer_prop": 922337203685477580800
           }
         }
       ],
@@ -995,8 +929,7 @@
       ]
     },
     {
-      "name": "getOptBooleanFromDict(false, dict, 'prop') => true",
-      "expression": "@{getOptBooleanFromDict(false, dict, 'prop')}",
+      "expression": "@{getOptBooleanFromDict(false, dict, 'boolean_prop')}",
       "expected": {
         "type": "boolean",
         "value": true
@@ -1006,7 +939,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": true
+            "boolean_prop": true
           }
         }
       ],
@@ -1017,8 +950,7 @@
       ]
     },
     {
-      "name": "getOptBooleanFromDict(false, dict, 'prop') => true (2)",
-      "expression": "@{getOptBooleanFromDict(false, dict, 'prop')}",
+      "expression": "@{getOptBooleanFromDict(false, dict, 'integer1_prop')}",
       "expected": {
         "type": "boolean",
         "value": false
@@ -1028,7 +960,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 1
+            "integer1_prop": 1
           }
         }
       ],
@@ -1039,8 +971,28 @@
       ]
     },
     {
-      "name": "getOptBooleanFromDict(false, dict, 'prop') => false",
-      "expression": "@{getOptBooleanFromDict(false, dict, 'prop')}",
+      "expression": "@{getOptBooleanFromDict(true, dict, 'integer0_prop')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "integer0_prop": 0
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{getOptBooleanFromDict(false, dict, 'integer_prop')}",
       "expected": {
         "type": "boolean",
         "value": false
@@ -1050,7 +1002,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 0
+            "integer_prop": 2
           }
         }
       ],
@@ -1061,30 +1013,7 @@
       ]
     },
     {
-      "name": "getOptBooleanFromDict(false, dict, 'prop') => false (2)",
-      "expression": "@{getOptBooleanFromDict(false, dict, 'prop')}",
-      "expected": {
-        "type": "boolean",
-        "value": false
-      },
-      "variables": [
-        {
-          "type": "dict",
-          "name": "dict",
-          "value": {
-            "prop": 2
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "name": "getOptColorFromDict('#000', dict, 'prop') => '#FFFFFFFF'",
-      "expression": "@{getOptColorFromDict('#000', dict, 'prop')}",
+      "expression": "@{getOptColorFromDict('#000', dict, 'color_prop')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -1094,7 +1023,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "#fff"
+            "color_prop": "#fff"
           }
         }
       ],
@@ -1105,8 +1034,7 @@
       ]
     },
     {
-      "name": "getOptColorFromDict('#000', dict, 'prop') => '#FF000000'",
-      "expression": "@{getOptColorFromDict('#000', dict, 'prop')}",
+      "expression": "@{getOptColorFromDict('#000', dict, 'invalid_color_prop')}",
       "expected": {
         "type": "color",
         "value": "#FF000000"
@@ -1116,7 +1044,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "fff"
+            "invalid_color_prop": "fff"
           }
         }
       ],
@@ -1127,8 +1055,7 @@
       ]
     },
     {
-      "name": "getOptColorFromDict(toColor('#000'), dict, 'prop') => '#FFFFFFFF'",
-      "expression": "@{getOptColorFromDict(toColor('#000'), dict, 'prop')}",
+      "expression": "@{getOptColorFromDict(toColor('#000'), dict, 'color_prop')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -1138,7 +1065,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "#fff"
+            "color_prop": "#fff"
           }
         }
       ],
@@ -1149,8 +1076,7 @@
       ]
     },
     {
-      "name": "getOptColorFromDict(toColor('#000'), dict, 'prop') => '#FF000000'",
-      "expression": "@{getOptColorFromDict(toColor('#000'), dict, 'prop')}",
+      "expression": "@{getOptColorFromDict(toColor('#000'), dict, 'invalid_color_prop')}",
       "expected": {
         "type": "color",
         "value": "#FF000000"
@@ -1160,7 +1086,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "fff"
+            "invalid_color_prop": "fff"
           }
         }
       ],
@@ -1171,8 +1097,7 @@
       ]
     },
     {
-      "name": "getOptUrlFromDict('https://fallback', dict, 'prop') => 'https://ya.ru'",
-      "expression": "@{getOptUrlFromDict('https://fallback', dict, 'prop')}",
+      "expression": "@{getOptUrlFromDict('https://fallback', dict, 'url_prop')}",
       "expected": {
         "type": "url",
         "value": "https://ya.ru"
@@ -1182,7 +1107,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "https://ya.ru"
+            "url_prop": "https://ya.ru"
           }
         }
       ],
@@ -1193,8 +1118,7 @@
       ]
     },
     {
-      "name": "getOptUrlFromDict('https://fallback', dict, 'prop') => 'https://fallback'",
-      "expression": "@{getOptUrlFromDict('https://fallback', dict, 'prop')}",
+      "expression": "@{getOptUrlFromDict('https://fallback', dict, 'integer_prop')}",
       "expected": {
         "type": "url",
         "value": "https://fallback"
@@ -1204,7 +1128,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123
+            "integer_prop": 123
           }
         }
       ],
@@ -1215,8 +1139,7 @@
       ]
     },
     {
-      "name": "getOptUrlFromDict(toUrl('https://fallback'), dict, 'prop') => 'https://ya.ru'",
-      "expression": "@{getOptUrlFromDict(toUrl('https://fallback'), dict, 'prop')}",
+      "expression": "@{getOptUrlFromDict(toUrl('https://fallback'), dict, 'url_prop')}",
       "expected": {
         "type": "url",
         "value": "https://ya.ru"
@@ -1226,7 +1149,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "https://ya.ru"
+            "url_prop": "https://ya.ru"
           }
         }
       ],
@@ -1237,8 +1160,7 @@
       ]
     },
     {
-      "name": "getOptUrlFromDict(toUrl('https://fallback'), dict, 'prop') => 'https://fallback'",
-      "expression": "@{getOptUrlFromDict(toUrl('https://fallback'), dict, 'prop')}",
+      "expression": "@{getOptUrlFromDict(toUrl('https://fallback'), dict, 'integer_prop')}",
       "expected": {
         "type": "url",
         "value": "https://fallback"
@@ -1248,7 +1170,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123
+            "integer_prop": 123
           }
         }
       ],
@@ -1259,12 +1181,11 @@
       ]
     },
     {
-      "name": "getDictFromDict(dict, 'prop') => dict",
-      "expression": "@{getDictFromDict(dict, 'prop')}",
+      "expression": "@{getDictFromDict(dict, 'dict_prop')}",
       "expected": {
         "type": "dict",
         "value": {
-          "subdict": 1
+          "integer_prop": 1
         }
       },
       "variables": [
@@ -1272,8 +1193,8 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": {
-              "subdict": 1
+            "dict_prop": {
+              "integer_prop": 1
             }
           }
         }
@@ -1285,7 +1206,6 @@
       ]
     },
     {
-      "name": "getDictFromDict(dict, 'missing_prop') => error",
       "expression": "@{getDictFromDict(dict, 'missing_prop')}",
       "expected": {
         "type": "error",
@@ -1305,7 +1225,6 @@
       ]
     },
     {
-      "name": "getDictFromDict(dict, 'number_prop') => error",
       "expression": "@{getDictFromDict(dict, 'number_prop')}",
       "expected": {
         "type": "error",
@@ -1327,8 +1246,7 @@
       ]
     },
     {
-      "name": "getArrayFromDict(dict, 'prop') => dict",
-      "expression": "@{getArrayFromDict(dict, 'prop')}",
+      "expression": "@{getArrayFromDict(dict, 'array_prop')}",
       "expected": {
         "type": "array",
         "value": [1]
@@ -1338,7 +1256,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": [1]
+            "array_prop": [1]
           }
         }
       ],
@@ -1349,7 +1267,6 @@
       ]
     },
     {
-      "name": "getArrayFromDict(dict, 'missing_prop') => error",
       "expression": "@{getArrayFromDict(dict, 'missing_prop')}",
       "expected": {
         "type": "error",
@@ -1369,7 +1286,6 @@
       ]
     },
     {
-      "name": "getArrayFromDict(dict, 'number_prop') => error",
       "expression": "@{getArrayFromDict(dict, 'number_prop')}",
       "expected": {
         "type": "error",
@@ -1391,8 +1307,7 @@
       ]
     },
     {
-      "name": "getOptArrayFromDict(dict, 'correct_prop') => array",
-      "expression": "@{getOptArrayFromDict(dict, 'correct_prop')}",
+      "expression": "@{getOptArrayFromDict(dict, 'array_prop')}",
       "expected": {
         "type": "array",
         "value": [1]
@@ -1402,7 +1317,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "correct_prop": [1]
+            "array_prop": [1]
           }
         }
       ],
@@ -1413,7 +1328,6 @@
       ]
     },
     {
-      "name": "getOptArrayFromDict(dict, 'missing_prop') => array",
       "expression": "@{getOptArrayFromDict(dict, 'missing_prop')}",
       "expected": {
         "type": "array",
@@ -1423,8 +1337,7 @@
         {
           "type": "dict",
           "name": "dict",
-          "value": {
-          }
+          "value": {}
         }
       ],
       "platforms": [
@@ -1434,12 +1347,11 @@
       ]
     },
     {
-      "name": "getOptDictFromDict(dict, 'correct_prop') => dict",
-      "expression": "@{getOptDictFromDict(dict, 'correct_prop')}",
+      "expression": "@{getOptDictFromDict(dict, 'dict_prop')}",
       "expected": {
         "type": "dict",
         "value": {
-          "dict_prop": 1
+          "integer_prop": 1
         }
       },
       "variables": [
@@ -1447,8 +1359,8 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "correct_prop": {
-              "dict_prop": 1
+            "dict_prop": {
+              "integer_prop": 1
             }
           }
         }
@@ -1460,7 +1372,6 @@
       ]
     },
     {
-      "name": "getOptDictFromDict(dict, 'missing_prop') => dict",
       "expression": "@{getOptDictFromDict(dict, 'missing_prop')}",
       "expected": {
         "type": "dict",
@@ -1470,8 +1381,7 @@
         {
           "type": "dict",
           "name": "dict",
-          "value": {
-          }
+          "value": {}
         }
       ],
       "platforms": [

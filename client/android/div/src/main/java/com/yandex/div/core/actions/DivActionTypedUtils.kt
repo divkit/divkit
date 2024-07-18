@@ -1,5 +1,6 @@
 package com.yandex.div.core.actions
 
+import android.view.View
 import com.yandex.div.core.view2.Div2View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
@@ -31,4 +32,9 @@ internal fun DivTypedValue.evaluate(expressionResolver: ExpressionResolver): Any
 internal fun DivInputView.openKeyboard() {
     val imm = ContextCompat.getSystemService(context, InputMethodManager::class.java)
     imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+}
+
+internal fun View.closeKeyboard() {
+    val imm = ContextCompat.getSystemService(context, InputMethodManager::class.java)
+    imm?.hideSoftInputFromWindow(windowToken, InputMethodManager.SHOW_IMPLICIT)
 }

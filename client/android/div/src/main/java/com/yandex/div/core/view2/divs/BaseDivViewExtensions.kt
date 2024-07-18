@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.MainThread
-import androidx.core.graphics.withTranslation
+import androidx.core.graphics.withSave
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
@@ -34,6 +34,7 @@ import com.yandex.div.core.view2.animations.asTouchListener
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.FixedLineHeightView
 import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
@@ -680,14 +681,18 @@ internal fun ViewGroup.trackVisibilityActions(
     }
 }
 
-internal fun getTypeface(fontWeight: DivFontWeight, typefaceProvider: DivTypefaceProvider): Typeface {
-    return when (fontWeight) {
-        DivFontWeight.LIGHT -> typefaceProvider.light ?: return Typeface.DEFAULT
-        DivFontWeight.REGULAR -> typefaceProvider.regular ?: return Typeface.DEFAULT
-        DivFontWeight.MEDIUM -> typefaceProvider.medium ?: return Typeface.DEFAULT
-        DivFontWeight.BOLD -> typefaceProvider.bold ?: return Typeface.DEFAULT_BOLD
-        else -> typefaceProvider.regular ?: return Typeface.DEFAULT
+internal fun getTypefaceValue(fontWeight: DivFontWeight?, fontWeightValue: Long?): Int {
+    return fontWeightValue?.toInt() ?: when (fontWeight) {
+        DivFontWeight.LIGHT -> 300
+        DivFontWeight.REGULAR -> 400
+        DivFontWeight.MEDIUM -> 500
+        DivFontWeight.BOLD -> 700
+        else -> 400
     }
+}
+
+internal fun getTypeface(fontWeight: Int, typefaceProvider: DivTypefaceProvider): Typeface {
+    return typefaceProvider.getTypefaceFor(fontWeight) ?: Typeface.DEFAULT
 }
 
 internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Float {
@@ -699,13 +704,15 @@ internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Floa
 }
 
 internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
-    for (i in 0 until children.count()) {
-        children.elementAt(i).let { child ->
-            canvas.withTranslation(child.x, child.y) {
+    children
+        .filter { it.visibility == View.VISIBLE }
+        .forEach { child ->
+            canvas.withSave {
+                translate(child.x, child.y)
+                rotate(child.rotation, child.pivotX, child.pivotY)
                 (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
             }
         }
-    }
 }
 
 internal fun View.extractParentContentAlignmentVertical(
@@ -886,6 +893,11 @@ internal fun DivContentAlignmentVertical.toAlignmentVertical(): DivAlignmentVert
     DivContentAlignmentVertical.BOTTOM -> DivAlignmentVertical.BOTTOM
     DivContentAlignmentVertical.BASELINE -> DivAlignmentVertical.BASELINE
     else -> DivAlignmentVertical.TOP
+}
+
+internal fun View.clearFocusOnClick(focusTracker: InputFocusTracker) {
+    if (this.isFocused || !this.isInTouchMode) return
+    focusTracker.removeFocusFromFocusedInput()
 }
 
 internal val View.bindingContext get() = (this as? DivHolderView<*>)?.bindingContext

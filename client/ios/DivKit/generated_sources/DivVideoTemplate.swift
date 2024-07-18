@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivVideoTemplate: TemplateValue {
   public static let type: String = "video"
@@ -25,6 +25,7 @@ public final class DivVideoTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let muted: Field<Expression<Bool>>? // default value: false
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -43,6 +44,7 @@ public final class DivVideoTemplate: TemplateValue {
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
+  public let variables: Field<[DivVariableTemplate]>?
   public let videoSources: Field<[DivVideoSourceTemplate]>? // at least 1 elements
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
@@ -70,6 +72,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       muted: dictionary.getOptionalExpressionField("muted"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -88,6 +91,7 @@ public final class DivVideoTemplate: TemplateValue {
       transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
       transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
+      variables: dictionary.getOptionalArray("variables", templateToType: templateToType),
       videoSources: dictionary.getOptionalArray("video_sources", templateToType: templateToType),
       visibility: dictionary.getOptionalExpressionField("visibility"),
       visibilityAction: dictionary.getOptionalField("visibility_action", templateToType: templateToType),
@@ -116,6 +120,7 @@ public final class DivVideoTemplate: TemplateValue {
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     muted: Field<Expression<Bool>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -134,6 +139,7 @@ public final class DivVideoTemplate: TemplateValue {
     transitionIn: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionTriggers: Field<[DivTransitionTrigger]>? = nil,
+    variables: Field<[DivVariableTemplate]>? = nil,
     videoSources: Field<[DivVideoSourceTemplate]>? = nil,
     visibility: Field<Expression<DivVisibility>>? = nil,
     visibilityAction: Field<DivVisibilityActionTemplate>? = nil,
@@ -159,6 +165,7 @@ public final class DivVideoTemplate: TemplateValue {
     self.focus = focus
     self.height = height
     self.id = id
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.muted = muted
     self.paddings = paddings
@@ -177,6 +184,7 @@ public final class DivVideoTemplate: TemplateValue {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.videoSources = videoSources
     self.visibility = visibility
     self.visibilityAction = visibilityAction
@@ -203,6 +211,7 @@ public final class DivVideoTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let mutedValue = parent?.muted?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -221,6 +230,7 @@ public final class DivVideoTemplate: TemplateValue {
     let transitionInValue = parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    let variablesValue = parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let videoSourcesValue = parent?.videoSources?.resolveValue(context: context, validator: ResolvedValue.videoSourcesValidator, useOnlyLinks: true) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -245,6 +255,7 @@ public final class DivVideoTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       mutedValue.errorsOrWarnings?.map { .nestedObjectError(field: "muted", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -263,6 +274,7 @@ public final class DivVideoTemplate: TemplateValue {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       videoSourcesValue.errorsOrWarnings?.map { .nestedObjectError(field: "video_sources", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
@@ -296,6 +308,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       muted: mutedValue.value,
       paddings: paddingsValue.value,
@@ -314,6 +327,7 @@ public final class DivVideoTemplate: TemplateValue {
       transitionIn: transitionInValue.value,
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
+      variables: variablesValue.value,
       videoSources: videoSourcesNonNil,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
@@ -345,6 +359,7 @@ public final class DivVideoTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var mutedValue: DeserializationResult<Expression<Bool>> = parent?.muted?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -363,6 +378,7 @@ public final class DivVideoTemplate: TemplateValue {
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    var variablesValue: DeserializationResult<[DivVariable]> = .noValue
     var videoSourcesValue: DeserializationResult<[DivVideoSource]> = .noValue
     var visibilityValue: DeserializationResult<Expression<DivVisibility>> = parent?.visibility?.value() ?? .noValue
     var visibilityActionValue: DeserializationResult<DivVisibilityAction> = .noValue
@@ -406,6 +422,8 @@ public final class DivVideoTemplate: TemplateValue {
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "muted":
@@ -442,6 +460,8 @@ public final class DivVideoTemplate: TemplateValue {
         transitionOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionOutValue)
       case "transition_triggers":
         transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
+      case "variables":
+        variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
       case "video_sources":
         videoSourcesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.videoSourcesValidator, type: DivVideoSourceTemplate.self).merged(with: videoSourcesValue)
       case "visibility":
@@ -488,6 +508,8 @@ public final class DivVideoTemplate: TemplateValue {
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.id?.link:
         idValue = idValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.muted?.link:
@@ -524,6 +546,8 @@ public final class DivVideoTemplate: TemplateValue {
         transitionOutValue = transitionOutValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self) })
       case parent?.transitionTriggers?.link:
         transitionTriggersValue = transitionTriggersValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator) })
+      case parent?.variables?.link:
+        variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
       case parent?.videoSources?.link:
         videoSourcesValue = videoSourcesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.videoSourcesValidator, type: DivVideoSourceTemplate.self) })
       case parent?.visibility?.link:
@@ -549,6 +573,7 @@ public final class DivVideoTemplate: TemplateValue {
       fatalActionsValue = fatalActionsValue.merged(with: { parent.fatalActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       pauseActionsValue = pauseActionsValue.merged(with: { parent.pauseActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -559,6 +584,7 @@ public final class DivVideoTemplate: TemplateValue {
       transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       videoSourcesValue = videoSourcesValue.merged(with: { parent.videoSources?.resolveValue(context: context, validator: ResolvedValue.videoSourcesValidator, useOnlyLinks: true) })
       visibilityActionValue = visibilityActionValue.merged(with: { parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -583,6 +609,7 @@ public final class DivVideoTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       mutedValue.errorsOrWarnings?.map { .nestedObjectError(field: "muted", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -601,6 +628,7 @@ public final class DivVideoTemplate: TemplateValue {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       videoSourcesValue.errorsOrWarnings?.map { .nestedObjectError(field: "video_sources", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
@@ -634,6 +662,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       muted: mutedValue.value,
       paddings: paddingsValue.value,
@@ -652,6 +681,7 @@ public final class DivVideoTemplate: TemplateValue {
       transitionIn: transitionInValue.value,
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
+      variables: variablesValue.value,
       videoSources: videoSourcesNonNil,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
@@ -688,6 +718,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       muted: muted ?? mergedParent.muted,
       paddings: paddings ?? mergedParent.paddings,
@@ -706,6 +737,7 @@ public final class DivVideoTemplate: TemplateValue {
       transitionIn: transitionIn ?? mergedParent.transitionIn,
       transitionOut: transitionOut ?? mergedParent.transitionOut,
       transitionTriggers: transitionTriggers ?? mergedParent.transitionTriggers,
+      variables: variables ?? mergedParent.variables,
       videoSources: videoSources ?? mergedParent.videoSources,
       visibility: visibility ?? mergedParent.visibility,
       visibilityAction: visibilityAction ?? mergedParent.visibilityAction,
@@ -737,6 +769,7 @@ public final class DivVideoTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       muted: merged.muted,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
@@ -755,6 +788,7 @@ public final class DivVideoTemplate: TemplateValue {
       transitionIn: merged.transitionIn?.tryResolveParent(templates: templates),
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),
       transitionTriggers: merged.transitionTriggers,
+      variables: merged.variables?.tryResolveParent(templates: templates),
       videoSources: try merged.videoSources?.resolveParent(templates: templates),
       visibility: merged.visibility,
       visibilityAction: merged.visibilityAction?.tryResolveParent(templates: templates),

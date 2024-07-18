@@ -12,9 +12,6 @@
         "state_id": 0,
         "div": {
           "type": "text",
-          "width": {
-            "type": "wrap_content"
-          },
           "paddings": {
             "left": 4,
             "top": 4,
@@ -23,10 +20,10 @@
           },
           "font_size": 14,
           "line_height": 16,
-          "text": "Lorem ipsum dolor sit amet, consectetur\nadipiscing elit, sed do eiusmod  tempor\nincididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud\nexercitation ullamco laboris nisi ut\naliquip ex ea commodo consequat.",
+          "text": "Multiline text with overall line height containing:\n\t1. embedded  image\n\t2. embedded  image and line height range",
           "images": [
             {
-              "start": 72,
+              "start": 65,
               "width": {
                 "value": 24
               },
@@ -34,6 +31,24 @@
                 "value": 24
               },
               "url": "https://yastatic.net/s3/home/test/omni_icon.png"
+            },
+            {
+              "start": 85,
+              "width": {
+                "value": 24
+              },
+              "height": {
+                "value": 24
+              },
+              "url": "https://yastatic.net/s3/home/test/omni_icon.png"
+            }
+          ],
+          "ranges": [
+            {
+              "start": 96,
+              "end": 113,
+              "font_weight": "medium",
+              "line_height": 32
             }
           ]
         }

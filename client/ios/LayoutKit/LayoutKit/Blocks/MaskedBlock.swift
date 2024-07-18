@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 public final class MaskedBlock: SizeForwardingBlock {
   public let maskBlock: Block

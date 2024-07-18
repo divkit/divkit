@@ -4,7 +4,7 @@
     import { getContext } from 'svelte';
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
 
-    const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
+    const {l10n, lang} = getContext<LanguageContext>(LANGUAGE_CTX);
 
     export let errors: ViewerError[];
 </script>
@@ -37,6 +37,11 @@
             {$l10n('noErrors')}
         </div>
     {/if}
+
+    <a class="errors-view__telegram" href={$lang === 'ru' ? 'https://t.me/divkit_community_ru' : 'https://t.me/divkit_community_en'} target="_blank" rel="noopener noreferrer">
+        <div class="errors-view__telegram-icon"></div>
+        {$l10n('telegramError')}
+    </a>
 </div>
 
 <style>
@@ -86,5 +91,27 @@
 
     .error-view__empty {
         padding: 12px 20px;
+    }
+
+    .errors-view__telegram {
+        display: inline-block;
+        padding: 20px 12px;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .errors-view__telegram:hover {
+        color: red;
+    }
+
+    .errors-view__telegram-icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-right: 4px;
+        vertical-align: -32%;
+        background: no-repeat 50% 50%;
+        background-image: url(../assets/telegram.svg);
+        background-size: contain;
     }
 </style>

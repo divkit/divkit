@@ -1,9 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension Block {
   func addingDebugInfo(context: DivBlockModelingContext) -> Block {

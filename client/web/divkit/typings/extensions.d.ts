@@ -2,6 +2,8 @@ import type { DivExtension } from './common';
 
 export class SizeProvider implements DivExtension {}
 
+export class Gesture implements DivExtension {}
+
 declare class Lottie implements DivExtension {}
 
 interface Params {

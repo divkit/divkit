@@ -8,7 +8,7 @@
     import PointingPopup from './PointingPopup.svelte';
     // import LivePreview from './LivePreview.svelte';
     // import { viewModeStore } from '../data/viewModeStore';
-    import { isInitialLoading, isLoadError } from '../data/session';
+    import { isInitialLoading, isLoadError, isSamples } from '../data/session';
     import Loader from './Loader.svelte';
     import ErrorPage from './ErrorPage.svelte';
     import type langObj from '../auto/lang.json';
@@ -48,6 +48,14 @@
 
 <svelte:head>
     <title>{`DivKit ${$l10n('playground')}`}</title>
+
+    <meta name="description" content={$l10n('description')}>
+
+    {#if $isSamples}
+        <link rel="canonical" href="https://divkit.tech/playground?samples=1">
+    {:else}
+        <link rel="canonical" href="https://divkit.tech/playground">
+    {/if}
 </svelte:head>
 
 {#if $isLoadError}

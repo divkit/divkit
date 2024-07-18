@@ -1,24 +1,25 @@
 import Root from './components/Root.svelte';
 import { SizeProvider } from './extensions/sizeProvider';
+import { Gesture } from './extensions/gesture';
 import { lottieExtensionBuilder } from './extensions/lottie';
 import type { DivExtensionClass } from '../typings/common';
 import Lottie from 'lottie-web/build/player/lottie';
 import { initComponents } from './devCustomComponents';
 
 const json = {
-    "templates": {},
-    "card": {
-        "log_id": "snapshot_test_card",
-        "states": [
-            {
-                "state_id": 0,
-                "div": {
-                    "type": "text",
-                    "text": "Hello world"
-                }
-            }
-        ]
-    }
+  "templates": {},
+  "card": {
+      "log_id": "snapshot_test_card",
+      "states": [
+          {
+              "state_id": 0,
+              "div": {
+                  "type": "text",
+                  "text": "Hello world"
+              }
+          }
+      ]
+  }
 };
 
 window.root = new Root({
@@ -31,6 +32,7 @@ window.root = new Root({
         },
         extensions: new Map<string, DivExtensionClass>([
             ['size_provider', SizeProvider],
+            ['gesture', Gesture],
             ['lottie', lottieExtensionBuilder(Lottie.loadAnimation)],
         ]),
         customComponents: new Map([

@@ -2,8 +2,7 @@
 
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 extension ContainerBlockLayout {
   fileprivate init(

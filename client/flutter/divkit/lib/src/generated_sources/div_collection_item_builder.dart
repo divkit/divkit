@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
 
 class DivCollectionItemBuilder with EquatableMixin {
   const DivCollectionItemBuilder({
@@ -25,6 +25,17 @@ class DivCollectionItemBuilder with EquatableMixin {
         prototypes,
       ];
 
+  DivCollectionItemBuilder copyWith({
+    Expression<List<dynamic>>? data,
+    String? dataElementName,
+    List<DivCollectionItemBuilderPrototype>? prototypes,
+  }) =>
+      DivCollectionItemBuilder(
+        data: data ?? this.data,
+        dataElementName: dataElementName ?? this.dataElementName,
+        prototypes: prototypes ?? this.prototypes,
+      );
+
   static DivCollectionItemBuilder? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -38,13 +49,11 @@ class DivCollectionItemBuilder with EquatableMixin {
         fallback: "it",
       )!,
       prototypes: safeParseObj(
-        (json['prototypes'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivCollectionItemBuilderPrototype.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['prototypes'],
+            (v) => safeParseObj(
+                  DivCollectionItemBuilderPrototype.fromJson(v),
+                )!),
       )!,
     );
   }
@@ -53,18 +62,33 @@ class DivCollectionItemBuilder with EquatableMixin {
 class DivCollectionItemBuilderPrototype with EquatableMixin {
   const DivCollectionItemBuilderPrototype({
     required this.div,
+    this.id,
     this.selector = const ValueExpression(true),
   });
 
   final Div div;
+
+  final Expression<String>? id;
   // default value: true
   final Expression<bool> selector;
 
   @override
   List<Object?> get props => [
         div,
+        id,
         selector,
       ];
+
+  DivCollectionItemBuilderPrototype copyWith({
+    Div? div,
+    Expression<String>? Function()? id,
+    Expression<bool>? selector,
+  }) =>
+      DivCollectionItemBuilderPrototype(
+        div: div ?? this.div,
+        id: id != null ? id.call() : this.id,
+        selector: selector ?? this.selector,
+      );
 
   static DivCollectionItemBuilderPrototype? fromJson(
       Map<String, dynamic>? json) {
@@ -75,6 +99,9 @@ class DivCollectionItemBuilderPrototype with EquatableMixin {
       div: safeParseObj(
         Div.fromJson(json['div']),
       )!,
+      id: safeParseStrExpr(
+        json['id']?.toString(),
+      ),
       selector: safeParseBoolExpr(
         json['selector'],
         fallback: true,

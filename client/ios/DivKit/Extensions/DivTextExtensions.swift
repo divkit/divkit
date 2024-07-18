@@ -2,9 +2,8 @@ import CoreFoundation
 import CoreGraphics
 import Foundation
 
-import BasePublic
-import BaseUIPublic
 import LayoutKit
+import VGSL
 
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
@@ -30,13 +29,8 @@ extension DivText: DivBlockModeling {
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
 
-    let font = context.fontProvider.font(
-      family: resolveFontFamily(expressionResolver) ?? "",
-      weight: resolveFontWeight(expressionResolver),
-      size: resolveFontSizeUnit(expressionResolver)
-        .makeScaledValue(resolveFontSize(expressionResolver))
-    )
-    var typo = Typo(font: font).allowHeightOverrun
+    let fontParams = resolveFontParams(expressionResolver)
+    var typo = Typo(font: context.fontProvider.font(fontParams)).allowHeightOverrun
 
     let alignment = resolveTextAlignmentHorizontal(expressionResolver)
       .makeTextAlignment(uiLayoutDirection: context.layoutDirection)
@@ -74,7 +68,8 @@ extension DivText: DivBlockModeling {
       typo: typo,
       ranges: ranges,
       actions: nil,
-      context: context
+      context: context,
+      fontParams: fontParams
     )
 
     let images = makeInlineImages(
@@ -89,7 +84,8 @@ extension DivText: DivBlockModeling {
         typo: typo,
         ranges: $0.ranges,
         actions: $0.actions?.uiActions(context: context),
-        context: context
+        context: context,
+        fontParams: fontParams
       )
     }
     let truncationImages = makeInlineImages(
@@ -127,7 +123,8 @@ extension DivText: DivBlockModeling {
     typo: Typo,
     ranges: [Range]?,
     actions: [UserInterfaceAction]?,
-    context: DivBlockModelingContext
+    context: DivBlockModelingContext,
+    fontParams: FontParams
   ) -> NSAttributedString {
     let length = CFStringGetLength(text)
     let attributedString = CFAttributedStringCreateMutable(kCFAllocatorDefault, length)!
@@ -135,7 +132,7 @@ extension DivText: DivBlockModeling {
     CFAttributedStringReplaceString(attributedString, CFRange(), text)
     let fullRange = CFRange(location: 0, length: length)
     typo.apply(to: attributedString, at: fullRange)
-    ranges?.forEach { apply($0, to: attributedString, context: context) }
+    ranges?.forEach { apply($0, to: attributedString, context: context, fontParams: fontParams) }
     attributedString.apply(actions, at: fullRange)
     CFAttributedStringEndEditing(attributedString)
     return attributedString
@@ -160,33 +157,30 @@ extension DivText: DivBlockModeling {
   private func apply(
     _ range: DivText.Range,
     to string: CFMutableAttributedString,
-    context: DivBlockModelingContext
+    context: DivBlockModelingContext,
+    fontParams: FontParams
   ) {
     let expressionResolver = context.expressionResolver
 
     let start = range.resolveStart(expressionResolver) ?? 0
     let end = range.resolveEnd(expressionResolver) ?? 0
-    guard end > start && start < CFAttributedStringGetLength(string) else {
+    guard end > start, start < CFAttributedStringGetLength(string) else {
       return
     }
 
-    let fontTypo: Typo?
-    if range.fontSize != nil || range.fontWeight != nil {
-      let font = context.fontProvider.font(
-        family: range.resolveFontFamily(expressionResolver)
-          ?? resolveFontFamily(expressionResolver) ?? "",
-        weight:
-        range.resolveFontWeight(expressionResolver)
-          ?? resolveFontWeight(expressionResolver),
-        size: CGFloat(
-          range.resolveFontSize(expressionResolver)
-            ?? resolveFontSize(expressionResolver)
-        )
-      )
-      fontTypo = Typo(font: font)
-    } else {
-      fontTypo = nil
-    }
+    let rangeFontParams = FontParams(
+      family: range.resolveFontFamily(expressionResolver) ?? fontParams.family,
+      weight: range.resolveFontWeightValue(expressionResolver)
+        ?? range.resolveFontWeight(expressionResolver)?.toInt()
+        ?? fontParams.weight,
+      size: range.resolveFontSize(expressionResolver) ?? fontParams.size,
+      unit: range.resolveFontSizeUnit(expressionResolver),
+      featureSettings: range.resolveFontFeatureSettings(expressionResolver)
+        ?? fontParams.featureSettings
+    )
+    let fontTypo = rangeFontParams == fontParams
+      ? nil
+      : Typo(font: context.fontProvider.font(rangeFontParams))
     let colorTypo = range.resolveTextColor(expressionResolver)
       .map { Typo(color: $0) }
     let heightTypo = range.resolveLineHeight(expressionResolver)
@@ -236,6 +230,8 @@ extension DivText: DivBlockModeling {
     }
   }
 }
+
+extension DivText: FontParamsProvider {}
 
 extension CFMutableAttributedString {
   fileprivate func apply(

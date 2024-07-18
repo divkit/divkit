@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_input_mask_base.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_input_mask_base.dart';
 
 class DivCurrencyInputMask with EquatableMixin implements DivInputMaskBase {
   const DivCurrencyInputMask({
@@ -23,6 +23,15 @@ class DivCurrencyInputMask with EquatableMixin implements DivInputMaskBase {
         locale,
         rawTextVariable,
       ];
+
+  DivCurrencyInputMask copyWith({
+    Expression<String>? Function()? locale,
+    String? rawTextVariable,
+  }) =>
+      DivCurrencyInputMask(
+        locale: locale != null ? locale.call() : this.locale,
+        rawTextVariable: rawTextVariable ?? this.rawTextVariable,
+      );
 
   static DivCurrencyInputMask? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

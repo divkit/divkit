@@ -48,7 +48,6 @@
           "type": "container",
           "orientation": "vertical",
           "item_builder": {
-            "type": "prototype",
             "data": "@{data}",
             "prototypes": [
               {
@@ -56,7 +55,6 @@
                   "type": "container",
                   "orientation": "horizontal",
                   "item_builder": {
-                    "type": "prototype",
                     "data": "@{getArrayFromDict(it, 'items')}",
                     "prototypes": [
                       {

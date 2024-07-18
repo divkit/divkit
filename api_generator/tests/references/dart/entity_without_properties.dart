@@ -12,6 +12,8 @@ class EntityWithoutProperties with EquatableMixin {
   @override
   List<Object?> get props => [];
 
+  EntityWithoutProperties? copyWith() => this;
+
   static EntityWithoutProperties? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

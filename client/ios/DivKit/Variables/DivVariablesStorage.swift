@@ -1,15 +1,12 @@
 import Foundation
 
-import BasePublic
+import LayoutKit
+import VGSL
 
 public final class DivVariablesStorage {
   public struct Values {
     public internal(set) var global: DivVariables = [:]
     public internal(set) var local: [DivCardID: DivVariables] = [:]
-
-    func makeVariables(for cardId: DivCardID) -> DivVariables {
-      global + (local[cardId] ?? [:])
-    }
   }
 
   public struct ChangeEvent {
@@ -20,6 +17,8 @@ public final class DivVariablesStorage {
     }
 
     public let kind: Kind
+
+    /// Deprecated. Use `DivVariablesStorage` directly to access the variable values.
     public let newValues: Values
 
     init(kind: Kind, newValues: Values) {
@@ -38,16 +37,24 @@ public final class DivVariablesStorage {
   }
 
   private let globalStorage: DivVariableStorage
-  private var cardVariables: [DivCardID: DivVariables] = [:]
-  private let lock = RWLock()
+  private var localStorages: [UIElementPath: DivVariableStorage] = [:]
+  private let lock = AllocatedUnfairLock()
 
   private let changeEventsPipe = SignalPipe<ChangeEvent>()
   public let changeEvents: Signal<ChangeEvent>
 
   private var allValues: Values {
-    Values(
+    let localValues = lock.withLock {
+      localStorages
+        .filter { $0.key.parent == nil }
+        .map(
+          key: { DivCardID(rawValue: $0.leaf) },
+          value: { $0.values }
+        )
+    }
+    return Values(
       global: globalStorage.allValues,
-      local: cardVariables
+      local: localValues
     )
   }
 
@@ -73,52 +80,86 @@ public final class DivVariablesStorage {
     weakSelf = self
   }
 
+  func getVariableValue<T>(
+    path: UIElementPath,
+    name: DivVariableName
+  ) -> T? {
+    lock.withLock {
+      getNearestStorage(path).getValue(name)
+    }
+  }
+
   public func getVariableValue<T>(
     cardId: DivCardID,
     name: DivVariableName
   ) -> T? {
-    let variable = lock.read {
-      cardVariables[cardId]?[name]
-    }
-    if let variable {
-      return variable.typedValue()
-    }
-    return globalStorage.getValue(name)
+    getVariableValue(path: cardId.path, name: name)
   }
 
+  public func hasValue(cardId: DivCardID, name: DivVariableName) -> Bool {
+    let localStorage = lock.withLock {
+      localStorages[cardId.path]
+    }
+    return localStorage?.hasValue(name) ?? globalStorage.hasValue(name)
+  }
+
+  func initializeIfNeeded(path: UIElementPath, variables: DivVariables) {
+    lock.withLock {
+      if localStorages[path] != nil {
+        // storage is already initialized
+        return
+      }
+      let nearestStorage = getNearestStorage(path.parent)
+      if variables.isEmpty {
+        // optimization that allows to access the local storage for one operation
+        localStorages[path] = nearestStorage
+      } else {
+        let localStorage = DivVariableStorage(outerStorage: nearestStorage)
+        localStorage.replaceAll(variables, notifyObservers: false)
+        localStorages[path] = localStorage
+      }
+    }
+  }
+
+  /// Replaces all card variables with new ones.
+  /// Does not affect global variables.
   public func set(
     cardId: DivCardID,
     variables: DivVariables
   ) {
-    var changeEvent: ChangeEvent?
-    lock.write {
-      let oldValues = allValues
-      cardVariables[cardId] = variables
-
-      let changedVariables = makeChangedVariables(
-        old: oldValues.local[cardId] ?? [:],
-        new: variables
-      )
-      if changedVariables.isEmpty {
-        return
+    let localStorage = lock.withLock {
+      let path = cardId.path
+      if let localStorage = localStorages[path] {
+        return localStorage
       }
-      changeEvent = ChangeEvent(
-        kind: .local(cardId, changedVariables),
-        newValues: allValues
-      )
+      let localStorage = DivVariableStorage(outerStorage: globalStorage)
+      localStorages[path] = localStorage
+      return localStorage
     }
-    if let changeEvent {
-      notify(changeEvent)
+
+    let oldValues = localStorage.values
+    localStorage.replaceAll(variables, notifyObservers: false)
+
+    let changedVariables = makeChangedVariables(old: oldValues, new: variables)
+    if changedVariables.isEmpty {
+      return
     }
+
+    notify(ChangeEvent(
+      kind: .local(cardId, changedVariables),
+      newValues: allValues
+    ))
   }
 
+  /// Adds new card variables.
+  /// Does not affect global variables.
   public func append(
     variables newVariables: DivVariables,
     for cardId: DivCardID,
     replaceExisting: Bool = true
   ) {
-    let oldVariables = lock.read {
-      cardVariables[cardId] ?? [:]
+    let oldVariables = lock.withLock {
+      localStorages[cardId.path]?.values ?? [:]
     }
     let resultVariables = replaceExisting ?
       oldVariables + newVariables :
@@ -142,27 +183,42 @@ public final class DivVariablesStorage {
     globalStorage.put(variables, notifyObservers: triggerUpdate)
   }
 
+  /// Deprecated. Do not use this method.
   public func makeVariables(for cardId: DivCardID) -> DivVariables {
-    lock.read {
-      globalStorage.allValues + (cardVariables[cardId] ?? [:])
+    lock.withLock {
+      localStorages[cardId.path]?.allValues ?? globalStorage.allValues
     }
   }
 
   public func reset() {
-    lock.write {
+    lock.withLock {
       globalStorage.clear()
-      cardVariables = [:]
+      localStorages = [:]
     }
   }
 
   public func reset(cardId: DivCardID) {
-    lock.write {
-      cardVariables[cardId] = [:]
+    lock.withLock {
+      localStorages.keys
+        .filter { $0.root == cardId.rawValue }
+        .forEach { localStorages[$0] = nil }
     }
   }
 
   public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
     changeEvents.addObserver(action)
+  }
+
+  private func getNearestStorage(_ path: UIElementPath?) -> DivVariableStorage {
+    var currentPath: UIElementPath? = path
+    while let path = currentPath {
+      let localStorage = localStorages[path]
+      if let localStorage {
+        return localStorage
+      }
+      currentPath = path.parent
+    }
+    return globalStorage
   }
 
   private func notify(_ event: ChangeEvent) {
@@ -178,45 +234,42 @@ extension DivVariablesStorage: DivVariableUpdater {
     name: DivVariableName,
     value: String
   ) {
+    update(path: cardId.path, name: name, value: value)
+  }
+
+  public func update(
+    path: UIElementPath,
+    name: DivVariableName,
+    value: String
+  ) {
     update(
-      cardId: cardId,
+      path: path,
       name: name,
       valueFactory: { makeDivVariableValue(oldValue: $0, name: name, value: value) }
     )
   }
 
   func update(
-    cardId: DivCardID,
+    path: UIElementPath,
     name: DivVariableName,
     value: DivVariableValue
   ) {
-    update(cardId: cardId, name: name, valueFactory: { _ in value })
+    update(path: path, name: name, valueFactory: { _ in value })
   }
 
   private func update(
-    cardId: DivCardID,
+    path: UIElementPath,
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
   ) {
-    var changeEvent: ChangeEvent? = nil
-    lock.write {
-      var variables = cardVariables[cardId]
-      if let oldValue = variables?[name] {
-        guard let newValue = valueFactory(oldValue), newValue != oldValue else {
-          return
-        }
-        variables?[name] = newValue
-        cardVariables[cardId] = variables
-        changeEvent = ChangeEvent(
-          kind: .local(cardId, [name]),
-          newValues: allValues
-        )
-      } else {
-        globalStorage.update(name: name, valueFactory: valueFactory)
-      }
+    let storage = lock.withLock {
+      getNearestStorage(path)
     }
-    if let changeEvent {
-      notify(changeEvent)
+    if storage.update(name: name, valueFactory: valueFactory), storage !== globalStorage {
+      notify(ChangeEvent(
+        kind: .local(path.cardId, [name]),
+        newValues: allValues
+      ))
     }
   }
 }
@@ -310,7 +363,7 @@ extension Collection<DivVariable> {
       case let .dictVariable(dictVariable):
         let name = DivVariableName(rawValue: dictVariable.name)
         if variables.keys.contains(name) { return }
-        if let dictionary = NSDictionary(dictionary: dictVariable.value) as? [String: AnyHashable] {
+        if let dictionary = NSDictionary(dictionary: dictVariable.value) as? DivDictionary {
           variables[name] = .dict(dictionary)
         } else {
           DivKitLogger.error("Incorrect value for dict variable \(name): \(dictVariable.value)")

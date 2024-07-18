@@ -1,9 +1,7 @@
 import Foundation
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 extension TextBlock {
   public static func makeBlockView() -> BlockView { TextBlockContainer() }
@@ -174,6 +172,8 @@ private final class TextBlockView: UIView {
     }
   }
 
+  private var imagesReferences: [UIImage?] = []
+
   var model: Model! {
     didSet {
       guard model == nil || model != oldValue else {
@@ -181,9 +181,15 @@ private final class TextBlockView: UIView {
       }
 
       precondition(model.images.count == model.attachments.count)
-      imageRequests = model.images.indices
-        .filter { model.attachments[$0].image == nil }
-        .compactMap(requestImage)
+
+      if model.images == oldValue?.images {
+        imageRequests = model.images.indices
+          .filter { model.attachments[$0].image == nil }
+          .compactMap(requestImage)
+      } else {
+        imagesReferences = Array(repeating: nil, times: UInt(model.images.count))
+        imageRequests = model.images.indices.compactMap(requestImage)
+      }
 
       isUserInteractionEnabled = model.isUserInteractionEnabled
 
@@ -457,6 +463,7 @@ private final class TextBlockView: UIView {
             strongSelf.model.source.value === source.value else { return }
       strongSelf.model.attachments[index].image = image
         .withTintColor(modelImage.tintColor)
+      strongSelf.imagesReferences[index] = image
       strongSelf.setNeedsDisplay()
     }
   }

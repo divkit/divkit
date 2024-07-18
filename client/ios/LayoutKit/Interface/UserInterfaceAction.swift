@@ -1,7 +1,6 @@
 import Foundation
 
-import BaseTinyPublic
-import BaseUIPublic
+import VGSL
 
 public struct UserInterfaceAction: Equatable, Codable {
   @frozen
@@ -14,23 +13,42 @@ public struct UserInterfaceAction: Equatable, Codable {
 
   public struct DivActionParams: Equatable {
     public let action: JSONObject
-    public let cardId: String
+    public let path: UIElementPath
     public let source: DivActionSource
     public let url: URL?
-    public let prototypeVariables: [String: AnyHashable]
+    public let localValues: [String: AnyHashable]
 
+    public var cardId: String {
+      path.root
+    }
+
+    /// Deprecated.
     public init(
       action: JSONObject,
       cardId: String,
       source: DivActionSource,
       url: URL?,
-      prototypeVariables: [String: AnyHashable] = [:]
+      localValues: [String: AnyHashable] = [:]
     ) {
       self.action = action
-      self.cardId = cardId
+      self.path = UIElementPath(cardId)
       self.source = source
       self.url = url
-      self.prototypeVariables = prototypeVariables
+      self.localValues = localValues
+    }
+
+    public init(
+      action: JSONObject,
+      path: UIElementPath,
+      source: DivActionSource,
+      url: URL?,
+      localValues: [String: AnyHashable] = [:]
+    ) {
+      self.action = action
+      self.path = path
+      self.source = source
+      self.url = url
+      self.localValues = localValues
     }
   }
 
@@ -114,7 +132,7 @@ extension UserInterfaceAction.Payload: Codable {
     case url
     case menu
     case json
-    case cardId
+    case path
     case divActionSource
   }
 
@@ -154,10 +172,10 @@ extension UserInterfaceAction.Payload: Codable {
       let source = try container.decodeIfPresent(String.self, forKey: .divActionSource)
       let params = try UserInterfaceAction.DivActionParams(
         action: container.decode(JSONObject.self, forKey: .json),
-        cardId: container.decode(String.self, forKey: .cardId),
+        path: UIElementPath.parse(container.decode(String.self, forKey: .path)),
         source: UserInterfaceAction.DivActionSource(rawValue: source ?? "") ?? .tap,
         url: container.decodeIfPresent(URL.self, forKey: .url),
-        prototypeVariables: [:]
+        localValues: [:]
       )
       self = .divAction(params: params)
     }
@@ -177,7 +195,7 @@ extension UserInterfaceAction.Payload: Codable {
       try container.encode(menu, forKey: .menu)
     case let .divAction(params):
       try container.encode(params.action, forKey: .json)
-      try container.encode(params.cardId, forKey: .cardId)
+      try container.encode(params.path.description, forKey: .path)
       try container.encode(params.source.rawValue, forKey: .divActionSource)
       try container.encodeIfPresent(params.url, forKey: .url)
     }

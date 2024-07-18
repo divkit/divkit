@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 
-import BaseTinyPublic
 import DivKit
 import Serialization
+import VGSL
 
 public struct ShimmerStyle: Equatable {
   public let colorsAndLocations: [(Color, CGFloat)]

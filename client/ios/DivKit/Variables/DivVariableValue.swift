@@ -1,6 +1,8 @@
 import Foundation
 
-import BasePublic
+import VGSL
+
+public typealias DivDictionary = [String: AnyHashable]
 
 @frozen
 public enum DivVariableValue: Hashable {
@@ -10,7 +12,7 @@ public enum DivVariableValue: Hashable {
   case bool(Bool)
   case color(Color)
   case url(URL)
-  case dict([String: AnyHashable])
+  case dict(DivDictionary)
   case array([AnyHashable])
 
   @inlinable
@@ -49,7 +51,7 @@ public enum DivVariableValue: Hashable {
       self = .color(value)
     case let value as URL:
       self = .url(value)
-    case let value as [String: AnyHashable]:
+    case let value as DivDictionary:
       self = .dict(value)
     case let value as [AnyHashable]:
       self = .array(value)

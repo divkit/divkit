@@ -1,8 +1,7 @@
 import CoreGraphics
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivEdgeInsets? {
   func resolve(_ context: DivBlockModelingContext) -> EdgeInsets {

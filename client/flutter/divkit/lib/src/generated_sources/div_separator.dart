@@ -2,29 +2,30 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_animation.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_focus.dart';
-import 'div_match_parent_size.dart';
-import 'div_size.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_animation.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivSeparator with EquatableMixin implements DivBase {
   const DivSeparator({
@@ -48,7 +49,7 @@ class DivSeparator with EquatableMixin implements DivBase {
     this.doubletapActions,
     this.extensions,
     this.focus,
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     this.longtapActions,
     this.margins = const DivEdgeInsets(),
@@ -61,10 +62,11 @@ class DivSeparator with EquatableMixin implements DivBase {
     this.transitionIn,
     this.transitionOut,
     this.transitionTriggers,
+    this.variables,
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "separator";
@@ -108,7 +110,7 @@ class DivSeparator with EquatableMixin implements DivBase {
 
   @override
   final DivFocus? focus;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -146,6 +148,9 @@ class DivSeparator with EquatableMixin implements DivBase {
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
+
+  @override
+  final List<DivVariable>? variables;
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
@@ -155,7 +160,7 @@ class DivSeparator with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -189,11 +194,105 @@ class DivSeparator with EquatableMixin implements DivBase {
         transitionIn,
         transitionOut,
         transitionTriggers,
+        variables,
         visibility,
         visibilityAction,
         visibilityActions,
         width,
       ];
+
+  DivSeparator copyWith({
+    DivAccessibility? accessibility,
+    DivAction? Function()? action,
+    DivAnimation? actionAnimation,
+    List<DivAction>? Function()? actions,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    DivSeparatorDelimiterStyle? delimiterStyle,
+    List<DivDisappearAction>? Function()? disappearActions,
+    List<DivAction>? Function()? doubletapActions,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    DivSize? height,
+    String? Function()? id,
+    List<DivAction>? Function()? longtapActions,
+    DivEdgeInsets? margins,
+    DivEdgeInsets? paddings,
+    Expression<int>? Function()? rowSpan,
+    List<DivAction>? Function()? selectedActions,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivSeparator(
+        accessibility: accessibility ?? this.accessibility,
+        action: action != null ? action.call() : this.action,
+        actionAnimation: actionAnimation ?? this.actionAnimation,
+        actions: actions != null ? actions.call() : this.actions,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        delimiterStyle: delimiterStyle ?? this.delimiterStyle,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        doubletapActions: doubletapActions != null
+            ? doubletapActions.call()
+            : this.doubletapActions,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        longtapActions: longtapActions != null
+            ? longtapActions.call()
+            : this.longtapActions,
+        margins: margins ?? this.margins,
+        paddings: paddings ?? this.paddings,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivSeparator? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -217,13 +316,11 @@ class DivSeparator with EquatableMixin implements DivBase {
         ),
       )!,
       actions: safeParseObj(
-        (json['actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       alignmentHorizontal: safeParseStrEnumExpr(
         json['alignment_horizontal'],
@@ -238,13 +335,11 @@ class DivSeparator with EquatableMixin implements DivBase {
         fallback: 1.0,
       )!,
       background: safeParseObj(
-        (json['background'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivBackground.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['background'],
+            (v) => safeParseObj(
+                  DivBackground.fromJson(v),
+                )!),
       ),
       border: safeParseObj(
         DivBorder.fromJson(json['border']),
@@ -258,50 +353,42 @@ class DivSeparator with EquatableMixin implements DivBase {
         fallback: const DivSeparatorDelimiterStyle(),
       )!,
       disappearActions: safeParseObj(
-        (json['disappear_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivDisappearAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['disappear_actions'],
+            (v) => safeParseObj(
+                  DivDisappearAction.fromJson(v),
+                )!),
       ),
       doubletapActions: safeParseObj(
-        (json['doubletap_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['doubletap_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       extensions: safeParseObj(
-        (json['extensions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivExtension.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['extensions'],
+            (v) => safeParseObj(
+                  DivExtension.fromJson(v),
+                )!),
       ),
       focus: safeParseObj(
         DivFocus.fromJson(json['focus']),
       ),
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
       ),
       longtapActions: safeParseObj(
-        (json['longtap_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['longtap_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       margins: safeParseObj(
         DivEdgeInsets.fromJson(json['margins']),
@@ -315,22 +402,18 @@ class DivSeparator with EquatableMixin implements DivBase {
         json['row_span'],
       ),
       selectedActions: safeParseObj(
-        (json['selected_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['selected_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       tooltips: safeParseObj(
-        (json['tooltips'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTooltip.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['tooltips'],
+            (v) => safeParseObj(
+                  DivTooltip.fromJson(v),
+                )!),
       ),
       transform: safeParseObj(
         DivTransform.fromJson(json['transform']),
@@ -346,14 +429,19 @@ class DivSeparator with EquatableMixin implements DivBase {
         DivAppearanceTransition.fromJson(json['transition_out']),
       ),
       transitionTriggers: safeParseObj(
-        (json['transition_triggers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseStrEnum(
-                v,
-                parse: DivTransitionTrigger.fromJson,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['transition_triggers'],
+            (v) => safeParseStrEnum(
+                  v,
+                  parse: DivTransitionTrigger.fromJson,
+                )!),
+      ),
+      variables: safeParseObj(
+        safeListMap(
+            json['variables'],
+            (v) => safeParseObj(
+                  DivVariable.fromJson(v),
+                )!),
       ),
       visibility: safeParseStrEnumExpr(
         json['visibility'],
@@ -364,17 +452,15 @@ class DivSeparator with EquatableMixin implements DivBase {
         DivVisibilityAction.fromJson(json['visibility_action']),
       ),
       visibilityActions: safeParseObj(
-        (json['visibility_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVisibilityAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['visibility_actions'],
+            (v) => safeParseObj(
+                  DivVisibilityAction.fromJson(v),
+                )!),
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }
@@ -382,7 +468,7 @@ class DivSeparator with EquatableMixin implements DivBase {
 
 class DivSeparatorDelimiterStyle with EquatableMixin {
   const DivSeparatorDelimiterStyle({
-    this.color = const ValueExpression(const Color(0x14000000)),
+    this.color = const ValueExpression(Color(0x14000000)),
     this.orientation =
         const ValueExpression(DivSeparatorDelimiterStyleOrientation.horizontal),
   });
@@ -397,6 +483,15 @@ class DivSeparatorDelimiterStyle with EquatableMixin {
         color,
         orientation,
       ];
+
+  DivSeparatorDelimiterStyle copyWith({
+    Expression<Color>? color,
+    Expression<DivSeparatorDelimiterStyleOrientation>? orientation,
+  }) =>
+      DivSeparatorDelimiterStyle(
+        color: color ?? this.color,
+        orientation: orientation ?? this.orientation,
+      );
 
   static DivSeparatorDelimiterStyle? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

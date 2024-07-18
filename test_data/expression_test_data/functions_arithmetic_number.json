@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "div(4.0, 2.0) => 2.0",
       "expression": "@{div(4.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,13 +13,11 @@
       ]
     },
     {
-      "name": "div(0.0, 2.0) => 0.0",
       "expression": "@{div(0.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -29,13 +25,11 @@
       ]
     },
     {
-      "name": "div(0.0, 0.0) => error",
       "expression": "@{div(0.0, 0.0)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [div(0.0, 0.0)]. Division by zero is not supported."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -43,13 +37,11 @@
       ]
     },
     {
-      "name": "div(1.0, 0.0) => error",
       "expression": "@{div(1.0, 0.0)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [div(1.0, 0.0)]. Division by zero is not supported."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -57,13 +49,11 @@
       ]
     },
     {
-      "name": "div(1.0, 2.0) => 0.5",
       "expression": "@{div(1.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": 0.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -71,13 +61,11 @@
       ]
     },
     {
-      "name": "div(-1.0, 2.0) => -0.5",
       "expression": "@{div(-1.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": -0.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -85,13 +73,11 @@
       ]
     },
     {
-      "name": "div(-2.0, 2.0) => -1.0",
       "expression": "@{div(-2.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -99,13 +85,11 @@
       ]
     },
     {
-      "name": "div(2.0, -2.0) => -1.0",
       "expression": "@{div(2.0, -2.0)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -113,13 +97,11 @@
       ]
     },
     {
-      "name": "mod(4.0, 2.0) => 0.0",
       "expression": "@{mod(4.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -127,13 +109,11 @@
       ]
     },
     {
-      "name": "mod(3.0, 2.0) => 1.0",
       "expression": "@{mod(3.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -141,13 +121,11 @@
       ]
     },
     {
-      "name": "mod(0.0, 2.0) => 0.0",
       "expression": "@{mod(0.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -155,13 +133,11 @@
       ]
     },
     {
-      "name": "mod(0.0, 0.0) => error",
       "expression": "@{mod(0.0, 0.0)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [mod(0.0, 0.0)]. Division by zero is not supported."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -169,13 +145,11 @@
       ]
     },
     {
-      "name": "mod(1.0, 0.0) => error",
       "expression": "@{mod(1.0, 0.0)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [mod(1.0, 0.0)]. Division by zero is not supported."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -183,13 +157,11 @@
       ]
     },
     {
-      "name": "mod(-3.0, 2.0) => -1.0",
       "expression": "@{mod(-3.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -197,13 +169,11 @@
       ]
     },
     {
-      "name": "mod(3.0, -2.0) => 1.0",
       "expression": "@{mod(3.0, -2.0)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -211,13 +181,11 @@
       ]
     },
     {
-      "name": "mod(-3.0, -2.0) => -1.0",
       "expression": "@{mod(-3.0, -2.0)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -225,13 +193,11 @@
       ]
     },
     {
-      "name": "mul(3.0, 2.0) => 6.0",
       "expression": "@{mul(3.0, 2.0)}",
       "expected": {
         "type": "number",
         "value": 6.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -239,13 +205,11 @@
       ]
     },
     {
-      "name": "mul(1.0, -1.0) => -1.0",
       "expression": "@{mul(1.0, -1.0)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -253,13 +217,11 @@
       ]
     },
     {
-      "name": "mul(-1.0, -1.0) => 1.0",
       "expression": "@{mul(-1.0, -1.0)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -267,13 +229,11 @@
       ]
     },
     {
-      "name": "mul(1.0, 0.0) => 0.0",
       "expression": "@{mul(1.0, 0.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -281,13 +241,11 @@
       ]
     },
     {
-      "name": "sub(3.0, 1.0) => 2.0",
       "expression": "@{sub(3.0, 1.0)}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -295,13 +253,11 @@
       ]
     },
     {
-      "name": "sub(1.0, +1.0) => 0.0",
       "expression": "@{sub(1.0, +1.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -309,13 +265,11 @@
       ]
     },
     {
-      "name": "sub(1.0, -1.0) => 2.0",
       "expression": "@{sub(1.0, -1.0)}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -323,13 +277,11 @@
       ]
     },
     {
-      "name": "sum(1.0, 1.0) => 2.0",
       "expression": "@{sum(1.0, 1.0)}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -337,13 +289,11 @@
       ]
     },
     {
-      "name": "sum(1.0, +1.0) => 2.0",
       "expression": "@{sum(1.0, +1.0)}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -351,13 +301,11 @@
       ]
     },
     {
-      "name": "sum(1.0, -1.0) => 0.0",
       "expression": "@{sum(1.0, -1.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -365,13 +313,11 @@
       ]
     },
     {
-      "name": "sum(1.0, -1e1) => -9.0",
       "expression": "@{sum(1.0, -1e1)}",
       "expected": {
         "type": "number",
         "value": -9.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -379,13 +325,11 @@
       ]
     },
     {
-      "name": "maxNumber() => 1.7976931348623157E308",
       "expression": "@{maxNumber()}",
       "expected": {
         "type": "number",
         "value": 1.7976931348623157E308
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -393,13 +337,11 @@
       ]
     },
     {
-      "name": "minNumber() => 4.9E-324",
       "expression": "@{minNumber()}",
       "expected": {
         "type": "number",
         "value": 4.9E-324
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -407,13 +349,11 @@
       ]
     },
     {
-      "name": "abs(0.0) => 0.0",
       "expression": "@{abs(0.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -421,13 +361,11 @@
       ]
     },
     {
-      "name": "abs(0.5) => 0.5",
       "expression": "@{abs(0.5)}",
       "expected": {
         "type": "number",
         "value": 0.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -435,13 +373,11 @@
       ]
     },
     {
-      "name": "abs(-0.5) => 0.5",
       "expression": "@{abs(-0.5)}",
       "expected": {
         "type": "number",
         "value": 0.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -449,13 +385,11 @@
       ]
     },
     {
-      "name": "signum(0.0) => 0.0",
       "expression": "@{signum(0.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -463,13 +397,11 @@
       ]
     },
     {
-      "name": "signum(-0.0) => -0.0",
       "expression": "@{signum(-0.0)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -477,13 +409,11 @@
       ]
     },
     {
-      "name": "signum(5.3) => 1.0",
       "expression": "@{signum(5.3)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -491,13 +421,11 @@
       ]
     },
     {
-      "name": "signum(-5.3) => -1.0",
       "expression": "@{signum(-5.3)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -505,13 +433,11 @@
       ]
     },
     {
-      "name": "copySign(1.5, 2.5) => 1.5",
       "expression": "@{copySign(1.5, 2.5)}",
       "expected": {
         "type": "number",
         "value": 1.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -519,13 +445,11 @@
       ]
     },
     {
-      "name": "copySign(1.5, -2.5) => -1.5",
       "expression": "@{copySign(1.5, -2.5)}",
       "expected": {
         "type": "number",
         "value": -1.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -533,13 +457,11 @@
       ]
     },
     {
-      "name": "copySign(-1.5, 2.5) => 1.5",
       "expression": "@{copySign(-1.5, 2.5)}",
       "expected": {
         "type": "number",
         "value": 1.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -547,13 +469,11 @@
       ]
     },
     {
-      "name": "copySign(-1.5, -2.5) => -1.5",
       "expression": "@{copySign(-1.5, -2.5)}",
       "expected": {
         "type": "number",
         "value": -1.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -561,13 +481,11 @@
       ]
     },
     {
-      "name": "copySign(1.5, 0.0) => 1.5",
       "expression": "@{copySign(1.5, 0.0)}",
       "expected": {
         "type": "number",
         "value": 1.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -575,13 +493,11 @@
       ]
     },
     {
-      "name": "copySign(-1.5, 0.0) => 1.5",
       "expression": "@{copySign(-1.5, 0.0)}",
       "expected": {
         "type": "number",
         "value": 1.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -589,13 +505,11 @@
       ]
     },
     {
-      "name": "copySign(1.5, -0.0) => -1.5",
       "expression": "@{copySign(1.5, -0.0)}",
       "expected": {
         "type": "number",
         "value": -1.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -603,13 +517,11 @@
       ]
     },
     {
-      "name": "copySign(-1.5, -0.0) => -1.5",
-      "expression": "@{copySign(1.5, -0.0)}",
+      "expression": "@{copySign(-1.5, -0.0)}",
       "expected": {
         "type": "number",
         "value": -1.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -617,13 +529,11 @@
       ]
     },
     {
-      "name": "copySign(0.0, 0.0) => 0.0",
       "expression": "@{copySign(0.0, 0.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -631,13 +541,11 @@
       ]
     },
     {
-      "name": "copySign(0.0, -0.0) => -0.0",
       "expression": "@{copySign(0.0, -0.0)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -645,13 +553,11 @@
       ]
     },
     {
-      "name": "copySign(-0.0, -0.0) => -0.0",
       "expression": "@{copySign(-0.0, -0.0)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -659,13 +565,11 @@
       ]
     },
     {
-      "name": "copySign(-0.0, 0.0) => 0.0",
       "expression": "@{copySign(-0.0, 0.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -673,13 +577,11 @@
       ]
     },
     {
-      "name": "copySign(-0.0, 1.5) => 0.0",
       "expression": "@{copySign(-0.0, 1.5)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -687,13 +589,11 @@
       ]
     },
     {
-      "name": "copySign(-0.0, -1.5) => -0.0",
       "expression": "@{copySign(-0.0, -1.5)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -701,13 +601,11 @@
       ]
     },
     {
-      "name": "copySign(0.0, 1.5) => 0.0",
       "expression": "@{copySign(0.0, 1.5)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -715,13 +613,11 @@
       ]
     },
     {
-      "name": "copySign(0.0, -1.5) => -0.0",
       "expression": "@{copySign(0.0, -1.5)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -729,13 +625,11 @@
       ]
     },
     {
-      "name": "round(1.5) => 2.0",
       "expression": "@{round(1.5)}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -743,13 +637,11 @@
       ]
     },
     {
-      "name": "round(1.0) => 1.0",
       "expression": "@{round(1.0)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -757,13 +649,11 @@
       ]
     },
     {
-      "name": "round(0.746578) => 1.0",
       "expression": "@{round(0.746578)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -771,13 +661,11 @@
       ]
     },
     {
-      "name": "round(0.5) => 1.0",
       "expression": "@{round(0.5)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -785,13 +673,11 @@
       ]
     },
     {
-      "name": "round(0.3) => 0.0",
       "expression": "@{round(0.3)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -799,13 +685,11 @@
       ]
     },
     {
-      "name": "round(0.0) => 0.0",
       "expression": "@{round(0.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -813,13 +697,11 @@
       ]
     },
     {
-      "name": "round(-0.0) => -0.0",
       "expression": "@{round(-0.0)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -827,13 +709,11 @@
       ]
     },
     {
-      "name": "round(-0.3) => -0.0",
       "expression": "@{round(-0.3)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -841,13 +721,11 @@
       ]
     },
     {
-      "name": "round(-0.5) => -1.0",
       "expression": "@{round(-0.5)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -855,13 +733,11 @@
       ]
     },
     {
-      "name": "round(-0.746578) => -1.0",
       "expression": "@{round(-0.746578)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -869,13 +745,11 @@
       ]
     },
     {
-      "name": "round(-1.0) => -1.0",
       "expression": "@{round(-1.0)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -883,13 +757,11 @@
       ]
     },
     {
-      "name": "round(-1.5) => -2.0",
       "expression": "@{round(-1.5)}",
       "expected": {
         "type": "number",
         "value": -2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -897,13 +769,11 @@
       ]
     },
     {
-      "name": "floor(1.5) => 1.0",
       "expression": "@{floor(1.5)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -911,13 +781,11 @@
       ]
     },
     {
-      "name": "floor(1.0) => 1.0",
       "expression": "@{floor(1.0)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -925,13 +793,11 @@
       ]
     },
     {
-      "name": "floor(0.746578) => 0.0",
       "expression": "@{floor(0.746578)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -939,13 +805,11 @@
       ]
     },
     {
-      "name": "floor(0.5) => 0.0",
       "expression": "@{floor(0.5)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -953,13 +817,11 @@
       ]
     },
     {
-      "name": "floor(0.3) => 0.0",
       "expression": "@{floor(0.3)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -967,13 +829,11 @@
       ]
     },
     {
-      "name": "floor(0.0) => 0.0",
       "expression": "@{floor(0.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -981,13 +841,11 @@
       ]
     },
     {
-      "name": "floor(-0.0) => -0.0",
       "expression": "@{floor(-0.0)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -995,13 +853,11 @@
       ]
     },
     {
-      "name": "floor(-0.3) => -1.0",
       "expression": "@{floor(-0.3)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1009,13 +865,11 @@
       ]
     },
     {
-      "name": "floor(-0.5) => -1.0",
       "expression": "@{floor(-0.5)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1023,13 +877,11 @@
       ]
     },
     {
-      "name": "floor(-0.7) => -1.0",
       "expression": "@{floor(-0.7)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1037,13 +889,11 @@
       ]
     },
     {
-      "name": "floor(-1.0) => -1.0",
       "expression": "@{floor(-1.0)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1051,13 +901,11 @@
       ]
     },
     {
-      "name": "floor(-1.5) => -2.0",
       "expression": "@{floor(-1.5)}",
       "expected": {
         "type": "number",
         "value": -2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1065,13 +913,11 @@
       ]
     },
     {
-      "name": "ceil(1.5) => 2.0",
       "expression": "@{ceil(1.5)}",
       "expected": {
         "type": "number",
         "value": 2.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1079,13 +925,11 @@
       ]
     },
     {
-      "name": "ceil(1.0) => 1.0",
       "expression": "@{ceil(1.0)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1093,13 +937,11 @@
       ]
     },
     {
-      "name": "ceil(0.746578) => 1.0",
       "expression": "@{ceil(0.746578)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1107,13 +949,11 @@
       ]
     },
     {
-      "name": "ceil(0.5) => 1.0",
       "expression": "@{ceil(0.5)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1121,13 +961,11 @@
       ]
     },
     {
-      "name": "ceil(0.3) => 1.0",
       "expression": "@{ceil(0.3)}",
       "expected": {
         "type": "number",
         "value": 1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1135,13 +973,11 @@
       ]
     },
     {
-      "name": "ceil(0.0) => 0.0",
       "expression": "@{ceil(0.0)}",
       "expected": {
         "type": "number",
         "value": 0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1149,13 +985,11 @@
       ]
     },
     {
-      "name": "ceil(-0.0) => -0.0",
       "expression": "@{ceil(-0.0)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1163,13 +997,11 @@
       ]
     },
     {
-      "name": "ceil(-0.3) => -0.0",
       "expression": "@{ceil(-0.3)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1177,13 +1009,11 @@
       ]
     },
     {
-      "name": "ceil(-0.5) => -0.0",
       "expression": "@{ceil(-0.5)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1191,13 +1021,11 @@
       ]
     },
     {
-      "name": "ceil(-0.7) => -0.0",
       "expression": "@{ceil(-0.7)}",
       "expected": {
         "type": "number",
         "value": -0.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1205,13 +1033,11 @@
       ]
     },
     {
-      "name": "ceil(-1.0) => -1.0",
       "expression": "@{ceil(-1.0)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -1219,13 +1045,11 @@
       ]
     },
     {
-      "name": "ceil(-1.5) => -1.0",
       "expression": "@{ceil(-1.5)}",
       "expected": {
         "type": "number",
         "value": -1.0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

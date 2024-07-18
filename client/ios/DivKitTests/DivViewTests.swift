@@ -1,11 +1,9 @@
 import XCTest
 
-import CommonCorePublic
 @testable import DivKit
 import LayoutKit
-import NetworkingPublic
 import Serialization
-import VGSL_Fundamentals_Tiny
+import VGSL
 
 final class DivViewTests: XCTestCase {
   @MainActor

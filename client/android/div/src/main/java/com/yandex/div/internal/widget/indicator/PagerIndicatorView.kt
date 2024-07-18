@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.widget.indicator.animations.getIndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.getIndicatorDrawer
 import kotlin.math.min
@@ -16,7 +17,7 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private var stripDrawer: IndicatorsStripDrawer? = null
-    private var pager: ViewPager2? = null
+    private var divPager: DivPagerView? = null
     private var style: IndicatorParams.Style? = null
 
     private val onPageChangeListener: ViewPager2.OnPageChangeCallback = object: ViewPager2.OnPageChangeCallback() {
@@ -71,8 +72,9 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val selectedWidth = style?.activeShape?.itemSize?.width ?: 0f
         val desiredWidth = when (val itemPlacement = style?.itemsPlacement) {
-            is IndicatorParams.ItemPlacement.Default ->
-                (itemPlacement.spaceBetweenCenters * (pager?.adapter?.itemCount ?: 0) + selectedWidth).toInt() + paddingLeft + paddingRight
+            is IndicatorParams.ItemPlacement.Default -> (itemPlacement.spaceBetweenCenters *
+                (divPager?.viewPager?.adapter?.itemCount ?: 0) + selectedWidth).toInt() +
+                paddingLeft + paddingRight
             is IndicatorParams.ItemPlacement.Stretch -> widthSize
             null -> selectedWidth.toInt() + paddingLeft + paddingRight
         }
@@ -96,23 +98,25 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
         stripDrawer?.onDraw(canvas)
     }
 
-    fun attachPager(newPager: ViewPager2) {
-        if (pager === newPager) {
-            return
-        }
+    fun attachPager(newDivPager: DivPagerView) {
+        divPager?.removeChangePageCallbackForIndicators(onPageChangeListener)
+        newDivPager.addChangePageCallbackForIndicators(onPageChangeListener)
 
-        pager?.unregisterOnPageChangeCallback(onPageChangeListener)
+        if (newDivPager === divPager) return
 
-        pager = newPager.apply {
+        divPager = newDivPager
+        newDivPager.viewPager.apply {
             requireNotNull(adapter) { "Attached pager adapter is null!" }
-            registerOnPageChangeCallback(onPageChangeListener)
         }
 
         stripDrawer?.update()
+        newDivPager.pagerOnItemsCountChange = DivPagerView.OnItemsUpdatedCallback {
+            stripDrawer?.update()
+        }
     }
 
     private fun IndicatorsStripDrawer.update() {
-        pager?.let {
+        divPager?.viewPager?.let {
             it.adapter?.let { adapter ->
                 setItemsCount(adapter.itemCount)
             }

@@ -2,7 +2,7 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension UIView {
   func perform(

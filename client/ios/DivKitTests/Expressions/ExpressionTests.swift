@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 final class ExpressionTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
@@ -20,7 +20,7 @@ private func makeTestCases() -> [(String, ExpressionTestCase)] {
         .cases ?? []
       return testCases
         .filter { $0.platforms.contains(.ios) }
-        .map { ("\(fileName): \($0.name)", $0) }
+        .map { ("\(fileName): \($0.description)", $0) }
     }
 }
 
@@ -63,7 +63,6 @@ private struct TestCases: Decodable {
 }
 
 private struct ExpressionTestCase: Decodable {
-  let name: String
   let expression: String
   let variables: DivVariables
   let expected: ExpectedValue
@@ -71,7 +70,6 @@ private struct ExpressionTestCase: Decodable {
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    name = try container.decode(String.self, forKey: .name)
     expression = try container.decode(String.self, forKey: .expression)
     expected = try container.decode(ExpectedValue.self, forKey: .expected)
     platforms = try container.decode([Platform].self, forKey: .platforms)
@@ -89,6 +87,17 @@ private struct ExpressionTestCase: Decodable {
       variables.append(variable)
     }
     self.variables = variables.extractDivVariableValues()
+  }
+
+  var description: String {
+    let formattedExpression = if expression.starts(with: "@{"),
+                                 expression.last == "}",
+                                 !expression.dropFirst(2).contains("@{") {
+      String(expression.dropFirst(2).dropLast())
+    } else {
+      expression
+    }
+    return "\(formattedExpression) -> \(expected.description)"
   }
 
   private enum CodingKeys: String, CodingKey {
@@ -117,15 +126,17 @@ private struct ExpressionTestCase: Decodable {
     makeExpressionResolver().resolveArray(link(expression)) as? [AnyHashable]
   }
 
-  func resolveDict() -> [String: AnyHashable]? {
-    makeExpressionResolver().resolveDict(link(expression)) as? [String: AnyHashable]
+  func resolveDict() -> DivDictionary? {
+    makeExpressionResolver().resolveDict(link(expression)) as? DivDictionary
   }
 
   private func makeExpressionResolver(
     errorTracker: ExpressionErrorTracker? = nil
   ) -> ExpressionResolver {
     ExpressionResolver(
-      variables: variables,
+      variableValueProvider: {
+        variables[DivVariableName(rawValue: $0)]?.typedValue()
+      },
       persistentValuesStorage: DivPersistentValuesStorage(),
       errorTracker: errorTracker ?? { XCTFail($0.description) }
     )
@@ -149,10 +160,10 @@ private enum ExpectedValue: Decodable {
   case color(Color)
   case datetime(Date)
   case array([AnyHashable])
-  case dict([String: AnyHashable])
+  case dict(DivDictionary)
   case error(String)
 
-  public init(from decoder: Decoder) throws {
+  init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     let type = try container.decode(String.self, forKey: .type)
     switch type {
@@ -176,7 +187,7 @@ private enum ExpectedValue: Decodable {
       self = .string(value)
     case "datetime":
       let value = try container.decode(String.self, forKey: .value)
-      self = .datetime(value.toDatetime()!)
+      self = .datetime(value.toDate()!)
     case "array":
       let value = try JSONObject(from: decoder).makeDictionary()
       guard let array = value?["value"] as? [AnyHashable] else {
@@ -185,7 +196,7 @@ private enum ExpectedValue: Decodable {
       self = .array(array)
     case "dict":
       let value = try JSONObject(from: decoder).makeDictionary()
-      guard let dict = value?["value"] as? [String: AnyHashable] else {
+      guard let dict = value?["value"] as? DivDictionary else {
         fallthrough
       }
       self = .dict(dict)
@@ -200,6 +211,29 @@ private enum ExpectedValue: Decodable {
           debugDescription: "incorrect type: \(type)"
         )
       )
+    }
+  }
+
+  var description: String {
+    switch self {
+    case let .string(value):
+      formatArgForError(value)
+    case let .double(value):
+      formatArgForError(value)
+    case let .integer(value):
+      formatArgForError(value)
+    case let .bool(value):
+      formatArgForError(value)
+    case let .color(value):
+      formatArgForError(value)
+    case let .datetime(value):
+      formatArgForError(value)
+    case let .array(value):
+      formatArgForError(value)
+    case let .dict(value):
+      formatArgForError(value)
+    case .error:
+      "error"
     }
   }
 

@@ -1,5 +1,3 @@
-import Foundation
+import VGSL
 
-import BasePublic
-
-public typealias EdgeInsets = BasePublic.EdgeInsets
+public typealias EdgeInsets = VGSLUI.EdgeInsets

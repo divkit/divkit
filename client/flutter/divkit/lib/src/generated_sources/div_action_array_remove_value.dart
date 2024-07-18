@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivActionArrayRemoveValue with EquatableMixin {
   const DivActionArrayRemoveValue({
@@ -21,6 +21,15 @@ class DivActionArrayRemoveValue with EquatableMixin {
         index,
         variableName,
       ];
+
+  DivActionArrayRemoveValue copyWith({
+    Expression<int>? index,
+    Expression<String>? variableName,
+  }) =>
+      DivActionArrayRemoveValue(
+        index: index ?? this.index,
+        variableName: variableName ?? this.variableName,
+      );
 
   static DivActionArrayRemoveValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

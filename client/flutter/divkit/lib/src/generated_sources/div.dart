@@ -2,86 +2,30 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_base.dart';
-import 'div_container.dart';
-import 'div_custom.dart';
-import 'div_gallery.dart';
-import 'div_gif_image.dart';
-import 'div_grid.dart';
-import 'div_image.dart';
-import 'div_indicator.dart';
-import 'div_input.dart';
-import 'div_pager.dart';
-import 'div_select.dart';
-import 'div_separator.dart';
-import 'div_slider.dart';
-import 'div_state.dart';
-import 'div_tabs.dart';
-import 'div_text.dart';
-import 'div_video.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_container.dart';
+import 'package:divkit/src/generated_sources/div_custom.dart';
+import 'package:divkit/src/generated_sources/div_gallery.dart';
+import 'package:divkit/src/generated_sources/div_gif_image.dart';
+import 'package:divkit/src/generated_sources/div_grid.dart';
+import 'package:divkit/src/generated_sources/div_image.dart';
+import 'package:divkit/src/generated_sources/div_indicator.dart';
+import 'package:divkit/src/generated_sources/div_input.dart';
+import 'package:divkit/src/generated_sources/div_pager.dart';
+import 'package:divkit/src/generated_sources/div_select.dart';
+import 'package:divkit/src/generated_sources/div_separator.dart';
+import 'package:divkit/src/generated_sources/div_slider.dart';
+import 'package:divkit/src/generated_sources/div_state.dart';
+import 'package:divkit/src/generated_sources/div_tabs.dart';
+import 'package:divkit/src/generated_sources/div_text.dart';
+import 'package:divkit/src/generated_sources/div_video.dart';
 
 class Div with EquatableMixin {
-  const Div(DivBase value) : _value = value;
-
-  final DivBase _value;
+  final DivBase value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  DivBase get value {
-    final value = _value;
-    if (value is DivContainer) {
-      return value;
-    }
-    if (value is DivCustom) {
-      return value;
-    }
-    if (value is DivGallery) {
-      return value;
-    }
-    if (value is DivGifImage) {
-      return value;
-    }
-    if (value is DivGrid) {
-      return value;
-    }
-    if (value is DivImage) {
-      return value;
-    }
-    if (value is DivIndicator) {
-      return value;
-    }
-    if (value is DivInput) {
-      return value;
-    }
-    if (value is DivPager) {
-      return value;
-    }
-    if (value is DivSelect) {
-      return value;
-    }
-    if (value is DivSeparator) {
-      return value;
-    }
-    if (value is DivSlider) {
-      return value;
-    }
-    if (value is DivState) {
-      return value;
-    }
-    if (value is DivTabs) {
-      return value;
-    }
-    if (value is DivText) {
-      return value;
-    }
-    if (value is DivVideo) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in Div");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivContainer) divContainer,
@@ -101,54 +45,71 @@ class Div with EquatableMixin {
     required T Function(DivText) divText,
     required T Function(DivVideo) divVideo,
   }) {
-    final value = _value;
-    if (value is DivContainer) {
-      return divContainer(value);
-    }
-    if (value is DivCustom) {
-      return divCustom(value);
-    }
-    if (value is DivGallery) {
-      return divGallery(value);
-    }
-    if (value is DivGifImage) {
-      return divGifImage(value);
-    }
-    if (value is DivGrid) {
-      return divGrid(value);
-    }
-    if (value is DivImage) {
-      return divImage(value);
-    }
-    if (value is DivIndicator) {
-      return divIndicator(value);
-    }
-    if (value is DivInput) {
-      return divInput(value);
-    }
-    if (value is DivPager) {
-      return divPager(value);
-    }
-    if (value is DivSelect) {
-      return divSelect(value);
-    }
-    if (value is DivSeparator) {
-      return divSeparator(value);
-    }
-    if (value is DivSlider) {
-      return divSlider(value);
-    }
-    if (value is DivState) {
-      return divState(value);
-    }
-    if (value is DivTabs) {
-      return divTabs(value);
-    }
-    if (value is DivText) {
-      return divText(value);
-    }
-    if (value is DivVideo) {
-      return divVideo(value);
+    switch (_index) {
+      case 0:
+        return divContainer(
+          value as DivContainer,
+        );
+      case 1:
+        return divCustom(
+          value as DivCustom,
+        );
+      case 2:
+        return divGallery(
+          value as DivGallery,
+        );
+      case 3:
+        return divGifImage(
+          value as DivGifImage,
+        );
+      case 4:
+        return divGrid(
+          value as DivGrid,
+        );
+      case 5:
+        return divImage(
+          value as DivImage,
+        );
+      case 6:
+        return divIndicator(
+          value as DivIndicator,
+        );
+      case 7:
+        return divInput(
+          value as DivInput,
+        );
+      case 8:
+        return divPager(
+          value as DivPager,
+        );
+      case 9:
+        return divSelect(
+          value as DivSelect,
+        );
+      case 10:
+        return divSeparator(
+          value as DivSeparator,
+        );
+      case 11:
+        return divSlider(
+          value as DivSlider,
+        );
+      case 12:
+        return divState(
+          value as DivState,
+        );
+      case 13:
+        return divTabs(
+          value as DivTabs,
+        );
+      case 14:
+        return divText(
+          value as DivText,
+        );
+      case 15:
+        return divVideo(
+          value as DivVideo,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in Div");
@@ -173,159 +134,240 @@ class Div with EquatableMixin {
     T Function(DivVideo)? divVideo,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivContainer && divContainer != null) {
-      return divContainer(value);
-    }
-    if (value is DivCustom && divCustom != null) {
-      return divCustom(value);
-    }
-    if (value is DivGallery && divGallery != null) {
-      return divGallery(value);
-    }
-    if (value is DivGifImage && divGifImage != null) {
-      return divGifImage(value);
-    }
-    if (value is DivGrid && divGrid != null) {
-      return divGrid(value);
-    }
-    if (value is DivImage && divImage != null) {
-      return divImage(value);
-    }
-    if (value is DivIndicator && divIndicator != null) {
-      return divIndicator(value);
-    }
-    if (value is DivInput && divInput != null) {
-      return divInput(value);
-    }
-    if (value is DivPager && divPager != null) {
-      return divPager(value);
-    }
-    if (value is DivSelect && divSelect != null) {
-      return divSelect(value);
-    }
-    if (value is DivSeparator && divSeparator != null) {
-      return divSeparator(value);
-    }
-    if (value is DivSlider && divSlider != null) {
-      return divSlider(value);
-    }
-    if (value is DivState && divState != null) {
-      return divState(value);
-    }
-    if (value is DivTabs && divTabs != null) {
-      return divTabs(value);
-    }
-    if (value is DivText && divText != null) {
-      return divText(value);
-    }
-    if (value is DivVideo && divVideo != null) {
-      return divVideo(value);
+    switch (_index) {
+      case 0:
+        if (divContainer != null) {
+          return divContainer(
+            value as DivContainer,
+          );
+        }
+        break;
+      case 1:
+        if (divCustom != null) {
+          return divCustom(
+            value as DivCustom,
+          );
+        }
+        break;
+      case 2:
+        if (divGallery != null) {
+          return divGallery(
+            value as DivGallery,
+          );
+        }
+        break;
+      case 3:
+        if (divGifImage != null) {
+          return divGifImage(
+            value as DivGifImage,
+          );
+        }
+        break;
+      case 4:
+        if (divGrid != null) {
+          return divGrid(
+            value as DivGrid,
+          );
+        }
+        break;
+      case 5:
+        if (divImage != null) {
+          return divImage(
+            value as DivImage,
+          );
+        }
+        break;
+      case 6:
+        if (divIndicator != null) {
+          return divIndicator(
+            value as DivIndicator,
+          );
+        }
+        break;
+      case 7:
+        if (divInput != null) {
+          return divInput(
+            value as DivInput,
+          );
+        }
+        break;
+      case 8:
+        if (divPager != null) {
+          return divPager(
+            value as DivPager,
+          );
+        }
+        break;
+      case 9:
+        if (divSelect != null) {
+          return divSelect(
+            value as DivSelect,
+          );
+        }
+        break;
+      case 10:
+        if (divSeparator != null) {
+          return divSeparator(
+            value as DivSeparator,
+          );
+        }
+        break;
+      case 11:
+        if (divSlider != null) {
+          return divSlider(
+            value as DivSlider,
+          );
+        }
+        break;
+      case 12:
+        if (divState != null) {
+          return divState(
+            value as DivState,
+          );
+        }
+        break;
+      case 13:
+        if (divTabs != null) {
+          return divTabs(
+            value as DivTabs,
+          );
+        }
+        break;
+      case 14:
+        if (divText != null) {
+          return divText(
+            value as DivText,
+          );
+        }
+        break;
+      case 15:
+        if (divVideo != null) {
+          return divVideo(
+            value as DivVideo,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const Div.divContainer(
-    DivContainer value,
-  ) : _value = value;
+    DivContainer obj,
+  )   : value = obj,
+        _index = 0;
 
   const Div.divCustom(
-    DivCustom value,
-  ) : _value = value;
+    DivCustom obj,
+  )   : value = obj,
+        _index = 1;
 
   const Div.divGallery(
-    DivGallery value,
-  ) : _value = value;
+    DivGallery obj,
+  )   : value = obj,
+        _index = 2;
 
   const Div.divGifImage(
-    DivGifImage value,
-  ) : _value = value;
+    DivGifImage obj,
+  )   : value = obj,
+        _index = 3;
 
   const Div.divGrid(
-    DivGrid value,
-  ) : _value = value;
+    DivGrid obj,
+  )   : value = obj,
+        _index = 4;
 
   const Div.divImage(
-    DivImage value,
-  ) : _value = value;
+    DivImage obj,
+  )   : value = obj,
+        _index = 5;
 
   const Div.divIndicator(
-    DivIndicator value,
-  ) : _value = value;
+    DivIndicator obj,
+  )   : value = obj,
+        _index = 6;
 
   const Div.divInput(
-    DivInput value,
-  ) : _value = value;
+    DivInput obj,
+  )   : value = obj,
+        _index = 7;
 
   const Div.divPager(
-    DivPager value,
-  ) : _value = value;
+    DivPager obj,
+  )   : value = obj,
+        _index = 8;
 
   const Div.divSelect(
-    DivSelect value,
-  ) : _value = value;
+    DivSelect obj,
+  )   : value = obj,
+        _index = 9;
 
   const Div.divSeparator(
-    DivSeparator value,
-  ) : _value = value;
+    DivSeparator obj,
+  )   : value = obj,
+        _index = 10;
 
   const Div.divSlider(
-    DivSlider value,
-  ) : _value = value;
+    DivSlider obj,
+  )   : value = obj,
+        _index = 11;
 
   const Div.divState(
-    DivState value,
-  ) : _value = value;
+    DivState obj,
+  )   : value = obj,
+        _index = 12;
 
   const Div.divTabs(
-    DivTabs value,
-  ) : _value = value;
+    DivTabs obj,
+  )   : value = obj,
+        _index = 13;
 
   const Div.divText(
-    DivText value,
-  ) : _value = value;
+    DivText obj,
+  )   : value = obj,
+        _index = 14;
 
   const Div.divVideo(
-    DivVideo value,
-  ) : _value = value;
+    DivVideo obj,
+  )   : value = obj,
+        _index = 15;
 
   static Div? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     switch (json['type']) {
-      case DivImage.type:
-        return Div(DivImage.fromJson(json)!);
-      case DivGifImage.type:
-        return Div(DivGifImage.fromJson(json)!);
-      case DivText.type:
-        return Div(DivText.fromJson(json)!);
-      case DivSeparator.type:
-        return Div(DivSeparator.fromJson(json)!);
       case DivContainer.type:
-        return Div(DivContainer.fromJson(json)!);
-      case DivGrid.type:
-        return Div(DivGrid.fromJson(json)!);
-      case DivGallery.type:
-        return Div(DivGallery.fromJson(json)!);
-      case DivPager.type:
-        return Div(DivPager.fromJson(json)!);
-      case DivTabs.type:
-        return Div(DivTabs.fromJson(json)!);
-      case DivState.type:
-        return Div(DivState.fromJson(json)!);
+        return Div.divContainer(DivContainer.fromJson(json)!);
       case DivCustom.type:
-        return Div(DivCustom.fromJson(json)!);
+        return Div.divCustom(DivCustom.fromJson(json)!);
+      case DivGallery.type:
+        return Div.divGallery(DivGallery.fromJson(json)!);
+      case DivGifImage.type:
+        return Div.divGifImage(DivGifImage.fromJson(json)!);
+      case DivGrid.type:
+        return Div.divGrid(DivGrid.fromJson(json)!);
+      case DivImage.type:
+        return Div.divImage(DivImage.fromJson(json)!);
       case DivIndicator.type:
-        return Div(DivIndicator.fromJson(json)!);
-      case DivSlider.type:
-        return Div(DivSlider.fromJson(json)!);
+        return Div.divIndicator(DivIndicator.fromJson(json)!);
       case DivInput.type:
-        return Div(DivInput.fromJson(json)!);
+        return Div.divInput(DivInput.fromJson(json)!);
+      case DivPager.type:
+        return Div.divPager(DivPager.fromJson(json)!);
       case DivSelect.type:
-        return Div(DivSelect.fromJson(json)!);
+        return Div.divSelect(DivSelect.fromJson(json)!);
+      case DivSeparator.type:
+        return Div.divSeparator(DivSeparator.fromJson(json)!);
+      case DivSlider.type:
+        return Div.divSlider(DivSlider.fromJson(json)!);
+      case DivState.type:
+        return Div.divState(DivState.fromJson(json)!);
+      case DivTabs.type:
+        return Div.divTabs(DivTabs.fromJson(json)!);
+      case DivText.type:
+        return Div.divText(DivText.fromJson(json)!);
       case DivVideo.type:
-        return Div(DivVideo.fromJson(json)!);
+        return Div.divVideo(DivVideo.fromJson(json)!);
     }
     return null;
   }

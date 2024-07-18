@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 public final class SegmentedProgressView: UIView {
   public var currentTimestamp: Double = 0 {

@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class ContentText with EquatableMixin {
   const ContentText({
@@ -17,6 +17,13 @@ class ContentText with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  ContentText copyWith({
+    Expression<String>? value,
+  }) =>
+      ContentText(
+        value: value ?? this.value,
+      );
 
   static ContentText? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

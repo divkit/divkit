@@ -1,6 +1,6 @@
 import UIKit
 
-import BaseUIPublic
+import VGSL
 
 final class TabListViewDataSource: NSObject, UICollectionViewDataSource {
   private let tabs: [TabTitleViewModel]

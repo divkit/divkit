@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_size_unit.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
 
 class DivWrapContentSize with EquatableMixin {
   const DivWrapContentSize({
@@ -26,6 +26,18 @@ class DivWrapContentSize with EquatableMixin {
         maxSize,
         minSize,
       ];
+
+  DivWrapContentSize copyWith({
+    Expression<bool>? Function()? constrained,
+    DivWrapContentSizeConstraintSize? Function()? maxSize,
+    DivWrapContentSizeConstraintSize? Function()? minSize,
+  }) =>
+      DivWrapContentSize(
+        constrained:
+            constrained != null ? constrained.call() : this.constrained,
+        maxSize: maxSize != null ? maxSize.call() : this.maxSize,
+        minSize: minSize != null ? minSize.call() : this.minSize,
+      );
 
   static DivWrapContentSize? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -61,6 +73,15 @@ class DivWrapContentSizeConstraintSize with EquatableMixin {
         unit,
         value,
       ];
+
+  DivWrapContentSizeConstraintSize copyWith({
+    Expression<DivSizeUnit>? unit,
+    Expression<int>? value,
+  }) =>
+      DivWrapContentSizeConstraintSize(
+        unit: unit ?? this.unit,
+        value: value ?? this.value,
+      );
 
   static DivWrapContentSizeConstraintSize? fromJson(
       Map<String, dynamic>? json) {

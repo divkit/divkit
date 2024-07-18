@@ -186,8 +186,22 @@ export interface ActionClearFocus {
     type: 'clear_focus';
 }
 
+export interface ActionDictSetValue {
+    type: 'dict_set_value';
+    variable_name: string;
+    key: string;
+    value?: TypedValue;
+}
+
+export interface ActionArraySetValue {
+    type: 'array_set_value';
+    variable_name: string;
+    index: number;
+    value: TypedValue;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
-    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus;
+    ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue;
 
 export interface ActionBase {
     log_id: string;
@@ -257,7 +271,7 @@ export type FetchInit = RequestInit | ((url: string) => RequestInit);
 
 export interface DivkitInstance {
     $destroy(): void;
-    execAction(action: Action | VisibilityAction): void;
+    execAction(action: Action | VisibilityAction | DisappearAction): void;
     /** @deprecated */
     setTheme(theme: Theme): void;
     /** Experimental */
@@ -281,6 +295,8 @@ export interface Customization {
 
 export interface DivExtensionContext {
     variables: Map<string, Variable>;
+    processExpressions<T>(t: T): T;
+    execAction(action: Action | VisibilityAction | DisappearAction): void;
     logError(error: WrappedError): void;
 }
 

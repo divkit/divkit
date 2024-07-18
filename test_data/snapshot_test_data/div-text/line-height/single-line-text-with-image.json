@@ -8,9 +8,6 @@
   "templates": {
     "text_block": {
       "type": "text",
-      "width": {
-        "type": "wrap_content"
-      },
       "paddings": {
         "left": 4,
         "top": 4,
@@ -39,10 +36,10 @@
             {
               "type": "text_block",
               "background_color": "#F8F8F8",
-              "text": "Lorem  ipsum",
+              "text": "Text with embedded  image",
               "images": [
                 {
-                  "start": 6,
+                  "start": 19,
                   "width": {
                     "value": 24
                   },
@@ -57,10 +54,10 @@
               "type": "text_block",
               "background_color": "#E0E0E0",
               "line_height": 16,
-              "text": "Lorem  ipsum",
+              "text": "Text with embedded  image and line height",
               "images": [
                 {
-                  "start": 6,
+                  "start": 19,
                   "width": {
                     "value": 24
                   },

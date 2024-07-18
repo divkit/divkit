@@ -36,12 +36,14 @@ export interface DivInputData extends DivBaseData {
     // font_size_unit
     font_family?: string;
     font_weight?: FontWeight;
+    font_weight_value?: number;
     text_color?: string;
     text_variable: string;
     text_alignment_horizontal?: AlignmentHorizontal;
     text_alignment_vertical?: AlignmentVertical;
     line_height?: number;
     max_visible_lines?: number;
+    max_length?: number;
     letter_spacing?: number;
     hint_text?: string;
     hint_color?: string;

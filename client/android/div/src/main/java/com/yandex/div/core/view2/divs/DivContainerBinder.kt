@@ -23,6 +23,7 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.divs.widgets.DivCollectionHolder
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
@@ -36,6 +37,7 @@ import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.getItemResolver
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
@@ -75,8 +77,8 @@ internal class DivContainerBinder @Inject constructor(
         @Suppress("UNCHECKED_CAST")
         val divHolderView = view as DivHolderView<DivContainer>
         val oldDiv = divHolderView.div
-        val oldResolver = divHolderView.bindingContext?.expressionResolver
         val divView = context.divView
+        val oldResolver = divHolderView.bindingContext?.expressionResolver ?: divView.oldExpressionResolver
 
         baseBinder.bindView(context, view, div, oldDiv)
         view.applyDivActions(
@@ -105,34 +107,84 @@ internal class DivContainerBinder @Inject constructor(
             divView.unbindViewFromDiv(childView)
         }
 
+        view.bindItems(context, div, oldDiv, oldResolver, path, errorCollector)
+    }
+
+    private fun ViewGroup.bindItems(
+        context: BindingContext,
+        div: DivContainer,
+        oldDiv: DivContainer?,
+        oldResolver: ExpressionResolver,
+        path: DivStatePath,
+        errorCollector: ErrorCollector,
+    ) {
+        val divView = context.divView
+        val resolver = context.expressionResolver
         val items = div.buildItems(resolver)
-        view.tryRebindPlainContainerChildren(divView, items, divViewCreator)
 
-        val oldItems = oldResolver?.let {
-            oldDiv?.buildItems(oldResolver)?.let {
-                when {
-                    div === oldDiv -> it
-                    divView.complexRebindInProgress -> null
-                    DivComparator.areValuesReplaceable(oldDiv, div, oldResolver, resolver) &&
-                        DivComparator.areChildrenReplaceable(it, items) -> it
+        val oldItems = (this as DivCollectionHolder).items?.let {
+            when {
+                div === oldDiv -> it
+                divView.complexRebindInProgress -> null
+                oldDiv != null &&
+                    DivComparator.areValuesReplaceable(oldDiv, div, oldResolver, context.expressionResolver) &&
+                    DivComparator.areChildrenReplaceable(it, items) -> it
 
-                    else -> {
-                        view.replaceWithReuse(divView, it, items)
-                        null
-                    }
+                else -> {
+                    replaceWithReuse(divView, it, items)
+                    null
                 }
             }
         }
+        bindItemBuilder(context, div, path, errorCollector)
+        applyItems(context, div, oldDiv, items, oldItems, path, errorCollector)
+    }
 
-        view.validateChildren(div, items, resolver, errorCollector)
-        view.dispatchBinding(context, div, oldDiv, items, path)
+    private fun ViewGroup.bindItemBuilder(
+        context: BindingContext,
+        div: DivContainer,
+        path: DivStatePath,
+        errorCollector: ErrorCollector,
+    ) {
+        val builder = div.itemBuilder ?: return
+
+        val callback = { _: Any ->
+            val newItems = div.buildItems(context.expressionResolver)
+            val oldItems = (this as DivCollectionHolder).items ?: emptyList()
+            replaceWithReuse(context.divView, oldItems, newItems)
+            applyItems(context, div, div, newItems, oldItems, path, errorCollector)
+        }
+        builder.data.observe(context.expressionResolver, callback)
+
+        val itemResolver = builder.getItemResolver(context.expressionResolver)
+        builder.prototypes.forEach {
+            it.selector.observe(itemResolver, callback)
+        }
+    }
+
+    private fun ViewGroup.applyItems(
+        context: BindingContext,
+        div: DivContainer,
+        oldDiv: DivContainer?,
+        items: List<DivItemBuilderResult>,
+        oldItems: List<DivItemBuilderResult>?,
+        path: DivStatePath,
+        errorCollector: ErrorCollector,
+    ) {
+        (this as DivCollectionHolder).items = items
+
+        val divView = context.divView
+        tryRebindPlainContainerChildren(divView, items, divViewCreator)
+
+        validateChildren(div, items, context.expressionResolver, errorCollector)
+        dispatchBinding(context, div, oldDiv, items, path)
 
         items.forEachIndexed { i, item ->
             if (item.div.value().hasSightActions) {
-                divView.bindViewToDiv(view.getChildAt(i), item.div)
+                divView.bindViewToDiv(getChildAt(i), item.div)
             }
         }
-        view.trackVisibilityActions(divView, items, oldItems)
+        trackVisibilityActions(divView, items, oldItems)
     }
 
     private fun ViewGroup.validateChildren(
@@ -197,7 +249,7 @@ internal class DivContainerBinder @Inject constructor(
             if (patchShift > NO_PATCH_SHIFT) {
                 shift += patchShift
             } else {
-                val childBindingContext = BindingContext(bindingContext.divView, item.expressionResolver)
+                val childBindingContext = bindingContext.getFor(item.expressionResolver)
                 binder.bind(childBindingContext, childView, item.div, path)
                 childView.bindChildAlignment(
                     newDiv,

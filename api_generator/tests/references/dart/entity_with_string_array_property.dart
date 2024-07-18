@@ -18,12 +18,18 @@ class EntityWithStringArrayProperty with EquatableMixin {
         array,
       ];
 
+  EntityWithStringArrayProperty copyWith({
+      Expression<List<String>>?  array,
+  }) => EntityWithStringArrayProperty(
+      array: array ?? this.array,
+    );
+
   static EntityWithStringArrayProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return EntityWithStringArrayProperty(
-      array: safeParseObjExpr((json['array'] as List<dynamic>).map((v) => safeParseStr(v?.toString(),)!,).toList(),)!,
+      array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseStr(v?.toString(),)!),)!,
     );
   }
 }

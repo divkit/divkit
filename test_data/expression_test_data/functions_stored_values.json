@@ -1,11 +1,10 @@
 {
   "cases": [
     {
-      "name": "getStoredIntegerValue(notStoredIntVar, fallback) => intVal",
-      "expression": "@{getStoredIntegerValue('abc', 456)}",
+      "expression": "@{getStoredIntegerValue('unknown_var', 123)}",
       "expected": {
         "type": "integer",
-        "value": 456
+        "value": 123
       },
       "platforms": [
         "android",
@@ -14,11 +13,10 @@
       ]
     },
     {
-      "name": "getStoredNumberValue(notStoredNumberVar, fallback) => numberVal",
-      "expression": "@{getStoredNumberValue('abc', 456.0)}",
+      "expression": "@{getStoredNumberValue('unknown_var', 123.45)}",
       "expected": {
         "type": "number",
-        "value": 456.0
+        "value": 123.45
       },
       "platforms": [
         "android",
@@ -27,8 +25,7 @@
       ]
     },
     {
-      "name": "getStoredBooleanValue(notStoredBooleanVar, fallback) => booleanVal",
-      "expression": "@{getStoredBooleanValue('abc', true)}",
+      "expression": "@{getStoredBooleanValue('unknown_var', true)}",
       "expected": {
         "type": "boolean",
         "value": true
@@ -40,11 +37,10 @@
       ]
     },
     {
-      "name": "getStoredStringValue(notStoredStringVar, fallback) => stringVal",
-      "expression": "@{getStoredStringValue('abc', 'a')}",
+      "expression": "@{getStoredStringValue('unknown_var', 'fallback')}",
       "expected": {
         "type": "string",
-        "value": "a"
+        "value": "fallback"
       },
       "platforms": [
         "android",
@@ -53,16 +49,15 @@
       ]
     },
     {
-      "name": "getStoredColorValue(notStoredColorVar, fallbackVar) => colorVal",
-      "expression": "@{getStoredColorValue('abc', fallback)}",
+      "expression": "@{getStoredColorValue('unknown_var', fallback)}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
       },
       "variables": [
         {
-          "type": "color",
           "name": "fallback",
+          "type": "color",
           "value": "#FFFFFFFF"
         }
       ],
@@ -73,8 +68,7 @@
       ]
     },
     {
-      "name": "getStoredColorValue(notStoredColorVar, fallback) => colorVal",
-      "expression": "@{getStoredColorValue('abc', '#FFFFFFFF')}",
+      "expression": "@{getStoredColorValue('unknown_var', '#FFFFFFFF')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -86,27 +80,26 @@
       ]
     },
     {
-      "name": "getStoredUrlValue(notStoredUrlVar, fallbackVar) => urlVal",
-      "expression": "@{getStoredUrlValue('abc', fallback)}",
+      "expression": "@{getStoredUrlValue('unknown_var', fallback)}",
       "expected": {
         "type": "url",
         "value": "https://fallback"
       },
       "variables": [
         {
-          "type": "url",
           "name": "fallback",
+          "type": "url",
           "value": "https://fallback"
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
     },
     {
-      "name": "getStoredUrlValue(notStoredUrlVar, fallback) => urlVal",
-      "expression": "@{getStoredUrlValue('abc', 'https://fallback')}",
+      "expression": "@{getStoredUrlValue('unknown_var', 'https://fallback')}",
       "expected": {
         "type": "url",
         "value": "https://fallback"

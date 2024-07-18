@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_size_unit.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
 
 class DivDimension with EquatableMixin {
   const DivDimension({
@@ -21,6 +21,15 @@ class DivDimension with EquatableMixin {
         unit,
         value,
       ];
+
+  DivDimension copyWith({
+    Expression<DivSizeUnit>? unit,
+    Expression<double>? value,
+  }) =>
+      DivDimension(
+        unit: unit ?? this.unit,
+        value: value ?? this.value,
+      );
 
   static DivDimension? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

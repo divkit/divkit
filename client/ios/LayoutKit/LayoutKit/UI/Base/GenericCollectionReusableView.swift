@@ -1,14 +1,14 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 public final class GenericCollectionReusableView: UICollectionReusableView {
   public private(set) var model: UIViewRenderable!
 
   private var view: BlockView? {
     didSet {
-      oldValue?.removeFromSuperview()
+      oldValue?.removeFrom(self)
       if let view {
         addSubview(view)
         setNeedsLayout()

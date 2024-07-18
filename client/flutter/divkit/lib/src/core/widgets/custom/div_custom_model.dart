@@ -16,8 +16,8 @@ class DivCustomModel with EquatableMixin {
     BuildContext context,
     DivCustom data,
   ) {
-    final variables =
-        DivKitProvider.watch<DivContext>(context)!.variableManager;
+    final divContext = DivKitProvider.watch<DivContext>(context)!;
+    final variables = divContext.variableManager;
     final customResolver = DivKitProvider.watch<DivCustomHandler>(context)!;
 
     return variables.watch(
@@ -25,7 +25,12 @@ class DivCustomModel with EquatableMixin {
         final type = data.customType;
 
         if (customResolver.isCustomTypeSupported(type)) {
-          return DivCustomModel(child: customResolver.createCustom(data));
+          return DivCustomModel(
+            child: customResolver.createCustom(
+              data,
+              divContext,
+            ),
+          );
         }
 
         return const DivCustomModel(

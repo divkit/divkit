@@ -11,8 +11,9 @@ internal class DivFrameLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): FrameContainerLayout(context, attrs, defStyleAttr),
+) : FrameContainerLayout(context, attrs, defStyleAttr),
     DivHolderView<DivContainer> by DivHolderViewMixin(),
+    DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

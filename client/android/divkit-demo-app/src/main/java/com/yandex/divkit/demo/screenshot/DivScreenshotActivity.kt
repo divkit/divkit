@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.FOCUS_BEFORE_DESCENDANTS
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.descendants
 import androidx.recyclerview.widget.RecyclerView
@@ -120,7 +121,12 @@ class DivScreenshotActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        registerReceiver(broadcastReceiver, receiverIntentFilter)
+        ContextCompat.registerReceiver(
+            this,
+            broadcastReceiver,
+            receiverIntentFilter,
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     private fun rebindDivWithSameData() {

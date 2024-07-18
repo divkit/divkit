@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivTimerTemplate: TemplateValue {
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 0

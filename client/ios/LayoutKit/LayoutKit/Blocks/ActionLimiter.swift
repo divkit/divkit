@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 public struct ActionLimiter {
   let canSend: () -> Bool

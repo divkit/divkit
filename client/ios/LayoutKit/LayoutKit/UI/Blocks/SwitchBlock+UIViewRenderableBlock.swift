@@ -1,9 +1,7 @@
 import Foundation
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 extension SwitchBlock {
   public static func makeBlockView() -> BlockView { SwitchBlockView() }

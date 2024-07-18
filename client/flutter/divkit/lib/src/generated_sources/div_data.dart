@@ -2,12 +2,12 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
-import 'div_timer.dart';
-import 'div_transition_selector.dart';
-import 'div_trigger.dart';
-import 'div_variable.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
+import 'package:divkit/src/generated_sources/div_timer.dart';
+import 'package:divkit/src/generated_sources/div_transition_selector.dart';
+import 'package:divkit/src/generated_sources/div_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
 
 class DivData with EquatableMixin {
   const DivData({
@@ -42,6 +42,26 @@ class DivData with EquatableMixin {
         variables,
       ];
 
+  DivData copyWith({
+    String? logId,
+    List<DivDataState>? states,
+    List<DivTimer>? Function()? timers,
+    Expression<DivTransitionSelector>? transitionAnimationSelector,
+    List<DivTrigger>? Function()? variableTriggers,
+    List<DivVariable>? Function()? variables,
+  }) =>
+      DivData(
+        logId: logId ?? this.logId,
+        states: states ?? this.states,
+        timers: timers != null ? timers.call() : this.timers,
+        transitionAnimationSelector:
+            transitionAnimationSelector ?? this.transitionAnimationSelector,
+        variableTriggers: variableTriggers != null
+            ? variableTriggers.call()
+            : this.variableTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+      );
+
   static DivData? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -51,22 +71,18 @@ class DivData with EquatableMixin {
         json['log_id']?.toString(),
       )!,
       states: safeParseObj(
-        (json['states'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivDataState.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['states'],
+            (v) => safeParseObj(
+                  DivDataState.fromJson(v),
+                )!),
       )!,
       timers: safeParseObj(
-        (json['timers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTimer.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['timers'],
+            (v) => safeParseObj(
+                  DivTimer.fromJson(v),
+                )!),
       ),
       transitionAnimationSelector: safeParseStrEnumExpr(
         json['transition_animation_selector'],
@@ -74,22 +90,18 @@ class DivData with EquatableMixin {
         fallback: DivTransitionSelector.none,
       )!,
       variableTriggers: safeParseObj(
-        (json['variable_triggers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTrigger.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['variable_triggers'],
+            (v) => safeParseObj(
+                  DivTrigger.fromJson(v),
+                )!),
       ),
       variables: safeParseObj(
-        (json['variables'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVariable.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['variables'],
+            (v) => safeParseObj(
+                  DivVariable.fromJson(v),
+                )!),
       ),
     );
   }
@@ -110,6 +122,15 @@ class DivDataState with EquatableMixin {
         div,
         stateId,
       ];
+
+  DivDataState copyWith({
+    Div? div,
+    int? stateId,
+  }) =>
+      DivDataState(
+        div: div ?? this.div,
+        stateId: stateId ?? this.stateId,
+      );
 
   static DivDataState? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

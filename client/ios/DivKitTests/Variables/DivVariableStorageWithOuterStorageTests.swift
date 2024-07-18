@@ -1,7 +1,7 @@
 import XCTest
 
-import BasePublic
 import DivKit
+import VGSL
 
 final class DivVariableStorageWithOuterStorageTest: XCTestCase {
   private let outerStorage = DivVariableStorage()
@@ -28,6 +28,13 @@ final class DivVariableStorageWithOuterStorageTest: XCTestCase {
     outerStorage.put(name: "string_var", value: .string("outer value"))
 
     XCTAssertEqual("value", storage.getValue("string_var"))
+  }
+
+  func test_hasValue_ReturnsTrueIfOuterStorageContainsVariable() {
+    storage.put(variables)
+    outerStorage.put(outerVariables)
+
+    XCTAssertTrue(storage.hasValue("outer_string_var"))
   }
 
   func test_update_UpdatesOuterVariable() {

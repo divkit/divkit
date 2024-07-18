@@ -1,0 +1,45 @@
+{
+  "description": "Padding sum is smaller than the component size itself",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "padding",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "image",
+              "width": {
+                "type": "fixed",
+                "value": 32
+              },
+              "height": {
+                "type": "fixed",
+                "value": 32
+              },
+              "paddings": {
+                "top": 8,
+                "right": 8,
+                "left": 8,
+                "bottom": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ],
+              "image_url": "https://yastatic.net/s3/home/divkit/chess_transparent.png"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -51,8 +51,8 @@ internal class DivVideoActionHandler @Inject constructor(
         when (div) {
             is DivVideo -> return if (div.id == id) div else null
             is DivGallery -> {
-                div.nonNullItems.forEach { item ->
-                    findDivVideoWithId(item.value(), id, resolver)?.let {
+                div.buildItems(resolver).forEach { (item, newResolver) ->
+                    findDivVideoWithId(item.value(), id, newResolver)?.let {
                         return it
                     }
                 }
@@ -75,8 +75,8 @@ internal class DivVideoActionHandler @Inject constructor(
                 return null
             }
             is DivPager -> {
-                div.nonNullItems.forEach { item ->
-                    findDivVideoWithId(item.value(), id, resolver)?.let {
+                div.buildItems(resolver).forEach { (item, newResolver) ->
+                    findDivVideoWithId(item.value(), id, newResolver)?.let {
                         return it
                     }
                 }

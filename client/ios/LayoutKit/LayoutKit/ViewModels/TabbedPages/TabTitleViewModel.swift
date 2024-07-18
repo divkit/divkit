@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 final class TabTitleViewModel: Equatable {
   let text: NSAttributedString

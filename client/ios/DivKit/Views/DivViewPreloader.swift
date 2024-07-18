@@ -1,6 +1,5 @@
-import BasePublic
-import BaseTinyPublic
 import Foundation
+import VGSL
 
 /// Utility for preloading the contents of `DivView'.
 ///
@@ -17,6 +16,7 @@ public final class DivViewPreloader {
   private var blockProviders = [DivCardID: DivBlockProvider]()
   private let divKitComponents: DivKitComponents
   private let changeEventsPipe = SignalPipe<DivViewSizeChange>()
+  private(set) var setSourceTask: Task<Void, Error>?
   var changeEvents: Signal<DivViewSizeChange> {
     changeEventsPipe.signal
   }
@@ -49,9 +49,33 @@ public final class DivViewPreloader {
     _ source: DivViewSource,
     debugParams: DebugParams = DebugParams()
   ) async {
+    setSourceTask = Task { [oldTask = setSourceTask] in
+      try? await oldTask?.value
+      try Task.checkCancellation()
+      let blockProvider: DivBlockProvider = blockProvider(for: source.id.cardId)
+
+      await blockProvider.setSource(
+        source,
+        debugParams: debugParams
+      )
+
+      blockProviders[source.id.cardId] = blockProvider
+    }
+    try? await setSourceTask?.value
+  }
+
+  /// Sets the source for  ``DivViewPreloader`` and updates the layout.
+  /// - Parameters:
+  /// - source: The source of the ``DivView``.
+  /// - debugParams: Optional debug configurations for the ``DivView``.
+  @_spi(Legacy)
+  public func setSource(
+    _ source: DivViewSource,
+    debugParams: DebugParams = DebugParams()
+  ) {
     let blockProvider: DivBlockProvider = blockProvider(for: source.id.cardId)
 
-    await blockProvider.setSource(
+    blockProvider.setSource(
       source,
       debugParams: debugParams
     )
@@ -67,14 +91,18 @@ public final class DivViewPreloader {
     _ sources: [DivViewSource],
     debugParams: DebugParams = DebugParams()
   ) async {
-    let blockProviders = sources.map { blockProvider(for: $0.id.cardId) }
-    await withTaskGroup(of: Void.self) { group in
-      zip(blockProviders, sources).forEach { blockProvider, source in
-        group.addTask {
-          await blockProvider.setSource(source, debugParams: debugParams)
+    setSourceTask = Task { [oldTask = setSourceTask] in
+      try? await oldTask?.value
+      let blockProviders = sources.map { blockProvider(for: $0.id.cardId) }
+      await withTaskGroup(of: Void.self) { group in
+        zip(blockProviders, sources).forEach { blockProvider, source in
+          group.addTask {
+            await blockProvider.setSource(source, debugParams: debugParams)
+          }
         }
       }
     }
+    try? await setSourceTask?.value
   }
 
   /// Fetches the expected size for a ``DivView`` with a specific identifier.

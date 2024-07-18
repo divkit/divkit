@@ -1,9 +1,8 @@
-import BasePublic
 import DivKit
 import Foundation
 import LayoutKit
 import Network
-import NetworkingPublic
+import VGSL
 
 public final class LottieExtensionHandler: DivExtensionHandler {
   public let id = "lottie"

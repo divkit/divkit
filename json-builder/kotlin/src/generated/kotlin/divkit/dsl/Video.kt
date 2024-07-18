@@ -54,6 +54,7 @@ class Video internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             muted = additive.muted ?: properties.muted,
             paddings = additive.paddings ?: properties.paddings,
@@ -72,6 +73,7 @@ class Video internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variables = additive.variables ?: properties.variables,
             videoSources = additive.videoSources ?: properties.videoSources,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -157,6 +159,10 @@ class Video internal constructor(
          */
         val id: Property<String>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * External margins from the element stroke.
          */
         val margins: Property<EdgeInsets>?,
@@ -232,6 +238,10 @@ class Video internal constructor(
          * Animation starting triggers. Default value: `[state_change, visibility_change]`.
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
+        /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
         val videoSources: Property<List<VideoSource>>?,
         /**
          * Element visibility.
@@ -273,6 +283,7 @@ class Video internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("muted", muted)
             result.tryPutProperty("paddings", paddings)
@@ -291,6 +302,7 @@ class Video internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("video_sources", videoSources)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -320,6 +332,7 @@ class Video internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -338,6 +351,7 @@ class Video internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -364,6 +378,7 @@ fun DivScope.video(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
@@ -382,6 +397,7 @@ fun DivScope.video(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -407,6 +423,7 @@ fun DivScope.video(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         muted = valueOrNull(muted),
         paddings = valueOrNull(paddings),
@@ -425,6 +442,7 @@ fun DivScope.video(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         videoSources = valueOrNull(videoSources),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -452,6 +470,7 @@ fun DivScope.video(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -470,6 +489,7 @@ fun DivScope.video(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -496,6 +516,7 @@ fun DivScope.videoProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
@@ -514,6 +535,7 @@ fun DivScope.videoProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -538,6 +560,7 @@ fun DivScope.videoProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     muted = valueOrNull(muted),
     paddings = valueOrNull(paddings),
@@ -556,6 +579,7 @@ fun DivScope.videoProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variables = valueOrNull(variables),
     videoSources = valueOrNull(videoSources),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -582,6 +606,7 @@ fun DivScope.videoProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -600,6 +625,7 @@ fun DivScope.videoProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -626,6 +652,7 @@ fun TemplateScope.videoRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -644,6 +671,7 @@ fun TemplateScope.videoRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -668,6 +696,7 @@ fun TemplateScope.videoRefs(
     focus = focus,
     height = height,
     id = id,
+    layoutProvider = layoutProvider,
     margins = margins,
     muted = muted,
     paddings = paddings,
@@ -686,6 +715,7 @@ fun TemplateScope.videoRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     videoSources = videoSources,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -712,6 +742,7 @@ fun TemplateScope.videoRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -730,6 +761,7 @@ fun TemplateScope.videoRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -756,6 +788,7 @@ fun Video.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
@@ -774,6 +807,7 @@ fun Video.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -799,6 +833,7 @@ fun Video.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         muted = valueOrNull(muted) ?: properties.muted,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -817,6 +852,7 @@ fun Video.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variables = valueOrNull(variables) ?: properties.variables,
         videoSources = valueOrNull(videoSources) ?: properties.videoSources,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -844,6 +880,7 @@ fun Video.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -862,6 +899,7 @@ fun Video.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -888,6 +926,7 @@ fun Video.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -906,6 +945,7 @@ fun Video.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -931,6 +971,7 @@ fun Video.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         muted = muted ?: properties.muted,
         paddings = paddings ?: properties.paddings,
@@ -949,6 +990,7 @@ fun Video.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variables = variables ?: properties.variables,
         videoSources = videoSources ?: properties.videoSources,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1006,6 +1048,7 @@ fun Video.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         muted = muted ?: properties.muted,
         paddings = properties.paddings,
@@ -1024,6 +1067,7 @@ fun Video.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variables = properties.variables,
         videoSources = properties.videoSources,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1051,6 +1095,7 @@ fun Video.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1069,6 +1114,7 @@ fun Video.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1095,6 +1141,7 @@ fun Component<Video>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     muted: Boolean? = null,
     paddings: EdgeInsets? = null,
@@ -1113,6 +1160,7 @@ fun Component<Video>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1139,6 +1187,7 @@ fun Component<Video>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         muted = valueOrNull(muted),
         paddings = valueOrNull(paddings),
@@ -1157,6 +1206,7 @@ fun Component<Video>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         videoSources = valueOrNull(videoSources),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1184,6 +1234,7 @@ fun Component<Video>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
@@ -1202,6 +1253,7 @@ fun Component<Video>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1228,6 +1280,7 @@ fun Component<Video>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1246,6 +1299,7 @@ fun Component<Video>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1272,6 +1326,7 @@ fun Component<Video>.defer(
         focus = focus,
         height = height,
         id = id,
+        layoutProvider = layoutProvider,
         margins = margins,
         muted = muted,
         paddings = paddings,
@@ -1290,6 +1345,7 @@ fun Component<Video>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variables = variables,
         videoSources = videoSources,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1348,6 +1404,7 @@ fun Component<Video>.evaluate(
         focus = null,
         height = null,
         id = null,
+        layoutProvider = null,
         margins = null,
         muted = muted,
         paddings = null,
@@ -1366,6 +1423,7 @@ fun Component<Video>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variables = null,
         videoSources = null,
         visibility = visibility,
         visibilityAction = null,

@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivImage: DivBase {
   public static let type: String = "image"
@@ -29,6 +29,7 @@ public final class DivImage: DivBase {
   public let highPriorityPreviewShow: Expression<Bool> // default value: false
   public let id: String?
   public let imageUrl: Expression<URL>
+  public let layoutProvider: DivLayoutProvider?
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
@@ -46,6 +47,7 @@ public final class DivImage: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -151,6 +153,7 @@ public final class DivImage: DivBase {
     highPriorityPreviewShow: Expression<Bool>? = nil,
     id: String? = nil,
     imageUrl: Expression<URL>,
+    layoutProvider: DivLayoutProvider? = nil,
     longtapActions: [DivAction]? = nil,
     margins: DivEdgeInsets? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -168,6 +171,7 @@ public final class DivImage: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -196,6 +200,7 @@ public final class DivImage: DivBase {
     self.highPriorityPreviewShow = highPriorityPreviewShow ?? .value(false)
     self.id = id
     self.imageUrl = imageUrl
+    self.layoutProvider = layoutProvider
     self.longtapActions = longtapActions
     self.margins = margins
     self.paddings = paddings
@@ -213,6 +218,7 @@ public final class DivImage: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -275,54 +281,60 @@ extension DivImage: Equatable {
     guard
       lhs.id == rhs.id,
       lhs.imageUrl == rhs.imageUrl,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings,
-      lhs.placeholderColor == rhs.placeholderColor
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.placeholderColor == rhs.placeholderColor,
       lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.preview == rhs.preview
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tintColor == rhs.tintColor
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tintColor == rhs.tintColor,
       lhs.tintMode == rhs.tintMode,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibility == rhs.visibility,
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -359,6 +371,7 @@ extension DivImage: Serializable {
     result["high_priority_preview_show"] = highPriorityPreviewShow.toValidSerializationValue()
     result["id"] = id
     result["image_url"] = imageUrl.toValidSerializationValue()
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
@@ -376,6 +389,7 @@ extension DivImage: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

@@ -53,7 +53,7 @@ class Stroke internal constructor(
          * Stroke width.
          * Default value: `1`.
          */
-        val width: Property<Int>?,
+        val width: Property<Double>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -75,7 +75,7 @@ fun DivScope.stroke(
     `use named arguments`: Guard = Guard.instance,
     color: Color? = null,
     unit: SizeUnit? = null,
-    width: Int? = null,
+    width: Double? = null,
 ): Stroke = Stroke(
     Stroke.Properties(
         color = valueOrNull(color),
@@ -93,7 +93,7 @@ fun DivScope.strokeProps(
     `use named arguments`: Guard = Guard.instance,
     color: Color? = null,
     unit: SizeUnit? = null,
-    width: Int? = null,
+    width: Double? = null,
 ) = Stroke.Properties(
     color = valueOrNull(color),
     unit = valueOrNull(unit),
@@ -109,7 +109,7 @@ fun TemplateScope.strokeRefs(
     `use named arguments`: Guard = Guard.instance,
     color: ReferenceProperty<Color>? = null,
     unit: ReferenceProperty<SizeUnit>? = null,
-    width: ReferenceProperty<Int>? = null,
+    width: ReferenceProperty<Double>? = null,
 ) = Stroke.Properties(
     color = color,
     unit = unit,
@@ -125,7 +125,7 @@ fun Stroke.override(
     `use named arguments`: Guard = Guard.instance,
     color: Color? = null,
     unit: SizeUnit? = null,
-    width: Int? = null,
+    width: Double? = null,
 ): Stroke = Stroke(
     Stroke.Properties(
         color = valueOrNull(color) ?: properties.color,
@@ -143,7 +143,7 @@ fun Stroke.defer(
     `use named arguments`: Guard = Guard.instance,
     color: ReferenceProperty<Color>? = null,
     unit: ReferenceProperty<SizeUnit>? = null,
-    width: ReferenceProperty<Int>? = null,
+    width: ReferenceProperty<Double>? = null,
 ): Stroke = Stroke(
     Stroke.Properties(
         color = color ?: properties.color,
@@ -161,7 +161,7 @@ fun Stroke.evaluate(
     `use named arguments`: Guard = Guard.instance,
     color: ExpressionProperty<Color>? = null,
     unit: ExpressionProperty<SizeUnit>? = null,
-    width: ExpressionProperty<Int>? = null,
+    width: ExpressionProperty<Double>? = null,
 ): Stroke = Stroke(
     Stroke.Properties(
         color = color ?: properties.color,

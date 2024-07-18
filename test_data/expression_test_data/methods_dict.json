@@ -1,7 +1,6 @@
 {
   "cases": [
     {
-      "name": "dict_var.getArray('array_prop') => array",
       "expression": "@{dict_var.getArray('array_prop')}",
       "expected": {
         "type": "array",
@@ -28,7 +27,6 @@
       ]
     },
     {
-      "name": "dict_var.getBoolean('boolean_prop') => true",
       "expression": "@{dict_var.getBoolean('boolean_prop')}",
       "expected": {
         "type": "boolean",
@@ -49,7 +47,6 @@
       ]
     },
     {
-      "name": "dict_var.getBoolean('number_prop') => error",
       "expression": "@{dict_var.getBoolean('number_prop')}",
       "expected": {
         "type": "error",
@@ -70,7 +67,6 @@
       ]
     },
     {
-      "name": "dict_var.getColor('color_prop') => #AABBCC",
       "expression": "@{dict_var.getColor('color_prop')}",
       "expected": {
         "type": "color",
@@ -91,7 +87,6 @@
       ]
     },
     {
-      "name": "dict_var.getDict('dict_prop') => dict",
       "expression": "@{dict_var.getDict('dict_prop')}",
       "expected": {
         "type": "dict",
@@ -118,7 +113,6 @@
       ]
     },
     {
-      "name": "dict_var.getInteger('integer_prop') => 123",
       "expression": "@{dict_var.getInteger('integer_prop')}",
       "expected": {
         "type": "integer",
@@ -139,7 +133,6 @@
       ]
     },
     {
-      "name": "dict_var.getInteger('dict_prop', 'dict_prop', 'integer_prop') => 123",
       "expression": "@{dict_var.getInteger('dict_prop', 'dict_prop', 'integer_prop')}",
       "expected": {
         "type": "integer",
@@ -164,7 +157,6 @@
       ]
     },
     {
-      "name": "dict_var.getNumber('number_prop') => 123.45",
       "expression": "@{dict_var.getNumber('number_prop')}",
       "expected": {
         "type": "number",
@@ -185,7 +177,6 @@
       ]
     },
     {
-      "name": "dict_var.getString('string_prop') => 'Hello!'",
       "expression": "@{dict_var.getString('string_prop')}",
       "expected": {
         "type": "string",
@@ -206,7 +197,6 @@
       ]
     },
     {
-      "name": "dict_var.getString('dict_prop', 'string_prop') => 'Hello!'",
       "expression": "@{dict_var.getString('dict_prop', 'string_prop')}",
       "expected": {
         "type": "string",
@@ -229,7 +219,6 @@
       ]
     },
     {
-      "name": "dict_var.getUrl('url_prop') => https://some.url",
       "expression": "@{dict_var.getUrl('url_prop')}",
       "expected": {
         "type": "url",
@@ -250,7 +239,6 @@
       ]
     },
     {
-      "name": "dict_var.getString('missing_prop') => error",
       "expression": "@{dict_var.getString('missing_prop')}",
       "expected": {
         "type": "error",
@@ -269,7 +257,6 @@
       ]
     },
     {
-      "name": "dict_var.getArray('missing_prop') => error",
       "expression": "@{dict_var.getArray('missing_prop')}",
       "expected": {
         "type": "error",
@@ -288,7 +275,6 @@
       ]
     },
     {
-      "name": "dict_var.getDict('missing_prop') => error",
       "expression": "@{dict_var.getDict('missing_prop')}",
       "expected": {
         "type": "error",
@@ -307,7 +293,6 @@
       ]
     },
     {
-      "name": "dict_var.getString('number_prop') => error",
       "expression": "@{dict_var.getString('number_prop')}",
       "expected": {
         "type": "error",
@@ -328,7 +313,6 @@
       ]
     },
     {
-      "name": "dict_var.getString() => error",
       "expression": "@{dict_var.getString()}",
       "expected": {
         "type": "error",
@@ -347,7 +331,6 @@
       ]
     },
     {
-      "name": "dict_var.getString(123) => error",
       "expression": "@{dict_var.getString(123)}",
       "expected": {
         "type": "error",
@@ -361,7 +344,113 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{dict_var.containsKey('key')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "key": "value"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{dict_var.containsKey('unknown_key')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{dict_var.containsKey('value')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "key": "value"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{dict_var.containsKey('null_key')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "null_key": null
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{dict_var.containsKey('inner_key')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "dict": {
+              "inner_key": "value"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
       ]
     }
   ]

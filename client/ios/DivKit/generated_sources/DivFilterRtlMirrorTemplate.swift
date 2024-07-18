@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivFilterRtlMirrorTemplate: TemplateValue {
   public static let type: String = "rtl_mirror"

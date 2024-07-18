@@ -2,7 +2,6 @@
   "description": "Images of different size with blur",
   "platforms": [
     "android",
-    "ios",
     "web"
   ],
   "templates": {

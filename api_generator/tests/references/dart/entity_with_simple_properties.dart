@@ -50,6 +50,28 @@ class EntityWithSimpleProperties with EquatableMixin {
         url,
       ];
 
+  EntityWithSimpleProperties copyWith({
+      Expression<bool>? Function()?  boolean,
+      Expression<bool>? Function()?  booleanInt,
+      Expression<Color>? Function()?  color,
+      Expression<double>? Function()?  dNum,
+      int?  id,
+      Expression<int>?  integer,
+      Expression<int>? Function()?  positiveInteger,
+      Expression<String>? Function()?  string,
+      Expression<Uri>? Function()?  url,
+  }) => EntityWithSimpleProperties(
+      boolean: boolean != null ? boolean.call() : this.boolean,
+      booleanInt: booleanInt != null ? booleanInt.call() : this.booleanInt,
+      color: color != null ? color.call() : this.color,
+      dNum: dNum != null ? dNum.call() : this.dNum,
+      id: id ?? this.id,
+      integer: integer ?? this.integer,
+      positiveInteger: positiveInteger != null ? positiveInteger.call() : this.positiveInteger,
+      string: string != null ? string.call() : this.string,
+      url: url != null ? url.call() : this.url,
+    );
+
   static EntityWithSimpleProperties? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

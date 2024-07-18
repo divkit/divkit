@@ -1,13 +1,11 @@
 {
     "cases": [
         {
-            "name": "'abc' == 7 => error",
             "expression": "@{'abc' == 7}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate ['abc' == 7]. Operator '==' cannot be applied to different types: String and Integer."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -15,13 +13,11 @@
             ]
         },
         {
-            "name": "7 == 'abc' => error",
             "expression": "@{7 == 'abc'}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [7 == 'abc']. Operator '==' cannot be applied to different types: Integer and String."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -29,13 +25,11 @@
             ]
         },
         {
-            "name": "'abc' != 7 => error",
             "expression": "@{'abc' != 7}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate ['abc' != 7]. Operator '!=' cannot be applied to different types: String and Integer."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -43,13 +37,11 @@
             ]
         },
         {
-            "name": "7 != 'abc' => error",
             "expression": "@{7 != 'abc'}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [7 != 'abc']. Operator '!=' cannot be applied to different types: Integer and String."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -57,13 +49,11 @@
             ]
         },
         {
-            "name": "7 == true => error",
             "expression": "@{7 == true}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [7 == true]. Operator '==' cannot be applied to different types: Integer and Boolean."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -71,13 +61,11 @@
             ]
         },
         {
-            "name": "true == 7 => error",
             "expression": "@{true == 7}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [true == 7]. Operator '==' cannot be applied to different types: Boolean and Integer."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -85,13 +73,11 @@
             ]
         },
         {
-            "name": "7 != true => error",
             "expression": "@{7 != true}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [7 != true]. Operator '!=' cannot be applied to different types: Integer and Boolean."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -99,13 +85,11 @@
             ]
         },
         {
-            "name": "true != 7 => error",
             "expression": "@{true != 7}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [true != 7]. Operator '!=' cannot be applied to different types: Boolean and Integer."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -113,13 +97,11 @@
             ]
         },
         {
-            "name": "7.0 == 'abc' => error",
             "expression": "@{7.0 == 'abc'}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [7.0 == 'abc']. Operator '==' cannot be applied to different types: Number and String."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -127,13 +109,11 @@
             ]
         },
         {
-            "name": "'abc' == 7.0 => error",
             "expression": "@{'abc' == 7.0}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate ['abc' == 7.0]. Operator '==' cannot be applied to different types: String and Number."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -141,13 +121,11 @@
             ]
         },
         {
-            "name": "7.0 != 'abc' => error",
             "expression": "@{7.0 != 'abc'}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [7.0 != 'abc']. Operator '!=' cannot be applied to different types: Number and String."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -155,13 +133,11 @@
             ]
         },
         {
-            "name": "'abc' != 7.0 => error",
             "expression": "@{'abc' != 7.0}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate ['abc' != 7.0]. Operator '!=' cannot be applied to different types: String and Number."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -169,13 +145,11 @@
             ]
         },
         {
-            "name": "7.0 == true => error",
             "expression": "@{7.0 == true}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [7.0 == true]. Operator '==' cannot be applied to different types: Number and Boolean."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -183,13 +157,11 @@
             ]
         },
         {
-            "name": "true == 7.0 => error",
             "expression": "@{true == 7.0}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [true == 7.0]. Operator '==' cannot be applied to different types: Boolean and Number."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -197,13 +169,11 @@
             ]
         },
         {
-            "name": "7.0 != true => error",
             "expression": "@{7.0 != true}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [7.0 != true]. Operator '!=' cannot be applied to different types: Number and Boolean."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",
@@ -211,13 +181,11 @@
             ]
         },
         {
-            "name": "true != 7.0 => error",
             "expression": "@{true != 7.0}",
             "expected": {
                 "type": "error",
                 "value": "Failed to evaluate [true != 7.0]. Operator '!=' cannot be applied to different types: Boolean and Number."
             },
-            "variables": [],
             "platforms": [
                 "android",
                 "ios",

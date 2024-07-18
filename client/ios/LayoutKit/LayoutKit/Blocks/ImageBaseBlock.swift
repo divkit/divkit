@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 public protocol ImageBaseBlock: BlockWithWidthTrait {
   var height: ImageBlockHeight { get }

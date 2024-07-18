@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivFixedCount with EquatableMixin {
   const DivFixedCount({
@@ -17,6 +17,13 @@ class DivFixedCount with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  DivFixedCount copyWith({
+    Expression<int>? value,
+  }) =>
+      DivFixedCount(
+        value: value ?? this.value,
+      );
 
   static DivFixedCount? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

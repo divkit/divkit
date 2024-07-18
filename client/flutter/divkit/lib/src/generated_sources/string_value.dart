@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class StringValue with EquatableMixin {
   const StringValue({
@@ -17,6 +17,13 @@ class StringValue with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  StringValue copyWith({
+    Expression<String>? value,
+  }) =>
+      StringValue(
+        value: value ?? this.value,
+      );
 
   static StringValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

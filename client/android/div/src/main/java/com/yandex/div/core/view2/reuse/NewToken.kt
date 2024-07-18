@@ -5,6 +5,8 @@ import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.itemsToDivItemBuilderResult
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.internal.core.toDivItemBuilderResult
+import com.yandex.div.internal.core.toItemBuilderResult
 import com.yandex.div2.Div
 
 internal class NewToken(
@@ -26,14 +28,14 @@ internal class NewToken(
             is Div.Select -> listOf()
             is Div.Video -> listOf()
             is Div.Container -> div.value.buildItems(resolver).itemsToNewTokenList()
-            is Div.Custom -> div.value.nonNullItems.map { DivItemBuilderResult(it, resolver) }.itemsToNewTokenList()
+            is Div.Custom -> div.value.nonNullItems.toDivItemBuilderResult(resolver).itemsToNewTokenList()
             is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver).itemsToNewTokenList()
-            is Div.Gallery -> div.value.itemsToDivItemBuilderResult(resolver).itemsToNewTokenList()
-            is Div.Pager -> div.value.itemsToDivItemBuilderResult(resolver).itemsToNewTokenList()
+            is Div.Gallery -> div.value.buildItems(resolver).itemsToNewTokenList()
+            is Div.Pager -> div.value.buildItems(resolver).itemsToNewTokenList()
             is Div.Tabs -> div.value.itemsToDivItemBuilderResult(resolver).itemsToNewTokenList()
             is Div.State -> {
                 val stateToBindDiv = div.value.getDefaultState(resolver)?.div ?: return listOf()
-                listOf(DivItemBuilderResult(stateToBindDiv, resolver)).itemsToNewTokenList()
+                listOf(stateToBindDiv.toItemBuilderResult(resolver)).itemsToNewTokenList()
             }
         }
     }

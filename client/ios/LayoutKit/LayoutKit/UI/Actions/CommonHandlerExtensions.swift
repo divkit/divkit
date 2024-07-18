@@ -1,7 +1,6 @@
 import UIKit
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 extension CommonHandler {
   public func perform(sendingFrom sender: UIResponder) {

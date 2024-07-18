@@ -15,7 +15,7 @@ class EntityWithArrayOfNestedItems(
         _propertiesHash?.let {
             return it
         }
-        val propertiesHash = javaClass.hashCode()
+        val propertiesHash = this::class.hashCode()
         _propertiesHash = propertiesHash
         return propertiesHash
     }
@@ -56,6 +56,7 @@ class EntityWithArrayOfNestedItems(
                 return it
             }
             val hash = 
+                this::class.hashCode() +
                 entity.hash() +
                 property.hashCode()
             _hash = hash

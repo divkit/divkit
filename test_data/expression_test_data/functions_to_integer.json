@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "positive number to integer => integer (1)",
       "expression": "@{toInteger(2.7182)}",
       "expected": {
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,13 +13,11 @@
       ]
     },
     {
-      "name": "positive number to integer => integer (2)",
       "expression": "@{toInteger(3.1415)}",
       "expected": {
         "type": "integer",
         "value": 3
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -29,13 +25,11 @@
       ]
     },
     {
-      "name": "negative number to integer => integer (1)",
       "expression": "@{toInteger(-2.7182)}",
       "expected": {
         "type": "integer",
         "value": -2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -43,13 +37,11 @@
       ]
     },
     {
-      "name": "negative number to integer => integer (2)",
       "expression": "@{toInteger(-3.1415)}",
       "expected": {
         "type": "integer",
         "value": -3
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -57,13 +49,11 @@
       ]
     },
     {
-      "name": "positive out-of-range number to integer => error",
       "expression": "@{toInteger(3.1415e64)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger(3.1415E64)]. Unable to convert value to Integer."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -71,13 +61,11 @@
       ]
     },
     {
-      "name": "negative out-of-range number to integer => error",
       "expression": "@{toInteger(-3.1415e64)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger(-3.1415E64)]. Unable to convert value to Integer."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -85,13 +73,11 @@
       ]
     },
     {
-      "name": "integer string to integer => integer",
       "expression": "@{toInteger('1')}",
       "expected": {
         "type": "integer",
         "value": 1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -99,13 +85,11 @@
       ]
     },
     {
-      "name": "positive integer string to integer => integer",
       "expression": "@{toInteger('+1')}",
       "expected": {
         "type": "integer",
         "value": 1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -113,13 +97,11 @@
       ]
     },
     {
-      "name": "negative integer string to integer => integer",
       "expression": "@{toInteger('-1')}",
       "expected": {
         "type": "integer",
         "value": -1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -127,13 +109,11 @@
       ]
     },
     {
-      "name": "decimal string to integer => error",
       "expression": "@{toInteger('3.1415')}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger('3.1415')]. Unable to convert value to Integer."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -141,13 +121,11 @@
       ]
     },
     {
-      "name": "out-of-range integer string to integer => error",
       "expression": "@{toInteger('3141592653589793238462643')}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger('3141592653589793238462643')]. Unable to convert value to Integer."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -155,13 +133,11 @@
       ]
     },
     {
-      "name": "negative out-of-range integer string to integer => error",
       "expression": "@{toInteger('-3141592653589793238462643')}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger('-3141592653589793238462643')]. Unable to convert value to Integer."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -169,13 +145,11 @@
       ]
     },
     {
-      "name": "expression string to integer => error",
       "expression": "@{toInteger('1+1')}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger('1+1')]. Unable to convert value to Integer."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -183,13 +157,11 @@
       ]
     },
     {
-      "name": "text string to integer => error",
       "expression": "@{toInteger('hello')}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger('hello')]. Unable to convert value to Integer."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -197,13 +169,11 @@
       ]
     },
     {
-      "name": "true boolean to integer => 1",
       "expression": "@{toInteger(true)}",
       "expected": {
         "type": "integer",
         "value": 1
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -211,13 +181,11 @@
       ]
     },
     {
-      "name": "false boolean to integer => 0",
       "expression": "@{toInteger(false)}",
       "expected": {
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -225,13 +193,11 @@
       ]
     },
     {
-      "name": "empty argument list => error",
       "expression": "@{toInteger()}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger()]. Function requires non empty argument list."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -239,13 +205,11 @@
       ]
     },
     {
-      "name": "too many arguments => error",
       "expression": "@{toInteger(1.0, 1.0)}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [toInteger(1.0, 1.0)]. Function has no matching overload for given argument types: Number, Number."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

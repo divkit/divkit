@@ -1,7 +1,5 @@
 import UIKit
 
-import LayoutKitInterface
-
 public protocol UIActionEventPerforming {
   func perform(uiActionEvents events: [UIActionEvent], from sender: AnyObject)
   func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject)

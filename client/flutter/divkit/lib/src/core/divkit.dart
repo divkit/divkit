@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:divkit/src/core/visibility/default_div_visibility_action_manager.dart';
 import 'package:divkit/src/core/action/handler/default_div_action_handler.dart';
+import 'package:divkit/src/core/data/data_provider.dart';
+import 'package:divkit/src/core/patch/patch_manager.dart';
 import 'package:divkit/src/core/protocol/div_action.dart';
 import 'package:divkit/src/core/protocol/div_context.dart';
 import 'package:divkit/src/core/protocol/div_custom.dart';
@@ -23,10 +26,13 @@ import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:meta/meta.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 
 /// The main widget embedding DivKit BDUI in the Flutter host application.
 class DivKitView extends StatelessWidget {
   /// The data of layout that will be rendered.
+  /// The process of building a DTO is quite expensive, so it is better
+  /// to create it outside the widget in order to avoid frame loss.
   final DivKitData data;
 
   /// External storage. Used to transfer the context from the host environment.
@@ -40,13 +46,14 @@ class DivKitView extends StatelessWidget {
   /// Handler for div-custom.
   final DivCustomHandler? customHandler;
 
-  /// Cache manager to override DefaultCacheManager if needed in DivImage.
-  final BaseCacheManager? cacheManager;
-
   /// LTR or RTL mode. If null used auto.
   final TextDirection? textDirection;
 
-  /// Light or dark mode. If null used auto.
+  /// [NOT_USED_FOR_SVG] Cache manager to override DefaultCacheManager if needed in DivImage.
+  @experimental
+  final BaseCacheManager? cacheManager;
+
+  /// [NOT_SUPPORTED_YET] Light or dark mode. If null used auto.
   @experimental
   final Brightness? brightness;
 
@@ -58,6 +65,14 @@ class DivKitView extends StatelessWidget {
   /// when the [DivContext] has been fully initialized.
   @experimental
   final void Function(DivContext)? onInit;
+
+  /// Can be used for scaling ui
+  @experimental
+  final double viewScale;
+
+  /// Can be used for scaling text
+  @experimental
+  final double textScale;
 
   /// Use DivKitView inside your widget tree with layout passed by param "data":
   /// ```dart
@@ -73,13 +88,13 @@ class DivKitView extends StatelessWidget {
   /// ```dart
   ///     DivKitView(
   ///       data: data,
-  ///       customHandler: MyCustomHandler(), // DivCustomHandler?
-  ///       actionHandler: MyCustomActionHandler(), // DivActionHandler?
-  ///       variableStorage: MyOwnVariableStorage(), // DivVariableStorage?
+  ///       customHandler: MyCustomHandler(),
+  ///       actionHandler: MyCustomActionHandler(),
+  ///       variableStorage: MyOwnVariableStorage(),
   ///     )
   /// ```
   /// Important! If you wish to work with default div-actions and use your own
-  /// actionHandler don't forget to inherit **DefaultDivActionHandler**.
+  /// actionHandler don't forget to inherit [DefaultDivActionHandler].
   const DivKitView({
     required this.data,
     this.variableStorage,
@@ -90,22 +105,30 @@ class DivKitView extends StatelessWidget {
     this.textDirection,
     this.showUnsupportedDivs = false,
     this.onInit,
+    this.viewScale = 1,
+    this.textScale = 1,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) => Directionality(
         textDirection: textDirection ?? Directionality.of(context),
-        child: DivKitProvider<ShowUnsupportedDivs>(
-          value: ShowUnsupportedDivs(showUnsupportedDivs),
-          child: FocusScope(
-            child: _DivKitView(
-              data: data,
-              variableStorage: variableStorage,
-              actionHandler: actionHandler,
-              customHandler: customHandler,
-              cacheManager: cacheManager,
-              onInit: onInit,
+        child: DivKitProvider<DivScalingModel>(
+          value: DivScalingModel(
+            textScale: textScale,
+            viewScale: viewScale,
+          ),
+          child: DivKitProvider<ShowUnsupportedDivs>(
+            value: ShowUnsupportedDivs(showUnsupportedDivs),
+            child: FocusScope(
+              child: _DivKitView(
+                data: data,
+                variableStorage: variableStorage,
+                actionHandler: actionHandler,
+                customHandler: customHandler,
+                cacheManager: cacheManager,
+                onInit: onInit,
+              ),
             ),
           ),
         ),
@@ -134,7 +157,6 @@ class _DivKitView extends StatefulWidget {
 }
 
 class _DivKitViewState extends State<_DivKitView> {
-  DivData? source;
   late DivLoggerContext loggerContext;
   late DivRootContext divRootContext;
   late DivTriggerManager triggerManager;
@@ -142,7 +164,7 @@ class _DivKitViewState extends State<_DivKitView> {
 
   DivContext get divContext => divRootContext;
 
-  DivData? init(DivKitData data) {
+  void init(DivKitData data) {
     final source = data.source;
 
     loggerContext = DefaultDivLoggerContext(source?.logId);
@@ -150,6 +172,8 @@ class _DivKitViewState extends State<_DivKitView> {
     if (source != null) {
       loggerUse(loggerContext).debug('Init DivKitView $hashCode');
       divRootContext = DivRootContext(buildContext: context)
+        ..dataProvider = DefaultDivDataProvider(source)
+        ..visibilityActionManager = DefaultDivVisibilityActionManager()
         ..variableManager = DefaultDivVariableManager(
           storage: DefaultDivVariableStorage(
             inheritedStorage: widget.variableStorage,
@@ -158,6 +182,9 @@ class _DivKitViewState extends State<_DivKitView> {
         )
         ..stateManager = DefaultDivStateManager()
         ..actionHandler = widget.actionHandler ?? DefaultDivActionHandler();
+
+      divRootContext.patchManager =
+          DefaultDivPatchManager(divRootContext.dataProvider!);
 
       final timerManager = DefaultDivTimerManager(divContext: divContext);
 
@@ -177,14 +204,12 @@ class _DivKitViewState extends State<_DivKitView> {
 
       customHandler = widget.customHandler ?? DivCustomHandler.none();
     }
-
-    return source;
   }
 
   @override
   void initState() {
     super.initState();
-    source = init(widget.data);
+    init(widget.data);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loggerUse(loggerContext).debug("First frame rendered $hashCode");
       widget.onInit?.call(divContext);
@@ -204,7 +229,7 @@ class _DivKitViewState extends State<_DivKitView> {
       loggerUse(loggerContext).debug(
         "Update DivKitView $hashCode [dataUpdated:$dataUpdated storageUpdated:$storageUpdated]",
       );
-      source = init(widget.data);
+      init(widget.data);
     }
 
     if (widget.actionHandler != oldWidget.actionHandler) {
@@ -220,14 +245,20 @@ class _DivKitViewState extends State<_DivKitView> {
           value: widget.cacheManager,
           child: DivKitProvider(
             value: customHandler,
-            child: DivCardStateWidget(source!),
+            child: StreamBuilder<DivData>(
+              initialData: divRootContext.dataProvider!.value,
+              stream: divRootContext.dataProvider!.stream,
+              builder: (context, snapshot) => DivCardStateWidget(
+                snapshot.requireData,
+              ),
+            ),
           ),
         ),
       );
 
   @override
   void dispose() {
-    divContext.dispose();
+    divRootContext.dispose();
     triggerManager.dispose();
 
     loggerUse(loggerContext).debug("Dispose DivKitView $hashCode");

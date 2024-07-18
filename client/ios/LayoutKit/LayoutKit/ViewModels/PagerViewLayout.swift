@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 public struct PagerViewLayout: GalleryViewLayouting, Equatable {
   public struct Page {
@@ -25,6 +24,14 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
 
   public var pageOrigins: [CGFloat] {
     blockPages.map(\.origin)
+  }
+
+  public var transformation: ElementsTransformation? {
+    model.transformation
+  }
+
+  public var scrollDirection: ScrollDirection {
+    model.direction
   }
 
   public init(
@@ -112,7 +119,10 @@ extension GalleryViewModel {
 
     let lastOrigin = lastFrame.origin.dimension(in: direction)
     let lastSize = lastFrame.size.dimension(in: direction)
-    let lastEdge = lastOrigin + lastSize + lastGap(forSize: size)
+    let lastEdge = lastOrigin + lastSize + lastGap(
+      forSize: size,
+      elementMainAxisSize: lastFrame.size.dimension(in: direction)
+    )
     let maxOffset = lastEdge - (size?.dimension(in: direction) ?? lastSize)
     let origins = frames.enumerated().map { index, frame -> CGFloat in
       let origin = frame.origin.dimension(in: direction)
@@ -145,14 +155,20 @@ extension GalleryViewModel {
     let neigbourFrames = frames[max(0, pageIndex - 1)...min(frames.count - 1, pageIndex + 1)]
     switch direction {
     case .horizontal:
-      let rightGap = lastGap(forSize: size)
+      let rightGap = lastGap(
+        forSize: size,
+        elementMainAxisSize: lastFrame.size.dimension(in: direction)
+      )
       let bottomGap = crossInsets(forSize: size).trailing
       let width = lastFrame.maxX + rightGap
       let maxHeight = neigbourFrames.map(\.maxY).max()!
       return CGSize(width: width, height: maxHeight + bottomGap)
     case .vertical:
       let rightGap = crossInsets(forSize: size).trailing
-      let bottomGap = lastGap(forSize: size)
+      let bottomGap = lastGap(
+        forSize: size,
+        elementMainAxisSize: lastFrame.size.dimension(in: direction)
+      )
       let maxWidth = neigbourFrames.map(\.maxX).max()!
       let height = lastFrame.maxY + bottomGap
       return CGSize(width: maxWidth + rightGap, height: height)
@@ -169,7 +185,7 @@ extension GalleryViewModel {
     case let .pageSize(relative):
       return relative.absoluteValue(in: availableSize)
     case let .neighbourPageSize(neighbourPageSize):
-      let gaps = gaps(forSize: nil)
+      let gaps = gaps(forSize: nil, elementMainAxisSize: nil)
       let leadingMargin = gaps.element(at: index) ?? 0
       let trailingMargin = gaps.element(at: index + 1) ?? 0
       let margins = leadingMargin + trailingMargin
@@ -190,15 +206,19 @@ extension GalleryViewModel {
       ?? blocks.maxHeightOfVerticallyNonResizableBlocks(for: widths)!
 
     let minY = crossInsets.leading
-    let gaps = self.gaps(forSize: size)
+    let gaps = self.gaps(forSize: size, elementMainAxisSize: widths.first)
     var x = gaps[0]
     return zip3(items, widths, gaps.dropFirst()).map { item, width, gap in
       let block = item.content
       let height = block.isVerticallyResizable ?
         maxElementHeight :
         block.heightOfVerticallyNonResizableBlock(forWidth: width)
-      let frame = CGRect(x: x, y: minY, width: width, height: height)
-
+      let frame = CGRect(
+        x: x,
+        y: minY,
+        width: width,
+        height: height
+      )
       x = frame.maxX + gap
       return frame
     }
@@ -216,12 +236,13 @@ extension GalleryViewModel {
       .map(\.widthOfHorizontallyNonResizableBlock).max()!
 
     let minX = crossInsets.leading
-    let gaps = self.gaps(forSize: size)
-    var y = gaps[0]
 
     let heights = (0..<blocks.count).map {
       pageSize(index: $0, fitting: size, layoutMode: layoutMode)
     }
+
+    let gaps = self.gaps(forSize: size, elementMainAxisSize: heights.first)
+    var y = gaps[0]
 
     return zip3(items, heights, gaps.dropFirst()).map { item, height, gap in
       let block = item.content
@@ -240,12 +261,29 @@ extension GalleryViewModel {
     metrics.crossInsetMode.insets(forSize: size?.dimension(in: direction) ?? 0)
   }
 
-  private func lastGap(forSize size: CGSize?) -> CGFloat {
-    metrics.axialInsetMode.insets(forSize: size?.dimension(in: direction) ?? 0).trailing
+  private func lastGap(forSize size: CGSize?, elementMainAxisSize: CGFloat?) -> CGFloat {
+    let modelInset = metrics.axialInsetMode.insets(forSize: size?.dimension(in: direction) ?? 0)
+      .trailing
+    let overlapInset: CGFloat = if transformation?.style == .overlap,
+                                   let mainAxisSpace = size?.dimension(in: direction),
+                                   let elementSize = elementMainAxisSize {
+      (mainAxisSpace - elementSize) / 2
+    } else {
+      0
+    }
+    return modelInset + overlapInset
   }
 
-  private func gaps(forSize size: CGSize?) -> [CGFloat] {
-    metrics.gaps(forSize: size?.dimension(in: direction) ?? 0)
+  private func gaps(forSize size: CGSize?, elementMainAxisSize: CGFloat?) -> [CGFloat] {
+    let modelInset = metrics.gaps(forSize: size?.dimension(in: direction) ?? 0)
+    if transformation?.style == .overlap,
+       let mainAxisSpace = size?.dimension(in: direction),
+       let elementSize = elementMainAxisSize {
+      let overlapInset = (mainAxisSpace - elementSize) / 2
+      return [overlapInset] + modelInset.dropFirst()
+    } else {
+      return modelInset
+    }
   }
 }
 
@@ -263,7 +301,7 @@ extension Alignment {
 }
 
 extension CGPoint {
-  fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
+  fileprivate func dimension(in direction: ScrollDirection) -> CGFloat {
     switch direction {
     case .horizontal:
       x
@@ -274,7 +312,7 @@ extension CGPoint {
 }
 
 extension CGSize {
-  fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
+  fileprivate func dimension(in direction: ScrollDirection) -> CGFloat {
     switch direction {
     case .horizontal:
       width

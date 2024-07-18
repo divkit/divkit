@@ -15,24 +15,24 @@ sealed class EnumWithDefaultType : Hashable {
         _propertiesHash?.let {
             return it
         }
-        return when(this) {
-            is WithDefaultCase -> 31 + this.value.propertiesHash()
-            is WithoutDefaultCase -> 62 + this.value.propertiesHash()
-        }.also {
-            _propertiesHash = it
+        val propertiesHash = this::class.hashCode() + when(this) {
+            is WithDefaultCase -> this.value.propertiesHash()
+            is WithoutDefaultCase -> this.value.propertiesHash()
         }
+       _propertiesHash = propertiesHash
+       return propertiesHash
     }
 
     override fun hash(): Int {
         _hash?.let {
             return it
         }
-        return when(this) {
-            is WithDefaultCase -> 31 + this.value.hash()
-            is WithoutDefaultCase -> 62 + this.value.hash()
-        }.also {
-            _hash = it
+        val hash = this::class.hashCode() + when(this) {
+            is WithDefaultCase -> this.value.hash()
+            is WithoutDefaultCase -> this.value.hash()
         }
+       _hash = hash
+       return hash
     }
 
     fun value(): Any {

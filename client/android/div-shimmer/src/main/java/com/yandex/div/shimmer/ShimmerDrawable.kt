@@ -76,6 +76,7 @@ class ShimmerDrawable(
     }
 
     override fun draw(canvas: Canvas) {
+        val shimmerShader = shimmerPaint.shader ?: return
         var rotate = config.angle
         fun translateHeight(): Float {
             val tan = tan(Math.toRadians(rotate)).toFloat()
@@ -117,7 +118,7 @@ class ShimmerDrawable(
         shaderMatrix.reset()
         shaderMatrix.setRotate(rotate.toFloat(), drawRect.width() / 2f, drawRect.height() / 2f)
         shaderMatrix.preTranslate(dx, dy)
-        shimmerPaint.shader.setLocalMatrix(shaderMatrix)
+        shimmerShader.setLocalMatrix(shaderMatrix)
         if (!isStopped) {
             start()
         }

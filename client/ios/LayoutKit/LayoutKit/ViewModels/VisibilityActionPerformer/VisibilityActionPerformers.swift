@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BasePublic
+import VGSL
 
 final class VisibilityActionPerformers {
   private let visibilityParams: VisibilityParams
@@ -18,11 +18,13 @@ final class VisibilityActionPerformers {
         requiredDuration: action.requiredDuration,
         targetVisibilityPercentage: action.targetPercentage,
         limiter: action.limiter,
-        action: {
+        action: { [unowned actionSender] in
+          #if os(iOS)
           UIActionEvent(
             uiAction: action.uiAction,
             originalSender: actionSender
           ).sendFrom(actionSender)
+          #endif
         },
         type: action.actionType,
         timerScheduler: visibilityParams.scheduler

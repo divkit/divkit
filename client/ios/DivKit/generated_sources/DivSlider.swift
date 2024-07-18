@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivSlider: DivBase {
   public final class Range {
@@ -39,6 +39,7 @@ public final class DivSlider: DivBase {
     public let fontSize: Expression<Int> // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight> // default value: regular
+    public let fontWeightValue: Expression<Int>? // constraint: number > 0
     public let offset: DivPoint?
     public let textColor: Expression<Color> // default value: #FF000000
 
@@ -54,6 +55,10 @@ public final class DivSlider: DivBase {
       resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
     }
 
+    public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+      resolver.resolveNumeric(fontWeightValue)
+    }
+
     public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
       resolver.resolveColor(textColor) ?? Color.colorWithARGBHexCode(0xFF000000)
     }
@@ -61,16 +66,21 @@ public final class DivSlider: DivBase {
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
 
+    static let fontWeightValueValidator: AnyValueValidator<Int> =
+      makeValueValidator(valueValidator: { $0 > 0 })
+
     init(
       fontSize: Expression<Int>,
       fontSizeUnit: Expression<DivSizeUnit>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
+      fontWeightValue: Expression<Int>? = nil,
       offset: DivPoint? = nil,
       textColor: Expression<Color>? = nil
     ) {
       self.fontSize = fontSize
       self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
       self.fontWeight = fontWeight ?? .value(.regular)
+      self.fontWeightValue = fontWeightValue
       self.offset = offset
       self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     }
@@ -89,6 +99,7 @@ public final class DivSlider: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let maxValue: Expression<Int> // default value: 100
   public let minValue: Expression<Int> // default value: 0
@@ -113,6 +124,7 @@ public final class DivSlider: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -175,6 +187,7 @@ public final class DivSlider: DivBase {
     focus: DivFocus? = nil,
     height: DivSize? = nil,
     id: String? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     margins: DivEdgeInsets? = nil,
     maxValue: Expression<Int>? = nil,
     minValue: Expression<Int>? = nil,
@@ -199,6 +212,7 @@ public final class DivSlider: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -216,6 +230,7 @@ public final class DivSlider: DivBase {
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.maxValue = maxValue ?? .value(100)
     self.minValue = minValue ?? .value(0)
@@ -240,6 +255,7 @@ public final class DivSlider: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -279,69 +295,71 @@ extension DivSlider: Equatable {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.maxValue == rhs.maxValue,
-      lhs.minValue == rhs.minValue
+      lhs.maxValue == rhs.maxValue
     else {
       return false
     }
     guard
+      lhs.minValue == rhs.minValue,
       lhs.paddings == rhs.paddings,
-      lhs.ranges == rhs.ranges,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.ranges == rhs.ranges
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle,
       lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle,
-      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable,
-      lhs.thumbStyle == rhs.thumbStyle
+      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable
     else {
       return false
     }
     guard
+      lhs.thumbStyle == rhs.thumbStyle,
       lhs.thumbTextStyle == rhs.thumbTextStyle,
-      lhs.thumbValueVariable == rhs.thumbValueVariable,
-      lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle
+      lhs.thumbValueVariable == rhs.thumbValueVariable
     else {
       return false
     }
     guard
+      lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle,
       lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle,
-      lhs.tooltips == rhs.tooltips,
-      lhs.trackActiveStyle == rhs.trackActiveStyle
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.trackActiveStyle == rhs.trackActiveStyle,
       lhs.trackInactiveStyle == rhs.trackInactiveStyle,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.visibility == rhs.visibility,
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variables == rhs.variables,
+      lhs.visibility == rhs.visibility
+    else {
+      return false
+    }
+    guard
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
-    else {
-      return false
-    }
-    guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -367,6 +385,7 @@ extension DivSlider: Serializable {
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["max_value"] = maxValue.toValidSerializationValue()
     result["min_value"] = minValue.toValidSerializationValue()
@@ -391,6 +410,7 @@ extension DivSlider: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }
@@ -431,6 +451,7 @@ extension DivSlider.TextStyle: Equatable {
       return false
     }
     guard
+      lhs.fontWeightValue == rhs.fontWeightValue,
       lhs.offset == rhs.offset,
       lhs.textColor == rhs.textColor
     else {
@@ -459,6 +480,7 @@ extension DivSlider.TextStyle: Serializable {
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
+    result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["offset"] = offset?.toDictionary()
     result["text_color"] = textColor.toValidSerializationValue()
     return result

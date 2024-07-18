@@ -1,9 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivSlider: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
@@ -235,16 +234,17 @@ extension DivSlider.TextStyle {
     value: Int
   ) -> Block {
     let expressionResolver = context.expressionResolver
-
-    let typo = Typo(
-      font: context.fontProvider.font(
-        weight: resolveFontWeight(expressionResolver),
-        size: resolveFontSize(expressionResolver).map(CGFloat.init) ?? 16
-      )
+    let fontParams = FontParams(
+      family: "",
+      weight: resolveFontWeightValue(expressionResolver)
+        ?? resolveFontWeight(expressionResolver).toInt(),
+      size: resolveFontSize(expressionResolver) ?? 16,
+      unit: resolveFontSizeUnit(expressionResolver),
+      featureSettings: nil
     )
-    .with(color: resolveTextColor(expressionResolver))
-    .with(alignment: .center)
-
+    let typo = Typo(font: context.fontProvider.font(fontParams))
+      .with(color: resolveTextColor(expressionResolver))
+      .with(alignment: .center)
     return TextBlock(
       widthTrait: .intrinsic,
       text: Int(value).description.with(typo: typo)

@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class TooltipFactorySnapshotTests: LayoutKitSnapshotTest {
   func test_Orientations() {

@@ -1,8 +1,6 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
-public enum CardIDTag {}
-public typealias DivCardID = Tagged<CardIDTag, String>
 public enum DivDataStateIDTag {}
 public typealias DivDataStateID = Tagged<DivDataStateIDTag, Int>
 public enum DivStateIDTag {}
@@ -14,11 +12,7 @@ public typealias DivBlockPath = Tagged<DivBlockPathTag, UIElementPath>
 
 extension Tagged where Tag == DivStatePathTag, RawValue == UIElementPath {
   public static func makeDivStatePath(from string: String) -> Self? {
-    guard let path = UIElementPath.parseDivPath(string) else {
-      return nil
-    }
-
-    return DivStatePath(rawValue: path)
+    DivStatePath(rawValue: UIElementPath.parse(string))
   }
 
   public var stateId: DivDataStateID? {
@@ -75,19 +69,5 @@ extension Tagged where Tag == DivBlockPathTag, RawValue == UIElementPath {
       return nil
     }
     return DivStatePath(rawValue: parent)
-  }
-}
-
-extension UIElementPath {
-  fileprivate static func parseDivPath(_ string: String) -> Self? {
-    let split = string.split(separator: "/")
-    guard
-      let first = split.first,
-      Int(first) != nil
-    else {
-      return nil
-    }
-
-    return UIElementPath(String(first)) + split.dropFirst().map(String.init)
   }
 }

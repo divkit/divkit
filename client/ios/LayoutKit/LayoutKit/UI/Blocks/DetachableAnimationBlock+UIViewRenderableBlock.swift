@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension DetachableAnimationBlock {
   public static func makeBlockView() -> BlockView {

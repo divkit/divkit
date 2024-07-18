@@ -7,6 +7,7 @@ import android.os.Build
 import android.view.View
 import android.view.View.LAYER_TYPE_HARDWARE
 import android.view.View.LAYER_TYPE_SOFTWARE
+import androidx.annotation.FloatRange
 import androidx.annotation.MainThread
 import com.airbnb.lottie.*
 import com.yandex.div.core.widget.DivViewDelegate
@@ -181,6 +182,9 @@ internal class LottieController(
             wasAnimatingWhenNotShown = true
         }
     }
+
+    @FloatRange(from = 0.0, to = 1.0)
+    fun getProgress(): Float = lottieDrawable.progress
 
     fun setRepeatMode(@LottieDrawable.RepeatMode mode: Int) {
         lottieDrawable.repeatMode = mode

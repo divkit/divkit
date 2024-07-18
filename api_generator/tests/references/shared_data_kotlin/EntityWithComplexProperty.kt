@@ -15,6 +15,7 @@ class EntityWithComplexProperty(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             property.hash()
         _hash = hash
         return hash
@@ -42,6 +43,7 @@ class EntityWithComplexProperty(
                 return it
             }
             val hash = 
+                this::class.hashCode() +
                 value.hashCode()
             _hash = hash
             return hash

@@ -1,7 +1,7 @@
-import BaseTinyPublic
 import CoreMedia
 import Foundation
 import LayoutKit
+import VGSL
 
 extension DivVideo: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

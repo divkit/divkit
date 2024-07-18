@@ -1,7 +1,6 @@
 import UIKit
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
   private let collectionView: UICollectionView

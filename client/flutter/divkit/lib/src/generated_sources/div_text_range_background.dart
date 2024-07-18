@@ -2,32 +2,23 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_solid_background.dart';
+import 'package:divkit/src/generated_sources/div_solid_background.dart';
 
 class DivTextRangeBackground with EquatableMixin {
-  const DivTextRangeBackground(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivSolidBackground) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivTextRangeBackground");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivSolidBackground) divSolidBackground,
   }) {
-    final value = _value;
-    if (value is DivSolidBackground) {
-      return divSolidBackground(value);
+    switch (_index) {
+      case 0:
+        return divSolidBackground(
+          value as DivSolidBackground,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivTextRangeBackground");
@@ -37,16 +28,22 @@ class DivTextRangeBackground with EquatableMixin {
     T Function(DivSolidBackground)? divSolidBackground,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivSolidBackground && divSolidBackground != null) {
-      return divSolidBackground(value);
+    switch (_index) {
+      case 0:
+        if (divSolidBackground != null) {
+          return divSolidBackground(
+            value as DivSolidBackground,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivTextRangeBackground.divSolidBackground(
-    DivSolidBackground value,
-  ) : _value = value;
+    DivSolidBackground obj,
+  )   : value = obj,
+        _index = 0;
 
   static DivTextRangeBackground? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -54,7 +51,8 @@ class DivTextRangeBackground with EquatableMixin {
     }
     switch (json['type']) {
       case DivSolidBackground.type:
-        return DivTextRangeBackground(DivSolidBackground.fromJson(json)!);
+        return DivTextRangeBackground.divSolidBackground(
+            DivSolidBackground.fromJson(json)!);
     }
     return null;
   }

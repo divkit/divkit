@@ -2,9 +2,8 @@ import CoreFoundation
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivSelect: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
@@ -18,12 +17,7 @@ extension DivSelect: DivBlockModeling {
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
 
-    let font = context.fontProvider.font(
-      family: resolveFontFamily(expressionResolver) ?? "",
-      weight: resolveFontWeight(expressionResolver),
-      size: resolveFontSizeUnit(expressionResolver)
-        .makeScaledValue(resolveFontSize(expressionResolver))
-    )
+    let font = context.fontProvider.font(resolveFontParams(expressionResolver))
     var typo = Typo(font: font).allowHeightOverrun
 
     let kern = CGFloat(resolveLetterSpacing(expressionResolver))
@@ -67,13 +61,13 @@ extension DivSelect: DivBlockModeling {
       layoutDirection: context.layoutDirection
     )
   }
-}
 
-extension DivSelect {
-  fileprivate func makeInputType(_ resolver: ExpressionResolver) -> TextInputBlock.InputType {
+  private func makeInputType(_ resolver: ExpressionResolver) -> TextInputBlock.InputType {
     .selection(options.map { $0.makeSelectionItem(resolver) })
   }
 }
+
+extension DivSelect: FontParamsProvider {}
 
 extension DivSelect.Option {
   fileprivate func makeSelectionItem(_ resolver: ExpressionResolver) -> TextInputBlock.InputType

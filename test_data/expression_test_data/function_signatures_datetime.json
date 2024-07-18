@@ -30,7 +30,8 @@
       "result_type": "datetime",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -366,7 +367,8 @@
       "result_type": "string",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -386,7 +388,8 @@
       "result_type": "string",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -410,7 +413,8 @@
       "result_type": "string",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -434,7 +438,8 @@
       "result_type": "string",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

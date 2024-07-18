@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_animation_interpolator.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_animation_interpolator.dart';
 
 class DivPageTransformationOverlap with EquatableMixin {
   const DivPageTransformationOverlap({
@@ -39,6 +39,24 @@ class DivPageTransformationOverlap with EquatableMixin {
         previousPageScale,
         reversedStackingOrder,
       ];
+
+  DivPageTransformationOverlap copyWith({
+    Expression<DivAnimationInterpolator>? interpolator,
+    Expression<double>? nextPageAlpha,
+    Expression<double>? nextPageScale,
+    Expression<double>? previousPageAlpha,
+    Expression<double>? previousPageScale,
+    Expression<bool>? reversedStackingOrder,
+  }) =>
+      DivPageTransformationOverlap(
+        interpolator: interpolator ?? this.interpolator,
+        nextPageAlpha: nextPageAlpha ?? this.nextPageAlpha,
+        nextPageScale: nextPageScale ?? this.nextPageScale,
+        previousPageAlpha: previousPageAlpha ?? this.previousPageAlpha,
+        previousPageScale: previousPageScale ?? this.previousPageScale,
+        reversedStackingOrder:
+            reversedStackingOrder ?? this.reversedStackingOrder,
+      );
 
   static DivPageTransformationOverlap? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

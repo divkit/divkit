@@ -3,9 +3,6 @@
 
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
-
 final class DivContainerExtensionsTests: XCTestCase {
   func test_NilItems() throws {
     let block = makeBlock(
@@ -83,6 +80,39 @@ final class DivContainerExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_NoClipping() throws {
+    let block = makeBlock(
+      divContainer(
+        clipToBounds: false,
+        items: [
+          divSeparator(),
+        ]
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: SeparatorBlock(
+                color: color("#14000000")
+              ),
+              accessibilityElement: .default
+            ),
+          ],
+          clipContent: false
+        ),
+        boundary: .noClip,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WithItemBuilder() throws {
     let block = makeBlock(
       divContainer(
@@ -117,6 +147,58 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Item 2"
+              )
+            ),
+          ]
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithItemBuilderAndPrototypeId() throws {
+    let block = makeBlock(
+      divContainer(
+        itemBuilder: DivCollectionItemBuilder(
+          data: .value([
+            [],
+            [],
+          ]),
+          prototypes: [
+            DivCollectionItemBuilder.Prototype(
+              div: divText(
+                id: "must_be_overloaded",
+                textExpression: "Index = @{index}"
+              ),
+              id: expression("item_@{index}")
+            ),
+          ]
+        )
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: textBlock(text: "Index = 0"),
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Index = 0",
+                identifier: "item_0"
+              )
+            ),
+            DecoratingBlock(
+              child: textBlock(text: "Index = 1"),
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Index = 1",
+                identifier: "item_1"
               )
             ),
           ]

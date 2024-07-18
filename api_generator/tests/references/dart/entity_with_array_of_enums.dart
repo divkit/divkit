@@ -18,12 +18,18 @@ class EntityWithArrayOfEnums with EquatableMixin {
         items,
       ];
 
+  EntityWithArrayOfEnums copyWith({
+      List<EntityWithArrayOfEnumsItem>?  items,
+  }) => EntityWithArrayOfEnums(
+      items: items ?? this.items,
+    );
+
   static EntityWithArrayOfEnums? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return EntityWithArrayOfEnums(
-      items: safeParseObj((json['items'] as List<dynamic>).map((v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!,).toList(),)!,
+      items: safeParseObj(safeListMap(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!),)!,
     );
   }
 }

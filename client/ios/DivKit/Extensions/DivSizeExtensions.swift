@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivSize {
   func resolveLayoutTrait(_ expressionResolver: ExpressionResolver) -> LayoutTrait {

@@ -2,8 +2,6 @@
 import UIKit
 #endif
 
-import LayoutKitInterface
-
 extension UserInterfaceAction {
   #if os(iOS)
   public typealias ResponderType = UIResponder

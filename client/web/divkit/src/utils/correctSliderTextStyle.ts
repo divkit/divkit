@@ -2,8 +2,8 @@ import type { SliderTextStyle } from '../types/slider';
 import type { MaybeMissing } from '../expressions/json';
 import { isPositiveNumber } from './isPositiveNumber';
 import { correctColor } from './correctColor';
-import { fontWeightToCss } from './fontWeightToCss';
 import { pxToEm } from './pxToEm';
+import { correctFontWeight } from './correctFontWeight';
 
 export interface TransformedSliderTextStyle {
     fontSize: string;
@@ -25,7 +25,7 @@ export function correctSliderTextStyle(
 
     const offset = textStyle.offset;
     const convertedColor = textStyle.text_color && correctColor(textStyle.text_color) || '#000';
-    const fontWeight = fontWeightToCss(textStyle.font_weight);
+    const fontWeight = correctFontWeight(textStyle.font_weight, textStyle.font_weight_value, undefined);
 
     if (
         isPositiveNumber(textStyle.font_size) &&

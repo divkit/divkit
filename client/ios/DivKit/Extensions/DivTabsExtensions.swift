@@ -1,44 +1,40 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivTabs: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let tabsPath = context.parentPath + (id ?? DivTabs.type)
-    return try modifyError({ DivBlockModelingError($0.message, path: tabsPath) }) {
+    let path = context.parentPath + (id ?? DivTabs.type)
+    let tabsContext = context.modifying(parentPath: path)
+    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
       try applyBaseProperties(
-        to: { try makeBaseBlock(context: context, tabsPath: tabsPath) },
-        context: context,
+        to: { try makeBaseBlock(context: tabsContext) },
+        context: tabsContext,
         actionsHolder: nil
       )
     }
   }
 
-  private func makeBaseBlock(
-    context: DivBlockModelingContext,
-    tabsPath: UIElementPath
-  ) throws -> Block {
-    let tabsContext = context.modifying(parentPath: tabsPath)
-    let tabsItemContext = tabsContext.modifying(errorsStorage: DivErrorsStorage(errors: []))
+  private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
+    let itemContext = context.modifying(errorsStorage: DivErrorsStorage(errors: []))
     let tabs = items.iterativeFlatMap { item, index in
       do {
-        return try item.makeTab(context: tabsItemContext, index: index)
+        return try item.makeTab(context: itemContext, index: index)
       } catch {
-        tabsItemContext.addError(error: error)
+        itemContext.addError(error: error)
         return nil
       }
     }
     if tabs.isEmpty {
       throw DivBlockModelingError(
         "Tabs error: missing children",
-        path: tabsPath,
-        causes: tabsItemContext.errorsStorage.errors
+        path: context.parentPath,
+        causes: itemContext.errorsStorage.errors
       )
     } else {
-      tabsContext.errorsStorage.add(contentsOf: tabsItemContext.errorsStorage)
+      context.errorsStorage.add(contentsOf: itemContext.errorsStorage)
     }
 
     let titleStyle = tabTitleStyle ?? DivTabs.TabTitleStyle()
@@ -55,7 +51,7 @@ extension DivTabs: DivBlockModeling {
       pagesHeight: resolveDynamicHeight(expressionResolver)
         ? .bySelectedPage
         : .byHighestPage,
-      path: tabsContext.parentPath,
+      path: context.parentPath,
       scrollingEnabled: resolveSwitchTabsByContentSwipeEnabled(expressionResolver),
       layoutDirection: context.layoutDirection
     )
@@ -66,7 +62,7 @@ extension DivTabs: DivBlockModeling {
         contentsModel: contentsModel,
         separatorStyle: resolveSeparatorStyle(context)
       ),
-      state: makeState(context: tabsContext, tabs: tabs),
+      state: makeState(context: context, tabs: tabs),
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context)
     )
@@ -188,9 +184,9 @@ extension Typo {
 
 extension DivTabs.Item {
   fileprivate func makeTab(context: DivBlockModelingContext, index: Int) throws -> Tab {
-    let tabContext = context.modifying(parentPath: context.parentPath + index)
-    let pageContext = tabContext.modifying(parentPath: tabContext.parentPath + "page")
-    let title = makeTitle(context: tabContext)
+    let titleContext = context.modifying(parentPath: context.parentPath + "title\(index)")
+    let title = makeTitle(context: titleContext)
+    let pageContext = context.modifying(parentPath: context.parentPath + index)
     let page = try div.value
       .makeBlock(context: pageContext)
       .makeTabPage(with: pageContext.parentPath)
@@ -198,14 +194,11 @@ extension DivTabs.Item {
   }
 
   private func makeTitle(context: DivBlockModelingContext) -> UILink {
-    let titleContext = context.modifying(
-      parentPath: context.parentPath + "title"
-    )
     let action = titleClickAction?.uiAction(context: context)
     return UILink(
-      text: resolveTitle(titleContext.expressionResolver) ?? "",
+      text: resolveTitle(context.expressionResolver) ?? "",
       url: action?.url,
-      path: action?.path ?? titleContext.parentPath
+      path: context.parentPath
     )
   }
 }

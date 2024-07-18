@@ -2,9 +2,8 @@ import CoreFoundation
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivInput: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
@@ -15,7 +14,8 @@ extension DivInput: DivBlockModeling {
       actionsHolder: nil,
       customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
         accessibility?.resolveDescription(context.expressionResolver) ?? textBinding.value
-      }
+      },
+      applyPaddings: false
     )
   }
 
@@ -25,12 +25,7 @@ extension DivInput: DivBlockModeling {
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
 
-    let font = context.fontProvider.font(
-      family: resolveFontFamily(expressionResolver) ?? "",
-      weight: resolveFontWeight(expressionResolver),
-      size: resolveFontSizeUnit(expressionResolver)
-        .makeScaledValue(resolveFontSize(expressionResolver))
-    )
+    let font = context.fontProvider.font(resolveFontParams(expressionResolver))
     var typo = Typo(font: font).allowHeightOverrun
 
     let kern = CGFloat(resolveLetterSpacing(expressionResolver))
@@ -56,8 +51,8 @@ extension DivInput: DivBlockModeling {
     let isFocused = context.blockStateStorage.isFocused(path: inputPath)
 
     return TextInputBlock(
-      widthTrait: resolveContentWidthTrait(context),
-      heightTrait: resolveContentHeightTrait(context),
+      widthTrait: resolveWidthTrait(context),
+      heightTrait: resolveHeightTrait(context),
       hint: hintValue.with(typo: typo.with(color: resolveHintColor(expressionResolver))),
       textValue: textBinding,
       rawTextValue: mask?.makeRawVariable(context),
@@ -77,13 +72,12 @@ extension DivInput: DivBlockModeling {
       layoutDirection: context.layoutDirection,
       textAlignmentHorizontal: resolveTextAlignmentHorizontal(expressionResolver).textAlignment,
       textAlignmentVertical: resolveTextAlignmentVertical(expressionResolver).textAlignment,
+      paddings: paddings?.resolve(context),
       isEnabled: resolveIsEnabled(expressionResolver)
     )
   }
-}
 
-extension DivInput {
-  fileprivate func makeValidators(_ context: DivBlockModelingContext) -> [TextInputValidator]? {
+  private func makeValidators(_ context: DivBlockModelingContext) -> [TextInputValidator]? {
     let expressionResolver = context.expressionResolver
     return validators?.compactMap { validator -> TextInputValidator? in
       switch validator {
@@ -138,6 +132,8 @@ extension DivInput {
     }
   }
 }
+
+extension DivInput: FontParamsProvider {}
 
 extension DivAlignmentHorizontal {
   fileprivate var textAlignment: TextInputBlock.TextAlignmentHorizontal {

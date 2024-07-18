@@ -2,29 +2,15 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_radial_gradient_fixed_center.dart';
-import 'div_radial_gradient_relative_center.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient_fixed_center.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient_relative_center.dart';
 
 class DivRadialGradientCenter with EquatableMixin {
-  const DivRadialGradientCenter(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivRadialGradientFixedCenter) {
-      return value;
-    }
-    if (value is DivRadialGradientRelativeCenter) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivRadialGradientCenter");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivRadialGradientFixedCenter)
@@ -32,12 +18,15 @@ class DivRadialGradientCenter with EquatableMixin {
     required T Function(DivRadialGradientRelativeCenter)
         divRadialGradientRelativeCenter,
   }) {
-    final value = _value;
-    if (value is DivRadialGradientFixedCenter) {
-      return divRadialGradientFixedCenter(value);
-    }
-    if (value is DivRadialGradientRelativeCenter) {
-      return divRadialGradientRelativeCenter(value);
+    switch (_index) {
+      case 0:
+        return divRadialGradientFixedCenter(
+          value as DivRadialGradientFixedCenter,
+        );
+      case 1:
+        return divRadialGradientRelativeCenter(
+          value as DivRadialGradientRelativeCenter,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivRadialGradientCenter");
@@ -49,25 +38,34 @@ class DivRadialGradientCenter with EquatableMixin {
         divRadialGradientRelativeCenter,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivRadialGradientFixedCenter &&
-        divRadialGradientFixedCenter != null) {
-      return divRadialGradientFixedCenter(value);
-    }
-    if (value is DivRadialGradientRelativeCenter &&
-        divRadialGradientRelativeCenter != null) {
-      return divRadialGradientRelativeCenter(value);
+    switch (_index) {
+      case 0:
+        if (divRadialGradientFixedCenter != null) {
+          return divRadialGradientFixedCenter(
+            value as DivRadialGradientFixedCenter,
+          );
+        }
+        break;
+      case 1:
+        if (divRadialGradientRelativeCenter != null) {
+          return divRadialGradientRelativeCenter(
+            value as DivRadialGradientRelativeCenter,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivRadialGradientCenter.divRadialGradientFixedCenter(
-    DivRadialGradientFixedCenter value,
-  ) : _value = value;
+    DivRadialGradientFixedCenter obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivRadialGradientCenter.divRadialGradientRelativeCenter(
-    DivRadialGradientRelativeCenter value,
-  ) : _value = value;
+    DivRadialGradientRelativeCenter obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivRadialGradientCenter? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -75,10 +73,10 @@ class DivRadialGradientCenter with EquatableMixin {
     }
     switch (json['type']) {
       case DivRadialGradientFixedCenter.type:
-        return DivRadialGradientCenter(
+        return DivRadialGradientCenter.divRadialGradientFixedCenter(
             DivRadialGradientFixedCenter.fromJson(json)!);
       case DivRadialGradientRelativeCenter.type:
-        return DivRadialGradientCenter(
+        return DivRadialGradientCenter.divRadialGradientRelativeCenter(
             DivRadialGradientRelativeCenter.fromJson(json)!);
     }
     return null;

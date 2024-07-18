@@ -66,6 +66,15 @@
           "default_value": "regular",
           "$description": "translations.json#/div_font_weight"
         },
+        "font_weight_value": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_font_weight_value",
+          "platforms": [
+            "ios",
+            "web",
+            "android"
+          ]
+        },
         "hint_text": {
           "type": "string",
           "$description": "translations.json#/div_select_hint_text"

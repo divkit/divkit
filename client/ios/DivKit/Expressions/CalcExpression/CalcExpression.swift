@@ -33,7 +33,7 @@
 
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 struct CalcExpression {
   static func parse(_ expression: String) throws -> CalcExpression {
@@ -52,8 +52,8 @@ struct CalcExpression {
     }
   }
 
-  func evaluate(evaluators: @escaping (Symbol) -> Function?) throws -> Any {
-    try root.evaluate(evaluators)
+  func evaluate(_ context: ExpressionContext) throws -> Any {
+    try root.evaluate(context)
   }
 }
 
@@ -75,15 +75,13 @@ enum Subexpression {
     }
   }
 
-  func evaluate(
-    _ evaluators: (CalcExpression.Symbol) -> Function?
-  ) throws -> Any {
+  func evaluate(_ context: ExpressionContext) throws -> Any {
     switch self {
     case let .literal(value):
       return value
     case let .symbol(symbol, args):
-      if let evaluator = evaluators(symbol) {
-        return try evaluator.invoke(args: args, evaluators: evaluators)
+      if let evaluator = context.evaluators(symbol) {
+        return try evaluator.invoke(args: args, context: context)
       }
       throw ExpressionError("Undefined symbol: \(symbol.name).")
     }
@@ -295,17 +293,6 @@ extension UnicodeScalarView {
       }
     }
 
-    func scanHex() -> String? {
-      scanCharacters {
-        switch $0 {
-        case "0"..."9", "A"..."F", "a"..."f":
-          true
-        default:
-          false
-        }
-      }
-    }
-
     func scanExponent() -> String? {
       let start = self
       if let e = scanCharacter({ $0 == "e" || $0 == "E" }) {
@@ -323,9 +310,6 @@ extension UnicodeScalarView {
       var endOfInt = self
       let sign = scanCharacter { $0 == "-" } ?? ""
       if let integer = scanInteger() {
-        if integer == "0", scanCharacter("x") {
-          return .integer("\(sign)0x\(scanHex() ?? "")")
-        }
         endOfInt = self
         if scanCharacter(".") {
           guard let fraction = scanInteger() else {
@@ -370,7 +354,7 @@ extension UnicodeScalarView {
   }
 
   private mutating func parseOperator() -> Subexpression? {
-    if let op = scanCharacters(isOperator)
+    if let op = scanCharacters({ "+-*/%=<>!&|?:".unicodeScalars.contains($0) })
       ?? scanCharacter({ "(.".unicodeScalars.contains($0) }) {
       return .symbol(.infix(op), [])
     }
@@ -643,11 +627,6 @@ private func takesPrecedence(_ lhs: String, over rhs: String) -> Bool {
   return p1 > p2
 }
 
-private func isOperator(_ char: UnicodeScalar) -> Bool {
-  // Strangely, this is faster than switching on value
-  "/=­+-!*%<>&|^~?:".unicodeScalars.contains(char)
-}
-
 private func isIdentifierHead(_ c: UnicodeScalar) -> Bool {
   switch c.value {
   case 0x5F, // _
@@ -666,15 +645,6 @@ private func isIdentifier(_ c: UnicodeScalar) -> Bool {
     true
   default:
     isIdentifierHead(c)
-  }
-}
-
-private func isIdentifierWithDot(_ c: UnicodeScalar) -> Bool {
-  switch c.value {
-  case 0x2E: // .
-    true
-  default:
-    isIdentifier(c)
   }
 }
 

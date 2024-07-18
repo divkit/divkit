@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 extension LayeredBlock {
   func makeChildrenFrames(size: CGSize) -> [CGRect] {

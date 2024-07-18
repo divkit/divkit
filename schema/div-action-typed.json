@@ -7,16 +7,22 @@
       "$ref": "div-action-array-remove-value.json"
     },
     {
-      "$ref": "div-action-set-variable.json"
-    },
-    {
-      "$ref": "div-action-focus-element.json"
+      "$ref": "div-action-array-set-value.json"
     },
     {
       "$ref": "div-action-clear-focus.json"
     },
     {
       "$ref": "div-action-copy-to-clipboard.json"
+    },
+    {
+      "$ref": "div-action-dict-set-value.json"
+    },
+    {
+      "$ref": "div-action-focus-element.json"
+    },
+    {
+      "$ref": "div-action-set-variable.json"
     }
   ]
 }

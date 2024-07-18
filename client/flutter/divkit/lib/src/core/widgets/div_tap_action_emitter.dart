@@ -1,42 +1,63 @@
-import 'package:divkit/src/core/action/action.dart';
+import 'package:divkit/src/core/action/models/action.dart';
 import 'package:divkit/src/core/action/action_converter.dart';
 import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart' as dto;
+import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:divkit/src/utils/tap_builder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
 class DivTapActionModel with EquatableMixin {
-  final List<DivAction> actions;
+  final List<DivActionModel> actions;
+  final List<DivActionModel> longtapActions;
   final bool enabled;
+  final bool enabledAnimation;
 
   const DivTapActionModel({
     required this.actions,
+    required this.longtapActions,
     required this.enabled,
+    required this.enabledAnimation,
   });
 
   static Stream<DivTapActionModel> from(
     BuildContext context,
-    List<dto.DivAction> actions,
+    List<DivAction> actions,
+    List<DivAction> longtapActions,
+    DivAnimation? divAnimation,
   ) {
     final variables =
         DivKitProvider.watch<DivContext>(context)!.variableManager;
 
     return variables.watch<DivTapActionModel>((context) async {
-      List<DivAction> result = [];
+      List<DivActionModel> a = [];
       for (final action in actions) {
         final rAction = await action.resolve(
           context: context,
         );
         if (rAction.enabled) {
-          result.add(rAction);
+          a.add(rAction);
         }
       }
 
+      List<DivActionModel> la = [];
+      for (final action in longtapActions) {
+        final rAction = await action.resolve(
+          context: context,
+        );
+        if (rAction.enabled) {
+          la.add(rAction);
+        }
+      }
+
+      final animationName =
+          await divAnimation?.name.resolveValue(context: context);
+
       return DivTapActionModel(
-        actions: result,
-        enabled: result.isNotEmpty,
+        actions: a,
+        longtapActions: la,
+        enabled: a.isNotEmpty || la.isNotEmpty,
+        enabledAnimation: !(animationName == DivAnimationName.noAnimation),
       );
     }).distinct();
   }
@@ -44,19 +65,25 @@ class DivTapActionModel with EquatableMixin {
   @override
   List<Object?> get props => [
         actions,
+        longtapActions,
+        enabledAnimation,
       ];
 }
 
 /// A wrapper for sending actions.
 class DivTapActionEmitter extends StatefulWidget {
-  final List<dto.DivAction> actions;
+  final List<DivAction> actions;
+  final List<DivAction> longtapActions;
+  final DivAnimation? actionAnimation;
 
   final Widget child;
 
   const DivTapActionEmitter({
     super.key,
     required this.actions,
+    required this.longtapActions,
     required this.child,
+    required this.actionAnimation,
   });
 
   @override
@@ -72,7 +99,12 @@ class _DivTapActionEmitterState extends State<DivTapActionEmitter> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    stream ??= DivTapActionModel.from(context, widget.actions);
+    stream ??= DivTapActionModel.from(
+      context,
+      widget.actions,
+      widget.longtapActions,
+      widget.actionAnimation,
+    );
   }
 
   @override
@@ -80,13 +112,18 @@ class _DivTapActionEmitterState extends State<DivTapActionEmitter> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.actions != oldWidget.actions) {
-      stream = DivTapActionModel.from(context, widget.actions);
+      stream = DivTapActionModel.from(
+        context,
+        widget.actions,
+        widget.longtapActions,
+        widget.actionAnimation,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) => StreamBuilder<DivTapActionModel>(
-        stream: DivTapActionModel.from(context, widget.actions),
+        stream: stream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final model = snapshot.requireData;
@@ -100,7 +137,15 @@ class _DivTapActionEmitterState extends State<DivTapActionEmitter> {
                     await action.execute(divContext);
                   }
                 },
+                onLongPress: () async {
+                  for (final action in model.longtapActions) {
+                    await action.execute(divContext);
+                  }
+                },
                 builder: (context, pressed, hovered, child) {
+                  if (!model.enabledAnimation) {
+                    return child;
+                  }
                   double opacity = 1.0;
                   if (pressed) {
                     opacity = 0.6;

@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs
 
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
@@ -15,13 +14,12 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
-import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.internal.core.toDivItemBuilderResult
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
@@ -40,7 +38,6 @@ internal class DivGridBinder @Inject constructor(
 
     override fun bindView(context: BindingContext, view: DivGridLayout, div: DivGrid, path: DivStatePath) {
         val oldDiv = view.div
-        val oldChildren = view.children
         if (div === oldDiv) {
             // todo MORDAANDROID-636
             // return
@@ -69,7 +66,7 @@ internal class DivGridBinder @Inject constructor(
 
         val items = div.nonNullItems
 
-        view.tryRebindPlainContainerChildren(divView, items.toDivItemBuilderResults(resolver), divViewCreator)
+        view.tryRebindPlainContainerChildren(divView, items.toDivItemBuilderResult(resolver), divViewCreator)
 
         var viewsPositionDiff = 0
         for (gridIndex in items.indices) {
@@ -108,8 +105,8 @@ internal class DivGridBinder @Inject constructor(
 
         view.trackVisibilityActions(
             divView,
-            items.toDivItemBuilderResults(resolver),
-            oldDiv?.items?.toDivItemBuilderResults(resolver),
+            items.toDivItemBuilderResult(resolver),
+            oldDiv?.items?.toDivItemBuilderResult(resolver),
         )
     }
 
@@ -170,7 +167,4 @@ internal class DivGridBinder @Inject constructor(
             divBinder.get().setDataWithoutBinding(context, childView, items[gridIndex])
         }
     }
-
-    private fun List<Div>.toDivItemBuilderResults(resolver: ExpressionResolver) =
-        map { DivItemBuilderResult(it, resolver) }
 }

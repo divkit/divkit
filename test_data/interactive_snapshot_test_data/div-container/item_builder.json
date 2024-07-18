@@ -1,6 +1,7 @@
 {
   "description": "Container with item_builder.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],
@@ -61,7 +62,6 @@
             "type": "container",
             "orientation": "vertical",
             "item_builder": {
-              "type": "prototype",
               "data": "@{data}",
               "data_element_name": "item",
               "prototypes": [

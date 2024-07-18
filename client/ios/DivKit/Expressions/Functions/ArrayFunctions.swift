@@ -1,8 +1,6 @@
 import Foundation
 
-import CommonCorePublic
-
-private typealias Dict = [String: AnyHashable]
+import VGSL
 
 extension [String: Function] {
   mutating func addArrayFunctions() {
@@ -65,7 +63,7 @@ private let _getColor = FunctionBinary<[AnyHashable], Int, Color> {
   try $0.getColor(index: $1)
 }
 
-private let _getDict = FunctionBinary<[AnyHashable], Int, Dict> {
+private let _getDict = FunctionBinary<[AnyHashable], Int, DivDictionary> {
   try $0.getDict(index: $1)
 }
 
@@ -105,7 +103,7 @@ private let _getOptColor = OverloadedFunction(functions: [
   },
 ])
 
-private let _getOptDict = FunctionBinary<[AnyHashable], Int, Dict> {
+private let _getOptDict = FunctionBinary<[AnyHashable], Int, DivDictionary> {
   (try? $0.getDict(index: $1)) ?? [:]
 }
 
@@ -142,9 +140,9 @@ extension [AnyHashable] {
     return arrayValue
   }
 
-  fileprivate func getDict(index: Int) throws -> Dict {
+  fileprivate func getDict(index: Int) throws -> DivDictionary {
     let value = try getValue(index: index)
-    guard let dictValue = value as? Dict else {
+    guard let dictValue = value as? DivDictionary else {
       throw ExpressionError.incorrectType("Dict", value)
     }
     return dictValue

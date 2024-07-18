@@ -1,7 +1,6 @@
-import BasePublic
-import CommonCorePublic
 import Foundation
 import LayoutKit
+import VGSL
 
 extension DivTooltip {
   fileprivate func makeTooltip(

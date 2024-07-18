@@ -13,6 +13,7 @@ internal class DivLinearLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearContainerLayout(context, attrs, defStyleAttr),
     DivHolderView<DivContainer> by DivHolderViewMixin(),
+    DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

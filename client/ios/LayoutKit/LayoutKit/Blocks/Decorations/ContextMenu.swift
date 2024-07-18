@@ -1,8 +1,6 @@
 import Foundation
 
-import BasePublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 public struct ContextMenu: Equatable {
   public struct Item: Equatable {

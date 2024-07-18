@@ -325,12 +325,22 @@
             "expression": "",
             "expected": {
                 "type": "error",
+                "value": "Expression expected"
+            },
+            "deprecated": "Should not return error",
+            "platforms": [
+                "android"
+            ]
+        },
+        {
+            "expression": "",
+            "expected": {
+                "type": "string",
                 "value": ""
             },
-            "variables": [],
             "platforms": [
-                "android",
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {
@@ -339,20 +349,6 @@
             "expected": {
                 "type": "string",
                 "value": "3.2 kilometers to destination"
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string template with expression in the middle",
-            "expression": "This is @{'a'} string",
-            "expected": {
-                "type": "string",
-                "value": "This is a string"
             },
             "variables": [],
             "platforms": [

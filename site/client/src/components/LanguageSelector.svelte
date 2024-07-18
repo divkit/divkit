@@ -31,6 +31,10 @@
         font-size: 20px;
     }
 
+    .language-selector__item:not(.language-selector__item_selected):hover {
+        color: red;
+    }
+
     .language-selector__item_selected {
         font-weight: bold;
     }
@@ -41,7 +45,13 @@
         left: 0;
         width: 100%;
         height: 100%;
+        margin: 0;
+        padding: 0;
         opacity: 0;
+    }
+
+    .language-selector__radio:not(:checked) {
+        cursor: pointer;
     }
 
     .language-selector__separator {

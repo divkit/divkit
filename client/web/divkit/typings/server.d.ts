@@ -19,4 +19,5 @@ export function render(opts: {
     typefaceProvider?: TypefaceProvider;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     store?: Store;
+    weekStartDay?: number;
 }): string;

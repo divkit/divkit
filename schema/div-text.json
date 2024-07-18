@@ -42,6 +42,15 @@
             "ios"
           ]
         },
+        "font_feature_settings": {
+          "type": "string",
+          "$description": "translations.json#/div_font_feature_settings",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
         "letter_spacing": {
           "type": "number",
           "$description": "translations.json#/div_text_range_letter_spacing"
@@ -49,6 +58,15 @@
         "font_weight": {
           "$ref": "div-font-weight.json",
           "$description": "translations.json#/div_font_weight"
+        },
+        "font_weight_value": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_font_weight_value",
+          "platforms": [
+            "ios",
+            "web",
+            "android"
+          ]
         },
         "text_color": {
           "$ref": "common.json#/color",
@@ -245,6 +263,15 @@
             "ios"
           ]
         },
+        "font_feature_settings": {
+          "type": "string",
+          "$description": "translations.json#/div_font_feature_settings",
+          "platforms": [
+            "android",
+            "ios",
+            "web"
+          ]
+        },
         "line_height": {
           "$ref": "common.json#/non_negative_integer",
           "$description": "translations.json#/div_text_line_height"
@@ -284,6 +311,15 @@
           "$ref": "div-font-weight.json",
           "default_value": "regular",
           "$description": "translations.json#/div_font_weight"
+        },
+        "font_weight_value": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_font_weight_value",
+          "platforms": [
+            "ios",
+            "android",
+            "web"
+          ]
         },
         "text_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",

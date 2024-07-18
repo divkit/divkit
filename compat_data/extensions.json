@@ -1,5 +1,44 @@
 {
     "features": [{
+        "id": "ext_lottie",
+        "name": "<code>lottie</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "6.0.0"
+            },
+            "web": {
+                "version_added": "24.3.0"
+            }
+        }
+    }, {
+        "id": "ext_size_provider",
+        "name": "<code>size_provider</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "24.0.0"
+            },
+            "ios": {
+                "version_added": "23.2.0"
+            },
+            "web": {
+                "version_added": "24.3.0"
+            }
+        }
+    }, {
+        "id": "ext_pinch_to_zoom",
+        "name": "<code>pinch-to-zoom</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "ios": {
+                "version_added": "1.0.0"
+            }
+        }
+    }, {
         "id": "ext_lottie_scale",
         "name": "Lottie extension <code>scale</code> property",
         "compat": {
@@ -16,6 +55,17 @@
             },
             "ios": {
                 "version_added": "29.8.0"
+            },
+            "web": {
+                "version_added": "30.3.0"
+            }
+        }
+    }, {
+        "id": "ext_markdown",
+        "name": "<code>markdown</code> extension",
+        "compat": {
+            "android": {
+                "version_added": "30.8.0"
             }
         }
     }]

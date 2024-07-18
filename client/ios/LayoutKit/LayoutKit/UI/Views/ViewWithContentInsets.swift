@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 final class ViewWithContentInsets: UIView {
   let innerView: BlockView

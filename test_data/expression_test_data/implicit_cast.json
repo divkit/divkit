@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "7 == 7.0 => true",
       "expression": "@{7 == 7.0}",
       "expected": {
         "type": "boolean",
         "value": true
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,22 +13,21 @@
       ]
     },
     {
-      "name": "a == b => true",
-      "expression": "@{a == b}",
+      "expression": "@{integer_var == number_var}",
       "expected": {
         "type": "boolean",
         "value": true
       },
       "variables": [
         {
+          "name": "integer_var",
           "type": "integer",
-          "value": 7,
-          "name": "a"
+          "value": 7
         },
         {
+          "name": "number_var",
           "type": "number",
-          "value": 7.0,
-          "name": "b"
+          "value": 7.0
         }
       ],
       "platforms": [
@@ -40,13 +37,11 @@
       ]
     },
     {
-      "name": "7 < 7.2 => true",
       "expression": "@{7 < 7.2}",
       "expected": {
         "type": "boolean",
         "value": true
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -54,22 +49,21 @@
       ]
     },
     {
-      "name": "a > b => false",
-      "expression": "@{a > b}",
+      "expression": "@{integer_var > number_var}",
       "expected": {
         "type": "boolean",
         "value": false
       },
       "variables": [
         {
+          "name": "integer_var",
           "type": "integer",
-          "value": 7,
-          "name": "a"
+          "value": 7
         },
         {
+          "name": "number_var",
           "type": "number",
-          "value": 7.0,
-          "name": "b"
+          "value": 7.0
         }
       ],
       "platforms": [
@@ -79,22 +73,21 @@
       ]
     },
     {
-      "name": "a >= b => true",
-      "expression": "@{a >= b}",
+      "expression": "@{integer_var >= number_var}",
       "expected": {
         "type": "boolean",
         "value": true
       },
       "variables": [
         {
+          "name": "integer_var",
           "type": "integer",
-          "value": 7,
-          "name": "a"
+          "value": 7
         },
         {
+          "name": "number_var",
           "type": "number",
-          "value": 7.0,
-          "name": "b"
+          "value": 7.0
         }
       ],
       "platforms": [
@@ -110,7 +103,6 @@
         "type": "number",
         "value": 15.9
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -118,21 +110,20 @@
       ]
     },
     {
-      "name": "a - b => -1.8",
-      "expression": "@{a - b}",
+      "expression": "@{number_var - integer_var}",
       "expected": {
         "type": "number",
         "value": -1.8
       },
       "variables": [
         {
+          "name": "number_var",
           "type": "number",
-          "value": 1.2,
-          "name": "a"
+          "value": 1.2
         },
         {
+          "name": "integer_var",
           "type": "integer",
-          "name": "b",
           "value": 3
         }
       ],
@@ -143,21 +134,20 @@
       ]
     },
     {
-      "name": "a * b => 3.6",
-      "expression": "@{a * b}",
+      "expression": "@{number_var * integer_var}",
       "expected": {
         "type": "number",
         "value": 3.6
       },
       "variables": [
         {
+          "name": "number_var",
           "type": "number",
-          "value": 1.2,
-          "name": "a"
+          "value": 1.2
         },
         {
+          "name": "integer_var",
           "type": "integer",
-          "name": "b",
           "value": 3
         }
       ],
@@ -168,21 +158,20 @@
       ]
     },
     {
-      "name": "a / b => 0.4",
-      "expression": "@{a / b}",
+      "expression": "@{number_var / integer_var}",
       "expected": {
         "type": "number",
         "value": 0.4
       },
       "variables": [
         {
+          "name": "number_var",
           "type": "number",
-          "value": 1.2,
-          "name": "a"
+          "value": 1.2
         },
         {
+          "name": "integer_var",
           "type": "integer",
-          "name": "b",
           "value": 3
         }
       ],
@@ -193,21 +182,20 @@
       ]
     },
     {
-      "name": "a % b => 1.4",
-      "expression": "@{a % b}",
+      "expression": "@{integer_var % number_var}",
       "expected": {
         "type": "number",
         "value": 1.4
       },
       "variables": [
         {
+          "name": "integer_var",
           "type": "integer",
-          "value": 3,
-          "name": "a"
+          "value": 3
         },
         {
+          "name": "number_var",
           "type": "number",
-          "name": "b",
           "value": 1.6
         }
       ],
@@ -218,13 +206,11 @@
       ]
     },
     {
-      "name": "max(0, 1, 2, 3.5) => 3",
       "expression": "@{max(0, 1, 2, 3.5)}",
       "expected": {
         "type": "number",
         "value": 3.5
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -232,21 +218,20 @@
       ]
     },
     {
-      "name": "argb(1.0, red, 0.0, blue) => #FF8000FF",
-      "expression": "@{argb(1.0, red, 0.0, blue)}",
+      "expression": "@{argb(1.0, number_var, 0.0, integer_var)}",
       "expected": {
         "type": "color",
         "value": "#FF8000FF"
       },
       "variables": [
         {
+          "name": "number_var",
           "type": "number",
-          "name": "red",
           "value": 0.5
         },
         {
+          "name": "integer_var",
           "type": "integer",
-          "name": "blue",
           "value": 1
         }
       ],

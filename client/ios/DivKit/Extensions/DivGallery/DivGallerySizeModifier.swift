@@ -13,7 +13,7 @@ struct DivGallerySizeModifier: DivSizeModifier {
   init(
     context: DivBlockModelingContext,
     gallery: DivGalleryProtocol,
-    direction: GalleryViewModel.Direction
+    direction: ScrollDirection
   ) {
     let items = gallery.nonNilItems
 

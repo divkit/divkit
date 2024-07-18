@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 public final class PagerBlock: BlockWithTraits {
   public enum LayoutMode: Equatable {

@@ -184,7 +184,9 @@
         startCoords = getTouchCoords(event);
         isChanged = false;
         startTs = Date.now();
-        clearTimeout(longtapTimer);
+        if (longtapTimer) {
+            clearTimeout(longtapTimer);
+        }
     }
 
     function onTouchMove(event: TouchEvent): void {
@@ -209,7 +211,9 @@
             componentContext.execAnyActions(longTapActions, { processUrls: true, node });
         }
 
-        clearTimeout(longtapTimer);
+        if (longtapTimer) {
+            clearTimeout(longtapTimer);
+        }
         longtapTimer = window.setTimeout(() => {
             startCoords = null;
             startTs = -1;
@@ -252,7 +256,9 @@
         if (id && !hasInnerFocusable) {
             rootCtx.unregisterFocusable(id);
         }
-        clearTimeout(longtapTimer);
+        if (longtapTimer) {
+            clearTimeout(longtapTimer);
+        }
     });
 </script>
 

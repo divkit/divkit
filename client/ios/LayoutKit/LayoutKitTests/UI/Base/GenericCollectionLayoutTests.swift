@@ -1,31 +1,47 @@
 import CoreGraphics
 import XCTest
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 final class GenericCollectionLayoutTests: XCTestCase {
   func test_WhenConstructingFromFramesAndPageSize_IncreasesContentSizeToFitLastPageSize() {
-    let me = GenericCollectionLayout(frames: frames, pageSize: pageSize)
+    let me = GenericCollectionLayout(
+      frames: frames,
+      pageSize: pageSize,
+      collectionDirection: .horizontal
+    )
 
     XCTAssertEqual(me.contentSize.truncatingRemainder(dividingBy: pageSize), .zero)
   }
 
   func test_WhenConstructingFromZeroFrameAndPageSize_IncreasesContentSizeToFitLastPageSize() {
-    let me = GenericCollectionLayout(frames: [.zero], pageSize: pageSize)
+    let me = GenericCollectionLayout(
+      frames: [.zero],
+      pageSize: pageSize,
+      collectionDirection: .horizontal
+    )
 
     XCTAssertEqual(me.contentSize.truncatingRemainder(dividingBy: pageSize), .zero)
   }
 
   func test_WhenConstructingWithoutFramesAndPageSize_IncreasesContentSizeToFitLastPageSize() {
-    let me = GenericCollectionLayout(frames: [], pageSize: pageSize)
+    let me = GenericCollectionLayout(
+      frames: [],
+      pageSize: pageSize,
+      collectionDirection: .horizontal
+    )
 
     XCTAssertEqual(me.contentSize.truncatingRemainder(dividingBy: pageSize), .zero)
   }
 
   func test_WhenConstructingFromFramesAndZeroPageSize_DoesNotIncreaseContentSize() {
     let frame = frames[0]
-    let me = GenericCollectionLayout(frames: [frame], pageSize: .zero)
+    let me = GenericCollectionLayout(
+      frames: [frame],
+      pageSize: .zero,
+      collectionDirection: .horizontal
+    )
 
     XCTAssertEqual(me.contentSize, CGSize(width: frame.maxX, height: frame.maxY))
   }

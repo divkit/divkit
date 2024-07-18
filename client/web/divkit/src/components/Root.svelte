@@ -78,7 +78,8 @@
     } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
-    import { arrayInsert, arrayRemove } from '../actions/array';
+    import { arrayInsert, arrayRemove, arraySet } from '../actions/array';
+    import { dictSetValue } from '../actions/dict';
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
     import TooltipView from './tooltip/Tooltip.svelte';
@@ -103,6 +104,9 @@
     export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
     export let direction: Direction = 'ltr';
     export let store: Store | undefined = undefined;
+    export let weekStartDay = 0;
+
+    let isMounted = true;
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -260,7 +264,7 @@
 
         const vars = mergeVars(variables, additionalVars);
 
-        const prepared = prepareVars(jsonProp, logError, store);
+        const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
         if (!prepared.vars.length) {
             if (prepared.hasExpression) {
                 return constStore(prepared.applyVars(vars));
@@ -280,7 +284,7 @@
         additionalVars?: Map<string, Variable>,
         keepComplex = false
     ): MaybeMissing<T> {
-        const prepared = prepareVars(jsonProp, logError, store);
+        const prepared = prepareVars(jsonProp, logError, store, weekStartDay);
 
         if (!prepared.hasExpression) {
             return jsonProp;
@@ -291,11 +295,18 @@
         return prepared.applyVars(vars, keepComplex);
     }
 
-    function preparePrototypeVariables(name: string, data: Record<string, unknown>): Map<string, Variable> {
+    function preparePrototypeVariables(
+        name: string,
+        data: Record<string, unknown>,
+        index: number
+    ): Map<string, Variable> {
         const map = new Map<string, Variable>();
 
         const dict = createConstVariable(name, 'dict', data);
         map.set(name, dict);
+
+        const indexVar = createConstVariable('index', 'integer', index);
+        map.set('index', indexVar);
 
         return map;
     }
@@ -914,6 +925,9 @@
                 case 'array_remove_value':
                     arrayRemove(variables, log, actionTyped);
                     break;
+                case 'array_set_value':
+                    arraySet(variables, log, actionTyped);
+                    break;
                 case 'copy_to_clipboard':
                     copyToClipboard(log, actionTyped);
                     break;
@@ -938,6 +952,10 @@
                     } catch (err) {
                         // do nothing
                     }
+                    break;
+                }
+                case 'dict_set_value': {
+                    dictSetValue(variables, log, actionTyped);
                     break;
                 }
                 default: {
@@ -1165,6 +1183,13 @@
     function getExtensionContext(): DivExtensionContext {
         return {
             variables,
+            processExpressions<T>(t: T) {
+                return getJsonWithVars(
+                    logError,
+                    t
+                ) as T;
+            },
+            execAction,
             logError
         };
     }
@@ -1286,7 +1311,11 @@
     }
 
     function registerTimeout(timeout: number): void {
-        timeouts.push(timeout);
+        if (isMounted) {
+            timeouts.push(timeout);
+        } else {
+            clearTimeout(timeout);
+        }
     }
 
     setContext<RootCtxValue>(ROOT_CTX, {
@@ -1589,7 +1618,9 @@
                         const stores = exprVars.map(name => variables.get(name) || awaitVariableChanges(name));
 
                         derived(stores, () => {
-                            const res = evalExpression(variables, store, ast);
+                            const res = evalExpression(variables, store, ast, {
+                                weekStartDay
+                            });
 
                             res.warnings.forEach(logError);
 
@@ -1610,6 +1641,7 @@
                                 // and trigger mode matches
                                 (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                             ) {
+                                prevConditionResult = Boolean(conditionResult.value);
                                 const actionsToLog: Action[] = [];
                                 const actions = trigger.actions.map(action => getJsonWithVars(logError, action));
                                 for (const action of actions) {
@@ -1621,9 +1653,9 @@
                                 for (const action of actionsToLog) {
                                     logStat('trigger', action);
                                 }
+                            } else {
+                                prevConditionResult = Boolean(conditionResult.value);
                             }
-
-                            prevConditionResult = Boolean(conditionResult.value);
                         });
                     } catch (err) {
                         logError(wrapError(new Error('Unable to parse variable_trigger'), {
@@ -1702,6 +1734,7 @@
     });
 
     onDestroy(() => {
+        isMounted = false;
         rootInstancesCount--;
 
         if (!rootInstancesCount) {

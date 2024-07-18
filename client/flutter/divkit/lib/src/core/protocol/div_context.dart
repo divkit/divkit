@@ -1,4 +1,7 @@
 import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/protocol/div_data_provider.dart';
+import 'package:divkit/src/core/protocol/div_patch.dart';
+import 'package:divkit/src/core/protocol/div_visibility_action.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:flutter/widgets.dart';
 
@@ -11,15 +14,19 @@ abstract class DivContext {
 
   DivActionHandler get actionHandler;
 
+  DivVisibilityActionManager get visibilityActionManager;
+
   DivTimerManager get timerManager;
 
-  FocusNode? getFocusNode(String divId);
+  DivPatchManager get patchManager;
 
-  Future<void> dispose();
+  FocusNode? getFocusNode(String divId);
 }
 
 class DivRootContext extends DivContext {
   BuildContext? buildContext;
+
+  DivDataProvider? dataProvider;
 
   DivVariableManager? _variableManager;
 
@@ -49,6 +56,22 @@ class DivRootContext extends DivContext {
 
   set timerManager(DivTimerManager value) => _timerManager = value;
 
+  DivPatchManager? _patchManager;
+
+  @override
+  DivPatchManager get patchManager => _patchManager!;
+
+  set patchManager(DivPatchManager value) => _patchManager = value;
+
+  DivVisibilityActionManager? _visibilityActionManager;
+
+  @override
+  DivVisibilityActionManager get visibilityActionManager =>
+      _visibilityActionManager!;
+
+  set visibilityActionManager(DivVisibilityActionManager value) =>
+      _visibilityActionManager = value;
+
   DivRootContext({
     this.buildContext,
   });
@@ -61,17 +84,20 @@ class DivRootContext extends DivContext {
     return null;
   }
 
-  @override
   Future<void> dispose() async {
     _stateManager?.dispose();
+    _visibilityActionManager?.dispose();
     await _timerManager?.dispose();
     await _variableManager?.dispose();
+    await dataProvider?.dispose();
 
     buildContext = null;
     _stateManager = null;
     _timerManager = null;
     _variableManager = null;
     _actionHandler = null;
+    _patchManager = null;
+    _visibilityActionManager = null;
 
     // Clear the expression resolver.
     await exprResolver.clearVariables();

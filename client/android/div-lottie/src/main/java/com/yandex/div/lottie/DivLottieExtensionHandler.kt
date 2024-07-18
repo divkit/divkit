@@ -4,11 +4,19 @@ import android.view.View
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.LottieResult
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
+import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.parser.ANY_TO_BOOLEAN
+import com.yandex.div.internal.parser.JsonParser
+import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
 import com.yandex.div.internal.util.mapNotNull
+import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivGifImage
@@ -26,6 +34,7 @@ private const val LOTTIE_PARAM_REPEAT_MODE_RESTART = "restart"
 private const val LOTTIE_PARAM_REPEAT_COUNT = "repeat_count"
 private const val LOTTIE_PARAM_MIN_FRAME = "min_frame"
 private const val LOTTIE_PARAM_MAX_FRAME = "max_frame"
+private const val LOTTIE_PARAM_PLAYING = "is_playing"
 
 /**
  * An extension handler for [EXTENSION_ID] div gif image. Important thing is you can use this extension
@@ -36,9 +45,11 @@ open class DivLottieExtensionHandler(
     private val rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
     private val logger: DivLottieLogger = DivLottieLogger.STUB,
     cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
-) : DivExtensionHandler {
+) : DivExtensionHandler, ExpressionSubscriber {
 
     private val repo = DivLottieCompositionRepository(rawResProvider, cache)
+
+    override val subscriptions: MutableList<Disposable> = mutableListOf()
 
     override fun preprocess(div: DivBase, expressionResolver: ExpressionResolver) {
         val lottieUrl = div.extensions
@@ -110,10 +121,31 @@ open class DivLottieExtensionHandler(
                     }
 
                     lottieController.playAnimation()
+
+                    params.isPlaying?.let { expression ->
+                        addSubscription(expression.observe(divView.expressionResolver) { isPlaying ->
+                            lottieController.playOrPauseAnimation(isPlaying)
+                        })
+                    }
                 } else {
                     logger.fail("failed to receive lotte composition on ${lottieData.description}", result.exception)
                 }
             }
+        }
+    }
+
+    private fun LottieController.playOrPauseAnimation(isPlaying: Boolean) {
+        if (!isPlaying) {
+            if (isAnimating()) {
+                pauseAnimation()
+            }
+            return
+        }
+        if (isAnimating()) {
+            return
+        }
+        if (getProgress() < 1f || getRepeatCount() == LottieDrawable.INFINITE) {
+            resumeAnimation()
         }
     }
 
@@ -167,6 +199,7 @@ open class DivLottieExtensionHandler(
         lottieView.clearOnAttachedToWindowScope()
         lottieController.clearComposition()
         lottieController.data = null
+        release()
     }
 }
 
@@ -193,6 +226,20 @@ private val JSONObject.repeatCount: Int
             return optInt(LOTTIE_PARAM_REPEAT_COUNT)
         }
         return 1
+    }
+
+private val JSONObject.isPlaying: Expression<Boolean>?
+    get() {
+        val logger = ParsingErrorLogger.LOG
+        return JsonParser.readOptionalExpression(
+            this,
+            LOTTIE_PARAM_PLAYING,
+            ANY_TO_BOOLEAN,
+            JsonParser.alwaysValid(),
+            logger,
+            DivParsingEnvironment(logger),
+            TYPE_HELPER_BOOLEAN
+        )
     }
 
 @LottieDrawable.RepeatMode

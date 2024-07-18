@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import Serialization
+import VGSL
 
 @inlinable
 func expressionTransform<T, U>(
@@ -13,7 +13,7 @@ func expressionTransform<T, U>(
     return nil
   }
 
-  if let rawValue = value as? String, !rawValue.isEmpty {
+  if let rawValue = value as? String {
     if let link = ExpressionLink<T>(
       rawValue: rawValue,
       validator: validator,

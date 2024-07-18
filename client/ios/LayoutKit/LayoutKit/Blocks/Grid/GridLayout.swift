@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 extension GridBlock.Layout {
   init(

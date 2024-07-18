@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension StateBlock {
   public static func makeBlockView() -> BlockView {
@@ -179,6 +179,11 @@ private final class StateBlockView: BlockView {
     super.layoutSubviews()
 
     childView?.frame = bounds
+  }
+
+  override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    let result = super.hitTest(point, with: event)
+    return result === self ? nil : result
   }
 }
 

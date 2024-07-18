@@ -19,12 +19,18 @@ class EntityWithArrayOfNestedItems with EquatableMixin {
         items,
       ];
 
+  EntityWithArrayOfNestedItems copyWith({
+      List<EntityWithArrayOfNestedItemsItem>?  items,
+  }) => EntityWithArrayOfNestedItems(
+      items: items ?? this.items,
+    );
+
   static EntityWithArrayOfNestedItems? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return EntityWithArrayOfNestedItems(
-      items: safeParseObj((json['items'] as List<dynamic>).map((v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!,).toList(),)!,
+      items: safeParseObj(safeListMap(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!),)!,
     );
   }
 }
@@ -45,6 +51,14 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
         entity,
         property,
       ];
+
+  EntityWithArrayOfNestedItemsItem copyWith({
+      Entity?  entity,
+      Expression<String>?  property,
+  }) => EntityWithArrayOfNestedItemsItem(
+      entity: entity ?? this.entity,
+      property: property ?? this.property,
+    );
 
   static EntityWithArrayOfNestedItemsItem? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

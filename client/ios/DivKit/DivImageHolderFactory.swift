@@ -1,7 +1,6 @@
 import Foundation
 
-import BasePublic
-import NetworkingPublic
+import VGSL
 
 /// Loads images for `DivKit` views.
 public protocol DivImageHolderFactory {
@@ -44,7 +43,7 @@ final class DefaultImageHolderFactory: DivImageHolderFactory {
 
   init(
     requestPerformer: URLRequestPerforming,
-    imageLoadingOptimizationEnabled: Bool
+    imageLoadingOptimizationEnabled: Bool = true
   ) {
     self.requester = NetworkURLResourceRequester(performer: requestPerformer)
     self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled

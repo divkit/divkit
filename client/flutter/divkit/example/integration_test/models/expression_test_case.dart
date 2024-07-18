@@ -18,20 +18,21 @@ class ExpressionTestCase with EquatableMixin {
     this.availablePlatforms,
   });
 
-  factory ExpressionTestCase.fromJson(Map<String, Object?> json) =>
-      ExpressionTestCase(
-        caseName: json['name'] as String,
-        expression: json['expression'] as String,
-        result: TestCaseResult.fromJson(
-          json['expected'] as Map<String, dynamic>,
-        ),
-        testVariables: (json['variables'] as List<dynamic>?)
-            ?.map((e) => TestCaseVariable.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        availablePlatforms: (json['platforms'] as List<dynamic>?)
-            ?.map((e) => e as String)
-            .toList(),
-      );
+  factory ExpressionTestCase.fromJson(Map<String, Object?> json) {
+    return ExpressionTestCase(
+      caseName: json['name'] as String? ?? json['expression'] as String,
+      expression: json['expression'] as String,
+      result: TestCaseResult.fromJson(
+        json['expected'] as Map<String, dynamic>,
+      ),
+      testVariables: (json['variables'] as List<dynamic>?)
+          ?.map((e) => TestCaseVariable.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      availablePlatforms: (json['platforms'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+    );
+  }
 
   @override
   List<Object?> get props => [

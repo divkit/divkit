@@ -1,7 +1,6 @@
 import Foundation
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 enum DivActionIntent {
   case showTooltip(id: String, multiple: Bool)

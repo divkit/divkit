@@ -10,13 +10,18 @@ import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yandex.div.DivDataTag
+import com.yandex.div.core.Div2Context
+import com.yandex.div.core.expression.variables.DivVariablesParser
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.data.Variable
+import com.yandex.div.internal.Assert
 import com.yandex.div2.DivSize
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.Div2MetadataBottomSheet
 import com.yandex.divkit.demo.div.editor.DivEditorScreenshot.takeScreenshot
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
+import org.json.JSONObject
 
 class DivEditorUi(
     private val activity: AppCompatActivity,
@@ -119,6 +124,7 @@ class DivEditorUi(
     private fun showDivReceivedState(state: DivEditorState.DivReceivedState) {
         hideAll()
 
+        tryDeclareContextVariables(state.rawDiv)
         if (state.isSingleCard) {
             div2View.visibility = VISIBLE
             div2Recycler.visibility = GONE
@@ -135,6 +141,15 @@ class DivEditorUi(
 
         // Make sure onDiv2ViewDrawnListener called, even if div2View not going to be drawn.
         debounceOnViewDrawObserver.onDraw()
+    }
+
+    private fun tryDeclareContextVariables(rawDiv: JSONObject) {
+        val variables = rawDiv.optJSONArray("variables") ?: return
+        val result: List<Variable> = DivVariablesParser.parse(variables) { e ->
+            Assert.fail("Error during parsing of variable", e)
+        }
+
+        (div2View.context as Div2Context).divVariableController.declare(*result.toTypedArray())
     }
 
     private fun hideAll() {

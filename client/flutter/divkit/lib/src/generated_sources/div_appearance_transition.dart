@@ -2,37 +2,17 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_appearance_set_transition.dart';
-import 'div_fade_transition.dart';
-import 'div_scale_transition.dart';
-import 'div_slide_transition.dart';
+import 'package:divkit/src/generated_sources/div_appearance_set_transition.dart';
+import 'package:divkit/src/generated_sources/div_fade_transition.dart';
+import 'package:divkit/src/generated_sources/div_scale_transition.dart';
+import 'package:divkit/src/generated_sources/div_slide_transition.dart';
 
 class DivAppearanceTransition with EquatableMixin {
-  const DivAppearanceTransition(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivAppearanceSetTransition) {
-      return value;
-    }
-    if (value is DivFadeTransition) {
-      return value;
-    }
-    if (value is DivScaleTransition) {
-      return value;
-    }
-    if (value is DivSlideTransition) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivAppearanceTransition");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivAppearanceSetTransition) divAppearanceSetTransition,
@@ -40,18 +20,23 @@ class DivAppearanceTransition with EquatableMixin {
     required T Function(DivScaleTransition) divScaleTransition,
     required T Function(DivSlideTransition) divSlideTransition,
   }) {
-    final value = _value;
-    if (value is DivAppearanceSetTransition) {
-      return divAppearanceSetTransition(value);
-    }
-    if (value is DivFadeTransition) {
-      return divFadeTransition(value);
-    }
-    if (value is DivScaleTransition) {
-      return divScaleTransition(value);
-    }
-    if (value is DivSlideTransition) {
-      return divSlideTransition(value);
+    switch (_index) {
+      case 0:
+        return divAppearanceSetTransition(
+          value as DivAppearanceSetTransition,
+        );
+      case 1:
+        return divFadeTransition(
+          value as DivFadeTransition,
+        );
+      case 2:
+        return divScaleTransition(
+          value as DivScaleTransition,
+        );
+      case 3:
+        return divSlideTransition(
+          value as DivSlideTransition,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivAppearanceTransition");
@@ -64,38 +49,58 @@ class DivAppearanceTransition with EquatableMixin {
     T Function(DivSlideTransition)? divSlideTransition,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivAppearanceSetTransition &&
-        divAppearanceSetTransition != null) {
-      return divAppearanceSetTransition(value);
-    }
-    if (value is DivFadeTransition && divFadeTransition != null) {
-      return divFadeTransition(value);
-    }
-    if (value is DivScaleTransition && divScaleTransition != null) {
-      return divScaleTransition(value);
-    }
-    if (value is DivSlideTransition && divSlideTransition != null) {
-      return divSlideTransition(value);
+    switch (_index) {
+      case 0:
+        if (divAppearanceSetTransition != null) {
+          return divAppearanceSetTransition(
+            value as DivAppearanceSetTransition,
+          );
+        }
+        break;
+      case 1:
+        if (divFadeTransition != null) {
+          return divFadeTransition(
+            value as DivFadeTransition,
+          );
+        }
+        break;
+      case 2:
+        if (divScaleTransition != null) {
+          return divScaleTransition(
+            value as DivScaleTransition,
+          );
+        }
+        break;
+      case 3:
+        if (divSlideTransition != null) {
+          return divSlideTransition(
+            value as DivSlideTransition,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivAppearanceTransition.divAppearanceSetTransition(
-    DivAppearanceSetTransition value,
-  ) : _value = value;
+    DivAppearanceSetTransition obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivAppearanceTransition.divFadeTransition(
-    DivFadeTransition value,
-  ) : _value = value;
+    DivFadeTransition obj,
+  )   : value = obj,
+        _index = 1;
 
   const DivAppearanceTransition.divScaleTransition(
-    DivScaleTransition value,
-  ) : _value = value;
+    DivScaleTransition obj,
+  )   : value = obj,
+        _index = 2;
 
   const DivAppearanceTransition.divSlideTransition(
-    DivSlideTransition value,
-  ) : _value = value;
+    DivSlideTransition obj,
+  )   : value = obj,
+        _index = 3;
 
   static DivAppearanceTransition? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -103,14 +108,17 @@ class DivAppearanceTransition with EquatableMixin {
     }
     switch (json['type']) {
       case DivAppearanceSetTransition.type:
-        return DivAppearanceTransition(
+        return DivAppearanceTransition.divAppearanceSetTransition(
             DivAppearanceSetTransition.fromJson(json)!);
       case DivFadeTransition.type:
-        return DivAppearanceTransition(DivFadeTransition.fromJson(json)!);
+        return DivAppearanceTransition.divFadeTransition(
+            DivFadeTransition.fromJson(json)!);
       case DivScaleTransition.type:
-        return DivAppearanceTransition(DivScaleTransition.fromJson(json)!);
+        return DivAppearanceTransition.divScaleTransition(
+            DivScaleTransition.fromJson(json)!);
       case DivSlideTransition.type:
-        return DivAppearanceTransition(DivSlideTransition.fromJson(json)!);
+        return DivAppearanceTransition.divSlideTransition(
+            DivSlideTransition.fromJson(json)!);
     }
     return null;
   }

@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension LayeredBlock {
   public static func makeBlockView() -> BlockView {

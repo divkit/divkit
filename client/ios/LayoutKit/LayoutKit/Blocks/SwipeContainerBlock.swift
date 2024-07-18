@@ -1,7 +1,5 @@
 import CoreGraphics
 
-import LayoutKitInterface
-
 public final class SwipeContainerBlock: WrapperBlock {
   public enum State: ElementState {
     case normal

@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_percentage_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_percentage_size.dart';
 
 class DivPageSize with EquatableMixin {
   const DivPageSize({
@@ -18,6 +18,13 @@ class DivPageSize with EquatableMixin {
   List<Object?> get props => [
         pageWidth,
       ];
+
+  DivPageSize copyWith({
+    DivPercentageSize? pageWidth,
+  }) =>
+      DivPageSize(
+        pageWidth: pageWidth ?? this.pageWidth,
+      );
 
   static DivPageSize? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

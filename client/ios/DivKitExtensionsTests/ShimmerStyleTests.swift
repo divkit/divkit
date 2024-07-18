@@ -1,8 +1,8 @@
 import XCTest
 
-import BasePublic
 import DivKit
 @testable import DivKitExtensions
+import VGSL
 
 final class ShimmerStyleTests: XCTestCase {
   private let expressionResolver = ExpressionResolver(

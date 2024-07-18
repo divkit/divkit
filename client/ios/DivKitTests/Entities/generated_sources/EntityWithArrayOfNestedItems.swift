@@ -2,9 +2,9 @@
 
 @testable import DivKit
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class EntityWithArrayOfNestedItems {
   public final class Item {

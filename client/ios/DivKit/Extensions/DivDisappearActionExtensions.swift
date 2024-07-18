@@ -1,7 +1,7 @@
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivDisappearAction {
   func makeDisappearAction(context: DivBlockModelingContext) -> VisibilityAction? {
@@ -13,7 +13,7 @@ extension DivDisappearAction {
     let path = context.parentPath + (resolveLogId(expressionResolver) ?? "")
     return VisibilityAction(
       uiAction: UserInterfaceAction(
-        payload: makeDivActionPayload(cardId: context.cardId, source: .disappear),
+        payload: makeDivActionPayload(path: context.parentPath, source: .disappear),
         path: path
       ),
       requiredDuration: TimeInterval(

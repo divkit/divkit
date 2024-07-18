@@ -1,9 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 final class DecoratingBlock: WrapperBlock {
   static let defaultBoundary: BoundaryTrait = .clips

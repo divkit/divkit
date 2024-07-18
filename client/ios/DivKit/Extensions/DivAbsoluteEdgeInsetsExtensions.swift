@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 extension DivAbsoluteEdgeInsets {
   func resolve(_ expressionResolver: ExpressionResolver) -> EdgeInsets {

@@ -1,7 +1,7 @@
 import CoreFoundation
 
-import CommonCorePublic
 import Serialization
+import VGSL
 
 /// Deserialization for Field<T>?
 extension [String: Any] {

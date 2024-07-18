@@ -40,6 +40,7 @@ export function render(opts: {
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     direction?: Direction;
     store?: Store;
+    weekStartDay?: number;
 }): DivkitInstance {
     const { target, hydrate, ...rest } = opts;
 
@@ -76,6 +77,10 @@ export {
 export {
     SizeProvider
 } from './extensions/sizeProvider';
+
+export {
+    Gesture
+} from './extensions/gesture';
 
 export {
     lottieExtensionBuilder

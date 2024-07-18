@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 extension BlockTooltip {
   public func calculateFrame(targeting targetRect: CGRect) -> CGRect {

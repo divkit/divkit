@@ -1,8 +1,7 @@
 import UIKit
 
-import BasePublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 /// ``DivView`` is a view that allows you to draw the layout for `DivKit`.
 /// She is able to handle actions, switch states correctly, as well as update the layout if
@@ -64,7 +63,31 @@ public final class DivView: VisibleBoundsTrackingView {
     blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
       self?.update(block: $0)
     }
+    preloader.setSourceTask?.cancel()
     await preloader.setSource(source, debugParams: debugParams)
+  }
+
+  /// Sets the source of the ``DivView`` and updates the layout.
+  /// - Parameters:
+  /// - source: The source of the ``DivView``, specified using `JSON` data, a `Data` object, or
+  /// ``DivData``.
+  /// - debugParams: Optional debug configurations for the ``DivView``.
+  /// - shouldResetPreviousCardData: Specifies whether to clear the data of the previous card when
+  /// updating the ``DivView`` with new content.
+  @_spi(Legacy)
+  public func setSource(
+    _ source: DivViewSource,
+    debugParams: DebugParams = DebugParams(),
+    shouldResetPreviousCardData: Bool = false
+  ) {
+    if shouldResetPreviousCardData, let blockProvider {
+      divKitComponents.reset(cardId: blockProvider.cardId)
+    }
+    blockProvider = preloader.blockProvider(for: source.id.cardId)
+    blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
+      self?.update(block: $0)
+    }
+    preloader.setSource(source, debugParams: debugParams)
   }
 
   /// Sets the source of the ``DivView`` and updates the layout.

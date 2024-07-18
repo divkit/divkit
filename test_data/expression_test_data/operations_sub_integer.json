@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "3 - 1 => 2",
       "expression": "@{3 - 1}",
       "expected": {
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,13 +13,11 @@
       ]
     },
     {
-      "name": "30000000000 - 10000000000 => 20000000000",
       "expression": "@{30000000000 - 10000000000}",
       "expected": {
         "type": "integer",
         "value": 20000000000
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -29,13 +25,11 @@
       ]
     },
     {
-      "name": "3 - 1 - 2 => 0",
       "expression": "@{3 - 1 - 2}",
       "expected": {
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -43,13 +37,11 @@
       ]
     },
     {
-      "name": "1 - +1 => 0",
       "expression": "@{1 - +1}",
       "expected": {
         "type": "integer",
         "value": 0
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -57,13 +49,11 @@
       ]
     },
     {
-      "name": "1 - -1 => 2",
       "expression": "@{1 - -1}",
       "expected": {
         "type": "integer",
         "value": 2
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -71,13 +61,11 @@
       ]
     },
     {
-      "name": "5000000000000000000 - -6000000000000000000 => error",
       "expression": "@{5000000000000000000 - -6000000000000000000}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [5000000000000000000 - -6000000000000000000]. Integer overflow."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -85,13 +73,11 @@
       ]
     },
     {
-      "name": "1 - 9223372036854775808 => error",
       "expression": "@{1 - 9223372036854775808}",
       "expected": {
         "type": "error",
         "value": "Value 9223372036854775808 can't be converted to Integer type."
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -99,7 +85,6 @@
       ]
     },
     {
-      "name": "7 - b => 2",
       "expression": "@{7 - b}",
       "expected": {
         "type": "integer",
@@ -109,31 +94,6 @@
         {
           "type": "integer",
           "value": 5,
-          "name": "b"
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "name": "a - b => 5",
-      "expression": "@{a - b}",
-      "expected": {
-        "type": "integer",
-        "value": 5
-      },
-      "variables": [
-        {
-          "type": "integer",
-          "value": 8,
-          "name": "a"
-        },
-        {
-          "type": "integer",
-          "value": 3,
           "name": "b"
         }
       ],
@@ -169,7 +129,6 @@
       ]
     },
     {
-      "name": "a - +b => 5",
       "expression": "@{a - +b}",
       "expected": {
         "type": "integer",

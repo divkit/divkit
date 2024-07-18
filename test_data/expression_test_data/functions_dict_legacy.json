@@ -1,18 +1,17 @@
 {
   "cases": [
     {
-      "name": "getDictString(dict, 'prop') => 'val'",
-      "expression": "@{getDictString(dict, 'prop')}",
+      "expression": "@{getDictString(dict, 'string_key')}",
       "expected": {
         "type": "string",
-        "value": "val"
+        "value": "value"
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "val"
+            "string_key": "value"
           }
         }
       ],
@@ -23,18 +22,17 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'missing_prop') => error",
-      "expression": "@{getDictString(dict, 'missing_prop')}",
+      "expression": "@{getDictString(dict, 'missing_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'missing_prop')]. Missing property \"missing_prop\" in the dict."
+        "value": "Failed to evaluate [getDictString(<dict>, 'missing_key')]. Missing property \"missing_key\" in the dict."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "val"
+            "key": "value"
           }
         }
       ],
@@ -45,19 +43,18 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop', 'prop2') => 'val'",
-      "expression": "@{getDictString(dict, 'prop', 'prop2')}",
+      "expression": "@{getDictString(dict, 'dict_key', 'string_key')}",
       "expected": {
         "type": "string",
-        "value": "val"
+        "value": "value"
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": {
-              "prop2": "val"
+            "dict_key": {
+              "string_key": "value"
             }
           }
         }
@@ -69,20 +66,19 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop', 'prop2', 'prop3') => 'val'",
-      "expression": "@{getDictString(dict, 'prop', 'prop2', 'prop3')}",
+      "expression": "@{getDictString(dict, 'dict_key1', 'dict_key2', 'string_key')}",
       "expected": {
         "type": "string",
-        "value": "val"
+        "value": "value"
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": {
-              "prop2": {
-                "prop3": "val"
+            "dict_key1": {
+              "dict_key2": {
+                "string_key": "value"
               }
             }
           }
@@ -95,19 +91,18 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop', 'missing_prop') => error",
-      "expression": "@{getDictString(dict, 'prop', 'missing_prop')}",
+      "expression": "@{getDictString(dict, 'dict_key', 'missing_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'prop', 'missing_prop')]. Missing property \"missing_prop\" in the dict."
+        "value": "Failed to evaluate [getDictString(<dict>, 'dict_key', 'missing_key')]. Missing property \"missing_key\" in the dict."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": {
-              "prop2": "val"
+            "dict_key": {
+              "string_key": "value"
             }
           }
         }
@@ -119,18 +114,17 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop', 'wrong_prop_type') => error",
-      "expression": "@{getDictString(dict, 'prop', 'wrong_prop_type')}",
+      "expression": "@{getDictString(dict, 'string_key', 'missing_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'prop', 'wrong_prop_type')]. Missing property \"wrong_prop_type\" in the dict."
+        "value": "Failed to evaluate [getDictString(<dict>, 'string_key', 'missing_key')]. Missing property \"missing_key\" in the dict."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "val"
+            "string_key": "value"
           }
         }
       ],
@@ -141,20 +135,17 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop') => error",
-      "expression": "@{getDictString(dict, 'prop')}",
+      "expression": "@{getDictString(dict, 'dict_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected String, got Dict."
+        "value": "Failed to evaluate [getDictString(<dict>, 'dict_key')]. Incorrect value type: expected String, got Dict."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": {
-              "prop2": "val"
-            }
+            "dict_key": {}
           }
         }
       ],
@@ -165,18 +156,17 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop') => error (2)",
-      "expression": "@{getDictString(dict, 'prop')}",
+      "expression": "@{getDictString(dict, 'array_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected String, got Array."
+        "value": "Failed to evaluate [getDictString(<dict>, 'array_key')]. Incorrect value type: expected String, got Array."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": []
+            "array_key": []
           }
         }
       ],
@@ -187,18 +177,17 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'number_prop') => error (3)",
-      "expression": "@{getDictString(dict, 'number_prop')}",
+      "expression": "@{getDictString(dict, 'number_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'number_prop')]. Incorrect value type: expected String, got Number."
+        "value": "Failed to evaluate [getDictString(<dict>, 'number_key')]. Incorrect value type: expected String, got Number."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "number_prop": 123.45
+            "number_key": 123.45
           }
         }
       ],
@@ -209,18 +198,17 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop') => error (4)",
-      "expression": "@{getDictString(dict, 'prop')}",
+      "expression": "@{getDictString(dict, 'boolean_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected String, got Boolean."
+        "value": "Failed to evaluate [getDictString(<dict>, 'boolean_key')]. Incorrect value type: expected String, got Boolean."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": true
+            "boolean_key": true
           }
         }
       ],
@@ -231,18 +219,17 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop') => error (5)",
-      "expression": "@{getDictString(dict, 'prop')}",
+      "expression": "@{getDictString(dict, 'null_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected String, got Null."
+        "value": "Failed to evaluate [getDictString(<dict>, 'null_key')]. Incorrect value type: expected String, got Null."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": null
+            "null_key": null
           }
         }
       ],
@@ -253,18 +240,17 @@
       ]
     },
     {
-      "name": "getDictString(dict, 'prop', 'missing_prop') => error (2)",
-      "expression": "@{getDictString(dict, 'prop', 'missing_prop')}",
+      "expression": "@{getDictString(dict, 'null_key', 'missing_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictString(<dict>, 'prop', 'missing_prop')]. Missing property \"missing_prop\" in the dict."
+        "value": "Failed to evaluate [getDictString(<dict>, 'null_key', 'missing_key')]. Missing property \"missing_key\" in the dict."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": null
+            "null_key": null
           }
         }
       ],
@@ -275,8 +261,7 @@
       ]
     },
     {
-      "name": "getDictNumber(dict, 'prop') => 123.4",
-      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expression": "@{getDictNumber(dict, 'number_key')}",
       "expected": {
         "type": "number",
         "value": 123.4
@@ -286,7 +271,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123.4
+            "number_key": 123.4
           }
         }
       ],
@@ -297,8 +282,7 @@
       ]
     },
     {
-      "name": "getDictNumber(dict, 'prop') => 123.0",
-      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expression": "@{getDictNumber(dict, 'integer_key')}",
       "expected": {
         "type": "number",
         "value": 123.0
@@ -308,7 +292,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123
+            "integer_key": 123
           }
         }
       ],
@@ -319,18 +303,17 @@
       ]
     },
     {
-      "name": "getDictNumber(dict, 'prop') => error",
-      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expression": "@{getDictNumber(dict, 'boolean_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictNumber(<dict>, 'prop')]. Incorrect value type: expected Number, got Boolean."
+        "value": "Failed to evaluate [getDictNumber(<dict>, 'boolean_key')]. Incorrect value type: expected Number, got Boolean."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": true
+            "boolean_key": true
           }
         }
       ],
@@ -341,18 +324,17 @@
       ]
     },
     {
-      "name": "getDictNumber(dict, 'prop') => error (2)",
-      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expression": "@{getDictNumber(dict, 'string_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictNumber(<dict>, 'prop')]. Incorrect value type: expected Number, got String."
+        "value": "Failed to evaluate [getDictNumber(<dict>, 'string_key')]. Incorrect value type: expected Number, got String."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "val"
+            "string_key": "value"
           }
         }
       ],
@@ -363,8 +345,7 @@
       ]
     },
     {
-      "name": "getDictInteger(dict, 'prop') => 123",
-      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expression": "@{getDictInteger(dict, 'integer_key')}",
       "expected": {
         "type": "integer",
         "value": 123
@@ -374,7 +355,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123
+            "integer_key": 123
           }
         }
       ],
@@ -385,18 +366,17 @@
       ]
     },
     {
-      "name": "getDictInteger(dict, 'prop') => error",
-      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expression": "@{getDictInteger(dict, 'number_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictInteger(<dict>, 'prop')]. Cannot convert value to integer."
+        "value": "Failed to evaluate [getDictInteger(<dict>, 'number_key')]. Cannot convert value to integer."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 123.4
+            "number_key": 123.4
           }
         }
       ],
@@ -407,18 +387,17 @@
       ]
     },
     {
-      "name": "getDictInteger(dict, 'prop') => error (2)",
-      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expression": "@{getDictInteger(dict, 'boolean_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictInteger(<dict>, 'prop')]. Incorrect value type: expected Integer, got Boolean."
+        "value": "Failed to evaluate [getDictInteger(<dict>, 'boolean_key')]. Incorrect value type: expected Integer, got Boolean."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": true
+            "boolean_key": true
           }
         }
       ],
@@ -429,8 +408,7 @@
       ]
     },
     {
-      "name": "getDictInteger(dict, 'prop') => 12345678901",
-      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expression": "@{getDictInteger(dict, 'integer_key')}",
       "expected": {
         "type": "integer",
         "value": 12345678901
@@ -440,7 +418,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 12345678901
+            "integer_key": 12345678901
           }
         }
       ],
@@ -451,18 +429,17 @@
       ]
     },
     {
-      "name": "getDictInteger(dict, 'prop') => error (3)",
-      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expression": "@{getDictInteger(dict, 'overflowed_integer_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictInteger(<dict>, 'prop')]. Integer overflow."
+        "value": "Failed to evaluate [getDictInteger(<dict>, 'overflowed_integer_key')]. Integer overflow."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 9223372036854775808000000000000000000000
+            "overflowed_integer_key": 9223372036854775808000000000000000000000
           }
         }
       ],
@@ -473,8 +450,7 @@
       ]
     },
     {
-      "name": "getDictBoolean(dict, 'prop') => true",
-      "expression": "@{getDictBoolean(dict, 'prop')}",
+      "expression": "@{getDictBoolean(dict, 'boolean_key')}",
       "expected": {
         "type": "boolean",
         "value": true
@@ -484,7 +460,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": true
+            "boolean_key": true
           }
         }
       ],
@@ -495,18 +471,17 @@
       ]
     },
     {
-      "name": "getDictBoolean(dict, 'number_prop') => error",
-      "expression": "@{getDictBoolean(dict, 'number_prop')}",
+      "expression": "@{getDictBoolean(dict, 'number1_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictBoolean(<dict>, 'number_prop')]. Incorrect value type: expected Boolean, got Number."
+        "value": "Failed to evaluate [getDictBoolean(<dict>, 'number1_key')]. Incorrect value type: expected Boolean, got Number."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "number_prop": 1.0
+            "number1_key": 1.0
           }
         }
       ],
@@ -517,18 +492,17 @@
       ]
     },
     {
-      "name": "getDictBoolean(dict, 'number_prop') => error (2)",
-      "expression": "@{getDictBoolean(dict, 'number_prop')}",
+      "expression": "@{getDictBoolean(dict, 'number0_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictBoolean(<dict>, 'number_prop')]. Incorrect value type: expected Boolean, got Number."
+        "value": "Failed to evaluate [getDictBoolean(<dict>, 'number0_key')]. Incorrect value type: expected Boolean, got Number."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "number_prop": 0.0
+            "number0_key": 0.0
           }
         }
       ],
@@ -539,18 +513,17 @@
       ]
     },
     {
-      "name": "getDictBoolean(dict, 'number_prop') => error (3)",
-      "expression": "@{getDictBoolean(dict, 'number_prop')}",
+      "expression": "@{getDictBoolean(dict, 'number2_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictBoolean(<dict>, 'number_prop')]. Incorrect value type: expected Boolean, got Number."
+        "value": "Failed to evaluate [getDictBoolean(<dict>, 'number2_key')]. Incorrect value type: expected Boolean, got Number."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "number_prop": 2.0
+            "number2_key": 2.0
           }
         }
       ],
@@ -561,8 +534,7 @@
       ]
     },
     {
-      "name": "getDictColor(dict, 'prop') => '#FFFFFFFF'",
-      "expression": "@{getDictColor(dict, 'prop')}",
+      "expression": "@{getDictColor(dict, 'color_key')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -572,7 +544,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "#fff"
+            "color_key": "#fff"
           }
         }
       ],
@@ -583,18 +555,17 @@
       ]
     },
     {
-      "name": "getDictColor(dict, 'prop') => error",
-      "expression": "@{getDictColor(dict, 'prop')}",
+      "expression": "@{getDictColor(dict, 'invalid_color_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictColor(<dict>, 'prop')]. Unable to convert value to Color, expected format #AARRGGBB."
+        "value": "Failed to evaluate [getDictColor(<dict>, 'invalid_color_key')]. Unable to convert value to Color, expected format #AARRGGBB."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "fff"
+            "invalid_color_key": "fff"
           }
         }
       ],
@@ -605,8 +576,7 @@
       ]
     },
     {
-      "name": "getDictUrl(dict, 'prop') => 'https://ya.ru'",
-      "expression": "@{getDictUrl(dict, 'prop')}",
+      "expression": "@{getDictUrl(dict, 'url_key')}",
       "expected": {
         "type": "url",
         "value": "https://ya.ru"
@@ -616,7 +586,7 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": "https://ya.ru"
+            "url_key": "https://ya.ru"
           }
         }
       ],
@@ -627,18 +597,17 @@
       ]
     },
     {
-      "name": "getDictUrl(dict, 'number_prop') => error",
-      "expression": "@{getDictUrl(dict, 'number_prop')}",
+      "expression": "@{getDictUrl(dict, 'number_key')}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictUrl(<dict>, 'number_prop')]. Incorrect value type: expected Url, got Number."
+        "value": "Failed to evaluate [getDictUrl(<dict>, 'number_key')]. Incorrect value type: expected Url, got Number."
       },
       "variables": [
         {
           "type": "dict",
           "name": "dict",
           "value": {
-            "number_prop": 123.45
+            "number_key": 123.45
           }
         }
       ],

@@ -4,6 +4,7 @@ import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.itemsToDivItemBuilderResult
 import com.yandex.div.internal.core.statesToDivItemBuilderResult
+import com.yandex.div.internal.core.toItemBuilderResult
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 
@@ -66,7 +67,7 @@ internal class DivTreeWalk private constructor(
     ) : AbstractIterator<DivItemBuilderResult>() {
 
         private val stack = ArrayDeque<Node>().apply {
-            addLast(node(DivItemBuilderResult(root, resolver)))
+            addLast(node(root.toItemBuilderResult(resolver)))
         }
 
         override fun computeNext() {
@@ -173,8 +174,8 @@ private fun Div.getItems(resolver: ExpressionResolver): List<DivItemBuilderResul
         is Div.Video -> emptyList()
         is Div.Container -> value.buildItems(resolver)
         is Div.Grid -> value.itemsToDivItemBuilderResult(resolver)
-        is Div.Gallery -> value.itemsToDivItemBuilderResult(resolver)
-        is Div.Pager -> value.itemsToDivItemBuilderResult(resolver)
+        is Div.Gallery -> value.buildItems(resolver)
+        is Div.Pager -> value.buildItems(resolver)
         is Div.Tabs -> value.itemsToDivItemBuilderResult(resolver)
         is Div.State -> value.statesToDivItemBuilderResult(resolver)
     }

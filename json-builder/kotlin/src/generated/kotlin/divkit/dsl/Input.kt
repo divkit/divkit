@@ -50,6 +50,7 @@ class Input internal constructor(
             fontSize = additive.fontSize ?: properties.fontSize,
             fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
             fontWeight = additive.fontWeight ?: properties.fontWeight,
+            fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
             height = additive.height ?: properties.height,
             highlightColor = additive.highlightColor ?: properties.highlightColor,
             hintColor = additive.hintColor ?: properties.hintColor,
@@ -57,10 +58,12 @@ class Input internal constructor(
             id = additive.id ?: properties.id,
             isEnabled = additive.isEnabled ?: properties.isEnabled,
             keyboardType = additive.keyboardType ?: properties.keyboardType,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
             margins = additive.margins ?: properties.margins,
             mask = additive.mask ?: properties.mask,
+            maxLength = additive.maxLength ?: properties.maxLength,
             maxVisibleLines = additive.maxVisibleLines ?: properties.maxVisibleLines,
             nativeInterface = additive.nativeInterface ?: properties.nativeInterface,
             paddings = additive.paddings ?: properties.paddings,
@@ -78,6 +81,7 @@ class Input internal constructor(
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             validators = additive.validators ?: properties.validators,
+            variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -147,6 +151,10 @@ class Input internal constructor(
          */
         val fontWeight: Property<FontWeight>?,
         /**
+         * Style. Numeric value.
+         */
+        val fontWeightValue: Property<Int>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
          */
@@ -179,6 +187,10 @@ class Input internal constructor(
          */
         val keyboardType: Property<KeyboardType>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * Spacing between characters.
          * Default value: `0`.
          */
@@ -195,6 +207,10 @@ class Input internal constructor(
          * Mask for entering text based on the specified template.
          */
         val mask: Property<InputMask>?,
+        /**
+         * Maximum number of characters that can be entered in the input field.
+         */
+        val maxLength: Property<Int>?,
         /**
          * Maximum number of lines to be displayed in the input field.
          */
@@ -268,6 +284,10 @@ class Input internal constructor(
          */
         val validators: Property<List<InputValidator>>?,
         /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
+        /**
          * Element visibility.
          * Default value: `visible`.
          */
@@ -303,6 +323,7 @@ class Input internal constructor(
             result.tryPutProperty("font_size", fontSize)
             result.tryPutProperty("font_size_unit", fontSizeUnit)
             result.tryPutProperty("font_weight", fontWeight)
+            result.tryPutProperty("font_weight_value", fontWeightValue)
             result.tryPutProperty("height", height)
             result.tryPutProperty("highlight_color", highlightColor)
             result.tryPutProperty("hint_color", hintColor)
@@ -310,10 +331,12 @@ class Input internal constructor(
             result.tryPutProperty("id", id)
             result.tryPutProperty("is_enabled", isEnabled)
             result.tryPutProperty("keyboard_type", keyboardType)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("mask", mask)
+            result.tryPutProperty("max_length", maxLength)
             result.tryPutProperty("max_visible_lines", maxVisibleLines)
             result.tryPutProperty("native_interface", nativeInterface)
             result.tryPutProperty("paddings", paddings)
@@ -331,6 +354,7 @@ class Input internal constructor(
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("validators", validators)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -400,6 +424,7 @@ class Input internal constructor(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
@@ -407,10 +432,12 @@ class Input internal constructor(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -428,6 +455,7 @@ class Input internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -450,6 +478,7 @@ fun DivScope.input(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
@@ -457,10 +486,12 @@ fun DivScope.input(
     id: String? = null,
     isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
     mask: InputMask? = null,
+    maxLength: Int? = null,
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
@@ -478,6 +509,7 @@ fun DivScope.input(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -498,6 +530,7 @@ fun DivScope.input(
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         height = valueOrNull(height),
         highlightColor = valueOrNull(highlightColor),
         hintColor = valueOrNull(hintColor),
@@ -505,10 +538,12 @@ fun DivScope.input(
         id = valueOrNull(id),
         isEnabled = valueOrNull(isEnabled),
         keyboardType = valueOrNull(keyboardType),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
         mask = valueOrNull(mask),
+        maxLength = valueOrNull(maxLength),
         maxVisibleLines = valueOrNull(maxVisibleLines),
         nativeInterface = valueOrNull(nativeInterface),
         paddings = valueOrNull(paddings),
@@ -526,6 +561,7 @@ fun DivScope.input(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         validators = valueOrNull(validators),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -548,6 +584,7 @@ fun DivScope.input(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
@@ -555,10 +592,12 @@ fun DivScope.input(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -576,6 +615,7 @@ fun DivScope.input(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -598,6 +638,7 @@ fun DivScope.inputProps(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
@@ -605,10 +646,12 @@ fun DivScope.inputProps(
     id: String? = null,
     isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
     mask: InputMask? = null,
+    maxLength: Int? = null,
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
@@ -626,6 +669,7 @@ fun DivScope.inputProps(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -645,6 +689,7 @@ fun DivScope.inputProps(
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
+    fontWeightValue = valueOrNull(fontWeightValue),
     height = valueOrNull(height),
     highlightColor = valueOrNull(highlightColor),
     hintColor = valueOrNull(hintColor),
@@ -652,10 +697,12 @@ fun DivScope.inputProps(
     id = valueOrNull(id),
     isEnabled = valueOrNull(isEnabled),
     keyboardType = valueOrNull(keyboardType),
+    layoutProvider = valueOrNull(layoutProvider),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
     margins = valueOrNull(margins),
     mask = valueOrNull(mask),
+    maxLength = valueOrNull(maxLength),
     maxVisibleLines = valueOrNull(maxVisibleLines),
     nativeInterface = valueOrNull(nativeInterface),
     paddings = valueOrNull(paddings),
@@ -673,6 +720,7 @@ fun DivScope.inputProps(
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
     validators = valueOrNull(validators),
+    variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -694,6 +742,7 @@ fun DivScope.inputProps(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
@@ -701,10 +750,12 @@ fun DivScope.inputProps(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -722,6 +773,7 @@ fun DivScope.inputProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -744,6 +796,7 @@ fun TemplateScope.inputRefs(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
@@ -751,10 +804,12 @@ fun TemplateScope.inputRefs(
     id: ReferenceProperty<String>? = null,
     isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     mask: ReferenceProperty<InputMask>? = null,
+    maxLength: ReferenceProperty<Int>? = null,
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -772,6 +827,7 @@ fun TemplateScope.inputRefs(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -791,6 +847,7 @@ fun TemplateScope.inputRefs(
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
+    fontWeightValue = fontWeightValue,
     height = height,
     highlightColor = highlightColor,
     hintColor = hintColor,
@@ -798,10 +855,12 @@ fun TemplateScope.inputRefs(
     id = id,
     isEnabled = isEnabled,
     keyboardType = keyboardType,
+    layoutProvider = layoutProvider,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
     margins = margins,
     mask = mask,
+    maxLength = maxLength,
     maxVisibleLines = maxVisibleLines,
     nativeInterface = nativeInterface,
     paddings = paddings,
@@ -819,6 +878,7 @@ fun TemplateScope.inputRefs(
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
     validators = validators,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -840,6 +900,7 @@ fun TemplateScope.inputRefs(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
@@ -847,10 +908,12 @@ fun TemplateScope.inputRefs(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -868,6 +931,7 @@ fun TemplateScope.inputRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -890,6 +954,7 @@ fun Input.override(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
@@ -897,10 +962,12 @@ fun Input.override(
     id: String? = null,
     isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
     mask: InputMask? = null,
+    maxLength: Int? = null,
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
@@ -918,6 +985,7 @@ fun Input.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -938,6 +1006,7 @@ fun Input.override(
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
+        fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         height = valueOrNull(height) ?: properties.height,
         highlightColor = valueOrNull(highlightColor) ?: properties.highlightColor,
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
@@ -945,10 +1014,12 @@ fun Input.override(
         id = valueOrNull(id) ?: properties.id,
         isEnabled = valueOrNull(isEnabled) ?: properties.isEnabled,
         keyboardType = valueOrNull(keyboardType) ?: properties.keyboardType,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         margins = valueOrNull(margins) ?: properties.margins,
         mask = valueOrNull(mask) ?: properties.mask,
+        maxLength = valueOrNull(maxLength) ?: properties.maxLength,
         maxVisibleLines = valueOrNull(maxVisibleLines) ?: properties.maxVisibleLines,
         nativeInterface = valueOrNull(nativeInterface) ?: properties.nativeInterface,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -966,6 +1037,7 @@ fun Input.override(
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         validators = valueOrNull(validators) ?: properties.validators,
+        variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -988,6 +1060,7 @@ fun Input.override(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
@@ -995,10 +1068,12 @@ fun Input.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -1016,6 +1091,7 @@ fun Input.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1038,6 +1114,7 @@ fun Input.defer(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
@@ -1045,10 +1122,12 @@ fun Input.defer(
     id: ReferenceProperty<String>? = null,
     isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     mask: ReferenceProperty<InputMask>? = null,
+    maxLength: ReferenceProperty<Int>? = null,
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1066,6 +1145,7 @@ fun Input.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1086,6 +1166,7 @@ fun Input.defer(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         height = height ?: properties.height,
         highlightColor = highlightColor ?: properties.highlightColor,
         hintColor = hintColor ?: properties.hintColor,
@@ -1093,10 +1174,12 @@ fun Input.defer(
         id = id ?: properties.id,
         isEnabled = isEnabled ?: properties.isEnabled,
         keyboardType = keyboardType ?: properties.keyboardType,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = margins ?: properties.margins,
         mask = mask ?: properties.mask,
+        maxLength = maxLength ?: properties.maxLength,
         maxVisibleLines = maxVisibleLines ?: properties.maxVisibleLines,
         nativeInterface = nativeInterface ?: properties.nativeInterface,
         paddings = paddings ?: properties.paddings,
@@ -1114,6 +1197,7 @@ fun Input.defer(
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         validators = validators ?: properties.validators,
+        variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -1130,6 +1214,7 @@ fun Input.defer(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -1137,6 +1222,7 @@ fun Input.defer(
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
@@ -1156,6 +1242,7 @@ fun Input.evaluate(
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     highlightColor: ExpressionProperty<Color>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
@@ -1163,6 +1250,7 @@ fun Input.evaluate(
     keyboardType: ExpressionProperty<Input.KeyboardType>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
+    maxLength: ExpressionProperty<Int>? = null,
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
@@ -1186,6 +1274,7 @@ fun Input.evaluate(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         height = properties.height,
         highlightColor = highlightColor ?: properties.highlightColor,
         hintColor = hintColor ?: properties.hintColor,
@@ -1193,10 +1282,12 @@ fun Input.evaluate(
         id = properties.id,
         isEnabled = isEnabled ?: properties.isEnabled,
         keyboardType = keyboardType ?: properties.keyboardType,
+        layoutProvider = properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = properties.margins,
         mask = properties.mask,
+        maxLength = maxLength ?: properties.maxLength,
         maxVisibleLines = maxVisibleLines ?: properties.maxVisibleLines,
         nativeInterface = properties.nativeInterface,
         paddings = properties.paddings,
@@ -1214,6 +1305,7 @@ fun Input.evaluate(
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
         validators = properties.validators,
+        variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -1236,6 +1328,7 @@ fun Input.evaluate(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
@@ -1243,10 +1336,12 @@ fun Input.evaluate(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -1264,6 +1359,7 @@ fun Input.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1286,6 +1382,7 @@ fun Component<Input>.override(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
@@ -1293,10 +1390,12 @@ fun Component<Input>.override(
     id: String? = null,
     isEnabled: Boolean? = null,
     keyboardType: Input.KeyboardType? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
     mask: InputMask? = null,
+    maxLength: Int? = null,
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
@@ -1314,6 +1413,7 @@ fun Component<Input>.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1335,6 +1435,7 @@ fun Component<Input>.override(
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         height = valueOrNull(height),
         highlightColor = valueOrNull(highlightColor),
         hintColor = valueOrNull(hintColor),
@@ -1342,10 +1443,12 @@ fun Component<Input>.override(
         id = valueOrNull(id),
         isEnabled = valueOrNull(isEnabled),
         keyboardType = valueOrNull(keyboardType),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
         mask = valueOrNull(mask),
+        maxLength = valueOrNull(maxLength),
         maxVisibleLines = valueOrNull(maxVisibleLines),
         nativeInterface = valueOrNull(nativeInterface),
         paddings = valueOrNull(paddings),
@@ -1363,6 +1466,7 @@ fun Component<Input>.override(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         validators = valueOrNull(validators),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1385,6 +1489,7 @@ fun Component<Input>.override(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
@@ -1392,10 +1497,12 @@ fun Component<Input>.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param isEnabled Indicates if the text editing is enabled.
  * @param keyboardType Keyboard type.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param mask Mask for entering text based on the specified template.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
@@ -1413,6 +1520,7 @@ fun Component<Input>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1435,6 +1543,7 @@ fun Component<Input>.defer(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
@@ -1442,10 +1551,12 @@ fun Component<Input>.defer(
     id: ReferenceProperty<String>? = null,
     isEnabled: ReferenceProperty<Boolean>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     mask: ReferenceProperty<InputMask>? = null,
+    maxLength: ReferenceProperty<Int>? = null,
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1463,6 +1574,7 @@ fun Component<Input>.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1484,6 +1596,7 @@ fun Component<Input>.defer(
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
         height = height,
         highlightColor = highlightColor,
         hintColor = hintColor,
@@ -1491,10 +1604,12 @@ fun Component<Input>.defer(
         id = id,
         isEnabled = isEnabled,
         keyboardType = keyboardType,
+        layoutProvider = layoutProvider,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = margins,
         mask = mask,
+        maxLength = maxLength,
         maxVisibleLines = maxVisibleLines,
         nativeInterface = nativeInterface,
         paddings = paddings,
@@ -1512,6 +1627,7 @@ fun Component<Input>.defer(
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
         validators = validators,
+        variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1528,6 +1644,7 @@ fun Component<Input>.defer(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -1535,6 +1652,7 @@ fun Component<Input>.defer(
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
+ * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
@@ -1554,6 +1672,7 @@ fun Component<Input>.evaluate(
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     highlightColor: ExpressionProperty<Color>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
@@ -1561,6 +1680,7 @@ fun Component<Input>.evaluate(
     keyboardType: ExpressionProperty<Input.KeyboardType>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
+    maxLength: ExpressionProperty<Int>? = null,
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
@@ -1585,6 +1705,7 @@ fun Component<Input>.evaluate(
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
         height = null,
         highlightColor = highlightColor,
         hintColor = hintColor,
@@ -1592,10 +1713,12 @@ fun Component<Input>.evaluate(
         id = null,
         isEnabled = isEnabled,
         keyboardType = keyboardType,
+        layoutProvider = null,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = null,
         mask = null,
+        maxLength = maxLength,
         maxVisibleLines = maxVisibleLines,
         nativeInterface = null,
         paddings = null,
@@ -1613,6 +1736,7 @@ fun Component<Input>.evaluate(
         transitionOut = null,
         transitionTriggers = null,
         validators = null,
+        variables = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,

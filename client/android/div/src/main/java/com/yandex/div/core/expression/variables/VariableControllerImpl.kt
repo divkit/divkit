@@ -1,5 +1,6 @@
 package com.yandex.div.core.expression.variables
 
+import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable

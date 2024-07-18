@@ -1,3 +1,162 @@
+## 30.9.0
+
+# Android Client:
+* Fix `shadow` rotation if `div` uses `transform`.
+
+# iOS Client:
+* Fixed element paths for `div-gallery`.
+* Added `div-base.layout_provider`.
+* Optimized `DivLastVisibleBoundsCache`.
+
+# Web Client:
+* Performance optimizations.
+
+
+## 30.8.0
+
+# Android Client:
+* Implemented `DivMarkdownExtensionHandler` to support `markdown` extension for `text`.
+* Fixed crash after removing child in `gallery`.
+* Fixed drawing shadows when view is invisible or gone.
+* Fixed NPE at `shimmer` extension
+* Fix issue when Div2View could not access variable via nested DivVariableController.
+
+# iOS Client:
+* Added local variables support.
+* Fixed infinity pager scroll.
+* Opening tooltips in new window.
+* Fixed multiple `player.seek` call in `VideoBlock`.
+
+# Web Client:
+* Fixed several issues with `variable_triggers` evaluation.
+
+
+## 30.7.0
+
+# Android Client:
+* Add numeric value support for `fontWeightValue`
+* Supported `id` property in `div-collection-item-builder.prototype`.
+* Fixed div view state change happened before binding.
+
+# iOS Client:
+* Optimized `ExpressionResolver`.
+* `DivVariableTracker` state made public.
+
+# Web Client:
+* Fixed the `top_offset` mutation for incoming data in the `text` component.
+
+
+## 30.6.0
+
+# Android Client:
+* Fixed multiple state switching with different root state.
+* **Experimental API:** added new interfaces for data serialization.
+* Introduced `index` variable for prototyped elements.
+* Fixed grid cell size calculation when margins are set.
+
+# iOS Client:
+* Fixed inline image reusing in DivText.
+* Added `DivVariableStorage.hasValue` method.
+* Added `font_weight_value` support.
+* Added `id` property into `div-collection-item-builder.prototype`.
+* Fixed memory leak in VisibilityActionPerfromers.
+* Added `hitTest` implementation into `StateBlockView` to pass through touches.
+
+# Web Client:
+* Added support for the property `font_weight_value` in `text`, `input`, `slider` and `select`.
+* Introduced `index` variable for prototyped elements.
+
+
+## 30.5.0
+
+# Android Client:
+* Implemented support for field `page_transformation` in `pager`.
+* Old visibility actions are no longer logged after Div2View was rebound by another DivData.
+* Fixed image drawing when its padding bigger than size.
+* Fixed showing of first and last elements in `pager` with infinite scroll after items changing.
+* Fix closing `tooltip` on cleanup.
+* Fixed `Div2View` state reset that resulted in broken expression subscriptions.
+* Fixed vararg functions matching.
+* Detach old indicators from pager on attach new ones.
+* `okhttp` library updated to version 4.11.0
+
+# iOS Client:
+* Introduced `index` variable for prototyped elements.
+* Fixed escaped strings resolving in expressions
+
+# Web Client:
+* Added `array_set_value` action.
+
+
+## 30.4.0
+
+# Android Client:
+* Fixed `pager` page size evaluation. Now all the pages are the same size, the same as on other platforms.
+* Fixed scroll of `pager` when more then 2 pages is visible.
+* Added `array_set_value` action.
+* Added `dict_set_value` action.
+* Added `containsKey` method for dictionaries.
+
+# iOS Client:
+* Fixed `input` paddings.
+* Fixed comparing `scrollRange` in `GalleryViewState`.
+* Added `array_set_value` action.
+* Added `dict_set_value` action.
+* Added `containsKey` method for dictionaries.
+
+# Web Client:
+* Added `dict_set_value` action.
+* Added `containsKey` method for dictionaries.
+
+
+## 30.3.0
+
+# Android Client:
+* Fixed sizes calculation for `gallery` `items` wrapped within `container`.
+* Added `tab_title_delimiter` property support for `tabs`.
+* Remove focus from focused `input` if some clickable div were clicked.
+* Removed `z`/`Z` patterns restriction from datetime formatting functions.
+* Added `max_length` property support for `input`.
+* Fixed crash by `gallery` when count of `items` was less then `column_count`. 
+* Supported `font_feature_settings` property for `div-text`.
+
+# iOS Client:
+* Fixed items position in `gallery`.
+* Supported `font_feature_settings` property for `div-text`.
+* Removed `z`/`Z` patterns restriction from datetime formatting functions.
+* Fixed clipping in `container`.
+
+# Web Client:
+* Fixed an issue with the `text` property `top_offset` and ranges intersection.
+* Added new API's for the extensions: `processExpressions` and `execAction`.
+* Added `gesture` extension.
+* Fixed an issue with calling `disappear_actions` after instance destruction.
+* When passing `data` directly inside `item_builder`, its expressions are no longer executed.
+* Supported `z`/`Z` patterns in datetime formatting functions.
+* Added `max_length` property support for `input`.
+* Supported `font_feature_settings` property for `text`.
+* Updated error messages for invalid calls inside expressions.
+
+
+## 30.2.0
+
+# Android Client:
+* Fixed line height adjustment for embedded images and image placeholdes in `div-text`.
+* Added padding on draw `default_item` in `gallery`.
+* Improved expression error messages.
+
+# iOS Client:
+* Fixed disappear actions for gone blocks.
+* Improved expression error messages.
+
+# Web Client:
+* Calculate `is_enabled` in `actions` before executing the entire list of actions, not in the process.
+* Implemented `toString` function and method for arrays and dicts.
+* Improved expression error messages.
+* Fixed unary minus operator parsing.
+* Added functions `parseUnixTimeAsLocal`, `formatDateAsLocal`, `formatDateAsUTC`, `formatDateAsLocalWithLocale`, `formatDateAsUTCWithLocale` and the `weekStartDay` parameter.
+
+
 ## 30.1.0
 
 # Android Client:

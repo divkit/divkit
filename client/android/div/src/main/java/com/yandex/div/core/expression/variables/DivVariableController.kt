@@ -34,11 +34,7 @@ class DivVariableController(
         externalVariableRequestObservers.forEach { it.invoke(variableName) }
     }
 
-    internal val variableSource = VariableSource(
-        variables,
-        requestsObserver,
-        declarationObservers
-    )
+    internal val variableSource = MultiVariableSource(this, requestsObserver)
 
     /**
      * Will declare new variable in the current instance of GlobalVariableController.
@@ -167,4 +163,40 @@ class DivVariableController(
         externalVariableRequestObservers.remove(observer)
         internalVariableController?.removeVariableRequestObserver(observer)
     }
+
+    internal fun addDeclarationObserver(observer: (Variable) -> Unit) {
+        declarationObservers.add(observer)
+        internalVariableController?.addDeclarationObserver(observer)
+    }
+
+    internal fun removeDeclarationObserver(observer: (Variable) -> Unit) {
+        declarationObservers.remove(observer)
+        internalVariableController?.removeDeclarationObserver(observer)
+    }
+
+    internal fun addVariableObserver(observer: (Variable) -> Unit) {
+        variables.values.forEach {
+            it.addObserver(observer)
+        }
+        internalVariableController?.addVariableObserver(observer)
+    }
+
+    internal fun removeVariablesObserver(observer: (Variable) -> Unit) {
+        variables.values.forEach {
+            it.removeObserver(observer)
+        }
+        internalVariableController?.removeVariablesObserver(observer)
+    }
+
+    internal fun receiveVariablesUpdates(observer: (Variable) -> Unit) {
+        variables.values.forEach {
+            observer.invoke(it)
+        }
+        internalVariableController?.receiveVariablesUpdates(observer)
+    }
+
+    internal fun captureAllVariables(): List<Variable> {
+        return variables.values + (internalVariableController?.captureAllVariables() ?: emptyList())
+    }
+
 }

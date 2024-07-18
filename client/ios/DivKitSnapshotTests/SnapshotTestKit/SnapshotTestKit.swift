@@ -2,10 +2,9 @@ import CoreGraphics
 import Foundation
 import Testing
 import UIKit
-import class XCTest.XCTAttachment
-import class XCTest.XCTContext
+import XCTest
 
-import CommonCorePublic
+import VGSL
 
 enum TestMode {
   case update

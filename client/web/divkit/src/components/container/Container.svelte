@@ -54,6 +54,7 @@
     import { ContentAlignmentHorizontalMapped, correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
+    import { constStore } from '../../utils/constStore';
 
     export let componentContext: ComponentContext<DivContainerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -85,9 +86,10 @@
     }
 
     $: jsonItems = componentContext.json.items;
-    $: jsonItemBuilderData = componentContext.getDerivedFromVars(
+    // eslint-disable-next-line no-nested-ternary
+    $: jsonItemBuilderData = typeof componentContext.json.item_builder?.data === 'string' ? componentContext.getDerivedFromVars(
         componentContext.json.item_builder?.data, undefined, true
-    );
+    ) : (componentContext.json.item_builder?.data ? constStore(componentContext.json.item_builder.data) : undefined);
 
     $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
     $: jsonLayoutMode = componentContext.getDerivedFromVars(componentContext.json.layout_mode);
@@ -125,11 +127,11 @@
             const builder = componentContext.json.item_builder;
             newItems = [];
 
-            $jsonItemBuilderData.forEach(it => {
+            $jsonItemBuilderData.forEach((it, index) => {
                 if (it === null || typeof it !== 'object') {
                     return;
                 }
-                const additionalVars = rootCtx.preparePrototypeVariables(builder.data_element_name || 'it', it as Record<string, unknown>);
+                const additionalVars = rootCtx.preparePrototypeVariables(builder.data_element_name || 'it', it as Record<string, unknown>, index);
 
                 let div: MaybeMissing<DivBaseData> | undefined;
                 for (let i = 0; i < builder.prototypes.length; ++i) {

@@ -1,15 +1,15 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.Color
+import android.text.InputFilter
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
+import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.AccessibilityStateProvider
@@ -79,6 +79,7 @@ internal class DivInputBinder @Inject constructor(
             observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
             observeLineHeight(div, expressionResolver)
             observeMaxVisibleLines(div, expressionResolver)
+            observeMaxLength(div, expressionResolver)
 
             observeHintText(div, expressionResolver)
             observeHintColor(div, expressionResolver)
@@ -180,12 +181,14 @@ internal class DivInputBinder @Inject constructor(
         val callback = { _: Any ->  applyTypeface(div, resolver) }
         div.fontFamily?.observeAndGet(resolver, callback)?.let { addSubscription(it) }
         addSubscription(div.fontWeight.observe(resolver, callback))
+        addSubscription(div.fontWeightValue?.observe(resolver, callback))
     }
 
     private fun DivInputView.applyTypeface(div: DivInput, resolver: ExpressionResolver) {
         typeface = typefaceResolver.getTypeface(
             div.fontFamily?.evaluate(resolver),
-            div.fontWeight.evaluate(resolver)
+            div.fontWeight.evaluate(resolver),
+            div.fontWeightValue?.evaluate(resolver)
         )
     }
 
@@ -212,6 +215,15 @@ internal class DivInputBinder @Inject constructor(
 
         val callback = { _: Any -> maxLines = maxLinesExpr.evaluate(resolver).toIntSafely() }
         addSubscription(maxLinesExpr.observeAndGet(resolver, callback))
+    }
+
+    private fun DivInputView.observeMaxLength(div: DivInput, resolver: ExpressionResolver) {
+        val maxLengthExpr = div.maxLength ?: return
+
+        val callback = { _: Any ->
+            filters = arrayOf(InputFilter.LengthFilter(maxLengthExpr.evaluate(resolver).toIntSafely()))
+        }
+        addSubscription(maxLengthExpr.observeAndGet(resolver, callback))
     }
 
     private fun DivInputView.observeHintText(div: DivInput, resolver: ExpressionResolver) {
@@ -265,7 +277,7 @@ internal class DivInputBinder @Inject constructor(
 
     private fun DivInputView.observeIsEnabled(div: DivInput, resolver: ExpressionResolver) {
         val callback = { isEnabled: Boolean ->
-            if (!isEnabled && isFocused) closeKeyboard(this)
+            if (!isEnabled && isFocused) closeKeyboard()
             enabled = isEnabled
         }
         addSubscription(div.isEnabled.observeAndGet(resolver, callback))
@@ -444,11 +456,6 @@ internal class DivInputBinder @Inject constructor(
                 )
             }
         }
-    }
-
-    private fun closeKeyboard(view: View) {
-        val imm = ContextCompat.getSystemService(view.context, InputMethodManager::class.java)
-        imm?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun ValidatorItemData.validate(

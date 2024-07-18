@@ -1,5 +1,5 @@
-import BasePublic
 import CoreGraphics
+import VGSL
 
 extension DivFilter {
   func resolveEffect(_ expressionResolver: ExpressionResolver) -> ImageEffect? {

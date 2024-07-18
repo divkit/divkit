@@ -2,15 +2,15 @@ import 'package:divkit/src/core/protocol/div_logger.dart';
 import 'package:divkit/src/core/timer/timer.dart';
 
 /// Empty storage, important for initialization.
-final _empty = <String, DivTimer>{};
+final _empty = <String, DivTimerModel>{};
 
 class DivTimerScheduler {
-  final Map<String, DivTimer> _timers;
+  final Map<String, DivTimerModel> _timers;
 
-  Iterable<DivTimer> get timers => _timers.values;
+  Iterable<DivTimerModel> get timers => _timers.values;
 
   DivTimerScheduler({
-    required Iterable<DivTimer>? timers,
+    required Iterable<DivTimerModel>? timers,
   }) : _timers = timers != null
             ? Map.fromIterable(timers, key: (v) => v.id)
             : _empty;

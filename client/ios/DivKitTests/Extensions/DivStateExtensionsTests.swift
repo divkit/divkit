@@ -3,8 +3,6 @@
 
 import XCTest
 
-import CommonCorePublic
-
 final class DivStateExtensionsTests: XCTestCase {
   private let timerScheduler = TestTimerScheduler()
 

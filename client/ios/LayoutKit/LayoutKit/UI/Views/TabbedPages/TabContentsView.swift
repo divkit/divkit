@@ -1,10 +1,8 @@
 import UIKit
 
-import BasePublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
-class TabContentsView: BlockView {
+final class TabContentsView: BlockView {
   private enum Appearance {
     static let animationDuration: TimeInterval = 0.2
   }
@@ -40,6 +38,12 @@ class TabContentsView: BlockView {
     }
   }
 
+  private weak var renderingDelegate: RenderingDelegate? {
+    didSet {
+      dataSource.renderingDelegate = renderingDelegate
+    }
+  }
+
   private(set) var selectedPageIndex: CGFloat = 0
 
   private var selectedPagePath: UIElementPath {
@@ -54,14 +58,15 @@ class TabContentsView: BlockView {
   private var layout: TabContentsViewLayout! {
     didSet {
       collectionViewLayout.layout = layout.map {
-        var contentSize = BasePublic.contentSize(for: $0.pageFrames)
+        var contentSize = contentSize(for: $0.pageFrames)
         if bounds.width > 0 {
           contentSize.width = contentSize.width.ceiled(toStep: bounds.width)
         }
         contentSize.height = 0
         return GenericCollectionLayout(
           frames: $0.pageFrames,
-          contentSize: contentSize
+          contentSize: contentSize,
+          collectionDirection: .horizontal
         )
       }
     }
@@ -87,6 +92,7 @@ class TabContentsView: BlockView {
     self.model = model
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
+    self.renderingDelegate = renderingDelegate
 
     if oldModel?.layoutDirection != model.layoutDirection {
       collectionView.semanticContentAttribute = model

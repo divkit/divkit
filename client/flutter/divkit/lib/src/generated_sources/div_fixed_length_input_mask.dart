@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_input_mask_base.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_input_mask_base.dart';
 
 class DivFixedLengthInputMask with EquatableMixin implements DivInputMaskBase {
   const DivFixedLengthInputMask({
@@ -32,6 +32,19 @@ class DivFixedLengthInputMask with EquatableMixin implements DivInputMaskBase {
         rawTextVariable,
       ];
 
+  DivFixedLengthInputMask copyWith({
+    Expression<bool>? alwaysVisible,
+    Expression<String>? pattern,
+    List<DivFixedLengthInputMaskPatternElement>? patternElements,
+    String? rawTextVariable,
+  }) =>
+      DivFixedLengthInputMask(
+        alwaysVisible: alwaysVisible ?? this.alwaysVisible,
+        pattern: pattern ?? this.pattern,
+        patternElements: patternElements ?? this.patternElements,
+        rawTextVariable: rawTextVariable ?? this.rawTextVariable,
+      );
+
   static DivFixedLengthInputMask? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -45,13 +58,11 @@ class DivFixedLengthInputMask with EquatableMixin implements DivInputMaskBase {
         json['pattern']?.toString(),
       )!,
       patternElements: safeParseObj(
-        (json['pattern_elements'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivFixedLengthInputMaskPatternElement.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['pattern_elements'],
+            (v) => safeParseObj(
+                  DivFixedLengthInputMaskPatternElement.fromJson(v),
+                )!),
       )!,
       rawTextVariable: safeParseStr(
         json['raw_text_variable']?.toString(),
@@ -80,6 +91,17 @@ class DivFixedLengthInputMaskPatternElement with EquatableMixin {
         placeholder,
         regex,
       ];
+
+  DivFixedLengthInputMaskPatternElement copyWith({
+    Expression<String>? key,
+    Expression<String>? placeholder,
+    Expression<String>? Function()? regex,
+  }) =>
+      DivFixedLengthInputMaskPatternElement(
+        key: key ?? this.key,
+        placeholder: placeholder ?? this.placeholder,
+        regex: regex != null ? regex.call() : this.regex,
+      );
 
   static DivFixedLengthInputMaskPatternElement? fromJson(
       Map<String, dynamic>? json) {

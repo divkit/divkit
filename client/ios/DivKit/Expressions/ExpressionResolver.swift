@@ -1,20 +1,30 @@
 import Foundation
 
-import CommonCorePublic
+import LayoutKit
+import VGSL
 
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 
 public final class ExpressionResolver {
+  /// Depreacated.
   public typealias VariableTracker = (Set<DivVariableName>) -> Void
 
   private let functionsProvider: FunctionsProvider
+  private let variableValueProvider: (String) -> Any?
   private let errorTracker: ExpressionErrorTracker
+
+  private lazy var context = ExpressionContext(
+    evaluators: functionsProvider.evaluators,
+    variableValueProvider: variableValueProvider
+  )
 
   init(
     functionsProvider: FunctionsProvider,
+    variableValueProvider: @escaping (String) -> Any?,
     errorTracker: @escaping ExpressionErrorTracker
   ) {
     self.functionsProvider = functionsProvider
+    self.variableValueProvider = variableValueProvider
     self.errorTracker = errorTracker
   }
 
@@ -24,12 +34,13 @@ public final class ExpressionResolver {
     errorTracker: @escaping ExpressionErrorTracker
   ) {
     self.functionsProvider = FunctionsProvider(
-      variableValueProvider: variableValueProvider,
       persistentValuesStorage: persistentValuesStorage
     )
+    self.variableValueProvider = variableValueProvider
     self.errorTracker = errorTracker
   }
 
+  /// Deprecated. Use another initailizer.
   public init(
     variables: DivVariables,
     persistentValuesStorage: DivPersistentValuesStorage,
@@ -37,14 +48,30 @@ public final class ExpressionResolver {
     variableTracker: @escaping VariableTracker = { _ in }
   ) {
     self.functionsProvider = FunctionsProvider(
-      variableValueProvider: {
-        let variableName = DivVariableName(rawValue: $0)
-        variableTracker([variableName])
-        return variables[variableName]?.typedValue()
-      },
       persistentValuesStorage: persistentValuesStorage
     )
+    self.variableValueProvider = {
+      let variableName = DivVariableName(rawValue: $0)
+      variableTracker([variableName])
+      return variables[variableName]?.typedValue()
+    }
     self.errorTracker = { errorTracker?($0) }
+  }
+
+  init(
+    path: UIElementPath,
+    variablesStorage: DivVariablesStorage,
+    persistentValuesStorage: DivPersistentValuesStorage,
+    reporter: DivReporter
+  ) {
+    self.functionsProvider = FunctionsProvider(
+      persistentValuesStorage: persistentValuesStorage
+    )
+    self.variableValueProvider = {
+      let variableName = DivVariableName(rawValue: $0)
+      return variablesStorage.getVariableValue(path: path, name: variableName)
+    }
+    self.errorTracker = reporter.asExpressionErrorTracker(cardId: path.cardId)
   }
 
   public func resolve(_ expression: String) -> Any? {
@@ -114,39 +141,6 @@ public final class ExpressionResolver {
 
   func resolveDict(_ expression: Expression<[String: Any]>?) -> [String: Any]? {
     resolveNumeric(expression)
-  }
-
-  private func resolveEscaping<T>(_ value: T?) -> T? {
-    guard var value = value as? String, value.contains("\\") else {
-      return value
-    }
-
-    var index = value.startIndex
-    let escapingValues = ["@{", "'", "\\"]
-
-    while index < value.endIndex {
-      if value[index] == "\\" {
-        let nextIndex = value.index(index, offsetBy: 1)
-        let next = value[nextIndex...]
-
-        if let escaped = escapingValues.first(where: { next.starts(with: $0) }) {
-          let distance = value.distance(from: value.startIndex, to: index)
-          value.remove(at: index)
-          index = value.index(value.startIndex, offsetBy: distance + escaped.count)
-        } else {
-          if next.isEmpty {
-            errorTracker(ExpressionError("Error tokenizing '\(value)'.", expression: value))
-          } else {
-            errorTracker(ExpressionError("Incorrect string escape", expression: value))
-          }
-          return nil
-        }
-      } else {
-        index = value.index(after: index)
-      }
-    }
-
-    return value as? T
   }
 
   private func resolveAnyLink(_ link: ExpressionLink<Any>) -> Any? {
@@ -259,7 +253,7 @@ public final class ExpressionResolver {
   }
 
   private func evaluate<T>(_ expression: CalcExpression) throws -> T? {
-    let value = try expression.evaluate(evaluators: functionsProvider.evaluators)
+    let value = try expression.evaluate(context)
     if let castedValue: T = ExpressionValueConverter.cast(value) {
       return castedValue
     }
@@ -301,11 +295,14 @@ public final class ExpressionResolver {
   ) -> T? {
     switch expression {
     case let .value(value):
-      resolveEscaping(value)
+      if let stringValue = value as? String {
+        return ExpressionValueConverter.unescape(stringValue, errorTracker: errorTracker) as? T
+      }
+      return value
     case let .link(link):
-      resolveStringBasedLink(link, initializer: initializer)
+      return resolveStringBasedLink(link, initializer: initializer)
     case .none:
-      nil
+      return nil
     }
   }
 }

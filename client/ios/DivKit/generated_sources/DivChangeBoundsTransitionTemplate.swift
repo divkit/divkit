@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivChangeBoundsTransitionTemplate: TemplateValue {
   public static let type: String = "change_bounds"

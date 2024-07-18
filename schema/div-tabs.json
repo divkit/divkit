@@ -33,6 +33,28 @@
         "div"
       ],
       "$description": "translations.json#/div_tabs_item"
+    },
+    "delimiter_style": {
+      "type": "object",
+      "properties": {
+        "image_url": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_image_image_url"
+        },
+        "width": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\", \"value\": 12}",
+          "$description": "translations.json#/div_base_width"
+        },
+        "height": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\", \"value\": 12}",
+          "$description": "translations.json#/div_base_height"
+        }
+      },
+      "required": [
+        "image_url"
+      ]
     }
   },
   "allOf": [
@@ -159,6 +181,13 @@
             }
           },
           "$description": "translations.json#/div_tabs_tab_title_style"
+        },
+        "tab_title_delimiter": {
+          "$ref": "#/definitions/delimiter_style",
+          "$description": "translations.json#/div_tabs_tab_title_delimiter_delimiter_style",
+          "platforms": [
+            "android"
+          ]
         },
         "selected_tab": {
           "$ref": "common.json#/non_negative_integer",

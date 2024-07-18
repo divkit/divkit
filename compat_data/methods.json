@@ -39,7 +39,7 @@
                 "version_added": "29.15.0"
             },
             "web": {
-                "version_added": "29.15.0"
+                "version_added": "30.2.0"
             }
         }
     }, {
@@ -62,6 +62,20 @@
             },
             "web": {
                 "version_added": "29.15.0"
+            }
+        }
+    }, {
+        "id": "methods_dict_contains_key",
+        "name": "Method-<code>containsKey</code> for the <code>dict</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.4.0"
+            },
+            "ios": {
+                "version_added": "30.4.0"
+            },
+            "web": {
+                "version_added": "30.4.0"
             }
         }
     }]

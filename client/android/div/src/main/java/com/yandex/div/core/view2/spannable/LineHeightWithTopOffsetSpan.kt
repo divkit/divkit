@@ -14,13 +14,15 @@ private const val NOT_SET = -1
  */
 internal class LineHeightWithTopOffsetSpan(
     @field:Px private val topOffset: Int,
-    @field:Px private val lineHeight: Int
+    @field:Px private val lineHeight: Int,
+    @field:Px private val textLineHeight: Int = 0
 ) : LineHeightSpan {
 
     private var fontMetricsSaved = false
+    private var savedTop: Int = NOT_SET
     private var savedAscent: Int = NOT_SET
     private var savedDescent: Int = NOT_SET
-    private var savedTop: Int = NOT_SET
+    private var savedBottom: Int = NOT_SET
 
     override fun chooseHeight(
         text: CharSequence?,
@@ -34,13 +36,17 @@ internal class LineHeightWithTopOffsetSpan(
         val spanStart = spanned.getSpanStart(this)
         val spanEnd = spanned.getSpanEnd(this)
         if (fontMetricsSaved) {
-            resetFontMetrics(fm)
+            restoreFontMetrics(fm)
         } else if (start >= spanStart) {
             fontMetricsSaved = true
             saveFontMetrics(fm)
         }
-        if (start <= spanEnd && spanStart <= end) {
-            applyLineHeight(fm)
+        if (start <= spanEnd && spanStart <= end) {  // segment intersection
+            if (start >= spanStart && end <= spanEnd) {
+                applyLineHeight(fm)
+            } else if (lineHeight > textLineHeight) {
+                applyLineHeight(fm)
+            }
         }
         if (spanStart in start..end) {
             applyTopOffset(fm)
@@ -55,11 +61,16 @@ internal class LineHeightWithTopOffsetSpan(
         if (lineHeight <= 0) {
             return
         }
-        val originHeight = fm.descent - fm.ascent
-        if (originHeight >= 0) {
-            val ratio: Float = lineHeight * 1.0f / originHeight
+        val targetLineHeight = lineHeight
+        val originLineHeight = fm.descent - fm.ascent
+        val topAscent = fm.top - fm.ascent
+        val bottomDescent = fm.bottom - fm.descent
+        if (originLineHeight >= 0) {
+            val ratio: Float = targetLineHeight * 1.0f / originLineHeight
             fm.descent = (fm.descent * ratio).roundToInt()
-            fm.ascent = fm.descent - lineHeight
+            fm.ascent = fm.descent - targetLineHeight
+            fm.top = fm.ascent + topAscent
+            fm.bottom = fm.descent + bottomDescent
         }
     }
 
@@ -67,19 +78,21 @@ internal class LineHeightWithTopOffsetSpan(
         if (topOffset <= 0) {
             return
         }
-        fm.ascent -= topOffset
         fm.top -= topOffset
+        fm.ascent -= topOffset
     }
 
     private fun saveFontMetrics(fm: Paint.FontMetricsInt) {
+        savedTop = fm.top
         savedAscent = fm.ascent
         savedDescent = fm.descent
-        savedTop = fm.top
+        savedBottom = fm.bottom
     }
 
-    private fun resetFontMetrics(fm: Paint.FontMetricsInt) {
+    private fun restoreFontMetrics(fm: Paint.FontMetricsInt) {
+        fm.top = savedTop
         fm.ascent = savedAscent
         fm.descent = savedDescent
-        fm.top = savedTop
+        fm.bottom = savedBottom
     }
 }

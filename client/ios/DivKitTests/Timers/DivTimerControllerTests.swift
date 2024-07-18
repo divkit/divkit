@@ -3,12 +3,9 @@
 import Foundation
 import XCTest
 
-import CommonCorePublic
-
 final class DivTimerControllerTests: XCTestCase {
   private let tickActions = [divAction(logId: "Tick action")]
   private let endActions = [divAction(logId: "End action")]
-  private var variableValue: String?
   private var tickActionsCount = 0
   private var endActionsCount = 0
 
@@ -19,8 +16,20 @@ final class DivTimerControllerTests: XCTestCase {
   private var timerDuration: Int = 0
   private var timerTickInterval: Int = 0
 
+  private let variablesStorage = DivVariablesStorage()
+
+  private var variableValue: Int? {
+    variablesStorage.getVariableValue(cardId: "test_card", name: "test_variable_name")
+  }
+
   override func setUp() {
     super.setUp()
+
+    variablesStorage.set(
+      cardId: "test_card",
+      variables: ["test_variable_name": .integer(-1)]
+    )
+
     timer = makeTimer()
   }
 
@@ -31,7 +40,7 @@ final class DivTimerControllerTests: XCTestCase {
 
   func test_WhenTimerStart_VariableSetToZero() throws {
     timer.start()
-    XCTAssertEqual(variableValue, "0")
+    XCTAssertEqual(variableValue, 0)
   }
 
   func test_timerStartOnlyOnce() throws {
@@ -61,7 +70,7 @@ final class DivTimerControllerTests: XCTestCase {
     timer.start()
     makeTick()
     timer.stop()
-    XCTAssertEqual(variableValue, String(tickInterval))
+    XCTAssertEqual(variableValue, tickInterval)
   }
 
   func test_WhenTimerStarted_runEndActionsOnStop() throws {
@@ -99,7 +108,7 @@ final class DivTimerControllerTests: XCTestCase {
     timer.start()
     makeTick()
     timer.pause()
-    XCTAssertEqual(variableValue, String(tickInterval))
+    XCTAssertEqual(variableValue, tickInterval)
   }
 
   func test_timerPausedOnlyOnce() throws {
@@ -142,7 +151,7 @@ final class DivTimerControllerTests: XCTestCase {
     timer.start()
     makeTick()
     timer.cancel()
-    XCTAssertEqual(variableValue, String(tickInterval))
+    XCTAssertEqual(variableValue, tickInterval)
   }
 
   func test_WhenTimerPaused_StateIsStoppedOnCancel() throws {
@@ -159,7 +168,7 @@ final class DivTimerControllerTests: XCTestCase {
 
   func test_WhenTimerStopped_VariableSetToZeroOnReset() throws {
     timer.reset()
-    XCTAssertEqual(variableValue, "0")
+    XCTAssertEqual(variableValue, 0)
   }
 
   func test_WhenTimerStarted_StateIsStartedOnReset() throws {
@@ -172,7 +181,7 @@ final class DivTimerControllerTests: XCTestCase {
     timer.start()
     makeTick()
     timer.reset()
-    XCTAssertEqual(variableValue, "0")
+    XCTAssertEqual(variableValue, 0)
   }
 
   func test_WhenTimerPaused_StateIsStartedOnReset() throws {
@@ -191,7 +200,7 @@ final class DivTimerControllerTests: XCTestCase {
   func test_WhenTimerTick_VariableEqualTickInterval() throws {
     timer.start()
     makeTick()
-    XCTAssertEqual(variableValue, String(tickInterval))
+    XCTAssertEqual(variableValue, tickInterval)
   }
 
   func test_WhenTimerEnded_runEndActions() throws {
@@ -203,7 +212,7 @@ final class DivTimerControllerTests: XCTestCase {
   func test_WhenTimerEnded_VariableEqualDuration() throws {
     timer.start()
     endTimer()
-    XCTAssertEqual(variableValue, String(duration))
+    XCTAssertEqual(variableValue, duration)
   }
 
   func test_WhenTimerEnded_stateStopped() throws {
@@ -226,7 +235,7 @@ final class DivTimerControllerTests: XCTestCase {
     timer.pause()
     timer.resume()
     makeHalfTick()
-    XCTAssertEqual(variableValue, String(tickInterval))
+    XCTAssertEqual(variableValue, tickInterval)
   }
 
   func test_WhenTimerResumed_checkTickActionsCountOnNextTick() throws {
@@ -255,7 +264,7 @@ final class DivTimerControllerTests: XCTestCase {
     timer.resume()
     makeHalfTick()
     makeTick()
-    XCTAssertEqual(variableValue, String(tickInterval * 2))
+    XCTAssertEqual(variableValue, tickInterval * 2)
   }
 
   func test_WhenTimerResumed_VariableChanged() throws {
@@ -263,7 +272,7 @@ final class DivTimerControllerTests: XCTestCase {
     makeHalfTick()
     timer.pause()
     timer.resume()
-    XCTAssertEqual(variableValue, String(tickInterval / 2))
+    XCTAssertEqual(variableValue, tickInterval / 2)
   }
 
   func test_WhenTimerEnded_runTickActionWhenNeeded() throws {
@@ -334,7 +343,7 @@ final class DivTimerControllerTests: XCTestCase {
       id: "test_timer",
       tickActions: tickActions,
       tickInterval: .value(tickInterval),
-      valueVariable: variableName
+      valueVariable: "test_variable_name"
     )
     timerDuration = duration
     timerTickInterval = tickInterval
@@ -350,12 +359,8 @@ final class DivTimerControllerTests: XCTestCase {
           endActionsCount += 1
         }
       },
-      updateVariable: { [unowned self] name, value in
-        if name.rawValue == variableName {
-          variableValue = value
-        }
-      },
       updateCard: {},
+      variablesStorage: variablesStorage,
       persistentValuesStorage: DivPersistentValuesStorage(),
       reporter: DefaultDivReporter()
     )
@@ -368,7 +373,6 @@ extension Int {
   }
 }
 
-private let variableName = "test_variable_name"
 private let tickCount = 3
 private let tickInterval = 1000
 private let duration = tickInterval * tickCount

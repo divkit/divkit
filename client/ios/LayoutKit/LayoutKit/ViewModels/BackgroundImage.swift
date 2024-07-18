@@ -1,5 +1,4 @@
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 public struct BackgroundImage {
   let imageHolder: ImageHolder
@@ -22,7 +21,7 @@ public struct BackgroundImage {
 
 extension BackgroundImage: Equatable {
   public static func ==(lhs: BackgroundImage, rhs: BackgroundImage) -> Bool {
-    lhs.imageHolder == rhs.imageHolder &&
+    compare(lhs.imageHolder, rhs.imageHolder) &&
       lhs.contentMode == rhs.contentMode &&
       lhs.alpha == rhs.alpha &&
       lhs.effects == rhs.effects

@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 public struct PageIndicatorConfiguration: Equatable {
   public enum Animation {

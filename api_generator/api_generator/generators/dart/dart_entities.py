@@ -190,7 +190,7 @@ class DartProperty(Property):
         elif isinstance(prop_type, (String, StaticString)):
             return f"safeParseStr{expr}(json['{self.name}']?.toString(),{fallback}){required}"
         elif isinstance(prop_type, Dictionary):
-            return f"safeParseMap{expr}(json,{fallback}){required}"
+            return f"safeParseMap{expr}(json['{self.name}'],{fallback}){required}"
         elif isinstance(prop_type, RawArray):
             return f"safeParseList{expr}(json['{self.name}'],{fallback}){required}"
         elif isinstance(prop_type, Url):
@@ -202,7 +202,6 @@ class DartProperty(Property):
         elif prop_type.is_list():
             list_item_type = prop_type.get_list_inner_class()
             list_item_decl = list_item_type.declaration()
-
             if isinstance(list_item_type, Int):
                 strategy = "safeParseInt(v,)!"
             elif isinstance(list_item_type, Color):
@@ -226,9 +225,8 @@ class DartProperty(Property):
             else:
                 strategy = ""
 
-            return f"safeParseObj{expr}((json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
-                   f"{'?' if self.optional or self.has_default else ''}.map((v) => {strategy},)" \
-                   f".toList(),{fallback}){'' if self.optional or self.has_default else '!'}"
+            return f"safeParseObj{expr}(safeListMap(json['{self.name}'], (v) => {strategy})," \
+                   f"{fallback}){'' if self.optional or self.has_default else '!'}"
 
     @property
     def fallback_declaration(self) -> str:
@@ -393,7 +391,11 @@ class DartPropertyType(PropertyType):
                 if case_constructor is None:
                     return None
 
-                return f'const {get_full_name(self.object)}({case_constructor})'
+                if isinstance(self, Object) and prop_type.object is not None and isinstance(prop_type.object, DartEntity):
+                    entity = cast(DartEntity, prop_type.object)
+                    return f'const {get_full_name(self.object)}.{utils.lower_camel_case(entity.name)}({case_constructor})'
+
+                return f'const {get_full_name(self.object)}({case_constructor},)'
 
             if isinstance(self.object, DartEntity):
                 entity = cast(DartEntity, self.object)

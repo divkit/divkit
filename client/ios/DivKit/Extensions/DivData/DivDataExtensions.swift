@@ -1,6 +1,6 @@
-import CommonCorePublic
 import LayoutKit
 import Serialization
+import VGSL
 
 extension DivData: DivBlockModeling {
   static let rootPath = DivStatePath(rawValue: UIElementPath("{root}"))
@@ -13,7 +13,7 @@ extension DivData: DivBlockModeling {
 
     if let previousRootState = getPreviousRootState(stateManager: stateManager) {
       context.lastVisibleBoundsCache.dropVisibleBounds(
-        forMatchingPrefix: context.parentPath + previousRootState.rawValue
+        prefix: context.parentPath + previousRootState.rawValue
       )
     }
 

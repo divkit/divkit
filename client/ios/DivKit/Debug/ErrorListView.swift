@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 
-import BaseUIPublic
 import LayoutKit
+import VGSL
 
 final class ErrorListView: UIView {
   private let errorView: UIView
@@ -136,7 +136,7 @@ private func makeErrorListBlock(errors: [String]) -> Block {
   }
 
   return try! GalleryBlock(
-    gaps: [0] + Array(repeating: 10, count: errorBlocks.count),
+    gaps: [0] + .init(repeating: 10, times: UInt(errorBlocks.count)),
     children: errorBlocks,
     path: rootPath,
     direction: .vertical,

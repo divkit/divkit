@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_shape.dart';
-import 'div_stroke.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_shape.dart';
+import 'package:divkit/src/generated_sources/div_stroke.dart';
 
 class DivShapeDrawable with EquatableMixin {
   const DivShapeDrawable({
@@ -27,6 +27,17 @@ class DivShapeDrawable with EquatableMixin {
         shape,
         stroke,
       ];
+
+  DivShapeDrawable copyWith({
+    Expression<Color>? color,
+    DivShape? shape,
+    DivStroke? Function()? stroke,
+  }) =>
+      DivShapeDrawable(
+        color: color ?? this.color,
+        shape: shape ?? this.shape,
+        stroke: stroke != null ? stroke.call() : this.stroke,
+      );
 
   static DivShapeDrawable? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 public class DivStateManager {
   public struct Item: Equatable {
@@ -25,7 +25,7 @@ public class DivStateManager {
     case withID(DivStateID)
   }
 
-  private let rwLock = RWLock()
+  private let lock = AllocatedUnfairLock()
 
   private var _items: [DivStatePath: Item]
   private var _stateBindings: [DivStatePath: Binding<String>] = [:]
@@ -33,19 +33,19 @@ public class DivStateManager {
   private var _blockVisibility: [DivBlockPath: Bool] = [:]
 
   public var items: [DivStatePath: Item] {
-    rwLock.read {
+    lock.withLock {
       _items
     }
   }
 
   public var blockIds: [DivStatePath: Set<String>] {
-    rwLock.read {
+    lock.withLock {
       _blockIds
     }
   }
 
   public var blockVisibility: [DivBlockPath: Bool] {
-    rwLock.read {
+    lock.withLock {
       _blockVisibility
     }
   }
@@ -59,13 +59,13 @@ public class DivStateManager {
   }
 
   func get(stateBlockPath: DivStatePath) -> Item? {
-    rwLock.read {
+    lock.withLock {
       _items[stateBlockPath]
     }
   }
 
   func setState(stateBlockPath: DivStatePath, stateBinding: Binding<String>) {
-    rwLock.write {
+    lock.withLock {
       _stateBindings[stateBlockPath] = stateBinding
       guard stateBinding.value != _items[stateBlockPath]?.currentStateID.rawValue else { return }
       updateState(path: stateBlockPath, stateID: DivStateID(rawValue: stateBinding.value))
@@ -73,13 +73,13 @@ public class DivStateManager {
   }
 
   func resetBinding(for stateBlockPath: DivStatePath) {
-    rwLock.write {
+    lock.withLock {
       _ = _stateBindings.removeValue(forKey: stateBlockPath)
     }
   }
 
   public func setState(stateBlockPath: DivStatePath, stateID: DivStateID) {
-    rwLock.write {
+    lock.withLock {
       _stateBindings[stateBlockPath]?.value = stateID.rawValue
       _items[stateBlockPath] = Item(
         currentStateID: stateID,
@@ -89,7 +89,7 @@ public class DivStateManager {
   }
 
   public func setStateWithHistory(path: DivStatePath, stateID: DivStateID) {
-    rwLock.write {
+    lock.withLock {
       updateState(path: path, stateID: stateID)
     }
   }
@@ -110,13 +110,13 @@ public class DivStateManager {
   }
 
   public func removeState(path: DivStatePath) {
-    rwLock.write {
+    lock.withLock {
       _ = _items.removeValue(forKey: path)
     }
   }
 
   public func isBlockAdded(_ id: String, stateBlockPath: DivStatePath) -> Bool {
-    rwLock.read {
+    lock.withLock {
       guard let item = _items[stateBlockPath],
             let currentBlockIds = _blockIds[stateBlockPath + item.currentStateID] else {
         return false
@@ -142,13 +142,13 @@ public class DivStateManager {
   }
 
   public func updateBlockIdsWithStateChangeTransition(statePath: DivStatePath, div: Div) {
-    rwLock.write {
+    lock.withLock {
       _blockIds[statePath] = div.idsWithStateChangeTransitionInCurrentState
     }
   }
 
   public func getVisibleIds(statePath: DivStatePath) -> Set<String> {
-    rwLock.read {
+    lock.withLock {
       var ids = _blockIds[statePath] ?? Set<String>()
       for (blockPath, isVisible) in _blockVisibility {
         if blockPath.statePath == statePath {
@@ -164,7 +164,7 @@ public class DivStateManager {
   }
 
   public func shouldBlockAppearWithTransition(path: DivBlockPath) -> Bool {
-    rwLock.read {
+    lock.withLock {
       _blockVisibility[path] == false
     }
   }
@@ -175,7 +175,7 @@ public class DivStateManager {
       return
     }
 
-    rwLock.write {
+    lock.withLock {
       if let id = div.id, div.shouldApplyTransition(.visibilityChange) {
         _blockVisibility[statePath + id] = isVisible
       }
@@ -183,7 +183,7 @@ public class DivStateManager {
   }
 
   public func reset() {
-    rwLock.write {
+    lock.withLock {
       _items = [:]
       _blockIds = [:]
       _blockVisibility = [:]

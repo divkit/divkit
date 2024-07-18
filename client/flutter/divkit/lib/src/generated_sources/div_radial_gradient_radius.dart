@@ -2,41 +2,30 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_fixed_size.dart';
-import 'div_radial_gradient_relative_radius.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient_relative_radius.dart';
 
 class DivRadialGradientRadius with EquatableMixin {
-  const DivRadialGradientRadius(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivFixedSize) {
-      return value;
-    }
-    if (value is DivRadialGradientRelativeRadius) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivRadialGradientRadius");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivFixedSize) divFixedSize,
     required T Function(DivRadialGradientRelativeRadius)
         divRadialGradientRelativeRadius,
   }) {
-    final value = _value;
-    if (value is DivFixedSize) {
-      return divFixedSize(value);
-    }
-    if (value is DivRadialGradientRelativeRadius) {
-      return divRadialGradientRelativeRadius(value);
+    switch (_index) {
+      case 0:
+        return divFixedSize(
+          value as DivFixedSize,
+        );
+      case 1:
+        return divRadialGradientRelativeRadius(
+          value as DivRadialGradientRelativeRadius,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivRadialGradientRadius");
@@ -48,24 +37,34 @@ class DivRadialGradientRadius with EquatableMixin {
         divRadialGradientRelativeRadius,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivFixedSize && divFixedSize != null) {
-      return divFixedSize(value);
-    }
-    if (value is DivRadialGradientRelativeRadius &&
-        divRadialGradientRelativeRadius != null) {
-      return divRadialGradientRelativeRadius(value);
+    switch (_index) {
+      case 0:
+        if (divFixedSize != null) {
+          return divFixedSize(
+            value as DivFixedSize,
+          );
+        }
+        break;
+      case 1:
+        if (divRadialGradientRelativeRadius != null) {
+          return divRadialGradientRelativeRadius(
+            value as DivRadialGradientRelativeRadius,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivRadialGradientRadius.divFixedSize(
-    DivFixedSize value,
-  ) : _value = value;
+    DivFixedSize obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivRadialGradientRadius.divRadialGradientRelativeRadius(
-    DivRadialGradientRelativeRadius value,
-  ) : _value = value;
+    DivRadialGradientRelativeRadius obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivRadialGradientRadius? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -73,9 +72,10 @@ class DivRadialGradientRadius with EquatableMixin {
     }
     switch (json['type']) {
       case DivFixedSize.type:
-        return DivRadialGradientRadius(DivFixedSize.fromJson(json)!);
+        return DivRadialGradientRadius.divFixedSize(
+            DivFixedSize.fromJson(json)!);
       case DivRadialGradientRelativeRadius.type:
-        return DivRadialGradientRadius(
+        return DivRadialGradientRadius.divRadialGradientRelativeRadius(
             DivRadialGradientRelativeRadius.fromJson(json)!);
     }
     return null;

@@ -50,10 +50,12 @@ class Select internal constructor(
             fontSize = additive.fontSize ?: properties.fontSize,
             fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
             fontWeight = additive.fontWeight ?: properties.fontWeight,
+            fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
             height = additive.height ?: properties.height,
             hintColor = additive.hintColor ?: properties.hintColor,
             hintText = additive.hintText ?: properties.hintText,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
             margins = additive.margins ?: properties.margins,
@@ -69,6 +71,7 @@ class Select internal constructor(
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             valueVariable = additive.valueVariable ?: properties.valueVariable,
+            variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -138,6 +141,10 @@ class Select internal constructor(
          */
         val fontWeight: Property<FontWeight>?,
         /**
+         * Style. Numeric value.
+         */
+        val fontWeightValue: Property<Int>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
          */
@@ -155,6 +162,10 @@ class Select internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * Spacing between characters.
          * Default value: `0`.
@@ -215,6 +226,10 @@ class Select internal constructor(
          */
         val valueVariable: Property<String>?,
         /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
+        /**
          * Element visibility.
          * Default value: `visible`.
          */
@@ -250,10 +265,12 @@ class Select internal constructor(
             result.tryPutProperty("font_size", fontSize)
             result.tryPutProperty("font_size_unit", fontSizeUnit)
             result.tryPutProperty("font_weight", fontWeight)
+            result.tryPutProperty("font_weight_value", fontWeightValue)
             result.tryPutProperty("height", height)
             result.tryPutProperty("hint_color", hintColor)
             result.tryPutProperty("hint_text", hintText)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
             result.tryPutProperty("margins", margins)
@@ -269,6 +286,7 @@ class Select internal constructor(
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("value_variable", valueVariable)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -336,10 +354,12 @@ class Select internal constructor(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -354,6 +374,7 @@ class Select internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -376,10 +397,12 @@ fun DivScope.select(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -395,6 +418,7 @@ fun DivScope.select(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -415,10 +439,12 @@ fun DivScope.select(
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         height = valueOrNull(height),
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
@@ -434,6 +460,7 @@ fun DivScope.select(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         valueVariable = valueOrNull(valueVariable),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -456,10 +483,12 @@ fun DivScope.select(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -474,6 +503,7 @@ fun DivScope.select(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -496,10 +526,12 @@ fun DivScope.selectProps(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -515,6 +547,7 @@ fun DivScope.selectProps(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -534,10 +567,12 @@ fun DivScope.selectProps(
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
+    fontWeightValue = valueOrNull(fontWeightValue),
     height = valueOrNull(height),
     hintColor = valueOrNull(hintColor),
     hintText = valueOrNull(hintText),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
     margins = valueOrNull(margins),
@@ -553,6 +588,7 @@ fun DivScope.selectProps(
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
     valueVariable = valueOrNull(valueVariable),
+    variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -574,10 +610,12 @@ fun DivScope.selectProps(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -592,6 +630,7 @@ fun DivScope.selectProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -614,10 +653,12 @@ fun TemplateScope.selectRefs(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -633,6 +674,7 @@ fun TemplateScope.selectRefs(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -652,10 +694,12 @@ fun TemplateScope.selectRefs(
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
+    fontWeightValue = fontWeightValue,
     height = height,
     hintColor = hintColor,
     hintText = hintText,
     id = id,
+    layoutProvider = layoutProvider,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
     margins = margins,
@@ -671,6 +715,7 @@ fun TemplateScope.selectRefs(
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
     valueVariable = valueVariable,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -692,10 +737,12 @@ fun TemplateScope.selectRefs(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -710,6 +757,7 @@ fun TemplateScope.selectRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -732,10 +780,12 @@ fun Select.override(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -751,6 +801,7 @@ fun Select.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -771,10 +822,12 @@ fun Select.override(
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
+        fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         height = valueOrNull(height) ?: properties.height,
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
         hintText = valueOrNull(hintText) ?: properties.hintText,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         margins = valueOrNull(margins) ?: properties.margins,
@@ -790,6 +843,7 @@ fun Select.override(
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         valueVariable = valueOrNull(valueVariable) ?: properties.valueVariable,
+        variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -812,10 +866,12 @@ fun Select.override(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -830,6 +886,7 @@ fun Select.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -852,10 +909,12 @@ fun Select.defer(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -871,6 +930,7 @@ fun Select.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -891,10 +951,12 @@ fun Select.defer(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         height = height ?: properties.height,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = margins ?: properties.margins,
@@ -910,6 +972,7 @@ fun Select.defer(
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         valueVariable = valueVariable ?: properties.valueVariable,
+        variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -926,6 +989,7 @@ fun Select.defer(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param letterSpacing Spacing between characters.
@@ -945,6 +1009,7 @@ fun Select.evaluate(
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -968,10 +1033,12 @@ fun Select.evaluate(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         height = properties.height,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = properties.margins,
@@ -987,6 +1054,7 @@ fun Select.evaluate(
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
         valueVariable = properties.valueVariable,
+        variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -1009,10 +1077,12 @@ fun Select.evaluate(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1027,6 +1097,7 @@ fun Select.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1049,10 +1120,12 @@ fun Component<Select>.override(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     margins: EdgeInsets? = null,
@@ -1068,6 +1141,7 @@ fun Component<Select>.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1089,10 +1163,12 @@ fun Component<Select>.override(
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         height = valueOrNull(height),
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
@@ -1108,6 +1184,7 @@ fun Component<Select>.override(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         valueVariable = valueOrNull(valueVariable),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1130,10 +1207,12 @@ fun Component<Select>.override(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1148,6 +1227,7 @@ fun Component<Select>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1170,10 +1250,12 @@ fun Component<Select>.defer(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
@@ -1189,6 +1271,7 @@ fun Component<Select>.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1210,10 +1293,12 @@ fun Component<Select>.defer(
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
         height = height,
         hintColor = hintColor,
         hintText = hintText,
         id = id,
+        layoutProvider = layoutProvider,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = margins,
@@ -1229,6 +1314,7 @@ fun Component<Select>.defer(
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
         valueVariable = valueVariable,
+        variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1245,6 +1331,7 @@ fun Component<Select>.defer(
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param hintColor Hint color.
  * @param hintText Hint text.
  * @param letterSpacing Spacing between characters.
@@ -1264,6 +1351,7 @@ fun Component<Select>.evaluate(
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -1288,10 +1376,12 @@ fun Component<Select>.evaluate(
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
         height = null,
         hintColor = hintColor,
         hintText = hintText,
         id = null,
+        layoutProvider = null,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = null,
@@ -1307,6 +1397,7 @@ fun Component<Select>.evaluate(
         transitionOut = null,
         transitionTriggers = null,
         valueVariable = null,
+        variables = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,

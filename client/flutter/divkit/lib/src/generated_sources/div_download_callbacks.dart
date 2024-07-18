@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
 
 class DivDownloadCallbacks with EquatableMixin {
   const DivDownloadCallbacks({
@@ -21,28 +21,36 @@ class DivDownloadCallbacks with EquatableMixin {
         onSuccessActions,
       ];
 
+  DivDownloadCallbacks copyWith({
+    List<DivAction>? Function()? onFailActions,
+    List<DivAction>? Function()? onSuccessActions,
+  }) =>
+      DivDownloadCallbacks(
+        onFailActions:
+            onFailActions != null ? onFailActions.call() : this.onFailActions,
+        onSuccessActions: onSuccessActions != null
+            ? onSuccessActions.call()
+            : this.onSuccessActions,
+      );
+
   static DivDownloadCallbacks? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return DivDownloadCallbacks(
       onFailActions: safeParseObj(
-        (json['on_fail_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['on_fail_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       onSuccessActions: safeParseObj(
-        (json['on_success_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['on_success_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
     );
   }

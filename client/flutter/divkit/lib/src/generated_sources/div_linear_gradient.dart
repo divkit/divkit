@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivLinearGradient with EquatableMixin {
   const DivLinearGradient({
@@ -22,6 +22,15 @@ class DivLinearGradient with EquatableMixin {
         colors,
       ];
 
+  DivLinearGradient copyWith({
+    Expression<int>? angle,
+    Expression<List<Color>>? colors,
+  }) =>
+      DivLinearGradient(
+        angle: angle ?? this.angle,
+        colors: colors ?? this.colors,
+      );
+
   static DivLinearGradient? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -32,13 +41,11 @@ class DivLinearGradient with EquatableMixin {
         fallback: 0,
       )!,
       colors: safeParseObjExpr(
-        (json['colors'] as List<dynamic>)
-            .map(
-              (v) => safeParseColor(
-                v,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['colors'],
+            (v) => safeParseColor(
+                  v,
+                )!),
       )!,
     );
   }

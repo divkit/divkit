@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 enum ExpressionValueConverter {
   static func cast<T>(_ anyValue: Any) -> T? {
@@ -49,7 +49,7 @@ enum ExpressionValueConverter {
       return dateFormatter.string(from: date)
     case let array as [AnyHashable]:
       return "[\(array.map { formatValue($0) }.joined(separator: ","))]"
-    case let dict as [String: AnyHashable]:
+    case let dict as DivDictionary:
       let properties = dict
         .keys.sorted()
         .map { "\"\($0)\":\(formatValue(dict[$0] ?? "null"))" }
@@ -58,6 +58,34 @@ enum ExpressionValueConverter {
     default:
       return "\(value)"
     }
+  }
+
+  static func unescape(_ value: String, errorTracker: ExpressionErrorTracker?) -> String? {
+    if !value.contains("\\") {
+      return value
+    }
+
+    var value = value
+    var index = value.startIndex
+    let escapingValues = ["@{", "'", "\\"]
+    while index < value.endIndex {
+      if value[index] != "\\" {
+        index = value.index(after: index)
+        continue
+      }
+      let nextIndex = value.index(index, offsetBy: 1)
+      let next = value[nextIndex...]
+      if let escaped = escapingValues.first(where: { next.starts(with: $0) }) {
+        let distance = value.distance(from: value.startIndex, to: index)
+        value.remove(at: index)
+        index = value.index(value.startIndex, offsetBy: distance + escaped.count)
+      } else {
+        let message = next.isEmpty ? "Error tokenizing '\(value)'." : "Incorrect string escape"
+        errorTracker?(ExpressionError(message, expression: value))
+        return nil
+      }
+    }
+    return value
   }
 }
 
@@ -99,7 +127,7 @@ func formatTypeForError(_ type: Any.Type) -> String {
     "DateTime"
   case is [AnyHashable].Type:
     "Array"
-  case is [String: AnyHashable].Type, is [AnyHashable: AnyHashable].Type:
+  case is DivDictionary.Type, is [AnyHashable: AnyHashable].Type:
     "Dict"
   default:
     String(describing: type)

@@ -1,5 +1,4 @@
-import BasePublic
-import CommonCorePublic
+import VGSL
 
 #if os(iOS)
 import UIKit
@@ -64,14 +63,15 @@ public final class DefaultTooltipManager: TooltipManager {
     public let view: VisibleBoundsTrackingView
   }
 
-  public var shownTooltips: BasePublic.Property<Set<String>>
+  public var shownTooltips: Property<Set<String>>
 
   private let handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
+  private var tooltipWindow: UIWindow?
 
   public init(
-    shownTooltips: BasePublic.Property<Set<String>>,
+    shownTooltips: Property<Set<String>>,
     handleAction: @escaping (UIActionEvent) -> Void
   ) {
     self.handleAction = handleAction
@@ -84,20 +84,21 @@ public final class DefaultTooltipManager: TooltipManager {
           let tooltip = existingAnchorViews.compactMap({ $0?.makeTooltip(id: info.id) }).first
     else { return }
 
-    let window: UIWindow? = if #available(iOS 13.0, *) {
-      (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first
-    } else {
-      UIApplication.shared.windows.first
-    }
+    setupTooltipWindow()
 
     let view = TooltipContainerView(
       tooltipView: tooltip.view,
       tooltipID: tooltip.id,
       handleAction: handleAction,
-      onCloseAction: { [weak self] in self?.showingTooltips.removeValue(forKey: tooltip.id) }
+      onCloseAction: { [weak self] in
+        self?.showingTooltips.removeValue(forKey: tooltip.id)
+        self?.tooltipWindow?.isHidden = true
+      }
     )
-    window?.addSubview(view)
-    view.frame = window?.bounds ?? .zero
+    tooltipWindow?.addSubview(view)
+    tooltipWindow?.isHidden = false
+    tooltipWindow?.makeKeyAndVisible()
+    view.frame = tooltipWindow?.bounds ?? .zero
     showingTooltips[info.id] = view
     if !tooltip.duration.value.isZero {
       after(tooltip.duration.value, block: { self.hideTooltip(id: tooltip.id) })
@@ -107,6 +108,7 @@ public final class DefaultTooltipManager: TooltipManager {
   public func hideTooltip(id: String) {
     guard let tooltipView = showingTooltips[id] else { return }
     tooltipView.close()
+    tooltipWindow?.isHidden = true
   }
 
   public func tooltipAnchorViewAdded(anchorView: TooltipAnchorView) {
@@ -115,6 +117,21 @@ public final class DefaultTooltipManager: TooltipManager {
 
   public func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView) {
     existingAnchorViews.remove(anchorView)
+  }
+
+  private func setupTooltipWindow() {
+    if #available(iOS 13.0, *) {
+      if tooltipWindow == nil {
+        guard let windowScene = UIApplication.shared.connectedScenes
+          .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene
+        else { return }
+        tooltipWindow = UIWindow(windowScene: windowScene)
+        tooltipWindow?.windowLevel = UIWindow.Level.alert + 1
+        tooltipWindow?.isHidden = true
+      }
+    } else {
+      tooltipWindow = UIApplication.shared.windows.first
+    }
   }
 }
 

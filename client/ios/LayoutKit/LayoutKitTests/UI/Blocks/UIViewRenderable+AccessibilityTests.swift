@@ -2,8 +2,7 @@
 
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 final class UIViewRenderable_AccessibilityTests: XCTestCase {
   func test_textBlockAccessibilityApplied() {

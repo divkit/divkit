@@ -2,40 +2,29 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_pivot_fixed.dart';
-import 'div_pivot_percentage.dart';
+import 'package:divkit/src/generated_sources/div_pivot_fixed.dart';
+import 'package:divkit/src/generated_sources/div_pivot_percentage.dart';
 
 class DivPivot with EquatableMixin {
-  const DivPivot(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivPivotFixed) {
-      return value;
-    }
-    if (value is DivPivotPercentage) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivPivot");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivPivotFixed) divPivotFixed,
     required T Function(DivPivotPercentage) divPivotPercentage,
   }) {
-    final value = _value;
-    if (value is DivPivotFixed) {
-      return divPivotFixed(value);
-    }
-    if (value is DivPivotPercentage) {
-      return divPivotPercentage(value);
+    switch (_index) {
+      case 0:
+        return divPivotFixed(
+          value as DivPivotFixed,
+        );
+      case 1:
+        return divPivotPercentage(
+          value as DivPivotPercentage,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivPivot");
@@ -46,23 +35,34 @@ class DivPivot with EquatableMixin {
     T Function(DivPivotPercentage)? divPivotPercentage,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivPivotFixed && divPivotFixed != null) {
-      return divPivotFixed(value);
-    }
-    if (value is DivPivotPercentage && divPivotPercentage != null) {
-      return divPivotPercentage(value);
+    switch (_index) {
+      case 0:
+        if (divPivotFixed != null) {
+          return divPivotFixed(
+            value as DivPivotFixed,
+          );
+        }
+        break;
+      case 1:
+        if (divPivotPercentage != null) {
+          return divPivotPercentage(
+            value as DivPivotPercentage,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivPivot.divPivotFixed(
-    DivPivotFixed value,
-  ) : _value = value;
+    DivPivotFixed obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivPivot.divPivotPercentage(
-    DivPivotPercentage value,
-  ) : _value = value;
+    DivPivotPercentage obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivPivot? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -70,9 +70,9 @@ class DivPivot with EquatableMixin {
     }
     switch (json['type']) {
       case DivPivotFixed.type:
-        return DivPivot(DivPivotFixed.fromJson(json)!);
+        return DivPivot.divPivotFixed(DivPivotFixed.fromJson(json)!);
       case DivPivotPercentage.type:
-        return DivPivot(DivPivotPercentage.fromJson(json)!);
+        return DivPivot.divPivotPercentage(DivPivotPercentage.fromJson(json)!);
     }
     return null;
   }

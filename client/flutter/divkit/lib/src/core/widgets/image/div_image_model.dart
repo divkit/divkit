@@ -4,6 +4,7 @@ import 'package:divkit/src/utils/converters.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 
 class DivImageModel with EquatableMixin {
   final String src;
@@ -33,6 +34,9 @@ class DivImageModel with EquatableMixin {
     final variables =
         DivKitProvider.watch<DivContext>(context)!.variableManager;
 
+    final divScalingModel = DivKitProvider.watch<DivScalingModel>(context);
+    final viewScale = divScalingModel?.viewScale ?? 1;
+
     return variables.watch<DivImageModel>((context) async {
       final alignment = PassDivAlignment(
         data.contentAlignmentVertical,
@@ -42,6 +46,7 @@ class DivImageModel with EquatableMixin {
       final filters = await DivFilters.resolve(
         filters: data.filters ?? [],
         context: context,
+        viewScale: viewScale,
       );
 
       return DivImageModel(
@@ -67,7 +72,9 @@ class DivImageModel with EquatableMixin {
         aspectRatio: await data.aspect?.resolve(
           context: context,
         ),
-        blurRadius: filters.blurRadius,
+        blurRadius: filters.blurRadius == null
+            ? null
+            : (filters.blurRadius ?? 0) * viewScale,
         rtlMirror: filters.isRtl,
       );
     }).distinct();

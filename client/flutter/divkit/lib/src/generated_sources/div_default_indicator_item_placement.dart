@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_fixed_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
 
 class DivDefaultIndicatorItemPlacement with EquatableMixin {
   const DivDefaultIndicatorItemPlacement({
@@ -20,6 +20,13 @@ class DivDefaultIndicatorItemPlacement with EquatableMixin {
   List<Object?> get props => [
         spaceBetweenCenters,
       ];
+
+  DivDefaultIndicatorItemPlacement copyWith({
+    DivFixedSize? spaceBetweenCenters,
+  }) =>
+      DivDefaultIndicatorItemPlacement(
+        spaceBetweenCenters: spaceBetweenCenters ?? this.spaceBetweenCenters,
+      );
 
   static DivDefaultIndicatorItemPlacement? fromJson(
       Map<String, dynamic>? json) {

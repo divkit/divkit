@@ -8,7 +8,7 @@ import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:divkit/src/core/trigger/trigger.dart';
 
 class DefaultDivTriggerManager extends DivTriggerManager {
-  final List<DivTrigger>? triggers;
+  final List<DivTriggerModel>? triggers;
 
   DefaultDivTriggerManager({
     required super.divContext,

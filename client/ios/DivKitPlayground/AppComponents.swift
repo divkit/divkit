@@ -1,10 +1,9 @@
 import Foundation
 
-import CommonCorePublic
 import DivKit
 import DivKitExtensions
 import LayoutKit
-import NetworkingPublic
+import VGSL
 
 enum AppComponents {
   static let fontProvider = YSFontProvider()

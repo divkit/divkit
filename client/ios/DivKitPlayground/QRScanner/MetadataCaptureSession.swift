@@ -1,7 +1,7 @@
 import AVFoundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 typealias LogError = (String) -> Void
 

@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivInputValidatorRegex with EquatableMixin {
   const DivInputValidatorRegex({
@@ -29,6 +29,19 @@ class DivInputValidatorRegex with EquatableMixin {
         pattern,
         variable,
       ];
+
+  DivInputValidatorRegex copyWith({
+    Expression<bool>? allowEmpty,
+    Expression<String>? labelId,
+    Expression<String>? pattern,
+    String? variable,
+  }) =>
+      DivInputValidatorRegex(
+        allowEmpty: allowEmpty ?? this.allowEmpty,
+        labelId: labelId ?? this.labelId,
+        pattern: pattern ?? this.pattern,
+        variable: variable ?? this.variable,
+      );
 
   static DivInputValidatorRegex? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

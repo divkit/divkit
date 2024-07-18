@@ -24,5 +24,30 @@
                 "version_added": "28.2.0"
             }
         }
+    }, {
+        "id": "item_builder_index_variable",
+        "name": "<code>index</code> variable inside <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.5.0"
+            },
+            "android": {
+                "version_added": "30.6.0"
+            },
+            "web": {
+                "version_added": "30.6.0"
+            }
+        }
+    }, {
+        "id": "item_builder_id_property",
+        "name": "<code>id</code> property for a prototype inside <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.6.0"
+            },
+            "android": {
+                "version_added": "30.7.0"
+            }
+        }
     }]
 }

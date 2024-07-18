@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivText: DivBase {
   public final class Ellipsis {
@@ -85,9 +85,11 @@ public final class DivText: DivBase {
     public let border: DivTextRangeBorder?
     public let end: Expression<Int> // constraint: number > 0
     public let fontFamily: Expression<String>?
+    public let fontFeatureSettings: Expression<String>?
     public let fontSize: Expression<Int>? // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight>?
+    public let fontWeightValue: Expression<Int>? // constraint: number > 0
     public let letterSpacing: Expression<Double>?
     public let lineHeight: Expression<Int>? // constraint: number >= 0
     public let start: Expression<Int> // constraint: number >= 0
@@ -105,6 +107,10 @@ public final class DivText: DivBase {
       resolver.resolveString(fontFamily)
     }
 
+    public func resolveFontFeatureSettings(_ resolver: ExpressionResolver) -> String? {
+      resolver.resolveString(fontFeatureSettings)
+    }
+
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int? {
       resolver.resolveNumeric(fontSize)
     }
@@ -115,6 +121,10 @@ public final class DivText: DivBase {
 
     public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
       resolver.resolveEnum(fontWeight)
+    }
+
+    public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+      resolver.resolveNumeric(fontWeightValue)
     }
 
     public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double? {
@@ -151,6 +161,9 @@ public final class DivText: DivBase {
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
 
+    static let fontWeightValueValidator: AnyValueValidator<Int> =
+      makeValueValidator(valueValidator: { $0 > 0 })
+
     static let lineHeightValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -166,9 +179,11 @@ public final class DivText: DivBase {
       border: DivTextRangeBorder? = nil,
       end: Expression<Int>,
       fontFamily: Expression<String>? = nil,
+      fontFeatureSettings: Expression<String>? = nil,
       fontSize: Expression<Int>? = nil,
       fontSizeUnit: Expression<DivSizeUnit>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
+      fontWeightValue: Expression<Int>? = nil,
       letterSpacing: Expression<Double>? = nil,
       lineHeight: Expression<Int>? = nil,
       start: Expression<Int>,
@@ -183,9 +198,11 @@ public final class DivText: DivBase {
       self.border = border
       self.end = end
       self.fontFamily = fontFamily
+      self.fontFeatureSettings = fontFeatureSettings
       self.fontSize = fontSize
       self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
       self.fontWeight = fontWeight
+      self.fontWeightValue = fontWeightValue
       self.letterSpacing = letterSpacing
       self.lineHeight = lineHeight
       self.start = start
@@ -216,12 +233,15 @@ public final class DivText: DivBase {
   public let focus: DivFocus?
   public let focusedTextColor: Expression<Color>?
   public let fontFamily: Expression<String>?
+  public let fontFeatureSettings: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
+  public let fontWeightValue: Expression<Int>? // constraint: number > 0
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let images: [Image]?
+  public let layoutProvider: DivLayoutProvider?
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let longtapActions: [DivAction]?
@@ -247,6 +267,7 @@ public final class DivText: DivBase {
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let underline: Expression<DivLineStyle> // default value: none
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -280,6 +301,10 @@ public final class DivText: DivBase {
     resolver.resolveString(fontFamily)
   }
 
+  public func resolveFontFeatureSettings(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(fontFeatureSettings)
+  }
+
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
     resolver.resolveNumeric(fontSize) ?? 12
   }
@@ -290,6 +315,10 @@ public final class DivText: DivBase {
 
   public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
     resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
+  }
+
+  public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumeric(fontWeightValue)
   }
 
   public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double {
@@ -353,6 +382,9 @@ public final class DivText: DivBase {
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let fontWeightValueValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 > 0 })
+
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -387,12 +419,15 @@ public final class DivText: DivBase {
     focus: DivFocus? = nil,
     focusedTextColor: Expression<Color>? = nil,
     fontFamily: Expression<String>? = nil,
+    fontFeatureSettings: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
+    fontWeightValue: Expression<Int>? = nil,
     height: DivSize? = nil,
     id: String? = nil,
     images: [Image]? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     letterSpacing: Expression<Double>? = nil,
     lineHeight: Expression<Int>? = nil,
     longtapActions: [DivAction]? = nil,
@@ -418,6 +453,7 @@ public final class DivText: DivBase {
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
     underline: Expression<DivLineStyle>? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -441,12 +477,15 @@ public final class DivText: DivBase {
     self.focus = focus
     self.focusedTextColor = focusedTextColor
     self.fontFamily = fontFamily
+    self.fontFeatureSettings = fontFeatureSettings
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
+    self.fontWeightValue = fontWeightValue
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.images = images
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
     self.longtapActions = longtapActions
@@ -472,6 +511,7 @@ public final class DivText: DivBase {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.underline = underline ?? .value(.none)
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -525,16 +565,23 @@ extension DivText: Equatable {
       return false
     }
     guard
+      lhs.fontFeatureSettings == rhs.fontFeatureSettings,
       lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight
+      lhs.fontSizeUnit == rhs.fontSizeUnit
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
+      lhs.fontWeight == rhs.fontWeight,
+      lhs.fontWeightValue == rhs.fontWeightValue,
+      lhs.height == rhs.height
+    else {
+      return false
+    }
+    guard
       lhs.id == rhs.id,
-      lhs.images == rhs.images
+      lhs.images == rhs.images,
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
@@ -596,12 +643,13 @@ extension DivText: Equatable {
     }
     guard
       lhs.underline == rhs.underline,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.variables == rhs.variables,
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -634,12 +682,15 @@ extension DivText: Serializable {
     result["focus"] = focus?.toDictionary()
     result["focused_text_color"] = focusedTextColor?.toValidSerializationValue()
     result["font_family"] = fontFamily?.toValidSerializationValue()
+    result["font_feature_settings"] = fontFeatureSettings?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
+    result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["id"] = id
     result["images"] = images?.map { $0.toDictionary() }
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
@@ -665,6 +716,7 @@ extension DivText: Serializable {
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["underline"] = underline.toValidSerializationValue()
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }
@@ -733,32 +785,34 @@ extension DivText.Range: Equatable {
     guard
       lhs.end == rhs.end,
       lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize
+      lhs.fontFeatureSettings == rhs.fontFeatureSettings
     else {
       return false
     }
     guard
+      lhs.fontSize == rhs.fontSize,
       lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.fontWeight == rhs.fontWeight
     else {
       return false
     }
     guard
-      lhs.lineHeight == rhs.lineHeight,
+      lhs.fontWeightValue == rhs.fontWeightValue,
+      lhs.letterSpacing == rhs.letterSpacing,
+      lhs.lineHeight == rhs.lineHeight
+    else {
+      return false
+    }
+    guard
       lhs.start == rhs.start,
-      lhs.strike == rhs.strike
+      lhs.strike == rhs.strike,
+      lhs.textColor == rhs.textColor
     else {
       return false
     }
     guard
-      lhs.textColor == rhs.textColor,
       lhs.textShadow == rhs.textShadow,
-      lhs.topOffset == rhs.topOffset
-    else {
-      return false
-    }
-    guard
+      lhs.topOffset == rhs.topOffset,
       lhs.underline == rhs.underline
     else {
       return false
@@ -801,9 +855,11 @@ extension DivText.Range: Serializable {
     result["border"] = border?.toDictionary()
     result["end"] = end.toValidSerializationValue()
     result["font_family"] = fontFamily?.toValidSerializationValue()
+    result["font_feature_settings"] = fontFeatureSettings?.toValidSerializationValue()
     result["font_size"] = fontSize?.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight?.toValidSerializationValue()
+    result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["letter_spacing"] = letterSpacing?.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["start"] = start.toValidSerializationValue()

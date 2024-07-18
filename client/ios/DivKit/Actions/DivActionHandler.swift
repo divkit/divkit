@@ -1,6 +1,8 @@
-import BasePublic
+import Foundation
+
 import LayoutKit
 import Serialization
+import VGSL
 
 public final class DivActionHandler {
   public typealias TrackVisibility = (_ logId: String, _ cardId: DivCardID) -> Void
@@ -16,45 +18,15 @@ public final class DivActionHandler {
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let reporter: DivReporter
 
-  private let setVariableActionHandler: SetVariableActionHandler
-  private let arrayInsertValueActionHandler: ArrayInsertValueActionHandler
-  private let arrayRemoveValueActionHandler: ArrayRemoveValueActionHandler
-  private let copyToClipboardActionHandler: CopyToClipboardActionHandler
-  private let focusElementActionHandler: FocusElementActionHandler
-  private let clearFocusActionHandler: ClearFocusActionHandler
+  private let arrayActionsHandler = ArrayActionsHandler()
+  private let dictSetValueActionHandler = DictSetValueActionHandler()
+  private let clearFocusActionHandler = ClearFocusActionHandler()
+  private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
+  private let focusElementActionHandler = FocusElementActionHandler()
+  private let setVariableActionHandler = SetVariableActionHandler()
 
-  init(
-    divActionURLHandler: DivActionURLHandler,
-    urlHandler: DivUrlHandler,
-    logger: DivActionLogger,
-    trackVisibility: @escaping TrackVisibility,
-    trackDisappear: @escaping TrackVisibility,
-    variablesStorage: DivVariablesStorage,
-    persistentValuesStorage: DivPersistentValuesStorage,
-    blockStateStorage: DivBlockStateStorage,
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
-    reporter: DivReporter
-  ) {
-    self.divActionURLHandler = divActionURLHandler
-    self.urlHandler = urlHandler
-    self.logger = logger
-    self.trackVisibility = trackVisibility
-    self.trackDisappear = trackDisappear
-    self.variablesStorage = variablesStorage
-    self.persistentValuesStorage = persistentValuesStorage
-    self.blockStateStorage = blockStateStorage
-    self.updateCard = updateCard
-    self.reporter = reporter
-
-    setVariableActionHandler = SetVariableActionHandler()
-    arrayInsertValueActionHandler = ArrayInsertValueActionHandler()
-    arrayRemoveValueActionHandler = ArrayRemoveValueActionHandler()
-    copyToClipboardActionHandler = CopyToClipboardActionHandler()
-    focusElementActionHandler = FocusElementActionHandler()
-    clearFocusActionHandler = ClearFocusActionHandler()
-  }
-
-  public convenience init(
+  /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
+  public init(
     stateUpdater: DivStateUpdater,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     patchProvider: DivPatchProvider,
@@ -70,28 +42,26 @@ public final class DivActionHandler {
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter? = nil
   ) {
-    self.init(
-      divActionURLHandler: DivActionURLHandler(
-        stateUpdater: stateUpdater,
-        blockStateStorage: blockStateStorage,
-        patchProvider: patchProvider,
-        variableUpdater: variablesStorage,
-        updateCard: updateCard,
-        showTooltip: showTooltip,
-        tooltipActionPerformer: tooltipActionPerformer,
-        performTimerAction: performTimerAction,
-        persistentValuesStorage: persistentValuesStorage
-      ),
-      urlHandler: urlHandler,
-      logger: logger ?? EmptyDivActionLogger(),
-      trackVisibility: trackVisibility,
-      trackDisappear: trackDisappear,
-      variablesStorage: variablesStorage,
-      persistentValuesStorage: persistentValuesStorage,
+    self.divActionURLHandler = DivActionURLHandler(
+      stateUpdater: stateUpdater,
       blockStateStorage: blockStateStorage,
+      patchProvider: patchProvider,
+      variableUpdater: variablesStorage,
       updateCard: updateCard,
-      reporter: reporter ?? DefaultDivReporter()
+      showTooltip: showTooltip,
+      tooltipActionPerformer: tooltipActionPerformer,
+      performTimerAction: performTimerAction,
+      persistentValuesStorage: persistentValuesStorage
     )
+    self.urlHandler = urlHandler
+    self.logger = logger ?? EmptyDivActionLogger()
+    self.trackVisibility = trackVisibility
+    self.trackDisappear = trackDisappear
+    self.variablesStorage = variablesStorage
+    self.persistentValuesStorage = persistentValuesStorage
+    self.blockStateStorage = blockStateStorage
+    self.updateCard = updateCard
+    self.reporter = reporter ?? DefaultDivReporter()
   }
 
   public func handle(
@@ -112,26 +82,41 @@ public final class DivActionHandler {
 
     handle(
       action,
-      cardId: DivCardID(rawValue: params.cardId),
+      path: params.path,
       source: params.source,
-      prototypeVariables: params.prototypeVariables,
+      localValues: params.localValues,
       sender: sender
     )
   }
 
+  /// Deprecated. This method is intended for backward compatibility only. Do not use it.
+  public func handleDivActionUrl(_ url: URL, cardId: DivCardID) -> Bool {
+    divActionURLHandler.handleURL(url, path: cardId.path)
+  }
+
   func handle(
     _ action: DivActionBase,
-    cardId: DivCardID,
+    path: UIElementPath,
     source: UserInterfaceAction.DivActionSource,
-    prototypeVariables: [String: AnyHashable] = [:],
+    localValues: [String: AnyHashable] = [:],
     sender: AnyObject?
   ) {
-    let expressionResolver = makeExpressionResolver(
-      cardId: cardId,
-      prototypeVariables: prototypeVariables
+    let cardId = path.cardId
+    let expressionResolver = ExpressionResolver(
+      functionsProvider: FunctionsProvider(
+        persistentValuesStorage: persistentValuesStorage
+      ),
+      variableValueProvider: { [unowned variablesStorage] in
+        if let value = localValues[$0] {
+          return value
+        }
+        let variableName = DivVariableName(rawValue: $0)
+        return variablesStorage.getVariableValue(path: path, name: variableName)
+      },
+      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )
     let context = DivActionHandlingContext(
-      cardId: cardId,
+      path: path,
       expressionResolver: expressionResolver,
       variablesStorage: variablesStorage,
       blockStateStorage: blockStateStorage,
@@ -140,18 +125,22 @@ public final class DivActionHandler {
 
     var isHandled = true
     switch action.typed {
-    case let .divActionSetVariable(action):
-      setVariableActionHandler.handle(action, context: context)
     case let .divActionArrayInsertValue(action):
-      arrayInsertValueActionHandler.handle(action, context: context)
+      arrayActionsHandler.handle(action, context: context)
     case let .divActionArrayRemoveValue(action):
-      arrayRemoveValueActionHandler.handle(action, context: context)
+      arrayActionsHandler.handle(action, context: context)
+    case let .divActionArraySetValue(action):
+      arrayActionsHandler.handle(action, context: context)
+    case let .divActionDictSetValue(action):
+      dictSetValueActionHandler.handle(action, context: context)
+    case .divActionClearFocus:
+      clearFocusActionHandler.handle(context: context)
     case let .divActionCopyToClipboard(action):
       copyToClipboardActionHandler.handle(action, context: context)
     case let .divActionFocusElement(action):
       focusElementActionHandler.handle(action, context: context)
-    case .divActionClearFocus:
-      clearFocusActionHandler.handle(context: context)
+    case let .divActionSetVariable(action):
+      setVariableActionHandler.handle(action, context: context)
     case .none:
       isHandled = false
     }
@@ -161,7 +150,7 @@ public final class DivActionHandler {
     let referer = action.resolveReferer(expressionResolver)
 
     let divActionInfo = DivActionInfo(
-      cardId: cardId,
+      path: path,
       logId: logId,
       url: action.resolveUrl(expressionResolver),
       logUrl: logUrl,
@@ -201,7 +190,7 @@ public final class DivActionHandler {
 
     let isDivActionURLHandled = divActionURLHandler.handleURL(
       url,
-      cardId: info.cardId,
+      path: info.path,
       completion: { [weak self] result in
         guard let self else {
           return
@@ -215,7 +204,7 @@ public final class DivActionHandler {
         for action in callbackActions {
           self.handle(
             action,
-            cardId: info.cardId,
+            path: info.path,
             source: info.source,
             sender: sender
           )
@@ -237,22 +226,6 @@ public final class DivActionHandler {
         )
       }
     }
-  }
-
-  private func makeExpressionResolver(
-    cardId: DivCardID,
-    prototypeVariables: [String: AnyHashable]
-  ) -> ExpressionResolver {
-    ExpressionResolver(
-      functionsProvider: FunctionsProvider(
-        cardId: cardId,
-        variablesStorage: variablesStorage,
-        variableTracker: { _ in },
-        persistentValuesStorage: persistentValuesStorage,
-        prototypesStorage: prototypeVariables
-      ),
-      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
-    )
   }
 
   private func parseAction<T: TemplateValue>(

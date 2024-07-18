@@ -1,7 +1,6 @@
 import Foundation
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 public struct PagerPath: Equatable {
   public let cardId: String

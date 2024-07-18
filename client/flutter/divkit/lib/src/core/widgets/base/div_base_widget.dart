@@ -1,27 +1,34 @@
 import 'package:divkit/src/core/widgets/base/div_base_model.dart';
 import 'package:divkit/src/core/widgets/div_tap_action_emitter.dart';
 import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_animation.dart';
 import 'package:divkit/src/generated_sources/div_base.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:divkit/src/utils/size_converters.dart';
 import 'package:flutter/widgets.dart';
+import 'package:divkit/src/core/widgets/div_visibility_emitter.dart';
 
 class DivBaseWidget extends StatefulWidget {
   final DivBase data;
 
   final List<DivAction> actions;
+  final List<DivAction> longtapActions;
+  final DivAnimation? actionAnimation;
 
   final Widget child;
 
   DivBaseWidget({
     required this.data,
+    this.actionAnimation,
     super.key,
     DivAction? action,
     List<DivAction>? actions,
+    List<DivAction>? longtapActions,
     required this.child,
-  }) : actions = action != null
+  })  : actions = action != null
             ? ((actions ?? const []) + [action])
-            : (actions ?? const []);
+            : (actions ?? const []),
+        longtapActions = longtapActions ?? [];
 
   @override
   State<DivBaseWidget> createState() => _DivBaseWidgetState();
@@ -64,12 +71,16 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
               height: model.height,
               width: model.width,
               alignment: model.alignment,
-              child: IgnorePointer(
-                ignoring: !model.isVisible,
+              child: DivVisibilityEmitter(
+                visibilityActions: model.visibilityActions,
+                divVisibility: model.divVisibility,
+                id: model.divId.toString(),
                 child: Opacity(
                   opacity: model.opacity,
                   child: DivTapActionEmitter(
                     actions: widget.actions,
+                    actionAnimation: widget.actionAnimation,
+                    longtapActions: widget.longtapActions,
                     child: focusNode != null
                         ? AnimatedBuilder(
                             animation: focusNode,

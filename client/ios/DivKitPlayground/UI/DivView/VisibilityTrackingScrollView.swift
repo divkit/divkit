@@ -1,9 +1,7 @@
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
 import DivKit
-import LayoutKit
+import VGSL
 
 final class VisibilityTrackingScrollView: UIScrollView {
   var divView: DivView? {

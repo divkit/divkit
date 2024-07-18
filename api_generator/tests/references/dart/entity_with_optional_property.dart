@@ -18,6 +18,12 @@ class EntityWithOptionalProperty with EquatableMixin {
         property,
       ];
 
+  EntityWithOptionalProperty copyWith({
+      Expression<String>? Function()?  property,
+  }) => EntityWithOptionalProperty(
+      property: property != null ? property.call() : this.property,
+    );
+
   static EntityWithOptionalProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

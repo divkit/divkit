@@ -22,11 +22,12 @@ kotlin-coroutines = "1.6.0"
 kotlin-serialization = "1.3.2"
 kotlinpoet = "1.4.4"
 lottie = "6.1.0"
+markwon = "4.6.2"
 metrica = "5.0.0"
 metricaCrashPlugin = "0.6.1"
 mockito = "3.12.4"
 mockitoKotlin = "3.2.0"
-okhttp = "4.10.0"
+okhttp = "4.11.0"
 okio = "3.0.0"
 picasso = "2.8"
 protobuf = "3.21.12"
@@ -34,6 +35,7 @@ robolectric = "4.11.1"
 stetho = "1.6.0"
 strikt = "0.28.2"
 tinkoffAllure = "2.5.1"
+webp-imageio = "0.1.6"
 yatagan = "1.5.0"
 
 androidx-activity = "1.8.2"
@@ -155,6 +157,8 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
+markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
+
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 
@@ -176,6 +180,8 @@ stetho-core = { module = "com.facebook.stetho:stetho", version.ref = "stetho" }
 stetho-okhttp3 = { module = "com.facebook.stetho:stetho-okhttp3", version.ref = "stetho" }
 
 strict-core = { module = "io.strikt:strikt-core", version.ref = "strikt" }
+
+webp-imageio = { module = "org.sejda.imageio:webp-imageio", version.ref = "webp-imageio" }
 
 yatagan-api-compiled = { module = "com.yandex.yatagan:api-compiled", version.ref = "yatagan" }
 yatagan-processor-jap = { module = "com.yandex.yatagan:processor-jap", version.ref = "yatagan" }

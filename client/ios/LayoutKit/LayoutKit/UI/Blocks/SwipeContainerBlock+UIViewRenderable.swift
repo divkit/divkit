@@ -1,11 +1,8 @@
-
-
 import CoreGraphics
 import Foundation
 import UIKit
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 extension SwipeContainerBlock {
   public static func makeBlockView() -> BlockView { SwipeContainerBlockView() }

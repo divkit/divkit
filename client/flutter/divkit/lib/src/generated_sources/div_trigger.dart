@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
 
 class DivTrigger with EquatableMixin {
   const DivTrigger({
@@ -26,19 +26,28 @@ class DivTrigger with EquatableMixin {
         mode,
       ];
 
+  DivTrigger copyWith({
+    List<DivAction>? actions,
+    Expression<bool>? condition,
+    Expression<DivTriggerMode>? mode,
+  }) =>
+      DivTrigger(
+        actions: actions ?? this.actions,
+        condition: condition ?? this.condition,
+        mode: mode ?? this.mode,
+      );
+
   static DivTrigger? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return DivTrigger(
       actions: safeParseObj(
-        (json['actions'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       )!,
       condition: safeParseBoolExpr(
         json['condition'],

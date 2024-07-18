@@ -1,7 +1,7 @@
 {
     "features": [{
         "id": "text_truncate",
-        "name": "Text truncate",
+        "name": "Text <code>truncate</code> property",
         "status": {
             "deprecated": true,
             "notes": "Property is deprecated and should not be used. Use <code>ellipsis</code> instead"
@@ -12,6 +12,48 @@
             },
             "ios": {
                 "version_added": "1.0.0"
+            }
+        }
+    }, {
+        "id": "text_auto_ellipsize",
+        "name": "Text <code>auto_ellipsize</code> property",
+        "compat": {
+            "android": {
+                "version_added": "1.0.0"
+            },
+            "web": {
+                "version_added": "29.2.0"
+            },
+            "flutter": {
+                "version_added": "0.1.0"
+            }
+        }
+    }, {
+        "id": "text_font_feature_settings",
+        "name": "Text <code>font_feature_settings</code> property",
+        "compat": {
+            "android": {
+                "version_added": "30.3.0"
+            },
+            "web": {
+                "version_added": "30.3.0"
+            },
+            "ios": {
+                "version_added": "30.3.0"
+            }
+        }
+    }, {
+        "id": "text_font_weight_value",
+        "name": "Text <code>font_weight_value</code> property",
+        "compat": {
+            "web": {
+                "version_added": "30.6.0"
+            },
+            "ios": {
+                "version_added": "30.6.0"
+            },
+            "android": {
+                "version_added": "30.7.0"
             }
         }
     }]

@@ -1,5 +1,7 @@
 package com.yandex.div.internal.widget.tabs;
 
+import static com.yandex.div.core.view2.divs.BaseDivViewExtensionsKt.clearFocusOnClick;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -10,6 +12,7 @@ import android.text.TextUtils;
 import android.text.method.TransformationMethod;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -21,6 +24,7 @@ import androidx.core.view.ViewCompat;
 
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.font.DivTypefaceType;
+import com.yandex.div.core.view2.reuse.InputFocusTracker;
 import com.yandex.div.internal.widget.SuperLineHeightTextView;
 
 /**
@@ -32,6 +36,8 @@ public final class TabView extends SuperLineHeightTextView {
 
     @Nullable
     private DivTypefaceProvider mTypefaceProvider;
+    @Nullable
+    private InputFocusTracker mInputFocusTracker;
     @StyleRes
     private int mTextAppearance;
     private boolean mBoldTextOnSelection;
@@ -107,13 +113,20 @@ public final class TabView extends SuperLineHeightTextView {
         mMaxWidthProvider = provider;
     }
 
+    void setInputFocusTracker(InputFocusTracker focusTracker) {
+        mInputFocusTracker = focusTracker;
+    }
+
     void setOnUpdateListener(@Nullable OnUpdateListener listener) {
         mOnUpdateListener = listener;
     }
 
     @Override
     public boolean performClick() {
-        final boolean value = super.performClick();
+        final boolean value = super.performClick();;
+        if (mInputFocusTracker != null) {
+            clearFocusOnClick(this, mInputFocusTracker);
+        }
 
         if (mTab != null) {
             mTab.select();

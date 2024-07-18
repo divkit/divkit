@@ -1,53 +1,50 @@
 {
   "cases": [
     {
-      "name": "true || 7.0 => true",
       "expression": "@{true || 7.0}",
       "expected": {
         "type": "boolean",
         "value": true
       },
-      "variables": [],
       "platforms": [
-        "web",
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
-      "name": "false || 7.0 => error",
       "expression": "@{false || 7.0}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [false || 7.0]. Operator '||' cannot be applied to different types: Boolean and Number."
       },
-      "variables": [],
       "platforms": [
-        "web",
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
-      "name": "true && 7.0 => error",
       "expression": "@{true && 7.0}",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [true && 7.0]. Operator '&&' cannot be applied to different types: Boolean and Number."
       },
-      "variables": [],
       "platforms": [
-        "web",
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     },
     {
-      "name": "true || abc => error",
-      "expression": "@{true || abc}",
+      "expression": "@{true || undefined}",
       "expected": {
         "type": "boolean",
         "value": true
       },
-      "variables": [],
       "platforms": [
+        "android",
+        "ios",
         "web"
       ]
     }

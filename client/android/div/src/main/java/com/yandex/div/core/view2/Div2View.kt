@@ -39,7 +39,6 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
-import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
@@ -135,7 +134,7 @@ class Div2View private constructor(
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
 
-    internal var bindingContext: BindingContext = BindingContext(this, expressionResolver)
+    internal var bindingContext: BindingContext = BindingContext.createEmpty(this)
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
 
@@ -198,7 +197,7 @@ class Div2View private constructor(
         if (oldExpressionsRuntime != _expressionsRuntime) {
             oldExpressionsRuntime?.clearBinding()
         }
-        bindingContext = BindingContext(this, expressionResolver)
+        bindingContext = bindingContext.getFor(expressionResolver)
     }
 
     private fun attachVariableTriggers() {
@@ -568,20 +567,20 @@ class Div2View private constructor(
         rebindTask?.clear()?.let {
             rebindTask = null
         }
+        cancelImageLoads()
+        stopLoadAndSubscriptions() // Depends on children, should be called before removing them
         if (removeChildren) {
-            releaseAndRemoveChildren(this)
+            releaseAndRemoveChildren(this) // Removes children
         }
         viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
         divData = null
         dataTag = DivDataTag.INVALID
-        cancelImageLoads()
-        stopLoadAndSubscriptions()
     }
 
     private fun stopLoadAndSubscriptions() {
         viewToDivBindings.clear()
         propagatedAccessibilityModes.clear()
-        cancelTooltips()
+        cancelTooltips() // Depends on children, should be called before removing them
         clearSubscriptions()
         divDataChangedObservers.clear()
     }
@@ -609,13 +608,8 @@ class Div2View private constructor(
     }
 
     override fun switchToState(path: DivStatePath, temporary: Boolean) = synchronized(monitor) {
-        if (stateId == path.topLevelStateId) {
-            val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
-            bulkActionsHandler.switchState(state, path, temporary)
-        } else if (path.topLevelStateId != DivData.INVALID_STATE_ID) {
-            div2Component.stateManager.updateStates(dataTag.id, path, temporary)
-            switchToState(path.topLevelStateId, temporary)
-        }
+        val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
+        bulkActionsHandler.switchState(state, path, temporary)
     }
 
     /**
@@ -1180,6 +1174,7 @@ class Div2View private constructor(
     private inner class BulkActionHandler {
         private var bulkMode = false
         private var pendingState: DivData.State? = null
+        private var isPendingStateTemporary: Boolean = true
         private val pendingPaths = mutableListOf<DivStatePath>()
 
         fun bulkActions(function: () -> Unit = {}) {
@@ -1202,9 +1197,10 @@ class Div2View private constructor(
             temporary: Boolean,
         ) {
             if (pendingState != null && state != pendingState) {
-                pendingPaths.clear()
+                reset()
             }
             pendingState = state
+            isPendingStateTemporary = isPendingStateTemporary && temporary
             pendingPaths += paths
             paths.forEach { path: DivStatePath ->
                 div2Component.stateManager.updateStates(divTag.id, path, temporary)
@@ -1216,13 +1212,18 @@ class Div2View private constructor(
         }
 
         fun runBulkActions() {
-            if (childCount == 0) {
-                doOnActualLayout { bulkActions() }
-                return
+            val newState = pendingState ?: return
+            if (newState.stateId != stateId) {
+                switchToState(newState.stateId, isPendingStateTemporary)
+            } else if (childCount > 0) {
+                viewComponent.stateSwitcher.switchStates(newState, pendingPaths.immutableCopy(), expressionResolver)
             }
-            val currentState = pendingState ?: return
-            viewComponent.stateSwitcher.switchStates(currentState, pendingPaths.immutableCopy(), expressionResolver)
+            reset()
+        }
+
+        private fun reset() {
             pendingState = null
+            isPendingStateTemporary = true
             pendingPaths.clear()
         }
     }

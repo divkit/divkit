@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 extension [String: Function] {
   mutating func addColorFunctions() {
@@ -65,7 +65,7 @@ private func _setColor(channel: Channel) -> Function {
           throw valueOutOfRangeError()
         }
         return color.set(value, for: channel)
-      }
+      },
     ]
   )
 }

@@ -5,31 +5,34 @@ import XCTest
 final class DivVariableTrackerTests: XCTestCase {
   private let variableTracker = DivVariableTracker()
 
-  func test_onVariablesUsed_UpdatesAffectedCards() {
-    variableTracker.onVariablesUsed(id: id1, variables: ["Var1", "Var2"])
+  func test_onVariableUsed_UpdatesAffectedCards() {
+    variableTracker.onVariableUsed(id: id1, variable: "Var1")
+
+    let affectedCards = variableTracker.getAffectedCards(variables: ["Var1", "Var2"])
+    XCTAssertEqual(affectedCards, ["card1": ["Var1"]])
+  }
+
+  func test_onVariableUsed_WithSameCardId_UpdatesAffectedCards() {
+    variableTracker.onVariableUsed(id: id1, variable: "Var1")
+    variableTracker.onVariableUsed(id: id1, variable: "Var2")
+    variableTracker.onVariableUsed(id: id1, variable: "Var3")
 
     let affectedCards = variableTracker.getAffectedCards(variables: ["Var1", "Var2"])
     XCTAssertEqual(affectedCards, ["card1": ["Var1", "Var2"]])
   }
 
-  func test_onVariablesUsed_WithSameCardId_UpdatesAffectedCards() {
-    variableTracker.onVariablesUsed(id: id1, variables: ["Var1", "Var2"])
-    variableTracker.onVariablesUsed(id: id1, variables: ["Var3", "Var4"])
-
-    let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
-    XCTAssertEqual(affectedCards, ["card1": ["Var1"]])
-  }
-
-  func test_onVariablesUsed_WithDifferentCardId_UpdatesAffectedCards() {
-    variableTracker.onVariablesUsed(id: id1, variables: ["Var1", "Var2"])
-    variableTracker.onVariablesUsed(id: id2, variables: ["Var1", "Var3"])
+  func test_onVariableUsed_WithDifferentCardId_UpdatesAffectedCards() {
+    variableTracker.onVariableUsed(id: id1, variable: "Var1")
+    variableTracker.onVariableUsed(id: id1, variable: "Var2")
+    variableTracker.onVariableUsed(id: id2, variable: "Var1")
+    variableTracker.onVariableUsed(id: id2, variable: "Var3")
 
     let affectedCards = variableTracker.getAffectedCards(variables: ["Var1", "Var2"])
     XCTAssertEqual(affectedCards, ["card1": ["Var1", "Var2"], "card2": ["Var1"]])
   }
 
   func test_onModelingStarted_ResetsAffectedCards() {
-    variableTracker.onVariablesUsed(id: id1, variables: ["Var1", "Var2"])
+    variableTracker.onVariableUsed(id: id1, variable: "Var1")
 
     variableTracker.onModelingStarted(id: id1)
 
@@ -37,20 +40,34 @@ final class DivVariableTrackerTests: XCTestCase {
     XCTAssertTrue(affectedCards.isEmpty)
   }
 
-  func test_onVariablesUsed_WithAdditionalId_UpdatesAffectedCards() {
-    variableTracker.onVariablesUsed(id: id1a1, variables: ["Var1"])
+  func test_onVariableUsed_WithAdditionalId_UpdatesAffectedCards() {
+    variableTracker.onVariableUsed(id: id1a1, variable: "Var1")
 
     let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
     XCTAssertEqual(affectedCards, ["card1": ["Var1"]])
   }
 
   func test_onModelingStarted_WithAdditionalId_DoesNotResetAffectedCards() {
-    variableTracker.onVariablesUsed(id: id1, variables: ["Var1", "Var2"])
+    variableTracker.onVariableUsed(id: id1, variable: "Var1")
 
     variableTracker.onModelingStarted(id: id1a1)
 
     let affectedCards = variableTracker.getAffectedCards(variables: ["Var1"])
     XCTAssertEqual(affectedCards, ["card1": ["Var1"]])
+  }
+
+  func test_ProvidesUsedVariables() {
+    variableTracker.onVariableUsed(id: id1, variable: "Var1")
+    variableTracker.onVariableUsed(id: id2, variable: "Var2")
+    variableTracker.onVariableUsed(id: id2, variable: "Var3")
+
+    XCTAssertEqual(
+      variableTracker.usedVariablesByCard,
+      [
+        id1.cardId: ["Var1"],
+        id2.cardId: ["Var2", "Var3"]
+      ]
+    )
   }
 }
 

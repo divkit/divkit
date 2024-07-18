@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivAccessibility with EquatableMixin {
   const DivAccessibility({
@@ -35,6 +35,26 @@ class DivAccessibility with EquatableMixin {
         stateDescription,
         type,
       ];
+
+  DivAccessibility copyWith({
+    Expression<String>? Function()? description,
+    Expression<String>? Function()? hint,
+    Expression<DivAccessibilityMode>? mode,
+    Expression<bool>? muteAfterAction,
+    Expression<String>? Function()? stateDescription,
+    DivAccessibilityType? type,
+  }) =>
+      DivAccessibility(
+        description:
+            description != null ? description.call() : this.description,
+        hint: hint != null ? hint.call() : this.hint,
+        mode: mode ?? this.mode,
+        muteAfterAction: muteAfterAction ?? this.muteAfterAction,
+        stateDescription: stateDescription != null
+            ? stateDescription.call()
+            : this.stateDescription,
+        type: type ?? this.type,
+      );
 
   static DivAccessibility? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

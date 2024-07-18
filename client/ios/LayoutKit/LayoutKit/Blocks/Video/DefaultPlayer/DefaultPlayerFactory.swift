@@ -1,8 +1,8 @@
 import AVFoundation
-import BasePublic
 import Foundation
-import NetworkingPublic
 import UIKit
+
+import VGSL
 
 public final class DefaultPlayerFactory: PlayerFactory {
   private let itemsProvider: PlayerItemsProvider

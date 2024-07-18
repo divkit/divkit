@@ -1,358 +1,346 @@
 {
-    "cases": [
+  "cases": [
+    {
+      "expression": "@{'abc' == 'abc'}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'abc' != 'abc'}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'abc' == 'abcd'}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'abcd' == 'abc'}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'abc' != 'abcd'}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'abcd' != 'abc'}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "var_a == var_b => true",
+      "expression": "@{var_a == var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
         {
-            "name": "'abc' == 'abc' => true",
-            "expression": "@{'abc' == 'abc'}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
         },
         {
-            "name": "'abc' != 'abc' => false",
-            "expression": "@{'abc' != 'abc'}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "'abc' == 'abcd' => false",
-            "expression": "@{'abc' == 'abcd'}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "'abcd' == 'abc' => false",
-            "expression": "@{'abcd' == 'abc'}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "'abc' != 'abcd' => true",
-            "expression": "@{'abc' != 'abcd'}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "'abcd' != 'abc' => true",
-            "expression": "@{'abcd' != 'abc'}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "var_a == var_b => true",
-            "expression": "@{var_a == var_b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                },
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "var_a != var_b => false",
-            "expression": "@{var_a != var_b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                },
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "var_a == var_b => false",
-            "expression": "@{var_a == var_b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                },
-                {
-                    "type": "string",
-                    "value": "abcd",
-                    "name": "var_b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "var_b == var_a => false",
-            "expression": "@{var_b == var_a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                },
-                {
-                    "type": "string",
-                    "value": "abcd",
-                    "name": "var_b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "var_a != var_b => true",
-            "expression": "@{var_a != var_b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                },
-                {
-                    "type": "string",
-                    "value": "abcd",
-                    "name": "var_b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "var_b != var_a => true",
-            "expression": "@{var_b != var_a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                },
-                {
-                    "type": "string",
-                    "value": "abcd",
-                    "name": "var_b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "'abc' == var_b => true",
-            "expression": "@{'abc' == var_b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "'abc' != var_b => false",
-            "expression": "@{'abc' != var_b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "var_a == 'abcd' => false",
-            "expression": "@{var_a == 'abcd'}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "'abcd' == var_a => false",
-            "expression": "@{'abcd' == var_a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "var_a != 'abcd' => true",
-            "expression": "@{var_a != 'abcd'}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "'abcd' != var_a => true",
-            "expression": "@{'abcd' != var_a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "abc",
-                    "name": "var_a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
+          "type": "string",
+          "value": "abc",
+          "name": "var_b"
         }
-    ]
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "var_a != var_b => false",
+      "expression": "@{var_a != var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        },
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "var_a == var_b => false",
+      "expression": "@{var_a == var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        },
+        {
+          "type": "string",
+          "value": "abcd",
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "var_b == var_a => false",
+      "expression": "@{var_b == var_a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        },
+        {
+          "type": "string",
+          "value": "abcd",
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "var_a != var_b => true",
+      "expression": "@{var_a != var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        },
+        {
+          "type": "string",
+          "value": "abcd",
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "var_b != var_a => true",
+      "expression": "@{var_b != var_a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        },
+        {
+          "type": "string",
+          "value": "abcd",
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "'abc' == var_b => true",
+      "expression": "@{'abc' == var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "'abc' != var_b => false",
+      "expression": "@{'abc' != var_b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "var_a == 'abcd' => false",
+      "expression": "@{var_a == 'abcd'}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "'abcd' == var_a => false",
+      "expression": "@{'abcd' == var_a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "var_a != 'abcd' => true",
+      "expression": "@{var_a != 'abcd'}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "'abcd' != var_a => true",
+      "expression": "@{'abcd' != var_a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "string",
+          "value": "abc",
+          "name": "var_a"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
 }

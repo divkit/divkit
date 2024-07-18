@@ -7,14 +7,22 @@ func divAction(
   logId: String,
   payload: [String: Any]? = nil,
   typed: DivActionTyped? = nil,
-  url: String? = nil
+  url: String? = nil,
+  urlExpression: String? = nil
 ) -> DivAction {
-  DivAction(
+  let urlParam: Expression<URL>? = if let urlExpression {
+    expression(urlExpression)
+  } else if let url {
+    .value(URL(string: url)!)
+  } else {
+    nil
+  }
+  return DivAction(
     isEnabled: .value(isEnabled),
     logId: .value(logId),
     payload: payload,
     typed: typed,
-    url: url.flatMap { .value(URL(string: $0)!) }
+    url: urlParam
   )
 }
 
@@ -111,6 +119,7 @@ func divText(
 func divSeparator(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  border: DivBorder? = nil,
   delimiterStyle: DivSeparator.DelimiterStyle? = nil,
   id: String? = nil,
   margins: DivEdgeInsets? = nil,
@@ -122,6 +131,7 @@ func divSeparator(
   .divSeparator(DivSeparator(
     accessibility: accessibility,
     actions: actions,
+    border: border,
     delimiterStyle: delimiterStyle,
     id: id,
     margins: margins,
@@ -135,6 +145,7 @@ func divSeparator(
 func divContainer(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  clipToBounds: Bool = true,
   height: DivSize? = nil,
   itemBuilder: DivCollectionItemBuilder? = nil,
   items: [Div]? = nil,
@@ -151,7 +162,7 @@ func divContainer(
     aspect: nil,
     background: nil,
     border: nil,
-    clipToBounds: nil,
+    clipToBounds: .value(clipToBounds),
     columnSpan: nil,
     contentAlignmentHorizontal: nil,
     contentAlignmentVertical: nil,
@@ -164,6 +175,7 @@ func divContainer(
     itemBuilder: itemBuilder,
     items: items,
     layoutMode: nil,
+    layoutProvider: nil,
     lineSeparator: nil,
     longtapActions: nil,
     margins: nil,
@@ -178,6 +190,7 @@ func divContainer(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variables: nil,
     visibility: nil,
     visibilityAction: nil,
     visibilityActions: nil,
@@ -205,8 +218,10 @@ func divGallery(
     focus: nil,
     height: nil,
     id: nil,
+    itemBuilder: nil,
     itemSpacing: nil,
     items: items,
+    layoutProvider: nil,
     margins: nil,
     orientation: nil,
     paddings: nil,
@@ -221,6 +236,7 @@ func divGallery(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variables: nil,
     visibility: nil,
     visibilityAction: nil,
     visibilityActions: nil,
@@ -253,6 +269,7 @@ func divGrid(
     height: nil,
     id: nil,
     items: items,
+    layoutProvider: nil,
     longtapActions: nil,
     margins: nil,
     paddings: nil,
@@ -264,6 +281,7 @@ func divGrid(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variables: nil,
     visibility: nil,
     visibilityAction: nil,
     visibilityActions: nil,
@@ -290,9 +308,11 @@ func divPager(
     height: nil,
     id: nil,
     infiniteScroll: nil,
+    itemBuilder: nil,
     itemSpacing: nil,
     items: items,
     layoutMode: layoutMode,
+    layoutProvider: nil,
     margins: nil,
     orientation: nil,
     paddings: nil,
@@ -306,6 +326,7 @@ func divPager(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variables: nil,
     visibility: nil,
     visibilityAction: nil,
     visibilityActions: nil,
@@ -332,6 +353,7 @@ func divState(
     focus: nil,
     height: nil,
     id: nil,
+    layoutProvider: nil,
     margins: nil,
     paddings: nil,
     rowSpan: nil,
@@ -345,6 +367,7 @@ func divState(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variables: nil,
     visibility: nil,
     visibilityAction: nil,
     visibilityActions: nil,
@@ -384,6 +407,7 @@ func divTabs(
     height: nil,
     id: nil,
     items: items,
+    layoutProvider: nil,
     margins: nil,
     paddings: nil,
     restrictParentScroll: nil,
@@ -393,6 +417,7 @@ func divTabs(
     separatorColor: nil,
     separatorPaddings: nil,
     switchTabsByContentSwipeEnabled: nil,
+    tabTitleDelimiter: nil,
     tabTitleStyle: nil,
     titlePaddings: nil,
     tooltips: nil,
@@ -401,6 +426,7 @@ func divTabs(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
+    variables: nil,
     visibility: nil,
     visibilityAction: nil,
     visibilityActions: nil,

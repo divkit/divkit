@@ -18,12 +18,18 @@ class EntityWithJsonProperty with EquatableMixin {
         jsonProperty,
       ];
 
+  EntityWithJsonProperty copyWith({
+      Map<String, dynamic>?  jsonProperty,
+  }) => EntityWithJsonProperty(
+      jsonProperty: jsonProperty ?? this.jsonProperty,
+    );
+
   static EntityWithJsonProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return EntityWithJsonProperty(
-      jsonProperty: safeParseMap(json, fallback: None,)!,
+      jsonProperty: safeParseMap(json['json_property'], fallback: None,)!,
     );
   }
 }

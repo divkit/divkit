@@ -60,10 +60,14 @@ internal class ExoDivPlayerView(context: Context) : DivPlayerView(context) {
                 "Device doesn't support hardware acceleration. Fallback to SurfaceView"
             }
 
-            val player = getAttachedPlayer() as? ExoDivPlayer ?: return
+            val currentPlayer = (getAttachedPlayer() as? ExoDivPlayer)?.player ?: return
+
             playerView.player = null
-            playerView = setupPlayerView { StyledPlayerView(context) }
-            playerView.player = player.player
+            removeView(playerView)
+
+            playerView = setupPlayerView { StyledPlayerView(context) }.apply {
+                player = currentPlayer
+            }
         }
 
         super.onAttachedToWindow()

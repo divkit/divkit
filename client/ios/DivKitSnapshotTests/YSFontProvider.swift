@@ -1,6 +1,5 @@
 import UIKit
 
-import BaseUIPublic
 import DivKit
 
 final class YSFontProvider: DivFontProvider {

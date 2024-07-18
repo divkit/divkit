@@ -1,5 +1,5 @@
-import CommonCorePublic
 import Serialization
+import VGSL
 
 func calculateTemplateToType(in dict: [String: Any]) -> [TemplateName: String] {
   var unresolved: [TemplateName: String] = [:]

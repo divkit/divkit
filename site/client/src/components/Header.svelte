@@ -32,13 +32,15 @@
         <div class="header__right">
             <ul class="header__links">
                 <li class="header__item">
-                    <a class="header__link" href="https://github.com/divkit/divkit">
-                        Github
+                    <a class="header__link" href="https://github.com/divkit/divkit" target="_blank" rel="noopener noreferrer">
+                        <div class="header__icon header__icon_github"></div>
+                        GitHub
                     </a>
                 </li>
                 <li class="header__item">
-                    <a class="header__link" href={$lang === 'ru' ? 'https://t.me/divkit_community_ru' : 'https://t.me/divkit_community_en'}>
-                        Telegram
+                    <a class="header__link" href={$lang === 'ru' ? 'https://t.me/divkit_community_ru' : 'https://t.me/divkit_community_en'} target="_blank" rel="noopener noreferrer">
+                        <div class="header__icon header__icon_telegram"></div>
+                        {$l10n('telegram')}
                     </a>
                 </li>
             </ul>
@@ -124,6 +126,24 @@
 
     .header__link:hover {
         color: red;
+    }
+
+    .header__icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-right: 4px;
+        vertical-align: -4px;
+        background: no-repeat 50% 50%;
+        background-size: contain;
+    }
+
+    .header__icon_github {
+        background-image: url(../assets/github.svg);
+    }
+
+    .header__icon_telegram {
+        background-image: url(../assets/telegram.svg);
     }
 
     .header__subnav {

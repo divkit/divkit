@@ -3,7 +3,7 @@
 
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 final class DivGridExtensionsTests: XCTestCase {
   func test_WhenGridHasHorizontalIncompatibleTraits_ThrowsError() throws {

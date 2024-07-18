@@ -1,5 +1,4 @@
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 extension DivAccessibility {
   func resolve(
@@ -15,7 +14,7 @@ extension DivAccessibility {
       )
     }
 
-    var label: String? = nil
+    var label: String?
     if let customDescriptionProvider = customParams.descriptionProvider {
       label = customDescriptionProvider()
     } else if let description = resolveDescription(expressionResolver) {

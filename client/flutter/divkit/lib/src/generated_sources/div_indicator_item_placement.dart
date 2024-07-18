@@ -2,29 +2,15 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_default_indicator_item_placement.dart';
-import 'div_stretch_indicator_item_placement.dart';
+import 'package:divkit/src/generated_sources/div_default_indicator_item_placement.dart';
+import 'package:divkit/src/generated_sources/div_stretch_indicator_item_placement.dart';
 
 class DivIndicatorItemPlacement with EquatableMixin {
-  const DivIndicatorItemPlacement(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivDefaultIndicatorItemPlacement) {
-      return value;
-    }
-    if (value is DivStretchIndicatorItemPlacement) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivIndicatorItemPlacement");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivDefaultIndicatorItemPlacement)
@@ -32,12 +18,15 @@ class DivIndicatorItemPlacement with EquatableMixin {
     required T Function(DivStretchIndicatorItemPlacement)
         divStretchIndicatorItemPlacement,
   }) {
-    final value = _value;
-    if (value is DivDefaultIndicatorItemPlacement) {
-      return divDefaultIndicatorItemPlacement(value);
-    }
-    if (value is DivStretchIndicatorItemPlacement) {
-      return divStretchIndicatorItemPlacement(value);
+    switch (_index) {
+      case 0:
+        return divDefaultIndicatorItemPlacement(
+          value as DivDefaultIndicatorItemPlacement,
+        );
+      case 1:
+        return divStretchIndicatorItemPlacement(
+          value as DivStretchIndicatorItemPlacement,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivIndicatorItemPlacement");
@@ -50,25 +39,34 @@ class DivIndicatorItemPlacement with EquatableMixin {
         divStretchIndicatorItemPlacement,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivDefaultIndicatorItemPlacement &&
-        divDefaultIndicatorItemPlacement != null) {
-      return divDefaultIndicatorItemPlacement(value);
-    }
-    if (value is DivStretchIndicatorItemPlacement &&
-        divStretchIndicatorItemPlacement != null) {
-      return divStretchIndicatorItemPlacement(value);
+    switch (_index) {
+      case 0:
+        if (divDefaultIndicatorItemPlacement != null) {
+          return divDefaultIndicatorItemPlacement(
+            value as DivDefaultIndicatorItemPlacement,
+          );
+        }
+        break;
+      case 1:
+        if (divStretchIndicatorItemPlacement != null) {
+          return divStretchIndicatorItemPlacement(
+            value as DivStretchIndicatorItemPlacement,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivIndicatorItemPlacement.divDefaultIndicatorItemPlacement(
-    DivDefaultIndicatorItemPlacement value,
-  ) : _value = value;
+    DivDefaultIndicatorItemPlacement obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivIndicatorItemPlacement.divStretchIndicatorItemPlacement(
-    DivStretchIndicatorItemPlacement value,
-  ) : _value = value;
+    DivStretchIndicatorItemPlacement obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivIndicatorItemPlacement? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -76,10 +74,10 @@ class DivIndicatorItemPlacement with EquatableMixin {
     }
     switch (json['type']) {
       case DivDefaultIndicatorItemPlacement.type:
-        return DivIndicatorItemPlacement(
+        return DivIndicatorItemPlacement.divDefaultIndicatorItemPlacement(
             DivDefaultIndicatorItemPlacement.fromJson(json)!);
       case DivStretchIndicatorItemPlacement.type:
-        return DivIndicatorItemPlacement(
+        return DivIndicatorItemPlacement.divStretchIndicatorItemPlacement(
             DivStretchIndicatorItemPlacement.fromJson(json)!);
     }
     return null;

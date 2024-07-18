@@ -1,4 +1,4 @@
-import CommonCorePublic
+import VGSL
 
 public final class StateBlock: WrapperBlock, LayoutCachingDefaultImpl {
   public let child: Block

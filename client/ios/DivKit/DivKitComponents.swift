@@ -1,10 +1,8 @@
 import Foundation
 
-import BasePublic
-import BaseUIPublic
 import LayoutKit
-import NetworkingPublic
 import Serialization
+import VGSL
 
 #if os(iOS)
 import UIKit
@@ -41,6 +39,7 @@ public final class DivKitComponents {
 
   private let disposePool = AutodisposePool()
   private let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
+  private let layoutProviderHandler: DivLayoutProviderHandler
   private let persistentValuesStorage = DivPersistentValuesStorage()
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
@@ -123,6 +122,8 @@ public final class DivKitComponents {
 
     let updateCardActionSignalPipe = SignalPipe<[DivActionURLHandler.UpdateReason]>()
     self.updateCardPipe = updateCardActionSignalPipe
+
+    layoutProviderHandler = DivLayoutProviderHandler(variablesStorage: variablesStorage)
 
     safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
@@ -214,7 +215,7 @@ public final class DivKitComponents {
 
   public func reset(cardId: DivCardID) {
     blockStateStorage.reset(cardId: cardId)
-    lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: UIElementPath(cardId.rawValue))
+    lastVisibleBoundsCache.dropVisibleBounds(prefix: UIElementPath(cardId.rawValue))
     stateManagement.reset(cardId: cardId)
     variablesStorage.reset(cardId: cardId)
     visibilityCounter.reset(cardId: cardId)
@@ -300,7 +301,8 @@ public final class DivKitComponents {
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
-      tooltipViewFactory: DivTooltipViewFactory(divKitComponents: self, cardId: cardId)
+      tooltipViewFactory: DivTooltipViewFactory(divKitComponents: self, cardId: cardId),
+      layoutProviderHandler: layoutProviderHandler
     )
   }
 

@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivPagerTemplate: TemplateValue {
   public typealias Orientation = DivPager.Orientation
@@ -23,9 +23,11 @@ public final class DivPagerTemplate: TemplateValue {
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
   public let infiniteScroll: Field<Expression<Bool>>? // default value: false
+  public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
   public let itemSpacing: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(0))
   public let items: Field<[DivTemplate]>?
   public let layoutMode: Field<DivPagerLayoutModeTemplate>?
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let orientation: Field<Expression<Orientation>>? // default value: horizontal
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -39,6 +41,7 @@ public final class DivPagerTemplate: TemplateValue {
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
+  public let variables: Field<[DivVariableTemplate]>?
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
   public let visibilityActions: Field<[DivVisibilityActionTemplate]>?
@@ -61,9 +64,11 @@ public final class DivPagerTemplate: TemplateValue {
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       infiniteScroll: dictionary.getOptionalExpressionField("infinite_scroll"),
+      itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
       itemSpacing: dictionary.getOptionalField("item_spacing", templateToType: templateToType),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
       layoutMode: dictionary.getOptionalField("layout_mode", templateToType: templateToType),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       orientation: dictionary.getOptionalExpressionField("orientation"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -77,6 +82,7 @@ public final class DivPagerTemplate: TemplateValue {
       transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
       transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
+      variables: dictionary.getOptionalArray("variables", templateToType: templateToType),
       visibility: dictionary.getOptionalExpressionField("visibility"),
       visibilityAction: dictionary.getOptionalField("visibility_action", templateToType: templateToType),
       visibilityActions: dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
@@ -100,9 +106,11 @@ public final class DivPagerTemplate: TemplateValue {
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     infiniteScroll: Field<Expression<Bool>>? = nil,
+    itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
     itemSpacing: Field<DivFixedSizeTemplate>? = nil,
     items: Field<[DivTemplate]>? = nil,
     layoutMode: Field<DivPagerLayoutModeTemplate>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     orientation: Field<Expression<Orientation>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -116,6 +124,7 @@ public final class DivPagerTemplate: TemplateValue {
     transitionIn: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionTriggers: Field<[DivTransitionTrigger]>? = nil,
+    variables: Field<[DivVariableTemplate]>? = nil,
     visibility: Field<Expression<DivVisibility>>? = nil,
     visibilityAction: Field<DivVisibilityActionTemplate>? = nil,
     visibilityActions: Field<[DivVisibilityActionTemplate]>? = nil,
@@ -136,9 +145,11 @@ public final class DivPagerTemplate: TemplateValue {
     self.height = height
     self.id = id
     self.infiniteScroll = infiniteScroll
+    self.itemBuilder = itemBuilder
     self.itemSpacing = itemSpacing
     self.items = items
     self.layoutMode = layoutMode
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.orientation = orientation
     self.paddings = paddings
@@ -152,6 +163,7 @@ public final class DivPagerTemplate: TemplateValue {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -173,9 +185,11 @@ public final class DivPagerTemplate: TemplateValue {
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let infiniteScrollValue = parent?.infiniteScroll?.resolveOptionalValue(context: context) ?? .noValue
+    let itemBuilderValue = parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let layoutModeValue = parent?.layoutMode?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let orientationValue = parent?.orientation?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -189,6 +203,7 @@ public final class DivPagerTemplate: TemplateValue {
     let transitionInValue = parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    let variablesValue = parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -208,9 +223,11 @@ public final class DivPagerTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       infiniteScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "infinite_scroll", error: $0) },
+      itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -224,6 +241,7 @@ public final class DivPagerTemplate: TemplateValue {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
@@ -252,9 +270,11 @@ public final class DivPagerTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       infiniteScroll: infiniteScrollValue.value,
+      itemBuilder: itemBuilderValue.value,
       itemSpacing: itemSpacingValue.value,
       items: itemsValue.value,
       layoutMode: layoutModeNonNil,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
@@ -268,6 +288,7 @@ public final class DivPagerTemplate: TemplateValue {
       transitionIn: transitionInValue.value,
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
+      variables: variablesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -294,9 +315,11 @@ public final class DivPagerTemplate: TemplateValue {
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var infiniteScrollValue: DeserializationResult<Expression<Bool>> = parent?.infiniteScroll?.value() ?? .noValue
+    var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
     var itemSpacingValue: DeserializationResult<DivFixedSize> = .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
     var layoutModeValue: DeserializationResult<DivPagerLayoutMode> = .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var orientationValue: DeserializationResult<Expression<DivPager.Orientation>> = parent?.orientation?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -310,6 +333,7 @@ public final class DivPagerTemplate: TemplateValue {
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    var variablesValue: DeserializationResult<[DivVariable]> = .noValue
     var visibilityValue: DeserializationResult<Expression<DivVisibility>> = parent?.visibility?.value() ?? .noValue
     var visibilityActionValue: DeserializationResult<DivVisibilityAction> = .noValue
     var visibilityActionsValue: DeserializationResult<[DivVisibilityAction]> = .noValue
@@ -344,12 +368,16 @@ public final class DivPagerTemplate: TemplateValue {
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "infinite_scroll":
         infiniteScrollValue = deserialize(__dictValue).merged(with: infiniteScrollValue)
+      case "item_builder":
+        itemBuilderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCollectionItemBuilderTemplate.self).merged(with: itemBuilderValue)
       case "item_spacing":
         itemSpacingValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: itemSpacingValue)
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
       case "layout_mode":
         layoutModeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPagerLayoutModeTemplate.self).merged(with: layoutModeValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "orientation":
@@ -376,6 +404,8 @@ public final class DivPagerTemplate: TemplateValue {
         transitionOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionOutValue)
       case "transition_triggers":
         transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
+      case "variables":
+        variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
       case "visibility":
         visibilityValue = deserialize(__dictValue).merged(with: visibilityValue)
       case "visibility_action":
@@ -412,12 +442,16 @@ public final class DivPagerTemplate: TemplateValue {
         idValue = idValue.merged(with: { deserialize(__dictValue) })
       case parent?.infiniteScroll?.link:
         infiniteScrollValue = infiniteScrollValue.merged(with: { deserialize(__dictValue) })
+      case parent?.itemBuilder?.link:
+        itemBuilderValue = itemBuilderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCollectionItemBuilderTemplate.self) })
       case parent?.itemSpacing?.link:
         itemSpacingValue = itemSpacingValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
       case parent?.items?.link:
         itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
       case parent?.layoutMode?.link:
         layoutModeValue = layoutModeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPagerLayoutModeTemplate.self) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.orientation?.link:
@@ -444,6 +478,8 @@ public final class DivPagerTemplate: TemplateValue {
         transitionOutValue = transitionOutValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self) })
       case parent?.transitionTriggers?.link:
         transitionTriggersValue = transitionTriggersValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator) })
+      case parent?.variables?.link:
+        variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
       case parent?.visibility?.link:
         visibilityValue = visibilityValue.merged(with: { deserialize(__dictValue) })
       case parent?.visibilityAction?.link:
@@ -463,9 +499,11 @@ public final class DivPagerTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      itemBuilderValue = itemBuilderValue.merged(with: { parent.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemSpacingValue = itemSpacingValue.merged(with: { parent.itemSpacing?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       layoutModeValue = layoutModeValue.merged(with: { parent.layoutMode?.resolveValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       pageTransformationValue = pageTransformationValue.merged(with: { parent.pageTransformation?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -475,6 +513,7 @@ public final class DivPagerTemplate: TemplateValue {
       transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionValue = visibilityActionValue.merged(with: { parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -494,9 +533,11 @@ public final class DivPagerTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       infiniteScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "infinite_scroll", error: $0) },
+      itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -510,6 +551,7 @@ public final class DivPagerTemplate: TemplateValue {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
@@ -538,9 +580,11 @@ public final class DivPagerTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       infiniteScroll: infiniteScrollValue.value,
+      itemBuilder: itemBuilderValue.value,
       itemSpacing: itemSpacingValue.value,
       items: itemsValue.value,
       layoutMode: layoutModeNonNil,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
@@ -554,6 +598,7 @@ public final class DivPagerTemplate: TemplateValue {
       transitionIn: transitionInValue.value,
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
+      variables: variablesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -585,9 +630,11 @@ public final class DivPagerTemplate: TemplateValue {
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       infiniteScroll: infiniteScroll ?? mergedParent.infiniteScroll,
+      itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
       itemSpacing: itemSpacing ?? mergedParent.itemSpacing,
       items: items ?? mergedParent.items,
       layoutMode: layoutMode ?? mergedParent.layoutMode,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       orientation: orientation ?? mergedParent.orientation,
       paddings: paddings ?? mergedParent.paddings,
@@ -601,6 +648,7 @@ public final class DivPagerTemplate: TemplateValue {
       transitionIn: transitionIn ?? mergedParent.transitionIn,
       transitionOut: transitionOut ?? mergedParent.transitionOut,
       transitionTriggers: transitionTriggers ?? mergedParent.transitionTriggers,
+      variables: variables ?? mergedParent.variables,
       visibility: visibility ?? mergedParent.visibility,
       visibilityAction: visibilityAction ?? mergedParent.visibilityAction,
       visibilityActions: visibilityActions ?? mergedParent.visibilityActions,
@@ -627,9 +675,11 @@ public final class DivPagerTemplate: TemplateValue {
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       infiniteScroll: merged.infiniteScroll,
+      itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
       itemSpacing: merged.itemSpacing?.tryResolveParent(templates: templates),
       items: merged.items?.tryResolveParent(templates: templates),
       layoutMode: try merged.layoutMode?.resolveParent(templates: templates),
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       orientation: merged.orientation,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
@@ -643,6 +693,7 @@ public final class DivPagerTemplate: TemplateValue {
       transitionIn: merged.transitionIn?.tryResolveParent(templates: templates),
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),
       transitionTriggers: merged.transitionTriggers,
+      variables: merged.variables?.tryResolveParent(templates: templates),
       visibility: merged.visibility,
       visibilityAction: merged.visibilityAction?.tryResolveParent(templates: templates),
       visibilityActions: merged.visibilityActions?.tryResolveParent(templates: templates),

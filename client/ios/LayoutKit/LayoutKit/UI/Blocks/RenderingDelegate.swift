@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 #if os(iOS)
 public protocol RenderingDelegate: AnyObject {

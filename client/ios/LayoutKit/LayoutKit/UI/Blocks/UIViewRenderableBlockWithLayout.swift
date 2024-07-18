@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension BlockWithLayout {
   public func configureBlockView(

@@ -1,0 +1,108 @@
+{
+  "description": "Inner data_element_name should override outer one.",
+  "platforms": [
+    "android"
+  ],
+  "card": {
+    "log_id": "prototypes",
+    "variables": [
+      {
+        "name": "data",
+        "type": "array",
+        "value": [
+          {
+            "title": "First array",
+            "items": [
+              {
+                "title": "First subarray",
+                "text": "First text"
+              },
+              {
+                "title": "First subarray",
+                "text": "Second text"
+              }
+            ]
+          },
+          {
+            "title": "Second array",
+            "items": [
+              {
+                "title": "Second subarray",
+                "text": "First text"
+              },
+              {
+                "text": "Second text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "item_builder": {
+            "type": "prototype",
+            "data": "@{data}",
+            "prototypes": [
+              {
+                "div": {
+                  "type": "gallery",
+                  "orientation": "horizontal",
+                  "item_builder": {
+                    "type": "prototype",
+                    "data": "@{getArrayFromDict(it, 'items')}",
+                    "prototypes": [
+                      {
+                        "div": {
+                          "type": "container",
+                          "width": {
+                            "type": "wrap_content"
+                          },
+                          "orientation": "vertical",
+                          "border": {
+                            "corner_radius": 16,
+                            "stroke": {
+                              "color": "#aaaaaa",
+                              "width": 1
+                            }
+                          },
+                          "paddings": {
+                            "top": 12,
+                            "bottom": 12,
+                            "left": 12,
+                            "right": 12
+                          },
+                          "items": [
+                            {
+                              "type": "text",
+                              "width": {
+                                "type": "wrap_content"
+                              },
+                              "text": "@{getOptStringFromDict('<title is missing>', it, 'title')}",
+                              "font_size": 16
+                            },
+                            {
+                              "type": "text",
+                              "width": {
+                                "type": "wrap_content"
+                              },
+                              "text": "@{getStringFromDict(it, 'text')}"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

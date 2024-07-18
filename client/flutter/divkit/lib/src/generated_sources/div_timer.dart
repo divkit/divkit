@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_action.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
 
 class DivTimer with EquatableMixin {
   const DivTimer({
@@ -38,6 +38,26 @@ class DivTimer with EquatableMixin {
         valueVariable,
       ];
 
+  DivTimer copyWith({
+    Expression<int>? duration,
+    List<DivAction>? Function()? endActions,
+    String? id,
+    List<DivAction>? Function()? tickActions,
+    Expression<int>? Function()? tickInterval,
+    String? Function()? valueVariable,
+  }) =>
+      DivTimer(
+        duration: duration ?? this.duration,
+        endActions: endActions != null ? endActions.call() : this.endActions,
+        id: id ?? this.id,
+        tickActions:
+            tickActions != null ? tickActions.call() : this.tickActions,
+        tickInterval:
+            tickInterval != null ? tickInterval.call() : this.tickInterval,
+        valueVariable:
+            valueVariable != null ? valueVariable.call() : this.valueVariable,
+      );
+
   static DivTimer? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -48,25 +68,21 @@ class DivTimer with EquatableMixin {
         fallback: 0,
       )!,
       endActions: safeParseObj(
-        (json['end_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['end_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       id: safeParseStr(
         json['id']?.toString(),
       )!,
       tickActions: safeParseObj(
-        (json['tick_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['tick_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       tickInterval: safeParseIntExpr(
         json['tick_interval'],

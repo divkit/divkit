@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 extension LayeredBlock: ImageRenderableBlock {
   public func drawInRect(_ rect: CGRect, context: CGContext) {

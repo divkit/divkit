@@ -19,6 +19,9 @@
         "compat": {
             "ios": {
                 "version_added": "29.15.0"
+            },
+            "web": {
+                "version_added": "30.2.0"
             }
         }
     }, {
@@ -44,6 +47,48 @@
             },
             "web": {
                 "version_added": "29.0.0"
+            }
+        }
+    }, {
+        "id": "fn_parse_unix_time_as_local",
+        "name": "Function <code>parseUnixTimeAsLocal</code>",
+        "compat": {
+            "ios": {
+                "version_added": "29.4.0"
+            },
+            "android": {
+                "version_added": "23.6.0"
+            },
+            "web": {
+                "version_added": "30.2.0"
+            }
+        }
+    }, {
+        "id": "fn_datetime_formats",
+        "name": "Datetime formatting functions: <code>formatDateAsLocal</code>, <code>formatDateAsUTC</code>, <code>formatDateAsLocalWithLocale</code>, <code>formatDateAsUTCWithLocale</code>",
+        "compat": {
+            "ios": {
+                "version_added": "29.4.0"
+            },
+            "android": {
+                "version_added": "23.6.0"
+            },
+            "web": {
+                "version_added": "30.2.0"
+            }
+        }
+    }, {
+        "id": "fn_datetime_formats_timezone",
+        "name": "Datetime formatting functions <code>z</code> and <code>Z</code> flags",
+        "compat": {
+            "ios": {
+                "version_added": "30.3.0"
+            },
+            "android": {
+                "version_added": "30.3.0"
+            },
+            "web": {
+                "version_added": "30.3.0"
             }
         }
     }]

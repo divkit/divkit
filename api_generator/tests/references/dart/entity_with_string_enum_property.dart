@@ -18,6 +18,12 @@ class EntityWithStringEnumProperty with EquatableMixin {
         property,
       ];
 
+  EntityWithStringEnumProperty copyWith({
+      Expression<EntityWithStringEnumPropertyProperty>?  property,
+  }) => EntityWithStringEnumProperty(
+      property: property ?? this.property,
+    );
+
   static EntityWithStringEnumProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

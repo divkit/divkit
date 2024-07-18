@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivActionFocusElement with EquatableMixin {
   const DivActionFocusElement({
@@ -17,6 +17,13 @@ class DivActionFocusElement with EquatableMixin {
   List<Object?> get props => [
         elementId,
       ];
+
+  DivActionFocusElement copyWith({
+    Expression<String>? elementId,
+  }) =>
+      DivActionFocusElement(
+        elementId: elementId ?? this.elementId,
+      );
 
   static DivActionFocusElement? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

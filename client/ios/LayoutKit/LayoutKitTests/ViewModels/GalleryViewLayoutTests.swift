@@ -2,8 +2,7 @@
 
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 final class GalleryViewLayoutTests: XCTestCase {
   func test_ProducesEqualToModelBlocksCountNumberOfFrames() {
@@ -242,7 +241,7 @@ final class GalleryViewLayoutTests: XCTestCase {
     let page = layout.blockPages[2]
     let offset = page.origin + page.size / 2
     let pageIndex = layout.pageIndex(forContentOffset: offset)
-    let foundOffset = layout.contentOffset(pageIndex: pageIndex) + Blocks.gapSize
+    let foundOffset = layout.contentOffset(pageIndex: pageIndex)
 
     XCTAssertEqual(offset, foundOffset, accuracy: accuracy)
   }
@@ -252,7 +251,7 @@ final class GalleryViewLayoutTests: XCTestCase {
     let page = layout.blockPages[2]
     let offset = page.origin + page.size / 2
     let pageIndex = layout.pageIndex(forContentOffset: offset)
-    let foundOffset = layout.contentOffset(pageIndex: pageIndex) + Blocks.gapSize
+    let foundOffset = layout.contentOffset(pageIndex: pageIndex)
 
     XCTAssertEqual(offset, foundOffset, accuracy: accuracy)
   }
@@ -354,7 +353,7 @@ private enum Blocks {
   )
 
   static func makeModel(
-    direction: GalleryViewModel.Direction = .horizontal,
+    direction: ScrollDirection = .horizontal,
     metrics: GalleryViewMetrics = .fixed,
     crossAlignment: Alignment = .center,
     scrollMode: GalleryViewModel.ScrollMode = .default
@@ -406,7 +405,7 @@ private enum Blocks {
     crossAlignment: .trailing
   )
   static let fixedPagingModel = makeModel(scrollMode: .fixedPaging(pageSize: boundsSize.width))
-  static let autoPagingModel = makeModel(scrollMode: .autoPaging)
+  static let autoPagingModel = makeModel(scrollMode: .autoPaging(inertionEnabled: true))
   static let fixedInsets = SideInsets(leading: 4, trailing: 10)
   static let resizableInsets = InsetMode.Resizable(minValue: 10, maxViewportSize: 14)
   static let horizontalResizableModel = makeModel(metrics: .resizableAxial)

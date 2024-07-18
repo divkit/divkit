@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_animation_interpolator.dart';
-import 'div_count.dart';
-import 'div_infinity_count.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_animation_interpolator.dart';
+import 'package:divkit/src/generated_sources/div_count.dart';
+import 'package:divkit/src/generated_sources/div_infinity_count.dart';
 
 class DivAnimation with EquatableMixin {
   const DivAnimation({
@@ -14,7 +14,7 @@ class DivAnimation with EquatableMixin {
     this.interpolator = const ValueExpression(DivAnimationInterpolator.spring),
     this.items,
     required this.name,
-    this.repeat = const DivCount(DivInfinityCount()),
+    this.repeat = const DivCount.divInfinityCount(DivInfinityCount()),
     this.startDelay = const ValueExpression(0),
     this.startValue,
   });
@@ -29,7 +29,7 @@ class DivAnimation with EquatableMixin {
   final List<DivAnimation>? items;
 
   final Expression<DivAnimationName> name;
-  // default value: const DivCount(DivInfinityCount())
+  // default value: const DivCount.divInfinityCount(DivInfinityCount())
   final DivCount repeat;
   // constraint: number >= 0; default value: 0
   final Expression<int> startDelay;
@@ -47,6 +47,27 @@ class DivAnimation with EquatableMixin {
         startDelay,
         startValue,
       ];
+
+  DivAnimation copyWith({
+    Expression<int>? duration,
+    Expression<double>? Function()? endValue,
+    Expression<DivAnimationInterpolator>? interpolator,
+    List<DivAnimation>? Function()? items,
+    Expression<DivAnimationName>? name,
+    DivCount? repeat,
+    Expression<int>? startDelay,
+    Expression<double>? Function()? startValue,
+  }) =>
+      DivAnimation(
+        duration: duration ?? this.duration,
+        endValue: endValue != null ? endValue.call() : this.endValue,
+        interpolator: interpolator ?? this.interpolator,
+        items: items != null ? items.call() : this.items,
+        name: name ?? this.name,
+        repeat: repeat ?? this.repeat,
+        startDelay: startDelay ?? this.startDelay,
+        startValue: startValue != null ? startValue.call() : this.startValue,
+      );
 
   static DivAnimation? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -66,13 +87,11 @@ class DivAnimation with EquatableMixin {
         fallback: DivAnimationInterpolator.spring,
       )!,
       items: safeParseObj(
-        (json['items'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAnimation.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  DivAnimation.fromJson(v),
+                )!),
       ),
       name: safeParseStrEnumExpr(
         json['name'],
@@ -80,7 +99,7 @@ class DivAnimation with EquatableMixin {
       )!,
       repeat: safeParseObj(
         DivCount.fromJson(json['repeat']),
-        fallback: const DivCount(DivInfinityCount()),
+        fallback: const DivCount.divInfinityCount(DivInfinityCount()),
       )!,
       startDelay: safeParseIntExpr(
         json['start_delay'],

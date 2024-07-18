@@ -35,11 +35,13 @@ export function render(opts: {
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     store?: Store;
+    weekStartDay?: number;
 }): DivkitInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';
 
 export {
     SizeProvider,
+    Gesture,
     lottieExtensionBuilder
 } from './extensions';

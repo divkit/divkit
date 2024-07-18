@@ -2,7 +2,7 @@
 
 import XCTest
 
-import BaseUIPublic
+import VGSL
 
 final class DivAccessibilityExtentionsTests: XCTestCase {
   func test_resolve_Empty() {

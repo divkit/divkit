@@ -2,38 +2,38 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_fixed_size.dart';
-import 'div_focus.dart';
-import 'div_indicator_item_placement.dart';
-import 'div_match_parent_size.dart';
-import 'div_rounded_rectangle_shape.dart';
-import 'div_rounded_rectangle_shape.dart';
-import 'div_shape.dart';
-import 'div_size.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_indicator_item_placement.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_rounded_rectangle_shape.dart';
+import 'package:divkit/src/generated_sources/div_shape.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivIndicator with EquatableMixin implements DivBase {
   const DivIndicator({
     this.accessibility = const DivAccessibility(),
-    this.activeItemColor = const ValueExpression(const Color(0xFFFFDC60)),
+    this.activeItemColor = const ValueExpression(Color(0xFFFFDC60)),
     this.activeItemSize = const ValueExpression(1.3),
     this.activeShape,
     this.alignmentHorizontal,
@@ -46,9 +46,9 @@ class DivIndicator with EquatableMixin implements DivBase {
     this.disappearActions,
     this.extensions,
     this.focus,
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
-    this.inactiveItemColor = const ValueExpression(const Color(0x33919CB5)),
+    this.inactiveItemColor = const ValueExpression(Color(0x33919CB5)),
     this.inactiveMinimumShape,
     this.inactiveShape,
     this.itemsPlacement,
@@ -58,7 +58,8 @@ class DivIndicator with EquatableMixin implements DivBase {
     this.pagerId,
     this.rowSpan,
     this.selectedActions,
-    this.shape = const DivShape(DivRoundedRectangleShape()),
+    this.shape =
+        const DivShape.divRoundedRectangleShape(DivRoundedRectangleShape()),
     this.spaceBetweenCenters = const DivFixedSize(
       value: ValueExpression(15),
     ),
@@ -68,10 +69,11 @@ class DivIndicator with EquatableMixin implements DivBase {
     this.transitionIn,
     this.transitionOut,
     this.transitionTriggers,
+    this.variables,
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "indicator";
@@ -113,7 +115,7 @@ class DivIndicator with EquatableMixin implements DivBase {
 
   @override
   final DivFocus? focus;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -143,7 +145,7 @@ class DivIndicator with EquatableMixin implements DivBase {
 
   @override
   final List<DivAction>? selectedActions;
-  // default value: const DivShape(DivRoundedRectangleShape())
+  // default value: const DivShape.divRoundedRectangleShape(DivRoundedRectangleShape())
   final DivShape shape;
   // default value: const DivFixedSize(value: ValueExpression(15),)
   final DivFixedSize spaceBetweenCenters;
@@ -165,6 +167,9 @@ class DivIndicator with EquatableMixin implements DivBase {
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
+
+  @override
+  final List<DivVariable>? variables;
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
@@ -174,7 +179,7 @@ class DivIndicator with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -214,11 +219,119 @@ class DivIndicator with EquatableMixin implements DivBase {
         transitionIn,
         transitionOut,
         transitionTriggers,
+        variables,
         visibility,
         visibilityAction,
         visibilityActions,
         width,
       ];
+
+  DivIndicator copyWith({
+    DivAccessibility? accessibility,
+    Expression<Color>? activeItemColor,
+    Expression<double>? activeItemSize,
+    DivRoundedRectangleShape? Function()? activeShape,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    Expression<DivIndicatorAnimation>? animation,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    List<DivDisappearAction>? Function()? disappearActions,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    DivSize? height,
+    String? Function()? id,
+    Expression<Color>? inactiveItemColor,
+    DivRoundedRectangleShape? Function()? inactiveMinimumShape,
+    DivRoundedRectangleShape? Function()? inactiveShape,
+    DivIndicatorItemPlacement? Function()? itemsPlacement,
+    DivEdgeInsets? margins,
+    Expression<double>? minimumItemSize,
+    DivEdgeInsets? paddings,
+    String? Function()? pagerId,
+    Expression<int>? Function()? rowSpan,
+    List<DivAction>? Function()? selectedActions,
+    DivShape? shape,
+    DivFixedSize? spaceBetweenCenters,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivIndicator(
+        accessibility: accessibility ?? this.accessibility,
+        activeItemColor: activeItemColor ?? this.activeItemColor,
+        activeItemSize: activeItemSize ?? this.activeItemSize,
+        activeShape:
+            activeShape != null ? activeShape.call() : this.activeShape,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        animation: animation ?? this.animation,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        inactiveItemColor: inactiveItemColor ?? this.inactiveItemColor,
+        inactiveMinimumShape: inactiveMinimumShape != null
+            ? inactiveMinimumShape.call()
+            : this.inactiveMinimumShape,
+        inactiveShape:
+            inactiveShape != null ? inactiveShape.call() : this.inactiveShape,
+        itemsPlacement: itemsPlacement != null
+            ? itemsPlacement.call()
+            : this.itemsPlacement,
+        margins: margins ?? this.margins,
+        minimumItemSize: minimumItemSize ?? this.minimumItemSize,
+        paddings: paddings ?? this.paddings,
+        pagerId: pagerId != null ? pagerId.call() : this.pagerId,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        shape: shape ?? this.shape,
+        spaceBetweenCenters: spaceBetweenCenters ?? this.spaceBetweenCenters,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivIndicator? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -258,13 +371,11 @@ class DivIndicator with EquatableMixin implements DivBase {
         fallback: DivIndicatorAnimation.scale,
       )!,
       background: safeParseObj(
-        (json['background'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivBackground.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['background'],
+            (v) => safeParseObj(
+                  DivBackground.fromJson(v),
+                )!),
       ),
       border: safeParseObj(
         DivBorder.fromJson(json['border']),
@@ -274,29 +385,25 @@ class DivIndicator with EquatableMixin implements DivBase {
         json['column_span'],
       ),
       disappearActions: safeParseObj(
-        (json['disappear_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivDisappearAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['disappear_actions'],
+            (v) => safeParseObj(
+                  DivDisappearAction.fromJson(v),
+                )!),
       ),
       extensions: safeParseObj(
-        (json['extensions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivExtension.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['extensions'],
+            (v) => safeParseObj(
+                  DivExtension.fromJson(v),
+                )!),
       ),
       focus: safeParseObj(
         DivFocus.fromJson(json['focus']),
       ),
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
@@ -333,17 +440,16 @@ class DivIndicator with EquatableMixin implements DivBase {
         json['row_span'],
       ),
       selectedActions: safeParseObj(
-        (json['selected_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['selected_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       shape: safeParseObj(
         DivShape.fromJson(json['shape']),
-        fallback: const DivShape(DivRoundedRectangleShape()),
+        fallback:
+            const DivShape.divRoundedRectangleShape(DivRoundedRectangleShape()),
       )!,
       spaceBetweenCenters: safeParseObj(
         DivFixedSize.fromJson(json['space_between_centers']),
@@ -352,13 +458,11 @@ class DivIndicator with EquatableMixin implements DivBase {
         ),
       )!,
       tooltips: safeParseObj(
-        (json['tooltips'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTooltip.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['tooltips'],
+            (v) => safeParseObj(
+                  DivTooltip.fromJson(v),
+                )!),
       ),
       transform: safeParseObj(
         DivTransform.fromJson(json['transform']),
@@ -374,14 +478,19 @@ class DivIndicator with EquatableMixin implements DivBase {
         DivAppearanceTransition.fromJson(json['transition_out']),
       ),
       transitionTriggers: safeParseObj(
-        (json['transition_triggers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseStrEnum(
-                v,
-                parse: DivTransitionTrigger.fromJson,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['transition_triggers'],
+            (v) => safeParseStrEnum(
+                  v,
+                  parse: DivTransitionTrigger.fromJson,
+                )!),
+      ),
+      variables: safeParseObj(
+        safeListMap(
+            json['variables'],
+            (v) => safeParseObj(
+                  DivVariable.fromJson(v),
+                )!),
       ),
       visibility: safeParseStrEnumExpr(
         json['visibility'],
@@ -392,17 +501,15 @@ class DivIndicator with EquatableMixin implements DivBase {
         DivVisibilityAction.fromJson(json['visibility_action']),
       ),
       visibilityActions: safeParseObj(
-        (json['visibility_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVisibilityAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['visibility_actions'],
+            (v) => safeParseObj(
+                  DivVisibilityAction.fromJson(v),
+                )!),
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }

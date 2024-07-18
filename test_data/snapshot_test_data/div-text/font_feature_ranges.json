@@ -1,0 +1,66 @@
+{
+  "description": "Text with font features",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_template": {
+      "type": "text",
+      "font_size": 20
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text_template",
+              "text": "Yandex Sans with kerning and Yandex Sans without it",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 11,
+                  "font_size": 24,
+                  "font_weight": "medium"
+                },
+                {
+                  "start": 29,
+                  "end": 40,
+                  "font_size": 24,
+                  "font_weight": "medium",
+                  "font_feature_settings": "\"kern\" 0"
+                }
+              ]
+            },
+            {
+              "type": "text_template",
+              "text": "Simple fraction 1/2 and fraction ligature 1/2",
+              "ranges": [
+                {
+                  "start": 16,
+                  "end": 19,
+                  "font_size": 24,
+                  "font_weight": "medium"
+                },
+                {
+                  "start": 42,
+                  "end": 45,
+                  "font_size": 24,
+                  "font_weight": "medium",
+                  "font_feature_settings": "\"frac\" on"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

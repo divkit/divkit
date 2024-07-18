@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 public final class PinchToZoomBlock: WrapperBlock, LayoutCachingDefaultImpl {
   public let child: Block

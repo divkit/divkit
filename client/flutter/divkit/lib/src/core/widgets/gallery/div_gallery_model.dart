@@ -1,6 +1,7 @@
 import 'package:divkit/src/core/protocol/div_context.dart';
 import 'package:divkit/src/core/widgets/div_widget.dart';
 import 'package:divkit/src/generated_sources/div_gallery.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -25,6 +26,9 @@ class DivGalleryModel with EquatableMixin {
     final variables =
         DivKitProvider.watch<DivContext>(context)!.variableManager;
 
+    final divScalingModel = DivKitProvider.watch<DivScalingModel>(context);
+    final viewScale = divScalingModel?.viewScale ?? 1;
+
     return variables.watch<DivGalleryModel>((context) async {
       final rawAlignment = await data.crossContentAlignment.resolveValue(
         context: context,
@@ -48,9 +52,10 @@ class DivGalleryModel with EquatableMixin {
         crossContentAlignment: alignment,
         orientation: orientation,
         itemSpacing: (await data.itemSpacing.resolveValue(
-          context: context,
-        ))
-            .toDouble(),
+              context: context,
+            ))
+                .toDouble() *
+            viewScale,
       );
     }).distinct();
   }

@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
   public struct Layout: Equatable {

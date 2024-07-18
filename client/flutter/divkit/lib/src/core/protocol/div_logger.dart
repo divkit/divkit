@@ -25,6 +25,8 @@ class DefaultDivLoggerContext implements DivLoggerContext {
 }
 
 abstract class DivLogger {
+  const DivLogger();
+
   /// Log a message at level [Level.FINE].
   void debug(dynamic message, {Object? error, StackTrace? stackTrace});
 

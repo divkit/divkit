@@ -56,7 +56,7 @@ class DivFocusBinderTest {
     }
     private val divView = mock<Div2View>()
     private val resolver = mock<ExpressionResolver>()
-    private val context = BindingContext(divView, resolver)
+    private val context = BindingContext.createEmpty(divView).getFor(resolver)
     private val defaultBorder = DivBorder(hasShadow = Expression.constant(true))
     private val focusActions = listOf(mock<DivAction>())
     private val blurActions = listOf(mock<DivAction>())

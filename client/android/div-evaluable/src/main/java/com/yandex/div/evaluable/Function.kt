@@ -26,60 +26,35 @@ abstract class Function {
     }
 
     internal fun matchesArguments(argTypes: List<EvaluableType>): MatchResult {
-        val argumentMin: Int
-        val argumentMax: Int
-        if (declaredArgs.isEmpty()) {
-            argumentMin = 0
-            argumentMax = 0
-        } else {
-            val hasVarArg = declaredArgs.last().isVariadic
-            argumentMin = if (hasVarArg) declaredArgs.size - 1 else declaredArgs.size
-            argumentMax = if (hasVarArg) Int.MAX_VALUE else declaredArgs.size
-        }
-
-        if (argTypes.size < argumentMin) {
-            return MatchResult.TooFewArguments(expected = argumentMin, actual = argTypes.size)
-        }
-        if (argTypes.size > argumentMax) {
-            return MatchResult.TooManyArguments(expected = argumentMax, actual = argTypes.size)
-        }
-
-        for (index in argTypes.indices) {
-            val declaredArg = declaredArgs[index.coerceAtMost(declaredArgs.lastIndex)]
-            if (argTypes[index] != declaredArg.type) {
-                return MatchResult.ArgTypeMismatch(expected = declaredArg.type, actual = argTypes[index])
-            }
-        }
-        return MatchResult.Ok
+        return matchesArguments(argTypes) { type, declaredType -> type == declaredType }
     }
 
     internal fun matchesArgumentsWithCast(argTypes: List<EvaluableType>): MatchResult {
-        val argumentMin: Int
-        val argumentMax: Int
-        if (declaredArgs.isEmpty()) {
-            argumentMin = 0
-            argumentMax = 0
-        } else {
-            val hasVarArg = declaredArgs.last().isVariadic
-            argumentMin = if (hasVarArg) declaredArgs.size - 1 else declaredArgs.size
-            argumentMax = if (hasVarArg) Int.MAX_VALUE else declaredArgs.size
+        return matchesArguments(argTypes) { type, declaredType ->
+            type == declaredType || type.canCastTo(declaredType)
         }
+    }
 
-        if (argTypes.size < argumentMin) {
-            return MatchResult.TooFewArguments(expected = argumentMin, actual = argTypes.size)
+    private fun matchesArguments(
+        argTypes: List<EvaluableType>,
+        matches: (type: EvaluableType, declaredType: EvaluableType) -> Boolean
+    ): MatchResult {
+        val argumentMin = declaredArgs.size
+        val argumentMax = if (hasVarArg) Int.MAX_VALUE else declaredArgs.size
+        if (argTypes.size < argumentMin || argTypes.size > argumentMax) {
+            return MatchResult.ArgCountMismatch(expected = argumentMin)
         }
-        if (argTypes.size > argumentMax) {
-            return MatchResult.TooManyArguments(expected = argumentMax, actual = argTypes.size)
-        }
-
         for (index in argTypes.indices) {
-            val declaredArg = declaredArgs[index.coerceAtMost(declaredArgs.lastIndex)]
-            if (argTypes[index] != declaredArg.type && !argTypes[index].canCastTo(declaredArg.type)) {
-                return MatchResult.ArgTypeMismatch(expected = declaredArg.type, actual = argTypes[index])
+            val declaredArgType = declaredArgs[index.coerceAtMost(declaredArgs.lastIndex)].type
+            if (!matches(argTypes[index], declaredArgType)) {
+                return MatchResult.ArgTypeMismatch(expected = declaredArgType, actual = argTypes[index])
             }
         }
         return MatchResult.Ok
     }
+
+    internal val hasVarArg: Boolean
+        get() = declaredArgs.lastOrNull()?.isVariadic ?: false
 
     override fun toString(): String {
         return declaredArgs.joinToString(prefix = "${name}(", postfix = ")") { arg ->
@@ -114,8 +89,7 @@ abstract class Function {
 
     internal sealed class MatchResult {
         object Ok : MatchResult()
-        class TooFewArguments(val expected: Int, val actual: Int) : MatchResult()
-        class TooManyArguments(val expected: Int, val actual: Int) : MatchResult()
+        class ArgCountMismatch(val expected: Int) : MatchResult()
         class ArgTypeMismatch(val expected: EvaluableType, val actual: EvaluableType) : MatchResult()
     }
 }

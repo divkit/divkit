@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_animation_interpolator.dart';
-import 'div_transition_base.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_animation_interpolator.dart';
+import 'package:divkit/src/generated_sources/div_transition_base.dart';
 
 class DivScaleTransition with EquatableMixin implements DivTransitionBase {
   const DivScaleTransition({
@@ -43,6 +43,23 @@ class DivScaleTransition with EquatableMixin implements DivTransitionBase {
         scale,
         startDelay,
       ];
+
+  DivScaleTransition copyWith({
+    Expression<int>? duration,
+    Expression<DivAnimationInterpolator>? interpolator,
+    Expression<double>? pivotX,
+    Expression<double>? pivotY,
+    Expression<double>? scale,
+    Expression<int>? startDelay,
+  }) =>
+      DivScaleTransition(
+        duration: duration ?? this.duration,
+        interpolator: interpolator ?? this.interpolator,
+        pivotX: pivotX ?? this.pivotX,
+        pivotY: pivotY ?? this.pivotY,
+        scale: scale ?? this.scale,
+        startDelay: startDelay ?? this.startDelay,
+      );
 
   static DivScaleTransition? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

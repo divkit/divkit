@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.view2.divs.PagerSelectedActionsDispatcher
 import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
@@ -34,6 +34,9 @@ internal class DivPagerView @JvmOverloads constructor(
             field = value
         }
 
+    private val changePageCallbacksForIndicators:
+        MutableList<ViewPager2.OnPageChangeCallback> = mutableListOf()
+
     internal var changePageCallbackForLogger: ViewPager2.OnPageChangeCallback? = null
         set(value) {
             field?.let(viewPager::unregisterOnPageChangeCallback)
@@ -48,7 +51,10 @@ internal class DivPagerView @JvmOverloads constructor(
             field = value
         }
 
+    internal var pagerOnItemsCountChange: OnItemsUpdatedCallback? = null
+
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
+
     internal var currentItem: Int
         get() = viewPager.currentItem
         set(value) = viewPager.setCurrentItem(value, false)
@@ -90,6 +96,23 @@ internal class DivPagerView @JvmOverloads constructor(
         dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
     }
 
+    fun addChangePageCallbackForIndicators(callback: ViewPager2.OnPageChangeCallback) {
+        changePageCallbacksForIndicators.add(callback)
+        viewPager.registerOnPageChangeCallback(callback)
+    }
+
+    fun removeChangePageCallbackForIndicators(callback: ViewPager2.OnPageChangeCallback) {
+        changePageCallbacksForIndicators.remove(callback)
+        viewPager.unregisterOnPageChangeCallback(callback)
+    }
+
+    fun clearChangePageCallbackForIndicators() {
+        changePageCallbacksForIndicators.forEach {
+            viewPager.unregisterOnPageChangeCallback(it)
+        }
+        changePageCallbacksForIndicators.clear()
+    }
+
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         val intercepted =
             onInterceptTouchEventListener?.onInterceptTouchEvent(target = this, event = event)
@@ -101,5 +124,9 @@ internal class DivPagerView @JvmOverloads constructor(
         val recyclerView = getRecyclerView() ?: return null
         val wrappedChild = recyclerView.getChildAt(index) as? ViewGroup ?: return null
         return wrappedChild.getChildAt(0)
+    }
+
+    internal fun interface OnItemsUpdatedCallback {
+        fun onItemsUpdated()
     }
 }

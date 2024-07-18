@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension AnchorBlock {
   public static func makeBlockView() -> BlockView {

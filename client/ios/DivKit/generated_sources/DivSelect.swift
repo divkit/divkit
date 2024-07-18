@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivSelect: DivBase {
   public final class Option {
@@ -41,10 +41,12 @@ public final class DivSelect: DivBase {
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
+  public let fontWeightValue: Expression<Int>? // constraint: number > 0
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let hintColor: Expression<Color> // default value: #73000000
   public let hintText: Expression<String>?
   public let id: String?
+  public let layoutProvider: DivLayoutProvider?
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let margins: DivEdgeInsets?
@@ -60,6 +62,7 @@ public final class DivSelect: DivBase {
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let valueVariable: String
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -95,6 +98,10 @@ public final class DivSelect: DivBase {
 
   public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
     resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
+  }
+
+  public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumeric(fontWeightValue)
   }
 
   public func resolveHintColor(_ resolver: ExpressionResolver) -> Color {
@@ -134,6 +141,9 @@ public final class DivSelect: DivBase {
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let fontWeightValueValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 > 0 })
+
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -161,10 +171,12 @@ public final class DivSelect: DivBase {
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
+    fontWeightValue: Expression<Int>? = nil,
     height: DivSize? = nil,
     hintColor: Expression<Color>? = nil,
     hintText: Expression<String>? = nil,
     id: String? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     letterSpacing: Expression<Double>? = nil,
     lineHeight: Expression<Int>? = nil,
     margins: DivEdgeInsets? = nil,
@@ -180,6 +192,7 @@ public final class DivSelect: DivBase {
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
     valueVariable: String,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -199,10 +212,12 @@ public final class DivSelect: DivBase {
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
+    self.fontWeightValue = fontWeightValue
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
     self.hintText = hintText
     self.id = id
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
     self.margins = margins
@@ -218,6 +233,7 @@ public final class DivSelect: DivBase {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.valueVariable = valueVariable
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -259,49 +275,56 @@ extension DivSelect: Equatable {
     guard
       lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.height == rhs.height
+      lhs.fontWeightValue == rhs.fontWeightValue
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.hintColor == rhs.hintColor,
-      lhs.hintText == rhs.hintText,
-      lhs.id == rhs.id
+      lhs.hintText == rhs.hintText
     else {
       return false
     }
     guard
-      lhs.letterSpacing == rhs.letterSpacing,
+      lhs.id == rhs.id,
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.letterSpacing == rhs.letterSpacing
+    else {
+      return false
+    }
+    guard
       lhs.lineHeight == rhs.lineHeight,
-      lhs.margins == rhs.margins
+      lhs.margins == rhs.margins,
+      lhs.options == rhs.options
     else {
       return false
     }
     guard
-      lhs.options == rhs.options,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.rowSpan == rhs.rowSpan,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.textColor == rhs.textColor,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.valueVariable == rhs.valueVariable
+      lhs.valueVariable == rhs.valueVariable,
+      lhs.variables == rhs.variables
     else {
       return false
     }
@@ -340,10 +363,12 @@ extension DivSelect: Serializable {
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
+    result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["hint_color"] = hintColor.toValidSerializationValue()
     result["hint_text"] = hintText?.toValidSerializationValue()
     result["id"] = id
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["margins"] = margins?.toDictionary()
@@ -359,6 +384,7 @@ extension DivSelect: Serializable {
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["value_variable"] = valueVariable
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

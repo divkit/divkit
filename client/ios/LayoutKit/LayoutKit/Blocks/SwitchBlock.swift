@@ -1,10 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BasePublic
-import BaseUIPublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 public final class SwitchBlock: Block {
   public let on: Bool

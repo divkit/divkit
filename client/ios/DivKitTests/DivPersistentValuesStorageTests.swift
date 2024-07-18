@@ -3,7 +3,7 @@
 import Foundation
 import XCTest
 
-import BasePublic
+import VGSL
 
 final class DivPersistentValuesStorageTests: XCTestCase {
   private var storage: DivPersistentValuesStorage!

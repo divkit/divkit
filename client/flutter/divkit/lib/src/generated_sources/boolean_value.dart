@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class BooleanValue with EquatableMixin {
   const BooleanValue({
@@ -17,6 +17,13 @@ class BooleanValue with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  BooleanValue copyWith({
+    Expression<bool>? value,
+  }) =>
+      BooleanValue(
+        value: value ?? this.value,
+      );
 
   static BooleanValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

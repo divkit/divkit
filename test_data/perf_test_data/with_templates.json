@@ -14,9 +14,9 @@
       "type": "base_text",
       "paddings": {
         "left": "@{padding.left}",
-        "top": 16,
         "right": "@{padding.right}",
-        "bottom": 16
+        "top": 10,
+        "bottom": 10
       },
       "background": [
         {
@@ -27,6 +27,26 @@
       "font_size": 16,
       "font_weight": "medium",
       "text_alignment_horizontal": "center"
+    },
+    "invisible_text": {
+      "type": "base_text",
+      "paddings": {
+        "left": "@{padding.left}",
+        "right": "@{padding.right}",
+        "top": 10,
+        "bottom": 10
+      },
+      "visibility": "invisible"
+    },
+    "gone_text": {
+      "type": "base_text",
+      "paddings": {
+        "left": "@{padding.left}",
+        "right": "@{padding.right}",
+        "top": 10,
+        "bottom": 10
+      },
+      "visibility": "gone"
     },
     "base_input": {
       "type": "input",
@@ -54,9 +74,9 @@
           "type": "base_text",
           "paddings": {
             "left": "@{padding.left}",
-            "top": 12,
             "right": "@{padding.right}",
-            "bottom": 4
+            "top": 20,
+            "bottom": 10
           },
           "font_size": 20,
           "font_weight": "regular",
@@ -73,10 +93,10 @@
             "value": 40
           },
           "paddings": {
-            "left": 4,
-            "top": 12,
-            "right": 12,
-            "bottom": 4
+            "left": 20,
+            "right": 20,
+            "top": 20,
+            "bottom": 20
           },
           "placeholder_color": "#00000000",
           "image_url": "file:///android_asset/images/benchmark/menu.png",
@@ -118,7 +138,7 @@
     },
     "tab_pager": {
       "type": "tabs",
-      "has_separator": "@{true}",
+      "has_separator": true,
       "separator_color": "@{dark_sky}",
       "separator_paddings": {
         "left": 0,
@@ -128,10 +148,10 @@
       },
       "tab_title_style": {
         "paddings": {
-          "left": 12,
-          "top": 8,
-          "right": 12,
-          "bottom": 8
+          "left": 10,
+          "right": 10,
+          "top": 5,
+          "bottom": 5
         },
         "active_text_color": "@{dark_sky}",
         "inactive_text_color": "#ECF0F1",
@@ -140,20 +160,20 @@
       },
       "title_paddings": {
         "left": "@{padding.left}",
-        "top": 8,
         "right": "@{padding.right}",
-        "bottom": 16
+        "top": 10,
+        "bottom": 10
       }
     },
     "page": {
       "type": "gallery",
       "paddings": {
         "left": "@{padding.left}",
-        "top": 16,
         "right": "@{padding.right}",
-        "bottom": 16
+        "top": 10,
+        "bottom": 10
       },
-      "item_spacing": 16
+      "item_spacing": 20
     },
     "page_element": {
       "type": "container",
@@ -171,9 +191,8 @@
         "corner_radius": 8
       }
     },
-    "list": {
-      "type": "page_element",
-      "$items": "items"
+    "block_with_grids": {
+      "type": "page_element"
     },
     "list_item": {
       "type": "grid",
@@ -232,7 +251,13 @@
           },
           "font_size": 14,
           "text_alignment_vertical": "bottom",
-          "$text": "title"
+          "$text": "title",
+          "visibility_actions": [
+            {
+              "log_id": "benchmark/list_item/title",
+              "url": "@{empty_action}"
+            }
+          ]
         },
         {
           "type": "base_text",
@@ -298,36 +323,6 @@
               "color": "@{rgb(div(mul(3.0, 16.0) + 4.0, 255.0), div(mul(4.0, 16.0) + 9.0, 255.0), div(mul(5.0, 16.0) + 14.0, 255.0))}"
             }
           ]
-        }
-      ]
-    },
-    "post": {
-      "type": "page_element",
-      "items": [
-        {
-          "type": "title_text",
-          "$text": "post_title"
-        },
-        {
-          "type": "base_text",
-          "margins": {
-            "left": "@{padding.left}",
-            "top": 16,
-            "right": "@{padding.right}"
-          },
-          "line_height": 16,
-          "$text": "post_text"
-        },
-        {
-          "type": "base_text",
-          "margins": {
-            "left": "@{padding.left}",
-            "top": 16,
-            "right": "@{padding.right}",
-            "bottom": 16
-          },
-          "$text": "post_tags",
-          "$ranges": "post_tag_spans"
         }
       ]
     },
@@ -447,6 +442,111 @@
         }
       ]
     },
+    "block_with_variables": {
+      "type": "page_element",
+      "items": [
+        {
+          "type": "title_text",
+          "text": "VARIABLES"
+        },
+        {
+          "type": "base_text",
+          "margins": {
+            "left": "@{padding.left}",
+            "right": "@{padding.right}",
+            "top": 10
+          },
+          "line_height": 16,
+          "text": "counter: @{counter}\nempty_action: '@{empty_action}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'"
+        },
+        {
+          "type": "base_text",
+          "margins": {
+            "left": "@{padding.left}",
+            "right": "@{padding.right}",
+            "top": 10,
+            "bottom": 10
+          },
+          "text": "#lorem #ipsum #dolor #sit #amet",
+          "ranges": [
+            {
+              "start": 0,
+              "end": 6,
+              "text_color": "@{mint_green}"
+            },
+            {
+              "start": 7,
+              "end": 13,
+              "text_color": "@{medium_sea_green}"
+            },
+            {
+              "start": 14,
+              "end": 20,
+              "text_color": "#@{golden_dragon}"
+            },
+            {
+              "start": 21,
+              "end": 25,
+              "text_color": "@{vivid_orange}"
+            },
+            {
+              "start": 26,
+              "end": 31,
+              "text_color": "@{cinnabar}"
+            }
+          ]
+        }
+      ]
+    },
+    "block_with_invisible_items": {
+      "type": "page_element",
+      "items": [
+        {
+          "type": "title_text",
+          "text": "INVISIBLE ITEMS"
+        },
+        {
+          "type": "invisible_text",
+          "text": "Item 1"
+        },
+        {
+          "type": "gone_text",
+          "text": "Item 2"
+        },
+        {
+          "type": "invisible_text",
+          "text": "Item 3"
+        },
+        {
+          "type": "gone_text",
+          "text": "Item 4"
+        },
+        {
+          "type": "invisible_text",
+          "text": "Item 5"
+        },
+        {
+          "type": "gone_text",
+          "text": "Item 6"
+        },
+        {
+          "type": "invisible_text",
+          "text": "Item 7"
+        },
+        {
+          "type": "gone_text",
+          "text": "Item 8"
+        },
+        {
+          "type": "invisible_text",
+          "text": "Item 9"
+        },
+        {
+          "type": "gone_text",
+          "text": "Item 10"
+        }
+      ]
+    },
     "button": {
       "type": "text",
       "height": {
@@ -455,9 +555,9 @@
       },
       "margins": {
         "left": "@{padding.left}",
-        "top": 16,
         "right": "@{padding.right}",
-        "bottom": 16
+        "top": 20,
+        "bottom": 20
       },
       "background": [
         {
@@ -518,9 +618,9 @@
     "log_id": "benchmark",
     "variables": [
       {
-        "name": "text_var",
-        "type": "string",
-        "value": "'text variable value'"
+        "name": "counter",
+        "type": "integer",
+        "value": 1
       },
       {
         "name": "empty_action",
@@ -528,19 +628,14 @@
         "value": "action://none"
       },
       {
-        "name": "true",
-        "type": "boolean",
-        "value": 1
-      },
-      {
         "name": "padding.left",
         "type": "integer",
-        "value": 16
+        "value": 20
       },
       {
         "name": "padding.right",
         "type": "integer",
-        "value": 16
+        "value": 20
       },
       {
         "name": "sky_blue",
@@ -599,7 +694,7 @@
         "div": {
           "type": "benchmark_card",
           "header_text": "Benchmark card",
-          "button_text": "button with text from @{text_var}",
+          "button_text": "Counter: @{counter}",
           "button_action": {
             "log_id": "benchmark/button",
             "url": "@{empty_action}"
@@ -611,7 +706,7 @@
                 "type": "page",
                 "items": [
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -664,37 +759,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "VARIABLES",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -709,7 +777,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -762,37 +830,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -807,7 +848,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -860,37 +901,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -905,7 +919,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -958,37 +972,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1011,7 +998,7 @@
                 "type": "page",
                 "items": [
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1064,37 +1051,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1109,7 +1069,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1162,37 +1122,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1207,7 +1140,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1260,37 +1193,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1305,7 +1211,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1358,37 +1264,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1411,7 +1290,7 @@
                 "type": "page",
                 "items": [
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1464,37 +1343,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1509,7 +1361,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1562,37 +1414,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1607,7 +1432,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1660,37 +1485,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1705,7 +1503,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1758,37 +1556,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1811,7 +1582,7 @@
                 "type": "page",
                 "items": [
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1864,37 +1635,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -1909,7 +1653,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -1962,37 +1706,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2007,7 +1724,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2060,37 +1777,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2105,7 +1795,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2158,37 +1848,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2211,7 +1874,7 @@
                 "type": "page",
                 "items": [
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2264,37 +1927,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2309,7 +1945,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2362,37 +1998,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2407,7 +2016,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2460,37 +2069,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2505,7 +2087,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2558,37 +2140,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2611,7 +2166,7 @@
                 "type": "page",
                 "items": [
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2664,37 +2219,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2709,7 +2237,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2762,37 +2290,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2807,7 +2308,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2860,37 +2361,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -2905,7 +2379,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -2958,37 +2432,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -3011,7 +2458,7 @@
                 "type": "page",
                 "items": [
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -3064,37 +2511,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -3109,7 +2529,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -3162,37 +2582,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -3207,7 +2600,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -3260,37 +2653,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -3305,7 +2671,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -3358,37 +2724,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -3411,7 +2750,7 @@
                 "type": "page",
                 "items": [
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -3464,37 +2803,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -3509,7 +2821,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -3562,37 +2874,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -3607,7 +2892,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -3660,37 +2945,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",
@@ -3705,7 +2963,7 @@
                     "bottom_input_variable": "bottom_input_var"
                   },
                   {
-                    "type": "list",
+                    "type": "block_with_grids",
                     "items": [
                       {
                         "type": "list_item",
@@ -3758,37 +3016,10 @@
                     ]
                   },
                   {
-                    "type": "post",
-                    "post_title": "POST TITLE",
-                    "post_text": "empty_action: '@{empty_action}'\ntrue: '@{true}'\npadding.left: '@{padding.left}'\npadding.right: '@{padding.right}'\nsky_blue: '@{sky_blue}'\nmint_green: '@{mint_green}'\ndark_sky: '@{dark_sky}'\ngolden_dragon: '@{golden_dragon}'\nmedium_sea_green: '@{medium_sea_green}'\nvivid_orange: '@{vivid_orange}'\ncinnabar: '@{cinnabar}'",
-                    "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                    "post_tag_spans": [
-                      {
-                        "start": 0,
-                        "end": 6,
-                        "text_color": "@{mint_green}"
-                      },
-                      {
-                        "start": 7,
-                        "end": 13,
-                        "text_color": "@{medium_sea_green}"
-                      },
-                      {
-                        "start": 14,
-                        "end": 20,
-                        "text_color": "#@{golden_dragon}"
-                      },
-                      {
-                        "start": 21,
-                        "end": 25,
-                        "text_color": "@{vivid_orange}"
-                      },
-                      {
-                        "start": 26,
-                        "end": 31,
-                        "text_color": "@{cinnabar}"
-                      }
-                    ]
+                    "type": "block_with_variables"
+                  },
+                  {
+                    "type": "block_with_invisible_items"
                   },
                   {
                     "type": "form",

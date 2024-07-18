@@ -1,6 +1,5 @@
 import XCTest
 
-import CommonCorePublic
 import DivKit
 import LayoutKit
 
@@ -29,9 +28,9 @@ final class DivTabsExtensionsTests: XCTestCase {
 
     // We are using "tabs" const instead of DivTabs.type to emphasise its importance for analytics.
     // DivTabs.type changes can brake analytic reports.
-    XCTAssertEqual(titlePath, UIElementPath.root + "tabs" + 0 + "title")
+    XCTAssertEqual(titlePath, UIElementPath.root + "tabs" + "title0")
     XCTAssertEqual(contentPath, UIElementPath.root + "tabs")
-    XCTAssertEqual(pagePath, UIElementPath.root + "tabs" + 0 + "page")
+    XCTAssertEqual(pagePath, UIElementPath.root + "tabs" + 0)
   }
 }
 

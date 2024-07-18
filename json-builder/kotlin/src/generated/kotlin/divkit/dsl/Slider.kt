@@ -48,6 +48,7 @@ class Slider internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             maxValue = additive.maxValue ?: properties.maxValue,
             minValue = additive.minValue ?: properties.minValue,
@@ -72,6 +73,7 @@ class Slider internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -130,6 +132,10 @@ class Slider internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * External margins from the element stroke.
          */
@@ -229,6 +235,10 @@ class Slider internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
+        /**
          * Element visibility.
          * Default value: `visible`.
          */
@@ -262,6 +272,7 @@ class Slider internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("max_value", maxValue)
             result.tryPutProperty("min_value", minValue)
@@ -286,6 +297,7 @@ class Slider internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -369,6 +381,7 @@ class Slider internal constructor(
                 fontSize = additive.fontSize ?: properties.fontSize,
                 fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
                 fontWeight = additive.fontWeight ?: properties.fontWeight,
+                fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
                 offset = additive.offset ?: properties.offset,
                 textColor = additive.textColor ?: properties.textColor,
             )
@@ -389,6 +402,10 @@ class Slider internal constructor(
              */
             val fontWeight: Property<FontWeight>?,
             /**
+             * Style. Numeric value.
+             */
+            val fontWeightValue: Property<Int>?,
+            /**
              * Shift relative to the center.
              */
             val offset: Property<Point>?,
@@ -404,6 +421,7 @@ class Slider internal constructor(
                 result.tryPutProperty("font_size", fontSize)
                 result.tryPutProperty("font_size_unit", fontSizeUnit)
                 result.tryPutProperty("font_weight", fontWeight)
+                result.tryPutProperty("font_weight_value", fontWeightValue)
                 result.tryPutProperty("offset", offset)
                 result.tryPutProperty("text_color", textColor)
                 return result
@@ -426,6 +444,7 @@ class Slider internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -450,6 +469,7 @@ class Slider internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -470,6 +490,7 @@ fun DivScope.slider(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
     minValue: Int? = null,
@@ -494,6 +515,7 @@ fun DivScope.slider(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -512,6 +534,7 @@ fun DivScope.slider(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         maxValue = valueOrNull(maxValue),
         minValue = valueOrNull(minValue),
@@ -536,6 +559,7 @@ fun DivScope.slider(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -556,6 +580,7 @@ fun DivScope.slider(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -580,6 +605,7 @@ fun DivScope.slider(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -600,6 +626,7 @@ fun DivScope.sliderProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
     minValue: Int? = null,
@@ -624,6 +651,7 @@ fun DivScope.sliderProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -641,6 +669,7 @@ fun DivScope.sliderProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     maxValue = valueOrNull(maxValue),
     minValue = valueOrNull(minValue),
@@ -665,6 +694,7 @@ fun DivScope.sliderProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -684,6 +714,7 @@ fun DivScope.sliderProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -708,6 +739,7 @@ fun DivScope.sliderProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -728,6 +760,7 @@ fun TemplateScope.sliderRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
@@ -752,6 +785,7 @@ fun TemplateScope.sliderRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -769,6 +803,7 @@ fun TemplateScope.sliderRefs(
     focus = focus,
     height = height,
     id = id,
+    layoutProvider = layoutProvider,
     margins = margins,
     maxValue = maxValue,
     minValue = minValue,
@@ -793,6 +828,7 @@ fun TemplateScope.sliderRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -812,6 +848,7 @@ fun TemplateScope.sliderRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -836,6 +873,7 @@ fun TemplateScope.sliderRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -856,6 +894,7 @@ fun Slider.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
     minValue: Int? = null,
@@ -880,6 +919,7 @@ fun Slider.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -898,6 +938,7 @@ fun Slider.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         maxValue = valueOrNull(maxValue) ?: properties.maxValue,
         minValue = valueOrNull(minValue) ?: properties.minValue,
@@ -922,6 +963,7 @@ fun Slider.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -942,6 +984,7 @@ fun Slider.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -966,6 +1009,7 @@ fun Slider.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -986,6 +1030,7 @@ fun Slider.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
@@ -1010,6 +1055,7 @@ fun Slider.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1028,6 +1074,7 @@ fun Slider.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
@@ -1052,6 +1099,7 @@ fun Slider.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -1094,6 +1142,7 @@ fun Slider.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
@@ -1118,6 +1167,7 @@ fun Slider.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -1138,6 +1188,7 @@ fun Slider.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1162,6 +1213,7 @@ fun Slider.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1182,6 +1234,7 @@ fun Component<Slider>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     maxValue: Int? = null,
     minValue: Int? = null,
@@ -1206,6 +1259,7 @@ fun Component<Slider>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1225,6 +1279,7 @@ fun Component<Slider>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         maxValue = valueOrNull(maxValue),
         minValue = valueOrNull(minValue),
@@ -1249,6 +1304,7 @@ fun Component<Slider>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1269,6 +1325,7 @@ fun Component<Slider>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
@@ -1293,6 +1350,7 @@ fun Component<Slider>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1313,6 +1371,7 @@ fun Component<Slider>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
@@ -1337,6 +1396,7 @@ fun Component<Slider>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1356,6 +1416,7 @@ fun Component<Slider>.defer(
         focus = focus,
         height = height,
         id = id,
+        layoutProvider = layoutProvider,
         margins = margins,
         maxValue = maxValue,
         minValue = minValue,
@@ -1380,6 +1441,7 @@ fun Component<Slider>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1423,6 +1485,7 @@ fun Component<Slider>.evaluate(
         focus = null,
         height = null,
         id = null,
+        layoutProvider = null,
         margins = null,
         maxValue = maxValue,
         minValue = minValue,
@@ -1447,6 +1510,7 @@ fun Component<Slider>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variables = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
@@ -1609,6 +1673,7 @@ fun Slider.Range.asList() = listOf(this)
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1618,6 +1683,7 @@ fun DivScope.sliderTextStyle(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1625,6 +1691,7 @@ fun DivScope.sliderTextStyle(
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         offset = valueOrNull(offset),
         textColor = valueOrNull(textColor),
     )
@@ -1633,6 +1700,7 @@ fun DivScope.sliderTextStyle(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1642,12 +1710,14 @@ fun DivScope.sliderTextStyleProps(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ) = Slider.TextStyle.Properties(
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
+    fontWeightValue = valueOrNull(fontWeightValue),
     offset = valueOrNull(offset),
     textColor = valueOrNull(textColor),
 )
@@ -1655,6 +1725,7 @@ fun DivScope.sliderTextStyleProps(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1664,12 +1735,14 @@ fun TemplateScope.sliderTextStyleRefs(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
 ) = Slider.TextStyle.Properties(
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
+    fontWeightValue = fontWeightValue,
     offset = offset,
     textColor = textColor,
 )
@@ -1677,6 +1750,7 @@ fun TemplateScope.sliderTextStyleRefs(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1686,6 +1760,7 @@ fun Slider.TextStyle.override(
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     offset: Point? = null,
     textColor: Color? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1693,6 +1768,7 @@ fun Slider.TextStyle.override(
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
+        fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         offset = valueOrNull(offset) ?: properties.offset,
         textColor = valueOrNull(textColor) ?: properties.textColor,
     )
@@ -1701,6 +1777,7 @@ fun Slider.TextStyle.override(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param offset Shift relative to the center.
  * @param textColor Text color.
  */
@@ -1710,6 +1787,7 @@ fun Slider.TextStyle.defer(
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     offset: ReferenceProperty<Point>? = null,
     textColor: ReferenceProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
@@ -1717,6 +1795,7 @@ fun Slider.TextStyle.defer(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         offset = offset ?: properties.offset,
         textColor = textColor ?: properties.textColor,
     )
@@ -1725,6 +1804,7 @@ fun Slider.TextStyle.defer(
 /**
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param textColor Text color.
  */
 @Generated
@@ -1733,12 +1813,14 @@ fun Slider.TextStyle.evaluate(
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     textColor: ExpressionProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         offset = properties.offset,
         textColor = textColor ?: properties.textColor,
     )

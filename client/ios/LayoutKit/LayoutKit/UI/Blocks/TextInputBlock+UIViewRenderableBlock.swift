@@ -1,8 +1,6 @@
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 extension TextInputBlock {
   public static func makeBlockView() -> BlockView { TextInputBlockView() }
@@ -37,6 +35,7 @@ extension TextInputBlock {
     inputView.setPath(path)
     inputView.setObserver(observer)
     inputView.setIsEnabled(isEnabled)
+    inputView.paddings = paddings ?? .zero
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -69,6 +68,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var textAlignmentHorizontal: TextInputBlock.TextAlignmentHorizontal = .start
   private var textAlignmentVertical: TextInputBlock.TextAlignmentVertical = .center
   private var isInputFocused = false
+  var paddings: EdgeInsets = .zero
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -82,9 +82,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.showsVerticalScrollIndicator = false
     multiLineInput.autocorrectionType = .no
     multiLineInput.backgroundColor = .clear
-    multiLineInput.textContainerInset = .zero
     multiLineInput.delegate = self
-    multiLineInput.textContainerInset = .zero
     multiLineInput.textContainer.lineFragmentPadding = 0
 
     singleLineInput.isHidden = true
@@ -114,13 +112,17 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+
     multiLineInput.frame = bounds
+    multiLineInput.textContainerInset = paddings
     updateMultiLineOffset()
+
     singleLineInput.frame = bounds
+    singleLineInput.paddings = paddings
     updateSingleLineOffset()
-    hintView.frame = bounds
-    hintView.sizeToFit()
-    hintView.frame.origin = CGPoint(x: offsetX(hintView), y: offsetY(hintView))
+
+    hintView.frame.size = hintView.sizeThatFits(bounds.size.inset(by: paddings))
+    updateHintViewOffset()
 
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapGesture(sender:)))
     addGestureRecognizer(tapGesture)
@@ -160,7 +162,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   func setLayoutDirection(_ layoutDirection: UserInterfaceLayoutDirection) {
     if layoutDirection != self.layoutDirection {
       self.layoutDirection = layoutDirection
-      hintView.frame.origin = CGPoint(x: offsetX(hintView), y: offsetY(hintView))
+      updateHintViewOffset()
     }
   }
 
@@ -288,6 +290,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func updateSingleLineOffset() {
     guard !singleLineInput.isHidden else { return }
     singleLineInput.frame.origin = CGPoint(x: 0, y: singleLineOffsetY)
+  }
+
+  private func updateHintViewOffset() {
+    guard !hintView.isHidden else { return }
+    hintView.frame.origin = CGPoint(x: hintViewOffsetX, y: hintViewOffsetY)
   }
 
   private func updateValidation() {
@@ -579,44 +586,51 @@ extension TextInputBlockView: UITextFieldDelegate {
 }
 
 extension TextInputBlockView {
-  private var multiLineOffsetY: CGFloat {
-    offsetY(multiLineInput.bounds.height - multiLineInput.contentSize.height)
-  }
-
-  private var singleLineOffsetY: CGFloat {
-    offsetY(singleLineInput.bounds.height - singleLineInput.intrinsicContentSize.height)
-  }
-
-  private func offsetX(_ view: UIView) -> CGFloat {
-    let emptySpace = bounds.size.width - view.bounds.size.width
+  private var hintViewOffsetX: CGFloat {
+    let emptySpace = bounds.size.width - hintView.bounds.size.width
     switch textAlignment {
     case .left:
-      return cusorOffset
+      return cusorOffset + paddings.left
     case .center:
       guard emptySpace > 0 else { return 0 }
-      return (emptySpace - cusorOffset) / 2
+      return (emptySpace - cusorOffset + paddings.left - paddings.right) / 2
     case .right:
       guard emptySpace > 0 else { return 0 }
-      return emptySpace - cusorOffset
+      return emptySpace - cusorOffset - paddings.right
     default:
       assertionFailure("Only .left, .center and .right cases of textAlignment are implemented")
       return cusorOffset
     }
   }
 
-  private func offsetY(_ view: UIView) -> CGFloat {
-    offsetY(bounds.size.height - view.bounds.size.height)
+  private var multiLineOffsetY: CGFloat {
+    offsetY(
+      emptySpace: multiLineInput.bounds.height - multiLineInput.contentSize.height
+    )
   }
 
-  private func offsetY(_ emptySpace: CGFloat) -> CGFloat {
+  private var singleLineOffsetY: CGFloat {
+    offsetY(
+      emptySpace: singleLineInput.bounds.height - singleLineInput.intrinsicContentSize.height
+    )
+  }
+
+  private var hintViewOffsetY: CGFloat {
+    offsetY(
+      emptySpace: bounds.size.height - hintView.bounds.size.height,
+      paddings: paddings
+    )
+  }
+
+  private func offsetY(emptySpace: CGFloat, paddings: EdgeInsets = .zero) -> CGFloat {
     guard emptySpace > 0 else { return 0 }
     switch textAlignmentVertical {
     case .top:
-      return 0
+      return paddings.top
     case .center:
-      return emptySpace / 2
+      return (emptySpace + paddings.top - paddings.bottom) / 2
     case .bottom:
-      return emptySpace
+      return emptySpace - paddings.bottom
     }
   }
 
@@ -711,9 +725,21 @@ extension TextInputBlock.TextAlignmentVertical {
 }
 
 private class PatchedUITextField: UITextField {
+  var paddings: EdgeInsets = .zero
+
   override func cut(_ sender: Any?) {
     copy(sender)
     super.cut(sender)
+  }
+
+  override func textRect(forBounds bounds: CGRect) -> CGRect {
+    let rect = super.textRect(forBounds: bounds)
+    return rect.inset(by: paddings)
+  }
+
+  override func editingRect(forBounds bounds: CGRect) -> CGRect {
+    let rect = super.editingRect(forBounds: bounds)
+    return rect.inset(by: paddings)
   }
 }
 

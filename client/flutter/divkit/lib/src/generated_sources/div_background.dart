@@ -2,41 +2,18 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_image_background.dart';
-import 'div_linear_gradient.dart';
-import 'div_nine_patch_background.dart';
-import 'div_radial_gradient.dart';
-import 'div_solid_background.dart';
+import 'package:divkit/src/generated_sources/div_image_background.dart';
+import 'package:divkit/src/generated_sources/div_linear_gradient.dart';
+import 'package:divkit/src/generated_sources/div_nine_patch_background.dart';
+import 'package:divkit/src/generated_sources/div_radial_gradient.dart';
+import 'package:divkit/src/generated_sources/div_solid_background.dart';
 
 class DivBackground with EquatableMixin {
-  const DivBackground(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivImageBackground) {
-      return value;
-    }
-    if (value is DivLinearGradient) {
-      return value;
-    }
-    if (value is DivNinePatchBackground) {
-      return value;
-    }
-    if (value is DivRadialGradient) {
-      return value;
-    }
-    if (value is DivSolidBackground) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivBackground");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivImageBackground) divImageBackground,
@@ -45,21 +22,27 @@ class DivBackground with EquatableMixin {
     required T Function(DivRadialGradient) divRadialGradient,
     required T Function(DivSolidBackground) divSolidBackground,
   }) {
-    final value = _value;
-    if (value is DivImageBackground) {
-      return divImageBackground(value);
-    }
-    if (value is DivLinearGradient) {
-      return divLinearGradient(value);
-    }
-    if (value is DivNinePatchBackground) {
-      return divNinePatchBackground(value);
-    }
-    if (value is DivRadialGradient) {
-      return divRadialGradient(value);
-    }
-    if (value is DivSolidBackground) {
-      return divSolidBackground(value);
+    switch (_index) {
+      case 0:
+        return divImageBackground(
+          value as DivImageBackground,
+        );
+      case 1:
+        return divLinearGradient(
+          value as DivLinearGradient,
+        );
+      case 2:
+        return divNinePatchBackground(
+          value as DivNinePatchBackground,
+        );
+      case 3:
+        return divRadialGradient(
+          value as DivRadialGradient,
+        );
+      case 4:
+        return divSolidBackground(
+          value as DivSolidBackground,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivBackground");
@@ -73,60 +56,91 @@ class DivBackground with EquatableMixin {
     T Function(DivSolidBackground)? divSolidBackground,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivImageBackground && divImageBackground != null) {
-      return divImageBackground(value);
-    }
-    if (value is DivLinearGradient && divLinearGradient != null) {
-      return divLinearGradient(value);
-    }
-    if (value is DivNinePatchBackground && divNinePatchBackground != null) {
-      return divNinePatchBackground(value);
-    }
-    if (value is DivRadialGradient && divRadialGradient != null) {
-      return divRadialGradient(value);
-    }
-    if (value is DivSolidBackground && divSolidBackground != null) {
-      return divSolidBackground(value);
+    switch (_index) {
+      case 0:
+        if (divImageBackground != null) {
+          return divImageBackground(
+            value as DivImageBackground,
+          );
+        }
+        break;
+      case 1:
+        if (divLinearGradient != null) {
+          return divLinearGradient(
+            value as DivLinearGradient,
+          );
+        }
+        break;
+      case 2:
+        if (divNinePatchBackground != null) {
+          return divNinePatchBackground(
+            value as DivNinePatchBackground,
+          );
+        }
+        break;
+      case 3:
+        if (divRadialGradient != null) {
+          return divRadialGradient(
+            value as DivRadialGradient,
+          );
+        }
+        break;
+      case 4:
+        if (divSolidBackground != null) {
+          return divSolidBackground(
+            value as DivSolidBackground,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivBackground.divImageBackground(
-    DivImageBackground value,
-  ) : _value = value;
+    DivImageBackground obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivBackground.divLinearGradient(
-    DivLinearGradient value,
-  ) : _value = value;
+    DivLinearGradient obj,
+  )   : value = obj,
+        _index = 1;
 
   const DivBackground.divNinePatchBackground(
-    DivNinePatchBackground value,
-  ) : _value = value;
+    DivNinePatchBackground obj,
+  )   : value = obj,
+        _index = 2;
 
   const DivBackground.divRadialGradient(
-    DivRadialGradient value,
-  ) : _value = value;
+    DivRadialGradient obj,
+  )   : value = obj,
+        _index = 3;
 
   const DivBackground.divSolidBackground(
-    DivSolidBackground value,
-  ) : _value = value;
+    DivSolidBackground obj,
+  )   : value = obj,
+        _index = 4;
 
   static DivBackground? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     switch (json['type']) {
-      case DivLinearGradient.type:
-        return DivBackground(DivLinearGradient.fromJson(json)!);
-      case DivRadialGradient.type:
-        return DivBackground(DivRadialGradient.fromJson(json)!);
       case DivImageBackground.type:
-        return DivBackground(DivImageBackground.fromJson(json)!);
-      case DivSolidBackground.type:
-        return DivBackground(DivSolidBackground.fromJson(json)!);
+        return DivBackground.divImageBackground(
+            DivImageBackground.fromJson(json)!);
+      case DivLinearGradient.type:
+        return DivBackground.divLinearGradient(
+            DivLinearGradient.fromJson(json)!);
       case DivNinePatchBackground.type:
-        return DivBackground(DivNinePatchBackground.fromJson(json)!);
+        return DivBackground.divNinePatchBackground(
+            DivNinePatchBackground.fromJson(json)!);
+      case DivRadialGradient.type:
+        return DivBackground.divRadialGradient(
+            DivRadialGradient.fromJson(json)!);
+      case DivSolidBackground.type:
+        return DivBackground.divSolidBackground(
+            DivSolidBackground.fromJson(json)!);
     }
     return null;
   }

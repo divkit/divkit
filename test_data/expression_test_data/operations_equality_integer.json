@@ -1,2498 +1,2456 @@
 {
-    "cases": [
-        {
-            "name": "7 == 7 => true",
-            "expression": "@{7 == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "70000000000 == 70000000000 => true",
-            "expression": "@{70000000000 == 70000000000}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != 7 => false",
-            "expression": "@{7 != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == +7 => true",
-            "expression": "@{7 == +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 == 7 => true",
-            "expression": "@{+7 == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != +7 => false",
-            "expression": "@{7 != +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 != 7 => false",
-            "expression": "@{+7 != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == +7 => false",
-            "expression": "@{-7 == +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 == -7 => false",
-            "expression": "@{+7 == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != +7 => true",
-            "expression": "@{-7 != +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 != -7 => true",
-            "expression": "@{+7 != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == 7 => false",
-            "expression": "@{-7 == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == -7 => false",
-            "expression": "@{7 == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != 7 => true",
-            "expression": "@{-7 != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != -7 => true",
-            "expression": "@{7 != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == -7 => true",
-            "expression": "@{-7 == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != -7 => false",
-            "expression": "@{-7 != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == 15 => false",
-            "expression": "@{7 == 15}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "15 == 7 => false",
-            "expression": "@{15 == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != 15 => true",
-            "expression": "@{7 != 15}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "15 != 7 => true",
-            "expression": "@{15 != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a == b => true",
-            "expression": "@{a == b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a != b => false",
-            "expression": "@{a != b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a == b => false (1)",
-            "expression": "@{a == b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == a => false (1)",
-            "expression": "@{b == a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a != b => true (1)",
-            "expression": "@{a != b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != a => true (1)",
-            "expression": "@{b != a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a == +b => true",
-            "expression": "@{a == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == a => true",
-            "expression": "@{+b == a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a != +b => false",
-            "expression": "@{a != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != a => false",
-            "expression": "@{+b != a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a == +b => false",
-            "expression": "@{a == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == a => false",
-            "expression": "@{+b == a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a != +b => true",
-            "expression": "@{a != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != a => true",
-            "expression": "@{+b != a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a == +b => false",
-            "expression": "@{-a == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == -a => false",
-            "expression": "@{+b == -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a != +b => true",
-            "expression": "@{-a != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != -a => true",
-            "expression": "@{+b != -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a == +b => true",
-            "expression": "@{-a == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == -a => true",
-            "expression": "@{+b == -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a != +b => false",
-            "expression": "@{-a != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != -a => false",
-            "expression": "@{+b != -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a == b => false",
-            "expression": "@{-a == b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == -a => false",
-            "expression": "@{b == -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a != b => true",
-            "expression": "@{-a != b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != -a => true",
-            "expression": "@{b != -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a == b => true",
-            "expression": "@{-a == b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == -a => true",
-            "expression": "@{b == -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a != b => false",
-            "expression": "@{-a != b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != -a => false",
-            "expression": "@{b != -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a == -b => true",
-            "expression": "@{-a == -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a != -b => false",
-            "expression": "@{-a != -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a == -b => false",
-            "expression": "@{-a == -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b == -a => false",
-            "expression": "@{-b == -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a != -b => true",
-            "expression": "@{-a != -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b != -a => true",
-            "expression": "@{-b != -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a == b => false (2)",
-            "expression": "@{a == b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 15,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == a => false (2)",
-            "expression": "@{b == a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 15,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a != b => true (2)",
-            "expression": "@{a != b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 15,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != a => true (2)",
-            "expression": "@{b != a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 15,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == b => true",
-            "expression": "@{7 == b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == 7 => true",
-            "expression": "@{b == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != b => false",
-            "expression": "@{7 != b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != 7 => false",
-            "expression": "@{b != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == b => false (1)",
-            "expression": "@{7 == b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == 7 => false (1)",
-            "expression": "@{b == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != b => true (1)",
-            "expression": "@{7 != b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != 7 => true (1)",
-            "expression": "@{b != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == +b => true",
-            "expression": "@{7 == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == 7 => true",
-            "expression": "@{+b == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != +b => false",
-            "expression": "@{7 != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != 7 => false",
-            "expression": "@{+b != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == +b => false",
-            "expression": "@{7 == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == 7 => false",
-            "expression": "@{+b == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != +b => true",
-            "expression": "@{7 != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != 7 => true",
-            "expression": "@{+b != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 == b => true",
-            "expression": "@{+7 == b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == +7 => true",
-            "expression": "@{b == +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 != b => false",
-            "expression": "@{+7 != b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != +7 => false",
-            "expression": "@{b != +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 == b => false",
-            "expression": "@{+7 == b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == +7 => false",
-            "expression": "@{b == +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 != b => true",
-            "expression": "@{+7 != b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != +7 => true",
-            "expression": "@{b != +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 == +b => true",
-            "expression": "@{+7 == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == +7 => true",
-            "expression": "@{+b == +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 != +b => false",
-            "expression": "@{+7 != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != +7 => false",
-            "expression": "@{+b != +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 == +b => false",
-            "expression": "@{+7 == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == +7 => false",
-            "expression": "@{+b == +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 != +b => true",
-            "expression": "@{+7 != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != +7 => true",
-            "expression": "@{+b != +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == +b => false",
-            "expression": "@{-7 == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == -7 => false",
-            "expression": "@{+b == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != +b => true",
-            "expression": "@{-7 != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != -7 => true",
-            "expression": "@{+b != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == +b => true",
-            "expression": "@{-7 == +b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b == -7 => true",
-            "expression": "@{+b == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != +b => false",
-            "expression": "@{-7 != +b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+b != -7 => false",
-            "expression": "@{+b != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == b => false",
-            "expression": "@{-7 == b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == -7 => false",
-            "expression": "@{b == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != b => true",
-            "expression": "@{-7 != b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != -7 => true",
-            "expression": "@{b != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == b => true",
-            "expression": "@{-7 == b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == -7 => true",
-            "expression": "@{b == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != b => false",
-            "expression": "@{-7 != b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != -7 => false",
-            "expression": "@{b != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == -b => true",
-            "expression": "@{-7 == -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b == -7 => true",
-            "expression": "@{-b == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != -b => false",
-            "expression": "@{-7 != -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b != -7 => false",
-            "expression": "@{-b != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 == -b => false",
-            "expression": "@{-7 == -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b == -7 => false",
-            "expression": "@{-b == -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 != -b => true",
-            "expression": "@{-7 != -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b != -7 => true",
-            "expression": "@{-b != -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == b => false (2)",
-            "expression": "@{7 == b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 15,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b == 7 => false (2)",
-            "expression": "@{b == 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 15,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != b => true (2)",
-            "expression": "@{7 != b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 15,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b != 7 => true (2)",
-            "expression": "@{b != 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 15,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
+  "cases": [
+    {
+      "expression": "@{7 == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{70000000000 == 70000000000}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{7 != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{7 == +7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{+7 == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{7 != +7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{+7 != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-7 == +7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{+7 == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-7 != +7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{+7 != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-7 == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{7 == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-7 != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{7 != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-7 == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{-7 != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{7 == 15}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{15 == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{7 != 15}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{15 != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a == b => true",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
         }
-    ]
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a != b => false",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a == b => false (1)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == a => false (1)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a != b => true (1)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != a => true (1)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a == +b => true",
+      "expression": "@{a == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == a => true",
+      "expression": "@{+b == a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a != +b => false",
+      "expression": "@{a != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != a => false",
+      "expression": "@{+b != a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a == +b => false",
+      "expression": "@{a == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == a => false",
+      "expression": "@{+b == a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a != +b => true",
+      "expression": "@{a != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != a => true",
+      "expression": "@{+b != a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a == +b => false",
+      "expression": "@{-a == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == -a => false",
+      "expression": "@{+b == -a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a != +b => true",
+      "expression": "@{-a != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != -a => true",
+      "expression": "@{+b != -a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a == +b => true",
+      "expression": "@{-a == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == -a => true",
+      "expression": "@{+b == -a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a != +b => false",
+      "expression": "@{-a != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != -a => false",
+      "expression": "@{+b != -a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a == b => false",
+      "expression": "@{-a == b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == -a => false",
+      "expression": "@{b == -a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a != b => true",
+      "expression": "@{-a != b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != -a => true",
+      "expression": "@{b != -a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a == b => true",
+      "expression": "@{-a == b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == -a => true",
+      "expression": "@{b == -a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a != b => false",
+      "expression": "@{-a != b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != -a => false",
+      "expression": "@{b != -a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a == -b => true",
+      "expression": "@{-a == -b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a != -b => false",
+      "expression": "@{-a != -b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a == -b => false",
+      "expression": "@{-a == -b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-b == -a => false",
+      "expression": "@{-b == -a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a != -b => true",
+      "expression": "@{-a != -b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-b != -a => true",
+      "expression": "@{-b != -a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a == b => false (2)",
+      "expression": "@{a == b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 15,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == a => false (2)",
+      "expression": "@{b == a}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 15,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a != b => true (2)",
+      "expression": "@{a != b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 15,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != a => true (2)",
+      "expression": "@{b != a}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 15,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 == b => true",
+      "expression": "@{7 == b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == 7 => true",
+      "expression": "@{b == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 != b => false",
+      "expression": "@{7 != b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != 7 => false",
+      "expression": "@{b != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 == b => false (1)",
+      "expression": "@{7 == b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == 7 => false (1)",
+      "expression": "@{b == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 != b => true (1)",
+      "expression": "@{7 != b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != 7 => true (1)",
+      "expression": "@{b != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 == +b => true",
+      "expression": "@{7 == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == 7 => true",
+      "expression": "@{+b == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 != +b => false",
+      "expression": "@{7 != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != 7 => false",
+      "expression": "@{+b != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 == +b => false",
+      "expression": "@{7 == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == 7 => false",
+      "expression": "@{+b == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 != +b => true",
+      "expression": "@{7 != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != 7 => true",
+      "expression": "@{+b != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+7 == b => true",
+      "expression": "@{+7 == b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == +7 => true",
+      "expression": "@{b == +7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+7 != b => false",
+      "expression": "@{+7 != b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != +7 => false",
+      "expression": "@{b != +7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+7 == b => false",
+      "expression": "@{+7 == b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == +7 => false",
+      "expression": "@{b == +7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+7 != b => true",
+      "expression": "@{+7 != b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != +7 => true",
+      "expression": "@{b != +7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+7 == +b => true",
+      "expression": "@{+7 == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == +7 => true",
+      "expression": "@{+b == +7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+7 != +b => false",
+      "expression": "@{+7 != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != +7 => false",
+      "expression": "@{+b != +7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+7 == +b => false",
+      "expression": "@{+7 == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == +7 => false",
+      "expression": "@{+b == +7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+7 != +b => true",
+      "expression": "@{+7 != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != +7 => true",
+      "expression": "@{+b != +7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 == +b => false",
+      "expression": "@{-7 == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == -7 => false",
+      "expression": "@{+b == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 != +b => true",
+      "expression": "@{-7 != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != -7 => true",
+      "expression": "@{+b != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 == +b => true",
+      "expression": "@{-7 == +b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b == -7 => true",
+      "expression": "@{+b == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 != +b => false",
+      "expression": "@{-7 != +b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+b != -7 => false",
+      "expression": "@{+b != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 == b => false",
+      "expression": "@{-7 == b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == -7 => false",
+      "expression": "@{b == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 != b => true",
+      "expression": "@{-7 != b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != -7 => true",
+      "expression": "@{b != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 == b => true",
+      "expression": "@{-7 == b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == -7 => true",
+      "expression": "@{b == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 != b => false",
+      "expression": "@{-7 != b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != -7 => false",
+      "expression": "@{b != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 == -b => true",
+      "expression": "@{-7 == -b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-b == -7 => true",
+      "expression": "@{-b == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 != -b => false",
+      "expression": "@{-7 != -b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-b != -7 => false",
+      "expression": "@{-b != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 == -b => false",
+      "expression": "@{-7 == -b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-b == -7 => false",
+      "expression": "@{-b == -7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-7 != -b => true",
+      "expression": "@{-7 != -b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-b != -7 => true",
+      "expression": "@{-b != -7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 == b => false (2)",
+      "expression": "@{7 == b}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 15,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b == 7 => false (2)",
+      "expression": "@{b == 7}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 15,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "7 != b => true (2)",
+      "expression": "@{7 != b}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 15,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "b != 7 => true (2)",
+      "expression": "@{b != 7}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 15,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
 }

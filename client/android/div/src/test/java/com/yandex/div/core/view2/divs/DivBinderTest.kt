@@ -43,7 +43,6 @@ open class DivBinderTest {
     internal val imageLoader = mock<DivImageLoader>()
 
     internal val context = RuntimeEnvironment.application
-    private val expressionResolver = mock<ExpressionResolver>()
     private val oldExpressionResolver = mock<ExpressionResolver>()
     internal val divView = mock<Div2View> {
         on { div2Component } doReturn mockComponent
@@ -54,7 +53,7 @@ open class DivBinderTest {
         on { oldExpressionResolver } doReturn oldExpressionResolver
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
     }
-    internal val bindingContext = BindingContext(divView, expressionResolver)
+    internal val bindingContext = BindingContext.createEmpty(divView)
     private val divExtensionController = DivExtensionController(emptyList())
 
     internal val visitor: ReleaseViewVisitor = spy(

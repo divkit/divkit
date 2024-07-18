@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivRadialGradientRelativeRadius with EquatableMixin {
   const DivRadialGradientRelativeRadius({
@@ -17,6 +17,13 @@ class DivRadialGradientRelativeRadius with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  DivRadialGradientRelativeRadius copyWith({
+    Expression<DivRadialGradientRelativeRadiusValue>? value,
+  }) =>
+      DivRadialGradientRelativeRadius(
+        value: value ?? this.value,
+      );
 
   static DivRadialGradientRelativeRadius? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

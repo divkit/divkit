@@ -1,51 +1,50 @@
 import CoreGraphics
 
-import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivPager: DivBlockModeling, DivGalleryProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
-      to: { try makeBaseBlock(context: context) },
-      context: context,
-      actionsHolder: nil,
-      options: .noPaddings
-    )
+    let path = context.parentPath + (id ?? DivPager.type)
+    let pagerContext = context.modifying(parentPath: path)
+    return try modifyError({ DivBlockModelingError($0.message, path: path) }) {
+      try applyBaseProperties(
+        to: { try makeBaseBlock(context: pagerContext) },
+        context: pagerContext,
+        actionsHolder: nil,
+        applyPaddings: false
+      )
+    }
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let pagerPath = context.parentPath + (id ?? DivPager.type)
     let expressionResolver = context.expressionResolver
-    let itemContext = context.modifying(parentPath: pagerPath)
-    let pagerModelPath = id.map {
+    let pagerPath = id.map {
       PagerPath(
         cardId: context.cardId.rawValue,
         pagerId: $0
       )
     }
-
-    return try modifyError({ DivBlockModelingError($0.message, path: pagerPath) }) {
-      let items = nonNilItems
-      let gallery = try makeGalleryModel(
-        context: itemContext,
-        direction: resolveOrientation(expressionResolver).direction,
-        spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
-        crossSpacing: 0,
-        defaultAlignment: .center,
-        scrollMode: .autoPaging,
-        infiniteScroll: resolveInfiniteScroll(expressionResolver)
-      )
-      return try PagerBlock(
-        pagerPath: pagerModelPath,
-        layoutMode: layoutMode.resolve(expressionResolver),
-        gallery: gallery,
-        selectedActions: items.map { $0.value.makeSelectedActions(context: itemContext) },
-        state: getState(context: context, path: pagerPath, numberOfPages: items.count),
-        widthTrait: resolveWidthTrait(context),
-        heightTrait: resolveHeightTrait(context)
-      )
-    }
+    let items = nonNilItems
+    let gallery = try makeGalleryModel(
+      context: context,
+      direction: resolveOrientation(expressionResolver).direction,
+      spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
+      crossSpacing: 0,
+      defaultAlignment: .center,
+      scrollMode: .autoPaging(inertionEnabled: false),
+      infiniteScroll: resolveInfiniteScroll(expressionResolver),
+      transformation: pageTransformation?.resolve(expressionResolver)
+    )
+    return try PagerBlock(
+      pagerPath: pagerPath,
+      layoutMode: layoutMode.resolve(expressionResolver),
+      gallery: gallery,
+      selectedActions: items.map { $0.value.makeSelectedActions(context: context) },
+      state: getState(context: context, path: context.parentPath, numberOfPages: items.count),
+      widthTrait: resolveWidthTrait(context),
+      heightTrait: resolveHeightTrait(context)
+    )
   }
 
   private func getState(
@@ -66,7 +65,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
 }
 
 extension DivPager.Orientation {
-  var direction: GalleryViewModel.Direction {
+  var direction: ScrollDirection {
     switch self {
     case .horizontal: .horizontal
     case .vertical: .vertical
@@ -95,5 +94,28 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> [UserInterfaceAction] {
     selectedActions?.uiActions(context: context) ?? []
+  }
+}
+
+extension DivPageTransformation {
+  fileprivate func resolve(_ resolver: ExpressionResolver) -> ElementsTransformation {
+    switch self {
+    case let .divPageTransformationSlide(transformation):
+      return .init(
+        nextElementAlpha: transformation.resolveNextPageAlpha(resolver),
+        previousElementAlpha: transformation.resolvePreviousPageAlpha(resolver),
+        nextElementScale: transformation.resolveNextPageScale(resolver),
+        previousElementScale: transformation.resolvePreviousPageScale(resolver),
+        style: .slide
+      )
+    case let .divPageTransformationOverlap(transformation):
+      return .init(
+        nextElementAlpha: transformation.resolveNextPageAlpha(resolver),
+        previousElementAlpha: transformation.resolvePreviousPageAlpha(resolver),
+        nextElementScale: transformation.resolveNextPageScale(resolver),
+        previousElementScale: transformation.resolvePreviousPageScale(resolver),
+        style: .overlap
+      )
+    }
   }
 }

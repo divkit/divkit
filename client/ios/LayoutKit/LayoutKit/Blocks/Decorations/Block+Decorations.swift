@@ -1,8 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 extension Block {
   public var wrappingWidthTrait: LayoutTrait {

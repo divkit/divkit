@@ -2,40 +2,29 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'div_neighbour_page_size.dart';
-import 'div_page_size.dart';
+import 'package:divkit/src/generated_sources/div_neighbour_page_size.dart';
+import 'package:divkit/src/generated_sources/div_page_size.dart';
 
 class DivPagerLayoutMode with EquatableMixin {
-  const DivPagerLayoutMode(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is DivNeighbourPageSize) {
-      return value;
-    }
-    if (value is DivPageSize) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivPagerLayoutMode");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(DivNeighbourPageSize) divNeighbourPageSize,
     required T Function(DivPageSize) divPageSize,
   }) {
-    final value = _value;
-    if (value is DivNeighbourPageSize) {
-      return divNeighbourPageSize(value);
-    }
-    if (value is DivPageSize) {
-      return divPageSize(value);
+    switch (_index) {
+      case 0:
+        return divNeighbourPageSize(
+          value as DivNeighbourPageSize,
+        );
+      case 1:
+        return divPageSize(
+          value as DivPageSize,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivPagerLayoutMode");
@@ -46,33 +35,45 @@ class DivPagerLayoutMode with EquatableMixin {
     T Function(DivPageSize)? divPageSize,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is DivNeighbourPageSize && divNeighbourPageSize != null) {
-      return divNeighbourPageSize(value);
-    }
-    if (value is DivPageSize && divPageSize != null) {
-      return divPageSize(value);
+    switch (_index) {
+      case 0:
+        if (divNeighbourPageSize != null) {
+          return divNeighbourPageSize(
+            value as DivNeighbourPageSize,
+          );
+        }
+        break;
+      case 1:
+        if (divPageSize != null) {
+          return divPageSize(
+            value as DivPageSize,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivPagerLayoutMode.divNeighbourPageSize(
-    DivNeighbourPageSize value,
-  ) : _value = value;
+    DivNeighbourPageSize obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivPagerLayoutMode.divPageSize(
-    DivPageSize value,
-  ) : _value = value;
+    DivPageSize obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivPagerLayoutMode? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     switch (json['type']) {
-      case DivPageSize.type:
-        return DivPagerLayoutMode(DivPageSize.fromJson(json)!);
       case DivNeighbourPageSize.type:
-        return DivPagerLayoutMode(DivNeighbourPageSize.fromJson(json)!);
+        return DivPagerLayoutMode.divNeighbourPageSize(
+            DivNeighbourPageSize.fromJson(json)!);
+      case DivPageSize.type:
+        return DivPagerLayoutMode.divPageSize(DivPageSize.fromJson(json)!);
     }
     return null;
   }

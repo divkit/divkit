@@ -4,40 +4,26 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.data.Variable
 
 @Mockable
-internal class VariableSource(
-    private val variables: Map<String, Variable>,
-    private val requestObserver: (variableName: String) -> Unit,
-    private val declarationObservers: MutableCollection<(Variable) -> Unit>
-) {
+internal interface VariableSource {
+    fun getMutableVariable(name: String): Variable?
 
-    internal fun getMutableVariable(name: String): Variable? {
-        requestObserver.invoke(name)
-        return variables[name]
-    }
+    fun observeDeclaration(observer: (Variable) -> Unit)
 
-    internal fun observeDeclaration(observer: (Variable) -> Unit) {
-        declarationObservers.add(observer)
-    }
+    fun observeVariables(observer: (Variable) -> Unit)
 
-    internal fun observeVariables(observer: (Variable) -> Unit) {
-        variables.values.forEach {
-            it.addObserver(observer)
-        }
-    }
+    fun receiveVariablesUpdates(observer: (Variable) -> Unit)
 
-    internal fun receiveVariablesUpdates(observer: (Variable) -> Unit) {
-        variables.values.forEach {
-            observer.invoke(it)
-        }
-    }
+    fun removeDeclarationObserver(observer: (Variable) -> Unit)
 
-    internal fun removeDeclarationObserver(observer: (Variable) -> Unit) {
-        declarationObservers.remove(observer)
-    }
+    fun removeVariablesObserver(observer: (Variable) -> Unit)
 
-    internal fun removeVariablesObserver(observer: (Variable) -> Unit) {
-        variables.values.forEach {
-            it.removeObserver(observer)
+    companion object {
+        operator fun invoke(
+            variables: Map<String, Variable>,
+            requestObserver: (variableName: String) -> Unit,
+            declarationObservers: MutableCollection<(Variable) -> Unit>
+        ): VariableSource {
+            return SingleVariableSource(variables, requestObserver, declarationObservers)
         }
     }
 }

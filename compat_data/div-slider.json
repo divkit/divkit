@@ -1,0 +1,17 @@
+{
+    "features": [{
+        "id": "slider_font_weight_value",
+        "name": "Slider <code>font_weight_value</code> property",
+        "compat": {
+            "web": {
+                "version_added": "30.6.0"
+            },
+            "ios": {
+                "version_added": "30.6.0"
+            },
+            "android": {
+                "version_added": "30.7.0"
+            }
+        }
+    }]
+}

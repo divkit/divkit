@@ -79,6 +79,7 @@ class CollectionItemBuilder internal constructor(
         operator fun plus(additive: Properties): Prototype = Prototype(
             Properties(
                 div = additive.div ?: properties.div,
+                id = additive.id ?: properties.id,
                 selector = additive.selector ?: properties.selector,
             )
         )
@@ -89,6 +90,10 @@ class CollectionItemBuilder internal constructor(
              */
             val div: Property<Div>?,
             /**
+             * `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
+             */
+            val id: Property<String>?,
+            /**
              * A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
              * Default value: `true`.
              */
@@ -98,6 +103,7 @@ class CollectionItemBuilder internal constructor(
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
                 result.tryPutProperty("div", div)
+                result.tryPutProperty("id", id)
                 result.tryPutProperty("selector", selector)
                 return result
             }
@@ -217,90 +223,108 @@ fun CollectionItemBuilder.asList() = listOf(this)
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun DivScope.collectionItemBuilderPrototype(
     `use named arguments`: Guard = Guard.instance,
     div: Div? = null,
+    id: String? = null,
     selector: Boolean? = null,
 ): CollectionItemBuilder.Prototype = CollectionItemBuilder.Prototype(
     CollectionItemBuilder.Prototype.Properties(
         div = valueOrNull(div),
+        id = valueOrNull(id),
         selector = valueOrNull(selector),
     )
 )
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun DivScope.collectionItemBuilderPrototypeProps(
     `use named arguments`: Guard = Guard.instance,
     div: Div? = null,
+    id: String? = null,
     selector: Boolean? = null,
 ) = CollectionItemBuilder.Prototype.Properties(
     div = valueOrNull(div),
+    id = valueOrNull(id),
     selector = valueOrNull(selector),
 )
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun TemplateScope.collectionItemBuilderPrototypeRefs(
     `use named arguments`: Guard = Guard.instance,
     div: ReferenceProperty<Div>? = null,
+    id: ReferenceProperty<String>? = null,
     selector: ReferenceProperty<Boolean>? = null,
 ) = CollectionItemBuilder.Prototype.Properties(
     div = div,
+    id = id,
     selector = selector,
 )
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun CollectionItemBuilder.Prototype.override(
     `use named arguments`: Guard = Guard.instance,
     div: Div? = null,
+    id: String? = null,
     selector: Boolean? = null,
 ): CollectionItemBuilder.Prototype = CollectionItemBuilder.Prototype(
     CollectionItemBuilder.Prototype.Properties(
         div = valueOrNull(div) ?: properties.div,
+        id = valueOrNull(id) ?: properties.id,
         selector = valueOrNull(selector) ?: properties.selector,
     )
 )
 
 /**
  * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun CollectionItemBuilder.Prototype.defer(
     `use named arguments`: Guard = Guard.instance,
     div: ReferenceProperty<Div>? = null,
+    id: ReferenceProperty<String>? = null,
     selector: ReferenceProperty<Boolean>? = null,
 ): CollectionItemBuilder.Prototype = CollectionItemBuilder.Prototype(
     CollectionItemBuilder.Prototype.Properties(
         div = div ?: properties.div,
+        id = id ?: properties.id,
         selector = selector ?: properties.selector,
     )
 )
 
 /**
+ * @param id `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
  * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun CollectionItemBuilder.Prototype.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    id: ExpressionProperty<String>? = null,
     selector: ExpressionProperty<Boolean>? = null,
 ): CollectionItemBuilder.Prototype = CollectionItemBuilder.Prototype(
     CollectionItemBuilder.Prototype.Properties(
         div = properties.div,
+        id = id ?: properties.id,
         selector = selector ?: properties.selector,
     )
 )

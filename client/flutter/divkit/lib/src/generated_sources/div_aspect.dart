@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivAspect with EquatableMixin {
   const DivAspect({
@@ -16,6 +16,13 @@ class DivAspect with EquatableMixin {
   List<Object?> get props => [
         ratio,
       ];
+
+  DivAspect copyWith({
+    Expression<double>? ratio,
+  }) =>
+      DivAspect(
+        ratio: ratio ?? this.ratio,
+      );
 
   static DivAspect? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

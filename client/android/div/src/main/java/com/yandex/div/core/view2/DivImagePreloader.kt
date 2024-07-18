@@ -102,14 +102,14 @@ class DivImagePreloader @Inject constructor(
         override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
             if (visitContainers) {
-                data.value.nonNullItems.forEach { visit(it, resolver) }
+                data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
             }
         }
 
         override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
             if (visitContainers) {
-                data.value.nonNullItems.forEach { visit(it, resolver) }
+                data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
             }
         }
 

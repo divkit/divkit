@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [ActionArrayInsertValue], [ActionArrayRemoveValue], [ActionSetVariable], [ActionFocusElement], [ActionClearFocus], [ActionCopyToClipboard].
+ * Possible values: [ActionArrayInsertValue], [ActionArrayRemoveValue], [ActionArraySetValue], [ActionClearFocus], [ActionCopyToClipboard], [ActionDictSetValue], [ActionFocusElement], [ActionSetVariable].
  */
 @Generated
 sealed interface ActionTyped

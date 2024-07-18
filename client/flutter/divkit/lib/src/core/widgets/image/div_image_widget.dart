@@ -1,3 +1,6 @@
+// Since we still support a wide range of flutter_svg versions, we cannot migrate to the new API yet.
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -46,6 +49,8 @@ class _DivImageWidgetState extends State<DivImageWidget> {
         data: widget.data,
         action: widget.data.action,
         actions: widget.data.actions,
+        longtapActions: widget.data.longtapActions,
+        actionAnimation: widget.data.actionAnimation,
         child: StreamBuilder<DivImageModel>(
           stream: stream,
           builder: (context, snapshot) {

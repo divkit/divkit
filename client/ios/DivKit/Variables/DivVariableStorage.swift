@@ -1,6 +1,6 @@
 import Foundation
 
-import BasePublic
+import VGSL
 
 /// Stores variables.
 /// Use ``DivVariableStorage`` to provide external variables into `DivKit`.
@@ -12,18 +12,24 @@ public final class DivVariableStorage {
 
   private let outerStorage: DivVariableStorage?
 
-  private var values = DivVariables()
-  private let lock = RWLock()
+  private var _values = DivVariables()
+  private let lock = AllocatedUnfairLock()
 
   /// Gets all available variables including variables from outer storage.
   public var allValues: DivVariables {
-    lock.read {
+    lock.withLock {
       _allValues
     }
   }
 
+  var values: DivVariables {
+    lock.withLock {
+      _values
+    }
+  }
+
   private var _allValues: DivVariables {
-    (outerStorage?.allValues ?? [:]) + values
+    (outerStorage?.allValues ?? [:]) + _values
   }
 
   private let changeEventsPipe = SignalPipe<ChangeEvent>()
@@ -48,8 +54,8 @@ public final class DivVariableStorage {
   /// Gets variable value.
   /// If variable with the given name not exists gets value from the outer storage.
   public func getValue<T>(_ name: DivVariableName) -> T? {
-    let variable = lock.read {
-      values[name]
+    let variable = lock.withLock {
+      _values[name]
     }
     if let variable {
       return variable.typedValue()
@@ -57,14 +63,22 @@ public final class DivVariableStorage {
     return outerStorage?.getValue(name)
   }
 
+  /// Gets value indicating if variable with the given name is availabale.
+  public func hasValue(_ name: DivVariableName) -> Bool {
+    let variable = lock.withLock {
+      _values[name]
+    }
+    return variable != nil || outerStorage?.hasValue(name) ?? false
+  }
+
   /// Puts variable into the storage.
   /// Updates variable value if a variable with the given name already exists.
   /// Does not affect outer storage.
   public func put(name: DivVariableName, value: DivVariableValue) {
-    var oldValues: DivVariables = [:]
-    lock.write {
-      oldValues = _allValues
-      values[name] = value
+    let oldValues = lock.withLock {
+      let oldValues = _allValues
+      _values[name] = value
+      return oldValues
     }
     if oldValues[name] != value {
       notify(ChangeEvent(changedVariables: [name]))
@@ -78,10 +92,10 @@ public final class DivVariableStorage {
     _ variables: DivVariables,
     notifyObservers: Bool = true
   ) {
-    var changedVariables = Set<DivVariableName>()
-    lock.write {
+    let changedVariables = lock.withLock {
+      var changedVariables = Set<DivVariableName>()
       let oldValues = _allValues
-      values = values + variables
+      _values = _values + variables
       if notifyObservers {
         for (name, value) in variables {
           if oldValues[name] != value {
@@ -89,6 +103,7 @@ public final class DivVariableStorage {
           }
         }
       }
+      return changedVariables
     }
     if !changedVariables.isEmpty {
       notify(ChangeEvent(changedVariables: changedVariables))
@@ -101,13 +116,13 @@ public final class DivVariableStorage {
     _ variables: DivVariables,
     notifyObservers: Bool = true
   ) {
-    var changedVariables = Set<DivVariableName>()
-    lock.write {
+    let changedVariables = lock.withLock {
       let oldValues = _allValues
-      values = variables
+      _values = variables
       if notifyObservers {
-        changedVariables = makeChangedVariables(old: oldValues, new: variables)
+        return makeChangedVariables(old: oldValues, new: variables)
       }
+      return []
     }
     if !changedVariables.isEmpty {
       notify(ChangeEvent(changedVariables: changedVariables))
@@ -117,34 +132,30 @@ public final class DivVariableStorage {
   /// Updates variable value.
   /// If variable with the given name not exists updates value in the outer storage.
   public func update(name: DivVariableName, value: DivVariableValue) {
-    update(name: name, valueFactory: { _ in value })
+    _ = update(name: name, valueFactory: { _ in value })
   }
 
   /// Clears the storage.
   /// Does not affect outer storage.
   public func clear() {
-    lock.write {
-      values = DivVariables()
+    lock.withLock {
+      _values = DivVariables()
     }
   }
 
   func update(
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
-  ) {
-    var isUpdated = false
-    var hasLocalValue = false
-    lock.write {
-      guard let oldValue = values[name] else {
-        return
+  ) -> Bool {
+    let (isUpdated, hasLocalValue) = lock.withLock {
+      guard let oldValue = _values[name] else {
+        return (false, false)
       }
-
-      hasLocalValue = true
-
       if let value = valueFactory(oldValue), value != oldValue {
-        isUpdated = true
-        values[name] = value
+        _values[name] = value
+        return (true, true)
       }
+      return (false, true)
     }
 
     if isUpdated {
@@ -152,14 +163,16 @@ public final class DivVariableStorage {
     }
 
     if hasLocalValue {
-      return
+      return isUpdated
     }
 
     if let outerStorage {
-      outerStorage.update(name: name, valueFactory: valueFactory)
+      _ = outerStorage.update(name: name, valueFactory: valueFactory)
     } else {
       DivKitLogger.error("Variable is not declared: \(name)")
     }
+
+    return false
   }
 
   public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {

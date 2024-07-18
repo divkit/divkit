@@ -1,5 +1,4 @@
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 extension TextFieldBlock: CustomDebugStringConvertible {
   public var debugDescription: String {

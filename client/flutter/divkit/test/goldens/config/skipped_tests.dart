@@ -26,8 +26,7 @@ final skippedTestsMap = {
 };
 
 final skippedTests = [
-// # div-background
-
+  // # div-background
   ...const [
     'example/assets/test_data/snapshot_test_data/div-background/nine-patch-rhombs-horizontal-insets.json',
     'example/assets/test_data/snapshot_test_data/div-background/nine-patch-rhombs-large-all-insets.json',
@@ -66,6 +65,8 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-container/wrap/vertical-orientation-with-separators-using-paddings-rtl.json',
     'example/assets/test_data/snapshot_test_data/div-container/block-paddings.json',
     'example/assets/test_data/snapshot_test_data/div-container/match-parent-with-big-content.json',
+    'example/assets/test_data/snapshot_test_data/div-container/fixed-size-with-paddings.json',
+    'example/assets/test_data/snapshot_test_data/div-container/corners_radius.json'
   ].map(
     (e) => _SkipTest(
       e,
@@ -81,29 +82,12 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-container/baseline-with-images.json',
     'example/assets/test_data/snapshot_test_data/div-input/text-alignment-property.json',
     'example/assets/test_data/snapshot_test_data/div-input/text-alignment-property-single-line.json',
+    'example/assets/test_data/snapshot_test_data/div-input/all-attributes.json'
   ].map(
     (e) => _SkipTest(
       e,
       _Reason.divNotSupported,
       'Baseline alignment not supported yet',
-    ),
-  ),
-
-  ...const [
-    'example/assets/test_data/snapshot_test_data/div-container/container-alignment-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/container-horizontal-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/container-overlap-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/block-paddings-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/block-margins-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/block-alignment-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-input/rtl-input.json',
-    'example/assets/test_data/snapshot_test_data/div-text/text-alignment-rtl.json',
-    'example/assets/test_data/snapshot_test_data/div-container/block-paddings-rtl.json',
-  ].map(
-    (e) => _SkipTest(
-      e,
-      _Reason.divNotSupported,
-      'RTL is not configurable in tests yet',
     ),
   ),
 
@@ -235,6 +219,7 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-container/item_builder/item-builder.json',
     'example/assets/test_data/snapshot_test_data/div-container/item_builder/non-unique-matched-selectors.json',
     'example/assets/test_data/snapshot_test_data/div-container/item_builder/nested-builders.json',
+    'example/assets/test_data/snapshot_test_data/div-container/item_builder/index.json'
   ].map(
     (e) => _SkipTest(
       e,
@@ -395,17 +380,20 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-gallery/horizontal-gallery-scrollbar.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/horizontal-gallery-vertical-shrinking.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/horizontal-gallery-with-columns.json',
-    'example/assets/test_data/snapshot_test_data/div-gallery/rtl_gallery.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-fixed-height.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-items-not-fit.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-items-resizable-height.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-resizable-height.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-scrollbar.json',
     'example/assets/test_data/snapshot_test_data/div-gallery/vertical-gallery-with-columns.json',
+    'example/assets/test_data/snapshot_test_data/div-gallery/vertical-grid-gallery-wrapped-item-spacing.json',
+    'example/assets/test_data/snapshot_test_data/div-gallery/item-builder/item-builder.json',
+    'example/assets/test_data/snapshot_test_data/div-gallery/item-builder/nested-builders.json',
+    'example/assets/test_data/snapshot_test_data/div-gallery/item-builder/non-unique-matched-selectors.json'
   ].map(
     (e) => _SkipTest(
       e,
-      _Reason.divNotSupported,
+      _Reason.unknown,
     ),
   ),
 
@@ -482,6 +470,7 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-grid/wrap-content-weighted-items.json',
     'example/assets/test_data/snapshot_test_data/div-grid/content-alignment.json',
     'example/assets/test_data/snapshot_test_data/div-grid/wrap-content-greater-than-parent.json',
+    'example/assets/test_data/snapshot_test_data/div-grid/match-parent-items-with-margins.json'
   ].map(
     (e) => _SkipTest(
       e,
@@ -703,6 +692,8 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-size/wrap-content/min-max-constrained-false-wrap-vertical.json',
     'example/assets/test_data/snapshot_test_data/div-size/wrap-content/text-min-max-constrained-false-horizontal.json',
     'example/assets/test_data/snapshot_test_data/div-size/wrap-content/text-min-max-constrained-false-overlap.json',
+    'example/assets/test_data/snapshot_test_data/div-size/padding/padding-bigger-than-box.json',
+    'example/assets/test_data/snapshot_test_data/div-size/padding/padding-smaller-than-box.json'
   ].map(
     (e) => _SkipTest(
       e,
@@ -753,6 +744,7 @@ final skippedTests = [
 // # div-tabs
 
   ...[
+    'example/assets/test_data/snapshot_test_data/div-tabs/title-delimiters.json',
     'example/assets/test_data/snapshot_test_data/div-tabs/too-big-constrained-tabs.json',
     'example/assets/test_data/snapshot_test_data/div-tabs/spaces-in-title.json',
     'example/assets/test_data/snapshot_test_data/div-tabs/corners_radius.json',
@@ -806,16 +798,24 @@ final skippedTests = [
 
   ...[
     'example/assets/test_data/snapshot_test_data/div-text/ranges-line-height-top-offset.json',
-    'example/assets/test_data/snapshot_test_data/div-text/strike.json',
-    'example/assets/test_data/snapshot_test_data/div-text/underline.json',
-    'example/assets/test_data/snapshot_test_data/div-text/ranges-background-text.json',
     'example/assets/test_data/snapshot_test_data/div-text/ranges.json',
+  ].map(
+    (e) => _SkipTest(
+      e,
+      _Reason.crashesOnRenderFlexOverflow,
+      'Overflow in wrap content size',
+    ),
+  ),
+
+  ...[
+    'example/assets/test_data/snapshot_test_data/div-text/ranges-line-height-top-offset.json',
+    'example/assets/test_data/snapshot_test_data/div-text/ranges-background-text.json',
     'example/assets/test_data/snapshot_test_data/div-text/gradient-color-with-ranges.json',
   ].map(
     (e) => _SkipTest(
       e,
       _Reason.divNotSupported,
-      'Ranges not supported yet',
+      'Not supported by platform',
     ),
   ),
 

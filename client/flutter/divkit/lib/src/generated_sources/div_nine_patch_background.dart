@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_absolute_edge_insets.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_absolute_edge_insets.dart';
 
 class DivNinePatchBackground with EquatableMixin {
   const DivNinePatchBackground({
@@ -22,6 +22,15 @@ class DivNinePatchBackground with EquatableMixin {
         imageUrl,
         insets,
       ];
+
+  DivNinePatchBackground copyWith({
+    Expression<Uri>? imageUrl,
+    DivAbsoluteEdgeInsets? insets,
+  }) =>
+      DivNinePatchBackground(
+        imageUrl: imageUrl ?? this.imageUrl,
+        insets: insets ?? this.insets,
+      );
 
   static DivNinePatchBackground? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

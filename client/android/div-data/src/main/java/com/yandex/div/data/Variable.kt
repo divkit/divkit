@@ -8,6 +8,8 @@ import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.util.toBoolean
+import com.yandex.div.json.JSONSerializable
+import com.yandex.div2.BoolVariable
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -22,13 +24,13 @@ sealed class Variable {
         val defaultValue: String,
     ) : Variable() {
         internal var value: String = defaultValue
-        set(value) {
-            if (field == value) {
-                return
+            set(value) {
+                if (field == value) {
+                    return
+                }
+                field = value
+                notifyVariableChanged(this)
             }
-            field = value
-            notifyVariableChanged(this)
-        }
     }
 
     class IntegerVariable(
@@ -52,7 +54,8 @@ sealed class Variable {
 
     class BooleanVariable(
         override val name: String,
-        val defaultValue: Boolean) : Variable() {
+        val defaultValue: Boolean
+    ) : Variable() {
         internal var value: Boolean = defaultValue
             set(value) {
                 if (field == value) {
@@ -68,8 +71,10 @@ sealed class Variable {
         }
     }
 
-    class DoubleVariable(override val name: String,
-                         val defaultValue: Double) : Variable() {
+    class DoubleVariable(
+        override val name: String,
+        val defaultValue: Double
+    ) : Variable() {
         internal var value: Double = defaultValue
             set(value) {
                 if (field == value) {
@@ -89,7 +94,6 @@ sealed class Variable {
         override val name: String,
         val defaultValue: Int,
     ) : Variable() {
-
         internal var value: Color = Color(defaultValue)
             set(value) {
                 if (field == value) {
@@ -147,8 +151,8 @@ sealed class Variable {
     }
 
     class ArrayVariable(
-            override val name: String,
-            val defaultValue: JSONArray
+        override val name: String,
+        val defaultValue: JSONArray
     ): Variable() {
         internal var value: JSONArray = defaultValue
             set(value) {
@@ -291,11 +295,18 @@ sealed class Variable {
         }
     }
 
-    private fun String.parseAsJsonArray(): JSONArray {
-        return try {
-            JSONArray(this)
-        } catch (e: JSONException) {
-            throw VariableMutationException(cause = e)
+    fun writeToJSON(): JSONObject {
+        val serializable: JSONSerializable = when (this) {
+            is ArrayVariable -> com.yandex.div2.ArrayVariable(this.name, this.value)
+            is BooleanVariable -> BoolVariable(this.name, this.value)
+            is ColorVariable -> com.yandex.div2.ColorVariable(this.name, this.value.value)
+            is DictVariable -> com.yandex.div2.DictVariable(this.name, this.value)
+            is DoubleVariable -> com.yandex.div2.NumberVariable(this.name, this.value)
+            is IntegerVariable -> com.yandex.div2.IntegerVariable(this.name, this.value)
+            is StringVariable -> com.yandex.div2.StrVariable(this.name, this.value)
+            is UrlVariable -> com.yandex.div2.UrlVariable(this.name, this.value)
         }
+
+        return serializable.writeToJSON()
     }
 }

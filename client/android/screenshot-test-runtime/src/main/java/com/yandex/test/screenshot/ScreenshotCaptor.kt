@@ -64,10 +64,7 @@ class ScreenshotCaptor {
         val bitmap = ViewRasterizer.rasterize(view)
         Log.i(TAG, "saving view render to ${outputFile.absolutePath}")
 
-        val outputStream = FileOutputStream(outputFile)
-        outputStream.use {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-        }
+        bitmap.save(outputFile)
     }
 
     @MainThread
@@ -78,10 +75,7 @@ class ScreenshotCaptor {
         val pixelCopy = ViewRasterizer.pixelCopy(window, view)
         Log.i(TAG, "saving view pixel copy to ${outputFile.absolutePath}")
 
-        val outputStream = FileOutputStream(outputFile)
-        outputStream.use {
-            pixelCopy.compress(Bitmap.CompressFormat.PNG, 100, it)
-        }
+        pixelCopy.save(outputFile)
     }
 
     fun takeDeviceScreenshot(device: UiDevice, outputFile: File) {
@@ -120,5 +114,17 @@ class ScreenshotCaptor {
         }
 
         private val propertiesSaved = AtomicBoolean(false)
+
+        private fun Bitmap.save(outputFile: File) {
+            val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Bitmap.CompressFormat.WEBP_LOSSLESS
+            } else {
+                Bitmap.CompressFormat.PNG
+            }
+
+            outputFile.outputStream().use {
+                compress(format, 100, it)
+            }
+        }
     }
 }

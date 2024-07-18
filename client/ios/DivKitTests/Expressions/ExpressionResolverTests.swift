@@ -2,12 +2,12 @@ import XCTest
 
 @testable import DivKit
 
-import CommonCorePublic
 import Serialization
+import VGSL
 
 final class ExpressionResolverTests: XCTestCase {
   private var isErrorExpected = false
-  private var error: String? = nil
+  private var error: String?
 
   private var variables: DivVariables = [
     "array_var": .array(["value", [true, 123, 123.45] as [AnyHashable]]),
@@ -22,16 +22,17 @@ final class ExpressionResolverTests: XCTestCase {
   ]
 
   private lazy var expressionResolver = ExpressionResolver(
-    variables: variables,
+    variableValueProvider: { [unowned self] in
+      let varibleName = DivVariableName(rawValue: $0)
+      self.usedVariables.insert(varibleName)
+      return self.variables[varibleName]?.typedValue()
+    },
     persistentValuesStorage: DivPersistentValuesStorage(),
     errorTracker: { [unowned self] in
       error = $0.description
       if !self.isErrorExpected {
         XCTFail($0.description)
       }
-    },
-    variableTracker: { [unowned self] in
-      self.usedVariables = self.usedVariables.union($0)
     }
   )
 
@@ -233,7 +234,7 @@ final class ExpressionResolverTests: XCTestCase {
 
   func test_ResolveDict_WithVariable() throws {
     XCTAssertEqual(
-      expressionResolver.resolveDict(expression("@{dict_var}")) as! [String: AnyHashable],
+      expressionResolver.resolveDict(expression("@{dict_var}")) as! DivDictionary,
       ["boolean": true, "integer": 1, "number": 1.0, "string": "value"]
     )
   }

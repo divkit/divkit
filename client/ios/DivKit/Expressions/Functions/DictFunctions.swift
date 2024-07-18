@@ -1,8 +1,6 @@
 import Foundation
 
-import CommonCorePublic
-
-private typealias Dict = [String: AnyHashable]
+import VGSL
 
 extension [String: Function] {
   mutating func addDictFunctions() {
@@ -40,6 +38,8 @@ extension [String: Function] {
     addFunction("getNumber", _getNumber)
     addFunction("getString", _getString)
     addFunction("getUrl", _getUrl)
+
+    addFunction("containsKey", _containsKey)
   }
 
   private mutating func addFunctions(
@@ -51,51 +51,51 @@ extension [String: Function] {
   }
 }
 
-private let _getArray = FunctionVarBinary<Dict, String, [AnyHashable]> {
+private let _getArray = FunctionVarBinary<DivDictionary, String, [AnyHashable]> {
   try $0.getArray(path: $1)
 }
 
-private let _getBoolean = FunctionVarBinary<Dict, String, Bool> {
+private let _getBoolean = FunctionVarBinary<DivDictionary, String, Bool> {
   try $0.getBoolean(path: $1)
 }
 
-private let _getColor = FunctionVarBinary<Dict, String, Color> {
+private let _getColor = FunctionVarBinary<DivDictionary, String, Color> {
   try $0.getColor(path: $1)
 }
 
-private let _getDict = FunctionVarBinary<Dict, String, Dict> {
+private let _getDict = FunctionVarBinary<DivDictionary, String, DivDictionary> {
   try $0.getDict(path: $1)
 }
 
-private let _getInteger = FunctionVarBinary<Dict, String, Int> {
+private let _getInteger = FunctionVarBinary<DivDictionary, String, Int> {
   try $0.getInteger(path: $1)
 }
 
-private let _getNumber = FunctionVarBinary<Dict, String, Double> {
+private let _getNumber = FunctionVarBinary<DivDictionary, String, Double> {
   try $0.getNumber(path: $1)
 }
 
-private let _getString = FunctionVarBinary<Dict, String, String> {
+private let _getString = FunctionVarBinary<DivDictionary, String, String> {
   try $0.getString(path: $1)
 }
 
-private let _getUrl = FunctionVarBinary<Dict, String, URL> {
+private let _getUrl = FunctionVarBinary<DivDictionary, String, URL> {
   try $0.getUrl(path: $1)
 }
 
-private let _getOptArray = FunctionVarBinary<Dict, String, [AnyHashable]> {
+private let _getOptArray = FunctionVarBinary<DivDictionary, String, [AnyHashable]> {
   (try? $0.getArray(path: $1)) ?? []
 }
 
-private let _getOptBoolean = FunctionVarTernary<Bool, Dict, String, Bool> {
+private let _getOptBoolean = FunctionVarTernary<Bool, DivDictionary, String, Bool> {
   (try? $1.getBoolean(path: $2)) ?? $0
 }
 
 private let _getOptColor = OverloadedFunction(functions: [
-  FunctionVarTernary<Color, Dict, String, Color> {
+  FunctionVarTernary<Color, DivDictionary, String, Color> {
     (try? $1.getColor(path: $2)) ?? $0
   },
-  FunctionVarTernary<String, Dict, String, Color> {
+  FunctionVarTernary<String, DivDictionary, String, Color> {
     if let value = try? $1.getColor(path: $2) {
       return value
     }
@@ -103,27 +103,27 @@ private let _getOptColor = OverloadedFunction(functions: [
   },
 ])
 
-private let _getOptDict = FunctionVarBinary<Dict, String, Dict> {
+private let _getOptDict = FunctionVarBinary<DivDictionary, String, DivDictionary> {
   (try? $0.getDict(path: $1)) ?? [:]
 }
 
-private let _getOptInteger = FunctionVarTernary<Int, Dict, String, Int> {
+private let _getOptInteger = FunctionVarTernary<Int, DivDictionary, String, Int> {
   (try? $1.getInteger(path: $2)) ?? $0
 }
 
-private let _getOptNumber = FunctionVarTernary<Double, Dict, String, Double> {
+private let _getOptNumber = FunctionVarTernary<Double, DivDictionary, String, Double> {
   (try? $1.getNumber(path: $2)) ?? $0
 }
 
-private let _getOptString = FunctionVarTernary<String, Dict, String, String> {
+private let _getOptString = FunctionVarTernary<String, DivDictionary, String, String> {
   (try? $1.getString(path: $2)) ?? $0
 }
 
 private let _getOptUrl = OverloadedFunction(functions: [
-  FunctionVarTernary<URL, Dict, String, URL> {
+  FunctionVarTernary<URL, DivDictionary, String, URL> {
     (try? $1.getUrl(path: $2)) ?? $0
   },
-  FunctionVarTernary<String, Dict, String, URL> {
+  FunctionVarTernary<String, DivDictionary, String, URL> {
     if let value = try? $1.getUrl(path: $2) {
       return value
     }
@@ -131,7 +131,11 @@ private let _getOptUrl = OverloadedFunction(functions: [
   },
 ])
 
-extension Dict {
+private let _containsKey = FunctionBinary<DivDictionary, String, Bool> { dict, key in
+  dict.contains { $0.key == key }
+}
+
+extension DivDictionary {
   fileprivate func getArray(path: [String]) throws -> [AnyHashable] {
     let value = try getValue(path: path)
     guard let dictValue = value as? [AnyHashable] else {
@@ -159,9 +163,9 @@ extension Dict {
     return color
   }
 
-  fileprivate func getDict(path: [String]) throws -> Dict {
+  fileprivate func getDict(path: [String]) throws -> DivDictionary {
     let value = try getValue(path: path)
-    guard let dictValue = value as? Dict else {
+    guard let dictValue = value as? DivDictionary else {
       throw ExpressionError.incorrectType("Dict", value)
     }
     return dictValue
@@ -218,12 +222,12 @@ extension Dict {
   }
 
   private func getValue(path: [String]) throws -> AnyHashable {
-    var dictionary: Dict? = self
+    var dictionary: DivDictionary? = self
     var i = 0
     while i < path.count - 1 {
       let key = path[i]
       if let current = dictionary {
-        dictionary = current[key] as? Dict
+        dictionary = current[key] as? DivDictionary
       } else {
         throw missingPropertyError(key)
       }

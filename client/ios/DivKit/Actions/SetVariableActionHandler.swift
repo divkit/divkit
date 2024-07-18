@@ -12,7 +12,7 @@ final class SetVariableActionHandler {
     }
 
     context.variablesStorage.update(
-      cardId: context.cardId,
+      path: context.path,
       name: DivVariableName(rawValue: variableName),
       value: variableValue
     )

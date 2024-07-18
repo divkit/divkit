@@ -112,15 +112,15 @@ export function checkIntegerOverflow(ctx: EvalContext, val: number | bigint): vo
 }
 
 export function gatherVarsFromAst(ast: Node): string[] {
-    const res: string[] = [];
+    const res = new Set<string>();
 
     walk(ast, {
         Variable(node: Variable): void {
-            res.push(node.id.name);
+            res.add(node.id.name);
         }
     });
 
-    return res;
+    return [...res];
 }
 
 export function evalError(msg: string, details: string): never {

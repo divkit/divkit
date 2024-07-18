@@ -2,7 +2,6 @@
   "description": "Image with different blur radii and without blur",
   "platforms": [
     "android",
-    "ios",
     "web"
   ],
   "div_data": {

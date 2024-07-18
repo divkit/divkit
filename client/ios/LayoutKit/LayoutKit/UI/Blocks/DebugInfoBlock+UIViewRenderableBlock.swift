@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension DebugInfoBlock {
   public static func makeBlockView() -> BlockView {

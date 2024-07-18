@@ -1,6 +1,5 @@
 import Foundation
-
-import BaseTinyPublic
+import VGSL
 
 enum EqualityOperators: String, CaseIterable {
   case equals = "=="
@@ -16,7 +15,7 @@ enum EqualityOperators: String, CaseIterable {
         makeFunction() as FunctionBinary<Date, Date, Bool>,
         makeFunction() as FunctionBinary<RGBAColor, RGBAColor, Bool>,
         makeFunction() as FunctionBinary<URL, URL, Bool>,
-        makeFunction() as FunctionBinary<[String: AnyHashable], [String: AnyHashable], Bool>,
+        makeFunction() as FunctionBinary<DivDictionary, DivDictionary, Bool>,
         makeFunction() as FunctionBinary<[AnyHashable], [AnyHashable], Bool>,
       ],
       makeError: {

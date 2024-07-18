@@ -102,8 +102,8 @@ internal class ErrorView(
             )
         )
 
-        Toast.makeText(root.context, "Error details are at your clipboard!", Toast.LENGTH_SHORT)
-            .show()
+        Toast.makeText(root.context, "Errors, DivData and Variables are dumped to clipboard!",
+            Toast.LENGTH_LONG).show()
     }
 
     private fun tryAddCounterView() {

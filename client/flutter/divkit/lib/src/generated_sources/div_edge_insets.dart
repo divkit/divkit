@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_size_unit.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
 
 class DivEdgeInsets with EquatableMixin {
   const DivEdgeInsets({
@@ -41,6 +41,25 @@ class DivEdgeInsets with EquatableMixin {
         top,
         unit,
       ];
+
+  DivEdgeInsets copyWith({
+    Expression<int>? bottom,
+    Expression<int>? Function()? end,
+    Expression<int>? left,
+    Expression<int>? right,
+    Expression<int>? Function()? start,
+    Expression<int>? top,
+    Expression<DivSizeUnit>? unit,
+  }) =>
+      DivEdgeInsets(
+        bottom: bottom ?? this.bottom,
+        end: end != null ? end.call() : this.end,
+        left: left ?? this.left,
+        right: right ?? this.right,
+        start: start != null ? start.call() : this.start,
+        top: top ?? this.top,
+        unit: unit ?? this.unit,
+      );
 
   static DivEdgeInsets? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

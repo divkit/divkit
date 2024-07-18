@@ -1,9 +1,8 @@
-@testable import DivKit
-
 import XCTest
 
-import CommonCorePublic
+@testable import DivKit
 import LayoutKit
+import VGSL
 
 final class DivActionExtensionsTests: XCTestCase {
   func test_uiAction_AddsCardLogIdFromContext() {
@@ -18,13 +17,13 @@ final class DivActionExtensionsTests: XCTestCase {
       isEnabled: false,
       logId: "action_log_id",
       url: "https://some.url"
-    ).uiAction
+    ).uiAction(context: .default)
 
     XCTAssertNil(action)
   }
 
   func test_WithLogIdOnly() {
-    let action = divAction(logId: "action_log_id").uiAction
+    let action = divAction(logId: "action_log_id").uiAction(context: .default)
 
     let expectedAction = UserInterfaceAction(
       payload: divActionPayload([
@@ -41,7 +40,7 @@ final class DivActionExtensionsTests: XCTestCase {
     let action = divAction(
       logId: "action_log_id",
       url: "https://some.url"
-    ).uiAction
+    ).uiAction(context: .default)
 
     let expectedAction = UserInterfaceAction(
       payload: divActionPayload(
@@ -65,7 +64,7 @@ final class DivActionExtensionsTests: XCTestCase {
         value: .integerValue(IntegerValue(value: .value(10))),
         variableName: .value("var1")
       ))
-    ).uiAction
+    ).uiAction(context: .default)
 
     let expectedAction = UserInterfaceAction(
       payload: divActionPayload([
@@ -98,7 +97,7 @@ final class DivActionExtensionsTests: XCTestCase {
           text: .value("Menu Item")
         ),
       ]
-    ).uiAction
+    ).uiAction(context: .default)
 
     let expectedAction = UserInterfaceAction(
       menu: Menu(items: [
@@ -123,7 +122,7 @@ final class DivActionExtensionsTests: XCTestCase {
         "string_key": "string_value",
         "number_key": 42,
       ]
-    ).uiAction
+    ).uiAction(context: .default)
 
     let expectedAction = UserInterfaceAction(
       payload: divActionPayload([
@@ -148,7 +147,7 @@ final class DivActionExtensionsTests: XCTestCase {
         "number_key": 42,
       ],
       url: "https://some.url"
-    ).uiAction
+    ).uiAction(context: .default)
 
     let expectedAction = UserInterfaceAction(
       payload: divActionPayload(

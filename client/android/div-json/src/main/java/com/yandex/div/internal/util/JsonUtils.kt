@@ -45,14 +45,16 @@ inline fun <R> JSONArray.map(mapping: (Any) -> R): List<R> {
     return result
 }
 
-inline fun <R> JSONArray.mapNotNull(mapping: (Any) -> R?): List<R> {
+inline fun <R> JSONArray.mapIndexedNotNull(mapping: (Int, Any) -> R?): List<R> {
     val length = length()
     val result = ArrayList<R>(length)
     for (i in 0 until length) {
-        mapping(get(i))?.let { result.add(it) }
+        mapping(i, get(i))?.let { result.add(it) }
     }
     return result
 }
+
+inline fun <R> JSONArray.mapNotNull(mapping: (Any) -> R?): List<R> = mapIndexedNotNull { _, obj -> mapping(obj) }
 
 @Suppress("UNCHECKED_CAST")
 fun <R : Any> JSONArray.asList(): List<R> = mapNotNull { it as? R }

@@ -4,19 +4,19 @@ import 'package:divkit/src/core/action/action_converter.dart';
 import 'package:divkit/src/core/protocol/div_context.dart';
 import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart' as dto;
+import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:divkit/src/utils/clockwork.dart';
 import 'package:divkit/src/utils/duration_helper.dart';
 import 'package:equatable/equatable.dart';
 
-class DivTimer with EquatableMixin {
+class DivTimerModel with EquatableMixin {
   final String id;
 
   final Expression<int> duration;
   final Expression<int>? tickInterval;
 
-  final List<dto.DivAction>? tickActions;
-  final List<dto.DivAction>? endActions;
+  final List<DivAction>? tickActions;
+  final List<DivAction>? endActions;
 
   final String? valueVariable;
 
@@ -25,7 +25,7 @@ class DivTimer with EquatableMixin {
 
   Clockwork get clockwork => _clockwork!;
 
-  DivTimer({
+  DivTimerModel({
     required this.id,
     required this.duration,
     this.endActions,

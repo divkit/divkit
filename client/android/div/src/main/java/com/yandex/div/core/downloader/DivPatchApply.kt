@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
+import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.KAssert
@@ -385,7 +385,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         when(currentView) {
             is DivRecyclerView -> {
                 if (currentView.div === divWithPatchedChild) {
-                    val adapter = (currentView.adapter as? DivGalleryBinder.GalleryAdapter) ?: return currentView
+                    val adapter = (currentView.adapter as? DivGalleryAdapter) ?: return currentView
                     currentView.div?.items?.forEachIndexed { i, child ->
                         if (child.value().id == patchedChildId) {
                             adapter.notifyItemChanged(i)

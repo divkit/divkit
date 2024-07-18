@@ -1,3 +1,57 @@
+## 30.9.0 (July 15, 2024)
+
+* Performance optimizations.
+
+
+## 30.8.0 (July 8, 2024)
+
+* Fixed several issues with `variable_triggers` evaluation.
+
+
+## 30.7.0 (July 1, 2024)
+
+* Fixed the `top_offset` mutation for incoming data in the `text` component.
+
+
+## 30.6.0 (June 24, 2024)
+
+* Added support for the property `font_weight_value` in `text`, `input`, `slider` and `select`.
+* Introduced `index` variable for prototyped elements.
+
+
+## 30.5.0 (June 17, 2024)
+
+* Added `array_set_value` action.
+
+
+## 30.4.0 (June 10, 2024)
+
+* Added `dict_set_value` action.
+* Added `containsKey` method for dictionaries.
+
+
+## 30.3.0 (June 3, 2024)
+
+* Fixed an issue with the `text` property `top_offset` and ranges intersection.
+* Added new API's for the extensions: `processExpressions` and `execAction`.
+* Added `gesture` extension.
+* Fixed an issue with calling `disappear_actions` after instance destruction.
+* When passing `data` directly inside `item_builder`, its expressions are no longer executed.
+* Supported `z`/`Z` patterns in datetime formatting functions.
+* Added `max_length` property support for `input`.
+* Supported `font_feature_settings` property for `text`.
+* Updated error messages for invalid calls inside expressions.
+
+
+## 30.2.0 (May 27, 2024)
+
+* Calculate `is_enabled` in `actions` before executing the entire list of actions, not in the process.
+* Implemented `toString` function and method for arrays and dicts.
+* Improved expression error messages.
+* Fixed unary minus operator parsing.
+* Added functions `parseUnixTimeAsLocal`, `formatDateAsLocal`, `formatDateAsUTC`, `formatDateAsLocalWithLocale`, `formatDateAsUTCWithLocale` and the `weekStartDay` parameter.
+
+
 ## 30.0.0 (May 13, 2024)
 
 * Breaking change: actions from `variable_triggers` lead to execution of a callback `onStat` with type = `trigger`.

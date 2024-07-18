@@ -90,12 +90,14 @@
         font_size: componentContext.json.font_size,
         letter_spacing: componentContext.json.letter_spacing,
         font_weight: componentContext.json.font_weight,
+        font_weight_value: componentContext.json.font_weight_value,
         font_family: componentContext.json.font_family,
         text_color: componentContext.json.text_color,
         underline: componentContext.json.underline,
         strike: componentContext.json.strike,
         line_height: componentContext.json.line_height,
-        text_shadow: componentContext.json.text_shadow
+        text_shadow: componentContext.json.text_shadow,
+        font_feature_settings: componentContext.json.font_feature_settings
     });
     $: jsonTextSize = componentContext.getDerivedFromVars(componentContext.json.font_size);
     $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);
@@ -238,7 +240,7 @@
         ];
         let images = textImages || [];
         let prevIndex = 0;
-        let activeRanges: MaybeMissing<TextStyles>[] = [];
+        let activeRanges: MaybeMissing<TextRange>[] = [];
         let list: ({
             index: number;
             range: MaybeMissing<TextRange> & {
@@ -259,9 +261,13 @@
 
         ranges.forEach(range => {
             if (range.start !== undefined && range.end !== undefined) {
+                const rangeWithExplicitProps = {
+                    top_offset: 0,
+                    ...range
+                };
                 list.push({
                     index: range.start,
-                    range: range as typeof range & {
+                    range: rangeWithExplicitProps as typeof range & {
                         start: number;
                         end: number;
                     },
@@ -270,7 +276,7 @@
                 });
                 list.push({
                     index: range.end,
-                    range: range as typeof range & {
+                    range: rangeWithExplicitProps as typeof range & {
                         start: number;
                         end: number;
                     },
@@ -323,7 +329,10 @@
             let index = item.index;
 
             if (index > prevIndex) {
-                let textStyles = Object.assign({ ...rootTextStyles }, ...activeRanges as any[]) as TextStyles;
+                let textStyles = Object.assign({ ...rootTextStyles }, ...activeRanges as any[]) as TextRange;
+                if (activeRanges.length && activeRanges[activeRanges.length - 1].start !== prevIndex) {
+                    textStyles.top_offset = 0;
+                }
                 newRenderList.push({
                     text: content.substring(prevIndex, index),
                     textStyles,

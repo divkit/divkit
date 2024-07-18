@@ -2,32 +2,34 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
-import 'div_accessibility.dart';
-import 'div_action.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_appearance_transition.dart';
-import 'div_background.dart';
-import 'div_base.dart';
-import 'div_border.dart';
-import 'div_change_transition.dart';
-import 'div_corners_radius.dart';
-import 'div_disappear_action.dart';
-import 'div_edge_insets.dart';
-import 'div_extension.dart';
-import 'div_focus.dart';
-import 'div_font_weight.dart';
-import 'div_match_parent_size.dart';
-import 'div_size.dart';
-import 'div_size_unit.dart';
-import 'div_tooltip.dart';
-import 'div_transform.dart';
-import 'div_transition_trigger.dart';
-import 'div_visibility.dart';
-import 'div_visibility_action.dart';
-import 'div_wrap_content_size.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
+import 'package:divkit/src/generated_sources/div_accessibility.dart';
+import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
+import 'package:divkit/src/generated_sources/div_background.dart';
+import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/src/generated_sources/div_border.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
+import 'package:divkit/src/generated_sources/div_corners_radius.dart';
+import 'package:divkit/src/generated_sources/div_disappear_action.dart';
+import 'package:divkit/src/generated_sources/div_edge_insets.dart';
+import 'package:divkit/src/generated_sources/div_extension.dart';
+import 'package:divkit/src/generated_sources/div_fixed_size.dart';
+import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_font_weight.dart';
+import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
+import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/src/generated_sources/div_size_unit.dart';
+import 'package:divkit/src/generated_sources/div_tooltip.dart';
+import 'package:divkit/src/generated_sources/div_transform.dart';
+import 'package:divkit/src/generated_sources/div_transition_trigger.dart';
+import 'package:divkit/src/generated_sources/div_variable.dart';
+import 'package:divkit/src/generated_sources/div_visibility.dart';
+import 'package:divkit/src/generated_sources/div_visibility_action.dart';
+import 'package:divkit/src/generated_sources/div_wrap_content_size.dart';
 
 class DivTabs with EquatableMixin implements DivBase {
   const DivTabs({
@@ -43,7 +45,7 @@ class DivTabs with EquatableMixin implements DivBase {
     this.extensions,
     this.focus,
     this.hasSeparator = const ValueExpression(false),
-    this.height = const DivSize(DivWrapContentSize()),
+    this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     required this.items,
     this.margins = const DivEdgeInsets(),
@@ -52,7 +54,7 @@ class DivTabs with EquatableMixin implements DivBase {
     this.rowSpan,
     this.selectedActions,
     this.selectedTab = const ValueExpression(0),
-    this.separatorColor = const ValueExpression(const Color(0x14000000)),
+    this.separatorColor = const ValueExpression(Color(0x14000000)),
     this.separatorPaddings = const DivEdgeInsets(
       bottom: ValueExpression(0),
       left: ValueExpression(12),
@@ -60,6 +62,7 @@ class DivTabs with EquatableMixin implements DivBase {
       top: ValueExpression(0),
     ),
     this.switchTabsByContentSwipeEnabled = const ValueExpression(true),
+    this.tabTitleDelimiter,
     this.tabTitleStyle = const DivTabsTabTitleStyle(),
     this.titlePaddings = const DivEdgeInsets(
       bottom: ValueExpression(8),
@@ -73,10 +76,11 @@ class DivTabs with EquatableMixin implements DivBase {
     this.transitionIn,
     this.transitionOut,
     this.transitionTriggers,
+    this.variables,
     this.visibility = const ValueExpression(DivVisibility.visible),
     this.visibilityAction,
     this.visibilityActions,
-    this.width = const DivSize(DivMatchParentSize()),
+    this.width = const DivSize.divMatchParentSize(DivMatchParentSize()),
   });
 
   static const type = "tabs";
@@ -114,7 +118,7 @@ class DivTabs with EquatableMixin implements DivBase {
   final DivFocus? focus;
   // default value: false
   final Expression<bool> hasSeparator;
-  // default value: const DivSize(DivWrapContentSize())
+  // default value: const DivSize.divWrapContentSize(DivWrapContentSize())
   @override
   final DivSize height;
 
@@ -145,6 +149,8 @@ class DivTabs with EquatableMixin implements DivBase {
   // default value: true
   final Expression<bool> switchTabsByContentSwipeEnabled;
 
+  final DivTabsTabTitleDelimiter? tabTitleDelimiter;
+
   final DivTabsTabTitleStyle tabTitleStyle;
   // default value: const DivEdgeInsets(bottom: ValueExpression(8), left: ValueExpression(12), right: ValueExpression(12), top: ValueExpression(0),)
   final DivEdgeInsets titlePaddings;
@@ -166,6 +172,9 @@ class DivTabs with EquatableMixin implements DivBase {
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
+
+  @override
+  final List<DivVariable>? variables;
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
@@ -175,7 +184,7 @@ class DivTabs with EquatableMixin implements DivBase {
 
   @override
   final List<DivVisibilityAction>? visibilityActions;
-  // default value: const DivSize(DivMatchParentSize())
+  // default value: const DivSize.divMatchParentSize(DivMatchParentSize())
   @override
   final DivSize width;
 
@@ -205,6 +214,7 @@ class DivTabs with EquatableMixin implements DivBase {
         separatorColor,
         separatorPaddings,
         switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter,
         tabTitleStyle,
         titlePaddings,
         tooltips,
@@ -213,11 +223,114 @@ class DivTabs with EquatableMixin implements DivBase {
         transitionIn,
         transitionOut,
         transitionTriggers,
+        variables,
         visibility,
         visibilityAction,
         visibilityActions,
         width,
       ];
+
+  DivTabs copyWith({
+    DivAccessibility? accessibility,
+    Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
+    Expression<DivAlignmentVertical>? Function()? alignmentVertical,
+    Expression<double>? alpha,
+    List<DivBackground>? Function()? background,
+    DivBorder? border,
+    Expression<int>? Function()? columnSpan,
+    List<DivDisappearAction>? Function()? disappearActions,
+    Expression<bool>? dynamicHeight,
+    List<DivExtension>? Function()? extensions,
+    DivFocus? Function()? focus,
+    Expression<bool>? hasSeparator,
+    DivSize? height,
+    String? Function()? id,
+    List<DivTabsItem>? items,
+    DivEdgeInsets? margins,
+    DivEdgeInsets? paddings,
+    Expression<bool>? restrictParentScroll,
+    Expression<int>? Function()? rowSpan,
+    List<DivAction>? Function()? selectedActions,
+    Expression<int>? selectedTab,
+    Expression<Color>? separatorColor,
+    DivEdgeInsets? separatorPaddings,
+    Expression<bool>? switchTabsByContentSwipeEnabled,
+    DivTabsTabTitleDelimiter? Function()? tabTitleDelimiter,
+    DivTabsTabTitleStyle? tabTitleStyle,
+    DivEdgeInsets? titlePaddings,
+    List<DivTooltip>? Function()? tooltips,
+    DivTransform? transform,
+    DivChangeTransition? Function()? transitionChange,
+    DivAppearanceTransition? Function()? transitionIn,
+    DivAppearanceTransition? Function()? transitionOut,
+    List<DivTransitionTrigger>? Function()? transitionTriggers,
+    List<DivVariable>? Function()? variables,
+    Expression<DivVisibility>? visibility,
+    DivVisibilityAction? Function()? visibilityAction,
+    List<DivVisibilityAction>? Function()? visibilityActions,
+    DivSize? width,
+  }) =>
+      DivTabs(
+        accessibility: accessibility ?? this.accessibility,
+        alignmentHorizontal: alignmentHorizontal != null
+            ? alignmentHorizontal.call()
+            : this.alignmentHorizontal,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
+        alpha: alpha ?? this.alpha,
+        background: background != null ? background.call() : this.background,
+        border: border ?? this.border,
+        columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
+        disappearActions: disappearActions != null
+            ? disappearActions.call()
+            : this.disappearActions,
+        dynamicHeight: dynamicHeight ?? this.dynamicHeight,
+        extensions: extensions != null ? extensions.call() : this.extensions,
+        focus: focus != null ? focus.call() : this.focus,
+        hasSeparator: hasSeparator ?? this.hasSeparator,
+        height: height ?? this.height,
+        id: id != null ? id.call() : this.id,
+        items: items ?? this.items,
+        margins: margins ?? this.margins,
+        paddings: paddings ?? this.paddings,
+        restrictParentScroll: restrictParentScroll ?? this.restrictParentScroll,
+        rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
+        selectedActions: selectedActions != null
+            ? selectedActions.call()
+            : this.selectedActions,
+        selectedTab: selectedTab ?? this.selectedTab,
+        separatorColor: separatorColor ?? this.separatorColor,
+        separatorPaddings: separatorPaddings ?? this.separatorPaddings,
+        switchTabsByContentSwipeEnabled: switchTabsByContentSwipeEnabled ??
+            this.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter: tabTitleDelimiter != null
+            ? tabTitleDelimiter.call()
+            : this.tabTitleDelimiter,
+        tabTitleStyle: tabTitleStyle ?? this.tabTitleStyle,
+        titlePaddings: titlePaddings ?? this.titlePaddings,
+        tooltips: tooltips != null ? tooltips.call() : this.tooltips,
+        transform: transform ?? this.transform,
+        transitionChange: transitionChange != null
+            ? transitionChange.call()
+            : this.transitionChange,
+        transitionIn:
+            transitionIn != null ? transitionIn.call() : this.transitionIn,
+        transitionOut:
+            transitionOut != null ? transitionOut.call() : this.transitionOut,
+        transitionTriggers: transitionTriggers != null
+            ? transitionTriggers.call()
+            : this.transitionTriggers,
+        variables: variables != null ? variables.call() : this.variables,
+        visibility: visibility ?? this.visibility,
+        visibilityAction: visibilityAction != null
+            ? visibilityAction.call()
+            : this.visibilityAction,
+        visibilityActions: visibilityActions != null
+            ? visibilityActions.call()
+            : this.visibilityActions,
+        width: width ?? this.width,
+      );
 
   static DivTabs? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -241,13 +354,11 @@ class DivTabs with EquatableMixin implements DivBase {
         fallback: 1.0,
       )!,
       background: safeParseObj(
-        (json['background'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivBackground.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['background'],
+            (v) => safeParseObj(
+                  DivBackground.fromJson(v),
+                )!),
       ),
       border: safeParseObj(
         DivBorder.fromJson(json['border']),
@@ -257,26 +368,22 @@ class DivTabs with EquatableMixin implements DivBase {
         json['column_span'],
       ),
       disappearActions: safeParseObj(
-        (json['disappear_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivDisappearAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['disappear_actions'],
+            (v) => safeParseObj(
+                  DivDisappearAction.fromJson(v),
+                )!),
       ),
       dynamicHeight: safeParseBoolExpr(
         json['dynamic_height'],
         fallback: false,
       )!,
       extensions: safeParseObj(
-        (json['extensions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivExtension.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['extensions'],
+            (v) => safeParseObj(
+                  DivExtension.fromJson(v),
+                )!),
       ),
       focus: safeParseObj(
         DivFocus.fromJson(json['focus']),
@@ -287,19 +394,17 @@ class DivTabs with EquatableMixin implements DivBase {
       )!,
       height: safeParseObj(
         DivSize.fromJson(json['height']),
-        fallback: const DivSize(DivWrapContentSize()),
+        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
       )!,
       id: safeParseStr(
         json['id']?.toString(),
       ),
       items: safeParseObj(
-        (json['items'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivTabsItem.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  DivTabsItem.fromJson(v),
+                )!),
       )!,
       margins: safeParseObj(
         DivEdgeInsets.fromJson(json['margins']),
@@ -317,13 +422,11 @@ class DivTabs with EquatableMixin implements DivBase {
         json['row_span'],
       ),
       selectedActions: safeParseObj(
-        (json['selected_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['selected_actions'],
+            (v) => safeParseObj(
+                  DivAction.fromJson(v),
+                )!),
       ),
       selectedTab: safeParseIntExpr(
         json['selected_tab'],
@@ -346,6 +449,9 @@ class DivTabs with EquatableMixin implements DivBase {
         json['switch_tabs_by_content_swipe_enabled'],
         fallback: true,
       )!,
+      tabTitleDelimiter: safeParseObj(
+        DivTabsTabTitleDelimiter.fromJson(json['tab_title_delimiter']),
+      ),
       tabTitleStyle: safeParseObj(
         DivTabsTabTitleStyle.fromJson(json['tab_title_style']),
         fallback: const DivTabsTabTitleStyle(),
@@ -360,13 +466,11 @@ class DivTabs with EquatableMixin implements DivBase {
         ),
       )!,
       tooltips: safeParseObj(
-        (json['tooltips'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivTooltip.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['tooltips'],
+            (v) => safeParseObj(
+                  DivTooltip.fromJson(v),
+                )!),
       ),
       transform: safeParseObj(
         DivTransform.fromJson(json['transform']),
@@ -382,14 +486,19 @@ class DivTabs with EquatableMixin implements DivBase {
         DivAppearanceTransition.fromJson(json['transition_out']),
       ),
       transitionTriggers: safeParseObj(
-        (json['transition_triggers'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseStrEnum(
-                v,
-                parse: DivTransitionTrigger.fromJson,
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['transition_triggers'],
+            (v) => safeParseStrEnum(
+                  v,
+                  parse: DivTransitionTrigger.fromJson,
+                )!),
+      ),
+      variables: safeParseObj(
+        safeListMap(
+            json['variables'],
+            (v) => safeParseObj(
+                  DivVariable.fromJson(v),
+                )!),
       ),
       visibility: safeParseStrEnumExpr(
         json['visibility'],
@@ -400,17 +509,15 @@ class DivTabs with EquatableMixin implements DivBase {
         DivVisibilityAction.fromJson(json['visibility_action']),
       ),
       visibilityActions: safeParseObj(
-        (json['visibility_actions'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivVisibilityAction.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['visibility_actions'],
+            (v) => safeParseObj(
+                  DivVisibilityAction.fromJson(v),
+                )!),
       ),
       width: safeParseObj(
         DivSize.fromJson(json['width']),
-        fallback: const DivSize(DivMatchParentSize()),
+        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
       )!,
     );
   }
@@ -418,9 +525,9 @@ class DivTabs with EquatableMixin implements DivBase {
 
 class DivTabsTabTitleStyle with EquatableMixin {
   const DivTabsTabTitleStyle({
-    this.activeBackgroundColor = const ValueExpression(const Color(0xFFFFDC60)),
+    this.activeBackgroundColor = const ValueExpression(Color(0xFFFFDC60)),
     this.activeFontWeight,
-    this.activeTextColor = const ValueExpression(const Color(0xCC000000)),
+    this.activeTextColor = const ValueExpression(Color(0xCC000000)),
     this.animationDuration = const ValueExpression(300),
     this.animationType =
         const ValueExpression(DivTabsTabTitleStyleAnimationType.slide),
@@ -432,7 +539,7 @@ class DivTabsTabTitleStyle with EquatableMixin {
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
     this.inactiveBackgroundColor,
     this.inactiveFontWeight,
-    this.inactiveTextColor = const ValueExpression(const Color(0x80000000)),
+    this.inactiveTextColor = const ValueExpression(Color(0x80000000)),
     this.itemSpacing = const ValueExpression(0),
     this.letterSpacing = const ValueExpression(0),
     this.lineHeight,
@@ -502,6 +609,56 @@ class DivTabsTabTitleStyle with EquatableMixin {
         lineHeight,
         paddings,
       ];
+
+  DivTabsTabTitleStyle copyWith({
+    Expression<Color>? activeBackgroundColor,
+    Expression<DivFontWeight>? Function()? activeFontWeight,
+    Expression<Color>? activeTextColor,
+    Expression<int>? animationDuration,
+    Expression<DivTabsTabTitleStyleAnimationType>? animationType,
+    Expression<int>? Function()? cornerRadius,
+    DivCornersRadius? Function()? cornersRadius,
+    Expression<String>? Function()? fontFamily,
+    Expression<int>? fontSize,
+    Expression<DivSizeUnit>? fontSizeUnit,
+    Expression<DivFontWeight>? fontWeight,
+    Expression<Color>? Function()? inactiveBackgroundColor,
+    Expression<DivFontWeight>? Function()? inactiveFontWeight,
+    Expression<Color>? inactiveTextColor,
+    Expression<int>? itemSpacing,
+    Expression<double>? letterSpacing,
+    Expression<int>? Function()? lineHeight,
+    DivEdgeInsets? paddings,
+  }) =>
+      DivTabsTabTitleStyle(
+        activeBackgroundColor:
+            activeBackgroundColor ?? this.activeBackgroundColor,
+        activeFontWeight: activeFontWeight != null
+            ? activeFontWeight.call()
+            : this.activeFontWeight,
+        activeTextColor: activeTextColor ?? this.activeTextColor,
+        animationDuration: animationDuration ?? this.animationDuration,
+        animationType: animationType ?? this.animationType,
+        cornerRadius:
+            cornerRadius != null ? cornerRadius.call() : this.cornerRadius,
+        cornersRadius:
+            cornersRadius != null ? cornersRadius.call() : this.cornersRadius,
+        fontFamily: fontFamily != null ? fontFamily.call() : this.fontFamily,
+        fontSize: fontSize ?? this.fontSize,
+        fontSizeUnit: fontSizeUnit ?? this.fontSizeUnit,
+        fontWeight: fontWeight ?? this.fontWeight,
+        inactiveBackgroundColor: inactiveBackgroundColor != null
+            ? inactiveBackgroundColor.call()
+            : this.inactiveBackgroundColor,
+        inactiveFontWeight: inactiveFontWeight != null
+            ? inactiveFontWeight.call()
+            : this.inactiveFontWeight,
+        inactiveTextColor: inactiveTextColor ?? this.inactiveTextColor,
+        itemSpacing: itemSpacing ?? this.itemSpacing,
+        letterSpacing: letterSpacing ?? this.letterSpacing,
+        lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
+        paddings: paddings ?? this.paddings,
+      );
 
   static DivTabsTabTitleStyle? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -643,6 +800,64 @@ enum DivTabsTabTitleStyleAnimationType {
   }
 }
 
+class DivTabsTabTitleDelimiter with EquatableMixin {
+  const DivTabsTabTitleDelimiter({
+    this.height = const DivFixedSize(
+      value: ValueExpression(12),
+    ),
+    required this.imageUrl,
+    this.width = const DivFixedSize(
+      value: ValueExpression(12),
+    ),
+  });
+
+  // default value: const DivFixedSize(value: ValueExpression(12),)
+  final DivFixedSize height;
+
+  final Expression<Uri> imageUrl;
+  // default value: const DivFixedSize(value: ValueExpression(12),)
+  final DivFixedSize width;
+
+  @override
+  List<Object?> get props => [
+        height,
+        imageUrl,
+        width,
+      ];
+
+  DivTabsTabTitleDelimiter copyWith({
+    DivFixedSize? height,
+    Expression<Uri>? imageUrl,
+    DivFixedSize? width,
+  }) =>
+      DivTabsTabTitleDelimiter(
+        height: height ?? this.height,
+        imageUrl: imageUrl ?? this.imageUrl,
+        width: width ?? this.width,
+      );
+
+  static DivTabsTabTitleDelimiter? fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return null;
+    }
+    return DivTabsTabTitleDelimiter(
+      height: safeParseObj(
+        DivFixedSize.fromJson(json['height']),
+        fallback: const DivFixedSize(
+          value: ValueExpression(12),
+        ),
+      )!,
+      imageUrl: safeParseUriExpr(json['image_url'])!,
+      width: safeParseObj(
+        DivFixedSize.fromJson(json['width']),
+        fallback: const DivFixedSize(
+          value: ValueExpression(12),
+        ),
+      )!,
+    );
+  }
+}
+
 class DivTabsItem with EquatableMixin {
   const DivTabsItem({
     required this.div,
@@ -662,6 +877,19 @@ class DivTabsItem with EquatableMixin {
         title,
         titleClickAction,
       ];
+
+  DivTabsItem copyWith({
+    Div? div,
+    Expression<String>? title,
+    DivAction? Function()? titleClickAction,
+  }) =>
+      DivTabsItem(
+        div: div ?? this.div,
+        title: title ?? this.title,
+        titleClickAction: titleClickAction != null
+            ? titleClickAction.call()
+            : this.titleClickAction,
+      );
 
   static DivTabsItem? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

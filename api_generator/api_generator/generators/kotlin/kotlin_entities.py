@@ -305,7 +305,7 @@ class KotlinEntity(Entity):
     def __manual_equals_hash_code_declaration(self) -> Text:
         result = Text('override fun equals(other: Any?) = javaClass == other?.javaClass')
         result += EMPTY
-        result += 'override fun hashCode() = javaClass.hashCode()'
+        result += 'override fun hashCode() = this::class.hashCode()'
         return result
 
     def hash_declaration(self, with_calculation_flag: bool = False) -> Text:
@@ -331,10 +331,11 @@ class KotlinEntity(Entity):
             result += '        }'
             if len(self.instance_properties_kotlin) > 1:
                 result += '        val propertiesHash = '
+                result += '            this::class.hashCode() +'
                 result += self.__generate_hash(list(filter(lambda it: it.declaration_name not in prop_filter,
                                                            self.instance_properties_kotlin))).indented(indent_width=12)
             else:
-                result += '        val propertiesHash = javaClass.hashCode()'
+                result += '        val propertiesHash = this::class.hashCode()'
             result += '        _propertiesHash = propertiesHash'
             result += '        return propertiesHash'
             result += '    }'
@@ -354,12 +355,13 @@ class KotlinEntity(Entity):
 
                 result += hash_text.indented(indent_width=12)
             else:
+                result += '            this::class.hashCode() +'
                 result += self.__generate_hash(list(filter(
                     lambda it: it.declaration_name not in prop_filter,
                     self.instance_properties_kotlin))
                 ).indented(indent_width=12)
         else:
-            result += '        val hash = javaClass.hashCode()'
+            result += '        val hash = this::class.hashCode()'
 
         result += '        _hash = hash'
         result += '        return hash'

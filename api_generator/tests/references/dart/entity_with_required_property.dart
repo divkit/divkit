@@ -18,6 +18,12 @@ class EntityWithRequiredProperty with EquatableMixin {
         property,
       ];
 
+  EntityWithRequiredProperty copyWith({
+      Expression<String>?  property,
+  }) => EntityWithRequiredProperty(
+      property: property ?? this.property,
+    );
+
   static EntityWithRequiredProperty? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;

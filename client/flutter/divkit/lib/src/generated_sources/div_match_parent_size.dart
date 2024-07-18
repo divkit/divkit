@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivMatchParentSize with EquatableMixin {
   const DivMatchParentSize({
@@ -17,6 +17,13 @@ class DivMatchParentSize with EquatableMixin {
   List<Object?> get props => [
         weight,
       ];
+
+  DivMatchParentSize copyWith({
+    Expression<double>? Function()? weight,
+  }) =>
+      DivMatchParentSize(
+        weight: weight != null ? weight.call() : this.weight,
+      );
 
   static DivMatchParentSize? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

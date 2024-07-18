@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
-import 'div_animation.dart';
-import 'div_point.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
+import 'package:divkit/src/generated_sources/div_animation.dart';
+import 'package:divkit/src/generated_sources/div_point.dart';
 
 class DivTooltip with EquatableMixin {
   const DivTooltip({
@@ -42,6 +42,27 @@ class DivTooltip with EquatableMixin {
         offset,
         position,
       ];
+
+  DivTooltip copyWith({
+    DivAnimation? Function()? animationIn,
+    DivAnimation? Function()? animationOut,
+    Div? div,
+    Expression<int>? duration,
+    String? id,
+    DivPoint? Function()? offset,
+    Expression<DivTooltipPosition>? position,
+  }) =>
+      DivTooltip(
+        animationIn:
+            animationIn != null ? animationIn.call() : this.animationIn,
+        animationOut:
+            animationOut != null ? animationOut.call() : this.animationOut,
+        div: div ?? this.div,
+        duration: duration ?? this.duration,
+        id: id ?? this.id,
+        offset: offset != null ? offset.call() : this.offset,
+        position: position ?? this.position,
+      );
 
   static DivTooltip? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

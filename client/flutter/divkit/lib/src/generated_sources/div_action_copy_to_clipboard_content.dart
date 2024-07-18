@@ -2,40 +2,29 @@
 
 import 'package:equatable/equatable.dart';
 
-import 'content_text.dart';
-import 'content_url.dart';
+import 'package:divkit/src/generated_sources/content_text.dart';
+import 'package:divkit/src/generated_sources/content_url.dart';
 
 class DivActionCopyToClipboardContent with EquatableMixin {
-  const DivActionCopyToClipboardContent(Object value) : _value = value;
-
-  final Object _value;
+  final Object value;
+  final int _index;
 
   @override
-  List<Object?> get props => [_value];
-
-  /// It may not work correctly so use [map] or [maybeMap]!
-  Object get value {
-    final value = _value;
-    if (value is ContentText) {
-      return value;
-    }
-    if (value is ContentUrl) {
-      return value;
-    }
-    throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivActionCopyToClipboardContent");
-  }
+  List<Object?> get props => [value];
 
   T map<T>({
     required T Function(ContentText) contentText,
     required T Function(ContentUrl) contentUrl,
   }) {
-    final value = _value;
-    if (value is ContentText) {
-      return contentText(value);
-    }
-    if (value is ContentUrl) {
-      return contentUrl(value);
+    switch (_index) {
+      case 0:
+        return contentText(
+          value as ContentText,
+        );
+      case 1:
+        return contentUrl(
+          value as ContentUrl,
+        );
     }
     throw Exception(
         "Type ${value.runtimeType.toString()} is not generalized in DivActionCopyToClipboardContent");
@@ -46,23 +35,34 @@ class DivActionCopyToClipboardContent with EquatableMixin {
     T Function(ContentUrl)? contentUrl,
     required T Function() orElse,
   }) {
-    final value = _value;
-    if (value is ContentText && contentText != null) {
-      return contentText(value);
-    }
-    if (value is ContentUrl && contentUrl != null) {
-      return contentUrl(value);
+    switch (_index) {
+      case 0:
+        if (contentText != null) {
+          return contentText(
+            value as ContentText,
+          );
+        }
+        break;
+      case 1:
+        if (contentUrl != null) {
+          return contentUrl(
+            value as ContentUrl,
+          );
+        }
+        break;
     }
     return orElse();
   }
 
   const DivActionCopyToClipboardContent.contentText(
-    ContentText value,
-  ) : _value = value;
+    ContentText obj,
+  )   : value = obj,
+        _index = 0;
 
   const DivActionCopyToClipboardContent.contentUrl(
-    ContentUrl value,
-  ) : _value = value;
+    ContentUrl obj,
+  )   : value = obj,
+        _index = 1;
 
   static DivActionCopyToClipboardContent? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -70,9 +70,11 @@ class DivActionCopyToClipboardContent with EquatableMixin {
     }
     switch (json['type']) {
       case ContentText.type:
-        return DivActionCopyToClipboardContent(ContentText.fromJson(json)!);
+        return DivActionCopyToClipboardContent.contentText(
+            ContentText.fromJson(json)!);
       case ContentUrl.type:
-        return DivActionCopyToClipboardContent(ContentUrl.fromJson(json)!);
+        return DivActionCopyToClipboardContent.contentUrl(
+            ContentUrl.fromJson(json)!);
     }
     return null;
   }

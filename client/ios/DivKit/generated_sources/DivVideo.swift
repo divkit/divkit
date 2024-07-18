@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivVideo: DivBase {
   public static let type: String = "video"
@@ -24,6 +24,7 @@ public final class DivVideo: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let muted: Expression<Bool> // default value: false
   public let paddings: DivEdgeInsets?
@@ -42,6 +43,7 @@ public final class DivVideo: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variables: [DivVariable]?
   public let videoSources: [DivVideoSource] // at least 1 elements
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
@@ -130,6 +132,7 @@ public final class DivVideo: DivBase {
     focus: DivFocus? = nil,
     height: DivSize? = nil,
     id: String? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     margins: DivEdgeInsets? = nil,
     muted: Expression<Bool>? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -148,6 +151,7 @@ public final class DivVideo: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variables: [DivVariable]? = nil,
     videoSources: [DivVideoSource],
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
@@ -172,6 +176,7 @@ public final class DivVideo: DivBase {
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.muted = muted ?? .value(false)
     self.paddings = paddings
@@ -190,6 +195,7 @@ public final class DivVideo: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.videoSources = videoSources
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
@@ -245,55 +251,57 @@ extension DivVideo: Equatable {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.muted == rhs.muted,
-      lhs.paddings == rhs.paddings
+      lhs.muted == rhs.muted
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.pauseActions == rhs.pauseActions,
-      lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview
+      lhs.preloadRequired == rhs.preloadRequired
     else {
       return false
     }
     guard
+      lhs.preview == rhs.preview,
       lhs.repeatable == rhs.repeatable,
-      lhs.resumeActions == rhs.resumeActions,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.resumeActions == rhs.resumeActions
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.videoSources == rhs.videoSources
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
-      lhs.visibility == rhs.visibility,
+      lhs.variables == rhs.variables,
+      lhs.videoSources == rhs.videoSources,
+      lhs.visibility == rhs.visibility
+    else {
+      return false
+    }
+    guard
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
-    else {
-      return false
-    }
-    guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -325,6 +333,7 @@ extension DivVideo: Serializable {
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["muted"] = muted.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
@@ -343,6 +352,7 @@ extension DivVideo: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["video_sources"] = videoSources.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()

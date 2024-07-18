@@ -17,6 +17,7 @@ export function render(opts: {
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     direction?: Direction;
     store?: Store;
+    weekStartDay?: number;
 }) {
     // Root has client-side typings, not a server one
     return (Root as any).render(opts).html;

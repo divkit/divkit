@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_change_transition.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_change_transition.dart';
 
 class DivChangeSetTransition with EquatableMixin {
   const DivChangeSetTransition({
@@ -19,19 +19,24 @@ class DivChangeSetTransition with EquatableMixin {
         items,
       ];
 
+  DivChangeSetTransition copyWith({
+    List<DivChangeTransition>? items,
+  }) =>
+      DivChangeSetTransition(
+        items: items ?? this.items,
+      );
+
   static DivChangeSetTransition? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return DivChangeSetTransition(
       items: safeParseObj(
-        (json['items'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivChangeTransition.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  DivChangeTransition.fromJson(v),
+                )!),
       )!,
     );
   }

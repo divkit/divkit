@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivTabsTemplate: TemplateValue {
   public final class ItemTemplate: TemplateValue {
@@ -121,6 +121,118 @@ public final class DivTabsTemplate: TemplateValue {
         div: try merged.div?.resolveParent(templates: templates),
         title: merged.title,
         titleClickAction: merged.titleClickAction?.tryResolveParent(templates: templates)
+      )
+    }
+  }
+
+  public final class TabTitleDelimiterTemplate: TemplateValue {
+    public let height: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(12))
+    public let imageUrl: Field<Expression<URL>>?
+    public let width: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(12))
+
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
+      self.init(
+        height: dictionary.getOptionalField("height", templateToType: templateToType),
+        imageUrl: dictionary.getOptionalExpressionField("image_url", transform: URL.init(string:)),
+        width: dictionary.getOptionalField("width", templateToType: templateToType)
+      )
+    }
+
+    init(
+      height: Field<DivFixedSizeTemplate>? = nil,
+      imageUrl: Field<Expression<URL>>? = nil,
+      width: Field<DivFixedSizeTemplate>? = nil
+    ) {
+      self.height = height
+      self.imageUrl = imageUrl
+      self.width = width
+    }
+
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: TabTitleDelimiterTemplate?) -> DeserializationResult<DivTabs.TabTitleDelimiter> {
+      let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+      let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
+      let widthValue = parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+      var errors = mergeErrors(
+        heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+        imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
+        widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
+      )
+      if case .noValue = imageUrlValue {
+        errors.append(.requiredFieldIsMissing(field: "image_url"))
+      }
+      guard
+        let imageUrlNonNil = imageUrlValue.value
+      else {
+        return .failure(NonEmptyArray(errors)!)
+      }
+      let result = DivTabs.TabTitleDelimiter(
+        height: heightValue.value,
+        imageUrl: imageUrlNonNil,
+        width: widthValue.value
+      )
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    }
+
+    public static func resolveValue(context: TemplatesContext, parent: TabTitleDelimiterTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTabs.TabTitleDelimiter> {
+      if useOnlyLinks {
+        return resolveOnlyLinks(context: context, parent: parent)
+      }
+      var heightValue: DeserializationResult<DivFixedSize> = .noValue
+      var imageUrlValue: DeserializationResult<Expression<URL>> = parent?.imageUrl?.value() ?? .noValue
+      var widthValue: DeserializationResult<DivFixedSize> = .noValue
+      context.templateData.forEach { key, __dictValue in
+        switch key {
+        case "height":
+          heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: heightValue)
+        case "image_url":
+          imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
+        case "width":
+          widthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: widthValue)
+        case parent?.height?.link:
+          heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+        case parent?.imageUrl?.link:
+          imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+        case parent?.width?.link:
+          widthValue = widthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+        default: break
+        }
+      }
+      if let parent = parent {
+        heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+        widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      }
+      var errors = mergeErrors(
+        heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+        imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
+        widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
+      )
+      if case .noValue = imageUrlValue {
+        errors.append(.requiredFieldIsMissing(field: "image_url"))
+      }
+      guard
+        let imageUrlNonNil = imageUrlValue.value
+      else {
+        return .failure(NonEmptyArray(errors)!)
+      }
+      let result = DivTabs.TabTitleDelimiter(
+        height: heightValue.value,
+        imageUrl: imageUrlNonNil,
+        width: widthValue.value
+      )
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    }
+
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> TabTitleDelimiterTemplate {
+      return self
+    }
+
+    public func resolveParent(templates: [TemplateName: Any]) throws -> TabTitleDelimiterTemplate {
+      let merged = try mergedWithParent(templates: templates)
+
+      return TabTitleDelimiterTemplate(
+        height: merged.height?.tryResolveParent(templates: templates),
+        imageUrl: merged.imageUrl,
+        width: merged.width?.tryResolveParent(templates: templates)
       )
     }
   }
@@ -465,6 +577,7 @@ public final class DivTabsTemplate: TemplateValue {
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
   public let items: Field<[ItemTemplate]>? // at least 1 elements
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let restrictParentScroll: Field<Expression<Bool>>? // default value: false
@@ -474,6 +587,7 @@ public final class DivTabsTemplate: TemplateValue {
   public let separatorColor: Field<Expression<Color>>? // default value: #14000000
   public let separatorPaddings: Field<DivEdgeInsetsTemplate>? // default value: DivEdgeInsets(bottom: .value(0), left: .value(12), right: .value(12), top: .value(0))
   public let switchTabsByContentSwipeEnabled: Field<Expression<Bool>>? // default value: true
+  public let tabTitleDelimiter: Field<TabTitleDelimiterTemplate>?
   public let tabTitleStyle: Field<TabTitleStyleTemplate>?
   public let titlePaddings: Field<DivEdgeInsetsTemplate>? // default value: DivEdgeInsets(bottom: .value(8), left: .value(12), right: .value(12), top: .value(0))
   public let tooltips: Field<[DivTooltipTemplate]>?
@@ -482,6 +596,7 @@ public final class DivTabsTemplate: TemplateValue {
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
+  public let variables: Field<[DivVariableTemplate]>?
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
   public let visibilityActions: Field<[DivVisibilityActionTemplate]>?
@@ -505,6 +620,7 @@ public final class DivTabsTemplate: TemplateValue {
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       restrictParentScroll: dictionary.getOptionalExpressionField("restrict_parent_scroll"),
@@ -514,6 +630,7 @@ public final class DivTabsTemplate: TemplateValue {
       separatorColor: dictionary.getOptionalExpressionField("separator_color", transform: Color.color(withHexString:)),
       separatorPaddings: dictionary.getOptionalField("separator_paddings", templateToType: templateToType),
       switchTabsByContentSwipeEnabled: dictionary.getOptionalExpressionField("switch_tabs_by_content_swipe_enabled"),
+      tabTitleDelimiter: dictionary.getOptionalField("tab_title_delimiter", templateToType: templateToType),
       tabTitleStyle: dictionary.getOptionalField("tab_title_style", templateToType: templateToType),
       titlePaddings: dictionary.getOptionalField("title_paddings", templateToType: templateToType),
       tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
@@ -522,6 +639,7 @@ public final class DivTabsTemplate: TemplateValue {
       transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
       transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
+      variables: dictionary.getOptionalArray("variables", templateToType: templateToType),
       visibility: dictionary.getOptionalExpressionField("visibility"),
       visibilityAction: dictionary.getOptionalField("visibility_action", templateToType: templateToType),
       visibilityActions: dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
@@ -546,6 +664,7 @@ public final class DivTabsTemplate: TemplateValue {
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     items: Field<[ItemTemplate]>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     restrictParentScroll: Field<Expression<Bool>>? = nil,
@@ -555,6 +674,7 @@ public final class DivTabsTemplate: TemplateValue {
     separatorColor: Field<Expression<Color>>? = nil,
     separatorPaddings: Field<DivEdgeInsetsTemplate>? = nil,
     switchTabsByContentSwipeEnabled: Field<Expression<Bool>>? = nil,
+    tabTitleDelimiter: Field<TabTitleDelimiterTemplate>? = nil,
     tabTitleStyle: Field<TabTitleStyleTemplate>? = nil,
     titlePaddings: Field<DivEdgeInsetsTemplate>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
@@ -563,6 +683,7 @@ public final class DivTabsTemplate: TemplateValue {
     transitionIn: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionTriggers: Field<[DivTransitionTrigger]>? = nil,
+    variables: Field<[DivVariableTemplate]>? = nil,
     visibility: Field<Expression<DivVisibility>>? = nil,
     visibilityAction: Field<DivVisibilityActionTemplate>? = nil,
     visibilityActions: Field<[DivVisibilityActionTemplate]>? = nil,
@@ -584,6 +705,7 @@ public final class DivTabsTemplate: TemplateValue {
     self.height = height
     self.id = id
     self.items = items
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.paddings = paddings
     self.restrictParentScroll = restrictParentScroll
@@ -593,6 +715,7 @@ public final class DivTabsTemplate: TemplateValue {
     self.separatorColor = separatorColor
     self.separatorPaddings = separatorPaddings
     self.switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled
+    self.tabTitleDelimiter = tabTitleDelimiter
     self.tabTitleStyle = tabTitleStyle
     self.titlePaddings = titlePaddings
     self.tooltips = tooltips
@@ -601,6 +724,7 @@ public final class DivTabsTemplate: TemplateValue {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -623,6 +747,7 @@ public final class DivTabsTemplate: TemplateValue {
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let restrictParentScrollValue = parent?.restrictParentScroll?.resolveOptionalValue(context: context) ?? .noValue
@@ -632,6 +757,7 @@ public final class DivTabsTemplate: TemplateValue {
     let separatorColorValue = parent?.separatorColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let separatorPaddingsValue = parent?.separatorPaddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let switchTabsByContentSwipeEnabledValue = parent?.switchTabsByContentSwipeEnabled?.resolveOptionalValue(context: context) ?? .noValue
+    let tabTitleDelimiterValue = parent?.tabTitleDelimiter?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let tabTitleStyleValue = parent?.tabTitleStyle?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let titlePaddingsValue = parent?.titlePaddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -640,6 +766,7 @@ public final class DivTabsTemplate: TemplateValue {
     let transitionInValue = parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    let variablesValue = parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -660,6 +787,7 @@ public final class DivTabsTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
@@ -669,6 +797,7 @@ public final class DivTabsTemplate: TemplateValue {
       separatorColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "separator_color", error: $0) },
       separatorPaddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "separator_paddings", error: $0) },
       switchTabsByContentSwipeEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "switch_tabs_by_content_swipe_enabled", error: $0) },
+      tabTitleDelimiterValue.errorsOrWarnings?.map { .nestedObjectError(field: "tab_title_delimiter", error: $0) },
       tabTitleStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "tab_title_style", error: $0) },
       titlePaddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "title_paddings", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
@@ -677,6 +806,7 @@ public final class DivTabsTemplate: TemplateValue {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
@@ -706,6 +836,7 @@ public final class DivTabsTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       items: itemsNonNil,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
       restrictParentScroll: restrictParentScrollValue.value,
@@ -715,6 +846,7 @@ public final class DivTabsTemplate: TemplateValue {
       separatorColor: separatorColorValue.value,
       separatorPaddings: separatorPaddingsValue.value,
       switchTabsByContentSwipeEnabled: switchTabsByContentSwipeEnabledValue.value,
+      tabTitleDelimiter: tabTitleDelimiterValue.value,
       tabTitleStyle: tabTitleStyleValue.value,
       titlePaddings: titlePaddingsValue.value,
       tooltips: tooltipsValue.value,
@@ -723,6 +855,7 @@ public final class DivTabsTemplate: TemplateValue {
       transitionIn: transitionInValue.value,
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
+      variables: variablesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -750,6 +883,7 @@ public final class DivTabsTemplate: TemplateValue {
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var itemsValue: DeserializationResult<[DivTabs.Item]> = .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var restrictParentScrollValue: DeserializationResult<Expression<Bool>> = parent?.restrictParentScroll?.value() ?? .noValue
@@ -759,6 +893,7 @@ public final class DivTabsTemplate: TemplateValue {
     var separatorColorValue: DeserializationResult<Expression<Color>> = parent?.separatorColor?.value() ?? .noValue
     var separatorPaddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var switchTabsByContentSwipeEnabledValue: DeserializationResult<Expression<Bool>> = parent?.switchTabsByContentSwipeEnabled?.value() ?? .noValue
+    var tabTitleDelimiterValue: DeserializationResult<DivTabs.TabTitleDelimiter> = .noValue
     var tabTitleStyleValue: DeserializationResult<DivTabs.TabTitleStyle> = .noValue
     var titlePaddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
@@ -767,6 +902,7 @@ public final class DivTabsTemplate: TemplateValue {
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    var variablesValue: DeserializationResult<[DivVariable]> = .noValue
     var visibilityValue: DeserializationResult<Expression<DivVisibility>> = parent?.visibility?.value() ?? .noValue
     var visibilityActionValue: DeserializationResult<DivVisibilityAction> = .noValue
     var visibilityActionsValue: DeserializationResult<[DivVisibilityAction]> = .noValue
@@ -803,6 +939,8 @@ public final class DivTabsTemplate: TemplateValue {
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTabsTemplate.ItemTemplate.self).merged(with: itemsValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "paddings":
@@ -821,6 +959,8 @@ public final class DivTabsTemplate: TemplateValue {
         separatorPaddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: separatorPaddingsValue)
       case "switch_tabs_by_content_swipe_enabled":
         switchTabsByContentSwipeEnabledValue = deserialize(__dictValue).merged(with: switchTabsByContentSwipeEnabledValue)
+      case "tab_title_delimiter":
+        tabTitleDelimiterValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTabsTemplate.TabTitleDelimiterTemplate.self).merged(with: tabTitleDelimiterValue)
       case "tab_title_style":
         tabTitleStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTabsTemplate.TabTitleStyleTemplate.self).merged(with: tabTitleStyleValue)
       case "title_paddings":
@@ -837,6 +977,8 @@ public final class DivTabsTemplate: TemplateValue {
         transitionOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionOutValue)
       case "transition_triggers":
         transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
+      case "variables":
+        variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
       case "visibility":
         visibilityValue = deserialize(__dictValue).merged(with: visibilityValue)
       case "visibility_action":
@@ -875,6 +1017,8 @@ public final class DivTabsTemplate: TemplateValue {
         idValue = idValue.merged(with: { deserialize(__dictValue) })
       case parent?.items?.link:
         itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTabsTemplate.ItemTemplate.self) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.paddings?.link:
@@ -893,6 +1037,8 @@ public final class DivTabsTemplate: TemplateValue {
         separatorPaddingsValue = separatorPaddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.switchTabsByContentSwipeEnabled?.link:
         switchTabsByContentSwipeEnabledValue = switchTabsByContentSwipeEnabledValue.merged(with: { deserialize(__dictValue) })
+      case parent?.tabTitleDelimiter?.link:
+        tabTitleDelimiterValue = tabTitleDelimiterValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTabsTemplate.TabTitleDelimiterTemplate.self) })
       case parent?.tabTitleStyle?.link:
         tabTitleStyleValue = tabTitleStyleValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTabsTemplate.TabTitleStyleTemplate.self) })
       case parent?.titlePaddings?.link:
@@ -909,6 +1055,8 @@ public final class DivTabsTemplate: TemplateValue {
         transitionOutValue = transitionOutValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self) })
       case parent?.transitionTriggers?.link:
         transitionTriggersValue = transitionTriggersValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator) })
+      case parent?.variables?.link:
+        variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
       case parent?.visibility?.link:
         visibilityValue = visibilityValue.merged(with: { deserialize(__dictValue) })
       case parent?.visibilityAction?.link:
@@ -929,10 +1077,12 @@ public final class DivTabsTemplate: TemplateValue {
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       separatorPaddingsValue = separatorPaddingsValue.merged(with: { parent.separatorPaddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      tabTitleDelimiterValue = tabTitleDelimiterValue.merged(with: { parent.tabTitleDelimiter?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       tabTitleStyleValue = tabTitleStyleValue.merged(with: { parent.tabTitleStyle?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       titlePaddingsValue = titlePaddingsValue.merged(with: { parent.titlePaddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       tooltipsValue = tooltipsValue.merged(with: { parent.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -940,6 +1090,7 @@ public final class DivTabsTemplate: TemplateValue {
       transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionValue = visibilityActionValue.merged(with: { parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -960,6 +1111,7 @@ public final class DivTabsTemplate: TemplateValue {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
@@ -969,6 +1121,7 @@ public final class DivTabsTemplate: TemplateValue {
       separatorColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "separator_color", error: $0) },
       separatorPaddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "separator_paddings", error: $0) },
       switchTabsByContentSwipeEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "switch_tabs_by_content_swipe_enabled", error: $0) },
+      tabTitleDelimiterValue.errorsOrWarnings?.map { .nestedObjectError(field: "tab_title_delimiter", error: $0) },
       tabTitleStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "tab_title_style", error: $0) },
       titlePaddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "title_paddings", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
@@ -977,6 +1130,7 @@ public final class DivTabsTemplate: TemplateValue {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
@@ -1006,6 +1160,7 @@ public final class DivTabsTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       items: itemsNonNil,
+      layoutProvider: layoutProviderValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
       restrictParentScroll: restrictParentScrollValue.value,
@@ -1015,6 +1170,7 @@ public final class DivTabsTemplate: TemplateValue {
       separatorColor: separatorColorValue.value,
       separatorPaddings: separatorPaddingsValue.value,
       switchTabsByContentSwipeEnabled: switchTabsByContentSwipeEnabledValue.value,
+      tabTitleDelimiter: tabTitleDelimiterValue.value,
       tabTitleStyle: tabTitleStyleValue.value,
       titlePaddings: titlePaddingsValue.value,
       tooltips: tooltipsValue.value,
@@ -1023,6 +1179,7 @@ public final class DivTabsTemplate: TemplateValue {
       transitionIn: transitionInValue.value,
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
+      variables: variablesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -1055,6 +1212,7 @@ public final class DivTabsTemplate: TemplateValue {
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       items: items ?? mergedParent.items,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       margins: margins ?? mergedParent.margins,
       paddings: paddings ?? mergedParent.paddings,
       restrictParentScroll: restrictParentScroll ?? mergedParent.restrictParentScroll,
@@ -1064,6 +1222,7 @@ public final class DivTabsTemplate: TemplateValue {
       separatorColor: separatorColor ?? mergedParent.separatorColor,
       separatorPaddings: separatorPaddings ?? mergedParent.separatorPaddings,
       switchTabsByContentSwipeEnabled: switchTabsByContentSwipeEnabled ?? mergedParent.switchTabsByContentSwipeEnabled,
+      tabTitleDelimiter: tabTitleDelimiter ?? mergedParent.tabTitleDelimiter,
       tabTitleStyle: tabTitleStyle ?? mergedParent.tabTitleStyle,
       titlePaddings: titlePaddings ?? mergedParent.titlePaddings,
       tooltips: tooltips ?? mergedParent.tooltips,
@@ -1072,6 +1231,7 @@ public final class DivTabsTemplate: TemplateValue {
       transitionIn: transitionIn ?? mergedParent.transitionIn,
       transitionOut: transitionOut ?? mergedParent.transitionOut,
       transitionTriggers: transitionTriggers ?? mergedParent.transitionTriggers,
+      variables: variables ?? mergedParent.variables,
       visibility: visibility ?? mergedParent.visibility,
       visibilityAction: visibilityAction ?? mergedParent.visibilityAction,
       visibilityActions: visibilityActions ?? mergedParent.visibilityActions,
@@ -1099,6 +1259,7 @@ public final class DivTabsTemplate: TemplateValue {
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       items: try merged.items?.resolveParent(templates: templates),
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       restrictParentScroll: merged.restrictParentScroll,
@@ -1108,6 +1269,7 @@ public final class DivTabsTemplate: TemplateValue {
       separatorColor: merged.separatorColor,
       separatorPaddings: merged.separatorPaddings?.tryResolveParent(templates: templates),
       switchTabsByContentSwipeEnabled: merged.switchTabsByContentSwipeEnabled,
+      tabTitleDelimiter: merged.tabTitleDelimiter?.tryResolveParent(templates: templates),
       tabTitleStyle: merged.tabTitleStyle?.tryResolveParent(templates: templates),
       titlePaddings: merged.titlePaddings?.tryResolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
@@ -1116,6 +1278,7 @@ public final class DivTabsTemplate: TemplateValue {
       transitionIn: merged.transitionIn?.tryResolveParent(templates: templates),
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),
       transitionTriggers: merged.transitionTriggers,
+      variables: merged.variables?.tryResolveParent(templates: templates),
       visibility: merged.visibility,
       visibilityAction: merged.visibilityAction?.tryResolveParent(templates: templates),
       visibilityActions: merged.visibilityActions?.tryResolveParent(templates: templates),

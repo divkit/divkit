@@ -1,0 +1,131 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {
+    "wrapper": {
+      "type": "container",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
+      "items": [
+        {
+          "type": "item"
+        }
+      ],
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0F0"
+        }
+      ]
+    },
+    "item": {
+      "type": "text",
+      "text": "item",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F00"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "item_spacing": 8,
+          "column_count": 3,
+          "background": [
+            {
+              "type": "solid",
+              "color": "#0000FF"
+            }
+          ],
+          "height": {
+            "type": "wrap_content"
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            },
+            {
+              "type": "wrapper"
+            }
+          ],
+          "paddings": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          }
+        }
+      }
+    ]
+  }
+}

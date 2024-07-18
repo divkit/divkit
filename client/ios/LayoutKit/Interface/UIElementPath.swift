@@ -1,26 +1,19 @@
 import Foundation
 
-import BaseTinyPublic
+import VGSL
 
-public struct UIElementPath: CustomStringConvertible, Hashable, ExpressibleByStringLiteral,
-  Codable {
-  private let address: ListNode<String>
+public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral, Codable {
+  private let address: ListNode
 
-  private init(address: ListNode<String>) {
+  private init(address: ListNode) {
     self.address = address
   }
 
   public init(_ root: String) {
-    #if INTERNAL_BUILD
-    precondition(!root.isEmpty)
-    #endif
     address = ListNode(value: root)
   }
 
   public init(parent: UIElementPath, child: String) {
-    #if INTERNAL_BUILD
-    precondition(!child.isEmpty)
-    #endif
     address = ListNode(value: child, next: parent.address)
   }
 
@@ -33,7 +26,10 @@ public struct UIElementPath: CustomStringConvertible, Hashable, ExpressibleByStr
   }
 
   public var parent: UIElementPath? {
-    address.next.map(UIElementPath.init)
+    if let parent = address.next {
+      return UIElementPath(address: parent)
+    }
+    return nil
   }
 
   public var root: String {
@@ -47,11 +43,26 @@ public struct UIElementPath: CustomStringConvertible, Hashable, ExpressibleByStr
   public var leaf: String {
     address.value
   }
+
+  public func starts(with path: UIElementPath) -> Bool {
+    if path == self {
+      return true
+    }
+    return parent?.starts(with: path) == true
+  }
+
+  public static func parse(_ path: String) -> UIElementPath {
+    let split = path.split(separator: "/")
+    if let first = split.first {
+      return UIElementPath(String(first)) + split.dropFirst().map(String.init)
+    }
+    return UIElementPath(path)
+  }
 }
 
-extension UIElementPath {
+extension UIElementPath: Hashable {
   public func hash(into hasher: inout Hasher) {
-    address.joined().hash(into: &hasher)
+    address.hash(into: &hasher)
   }
 }
 
@@ -95,36 +106,43 @@ extension UIElementPath {
   }
 }
 
-private final class ListNode<T: Codable>: Codable {
-  let value: T
-  let next: ListNode<T>?
+private final class ListNode: Codable, Hashable {
+  let value: String
+  let next: ListNode?
+  let nextHash: Int
 
-  init(value: T, next: ListNode<T>? = nil) {
+  init(value: String, next: ListNode? = nil) {
     self.value = value
     self.next = next
+    nextHash = next?.hashValue ?? 0
+  }
+
+  func hash(into hasher: inout Hasher) {
+    value.hash(into: &hasher)
+    nextHash.hash(into: &hasher)
   }
 }
 
-extension ListNode: Equatable where T: Equatable {
-  static func ==(lhs: ListNode<T>, rhs: ListNode<T>) -> Bool {
+extension ListNode: Equatable {
+  static func ==(lhs: ListNode, rhs: ListNode) -> Bool {
     if lhs === rhs {
       return true
     }
-
-    return lhs.value == rhs.value && lhs.next == rhs.next
+    return lhs.nextHash == rhs.nextHash && lhs.value == rhs.value && lhs.next == rhs.next
   }
 }
 
-extension ListNode: Hashable where T: Hashable {
-  func hash(into hasher: inout Hasher) {
-    value.hash(into: &hasher)
-    next?.hash(into: &hasher)
+extension ListNode {
+  fileprivate func joined(separator: String) -> String {
+    var result = String()
+    let (depth, countSum) = calcContentsParams()
+    result.reserveCapacity(countSum + separator.count * depth)
+    appendValue(to: &result)
+    return result
   }
-}
 
-extension ListNode where T == String {
   private func calcContentsParams() -> (depth: Int, countSum: Int) {
-    var current: ListNode<T>? = self
+    var current: ListNode? = self
     var depth = 0
     var countSum = 0
     while let currentNonNull = current {
@@ -141,13 +159,5 @@ extension ListNode where T == String {
       string.append("/")
     }
     string.append(value)
-  }
-
-  func joined(separator: T = "") -> T {
-    var result = String()
-    let (depth, countSum) = calcContentsParams()
-    result.reserveCapacity(countSum + separator.count * depth)
-    appendValue(to: &result)
-    return result
   }
 }

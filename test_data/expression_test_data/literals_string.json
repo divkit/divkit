@@ -1,218 +1,184 @@
 {
-    "cases": [
-        {
-            "name": "string literal",
-            "expression": "@{'abcd'}",
-            "expected": {
-                "type": "string",
-                "value": "abcd"
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal in escaping double quotes",
-            "expression": "@{\"abcd\"}",
-            "expected": {
-                "type": "error",
-                "value": ""
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal with escaping symbol",
-            "expression": "@{'This\\'s a string'}",
-            "expected": {
-                "type": "string",
-                "value": "This's a string"
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal without escaping symbol",
-            "expression": "@{'This's a string'}",
-            "expected": {
-                "type": "error",
-                "value": ""
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal without ending symbol",
-            "expression": "@{'This is a string}",
-            "expected": {
-                "type": "error",
-                "value": ""
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal without starting symbol",
-            "expression": "@{This is a string'}",
-            "expected": {
-                "type": "error",
-                "value": ""
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal with alone backslash",
-            "expression": "@{'\\'}",
-            "expected": {
-                "type": "error",
-                "value": "Error tokenizing '@{'\\'}'."
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal simple character escape",
-            "expression": "@{'\\a'}",
-            "expected": {
-                "type": "error",
-                "value": "Incorrect string escape"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal backslash escape",
-            "expression": "@{'\\\\'}",
-            "expected": {
-                "type": "string",
-                "value": "\\"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal quote escape",
-            "expression": "@{'\\''}",
-            "expected": {
-                "type": "string",
-                "value": "'"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal expression escape",
-            "expression": "@{'\\@{123}'}",
-            "expected": {
-                "type": "string",
-                "value": "@{123}"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal backslash with at",
-            "expression": "@{'\\@'}",
-            "expected": {
-                "type": "error",
-                "value": "Incorrect string escape"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal @ without interpolation",
-            "expression": "@{'a@bc.de'}",
-            "expected": {
-                "type": "string",
-                "value": "a@bc.de"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal interpolation start",
-            "expression": "@{'@{ Hello there'}",
-            "expected": {
-                "type": "error",
-                "value": "Error tokenizing '@{'@{ Hello there'}'."
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal escaped interpolation start",
-            "expression": "@{'\\@{ Hello there'}",
-            "expected": {
-                "type": "string",
-                "value": "@{ Hello there"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string literal multiple backslashes",
-            "expression": "@{'\\\\'}",
-            "expected": {
-                "type": "string",
-                "value": "\\"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        }
-    ]
+  "cases": [
+    {
+      "expression": "@{'abcd'}",
+      "expected": {
+        "type": "string",
+        "value": "abcd"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{\"abcd\"}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'This\\'s a string'}",
+      "expected": {
+        "type": "string",
+        "value": "This's a string"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'This's a string'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'This is a string}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{This is a string'}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'\\'}",
+      "expected": {
+        "type": "error",
+        "value": "Error tokenizing '@{'\\'}'."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'\\a'}",
+      "expected": {
+        "type": "error",
+        "value": "Incorrect string escape"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'\\\\'}",
+      "expected": {
+        "type": "string",
+        "value": "\\"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'\\''}",
+      "expected": {
+        "type": "string",
+        "value": "'"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'\\@{123}'}",
+      "expected": {
+        "type": "string",
+        "value": "@{123}"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'\\@'}",
+      "expected": {
+        "type": "error",
+        "value": "Incorrect string escape"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'a@bc.de'}",
+      "expected": {
+        "type": "string",
+        "value": "a@bc.de"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'@{ Hello there'}",
+      "expected": {
+        "type": "error",
+        "value": "Error tokenizing '@{'@{ Hello there'}'."
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{'\\@{ Hello there'}",
+      "expected": {
+        "type": "string",
+        "value": "@{ Hello there"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
 }

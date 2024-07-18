@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class DivExtension with EquatableMixin {
   const DivExtension({
@@ -20,6 +20,15 @@ class DivExtension with EquatableMixin {
         params,
       ];
 
+  DivExtension copyWith({
+    String? id,
+    Map<String, dynamic>? Function()? params,
+  }) =>
+      DivExtension(
+        id: id ?? this.id,
+        params: params != null ? params.call() : this.params,
+      );
+
   static DivExtension? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -29,7 +38,7 @@ class DivExtension with EquatableMixin {
         json['id']?.toString(),
       )!,
       params: safeParseMap(
-        json,
+        json['params'],
       ),
     );
   }

@@ -1,8 +1,6 @@
 import CoreGraphics
 import Foundation
 
-import LayoutKitInterface
-
 public struct VisibilityAction {
   let uiAction: UserInterfaceAction
   let requiredDuration: TimeInterval

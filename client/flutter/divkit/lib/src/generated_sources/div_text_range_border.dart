@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_stroke.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_stroke.dart';
 
 class DivTextRangeBorder with EquatableMixin {
   const DivTextRangeBorder({
@@ -21,6 +21,16 @@ class DivTextRangeBorder with EquatableMixin {
         cornerRadius,
         stroke,
       ];
+
+  DivTextRangeBorder copyWith({
+    Expression<int>? Function()? cornerRadius,
+    DivStroke? Function()? stroke,
+  }) =>
+      DivTextRangeBorder(
+        cornerRadius:
+            cornerRadius != null ? cornerRadius.call() : this.cornerRadius,
+        stroke: stroke != null ? stroke.call() : this.stroke,
+      );
 
   static DivTextRangeBorder? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

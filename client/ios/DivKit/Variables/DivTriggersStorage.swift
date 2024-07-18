@@ -1,7 +1,7 @@
 import Foundation
 
-import BasePublic
 import LayoutKit
+import VGSL
 
 public final class DivTriggersStorage {
   private typealias CardTriggers = (cardId: DivCardID, items: [Item])
@@ -16,7 +16,7 @@ public final class DivTriggersStorage {
   }
 
   private var triggersByCard: [CardTriggers] = []
-  private let triggersLock = RWLock()
+  private let lock = AllocatedUnfairLock()
 
   private let variablesStorage: DivVariablesStorage
   private let actionHandler: DivActionHandler?
@@ -45,57 +45,59 @@ public final class DivTriggersStorage {
     triggers: [DivTrigger]
   ) {
     let cardTriggers = (cardId, triggers.map { Item($0) })
-    triggersLock.write {
+    lock.withLock {
       triggersByCard.removeAll { $0.cardId == cardId }
       triggersByCard.append(cardTriggers)
     }
-    let variables = variablesStorage.makeVariables(for: cardId)
     runActions(
       cardTriggers: cardTriggers,
-      changedVariablesNames: Set(variables.keys),
-      variables: variables
+      changedVariablesNames: nil
     )
   }
 
   private func runActions(event: DivVariablesStorage.ChangeEvent) {
-    var triggers: [CardTriggers] = []
-    triggersLock.read {
+    let triggers = lock.withLock {
       switch event.kind {
       case let .local(cardId, _):
-        triggers = triggersByCard
+        triggersByCard
           .first { $0.cardId == cardId }
           .map { [$0] } ?? []
       case .global:
-        triggers = triggersByCard
+        triggersByCard
       }
     }
 
     for cardTriggers in triggers {
       runActions(
         cardTriggers: cardTriggers,
-        changedVariablesNames: event.changedVariables,
-        variables: event.newValues.makeVariables(for: cardTriggers.cardId)
+        changedVariablesNames: event.changedVariables
       )
     }
   }
 
   private func runActions(
     cardTriggers: CardTriggers,
-    changedVariablesNames: Set<DivVariableName>,
-    variables: DivVariables
+    changedVariablesNames: Set<DivVariableName>?
   ) {
     let cardId = cardTriggers.cardId
     for item in cardTriggers.items {
       let trigger = item.trigger
-      if trigger.condition.variablesNames.isDisjoint(with: changedVariablesNames) {
+      let triggerVariablesNames = trigger.condition.variablesNames
+      if triggerVariablesNames.isEmpty {
+        // conditions without variables is considered to be invalid
+        continue
+      }
+
+      if let changedVariablesNames, triggerVariablesNames.isDisjoint(with: changedVariablesNames) {
         continue
       }
 
       let oldCondition = item.condition
       let expressionResolver = ExpressionResolver(
-        variables: variables,
+        path: cardId.path,
+        variablesStorage: variablesStorage,
         persistentValuesStorage: persistentValuesStorage,
-        errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
+        reporter: reporter
       )
       item.condition = trigger.resolveCondition(expressionResolver) ?? false
       if !item.condition {
@@ -108,7 +110,7 @@ public final class DivTriggersStorage {
       for action in trigger.actions {
         actionHandler?.handle(
           action,
-          cardId: cardId,
+          path: cardId.path,
           source: .trigger,
           sender: nil
         )

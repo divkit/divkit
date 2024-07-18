@@ -38,12 +38,12 @@ class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber 
 
     override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
         defaultVisit(data, resolver)
-        data.value.nonNullItems.forEach { visit(it, resolver) }
+        data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
     }
 
     override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
         defaultVisit(data, resolver)
-        data.value.nonNullItems.forEach { visit(it, resolver) }
+        data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
     }
 
     override fun visit(data: Div.Tabs, resolver: ExpressionResolver) {

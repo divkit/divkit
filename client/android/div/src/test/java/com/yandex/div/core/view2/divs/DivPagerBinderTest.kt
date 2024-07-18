@@ -6,6 +6,8 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.divs.pager.DivPagerBinder
+import com.yandex.div.core.view2.divs.pager.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.core.nonNullItems

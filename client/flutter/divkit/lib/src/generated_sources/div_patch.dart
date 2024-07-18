@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div.dart';
 
 class DivPatch with EquatableMixin {
   const DivPatch({
@@ -22,19 +22,26 @@ class DivPatch with EquatableMixin {
         mode,
       ];
 
+  DivPatch copyWith({
+    List<DivPatchChange>? changes,
+    Expression<DivPatchMode>? mode,
+  }) =>
+      DivPatch(
+        changes: changes ?? this.changes,
+        mode: mode ?? this.mode,
+      );
+
   static DivPatch? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return DivPatch(
       changes: safeParseObj(
-        (json['changes'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivPatchChange.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['changes'],
+            (v) => safeParseObj(
+                  DivPatchChange.fromJson(v),
+                )!),
       )!,
       mode: safeParseStrEnumExpr(
         json['mode'],
@@ -108,6 +115,15 @@ class DivPatchChange with EquatableMixin {
         items,
       ];
 
+  DivPatchChange copyWith({
+    String? id,
+    List<Div>? Function()? items,
+  }) =>
+      DivPatchChange(
+        id: id ?? this.id,
+        items: items != null ? items.call() : this.items,
+      );
+
   static DivPatchChange? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -117,13 +133,11 @@ class DivPatchChange with EquatableMixin {
         json['id']?.toString(),
       )!,
       items: safeParseObj(
-        (json['items'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                Div.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  Div.fromJson(v),
+                )!),
       ),
     );
   }

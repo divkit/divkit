@@ -1,9 +1,10 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
+/// Deprecated. Use `DivActionHandler`.
 public final class DivActionURLHandler {
   public typealias UpdateCardAction = (UpdateReason) -> Void
   public typealias ShowTooltipAction = (TooltipInfo) -> Void
@@ -63,10 +64,19 @@ public final class DivActionURLHandler {
     cardId: DivCardID,
     completion: @escaping (Result<Void, Error>) -> Void = { _ in }
   ) -> Bool {
+    handleURL(url, path: cardId.path, completion: completion)
+  }
+
+  func handleURL(
+    _ url: URL,
+    path: UIElementPath,
+    completion: @escaping (Result<Void, Error>) -> Void = { _ in }
+  ) -> Bool {
     guard let intent = DivActionIntent(url: url) else {
       return false
     }
 
+    let cardId = path.cardId
     switch intent {
     case let .showTooltip(id, multiple):
       let tooltipInfo = TooltipInfo(id: id, showsOnStart: false, multiple: multiple)
@@ -96,7 +106,7 @@ public final class DivActionURLHandler {
       updateCard(.state(cardId))
     case let .setVariable(name, value):
       variableUpdater.update(
-        cardId: cardId,
+        path: path,
         name: DivVariableName(rawValue: name),
         value: value
       )

@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCorePublic
+import VGSL
 
 public protocol WrapperBlock: SizeForwardingBlock {
   var child: Block { get }

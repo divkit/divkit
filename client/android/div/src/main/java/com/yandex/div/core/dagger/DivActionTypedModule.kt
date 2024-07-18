@@ -3,6 +3,7 @@ package com.yandex.div.core.dagger
 import com.yandex.div.core.actions.DivActionTypedArrayMutationHandler
 import com.yandex.div.core.actions.DivActionTypedClearFocusHandler
 import com.yandex.div.core.actions.DivActionTypedCopyToClipboardHandler
+import com.yandex.div.core.actions.DivActionTypedDictSetValueHandler
 import com.yandex.div.core.actions.DivActionTypedSetVariableHandler
 import com.yandex.div.core.actions.DivActionTypedHandler
 import com.yandex.div.core.actions.DivActionTypedFocusElementHandler
@@ -21,14 +22,8 @@ internal interface DivActionTypedModule {
 
     @Binds
     @IntoSet
-    fun provideSetVariableActionHandler(
-        impl: DivActionTypedSetVariableHandler
-    ): DivActionTypedHandler
-
-    @Binds
-    @IntoSet
-    fun provideFocusElementActionHandler(
-        impl: DivActionTypedFocusElementHandler
+    fun provideClearFocusActionHandler(
+        impl: DivActionTypedClearFocusHandler
     ): DivActionTypedHandler
 
     @Binds
@@ -39,7 +34,19 @@ internal interface DivActionTypedModule {
 
     @Binds
     @IntoSet
-    fun provideClearFocusActionHandler(
-        impl: DivActionTypedClearFocusHandler
+    fun provideDictSetValueActionHandler(
+        impl: DivActionTypedDictSetValueHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
+    fun provideFocusElementActionHandler(
+        impl: DivActionTypedFocusElementHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
+    fun provideSetVariableActionHandler(
+        impl: DivActionTypedSetVariableHandler
     ): DivActionTypedHandler
 }

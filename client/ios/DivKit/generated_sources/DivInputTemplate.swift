@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivInputTemplate: TemplateValue {
   public final class NativeInterfaceTemplate: TemplateValue {
@@ -97,6 +97,7 @@ public final class DivInputTemplate: TemplateValue {
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
+  public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let highlightColor: Field<Expression<Color>>?
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
@@ -104,10 +105,12 @@ public final class DivInputTemplate: TemplateValue {
   public let id: Field<String>?
   public let isEnabled: Field<Expression<Bool>>? // default value: true
   public let keyboardType: Field<Expression<KeyboardType>>? // default value: multi_line_text
+  public let layoutProvider: Field<DivLayoutProviderTemplate>?
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let mask: Field<DivInputMaskTemplate>?
+  public let maxLength: Field<Expression<Int>>? // constraint: number > 0
   public let maxVisibleLines: Field<Expression<Int>>? // constraint: number > 0
   public let nativeInterface: Field<NativeInterfaceTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -125,6 +128,7 @@ public final class DivInputTemplate: TemplateValue {
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
   public let validators: Field<[DivInputValidatorTemplate]>?
+  public let variables: Field<[DivVariableTemplate]>?
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
   public let visibilityActions: Field<[DivVisibilityActionTemplate]>?
@@ -147,6 +151,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSize: dictionary.getOptionalExpressionField("font_size"),
       fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
       fontWeight: dictionary.getOptionalExpressionField("font_weight"),
+      fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       highlightColor: dictionary.getOptionalExpressionField("highlight_color", transform: Color.color(withHexString:)),
       hintColor: dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:)),
@@ -154,10 +159,12 @@ public final class DivInputTemplate: TemplateValue {
       id: dictionary.getOptionalField("id"),
       isEnabled: dictionary.getOptionalExpressionField("is_enabled"),
       keyboardType: dictionary.getOptionalExpressionField("keyboard_type"),
+      layoutProvider: dictionary.getOptionalField("layout_provider", templateToType: templateToType),
       letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
       lineHeight: dictionary.getOptionalExpressionField("line_height"),
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       mask: dictionary.getOptionalField("mask", templateToType: templateToType),
+      maxLength: dictionary.getOptionalExpressionField("max_length"),
       maxVisibleLines: dictionary.getOptionalExpressionField("max_visible_lines"),
       nativeInterface: dictionary.getOptionalField("native_interface", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -175,6 +182,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
       transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
       validators: dictionary.getOptionalArray("validators", templateToType: templateToType),
+      variables: dictionary.getOptionalArray("variables", templateToType: templateToType),
       visibility: dictionary.getOptionalExpressionField("visibility"),
       visibilityAction: dictionary.getOptionalField("visibility_action", templateToType: templateToType),
       visibilityActions: dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
@@ -198,6 +206,7 @@ public final class DivInputTemplate: TemplateValue {
     fontSize: Field<Expression<Int>>? = nil,
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
+    fontWeightValue: Field<Expression<Int>>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     highlightColor: Field<Expression<Color>>? = nil,
     hintColor: Field<Expression<Color>>? = nil,
@@ -205,10 +214,12 @@ public final class DivInputTemplate: TemplateValue {
     id: Field<String>? = nil,
     isEnabled: Field<Expression<Bool>>? = nil,
     keyboardType: Field<Expression<KeyboardType>>? = nil,
+    layoutProvider: Field<DivLayoutProviderTemplate>? = nil,
     letterSpacing: Field<Expression<Double>>? = nil,
     lineHeight: Field<Expression<Int>>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     mask: Field<DivInputMaskTemplate>? = nil,
+    maxLength: Field<Expression<Int>>? = nil,
     maxVisibleLines: Field<Expression<Int>>? = nil,
     nativeInterface: Field<NativeInterfaceTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -226,6 +237,7 @@ public final class DivInputTemplate: TemplateValue {
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionTriggers: Field<[DivTransitionTrigger]>? = nil,
     validators: Field<[DivInputValidatorTemplate]>? = nil,
+    variables: Field<[DivVariableTemplate]>? = nil,
     visibility: Field<Expression<DivVisibility>>? = nil,
     visibilityAction: Field<DivVisibilityActionTemplate>? = nil,
     visibilityActions: Field<[DivVisibilityActionTemplate]>? = nil,
@@ -246,6 +258,7 @@ public final class DivInputTemplate: TemplateValue {
     self.fontSize = fontSize
     self.fontSizeUnit = fontSizeUnit
     self.fontWeight = fontWeight
+    self.fontWeightValue = fontWeightValue
     self.height = height
     self.highlightColor = highlightColor
     self.hintColor = hintColor
@@ -253,10 +266,12 @@ public final class DivInputTemplate: TemplateValue {
     self.id = id
     self.isEnabled = isEnabled
     self.keyboardType = keyboardType
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing
     self.lineHeight = lineHeight
     self.margins = margins
     self.mask = mask
+    self.maxLength = maxLength
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
@@ -274,6 +289,7 @@ public final class DivInputTemplate: TemplateValue {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.validators = validators
+    self.variables = variables
     self.visibility = visibility
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -295,6 +311,7 @@ public final class DivInputTemplate: TemplateValue {
     let fontSizeValue = parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
     let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue
     let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue
+    let fontWeightValueValue = parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let highlightColorValue = parent?.highlightColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let hintColorValue = parent?.hintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
@@ -302,10 +319,12 @@ public final class DivInputTemplate: TemplateValue {
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue
     let keyboardTypeValue = parent?.keyboardType?.resolveOptionalValue(context: context) ?? .noValue
+    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let maskValue = parent?.mask?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let maxLengthValue = parent?.maxLength?.resolveOptionalValue(context: context, validator: ResolvedValue.maxLengthValidator) ?? .noValue
     let maxVisibleLinesValue = parent?.maxVisibleLines?.resolveOptionalValue(context: context, validator: ResolvedValue.maxVisibleLinesValidator) ?? .noValue
     let nativeInterfaceValue = parent?.nativeInterface?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -323,6 +342,7 @@ public final class DivInputTemplate: TemplateValue {
     let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
     let validatorsValue = parent?.validators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let variablesValue = parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -342,6 +362,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
+      fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       highlightColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "highlight_color", error: $0) },
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
@@ -349,10 +370,12 @@ public final class DivInputTemplate: TemplateValue {
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       keyboardTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "keyboard_type", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
+      maxLengthValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_length", error: $0) },
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -370,6 +393,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
       validatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "validators", error: $0) },
+      variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
@@ -398,6 +422,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSize: fontSizeValue.value,
       fontSizeUnit: fontSizeUnitValue.value,
       fontWeight: fontWeightValue.value,
+      fontWeightValue: fontWeightValueValue.value,
       height: heightValue.value,
       highlightColor: highlightColorValue.value,
       hintColor: hintColorValue.value,
@@ -405,10 +430,12 @@ public final class DivInputTemplate: TemplateValue {
       id: idValue.value,
       isEnabled: isEnabledValue.value,
       keyboardType: keyboardTypeValue.value,
+      layoutProvider: layoutProviderValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
       mask: maskValue.value,
+      maxLength: maxLengthValue.value,
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
@@ -426,6 +453,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
       validators: validatorsValue.value,
+      variables: variablesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -452,6 +480,7 @@ public final class DivInputTemplate: TemplateValue {
     var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
+    var fontWeightValueValue: DeserializationResult<Expression<Int>> = parent?.fontWeightValue?.value() ?? .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var highlightColorValue: DeserializationResult<Expression<Color>> = parent?.highlightColor?.value() ?? .noValue
     var hintColorValue: DeserializationResult<Expression<Color>> = parent?.hintColor?.value() ?? .noValue
@@ -459,10 +488,12 @@ public final class DivInputTemplate: TemplateValue {
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
     var keyboardTypeValue: DeserializationResult<Expression<DivInput.KeyboardType>> = parent?.keyboardType?.value() ?? .noValue
+    var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var letterSpacingValue: DeserializationResult<Expression<Double>> = parent?.letterSpacing?.value() ?? .noValue
     var lineHeightValue: DeserializationResult<Expression<Int>> = parent?.lineHeight?.value() ?? .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var maskValue: DeserializationResult<DivInputMask> = .noValue
+    var maxLengthValue: DeserializationResult<Expression<Int>> = parent?.maxLength?.value() ?? .noValue
     var maxVisibleLinesValue: DeserializationResult<Expression<Int>> = parent?.maxVisibleLines?.value() ?? .noValue
     var nativeInterfaceValue: DeserializationResult<DivInput.NativeInterface> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -480,6 +511,7 @@ public final class DivInputTemplate: TemplateValue {
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue
     var validatorsValue: DeserializationResult<[DivInputValidator]> = .noValue
+    var variablesValue: DeserializationResult<[DivVariable]> = .noValue
     var visibilityValue: DeserializationResult<Expression<DivVisibility>> = parent?.visibility?.value() ?? .noValue
     var visibilityActionValue: DeserializationResult<DivVisibilityAction> = .noValue
     var visibilityActionsValue: DeserializationResult<[DivVisibilityAction]> = .noValue
@@ -514,6 +546,8 @@ public final class DivInputTemplate: TemplateValue {
         fontSizeUnitValue = deserialize(__dictValue).merged(with: fontSizeUnitValue)
       case "font_weight":
         fontWeightValue = deserialize(__dictValue).merged(with: fontWeightValue)
+      case "font_weight_value":
+        fontWeightValueValue = deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator).merged(with: fontWeightValueValue)
       case "height":
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "highlight_color":
@@ -528,6 +562,8 @@ public final class DivInputTemplate: TemplateValue {
         isEnabledValue = deserialize(__dictValue).merged(with: isEnabledValue)
       case "keyboard_type":
         keyboardTypeValue = deserialize(__dictValue).merged(with: keyboardTypeValue)
+      case "layout_provider":
+        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
       case "letter_spacing":
         letterSpacingValue = deserialize(__dictValue).merged(with: letterSpacingValue)
       case "line_height":
@@ -536,6 +572,8 @@ public final class DivInputTemplate: TemplateValue {
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "mask":
         maskValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputMaskTemplate.self).merged(with: maskValue)
+      case "max_length":
+        maxLengthValue = deserialize(__dictValue, validator: ResolvedValue.maxLengthValidator).merged(with: maxLengthValue)
       case "max_visible_lines":
         maxVisibleLinesValue = deserialize(__dictValue, validator: ResolvedValue.maxVisibleLinesValidator).merged(with: maxVisibleLinesValue)
       case "native_interface":
@@ -570,6 +608,8 @@ public final class DivInputTemplate: TemplateValue {
         transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
       case "validators":
         validatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputValidatorTemplate.self).merged(with: validatorsValue)
+      case "variables":
+        variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
       case "visibility":
         visibilityValue = deserialize(__dictValue).merged(with: visibilityValue)
       case "visibility_action":
@@ -606,6 +646,8 @@ public final class DivInputTemplate: TemplateValue {
         fontSizeUnitValue = fontSizeUnitValue.merged(with: { deserialize(__dictValue) })
       case parent?.fontWeight?.link:
         fontWeightValue = fontWeightValue.merged(with: { deserialize(__dictValue) })
+      case parent?.fontWeightValue?.link:
+        fontWeightValueValue = fontWeightValueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator) })
       case parent?.height?.link:
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.highlightColor?.link:
@@ -620,6 +662,8 @@ public final class DivInputTemplate: TemplateValue {
         isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
       case parent?.keyboardType?.link:
         keyboardTypeValue = keyboardTypeValue.merged(with: { deserialize(__dictValue) })
+      case parent?.layoutProvider?.link:
+        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
       case parent?.letterSpacing?.link:
         letterSpacingValue = letterSpacingValue.merged(with: { deserialize(__dictValue) })
       case parent?.lineHeight?.link:
@@ -628,6 +672,8 @@ public final class DivInputTemplate: TemplateValue {
         marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.mask?.link:
         maskValue = maskValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputMaskTemplate.self) })
+      case parent?.maxLength?.link:
+        maxLengthValue = maxLengthValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.maxLengthValidator) })
       case parent?.maxVisibleLines?.link:
         maxVisibleLinesValue = maxVisibleLinesValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.maxVisibleLinesValidator) })
       case parent?.nativeInterface?.link:
@@ -662,6 +708,8 @@ public final class DivInputTemplate: TemplateValue {
         transitionTriggersValue = transitionTriggersValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator) })
       case parent?.validators?.link:
         validatorsValue = validatorsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputValidatorTemplate.self) })
+      case parent?.variables?.link:
+        variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
       case parent?.visibility?.link:
         visibilityValue = visibilityValue.merged(with: { deserialize(__dictValue) })
       case parent?.visibilityAction?.link:
@@ -681,6 +729,7 @@ public final class DivInputTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       maskValue = maskValue.merged(with: { parent.mask?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       nativeInterfaceValue = nativeInterfaceValue.merged(with: { parent.nativeInterface?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -692,6 +741,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       validatorsValue = validatorsValue.merged(with: { parent.validators?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionValue = visibilityActionValue.merged(with: { parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -711,6 +761,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
+      fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       highlightColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "highlight_color", error: $0) },
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
@@ -718,10 +769,12 @@ public final class DivInputTemplate: TemplateValue {
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       keyboardTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "keyboard_type", error: $0) },
+      layoutProviderValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_provider", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
+      maxLengthValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_length", error: $0) },
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -739,6 +792,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
       validatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "validators", error: $0) },
+      variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
@@ -767,6 +821,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSize: fontSizeValue.value,
       fontSizeUnit: fontSizeUnitValue.value,
       fontWeight: fontWeightValue.value,
+      fontWeightValue: fontWeightValueValue.value,
       height: heightValue.value,
       highlightColor: highlightColorValue.value,
       hintColor: hintColorValue.value,
@@ -774,10 +829,12 @@ public final class DivInputTemplate: TemplateValue {
       id: idValue.value,
       isEnabled: isEnabledValue.value,
       keyboardType: keyboardTypeValue.value,
+      layoutProvider: layoutProviderValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
       mask: maskValue.value,
+      maxLength: maxLengthValue.value,
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
@@ -795,6 +852,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
       validators: validatorsValue.value,
+      variables: variablesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -826,6 +884,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSize: fontSize ?? mergedParent.fontSize,
       fontSizeUnit: fontSizeUnit ?? mergedParent.fontSizeUnit,
       fontWeight: fontWeight ?? mergedParent.fontWeight,
+      fontWeightValue: fontWeightValue ?? mergedParent.fontWeightValue,
       height: height ?? mergedParent.height,
       highlightColor: highlightColor ?? mergedParent.highlightColor,
       hintColor: hintColor ?? mergedParent.hintColor,
@@ -833,10 +892,12 @@ public final class DivInputTemplate: TemplateValue {
       id: id ?? mergedParent.id,
       isEnabled: isEnabled ?? mergedParent.isEnabled,
       keyboardType: keyboardType ?? mergedParent.keyboardType,
+      layoutProvider: layoutProvider ?? mergedParent.layoutProvider,
       letterSpacing: letterSpacing ?? mergedParent.letterSpacing,
       lineHeight: lineHeight ?? mergedParent.lineHeight,
       margins: margins ?? mergedParent.margins,
       mask: mask ?? mergedParent.mask,
+      maxLength: maxLength ?? mergedParent.maxLength,
       maxVisibleLines: maxVisibleLines ?? mergedParent.maxVisibleLines,
       nativeInterface: nativeInterface ?? mergedParent.nativeInterface,
       paddings: paddings ?? mergedParent.paddings,
@@ -854,6 +915,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionOut: transitionOut ?? mergedParent.transitionOut,
       transitionTriggers: transitionTriggers ?? mergedParent.transitionTriggers,
       validators: validators ?? mergedParent.validators,
+      variables: variables ?? mergedParent.variables,
       visibility: visibility ?? mergedParent.visibility,
       visibilityAction: visibilityAction ?? mergedParent.visibilityAction,
       visibilityActions: visibilityActions ?? mergedParent.visibilityActions,
@@ -880,6 +942,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSize: merged.fontSize,
       fontSizeUnit: merged.fontSizeUnit,
       fontWeight: merged.fontWeight,
+      fontWeightValue: merged.fontWeightValue,
       height: merged.height?.tryResolveParent(templates: templates),
       highlightColor: merged.highlightColor,
       hintColor: merged.hintColor,
@@ -887,10 +950,12 @@ public final class DivInputTemplate: TemplateValue {
       id: merged.id,
       isEnabled: merged.isEnabled,
       keyboardType: merged.keyboardType,
+      layoutProvider: merged.layoutProvider?.tryResolveParent(templates: templates),
       letterSpacing: merged.letterSpacing,
       lineHeight: merged.lineHeight,
       margins: merged.margins?.tryResolveParent(templates: templates),
       mask: merged.mask?.tryResolveParent(templates: templates),
+      maxLength: merged.maxLength,
       maxVisibleLines: merged.maxVisibleLines,
       nativeInterface: merged.nativeInterface?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),
@@ -908,6 +973,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),
       transitionTriggers: merged.transitionTriggers,
       validators: merged.validators?.tryResolveParent(templates: templates),
+      variables: merged.variables?.tryResolveParent(templates: templates),
       visibility: merged.visibility,
       visibilityAction: merged.visibilityAction?.tryResolveParent(templates: templates),
       visibilityActions: merged.visibilityActions?.tryResolveParent(templates: templates),

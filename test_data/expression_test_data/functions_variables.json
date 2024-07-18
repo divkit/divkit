@@ -1,8 +1,7 @@
 {
   "cases": [
     {
-      "name": "getIntegerValue(correctIntVar, fallback) => intVal",
-      "expression": "@{getIntegerValue('abc', 456)}",
+      "expression": "@{getIntegerValue('integer_var', 456)}",
       "expected": {
         "type": "integer",
         "value": 123
@@ -10,7 +9,7 @@
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         }
       ],
@@ -21,8 +20,7 @@
       ]
     },
     {
-      "name": "getIntegerValue(incorrectIntVar, fallback) => intVal",
-      "expression": "@{getIntegerValue('abc', 456)}",
+      "expression": "@{getIntegerValue('number_var', 456)}",
       "expected": {
         "type": "integer",
         "value": 456
@@ -30,7 +28,7 @@
       "variables": [
         {
           "type": "number",
-          "name": "abc",
+          "name": "number_var",
           "value": 123.0
         }
       ],
@@ -41,13 +39,11 @@
       ]
     },
     {
-      "name": "getIntegerValue(nonexistentIntVar, fallback) => intVal",
-      "expression": "@{getIntegerValue('abc', 456)}",
+      "expression": "@{getIntegerValue('unknown_var', 456)}",
       "expected": {
         "type": "integer",
         "value": 456
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -55,17 +51,16 @@
       ]
     },
     {
-      "name": "getNumberValue(correctNumberVar, fallback) => numberVal",
-      "expression": "@{getNumberValue('abc', 456.0)}",
+      "expression": "@{getNumberValue('number_var', 456.78)}",
       "expected": {
         "type": "number",
-        "value": 123.0
+        "value": 123.45
       },
       "variables": [
         {
           "type": "number",
-          "name": "abc",
-          "value": 123.0
+          "name": "number_var",
+          "value": 123.45
         }
       ],
       "platforms": [
@@ -75,16 +70,15 @@
       ]
     },
     {
-      "name": "getNumberValue(incorrectNumberVar, fallback) => numberVal",
-      "expression": "@{getNumberValue('abc', 456.0)}",
+      "expression": "@{getNumberValue('integer_var', 456.78)}",
       "expected": {
         "type": "number",
-        "value": 456.0
+        "value": 456.78
       },
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         }
       ],
@@ -95,13 +89,11 @@
       ]
     },
     {
-      "name": "getNumberValue(nonexistentNumberVar, fallback) => numberVal",
-      "expression": "@{getNumberValue('abc', 456.0)}",
+      "expression": "@{getNumberValue('unknown_var', 456.78)}",
       "expected": {
         "type": "number",
-        "value": 456.0
+        "value": 456.78
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -109,8 +101,7 @@
       ]
     },
     {
-      "name": "getBooleanValue(correctBooleanVar, fallback) => booleanVal",
-      "expression": "@{getBooleanValue('abc', false)}",
+      "expression": "@{getBooleanValue('boolean_var', false)}",
       "expected": {
         "type": "boolean",
         "value": true
@@ -118,7 +109,7 @@
       "variables": [
         {
           "type": "boolean",
-          "name": "abc",
+          "name": "boolean_var",
           "value": true
         }
       ],
@@ -129,8 +120,7 @@
       ]
     },
     {
-      "name": "getBooleanValue(incorrectBooleanVar, fallback) => booleanVal",
-      "expression": "@{getBooleanValue('abc', false)}",
+      "expression": "@{getBooleanValue('integer_var', false)}",
       "expected": {
         "type": "boolean",
         "value": false
@@ -138,7 +128,7 @@
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         }
       ],
@@ -149,13 +139,11 @@
       ]
     },
     {
-      "name": "getBooleanValue(nonexistentBooleanVar, fallback) => booleanVal",
-      "expression": "@{getBooleanValue('abc', false)}",
+      "expression": "@{getBooleanValue('unknown_var', false)}",
       "expected": {
         "type": "boolean",
         "value": false
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -163,17 +151,16 @@
       ]
     },
     {
-      "name": "getStringValue(correctStringVar, fallback) => stringVal",
-      "expression": "@{getStringValue('abc', 'b')}",
+      "expression": "@{getStringValue('string_var', 'fallback')}",
       "expected": {
         "type": "string",
-        "value": "a"
+        "value": "value"
       },
       "variables": [
         {
           "type": "string",
-          "name": "abc",
-          "value": "a"
+          "name": "string_var",
+          "value": "value"
         }
       ],
       "platforms": [
@@ -183,16 +170,15 @@
       ]
     },
     {
-      "name": "getStringValue(incorrectStringVar, fallback) => stringVal",
-      "expression": "@{getStringValue('abc', 'b')}",
+      "expression": "@{getStringValue('integer_var', 'fallback')}",
       "expected": {
         "type": "string",
-        "value": "b"
+        "value": "fallback"
       },
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         }
       ],
@@ -203,13 +189,11 @@
       ]
     },
     {
-      "name": "getStringValue(nonexistentStringVar, fallback) => stringVal",
-      "expression": "@{getStringValue('abc', 'b')}",
+      "expression": "@{getStringValue('unknown_var', 'fallback')}",
       "expected": {
         "type": "string",
-        "value": "b"
+        "value": "fallback"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -217,8 +201,7 @@
       ]
     },
     {
-      "name": "getColorValue(correctColorVar, fallbackVar) => colorVal",
-      "expression": "@{getColorValue('abc', fallback)}",
+      "expression": "@{getColorValue('color_var', fallback)}",
       "expected": {
         "type": "color",
         "value": "#FF000000"
@@ -226,7 +209,7 @@
       "variables": [
         {
           "type": "color",
-          "name": "abc",
+          "name": "color_var",
           "value": "#FF000000"
         },
         {
@@ -242,8 +225,7 @@
       ]
     },
     {
-      "name": "getColorValue(incorrectColorVar, fallbackVar) => colorVal",
-      "expression": "@{getColorValue('abc', fallback)}",
+      "expression": "@{getColorValue('integer_var', fallback)}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -251,7 +233,7 @@
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         },
         {
@@ -267,8 +249,7 @@
       ]
     },
     {
-      "name": "getColorValue(nonexistentColorVar, fallbackVar) => colorVal",
-      "expression": "@{getColorValue('abc', fallback)}",
+      "expression": "@{getColorValue('unknown_var', fallback)}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -287,8 +268,7 @@
       ]
     },
     {
-      "name": "getColorValue(correctColorVar, fallback) => colorVal (1)",
-      "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
+      "expression": "@{getColorValue('color_var', '#FFFFFFFF')}",
       "expected": {
         "type": "color",
         "value": "#FF000000"
@@ -296,7 +276,7 @@
       "variables": [
         {
           "type": "color",
-          "name": "abc",
+          "name": "color_var",
           "value": "#FF000000"
         }
       ],
@@ -307,8 +287,7 @@
       ]
     },
     {
-      "name": "getColorValue(incorrectColorVar, fallback) => colorVal (1)",
-      "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
+      "expression": "@{getColorValue('integer_var', '#FFFFFFFF')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -316,7 +295,7 @@
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         }
       ],
@@ -327,13 +306,11 @@
       ]
     },
     {
-      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal (1)",
-      "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
+      "expression": "@{getColorValue('unknown_var', '#FFFFFFFF')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -341,8 +318,7 @@
       ]
     },
     {
-      "name": "getColorValue(correctColorVar, fallback) => colorVal (2)",
-      "expression": "@{getColorValue('abc', '#fff')}",
+      "expression": "@{getColorValue('color_var', '#fff')}",
       "expected": {
         "type": "color",
         "value": "#FF000000"
@@ -350,7 +326,7 @@
       "variables": [
         {
           "type": "color",
-          "name": "abc",
+          "name": "color_var",
           "value": "#000"
         }
       ],
@@ -361,8 +337,7 @@
       ]
     },
     {
-      "name": "getColorValue(incorrectColorVar, fallback) => colorVal (2)",
-      "expression": "@{getColorValue('abc', '#fff')}",
+      "expression": "@{getColorValue('integer_var', '#fff')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
@@ -370,7 +345,7 @@
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         }
       ],
@@ -381,13 +356,11 @@
       ]
     },
     {
-      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal (2)",
-      "expression": "@{getColorValue('abc', '#fff')}",
+      "expression": "@{getColorValue('unknown_var', '#fff')}",
       "expected": {
         "type": "color",
         "value": "#FFFFFFFF"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",
@@ -395,8 +368,7 @@
       ]
     },
     {
-      "name": "getUrlValue(correctUrlVar, fallbackVar) => urlVal",
-      "expression": "@{getUrlValue('abc', fallback)}",
+      "expression": "@{getUrlValue('url_var', fallback)}",
       "expected": {
         "type": "url",
         "value": "https://var"
@@ -404,7 +376,7 @@
       "variables": [
         {
           "type": "url",
-          "name": "abc",
+          "name": "url_var",
           "value": "https://var"
         },
         {
@@ -420,8 +392,7 @@
       ]
     },
     {
-      "name": "getUrlValue(incorrectUrlVar, fallbackVar) => urlVal",
-      "expression": "@{getUrlValue('abc', fallback)}",
+      "expression": "@{getUrlValue('integer_var', fallback)}",
       "expected": {
         "type": "url",
         "value": "https://fallback"
@@ -429,7 +400,7 @@
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         },
         {
@@ -445,8 +416,7 @@
       ]
     },
     {
-      "name": "getUrlValue(nonexistentUrlVar, fallbackVar) => urlVal",
-      "expression": "@{getUrlValue('abc', fallback)}",
+      "expression": "@{getUrlValue('unknown_var', fallback)}",
       "expected": {
         "type": "url",
         "value": "https://fallback"
@@ -465,8 +435,7 @@
       ]
     },
     {
-      "name": "getUrlValue(correctUrlVar, fallback) => urlVal (1)",
-      "expression": "@{getUrlValue('abc', 'https://fallback')}",
+      "expression": "@{getUrlValue('url_var', 'https://fallback')}",
       "expected": {
         "type": "url",
         "value": "https://var"
@@ -474,7 +443,7 @@
       "variables": [
         {
           "type": "url",
-          "name": "abc",
+          "name": "url_var",
           "value": "https://var"
         }
       ],
@@ -485,8 +454,7 @@
       ]
     },
     {
-      "name": "getUrlValue(incorrectUrlVar, fallback) => urlVal (1)",
-      "expression": "@{getUrlValue('abc', 'https://fallback')}",
+      "expression": "@{getUrlValue('integer_var', 'https://fallback')}",
       "expected": {
         "type": "url",
         "value": "https://fallback"
@@ -494,7 +462,7 @@
       "variables": [
         {
           "type": "integer",
-          "name": "abc",
+          "name": "integer_var",
           "value": 123
         }
       ],
@@ -505,13 +473,11 @@
       ]
     },
     {
-      "name": "getUrlValue(nonexistentUrlVar, fallback) => urlVal (1)",
-      "expression": "@{getUrlValue('abc', 'https://fallback')}",
+      "expression": "@{getUrlValue('unknown_var', 'https://fallback')}",
       "expected": {
         "type": "url",
         "value": "https://fallback"
       },
-      "variables": [],
       "platforms": [
         "android",
         "web",

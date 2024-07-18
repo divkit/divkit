@@ -1,9 +1,8 @@
 name: div_expressions_resolver
-description: Executes expressions
+description: DivKit expressions resolver plugin for Flutter. Wraps native iOS and Android implementations to resolve expressions with variables, operators, and functions.
 homepage: https://github.com/divkit/divkit
 repository: https://github.com/divkit/divkit
-publish_to: 'none'
-version: 0.4.0
+version: 0.4.2
 
 environment:
   sdk: '>=2.17.0 <4.0.0'

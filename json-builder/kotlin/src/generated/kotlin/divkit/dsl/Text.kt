@@ -55,12 +55,15 @@ class Text internal constructor(
             focus = additive.focus ?: properties.focus,
             focusedTextColor = additive.focusedTextColor ?: properties.focusedTextColor,
             fontFamily = additive.fontFamily ?: properties.fontFamily,
+            fontFeatureSettings = additive.fontFeatureSettings ?: properties.fontFeatureSettings,
             fontSize = additive.fontSize ?: properties.fontSize,
             fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
             fontWeight = additive.fontWeight ?: properties.fontWeight,
+            fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             images = additive.images ?: properties.images,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
@@ -86,6 +89,7 @@ class Text internal constructor(
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             truncate = additive.truncate ?: properties.truncate,
             underline = additive.underline ?: properties.underline,
+            variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -173,6 +177,10 @@ class Text internal constructor(
          */
         val fontFamily: Property<String>?,
         /**
+         * List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
+         */
+        val fontFeatureSettings: Property<String>?,
+        /**
          * Font size.
          * Default value: `12`.
          */
@@ -187,6 +195,10 @@ class Text internal constructor(
          */
         val fontWeight: Property<FontWeight>?,
         /**
+         * Style. Numeric value.
+         */
+        val fontWeightValue: Property<Int>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
          */
@@ -199,6 +211,10 @@ class Text internal constructor(
          * Images embedded in text.
          */
         val images: Property<List<Image>>?,
+        /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
         /**
          * Spacing between characters.
          * Default value: `0`.
@@ -309,6 +325,10 @@ class Text internal constructor(
          */
         val underline: Property<LineStyle>?,
         /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
+        /**
          * Element visibility.
          * Default value: `visible`.
          */
@@ -349,12 +369,15 @@ class Text internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("focused_text_color", focusedTextColor)
             result.tryPutProperty("font_family", fontFamily)
+            result.tryPutProperty("font_feature_settings", fontFeatureSettings)
             result.tryPutProperty("font_size", fontSize)
             result.tryPutProperty("font_size_unit", fontSizeUnit)
             result.tryPutProperty("font_weight", fontWeight)
+            result.tryPutProperty("font_weight_value", fontWeightValue)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("images", images)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
             result.tryPutProperty("longtap_actions", longtapActions)
@@ -380,6 +403,7 @@ class Text internal constructor(
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("truncate", truncate)
             result.tryPutProperty("underline", underline)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -550,9 +574,11 @@ class Text internal constructor(
                 border = additive.border ?: properties.border,
                 end = additive.end ?: properties.end,
                 fontFamily = additive.fontFamily ?: properties.fontFamily,
+                fontFeatureSettings = additive.fontFeatureSettings ?: properties.fontFeatureSettings,
                 fontSize = additive.fontSize ?: properties.fontSize,
                 fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
                 fontWeight = additive.fontWeight ?: properties.fontWeight,
+                fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
                 letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
                 lineHeight = additive.lineHeight ?: properties.lineHeight,
                 start = additive.start ?: properties.start,
@@ -586,6 +612,10 @@ class Text internal constructor(
              */
             val fontFamily: Property<String>?,
             /**
+             * List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
+             */
+            val fontFeatureSettings: Property<String>?,
+            /**
              * Font size.
              */
             val fontSize: Property<Int>?,
@@ -598,6 +628,10 @@ class Text internal constructor(
              * Style.
              */
             val fontWeight: Property<FontWeight>?,
+            /**
+             * Style. Numeric value.
+             */
+            val fontWeightValue: Property<Int>?,
             /**
              * Spacing between characters.
              */
@@ -639,9 +673,11 @@ class Text internal constructor(
                 result.tryPutProperty("border", border)
                 result.tryPutProperty("end", end)
                 result.tryPutProperty("font_family", fontFamily)
+                result.tryPutProperty("font_feature_settings", fontFeatureSettings)
                 result.tryPutProperty("font_size", fontSize)
                 result.tryPutProperty("font_size_unit", fontSizeUnit)
                 result.tryPutProperty("font_weight", fontWeight)
+                result.tryPutProperty("font_weight_value", fontWeightValue)
                 result.tryPutProperty("letter_spacing", letterSpacing)
                 result.tryPutProperty("line_height", lineHeight)
                 result.tryPutProperty("start", start)
@@ -677,11 +713,14 @@ class Text internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -707,6 +746,7 @@ class Text internal constructor(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -734,12 +774,15 @@ fun DivScope.text(
     focus: Focus? = null,
     focusedTextColor: Color? = null,
     fontFamily: String? = null,
+    fontFeatureSettings: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     longtapActions: List<Action>? = null,
@@ -765,6 +808,7 @@ fun DivScope.text(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -790,12 +834,15 @@ fun DivScope.text(
         focus = valueOrNull(focus),
         focusedTextColor = valueOrNull(focusedTextColor),
         fontFamily = valueOrNull(fontFamily),
+        fontFeatureSettings = valueOrNull(fontFeatureSettings),
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         height = valueOrNull(height),
         id = valueOrNull(id),
         images = valueOrNull(images),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         longtapActions = valueOrNull(longtapActions),
@@ -821,6 +868,7 @@ fun DivScope.text(
         transitionTriggers = valueOrNull(transitionTriggers),
         truncate = valueOrNull(truncate),
         underline = valueOrNull(underline),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -848,11 +896,14 @@ fun DivScope.text(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -878,6 +929,7 @@ fun DivScope.text(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -905,12 +957,15 @@ fun DivScope.textProps(
     focus: Focus? = null,
     focusedTextColor: Color? = null,
     fontFamily: String? = null,
+    fontFeatureSettings: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     longtapActions: List<Action>? = null,
@@ -936,6 +991,7 @@ fun DivScope.textProps(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -960,12 +1016,15 @@ fun DivScope.textProps(
     focus = valueOrNull(focus),
     focusedTextColor = valueOrNull(focusedTextColor),
     fontFamily = valueOrNull(fontFamily),
+    fontFeatureSettings = valueOrNull(fontFeatureSettings),
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
+    fontWeightValue = valueOrNull(fontWeightValue),
     height = valueOrNull(height),
     id = valueOrNull(id),
     images = valueOrNull(images),
+    layoutProvider = valueOrNull(layoutProvider),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
     longtapActions = valueOrNull(longtapActions),
@@ -991,6 +1050,7 @@ fun DivScope.textProps(
     transitionTriggers = valueOrNull(transitionTriggers),
     truncate = valueOrNull(truncate),
     underline = valueOrNull(underline),
+    variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -1017,11 +1077,14 @@ fun DivScope.textProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1047,6 +1110,7 @@ fun DivScope.textProps(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1074,12 +1138,15 @@ fun TemplateScope.textRefs(
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
     fontFamily: ReferenceProperty<String>? = null,
+    fontFeatureSettings: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1105,6 +1172,7 @@ fun TemplateScope.textRefs(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1129,12 +1197,15 @@ fun TemplateScope.textRefs(
     focus = focus,
     focusedTextColor = focusedTextColor,
     fontFamily = fontFamily,
+    fontFeatureSettings = fontFeatureSettings,
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
+    fontWeightValue = fontWeightValue,
     height = height,
     id = id,
     images = images,
+    layoutProvider = layoutProvider,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
     longtapActions = longtapActions,
@@ -1160,6 +1231,7 @@ fun TemplateScope.textRefs(
     transitionTriggers = transitionTriggers,
     truncate = truncate,
     underline = underline,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -1186,11 +1258,14 @@ fun TemplateScope.textRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1216,6 +1291,7 @@ fun TemplateScope.textRefs(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1243,12 +1319,15 @@ fun Text.override(
     focus: Focus? = null,
     focusedTextColor: Color? = null,
     fontFamily: String? = null,
+    fontFeatureSettings: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     longtapActions: List<Action>? = null,
@@ -1274,6 +1353,7 @@ fun Text.override(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1299,12 +1379,15 @@ fun Text.override(
         focus = valueOrNull(focus) ?: properties.focus,
         focusedTextColor = valueOrNull(focusedTextColor) ?: properties.focusedTextColor,
         fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
+        fontFeatureSettings = valueOrNull(fontFeatureSettings) ?: properties.fontFeatureSettings,
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
+        fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         images = valueOrNull(images) ?: properties.images,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
@@ -1330,6 +1413,7 @@ fun Text.override(
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         truncate = valueOrNull(truncate) ?: properties.truncate,
         underline = valueOrNull(underline) ?: properties.underline,
+        variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -1357,11 +1441,14 @@ fun Text.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1387,6 +1474,7 @@ fun Text.override(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1414,12 +1502,15 @@ fun Text.defer(
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
     fontFamily: ReferenceProperty<String>? = null,
+    fontFeatureSettings: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1445,6 +1536,7 @@ fun Text.defer(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1470,12 +1562,15 @@ fun Text.defer(
         focus = focus ?: properties.focus,
         focusedTextColor = focusedTextColor ?: properties.focusedTextColor,
         fontFamily = fontFamily ?: properties.fontFamily,
+        fontFeatureSettings = fontFeatureSettings ?: properties.fontFeatureSettings,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         height = height ?: properties.height,
         id = id ?: properties.id,
         images = images ?: properties.images,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         longtapActions = longtapActions ?: properties.longtapActions,
@@ -1501,6 +1596,7 @@ fun Text.defer(
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
         underline = underline ?: properties.underline,
+        variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -1517,8 +1613,10 @@ fun Text.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
@@ -1544,9 +1642,11 @@ fun Text.evaluate(
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
     fontFamily: ExpressionProperty<String>? = null,
+    fontFeatureSettings: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
     maxLines: ExpressionProperty<Int>? = null,
@@ -1581,12 +1681,15 @@ fun Text.evaluate(
         focus = properties.focus,
         focusedTextColor = focusedTextColor ?: properties.focusedTextColor,
         fontFamily = fontFamily ?: properties.fontFamily,
+        fontFeatureSettings = fontFeatureSettings ?: properties.fontFeatureSettings,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         height = properties.height,
         id = properties.id,
         images = properties.images,
+        layoutProvider = properties.layoutProvider,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         longtapActions = properties.longtapActions,
@@ -1612,6 +1715,7 @@ fun Text.evaluate(
         transitionTriggers = properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
         underline = underline ?: properties.underline,
+        variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -1639,11 +1743,14 @@ fun Text.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1669,6 +1776,7 @@ fun Text.evaluate(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1696,12 +1804,15 @@ fun Component<Text>.override(
     focus: Focus? = null,
     focusedTextColor: Color? = null,
     fontFamily: String? = null,
+    fontFeatureSettings: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
+    layoutProvider: LayoutProvider? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     longtapActions: List<Action>? = null,
@@ -1727,6 +1838,7 @@ fun Component<Text>.override(
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
     underline: LineStyle? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1753,12 +1865,15 @@ fun Component<Text>.override(
         focus = valueOrNull(focus),
         focusedTextColor = valueOrNull(focusedTextColor),
         fontFamily = valueOrNull(fontFamily),
+        fontFeatureSettings = valueOrNull(fontFeatureSettings),
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         height = valueOrNull(height),
         id = valueOrNull(id),
         images = valueOrNull(images),
+        layoutProvider = valueOrNull(layoutProvider),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         longtapActions = valueOrNull(longtapActions),
@@ -1784,6 +1899,7 @@ fun Component<Text>.override(
         transitionTriggers = valueOrNull(transitionTriggers),
         truncate = valueOrNull(truncate),
         underline = valueOrNull(underline),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1811,11 +1927,14 @@ fun Component<Text>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1841,6 +1960,7 @@ fun Component<Text>.override(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1868,12 +1988,15 @@ fun Component<Text>.defer(
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
     fontFamily: ReferenceProperty<String>? = null,
+    fontFeatureSettings: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
@@ -1899,6 +2022,7 @@ fun Component<Text>.defer(
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1925,12 +2049,15 @@ fun Component<Text>.defer(
         focus = focus,
         focusedTextColor = focusedTextColor,
         fontFamily = fontFamily,
+        fontFeatureSettings = fontFeatureSettings,
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
         height = height,
         id = id,
         images = images,
+        layoutProvider = layoutProvider,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         longtapActions = longtapActions,
@@ -1956,6 +2083,7 @@ fun Component<Text>.defer(
         transitionTriggers = transitionTriggers,
         truncate = truncate,
         underline = underline,
+        variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1972,8 +2100,10 @@ fun Component<Text>.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
@@ -1999,9 +2129,11 @@ fun Component<Text>.evaluate(
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
     fontFamily: ExpressionProperty<String>? = null,
+    fontFeatureSettings: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
     maxLines: ExpressionProperty<Int>? = null,
@@ -2037,12 +2169,15 @@ fun Component<Text>.evaluate(
         focus = null,
         focusedTextColor = focusedTextColor,
         fontFamily = fontFamily,
+        fontFeatureSettings = fontFeatureSettings,
         fontSize = fontSize,
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
         height = null,
         id = null,
         images = null,
+        layoutProvider = null,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         longtapActions = null,
@@ -2068,6 +2203,7 @@ fun Component<Text>.evaluate(
         transitionTriggers = null,
         truncate = truncate,
         underline = underline,
+        variables = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
@@ -2396,9 +2532,11 @@ fun Text.Image.asList() = listOf(this)
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
@@ -2416,9 +2554,11 @@ fun DivScope.textRange(
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
+    fontFeatureSettings: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     start: Int? = null,
@@ -2434,9 +2574,11 @@ fun DivScope.textRange(
         border = valueOrNull(border),
         end = valueOrNull(end),
         fontFamily = valueOrNull(fontFamily),
+        fontFeatureSettings = valueOrNull(fontFeatureSettings),
         fontSize = valueOrNull(fontSize),
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
+        fontWeightValue = valueOrNull(fontWeightValue),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
         start = valueOrNull(start),
@@ -2454,9 +2596,11 @@ fun DivScope.textRange(
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
@@ -2474,9 +2618,11 @@ fun DivScope.textRangeProps(
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
+    fontFeatureSettings: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     start: Int? = null,
@@ -2491,9 +2637,11 @@ fun DivScope.textRangeProps(
     border = valueOrNull(border),
     end = valueOrNull(end),
     fontFamily = valueOrNull(fontFamily),
+    fontFeatureSettings = valueOrNull(fontFeatureSettings),
     fontSize = valueOrNull(fontSize),
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
+    fontWeightValue = valueOrNull(fontWeightValue),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
     start = valueOrNull(start),
@@ -2510,9 +2658,11 @@ fun DivScope.textRangeProps(
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
@@ -2530,9 +2680,11 @@ fun TemplateScope.textRangeRefs(
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
     fontFamily: ReferenceProperty<String>? = null,
+    fontFeatureSettings: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     start: ReferenceProperty<Int>? = null,
@@ -2547,9 +2699,11 @@ fun TemplateScope.textRangeRefs(
     border = border,
     end = end,
     fontFamily = fontFamily,
+    fontFeatureSettings = fontFeatureSettings,
     fontSize = fontSize,
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
+    fontWeightValue = fontWeightValue,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
     start = start,
@@ -2566,9 +2720,11 @@ fun TemplateScope.textRangeRefs(
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
@@ -2586,9 +2742,11 @@ fun Text.Range.override(
     border: TextRangeBorder? = null,
     end: Int? = null,
     fontFamily: String? = null,
+    fontFeatureSettings: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
+    fontWeightValue: Int? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
     start: Int? = null,
@@ -2604,9 +2762,11 @@ fun Text.Range.override(
         border = valueOrNull(border) ?: properties.border,
         end = valueOrNull(end) ?: properties.end,
         fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
+        fontFeatureSettings = valueOrNull(fontFeatureSettings) ?: properties.fontFeatureSettings,
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
+        fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         start = valueOrNull(start) ?: properties.start,
@@ -2624,9 +2784,11 @@ fun Text.Range.override(
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
@@ -2644,9 +2806,11 @@ fun Text.Range.defer(
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
     fontFamily: ReferenceProperty<String>? = null,
+    fontFeatureSettings: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
+    fontWeightValue: ReferenceProperty<Int>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
     start: ReferenceProperty<Int>? = null,
@@ -2662,9 +2826,11 @@ fun Text.Range.defer(
         border = border ?: properties.border,
         end = end ?: properties.end,
         fontFamily = fontFamily ?: properties.fontFamily,
+        fontFeatureSettings = fontFeatureSettings ?: properties.fontFeatureSettings,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         start = start ?: properties.start,
@@ -2679,9 +2845,11 @@ fun Text.Range.defer(
 /**
  * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
+ * @param fontWeightValue Style. Numeric value.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
@@ -2695,9 +2863,11 @@ fun Text.Range.evaluate(
     `use named arguments`: Guard = Guard.instance,
     end: ExpressionProperty<Int>? = null,
     fontFamily: ExpressionProperty<String>? = null,
+    fontFeatureSettings: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
+    fontWeightValue: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
     start: ExpressionProperty<Int>? = null,
@@ -2712,9 +2882,11 @@ fun Text.Range.evaluate(
         border = properties.border,
         end = end ?: properties.end,
         fontFamily = fontFamily ?: properties.fontFamily,
+        fontFeatureSettings = fontFeatureSettings ?: properties.fontFeatureSettings,
         fontSize = fontSize ?: properties.fontSize,
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
+        fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         start = start ?: properties.start,

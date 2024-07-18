@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:divkit/src/core/variable/variable.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DefaultDivVariableStorage extends DivVariableStorage with EquatableMixin {
-  final _storage = BehaviorSubject<Map<String, DivVariable>>();
+  final _storage = BehaviorSubject<Map<String, DivVariableModel>>();
 
   /// Inherited storage of reactive variables. Not managed by local storage.
   @override
@@ -15,13 +17,13 @@ class DefaultDivVariableStorage extends DivVariableStorage with EquatableMixin {
 
   DefaultDivVariableStorage({
     this.inheritedStorage,
-    List<DivVariable>? variables,
+    List<DivVariableModel>? variables,
   }) {
     _storage.add(Map.fromIterable(variables ?? [], key: (v) => v.name));
   }
 
   @override
-  bool update(DivVariable variable) {
+  bool update(DivVariableModel variable) {
     final isLocal = names.contains(variable.name);
     final isInherited =
         inheritedStorage?.names.contains(variable.name) ?? false;
@@ -37,14 +39,14 @@ class DefaultDivVariableStorage extends DivVariableStorage with EquatableMixin {
   }
 
   @override
-  void put(DivVariable variable) {
+  void put(DivVariableModel variable) {
     if (!update(variable)) {
       _storage.add(Map.of(_storage.value)..addAll({variable.name: variable}));
     }
   }
 
   @override
-  Map<String, DivVariable> get value => _storage.isClosed
+  Map<String, DivVariableModel> get value => _storage.isClosed
       ? {}
       : {
           ...?inheritedStorage?.value,
@@ -52,27 +54,36 @@ class DefaultDivVariableStorage extends DivVariableStorage with EquatableMixin {
         };
 
   /// Caching the combined contextStream.
-  Stream<Map<String, DivVariable>>? _contextStream;
+  BehaviorSubject<Map<String, DivVariableModel>>? _contextStreamSubject;
+  StreamSubscription<Map<String, DivVariableModel>>? _contextStreamSubscription;
 
   @override
-  Stream<Map<String, DivVariable>> get stream {
-    if (_contextStream == null) {
+  Stream<Map<String, DivVariableModel>> get stream {
+    if (_contextStreamSubject == null) {
       final inheritedStream = inheritedStorage?.stream;
       if (inheritedStream != null) {
-        _contextStream = CombineLatestStream.combine2(
+        _contextStreamSubject =
+            BehaviorSubject<Map<String, DivVariableModel>>();
+        _contextStreamSubscription ??= CombineLatestStream.combine2(
           inheritedStream,
           _storage.stream,
-          (Map inherited, Map local) => {
+          (
+            Map<String, DivVariableModel> inherited,
+            Map<String, DivVariableModel> local,
+          ) =>
+              {
             ...inherited,
             ...local,
           },
-        );
+        ).listen((value) {
+          _contextStreamSubject?.add(value);
+        });
       } else {
-        _contextStream = _storage.stream;
+        _contextStreamSubject = _storage;
       }
     }
 
-    return _contextStream!;
+    return _contextStreamSubject?.stream ?? const Stream.empty();
   }
 
   @override

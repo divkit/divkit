@@ -3,8 +3,7 @@
 
 import XCTest
 
-import BaseUIPublic
-import CommonCorePublic
+import VGSL
 
 final class DivTextExtensionsTests: XCTestCase {
   func test_WithText() {
@@ -93,10 +92,12 @@ final class DivTextExtensionsTests: XCTestCase {
   func test_WithAction() {
     let block = makeBlock(
       divText(
-        actions: [divAction(
-          logId: "action_log_id",
-          url: "https://some.url"
-        )],
+        actions: [
+          divAction(
+            logId: "action_log_id",
+            url: "https://some.url"
+          ),
+        ],
         text: "Hello!"
       )
     )
@@ -105,7 +106,11 @@ final class DivTextExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: textBlock(text: "Hello!"),
         actions: NonEmptyArray(
-          uiAction(logId: "action_log_id", url: "https://some.url")
+          uiAction(
+            logId: "action_log_id",
+            path: .root + "0",
+            url: "https://some.url"
+          )
         ),
         actionAnimation: .default,
         accessibilityElement: accessibility(

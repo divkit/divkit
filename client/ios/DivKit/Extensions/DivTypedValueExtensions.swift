@@ -21,7 +21,7 @@ extension DivTypedValue {
       }
       return nil
     case let .dictValue(value):
-      if let dictValue = value.value as? [String: AnyHashable] {
+      if let dictValue = value.value as? DivDictionary {
         return .dict(dictValue)
       }
       return nil
@@ -68,7 +68,7 @@ extension DivTypedValue {
       }
       return nil
     case let .dictValue(value):
-      if let dictValue = value.value as? [String: AnyHashable] {
+      if let dictValue = value.value as? DivDictionary {
         return dictValue
       }
       return nil

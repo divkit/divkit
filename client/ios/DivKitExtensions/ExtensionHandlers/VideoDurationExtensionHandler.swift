@@ -1,8 +1,8 @@
 import Foundation
 
-import BasePublic
 import DivKit
 import LayoutKit
+import VGSL
 
 public final class VideoDurationExtensionHandler: DivExtensionHandler {
   public var id: String = extensionID

@@ -67,6 +67,7 @@ class AllureAwareRunListener : InstrumentationRunListener() {
             executeShellCommand("pm grant ${instrumentation.targetContext.packageName} android.permission.WRITE_EXTERNAL_STORAGE")
             executeShellCommand("pm grant ${instrumentation.context.packageName} android.permission.READ_EXTERNAL_STORAGE")
             executeShellCommand("pm grant ${instrumentation.targetContext.packageName} android.permission.READ_EXTERNAL_STORAGE")
+            executeShellCommand("appops set --uid ${instrumentation.targetContext.packageName} MANAGE_EXTERNAL_STORAGE allow")
         }
     }
 }

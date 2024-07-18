@@ -1,7 +1,6 @@
 import Foundation
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 public enum LongTapActions: Equatable {
   case actions(NonEmptyArray<UserInterfaceAction>)

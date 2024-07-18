@@ -2,8 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_appearance_transition.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_appearance_transition.dart';
 
 class DivAppearanceSetTransition with EquatableMixin {
   const DivAppearanceSetTransition({
@@ -19,19 +19,24 @@ class DivAppearanceSetTransition with EquatableMixin {
         items,
       ];
 
+  DivAppearanceSetTransition copyWith({
+    List<DivAppearanceTransition>? items,
+  }) =>
+      DivAppearanceSetTransition(
+        items: items ?? this.items,
+      );
+
   static DivAppearanceSetTransition? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return DivAppearanceSetTransition(
       items: safeParseObj(
-        (json['items'] as List<dynamic>)
-            .map(
-              (v) => safeParseObj(
-                DivAppearanceTransition.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['items'],
+            (v) => safeParseObj(
+                  DivAppearanceTransition.fromJson(v),
+                )!),
       )!,
     );
   }

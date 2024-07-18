@@ -15,6 +15,7 @@ class EntityWithRequiredProperty(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             property.hashCode()
         _hash = hash
         return hash

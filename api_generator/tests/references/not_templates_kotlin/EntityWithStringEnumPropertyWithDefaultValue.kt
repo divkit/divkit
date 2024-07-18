@@ -28,6 +28,7 @@ class EntityWithStringEnumPropertyWithDefaultValue(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             value.hashCode()
         _hash = hash
         return hash

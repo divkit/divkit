@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 /* eslint-disable no-else-return */
 
 import type {
@@ -11,7 +12,7 @@ import type {
     UnaryExpression, Variable
 } from './ast';
 import type { WrappedError } from '../utils/wrapError';
-import { convertArgs, findBestMatchedFunc, Func, funcByArgs, methodByArgs } from './funcs/funcs';
+import { convertArgs, findBestMatchedFunc, Func, funcByArgs, funcs, methodByArgs } from './funcs/funcs';
 import {
     checkIntegerOverflow,
     evalError,
@@ -100,6 +101,7 @@ export interface EvalContext {
     warnings: WrappedError[];
     safeIntegerOverflow: boolean;
     store?: Store;
+    weekStartDay: number;
 }
 
 register();
@@ -447,13 +449,28 @@ function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
         if ('expected' in findRes || 'type' in findRes && findRes.type === 'missing') {
             const argsType = args.map(arg => typeToString(arg.type)).join(', ');
             const prefix = `${funcName}(${argsToStr(args)})`;
+            const funcList = funcs.get(funcName) || [];
+            const firstFunc = funcList[0];
+            const hasOverloads = funcList.length > 1;
 
-            if (findRes.type === 'few' && args.length === 0) {
+            if (findRes.type === 'few' && args.length === 0 && hasOverloads) {
                 evalError(prefix, 'Function requires non empty argument list.');
-            } else if (findRes.type === 'many') {
-                evalError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
-            } else if (findRes.type === 'few' || findRes.type === 'mismatch') {
-                evalError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
+            } else if (firstFunc && (findRes.type === 'many' || findRes.type === 'few' || findRes.type === 'mismatch')) {
+                if (hasOverloads) {
+                    evalError(prefix, `Function has no matching overload for given argument types: ${argsType}.`);
+                } else {
+                    // eslint-disable-next-line no-lonely-if
+                    if (findRes.type === 'many' || findRes.type === 'few') {
+                        if (firstFunc.args.some(arg => typeof arg === 'object' && arg.isVararg)) {
+                            evalError(prefix, `At least ${firstFunc.args.length} argument(s) expected.`);
+                        } else {
+                            evalError(prefix, `Exactly ${firstFunc.args.length} argument(s) expected.`);
+                        }
+                    } else {
+                        const expectedArgs = firstFunc.args.map(arg => typeToString(typeof arg === 'string' ? arg : arg.type)).join(', ');
+                        evalError(prefix, `Invalid argument type: expected ${expectedArgs}, got ${argsType}.`);
+                    }
+                }
             } else {
                 evalError(prefix, `Unknown function name: ${funcName}.`);
             }
@@ -560,7 +577,9 @@ export function evalAny(ctx: EvalContext, expr: Node): EvalValue {
     throw new Error('Unsupported expression');
 }
 
-export function evalExpression(vars: VariablesMap, store: Store | undefined, expr: Node): {
+export function evalExpression(vars: VariablesMap, store: Store | undefined, expr: Node, opts?: {
+    weekStartDay?: number;
+}): {
     result: EvalResult;
     warnings: WrappedError[];
 } {
@@ -569,7 +588,8 @@ export function evalExpression(vars: VariablesMap, store: Store | undefined, exp
             variables: vars,
             warnings: [],
             safeIntegerOverflow: false,
-            store
+            store,
+            weekStartDay: opts?.weekStartDay || 0
         };
 
         const result = evalAny(ctx, expr);

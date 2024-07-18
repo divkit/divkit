@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivInput: DivBase {
   @frozen
@@ -45,6 +45,7 @@ public final class DivInput: DivBase {
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
+  public let fontWeightValue: Expression<Int>? // constraint: number > 0
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let highlightColor: Expression<Color>?
   public let hintColor: Expression<Color> // default value: #73000000
@@ -52,10 +53,12 @@ public final class DivInput: DivBase {
   public let id: String?
   public let isEnabled: Expression<Bool> // default value: true
   public let keyboardType: Expression<KeyboardType> // default value: multi_line_text
+  public let layoutProvider: DivLayoutProvider?
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let margins: DivEdgeInsets?
   public let mask: DivInputMask?
+  public let maxLength: Expression<Int>? // constraint: number > 0
   public let maxVisibleLines: Expression<Int>? // constraint: number > 0
   public let nativeInterface: NativeInterface?
   public let paddings: DivEdgeInsets?
@@ -73,6 +76,7 @@ public final class DivInput: DivBase {
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let validators: [DivInputValidator]?
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -110,6 +114,10 @@ public final class DivInput: DivBase {
     resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
   }
 
+  public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumeric(fontWeightValue)
+  }
+
   public func resolveHighlightColor(_ resolver: ExpressionResolver) -> Color? {
     resolver.resolveColor(highlightColor)
   }
@@ -136,6 +144,10 @@ public final class DivInput: DivBase {
 
   public func resolveLineHeight(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(lineHeight)
+  }
+
+  public func resolveMaxLength(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumeric(maxLength)
   }
 
   public func resolveMaxVisibleLines(_ resolver: ExpressionResolver) -> Int? {
@@ -175,8 +187,14 @@ public final class DivInput: DivBase {
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let fontWeightValueValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 > 0 })
+
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
+
+  static let maxLengthValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 > 0 })
 
   static let maxVisibleLinesValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })
@@ -202,6 +220,7 @@ public final class DivInput: DivBase {
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
+    fontWeightValue: Expression<Int>? = nil,
     height: DivSize? = nil,
     highlightColor: Expression<Color>? = nil,
     hintColor: Expression<Color>? = nil,
@@ -209,10 +228,12 @@ public final class DivInput: DivBase {
     id: String? = nil,
     isEnabled: Expression<Bool>? = nil,
     keyboardType: Expression<KeyboardType>? = nil,
+    layoutProvider: DivLayoutProvider? = nil,
     letterSpacing: Expression<Double>? = nil,
     lineHeight: Expression<Int>? = nil,
     margins: DivEdgeInsets? = nil,
     mask: DivInputMask? = nil,
+    maxLength: Expression<Int>? = nil,
     maxVisibleLines: Expression<Int>? = nil,
     nativeInterface: NativeInterface? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -230,6 +251,7 @@ public final class DivInput: DivBase {
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
     validators: [DivInputValidator]? = nil,
+    variables: [DivVariable]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -249,6 +271,7 @@ public final class DivInput: DivBase {
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
+    self.fontWeightValue = fontWeightValue
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.highlightColor = highlightColor
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
@@ -256,10 +279,12 @@ public final class DivInput: DivBase {
     self.id = id
     self.isEnabled = isEnabled ?? .value(true)
     self.keyboardType = keyboardType ?? .value(.multiLineText)
+    self.layoutProvider = layoutProvider
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
     self.margins = margins
     self.mask = mask
+    self.maxLength = maxLength
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
@@ -277,6 +302,7 @@ public final class DivInput: DivBase {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.validators = validators
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -318,33 +344,40 @@ extension DivInput: Equatable {
     guard
       lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.height == rhs.height
+      lhs.fontWeightValue == rhs.fontWeightValue
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.highlightColor == rhs.highlightColor,
-      lhs.hintColor == rhs.hintColor,
-      lhs.hintText == rhs.hintText
+      lhs.hintColor == rhs.hintColor
     else {
       return false
     }
     guard
+      lhs.hintText == rhs.hintText,
       lhs.id == rhs.id,
-      lhs.isEnabled == rhs.isEnabled,
-      lhs.keyboardType == rhs.keyboardType
+      lhs.isEnabled == rhs.isEnabled
     else {
       return false
     }
     guard
-      lhs.letterSpacing == rhs.letterSpacing,
+      lhs.keyboardType == rhs.keyboardType,
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.letterSpacing == rhs.letterSpacing
+    else {
+      return false
+    }
+    guard
       lhs.lineHeight == rhs.lineHeight,
-      lhs.margins == rhs.margins
+      lhs.margins == rhs.margins,
+      lhs.mask == rhs.mask
     else {
       return false
     }
     guard
-      lhs.mask == rhs.mask,
+      lhs.maxLength == rhs.maxLength,
       lhs.maxVisibleLines == rhs.maxVisibleLines,
       lhs.nativeInterface == rhs.nativeInterface
     else {
@@ -386,13 +419,14 @@ extension DivInput: Equatable {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -420,6 +454,7 @@ extension DivInput: Serializable {
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
+    result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["highlight_color"] = highlightColor?.toValidSerializationValue()
     result["hint_color"] = hintColor.toValidSerializationValue()
@@ -427,10 +462,12 @@ extension DivInput: Serializable {
     result["id"] = id
     result["is_enabled"] = isEnabled.toValidSerializationValue()
     result["keyboard_type"] = keyboardType.toValidSerializationValue()
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["margins"] = margins?.toDictionary()
     result["mask"] = mask?.toDictionary()
+    result["max_length"] = maxLength?.toValidSerializationValue()
     result["max_visible_lines"] = maxVisibleLines?.toValidSerializationValue()
     result["native_interface"] = nativeInterface?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
@@ -448,6 +485,7 @@ extension DivInput: Serializable {
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["validators"] = validators?.map { $0.toDictionary() }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

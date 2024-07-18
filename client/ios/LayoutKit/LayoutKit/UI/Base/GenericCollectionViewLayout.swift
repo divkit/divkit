@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 public final class GenericCollectionViewLayout: UICollectionViewLayout {
   public var layout: GenericCollectionLayout? {
@@ -25,6 +25,10 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
     )
   }
 
+  public override func shouldInvalidateLayout(forBoundsChange _: CGRect) -> Bool {
+    layout?.transformation != nil
+  }
+
   public override func layoutAttributesForElements(in rect: CGRect)
     -> [UICollectionViewLayoutAttributes]? {
     guard let frames = layout?.frames else {
@@ -32,6 +36,55 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
     }
     return filter(frames: frames, intersecting: rect)
       .map { UICollectionViewLayoutAttributes(index: $0.index, frame: $0.frame) }
+      .map { self.transformLayoutAttributes($0) }
+  }
+
+  fileprivate func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes)
+    -> UICollectionViewLayoutAttributes {
+    guard let collectionView = self.collectionView,
+          let transformation = layout?.transformation,
+          let direction = layout?.collectionDirection else { return attributes }
+
+    let originalCenter = attributes.center
+
+    if transformation.style == .overlap {
+      let contentOffset = collectionView.contentOffset
+      let offset = layout?.frames.first?.origin ?? .zero
+      attributes.frame.origin.x = max(attributes.frame.origin.x, contentOffset.x + offset.x)
+      attributes.zIndex = attributes.indexPath.item
+    }
+
+    let collectionCenter = collectionView.frame.size.width / 2
+
+    let normalizedCenter = if direction == .horizontal {
+      originalCenter.x - collectionView.contentOffset.x
+    } else {
+      originalCenter.y - collectionView.contentOffset.y
+    }
+
+    let maxDistance = if direction == .horizontal {
+      attributes.frame.width
+    } else {
+      attributes.frame.height
+    }
+    let sign = (normalizedCenter - collectionCenter) > 0 ? 1 : -1
+    let distance = min(abs(collectionCenter - normalizedCenter), maxDistance)
+    let ratio = (maxDistance - distance) / maxDistance
+
+    let alpha: CGFloat
+    let scale: CGFloat
+    if sign > 0 {
+      alpha = transformation.nextElementAlpa + ratio * (1 - transformation.nextElementAlpa)
+      scale = transformation.nextElementScale + ratio * (1 - transformation.nextElementScale)
+    } else {
+      alpha = transformation
+        .previousElementAlpha + ratio * (1 - transformation.previousElementAlpha)
+      scale = transformation
+        .previousElementScale + ratio * (1 - transformation.previousElementScale)
+    }
+    attributes.alpha = alpha
+    attributes.transform = CGAffineTransform(scale: scale)
+    return attributes
   }
 
   public override var flipsHorizontallyInOppositeLayoutDirection: Bool {

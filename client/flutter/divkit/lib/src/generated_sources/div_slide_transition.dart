@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_animation_interpolator.dart';
-import 'div_dimension.dart';
-import 'div_transition_base.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_animation_interpolator.dart';
+import 'package:divkit/src/generated_sources/div_dimension.dart';
+import 'package:divkit/src/generated_sources/div_transition_base.dart';
 
 class DivSlideTransition with EquatableMixin implements DivTransitionBase {
   const DivSlideTransition({
@@ -40,6 +40,21 @@ class DivSlideTransition with EquatableMixin implements DivTransitionBase {
         interpolator,
         startDelay,
       ];
+
+  DivSlideTransition copyWith({
+    DivDimension? Function()? distance,
+    Expression<int>? duration,
+    Expression<DivSlideTransitionEdge>? edge,
+    Expression<DivAnimationInterpolator>? interpolator,
+    Expression<int>? startDelay,
+  }) =>
+      DivSlideTransition(
+        distance: distance != null ? distance.call() : this.distance,
+        duration: duration ?? this.duration,
+        edge: edge ?? this.edge,
+        interpolator: interpolator ?? this.interpolator,
+        startDelay: startDelay ?? this.startDelay,
+      );
 
   static DivSlideTransition? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

@@ -1,7 +1,7 @@
 import Foundation
 
-import BasePublic
 import Foundation
+import VGSL
 
 public final class DivPersistentValuesStorage {
   static let storageFileName = "divkit.values_storage"

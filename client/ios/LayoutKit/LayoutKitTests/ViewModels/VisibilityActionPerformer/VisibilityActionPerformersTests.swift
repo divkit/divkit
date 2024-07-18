@@ -3,7 +3,7 @@
 import UIKit
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 final class VisibilityActionPerformerTests: XCTestCase {
   private let view = TestView()

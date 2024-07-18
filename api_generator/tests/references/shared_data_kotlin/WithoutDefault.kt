@@ -12,7 +12,7 @@ class WithoutDefault() : Hashable {
         _hash?.let {
             return it
         }
-        val hash = javaClass.hashCode()
+        val hash = this::class.hashCode()
         _hash = hash
         return hash
     }

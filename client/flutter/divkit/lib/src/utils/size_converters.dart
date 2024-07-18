@@ -67,11 +67,16 @@ class WrapDivSize extends PassDivSize {
 extension PassDivSizeImpl on DivSize {
   Future<PassDivSize> resolve({
     required DivVariableContext context,
+    required double viewScale,
     double extension = 0,
   }) async =>
       map(
         divFixedSize: (fixed) async => FixedDivSize(
-          await fixed.resolveDimension(context: context) + extension,
+          await fixed.resolveDimension(
+                context: context,
+                viewScale: viewScale,
+              ) +
+              extension * viewScale,
         ),
         divMatchParentSize: (flex) async => FlexDivSize(
           (await flex.weight?.resolveValue(context: context))?.toInt(),
@@ -82,14 +87,22 @@ extension PassDivSizeImpl on DivSize {
           final minSize = wrapped.minSize;
           if (maxSize != null) {
             parsedMax = FixedDivSize(
-              await maxSize.resolveDimension(context: context) + extension,
+              await maxSize.resolveDimension(
+                    context: context,
+                    viewScale: viewScale,
+                  ) +
+                  extension * viewScale,
             );
           } else {
             parsedMax = null;
           }
           if (minSize != null) {
             parsedMin = FixedDivSize(
-              await minSize.resolveDimension(context: context) + extension,
+              await minSize.resolveDimension(
+                    context: context,
+                    viewScale: viewScale,
+                  ) +
+                  extension * viewScale,
             );
           } else {
             parsedMin = null;
@@ -233,6 +246,7 @@ class DivSizeWrapper extends StatelessWidget {
     final safeWidth = width;
     final safeHeight = height;
     final safeAlignment = alignment;
+
     final maxWidth = safeWidth.maxConstraint;
     final minWidth = safeWidth.minConstraint;
     final maxHeight = safeHeight.maxConstraint;

@@ -51,6 +51,7 @@ class Tabs internal constructor(
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             items = additive.items ?: properties.items,
+            layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
             restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
@@ -60,6 +61,7 @@ class Tabs internal constructor(
             separatorColor = additive.separatorColor ?: properties.separatorColor,
             separatorPaddings = additive.separatorPaddings ?: properties.separatorPaddings,
             switchTabsByContentSwipeEnabled = additive.switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
+            tabTitleDelimiter = additive.tabTitleDelimiter ?: properties.tabTitleDelimiter,
             tabTitleStyle = additive.tabTitleStyle ?: properties.tabTitleStyle,
             titlePaddings = additive.titlePaddings ?: properties.titlePaddings,
             tooltips = additive.tooltips ?: properties.tooltips,
@@ -68,6 +70,7 @@ class Tabs internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -141,6 +144,10 @@ class Tabs internal constructor(
          */
         val items: Property<List<Item>>?,
         /**
+         * Provides element real size values after a layout cycle.
+         */
+        val layoutProvider: Property<LayoutProvider>?,
+        /**
          * External margins from the element stroke.
          */
         val margins: Property<EdgeInsets>?,
@@ -182,6 +189,10 @@ class Tabs internal constructor(
          */
         val switchTabsByContentSwipeEnabled: Property<Boolean>?,
         /**
+         * Style of delimiters between tab titles.
+         */
+        val tabTitleDelimiter: Property<TabTitleDelimiter>?,
+        /**
          * Design style of tab titles.
          */
         val tabTitleStyle: Property<TabTitleStyle>?,
@@ -214,6 +225,10 @@ class Tabs internal constructor(
          * Animation starting triggers. Default value: `[state_change, visibility_change]`.
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
+        /**
+         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         */
+        val variables: Property<List<Variable>>?,
         /**
          * Element visibility.
          * Default value: `visible`.
@@ -251,6 +266,7 @@ class Tabs internal constructor(
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("items", items)
+            result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
@@ -260,6 +276,7 @@ class Tabs internal constructor(
             result.tryPutProperty("separator_color", separatorColor)
             result.tryPutProperty("separator_paddings", separatorPaddings)
             result.tryPutProperty("switch_tabs_by_content_swipe_enabled", switchTabsByContentSwipeEnabled)
+            result.tryPutProperty("tab_title_delimiter", tabTitleDelimiter)
             result.tryPutProperty("tab_title_style", tabTitleStyle)
             result.tryPutProperty("title_paddings", titlePaddings)
             result.tryPutProperty("tooltips", tooltips)
@@ -268,6 +285,7 @@ class Tabs internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -319,6 +337,57 @@ class Tabs internal constructor(
                 result.tryPutProperty("div", div)
                 result.tryPutProperty("title", title)
                 result.tryPutProperty("title_click_action", titleClickAction)
+                return result
+            }
+        }
+    }
+
+
+    /**
+     * Style of delimiters between tab titles.
+     * 
+     * Can be created using the method [tabsTabTitleDelimiter].
+     * 
+     * Required parameters: `image_url`.
+     */
+    @Generated
+    class TabTitleDelimiter internal constructor(
+        @JsonIgnore
+        val properties: Properties,
+    ) {
+        @JsonAnyGetter
+        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+        operator fun plus(additive: Properties): TabTitleDelimiter = TabTitleDelimiter(
+            Properties(
+                height = additive.height ?: properties.height,
+                imageUrl = additive.imageUrl ?: properties.imageUrl,
+                width = additive.width ?: properties.width,
+            )
+        )
+
+        class Properties internal constructor(
+            /**
+             * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+             * Default value: `{"type": "fixed", "value": 12}`.
+             */
+            val height: Property<FixedSize>?,
+            /**
+             * Direct URL to an image.
+             */
+            val imageUrl: Property<Url>?,
+            /**
+             * Element width.
+             * Default value: `{"type": "fixed", "value": 12}`.
+             */
+            val width: Property<FixedSize>?,
+        ) {
+            internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                val result = mutableMapOf<String, Any>()
+                result.putAll(properties)
+                result.tryPutProperty("height", height)
+                result.tryPutProperty("image_url", imageUrl)
+                result.tryPutProperty("width", width)
                 return result
             }
         }
@@ -499,6 +568,7 @@ class Tabs internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -508,6 +578,7 @@ class Tabs internal constructor(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -516,6 +587,7 @@ class Tabs internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -539,6 +611,7 @@ fun DivScope.tabs(
     height: Size? = null,
     id: String? = null,
     items: List<Tabs.Item>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -548,6 +621,7 @@ fun DivScope.tabs(
     separatorColor: Color? = null,
     separatorPaddings: EdgeInsets? = null,
     switchTabsByContentSwipeEnabled: Boolean? = null,
+    tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
@@ -556,6 +630,7 @@ fun DivScope.tabs(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -577,6 +652,7 @@ fun DivScope.tabs(
         height = valueOrNull(height),
         id = valueOrNull(id),
         items = valueOrNull(items),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         restrictParentScroll = valueOrNull(restrictParentScroll),
@@ -586,6 +662,7 @@ fun DivScope.tabs(
         separatorColor = valueOrNull(separatorColor),
         separatorPaddings = valueOrNull(separatorPaddings),
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
+        tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
         tabTitleStyle = valueOrNull(tabTitleStyle),
         titlePaddings = valueOrNull(titlePaddings),
         tooltips = valueOrNull(tooltips),
@@ -594,6 +671,7 @@ fun DivScope.tabs(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -617,6 +695,7 @@ fun DivScope.tabs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -626,6 +705,7 @@ fun DivScope.tabs(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -634,6 +714,7 @@ fun DivScope.tabs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -657,6 +738,7 @@ fun DivScope.tabsProps(
     height: Size? = null,
     id: String? = null,
     items: List<Tabs.Item>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -666,6 +748,7 @@ fun DivScope.tabsProps(
     separatorColor: Color? = null,
     separatorPaddings: EdgeInsets? = null,
     switchTabsByContentSwipeEnabled: Boolean? = null,
+    tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
@@ -674,6 +757,7 @@ fun DivScope.tabsProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -694,6 +778,7 @@ fun DivScope.tabsProps(
     height = valueOrNull(height),
     id = valueOrNull(id),
     items = valueOrNull(items),
+    layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
     restrictParentScroll = valueOrNull(restrictParentScroll),
@@ -703,6 +788,7 @@ fun DivScope.tabsProps(
     separatorColor = valueOrNull(separatorColor),
     separatorPaddings = valueOrNull(separatorPaddings),
     switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
+    tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
     tabTitleStyle = valueOrNull(tabTitleStyle),
     titlePaddings = valueOrNull(titlePaddings),
     tooltips = valueOrNull(tooltips),
@@ -711,6 +797,7 @@ fun DivScope.tabsProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -733,6 +820,7 @@ fun DivScope.tabsProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -742,6 +830,7 @@ fun DivScope.tabsProps(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -750,6 +839,7 @@ fun DivScope.tabsProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -773,6 +863,7 @@ fun TemplateScope.tabsRefs(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Tabs.Item>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
@@ -782,6 +873,7 @@ fun TemplateScope.tabsRefs(
     separatorColor: ReferenceProperty<Color>? = null,
     separatorPaddings: ReferenceProperty<EdgeInsets>? = null,
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
+    tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -790,6 +882,7 @@ fun TemplateScope.tabsRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -810,6 +903,7 @@ fun TemplateScope.tabsRefs(
     height = height,
     id = id,
     items = items,
+    layoutProvider = layoutProvider,
     margins = margins,
     paddings = paddings,
     restrictParentScroll = restrictParentScroll,
@@ -819,6 +913,7 @@ fun TemplateScope.tabsRefs(
     separatorColor = separatorColor,
     separatorPaddings = separatorPaddings,
     switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
+    tabTitleDelimiter = tabTitleDelimiter,
     tabTitleStyle = tabTitleStyle,
     titlePaddings = titlePaddings,
     tooltips = tooltips,
@@ -827,6 +922,7 @@ fun TemplateScope.tabsRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -849,6 +945,7 @@ fun TemplateScope.tabsRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -858,6 +955,7 @@ fun TemplateScope.tabsRefs(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -866,6 +964,7 @@ fun TemplateScope.tabsRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -889,6 +988,7 @@ fun Tabs.override(
     height: Size? = null,
     id: String? = null,
     items: List<Tabs.Item>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -898,6 +998,7 @@ fun Tabs.override(
     separatorColor: Color? = null,
     separatorPaddings: EdgeInsets? = null,
     switchTabsByContentSwipeEnabled: Boolean? = null,
+    tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
@@ -906,6 +1007,7 @@ fun Tabs.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -927,6 +1029,7 @@ fun Tabs.override(
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         items = valueOrNull(items) ?: properties.items,
+        layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
@@ -936,6 +1039,7 @@ fun Tabs.override(
         separatorColor = valueOrNull(separatorColor) ?: properties.separatorColor,
         separatorPaddings = valueOrNull(separatorPaddings) ?: properties.separatorPaddings,
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled) ?: properties.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = valueOrNull(tabTitleDelimiter) ?: properties.tabTitleDelimiter,
         tabTitleStyle = valueOrNull(tabTitleStyle) ?: properties.tabTitleStyle,
         titlePaddings = valueOrNull(titlePaddings) ?: properties.titlePaddings,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
@@ -944,6 +1048,7 @@ fun Tabs.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -967,6 +1072,7 @@ fun Tabs.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -976,6 +1082,7 @@ fun Tabs.override(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -984,6 +1091,7 @@ fun Tabs.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1007,6 +1115,7 @@ fun Tabs.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Tabs.Item>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
@@ -1016,6 +1125,7 @@ fun Tabs.defer(
     separatorColor: ReferenceProperty<Color>? = null,
     separatorPaddings: ReferenceProperty<EdgeInsets>? = null,
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
+    tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1024,6 +1134,7 @@ fun Tabs.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1045,6 +1156,7 @@ fun Tabs.defer(
         height = height ?: properties.height,
         id = id ?: properties.id,
         items = items ?: properties.items,
+        layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
@@ -1054,6 +1166,7 @@ fun Tabs.defer(
         separatorColor = separatorColor ?: properties.separatorColor,
         separatorPaddings = separatorPaddings ?: properties.separatorPaddings,
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = tabTitleDelimiter ?: properties.tabTitleDelimiter,
         tabTitleStyle = tabTitleStyle ?: properties.tabTitleStyle,
         titlePaddings = titlePaddings ?: properties.titlePaddings,
         tooltips = tooltips ?: properties.tooltips,
@@ -1062,6 +1175,7 @@ fun Tabs.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -1115,6 +1229,7 @@ fun Tabs.evaluate(
         height = properties.height,
         id = properties.id,
         items = properties.items,
+        layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         paddings = properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
@@ -1124,6 +1239,7 @@ fun Tabs.evaluate(
         separatorColor = separatorColor ?: properties.separatorColor,
         separatorPaddings = properties.separatorPaddings,
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = properties.tabTitleDelimiter,
         tabTitleStyle = properties.tabTitleStyle,
         titlePaddings = properties.titlePaddings,
         tooltips = properties.tooltips,
@@ -1132,6 +1248,7 @@ fun Tabs.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -1155,6 +1272,7 @@ fun Tabs.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -1164,6 +1282,7 @@ fun Tabs.evaluate(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1172,6 +1291,7 @@ fun Tabs.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1195,6 +1315,7 @@ fun Component<Tabs>.override(
     height: Size? = null,
     id: String? = null,
     items: List<Tabs.Item>? = null,
+    layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -1204,6 +1325,7 @@ fun Component<Tabs>.override(
     separatorColor: Color? = null,
     separatorPaddings: EdgeInsets? = null,
     switchTabsByContentSwipeEnabled: Boolean? = null,
+    tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
@@ -1212,6 +1334,7 @@ fun Component<Tabs>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1234,6 +1357,7 @@ fun Component<Tabs>.override(
         height = valueOrNull(height),
         id = valueOrNull(id),
         items = valueOrNull(items),
+        layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         restrictParentScroll = valueOrNull(restrictParentScroll),
@@ -1243,6 +1367,7 @@ fun Component<Tabs>.override(
         separatorColor = valueOrNull(separatorColor),
         separatorPaddings = valueOrNull(separatorPaddings),
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
+        tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
         tabTitleStyle = valueOrNull(tabTitleStyle),
         titlePaddings = valueOrNull(titlePaddings),
         tooltips = valueOrNull(tooltips),
@@ -1251,6 +1376,7 @@ fun Component<Tabs>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1274,6 +1400,7 @@ fun Component<Tabs>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Tabs. Transition between tabs can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+ * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
@@ -1283,6 +1410,7 @@ fun Component<Tabs>.override(
  * @param separatorColor Separator color.
  * @param separatorPaddings Indents from the separating line. Not used if `has_separator = false`.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param tabTitleDelimiter Style of delimiters between tab titles.
  * @param tabTitleStyle Design style of tab titles.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1291,6 +1419,7 @@ fun Component<Tabs>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1314,6 +1443,7 @@ fun Component<Tabs>.defer(
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     items: ReferenceProperty<List<Tabs.Item>>? = null,
+    layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
@@ -1323,6 +1453,7 @@ fun Component<Tabs>.defer(
     separatorColor: ReferenceProperty<Color>? = null,
     separatorPaddings: ReferenceProperty<EdgeInsets>? = null,
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
+    tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1331,6 +1462,7 @@ fun Component<Tabs>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1353,6 +1485,7 @@ fun Component<Tabs>.defer(
         height = height,
         id = id,
         items = items,
+        layoutProvider = layoutProvider,
         margins = margins,
         paddings = paddings,
         restrictParentScroll = restrictParentScroll,
@@ -1362,6 +1495,7 @@ fun Component<Tabs>.defer(
         separatorColor = separatorColor,
         separatorPaddings = separatorPaddings,
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = tabTitleDelimiter,
         tabTitleStyle = tabTitleStyle,
         titlePaddings = titlePaddings,
         tooltips = tooltips,
@@ -1370,6 +1504,7 @@ fun Component<Tabs>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1424,6 +1559,7 @@ fun Component<Tabs>.evaluate(
         height = null,
         id = null,
         items = null,
+        layoutProvider = null,
         margins = null,
         paddings = null,
         restrictParentScroll = restrictParentScroll,
@@ -1433,6 +1569,7 @@ fun Component<Tabs>.evaluate(
         separatorColor = separatorColor,
         separatorPaddings = null,
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
+        tabTitleDelimiter = null,
         tabTitleStyle = null,
         titlePaddings = null,
         tooltips = null,
@@ -1441,6 +1578,7 @@ fun Component<Tabs>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variables = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
@@ -1565,6 +1703,115 @@ fun Tabs.Item.evaluate(
 
 @Generated
 fun Tabs.Item.asList() = listOf(this)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun DivScope.tabsTabTitleDelimiter(
+    `use named arguments`: Guard = Guard.instance,
+    height: FixedSize? = null,
+    imageUrl: Url? = null,
+    width: FixedSize? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = valueOrNull(height),
+        imageUrl = valueOrNull(imageUrl),
+        width = valueOrNull(width),
+    )
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun DivScope.tabsTabTitleDelimiterProps(
+    `use named arguments`: Guard = Guard.instance,
+    height: FixedSize? = null,
+    imageUrl: Url? = null,
+    width: FixedSize? = null,
+) = Tabs.TabTitleDelimiter.Properties(
+    height = valueOrNull(height),
+    imageUrl = valueOrNull(imageUrl),
+    width = valueOrNull(width),
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun TemplateScope.tabsTabTitleDelimiterRefs(
+    `use named arguments`: Guard = Guard.instance,
+    height: ReferenceProperty<FixedSize>? = null,
+    imageUrl: ReferenceProperty<Url>? = null,
+    width: ReferenceProperty<FixedSize>? = null,
+) = Tabs.TabTitleDelimiter.Properties(
+    height = height,
+    imageUrl = imageUrl,
+    width = width,
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun Tabs.TabTitleDelimiter.override(
+    `use named arguments`: Guard = Guard.instance,
+    height: FixedSize? = null,
+    imageUrl: Url? = null,
+    width: FixedSize? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = valueOrNull(height) ?: properties.height,
+        imageUrl = valueOrNull(imageUrl) ?: properties.imageUrl,
+        width = valueOrNull(width) ?: properties.width,
+    )
+)
+
+/**
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param imageUrl Direct URL to an image.
+ * @param width Element width.
+ */
+@Generated
+fun Tabs.TabTitleDelimiter.defer(
+    `use named arguments`: Guard = Guard.instance,
+    height: ReferenceProperty<FixedSize>? = null,
+    imageUrl: ReferenceProperty<Url>? = null,
+    width: ReferenceProperty<FixedSize>? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = height ?: properties.height,
+        imageUrl = imageUrl ?: properties.imageUrl,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param imageUrl Direct URL to an image.
+ */
+@Generated
+fun Tabs.TabTitleDelimiter.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    imageUrl: ExpressionProperty<Url>? = null,
+): Tabs.TabTitleDelimiter = Tabs.TabTitleDelimiter(
+    Tabs.TabTitleDelimiter.Properties(
+        height = properties.height,
+        imageUrl = imageUrl ?: properties.imageUrl,
+        width = properties.width,
+    )
+)
+
+@Generated
+fun Tabs.TabTitleDelimiter.asList() = listOf(this)
 
 /**
  * @param activeBackgroundColor Background color of the active tab title.

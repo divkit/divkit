@@ -84,7 +84,9 @@ class SwiftGenerator(Generator):
 
     def __extensions_declaration(self, obj: Declarable) -> List[str]:
         if isinstance(obj, Entity):
-            return self.__entity_extensions_declaration(cast(SwiftEntity, obj))
+            entity: SwiftEntity = cast(SwiftEntity, obj)
+            entity.__class__ = SwiftEntity
+            return self.__entity_extensions_declaration(entity)
         elif isinstance(obj, EntityEnumeration):
             return self.__entity_enumeration_extensions_declaration(obj)
         else:

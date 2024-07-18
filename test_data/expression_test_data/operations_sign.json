@@ -1,13 +1,11 @@
 {
   "cases": [
     {
-      "name": "+123 => 123",
       "expression": "@{+123}",
       "expected": {
         "type": "integer",
         "value": 123
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -15,7 +13,6 @@
       ]
     },
     {
-      "name": "+integer_var => 123",
       "expression": "@{+integer_var}",
       "expected": {
         "type": "integer",
@@ -35,7 +32,6 @@
       ]
     },
     {
-      "name": "+ integer_var => 123",
       "expression": "@{+ integer_var}",
       "expected": {
         "type": "integer",
@@ -55,7 +51,6 @@
       ]
     },
     {
-      "name": "-integer_var => -123",
       "expression": "@{-integer_var}",
       "expected": {
         "type": "integer",
@@ -75,7 +70,6 @@
       ]
     },
     {
-      "name": "- integer_var => -123",
       "expression": "@{- integer_var}",
       "expected": {
         "type": "integer",
@@ -95,7 +89,6 @@
       ]
     },
     {
-      "name": "+number_var => 123.45",
       "expression": "@{+number_var}",
       "expected": {
         "type": "number",
@@ -115,7 +108,6 @@
       ]
     },
     {
-      "name": "-number_var => -123.45",
       "expression": "@{-number_var}",
       "expected": {
         "type": "number",
@@ -135,7 +127,6 @@
       ]
     },
     {
-      "name": "+boolean_var => error",
       "expression": "@{+boolean_var}",
       "expected": {
         "type": "error",
@@ -155,7 +146,6 @@
       ]
     },
     {
-      "name": "-boolean_var => error",
       "expression": "@{-boolean_var}",
       "expected": {
         "type": "error",
@@ -175,13 +165,11 @@
       ]
     },
     {
-      "name": "-(+(-123)) => 123",
       "expression": "@{-(+(-123))}",
       "expected": {
         "type": "integer",
         "value": 123
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -189,13 +177,11 @@
       ]
     },
     {
-      "name": "++123 => error",
       "expression": "@{++123}",
       "expected": {
         "type": "error",
         "value": ""
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",
@@ -209,7 +195,6 @@
         "type": "error",
         "value": ""
       },
-      "variables": [],
       "platforms": [
         "android",
         "ios",

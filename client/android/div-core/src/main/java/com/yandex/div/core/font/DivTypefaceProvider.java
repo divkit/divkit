@@ -1,6 +1,8 @@
 package com.yandex.div.core.font;
 
 import android.graphics.Typeface;
+import android.os.Build;
+
 import androidx.annotation.Nullable;
 import com.yandex.div.core.annotations.PublicApi;
 
@@ -37,6 +39,16 @@ public interface DivTypefaceProvider {
 
         @Nullable
         @Override
+        public Typeface getTypefaceFor(int weight) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                return Typeface.create(Typeface.DEFAULT, weight, false);
+            } else {
+                return DivTypefaceProvider.super.getTypefaceFor(weight);
+            }
+        }
+
+        @Nullable
+        @Override
         public Typeface getRegularLegacy() {
             return null;
         }
@@ -65,6 +77,22 @@ public interface DivTypefaceProvider {
      */
     @Nullable
     Typeface getBold();
+
+    /**
+     * Returns typeface for text elements that require bold font.
+     */
+    @Nullable
+    default Typeface getTypefaceFor(int weight) {
+        if (weight >= 0 && weight < 350) {
+            return getLight();
+        } else if (weight >= 350 && weight < 450) {
+            return getRegular();
+        } else if (weight >= 450 && weight < 600) {
+            return getMedium();
+        } else {
+            return getBold();
+        }
+    }
 
     /**
      * Returns typeface for text elements that require regular font.

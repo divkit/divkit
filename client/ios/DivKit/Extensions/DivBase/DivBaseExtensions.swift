@@ -1,24 +1,29 @@
 import CoreGraphics
 
-import BasePublic
-import BaseUIPublic
 import LayoutKit
+import VGSL
 
 extension DivBase {
   func applyBaseProperties(
     to block: () throws -> Block,
     context: DivBlockModelingContext,
     actionsHolder: DivActionsHolder?,
-    options: BasePropertiesOptions = [],
     customAccessibilityParams: CustomAccessibilityParams = .default,
+    applyPaddings: Bool = true,
     clipToBounds: Bool = true
   ) throws -> Block {
+    let path = context.parentPath
+
+    context.variablesStorage.initializeIfNeeded(
+      path: path,
+      variables: variables?.extractDivVariableValues() ?? [:]
+    )
+
     let extensionHandlers = context.getExtensionHandlers(for: self)
     for extensionHandler in extensionHandlers {
       extensionHandler.accept(div: self, context: context)
     }
 
-    let path = context.parentPath
     let statePath = context.parentDivStatePath ?? DivData.rootPath
 
     let expressionResolver = context.expressionResolver
@@ -33,7 +38,7 @@ extension DivBase {
           visibilityParams: visibilityParams
         )
       }
-      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: path)
+      context.lastVisibleBoundsCache.onBecomeInvisible(path)
       return EmptyBlock.zeroSized
     }
 
@@ -43,14 +48,14 @@ extension DivBase {
       block = extensionHandler.applyBeforeBaseProperties(to: block, div: self, context: context)
     }
 
-    let internalInsets = options.contains(.noPaddings)
-      ? .zero
-      : paddings.resolve(context)
-    block = block.addingEdgeInsets(internalInsets, clipsToBounds: clipToBounds)
+    block = block.addingEdgeInsets(
+      applyPaddings ? paddings.resolve(context): .zero,
+      clipsToBounds: clipToBounds
+    )
 
     let externalInsets = margins.resolve(context)
     if visibility == .invisible {
-      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: path)
+      context.lastVisibleBoundsCache.onBecomeInvisible(path)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       block = applyExtensionHandlersAfterBaseProperties(
         to: block.addingEdgeInsets(externalInsets, clipsToBounds: clipToBounds),
@@ -59,6 +64,8 @@ extension DivBase {
       )
       return block.addingDecorations(alpha: 0)
     }
+
+    context.lastVisibleBoundsCache.onBecomeVisible(path)
 
     // We can't put container properties into single container.
     // Properties should be applied in specific order.
@@ -86,7 +93,7 @@ extension DivBase {
 
     let accessibilityElement = (accessibility ?? DivAccessibility()).resolve(
       expressionResolver,
-      id: id,
+      id: context.elementId ?? id,
       customParams: customAccessibilityParams
     )
 
@@ -114,13 +121,18 @@ extension DivBase {
       )
     }
 
+    let clipToBounds = rotation == nil && shadow == nil
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
-      .addActions(context: context, actionsHolder: actionsHolder)
+      .addActions(context: context, actionsHolder: actionsHolder, clipToBounds: clipToBounds)
       .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
-        boundary: rotation != nil || shadow != nil ? .noClip : nil,
+        boundary: clipToBounds ? nil : .noClip,
         alpha: CGFloat(resolveAlpha(expressionResolver))
       )
+
+    if let layoutProvider {
+      block = layoutProvider.apply(block: block, context: context)
+    }
 
     return applyExtensionHandlersAfterBaseProperties(
       to: block,
@@ -176,7 +188,7 @@ extension DivBase {
     context: DivBlockModelingContext,
     statePath: DivStatePath
   ) -> Block {
-    guard let id = self.id else {
+    guard let id = context.elementId ?? id else {
       return block
     }
 

@@ -2,9 +2,7 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 extension DecoratingBlock {
   static func makeBlockView() -> BlockView {
@@ -396,7 +394,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       return updateContentAlpha(animated: animated)
     }
 
-    childView?.perform(actionAnimation, animated: animated)
+    perform(actionAnimation, animated: animated)
   }
 
   private func updateContentAlpha(animated: Bool) {

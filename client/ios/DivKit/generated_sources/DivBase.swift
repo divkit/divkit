@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public protocol DivBase: DivBlockModeling {
   var accessibility: DivAccessibility? { get }
@@ -17,6 +17,7 @@ public protocol DivBase: DivBlockModeling {
   var focus: DivFocus? { get }
   var height: DivSize { get } // default value: .divWrapContentSize(DivWrapContentSize())
   var id: String? { get }
+  var layoutProvider: DivLayoutProvider? { get }
   var margins: DivEdgeInsets? { get }
   var paddings: DivEdgeInsets? { get }
   var rowSpan: Expression<Int>? { get } // constraint: number >= 0
@@ -27,6 +28,7 @@ public protocol DivBase: DivBlockModeling {
   var transitionIn: DivAppearanceTransition? { get }
   var transitionOut: DivAppearanceTransition? { get }
   var transitionTriggers: [DivTransitionTrigger]? { get } // at least 1 elements
+  var variables: [DivVariable]? { get }
   var visibility: Expression<DivVisibility> { get } // default value: visible
   var visibilityAction: DivVisibilityAction? { get }
   var visibilityActions: [DivVisibilityAction]? { get }

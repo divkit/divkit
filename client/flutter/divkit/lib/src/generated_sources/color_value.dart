@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
 class ColorValue with EquatableMixin {
   const ColorValue({
@@ -17,6 +17,13 @@ class ColorValue with EquatableMixin {
   List<Object?> get props => [
         value,
       ];
+
+  ColorValue copyWith({
+    Expression<Color>? value,
+  }) =>
+      ColorValue(
+        value: value ?? this.value,
+      );
 
   static ColorValue? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

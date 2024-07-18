@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import VGSL
 
 @frozen
 public indirect enum DeserializationResult<T> {
@@ -51,10 +51,10 @@ extension DeserializationResult {
 
   public func unwrap() throws -> T {
     switch self {
-    case let .success(divData):
-      return divData
-    case let .partialSuccess(divData, _):
-      return divData
+    case let .success(value):
+      return value
+    case let .partialSuccess(value, _):
+      return value
     case let .failure(errors):
       throw errors.first
     case .noValue:

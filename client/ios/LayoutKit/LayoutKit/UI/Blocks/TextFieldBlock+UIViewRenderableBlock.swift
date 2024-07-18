@@ -1,8 +1,6 @@
 import UIKit
 
-import BaseUIPublic
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 extension TextFieldBlock {
   public static func makeBlockView() -> BlockView { TextFieldBlockView() }

@@ -124,8 +124,8 @@ open class AspectImageView @JvmOverloads constructor(
     private fun updateMatrix(width: Int, height: Int) {
         val drawable = drawable ?: return
 
-        val availableWidth = (width - paddingLeft - paddingRight).toFloat()
-        val availableHeight = (height - paddingTop - paddingBottom).toFloat()
+        val availableWidth = (width - paddingLeft - paddingRight).coerceAtLeast(0).toFloat()
+        val availableHeight = (height - paddingTop - paddingBottom).coerceAtLeast(0).toFloat()
         val imageWidth = drawable.intrinsicWidth.toFloat()
         val imageHeight = drawable.intrinsicHeight.toFloat()
         val absoluteGravity = GravityCompat.getAbsoluteGravity(gravity, ViewCompat.getLayoutDirection(this))

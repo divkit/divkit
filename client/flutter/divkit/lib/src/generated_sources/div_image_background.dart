@@ -2,11 +2,11 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
-import 'div_alignment_horizontal.dart';
-import 'div_alignment_vertical.dart';
-import 'div_filter.dart';
-import 'div_image_scale.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
+import 'package:divkit/src/generated_sources/div_alignment_horizontal.dart';
+import 'package:divkit/src/generated_sources/div_alignment_vertical.dart';
+import 'package:divkit/src/generated_sources/div_filter.dart';
+import 'package:divkit/src/generated_sources/div_image_scale.dart';
 
 class DivImageBackground with EquatableMixin {
   const DivImageBackground({
@@ -48,6 +48,27 @@ class DivImageBackground with EquatableMixin {
         scale,
       ];
 
+  DivImageBackground copyWith({
+    Expression<double>? alpha,
+    Expression<DivAlignmentHorizontal>? contentAlignmentHorizontal,
+    Expression<DivAlignmentVertical>? contentAlignmentVertical,
+    List<DivFilter>? Function()? filters,
+    Expression<Uri>? imageUrl,
+    Expression<bool>? preloadRequired,
+    Expression<DivImageScale>? scale,
+  }) =>
+      DivImageBackground(
+        alpha: alpha ?? this.alpha,
+        contentAlignmentHorizontal:
+            contentAlignmentHorizontal ?? this.contentAlignmentHorizontal,
+        contentAlignmentVertical:
+            contentAlignmentVertical ?? this.contentAlignmentVertical,
+        filters: filters != null ? filters.call() : this.filters,
+        imageUrl: imageUrl ?? this.imageUrl,
+        preloadRequired: preloadRequired ?? this.preloadRequired,
+        scale: scale ?? this.scale,
+      );
+
   static DivImageBackground? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
@@ -68,13 +89,11 @@ class DivImageBackground with EquatableMixin {
         fallback: DivAlignmentVertical.center,
       )!,
       filters: safeParseObj(
-        (json['filters'] as List<dynamic>?)
-            ?.map(
-              (v) => safeParseObj(
-                DivFilter.fromJson(v),
-              )!,
-            )
-            .toList(),
+        safeListMap(
+            json['filters'],
+            (v) => safeParseObj(
+                  DivFilter.fromJson(v),
+                )!),
       ),
       imageUrl: safeParseUriExpr(json['image_url'])!,
       preloadRequired: safeParseBoolExpr(

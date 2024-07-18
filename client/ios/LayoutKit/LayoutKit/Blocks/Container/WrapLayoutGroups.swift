@@ -1,5 +1,5 @@
-import BaseTinyPublic
 import Foundation
+import VGSL
 
 struct WrapLayoutGroups {
   typealias ChildParametes = (child: ContainerBlock.Child, childSize: CGSize, lineOffset: CGFloat)

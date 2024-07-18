@@ -2,7 +2,7 @@ import CoreMedia
 import Foundation
 import UIKit
 
-import CommonCorePublic
+import VGSL
 
 extension VideoBlock {
   public static func makeBlockView() -> BlockView {
@@ -28,7 +28,7 @@ extension VideoBlock {
 }
 
 private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
-  var visibleBoundsTrackingSubviews: [CommonCorePublic.VisibleBoundsTrackingView] {
+  var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     [videoView].compactMap { $0 }
   }
 
@@ -47,8 +47,8 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   private lazy var player: Player? = {
     let player = playerFactory?.makePlayer(
-      data: nil,
-      config: nil
+      data: model.videoData,
+      config: model.playbackConfig
     )
 
     playerSignal = player?.signal.addObserver { [weak self] event in
@@ -130,6 +130,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     if let elapsedTime = model.elapsedTime?.value,
        elapsedTime != previousTime {
       player?.seek(to: CMTime(value: elapsedTime))
+      previousTime = elapsedTime
     }
   }
 

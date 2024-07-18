@@ -31,6 +31,7 @@ export function render(opts: {
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     store?: Store;
+    weekStartDay?: number;
 }): DivkitDebugInstance {
     const { target, hydrate, ...rest } = opts;
 

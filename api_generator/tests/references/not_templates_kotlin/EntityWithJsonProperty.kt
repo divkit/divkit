@@ -28,6 +28,7 @@ class EntityWithJsonProperty(
             return it
         }
         val hash = 
+            this::class.hashCode() +
             jsonProperty.hashCode()
         _hash = hash
         return hash

@@ -1,8 +1,8 @@
 // Generated code. Do not modify.
 
-import CommonCorePublic
 import Foundation
 import Serialization
+import VGSL
 
 public final class DivState: DivBase {
   public final class State {
@@ -42,6 +42,7 @@ public final class DivState: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
+  public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
@@ -55,6 +56,7 @@ public final class DivState: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variables: [DivVariable]?
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]?
@@ -122,6 +124,7 @@ public final class DivState: DivBase {
     focus: DivFocus?,
     height: DivSize?,
     id: String?,
+    layoutProvider: DivLayoutProvider?,
     margins: DivEdgeInsets?,
     paddings: DivEdgeInsets?,
     rowSpan: Expression<Int>?,
@@ -135,6 +138,7 @@ public final class DivState: DivBase {
     transitionIn: DivAppearanceTransition?,
     transitionOut: DivAppearanceTransition?,
     transitionTriggers: [DivTransitionTrigger]?,
+    variables: [DivVariable]?,
     visibility: Expression<DivVisibility>?,
     visibilityAction: DivVisibilityAction?,
     visibilityActions: [DivVisibilityAction]?,
@@ -154,6 +158,7 @@ public final class DivState: DivBase {
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.layoutProvider = layoutProvider
     self.margins = margins
     self.paddings = paddings
     self.rowSpan = rowSpan
@@ -167,6 +172,7 @@ public final class DivState: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variables = variables
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -208,46 +214,48 @@ extension DivState: Equatable {
     guard
       lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.margins == rhs.margins
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.stateIdVariable == rhs.stateIdVariable,
-      lhs.states == rhs.states,
-      lhs.tooltips == rhs.tooltips
+      lhs.states == rhs.states
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.visibility == rhs.visibility,
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variables == rhs.variables,
+      lhs.visibility == rhs.visibility
+    else {
+      return false
+    }
+    guard
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
-    else {
-      return false
-    }
-    guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -275,6 +283,7 @@ extension DivState: Serializable {
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
+    result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()
@@ -288,6 +297,7 @@ extension DivState: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variables"] = variables?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

@@ -1,5 +1,5 @@
-import CommonCorePublic
 import LayoutKit
+import VGSL
 
 extension DivAction: DivActionBase {}
 
@@ -14,9 +14,9 @@ extension DivAction {
     } else {
       // don't make .divAction payloads for menu actions until DivActionHandler could handle it
       makeDivActionPayload(
-        cardId: context.cardId,
+        path: context.parentPath,
         source: .tap,
-        prototypeVariables: context.prototypesStorage
+        localValues: context.localValues
       )
     }
 

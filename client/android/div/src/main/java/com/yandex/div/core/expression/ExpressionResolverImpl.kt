@@ -22,6 +22,7 @@ import com.yandex.div.json.invalidValue
 import com.yandex.div.json.missingVariable
 import com.yandex.div.json.resolveFailed
 import com.yandex.div.json.typeMismatch
+import org.json.JSONObject
 
 internal class ExpressionResolverImpl(
     private val variableController: VariableController,
@@ -228,5 +229,12 @@ internal class ExpressionResolverImpl(
             ),
             errorCollector = errorCollector
         )
+    }
+
+    fun validateItemBuilderDataElement(element: Any, index: Int): JSONObject? {
+        return element as? JSONObject ?: run {
+            errorCollector.logError(typeMismatch(index, element))
+            null
+        }
     }
 }

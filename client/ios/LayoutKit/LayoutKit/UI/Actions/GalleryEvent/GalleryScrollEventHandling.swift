@@ -1,7 +1,6 @@
 import UIKit
 
-import CommonCorePublic
-import LayoutKitInterface
+import VGSL
 
 public protocol GalleryScrollEventHandling {
   func handle(galleryScrollEvent: GalleryScrollEvent, from sender: AnyObject)

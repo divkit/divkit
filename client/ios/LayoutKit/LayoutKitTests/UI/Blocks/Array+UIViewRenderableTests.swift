@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCorePublic
+import VGSL
 
 final class Array_UIViewRenderableTests: XCTestCase {
   func test_AttachesViewsToParent() {

@@ -9,6 +9,7 @@ import com.yandex.div2.DivContainer
 internal class DivWrapLayout(context: Context) :
     WrapContainerLayout(context),
     DivHolderView<DivContainer> by DivHolderViewMixin(),
+    DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
