@@ -1,3 +1,13 @@
+## 30.10.0
+
+# Android Client:
+* Make `div-stroke.width` a number.
+* Now visual errors dump includes card's json and all global variables states.
+
+# iOS Client:
+* Fixed video player initialization in `VideoBlock`.
+
+
 ## 30.9.0
 
 # Android Client:
