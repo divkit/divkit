@@ -70,6 +70,54 @@
       ]
     },
     {
+      "expression": "@{10>-10}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{10>+10}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{10<-10}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "expression": "@{10>=-10}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
       "expression": "@{len('12345')-2}",
       "expected": {
         "type": "integer",
