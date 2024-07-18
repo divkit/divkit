@@ -1,1 +1,0 @@
-SUBSCRIBER(g:divkit-android)
