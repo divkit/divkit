@@ -10,10 +10,12 @@ extension DecoratingBlock {
   }
 
   func isBestViewForReuse(_ view: BlockView) -> Bool {
-    guard let view = view as? DecoratingView else {
+    guard let view = view as? DecoratingView,
+          let sourceBlock = view.model.source.value as? DecoratingBlock else {
       return false
     }
-    return view.model.source.value as? DecoratingBlock == self
+
+    return isPreceded(by: sourceBlock) || sourceBlock == self
   }
 
   func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -53,6 +55,15 @@ extension DecoratingBlock {
       overscrollDelegate: overscrollDelegate,
       renderingDelegate: renderingDelegate
     )
+  }
+}
+
+extension DecoratingBlock {
+  private func isPreceded(by block: DecoratingBlock) -> Bool {
+    guard let selfPath = self.childPath,
+          let blockPath = block.childPath else { return false }
+
+    return selfPath == blockPath
   }
 }
 

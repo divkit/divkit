@@ -127,13 +127,115 @@ final class Array_UIViewRenderableTests: XCTestCase {
 
     XCTAssertEqual([oldView2, oldView0, oldView1], views)
   }
+
+  func test_BlocksReuseOrder() {
+    let blocks = [TestBlock(), TestBlock()]
+    let views = [TestView(frame: .zero), TestView(frame: .zero)]
+    for (block, view) in zip(blocks, views) {
+      view.block = block
+    }
+
+    let newBlocks = [TestBlock(), TestBlock()]
+    newBlocks[0].valuableContent = 2
+
+    let newViews = (views as [BlockView]).reused(
+      with: newBlocks,
+      attachTo: UIView(frame: .zero),
+      observer: nil,
+      overscrollDelegate: nil,
+      renderingDelegate: nil
+    )
+
+    XCTAssertEqual(newViews as! [TestView], views.reversed())
+  }
+
+  func test_PathHolderBlocksReuseOrder() {
+    let blocks = [PathHolderTestBlock("path1"), PathHolderTestBlock("path2")]
+    let views = [TestView(frame: .zero), TestView(frame: .zero)]
+    for (block, view) in zip(blocks, views) {
+      view.block = block
+    }
+
+    let newBlocks = [PathHolderTestBlock("path1"), PathHolderTestBlock("path2")]
+    newBlocks[0].valuableContent = 2
+
+    let newViews = (views as [BlockView]).reused(
+      with: newBlocks,
+      attachTo: UIView(frame: .zero),
+      observer: nil,
+      overscrollDelegate: nil,
+      renderingDelegate: nil
+    )
+
+    XCTAssertEqual(views, newViews as! [TestView])
+  }
+
+  func test_DecoratingBlockIsBestViewForReuse() {
+    let oldBlock = DecoratingBlock(
+      child: DecoratingBlock(
+        child: PathHolderTestBlock("path1")
+      )
+    )
+    let view = DecoratingBlock.makeBlockView()
+
+    oldBlock.configureBlockView(
+      view,
+      observer: nil,
+      overscrollDelegate: nil,
+      renderingDelegate: nil
+    )
+
+    let newBlock = DecoratingBlock(
+      child: DecoratingBlock(
+        child: modified(PathHolderTestBlock("path1")) { $0.valuableContent = 20 }
+      )
+    )
+
+    XCTAssertTrue(newBlock.isBestViewForReuse(view))
+  }
 }
 
-private final class TestBlock: UIViewRenderable {
+private class TestBlock: BlockWithTraits {
+  var widthTrait: LayoutKit.LayoutTrait = .resizable
+  var heightTrait: LayoutKit.LayoutTrait = .resizable
+  var intrinsicContentWidth: CGFloat = 0.0
+
+  var valuableContent = 1
+
+  func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
+    0.0
+  }
+
+  func equals(_ other: LayoutKit.Block) -> Bool {
+    guard let other = other as? TestBlock else {
+      return false
+    }
+
+    return other.valuableContent == valuableContent
+  }
+
+  var debugDescription = ""
+
+  func getImageHolders() -> [VGSLUI.ImageHolder] {
+    []
+  }
+
+  func laidOut(for _: CGFloat) -> LayoutKit.Block {
+    self
+  }
+
+  func laidOut(for _: CGSize) -> LayoutKit.Block {
+    self
+  }
+
+  func updated(withStates _: LayoutKit.BlocksState) throws -> Self {
+    self
+  }
+
   static func makeBlockView() -> BlockView { TestView() }
 
   func isBestViewForReuse(_ view: BlockView) -> Bool {
-    (view as? TestView)?.block === self
+    (view as? TestView)?.block == self
   }
 
   func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -155,6 +257,22 @@ private final class TestBlock: UIViewRenderable {
 private final class TestView: BlockView, VisibleBoundsTrackingLeaf {
   var block: TestBlock?
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+}
+
+private final class PathHolderTestBlock: TestBlock, PathHolder {
+  let path: UIElementPath
+
+  init(_ path: UIElementPath) {
+    self.path = path
+  }
+
+  override func isBestViewForReuse(_ view: BlockView) -> Bool {
+    if path == ((view as? TestView)?.block as? PathHolderTestBlock)?.path {
+      return true
+    } else {
+      return (view as? TestView)?.block == self
+    }
+  }
 }
 
 private final class OtherTestBlock: UIViewRenderable {

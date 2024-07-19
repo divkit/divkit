@@ -204,5 +204,6 @@ extension TextInputBlock {
 
 extension TextInputBlock: LayoutCachingDefaultImpl {}
 extension TextInputBlock: ElementStateUpdatingDefaultImpl {}
+extension TextInputBlock: PathHolder {}
 
 private let defaultTextForMeasuring = "A"
