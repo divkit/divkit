@@ -11,6 +11,11 @@ internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
     items: List<DivItemBuilderResult>,
 ) : VisibilityAwareAdapter<VH>(items) {
 
+    override fun getItemViewType(position: Int): Int {
+        val item = visibleItems.getOrNull(position) ?: return 0
+        return item.div.value().reuseId?.evaluate(item.expressionResolver).hashCode()
+    }
+
     fun applyPatch(
         recyclerView: RecyclerView?,
         divPatchCache: DivPatchCache,

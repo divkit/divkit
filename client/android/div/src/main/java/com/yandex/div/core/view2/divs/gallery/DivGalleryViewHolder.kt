@@ -12,6 +12,7 @@ import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 
 internal class DivGalleryViewHolder(
@@ -46,6 +47,10 @@ internal class DivGalleryViewHolder(
     }
 
     private fun createChildView(bindingContext: BindingContext, div: Div): View {
+        oldDiv?.let {
+            KLog.d(TAG) { "Gallery holder reuse failed" }
+        }
+
         rootView.releaseAndRemoveChildren(bindingContext.divView)
         return viewCreator.create(div, bindingContext.expressionResolver).also {
             rootView.addView(it)
@@ -53,4 +58,8 @@ internal class DivGalleryViewHolder(
     }
 
     fun updateState() = oldDiv?.let { itemStateBinder.invoke(rootView, it) }
+
+    companion object {
+        const val TAG = "DivGalleryViewHolder"
+    }
 }

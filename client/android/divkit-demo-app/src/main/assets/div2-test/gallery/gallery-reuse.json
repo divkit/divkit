@@ -1,0 +1,122 @@
+{
+  "templates": {
+    "img_card": {
+      "type": "image",
+      "image_url": "empty://",
+      "height": {
+        "type": "fixed",
+        "value": 250
+      }
+    },
+    "video_card": {
+      "type": "video",
+      "video_sources": [
+        {
+          "type": "video_source",
+          "url": "empty://",
+          "mime_type": "dash"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 200
+      },
+      "autostart": false
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "id": "g",
+          "default_item": 3,
+          "orientation": "vertical",
+          "height": {
+            "type": "fixed",
+            "value": 240,
+            "unit": "sp"
+          },
+          "items": [
+            {
+              "type": "img_card",
+              "visibility_actions": [
+                {
+                  "log_id": "test_done",
+                  "visibility_percentage": 1
+                }
+              ]
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "video_card",
+              "visibility_actions": [
+                {
+                  "log_id": "scroll_to_end",
+                  "visibility_percentage": 1,
+                  "url": "div-action://set_current_item?id=g&item=15"
+                }
+              ]
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "img_card"
+            },
+            {
+              "type": "video_card",
+              "visibility_actions": [
+                {
+                  "log_id": "scroll_to_start",
+                  "visibility_percentage": 1,
+                  "url": "div-action://set_current_item?id=g&item=0"
+                }
+              ]
+            }
+          ],
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          }
+        }
+      }
+    ]
+  }
+}
