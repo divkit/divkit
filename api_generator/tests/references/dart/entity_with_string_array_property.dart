@@ -28,8 +28,12 @@ class EntityWithStringArrayProperty with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithStringArrayProperty(
-      array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseStr(v?.toString(),)!),)!,
-    );
+    try {
+      return EntityWithStringArrayProperty(
+        array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseStr(v?.toString(),)!),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

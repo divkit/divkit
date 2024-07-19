@@ -47,19 +47,23 @@ class DivCornersRadius with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivCornersRadius(
-      bottomLeft: safeParseIntExpr(
-        json['bottom-left'],
-      ),
-      bottomRight: safeParseIntExpr(
-        json['bottom-right'],
-      ),
-      topLeft: safeParseIntExpr(
-        json['top-left'],
-      ),
-      topRight: safeParseIntExpr(
-        json['top-right'],
-      ),
-    );
+    try {
+      return DivCornersRadius(
+        bottomLeft: safeParseIntExpr(
+          json['bottom-left'],
+        ),
+        bottomRight: safeParseIntExpr(
+          json['bottom-right'],
+        ),
+        topLeft: safeParseIntExpr(
+          json['top-left'],
+        ),
+        topRight: safeParseIntExpr(
+          json['top-right'],
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

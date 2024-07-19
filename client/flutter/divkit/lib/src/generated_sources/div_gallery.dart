@@ -18,6 +18,7 @@ import 'package:divkit/src/generated_sources/div_disappear_action.dart';
 import 'package:divkit/src/generated_sources/div_edge_insets.dart';
 import 'package:divkit/src/generated_sources/div_extension.dart';
 import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_layout_provider.dart';
 import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
 import 'package:divkit/src/generated_sources/div_size.dart';
 import 'package:divkit/src/generated_sources/div_tooltip.dart';
@@ -50,10 +51,12 @@ class DivGallery with EquatableMixin implements DivBase {
     this.itemBuilder,
     this.itemSpacing = const ValueExpression(8),
     this.items,
+    this.layoutProvider,
     this.margins = const DivEdgeInsets(),
     this.orientation = const ValueExpression(DivGalleryOrientation.horizontal),
     this.paddings = const DivEdgeInsets(),
     this.restrictParentScroll = const ValueExpression(false),
+    this.reuseId,
     this.rowSpan,
     this.scrollMode = const ValueExpression(DivGalleryScrollMode.default_),
     this.scrollbar = const ValueExpression(DivGalleryScrollbar.none),
@@ -124,6 +127,9 @@ class DivGallery with EquatableMixin implements DivBase {
   final List<Div>? items;
 
   @override
+  final DivLayoutProvider? layoutProvider;
+
+  @override
   final DivEdgeInsets margins;
   // default value: DivGalleryOrientation.horizontal
   final Expression<DivGalleryOrientation> orientation;
@@ -132,6 +138,9 @@ class DivGallery with EquatableMixin implements DivBase {
   final DivEdgeInsets paddings;
   // default value: false
   final Expression<bool> restrictParentScroll;
+
+  @override
+  final Expression<String>? reuseId;
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
@@ -197,10 +206,12 @@ class DivGallery with EquatableMixin implements DivBase {
         itemBuilder,
         itemSpacing,
         items,
+        layoutProvider,
         margins,
         orientation,
         paddings,
         restrictParentScroll,
+        reuseId,
         rowSpan,
         scrollMode,
         scrollbar,
@@ -238,10 +249,12 @@ class DivGallery with EquatableMixin implements DivBase {
     DivCollectionItemBuilder? Function()? itemBuilder,
     Expression<int>? itemSpacing,
     List<Div>? Function()? items,
+    DivLayoutProvider? Function()? layoutProvider,
     DivEdgeInsets? margins,
     Expression<DivGalleryOrientation>? orientation,
     DivEdgeInsets? paddings,
     Expression<bool>? restrictParentScroll,
+    Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     Expression<DivGalleryScrollMode>? scrollMode,
     Expression<DivGalleryScrollbar>? scrollbar,
@@ -288,10 +301,14 @@ class DivGallery with EquatableMixin implements DivBase {
             itemBuilder != null ? itemBuilder.call() : this.itemBuilder,
         itemSpacing: itemSpacing ?? this.itemSpacing,
         items: items != null ? items.call() : this.items,
+        layoutProvider: layoutProvider != null
+            ? layoutProvider.call()
+            : this.layoutProvider,
         margins: margins ?? this.margins,
         orientation: orientation ?? this.orientation,
         paddings: paddings ?? this.paddings,
         restrictParentScroll: restrictParentScroll ?? this.restrictParentScroll,
+        reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
         scrollMode: scrollMode ?? this.scrollMode,
         scrollbar: scrollbar ?? this.scrollbar,
@@ -325,182 +342,201 @@ class DivGallery with EquatableMixin implements DivBase {
     if (json == null) {
       return null;
     }
-    return DivGallery(
-      accessibility: safeParseObj(
-        DivAccessibility.fromJson(json['accessibility']),
-        fallback: const DivAccessibility(),
-      )!,
-      alignmentHorizontal: safeParseStrEnumExpr(
-        json['alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-      ),
-      alignmentVertical: safeParseStrEnumExpr(
-        json['alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-      ),
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 1.0,
-      )!,
-      background: safeParseObj(
-        safeListMap(
+    try {
+      return DivGallery(
+        accessibility: safeParseObj(
+          DivAccessibility.fromJson(json['accessibility']),
+          fallback: const DivAccessibility(),
+        )!,
+        alignmentHorizontal: safeParseStrEnumExpr(
+          json['alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+        ),
+        alignmentVertical: safeParseStrEnumExpr(
+          json['alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+        ),
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 1.0,
+        )!,
+        background: safeParseObj(
+          safeListMap(
             json['background'],
             (v) => safeParseObj(
-                  DivBackground.fromJson(v),
-                )!),
-      ),
-      border: safeParseObj(
-        DivBorder.fromJson(json['border']),
-        fallback: const DivBorder(),
-      )!,
-      columnCount: safeParseIntExpr(
-        json['column_count'],
-      ),
-      columnSpan: safeParseIntExpr(
-        json['column_span'],
-      ),
-      crossContentAlignment: safeParseStrEnumExpr(
-        json['cross_content_alignment'],
-        parse: DivGalleryCrossContentAlignment.fromJson,
-        fallback: DivGalleryCrossContentAlignment.start,
-      )!,
-      crossSpacing: safeParseIntExpr(
-        json['cross_spacing'],
-      ),
-      defaultItem: safeParseIntExpr(
-        json['default_item'],
-        fallback: 0,
-      )!,
-      disappearActions: safeParseObj(
-        safeListMap(
+              DivBackground.fromJson(v),
+            )!,
+          ),
+        ),
+        border: safeParseObj(
+          DivBorder.fromJson(json['border']),
+          fallback: const DivBorder(),
+        )!,
+        columnCount: safeParseIntExpr(
+          json['column_count'],
+        ),
+        columnSpan: safeParseIntExpr(
+          json['column_span'],
+        ),
+        crossContentAlignment: safeParseStrEnumExpr(
+          json['cross_content_alignment'],
+          parse: DivGalleryCrossContentAlignment.fromJson,
+          fallback: DivGalleryCrossContentAlignment.start,
+        )!,
+        crossSpacing: safeParseIntExpr(
+          json['cross_spacing'],
+        ),
+        defaultItem: safeParseIntExpr(
+          json['default_item'],
+          fallback: 0,
+        )!,
+        disappearActions: safeParseObj(
+          safeListMap(
             json['disappear_actions'],
             (v) => safeParseObj(
-                  DivDisappearAction.fromJson(v),
-                )!),
-      ),
-      extensions: safeParseObj(
-        safeListMap(
+              DivDisappearAction.fromJson(v),
+            )!,
+          ),
+        ),
+        extensions: safeParseObj(
+          safeListMap(
             json['extensions'],
             (v) => safeParseObj(
-                  DivExtension.fromJson(v),
-                )!),
-      ),
-      focus: safeParseObj(
-        DivFocus.fromJson(json['focus']),
-      ),
-      height: safeParseObj(
-        DivSize.fromJson(json['height']),
-        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
-      )!,
-      id: safeParseStr(
-        json['id']?.toString(),
-      ),
-      itemBuilder: safeParseObj(
-        DivCollectionItemBuilder.fromJson(json['item_builder']),
-      ),
-      itemSpacing: safeParseIntExpr(
-        json['item_spacing'],
-        fallback: 8,
-      )!,
-      items: safeParseObj(
-        safeListMap(
+              DivExtension.fromJson(v),
+            )!,
+          ),
+        ),
+        focus: safeParseObj(
+          DivFocus.fromJson(json['focus']),
+        ),
+        height: safeParseObj(
+          DivSize.fromJson(json['height']),
+          fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
+        )!,
+        id: safeParseStr(
+          json['id']?.toString(),
+        ),
+        itemBuilder: safeParseObj(
+          DivCollectionItemBuilder.fromJson(json['item_builder']),
+        ),
+        itemSpacing: safeParseIntExpr(
+          json['item_spacing'],
+          fallback: 8,
+        )!,
+        items: safeParseObj(
+          safeListMap(
             json['items'],
             (v) => safeParseObj(
-                  Div.fromJson(v),
-                )!),
-      ),
-      margins: safeParseObj(
-        DivEdgeInsets.fromJson(json['margins']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      orientation: safeParseStrEnumExpr(
-        json['orientation'],
-        parse: DivGalleryOrientation.fromJson,
-        fallback: DivGalleryOrientation.horizontal,
-      )!,
-      paddings: safeParseObj(
-        DivEdgeInsets.fromJson(json['paddings']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      restrictParentScroll: safeParseBoolExpr(
-        json['restrict_parent_scroll'],
-        fallback: false,
-      )!,
-      rowSpan: safeParseIntExpr(
-        json['row_span'],
-      ),
-      scrollMode: safeParseStrEnumExpr(
-        json['scroll_mode'],
-        parse: DivGalleryScrollMode.fromJson,
-        fallback: DivGalleryScrollMode.default_,
-      )!,
-      scrollbar: safeParseStrEnumExpr(
-        json['scrollbar'],
-        parse: DivGalleryScrollbar.fromJson,
-        fallback: DivGalleryScrollbar.none,
-      )!,
-      selectedActions: safeParseObj(
-        safeListMap(
+              Div.fromJson(v),
+            )!,
+          ),
+        ),
+        layoutProvider: safeParseObj(
+          DivLayoutProvider.fromJson(json['layout_provider']),
+        ),
+        margins: safeParseObj(
+          DivEdgeInsets.fromJson(json['margins']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        orientation: safeParseStrEnumExpr(
+          json['orientation'],
+          parse: DivGalleryOrientation.fromJson,
+          fallback: DivGalleryOrientation.horizontal,
+        )!,
+        paddings: safeParseObj(
+          DivEdgeInsets.fromJson(json['paddings']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        restrictParentScroll: safeParseBoolExpr(
+          json['restrict_parent_scroll'],
+          fallback: false,
+        )!,
+        reuseId: safeParseStrExpr(
+          json['reuse_id']?.toString(),
+        ),
+        rowSpan: safeParseIntExpr(
+          json['row_span'],
+        ),
+        scrollMode: safeParseStrEnumExpr(
+          json['scroll_mode'],
+          parse: DivGalleryScrollMode.fromJson,
+          fallback: DivGalleryScrollMode.default_,
+        )!,
+        scrollbar: safeParseStrEnumExpr(
+          json['scrollbar'],
+          parse: DivGalleryScrollbar.fromJson,
+          fallback: DivGalleryScrollbar.none,
+        )!,
+        selectedActions: safeParseObj(
+          safeListMap(
             json['selected_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      tooltips: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        tooltips: safeParseObj(
+          safeListMap(
             json['tooltips'],
             (v) => safeParseObj(
-                  DivTooltip.fromJson(v),
-                )!),
-      ),
-      transform: safeParseObj(
-        DivTransform.fromJson(json['transform']),
-        fallback: const DivTransform(),
-      )!,
-      transitionChange: safeParseObj(
-        DivChangeTransition.fromJson(json['transition_change']),
-      ),
-      transitionIn: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_in']),
-      ),
-      transitionOut: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_out']),
-      ),
-      transitionTriggers: safeParseObj(
-        safeListMap(
+              DivTooltip.fromJson(v),
+            )!,
+          ),
+        ),
+        transform: safeParseObj(
+          DivTransform.fromJson(json['transform']),
+          fallback: const DivTransform(),
+        )!,
+        transitionChange: safeParseObj(
+          DivChangeTransition.fromJson(json['transition_change']),
+        ),
+        transitionIn: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_in']),
+        ),
+        transitionOut: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_out']),
+        ),
+        transitionTriggers: safeParseObj(
+          safeListMap(
             json['transition_triggers'],
             (v) => safeParseStrEnum(
-                  v,
-                  parse: DivTransitionTrigger.fromJson,
-                )!),
-      ),
-      variables: safeParseObj(
-        safeListMap(
+              v,
+              parse: DivTransitionTrigger.fromJson,
+            )!,
+          ),
+        ),
+        variables: safeParseObj(
+          safeListMap(
             json['variables'],
             (v) => safeParseObj(
-                  DivVariable.fromJson(v),
-                )!),
-      ),
-      visibility: safeParseStrEnumExpr(
-        json['visibility'],
-        parse: DivVisibility.fromJson,
-        fallback: DivVisibility.visible,
-      )!,
-      visibilityAction: safeParseObj(
-        DivVisibilityAction.fromJson(json['visibility_action']),
-      ),
-      visibilityActions: safeParseObj(
-        safeListMap(
+              DivVariable.fromJson(v),
+            )!,
+          ),
+        ),
+        visibility: safeParseStrEnumExpr(
+          json['visibility'],
+          parse: DivVisibility.fromJson,
+          fallback: DivVisibility.visible,
+        )!,
+        visibilityAction: safeParseObj(
+          DivVisibilityAction.fromJson(json['visibility_action']),
+        ),
+        visibilityActions: safeParseObj(
+          safeListMap(
             json['visibility_actions'],
             (v) => safeParseObj(
-                  DivVisibilityAction.fromJson(v),
-                )!),
-      ),
-      width: safeParseObj(
-        DivSize.fromJson(json['width']),
-        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
-      )!,
-    );
+              DivVisibilityAction.fromJson(v),
+            )!,
+          ),
+        ),
+        width: safeParseObj(
+          DivSize.fromJson(json['width']),
+          fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -548,15 +584,19 @@ enum DivGalleryCrossContentAlignment {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'start':
-        return DivGalleryCrossContentAlignment.start;
-      case 'center':
-        return DivGalleryCrossContentAlignment.center;
-      case 'end':
-        return DivGalleryCrossContentAlignment.end;
+    try {
+      switch (json) {
+        case 'start':
+          return DivGalleryCrossContentAlignment.start;
+        case 'center':
+          return DivGalleryCrossContentAlignment.center;
+        case 'end':
+          return DivGalleryCrossContentAlignment.end;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }
 
@@ -597,13 +637,17 @@ enum DivGalleryScrollMode {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'paging':
-        return DivGalleryScrollMode.paging;
-      case 'default':
-        return DivGalleryScrollMode.default_;
+    try {
+      switch (json) {
+        case 'paging':
+          return DivGalleryScrollMode.paging;
+        case 'default':
+          return DivGalleryScrollMode.default_;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }
 
@@ -644,13 +688,17 @@ enum DivGalleryOrientation {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'horizontal':
-        return DivGalleryOrientation.horizontal;
-      case 'vertical':
-        return DivGalleryOrientation.vertical;
+    try {
+      switch (json) {
+        case 'horizontal':
+          return DivGalleryOrientation.horizontal;
+        case 'vertical':
+          return DivGalleryOrientation.vertical;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }
 
@@ -691,12 +739,16 @@ enum DivGalleryScrollbar {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'none':
-        return DivGalleryScrollbar.none;
-      case 'auto':
-        return DivGalleryScrollbar.auto;
+    try {
+      switch (json) {
+        case 'none':
+          return DivGalleryScrollbar.none;
+        case 'auto':
+          return DivGalleryScrollbar.auto;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

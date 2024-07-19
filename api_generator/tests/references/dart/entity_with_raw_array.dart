@@ -28,8 +28,12 @@ class EntityWithRawArray with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithRawArray(
-      array: safeParseListExpr(json['array'],)!,
-    );
+    try {
+      return EntityWithRawArray(
+        array: safeParseListExpr(json['array'],)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

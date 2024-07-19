@@ -29,10 +29,14 @@ class NumberValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return NumberValue(
-      value: safeParseDoubleExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return NumberValue(
+        value: safeParseDoubleExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

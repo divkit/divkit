@@ -79,24 +79,28 @@ enum DivContentAlignmentHorizontal {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'left':
-        return DivContentAlignmentHorizontal.left;
-      case 'center':
-        return DivContentAlignmentHorizontal.center;
-      case 'right':
-        return DivContentAlignmentHorizontal.right;
-      case 'start':
-        return DivContentAlignmentHorizontal.start;
-      case 'end':
-        return DivContentAlignmentHorizontal.end;
-      case 'space-between':
-        return DivContentAlignmentHorizontal.spaceBetween;
-      case 'space-around':
-        return DivContentAlignmentHorizontal.spaceAround;
-      case 'space-evenly':
-        return DivContentAlignmentHorizontal.spaceEvenly;
+    try {
+      switch (json) {
+        case 'left':
+          return DivContentAlignmentHorizontal.left;
+        case 'center':
+          return DivContentAlignmentHorizontal.center;
+        case 'right':
+          return DivContentAlignmentHorizontal.right;
+        case 'start':
+          return DivContentAlignmentHorizontal.start;
+        case 'end':
+          return DivContentAlignmentHorizontal.end;
+        case 'space-between':
+          return DivContentAlignmentHorizontal.spaceBetween;
+        case 'space-around':
+          return DivContentAlignmentHorizontal.spaceAround;
+        case 'space-evenly':
+          return DivContentAlignmentHorizontal.spaceEvenly;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

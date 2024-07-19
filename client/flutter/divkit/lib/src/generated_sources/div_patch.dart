@@ -35,20 +35,25 @@ class DivPatch with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivPatch(
-      changes: safeParseObj(
-        safeListMap(
+    try {
+      return DivPatch(
+        changes: safeParseObj(
+          safeListMap(
             json['changes'],
             (v) => safeParseObj(
-                  DivPatchChange.fromJson(v),
-                )!),
-      )!,
-      mode: safeParseStrEnumExpr(
-        json['mode'],
-        parse: DivPatchMode.fromJson,
-        fallback: DivPatchMode.partial,
-      )!,
-    );
+              DivPatchChange.fromJson(v),
+            )!,
+          ),
+        )!,
+        mode: safeParseStrEnumExpr(
+          json['mode'],
+          parse: DivPatchMode.fromJson,
+          fallback: DivPatchMode.partial,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -89,13 +94,17 @@ enum DivPatchMode {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'transactional':
-        return DivPatchMode.transactional;
-      case 'partial':
-        return DivPatchMode.partial;
+    try {
+      switch (json) {
+        case 'transactional':
+          return DivPatchMode.transactional;
+        case 'partial':
+          return DivPatchMode.partial;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }
 
@@ -128,17 +137,22 @@ class DivPatchChange with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivPatchChange(
-      id: safeParseStr(
-        json['id']?.toString(),
-      )!,
-      items: safeParseObj(
-        safeListMap(
+    try {
+      return DivPatchChange(
+        id: safeParseStr(
+          json['id']?.toString(),
+        )!,
+        items: safeParseObj(
+          safeListMap(
             json['items'],
             (v) => safeParseObj(
-                  Div.fromJson(v),
-                )!),
-      ),
-    );
+              Div.fromJson(v),
+            )!,
+          ),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

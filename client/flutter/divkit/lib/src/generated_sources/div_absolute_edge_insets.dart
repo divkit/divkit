@@ -46,23 +46,27 @@ class DivAbsoluteEdgeInsets with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivAbsoluteEdgeInsets(
-      bottom: safeParseIntExpr(
-        json['bottom'],
-        fallback: 0,
-      )!,
-      left: safeParseIntExpr(
-        json['left'],
-        fallback: 0,
-      )!,
-      right: safeParseIntExpr(
-        json['right'],
-        fallback: 0,
-      )!,
-      top: safeParseIntExpr(
-        json['top'],
-        fallback: 0,
-      )!,
-    );
+    try {
+      return DivAbsoluteEdgeInsets(
+        bottom: safeParseIntExpr(
+          json['bottom'],
+          fallback: 0,
+        )!,
+        left: safeParseIntExpr(
+          json['left'],
+          fallback: 0,
+        )!,
+        right: safeParseIntExpr(
+          json['right'],
+          fallback: 0,
+        )!,
+        top: safeParseIntExpr(
+          json['top'],
+          fallback: 0,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -29,12 +29,16 @@ class DivRadialGradientRelativeRadius with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivRadialGradientRelativeRadius(
-      value: safeParseStrEnumExpr(
-        json['value'],
-        parse: DivRadialGradientRelativeRadiusValue.fromJson,
-      )!,
-    );
+    try {
+      return DivRadialGradientRelativeRadius(
+        value: safeParseStrEnumExpr(
+          json['value'],
+          parse: DivRadialGradientRelativeRadiusValue.fromJson,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -89,16 +93,20 @@ enum DivRadialGradientRelativeRadiusValue {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'nearest_corner':
-        return DivRadialGradientRelativeRadiusValue.nearestCorner;
-      case 'farthest_corner':
-        return DivRadialGradientRelativeRadiusValue.farthestCorner;
-      case 'nearest_side':
-        return DivRadialGradientRelativeRadiusValue.nearestSide;
-      case 'farthest_side':
-        return DivRadialGradientRelativeRadiusValue.farthestSide;
+    try {
+      switch (json) {
+        case 'nearest_corner':
+          return DivRadialGradientRelativeRadiusValue.nearestCorner;
+        case 'farthest_corner':
+          return DivRadialGradientRelativeRadiusValue.farthestCorner;
+        case 'nearest_side':
+          return DivRadialGradientRelativeRadiusValue.nearestSide;
+        case 'farthest_side':
+          return DivRadialGradientRelativeRadiusValue.farthestSide;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

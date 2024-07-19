@@ -29,17 +29,22 @@ class DivDefaultIndicatorItemPlacement with EquatableMixin {
       );
 
   static DivDefaultIndicatorItemPlacement? fromJson(
-      Map<String, dynamic>? json) {
+    Map<String, dynamic>? json,
+  ) {
     if (json == null) {
       return null;
     }
-    return DivDefaultIndicatorItemPlacement(
-      spaceBetweenCenters: safeParseObj(
-        DivFixedSize.fromJson(json['space_between_centers']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(15),
-        ),
-      )!,
-    );
+    try {
+      return DivDefaultIndicatorItemPlacement(
+        spaceBetweenCenters: safeParseObj(
+          DivFixedSize.fromJson(json['space_between_centers']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(15),
+          ),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

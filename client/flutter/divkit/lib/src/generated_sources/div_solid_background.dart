@@ -29,10 +29,14 @@ class DivSolidBackground with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivSolidBackground(
-      color: safeParseColorExpr(
-        json['color'],
-      )!,
-    );
+    try {
+      return DivSolidBackground(
+        color: safeParseColorExpr(
+          json['color'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

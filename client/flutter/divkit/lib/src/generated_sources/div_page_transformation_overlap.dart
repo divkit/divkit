@@ -62,32 +62,36 @@ class DivPageTransformationOverlap with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivPageTransformationOverlap(
-      interpolator: safeParseStrEnumExpr(
-        json['interpolator'],
-        parse: DivAnimationInterpolator.fromJson,
-        fallback: DivAnimationInterpolator.easeInOut,
-      )!,
-      nextPageAlpha: safeParseDoubleExpr(
-        json['next_page_alpha'],
-        fallback: 1.0,
-      )!,
-      nextPageScale: safeParseDoubleExpr(
-        json['next_page_scale'],
-        fallback: 1.0,
-      )!,
-      previousPageAlpha: safeParseDoubleExpr(
-        json['previous_page_alpha'],
-        fallback: 1.0,
-      )!,
-      previousPageScale: safeParseDoubleExpr(
-        json['previous_page_scale'],
-        fallback: 1.0,
-      )!,
-      reversedStackingOrder: safeParseBoolExpr(
-        json['reversed_stacking_order'],
-        fallback: false,
-      )!,
-    );
+    try {
+      return DivPageTransformationOverlap(
+        interpolator: safeParseStrEnumExpr(
+          json['interpolator'],
+          parse: DivAnimationInterpolator.fromJson,
+          fallback: DivAnimationInterpolator.easeInOut,
+        )!,
+        nextPageAlpha: safeParseDoubleExpr(
+          json['next_page_alpha'],
+          fallback: 1.0,
+        )!,
+        nextPageScale: safeParseDoubleExpr(
+          json['next_page_scale'],
+          fallback: 1.0,
+        )!,
+        previousPageAlpha: safeParseDoubleExpr(
+          json['previous_page_alpha'],
+          fallback: 1.0,
+        )!,
+        previousPageScale: safeParseDoubleExpr(
+          json['previous_page_scale'],
+          fallback: 1.0,
+        )!,
+        reversedStackingOrder: safeParseBoolExpr(
+          json['reversed_stacking_order'],
+          fallback: false,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

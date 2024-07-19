@@ -72,22 +72,26 @@ enum DivContentAlignmentVertical {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'top':
-        return DivContentAlignmentVertical.top;
-      case 'center':
-        return DivContentAlignmentVertical.center;
-      case 'bottom':
-        return DivContentAlignmentVertical.bottom;
-      case 'baseline':
-        return DivContentAlignmentVertical.baseline;
-      case 'space-between':
-        return DivContentAlignmentVertical.spaceBetween;
-      case 'space-around':
-        return DivContentAlignmentVertical.spaceAround;
-      case 'space-evenly':
-        return DivContentAlignmentVertical.spaceEvenly;
+    try {
+      switch (json) {
+        case 'top':
+          return DivContentAlignmentVertical.top;
+        case 'center':
+          return DivContentAlignmentVertical.center;
+        case 'bottom':
+          return DivContentAlignmentVertical.bottom;
+        case 'baseline':
+          return DivContentAlignmentVertical.baseline;
+        case 'space-between':
+          return DivContentAlignmentVertical.spaceBetween;
+        case 'space-around':
+          return DivContentAlignmentVertical.spaceAround;
+        case 'space-evenly':
+          return DivContentAlignmentVertical.spaceEvenly;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

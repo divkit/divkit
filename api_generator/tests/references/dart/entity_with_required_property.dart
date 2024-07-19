@@ -28,8 +28,12 @@ class EntityWithRequiredProperty with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithRequiredProperty(
-      property: safeParseStrExpr(json['property']?.toString(),)!,
-    );
+    try {
+      return EntityWithRequiredProperty(
+        property: safeParseStrExpr(json['property']?.toString(),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

@@ -76,16 +76,20 @@ class EntityWithSimpleProperties with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithSimpleProperties(
-      boolean: safeParseBoolExpr(json['boolean'],),
-      booleanInt: safeParseBoolExpr(json['boolean_int'],),
-      color: safeParseColorExpr(json['color'],),
-      dNum: safeParseDoubleExpr(json['dNum'],),
-      id: safeParseInt(json['id'], fallback: 0,)!,
-      integer: safeParseIntExpr(json['integer'], fallback: 0,)!,
-      positiveInteger: safeParseIntExpr(json['positive_integer'],),
-      string: safeParseStrExpr(json['string']?.toString(),),
-      url: safeParseUriExpr(json['url']),
-    );
+    try {
+      return EntityWithSimpleProperties(
+        boolean: safeParseBoolExpr(json['boolean'],),
+        booleanInt: safeParseBoolExpr(json['boolean_int'],),
+        color: safeParseColorExpr(json['color'],),
+        dNum: safeParseDoubleExpr(json['dNum'],),
+        id: safeParseInt(json['id'], fallback: 0,)!,
+        integer: safeParseIntExpr(json['integer'], fallback: 0,)!,
+        positiveInteger: safeParseIntExpr(json['positive_integer'],),
+        string: safeParseStrExpr(json['string']?.toString(),),
+        url: safeParseUriExpr(json['url']),
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

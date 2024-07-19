@@ -68,31 +68,35 @@ class DivTooltip with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivTooltip(
-      animationIn: safeParseObj(
-        DivAnimation.fromJson(json['animation_in']),
-      ),
-      animationOut: safeParseObj(
-        DivAnimation.fromJson(json['animation_out']),
-      ),
-      div: safeParseObj(
-        Div.fromJson(json['div']),
-      )!,
-      duration: safeParseIntExpr(
-        json['duration'],
-        fallback: 5000,
-      )!,
-      id: safeParseStr(
-        json['id']?.toString(),
-      )!,
-      offset: safeParseObj(
-        DivPoint.fromJson(json['offset']),
-      ),
-      position: safeParseStrEnumExpr(
-        json['position'],
-        parse: DivTooltipPosition.fromJson,
-      )!,
-    );
+    try {
+      return DivTooltip(
+        animationIn: safeParseObj(
+          DivAnimation.fromJson(json['animation_in']),
+        ),
+        animationOut: safeParseObj(
+          DivAnimation.fromJson(json['animation_out']),
+        ),
+        div: safeParseObj(
+          Div.fromJson(json['div']),
+        )!,
+        duration: safeParseIntExpr(
+          json['duration'],
+          fallback: 5000,
+        )!,
+        id: safeParseStr(
+          json['id']?.toString(),
+        )!,
+        offset: safeParseObj(
+          DivPoint.fromJson(json['offset']),
+        ),
+        position: safeParseStrEnumExpr(
+          json['position'],
+          parse: DivTooltipPosition.fromJson,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -182,26 +186,30 @@ enum DivTooltipPosition {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'left':
-        return DivTooltipPosition.left;
-      case 'top-left':
-        return DivTooltipPosition.topLeft;
-      case 'top':
-        return DivTooltipPosition.top;
-      case 'top-right':
-        return DivTooltipPosition.topRight;
-      case 'right':
-        return DivTooltipPosition.right;
-      case 'bottom-right':
-        return DivTooltipPosition.bottomRight;
-      case 'bottom':
-        return DivTooltipPosition.bottom;
-      case 'bottom-left':
-        return DivTooltipPosition.bottomLeft;
-      case 'center':
-        return DivTooltipPosition.center;
+    try {
+      switch (json) {
+        case 'left':
+          return DivTooltipPosition.left;
+        case 'top-left':
+          return DivTooltipPosition.topLeft;
+        case 'top':
+          return DivTooltipPosition.top;
+        case 'top-right':
+          return DivTooltipPosition.topRight;
+        case 'right':
+          return DivTooltipPosition.right;
+        case 'bottom-right':
+          return DivTooltipPosition.bottomRight;
+        case 'bottom':
+          return DivTooltipPosition.bottom;
+        case 'bottom-left':
+          return DivTooltipPosition.bottomLeft;
+        case 'center':
+          return DivTooltipPosition.center;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

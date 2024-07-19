@@ -40,19 +40,23 @@ class DivStroke with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivStroke(
-      color: safeParseColorExpr(
-        json['color'],
-      )!,
-      unit: safeParseStrEnumExpr(
-        json['unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.dp,
-      )!,
-      width: safeParseDoubleExpr(
-        json['width'],
-        fallback: 1,
-      )!,
-    );
+    try {
+      return DivStroke(
+        color: safeParseColorExpr(
+          json['color'],
+        )!,
+        unit: safeParseStrEnumExpr(
+          json['unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.dp,
+        )!,
+        width: safeParseDoubleExpr(
+          json['width'],
+          fallback: 1,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -29,7 +29,8 @@ class DivIndicatorItemPlacement with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivIndicatorItemPlacement");
+      "Type ${value.runtimeType.toString()} is not generalized in DivIndicatorItemPlacement",
+    );
   }
 
   T maybeMap<T>({
@@ -72,14 +73,20 @@ class DivIndicatorItemPlacement with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivDefaultIndicatorItemPlacement.type:
-        return DivIndicatorItemPlacement.divDefaultIndicatorItemPlacement(
-            DivDefaultIndicatorItemPlacement.fromJson(json)!);
-      case DivStretchIndicatorItemPlacement.type:
-        return DivIndicatorItemPlacement.divStretchIndicatorItemPlacement(
-            DivStretchIndicatorItemPlacement.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivDefaultIndicatorItemPlacement.type:
+          return DivIndicatorItemPlacement.divDefaultIndicatorItemPlacement(
+            DivDefaultIndicatorItemPlacement.fromJson(json)!,
+          );
+        case DivStretchIndicatorItemPlacement.type:
+          return DivIndicatorItemPlacement.divStretchIndicatorItemPlacement(
+            DivStretchIndicatorItemPlacement.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

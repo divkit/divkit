@@ -35,15 +35,19 @@ class DivDimension with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivDimension(
-      unit: safeParseStrEnumExpr(
-        json['unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.dp,
-      )!,
-      value: safeParseDoubleExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return DivDimension(
+        unit: safeParseStrEnumExpr(
+          json['unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.dp,
+        )!,
+        value: safeParseDoubleExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

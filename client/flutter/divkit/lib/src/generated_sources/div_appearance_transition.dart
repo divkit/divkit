@@ -39,7 +39,8 @@ class DivAppearanceTransition with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivAppearanceTransition");
+      "Type ${value.runtimeType.toString()} is not generalized in DivAppearanceTransition",
+    );
   }
 
   T maybeMap<T>({
@@ -106,20 +107,28 @@ class DivAppearanceTransition with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivAppearanceSetTransition.type:
-        return DivAppearanceTransition.divAppearanceSetTransition(
-            DivAppearanceSetTransition.fromJson(json)!);
-      case DivFadeTransition.type:
-        return DivAppearanceTransition.divFadeTransition(
-            DivFadeTransition.fromJson(json)!);
-      case DivScaleTransition.type:
-        return DivAppearanceTransition.divScaleTransition(
-            DivScaleTransition.fromJson(json)!);
-      case DivSlideTransition.type:
-        return DivAppearanceTransition.divSlideTransition(
-            DivSlideTransition.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivAppearanceSetTransition.type:
+          return DivAppearanceTransition.divAppearanceSetTransition(
+            DivAppearanceSetTransition.fromJson(json)!,
+          );
+        case DivFadeTransition.type:
+          return DivAppearanceTransition.divFadeTransition(
+            DivFadeTransition.fromJson(json)!,
+          );
+        case DivScaleTransition.type:
+          return DivAppearanceTransition.divScaleTransition(
+            DivScaleTransition.fromJson(json)!,
+          );
+        case DivSlideTransition.type:
+          return DivAppearanceTransition.divSlideTransition(
+            DivSlideTransition.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

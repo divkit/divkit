@@ -12,20 +12,23 @@ class DivRadialGradient with EquatableMixin {
   const DivRadialGradient({
     this.centerX =
         const DivRadialGradientCenter.divRadialGradientRelativeCenter(
-            DivRadialGradientRelativeCenter(
-      value: ValueExpression(0.5),
-    )),
+      DivRadialGradientRelativeCenter(
+        value: ValueExpression(0.5),
+      ),
+    ),
     this.centerY =
         const DivRadialGradientCenter.divRadialGradientRelativeCenter(
-            DivRadialGradientRelativeCenter(
-      value: ValueExpression(0.5),
-    )),
+      DivRadialGradientRelativeCenter(
+        value: ValueExpression(0.5),
+      ),
+    ),
     required this.colors,
     this.radius = const DivRadialGradientRadius.divRadialGradientRelativeRadius(
-        DivRadialGradientRelativeRadius(
-      value:
-          ValueExpression(DivRadialGradientRelativeRadiusValue.farthestCorner),
-    )),
+      DivRadialGradientRelativeRadius(
+        value: ValueExpression(
+            DivRadialGradientRelativeRadiusValue.farthestCorner),
+      ),
+    ),
   });
 
   static const type = "radial_gradient";
@@ -63,36 +66,48 @@ class DivRadialGradient with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivRadialGradient(
-      centerX: safeParseObj(
-        DivRadialGradientCenter.fromJson(json['center_x']),
-        fallback: const DivRadialGradientCenter.divRadialGradientRelativeCenter(
+    try {
+      return DivRadialGradient(
+        centerX: safeParseObj(
+          DivRadialGradientCenter.fromJson(json['center_x']),
+          fallback:
+              const DivRadialGradientCenter.divRadialGradientRelativeCenter(
             DivRadialGradientRelativeCenter(
-          value: ValueExpression(0.5),
-        )),
-      )!,
-      centerY: safeParseObj(
-        DivRadialGradientCenter.fromJson(json['center_y']),
-        fallback: const DivRadialGradientCenter.divRadialGradientRelativeCenter(
+              value: ValueExpression(0.5),
+            ),
+          ),
+        )!,
+        centerY: safeParseObj(
+          DivRadialGradientCenter.fromJson(json['center_y']),
+          fallback:
+              const DivRadialGradientCenter.divRadialGradientRelativeCenter(
             DivRadialGradientRelativeCenter(
-          value: ValueExpression(0.5),
-        )),
-      )!,
-      colors: safeParseObjExpr(
-        safeListMap(
+              value: ValueExpression(0.5),
+            ),
+          ),
+        )!,
+        colors: safeParseObjExpr(
+          safeListMap(
             json['colors'],
             (v) => safeParseColor(
-                  v,
-                )!),
-      )!,
-      radius: safeParseObj(
-        DivRadialGradientRadius.fromJson(json['radius']),
-        fallback: const DivRadialGradientRadius.divRadialGradientRelativeRadius(
+              v,
+            )!,
+          ),
+        )!,
+        radius: safeParseObj(
+          DivRadialGradientRadius.fromJson(json['radius']),
+          fallback:
+              const DivRadialGradientRadius.divRadialGradientRelativeRadius(
             DivRadialGradientRelativeRadius(
-          value: ValueExpression(
-              DivRadialGradientRelativeRadiusValue.farthestCorner),
-        )),
-      )!,
-    );
+              value: ValueExpression(
+                DivRadialGradientRelativeRadiusValue.farthestCorner,
+              ),
+            ),
+          ),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

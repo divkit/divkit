@@ -33,7 +33,8 @@ class DivSize with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivSize");
+      "Type ${value.runtimeType.toString()} is not generalized in DivSize",
+    );
   }
 
   T maybeMap<T>({
@@ -87,14 +88,18 @@ class DivSize with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivFixedSize.type:
-        return DivSize.divFixedSize(DivFixedSize.fromJson(json)!);
-      case DivMatchParentSize.type:
-        return DivSize.divMatchParentSize(DivMatchParentSize.fromJson(json)!);
-      case DivWrapContentSize.type:
-        return DivSize.divWrapContentSize(DivWrapContentSize.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivFixedSize.type:
+          return DivSize.divFixedSize(DivFixedSize.fromJson(json)!);
+        case DivMatchParentSize.type:
+          return DivSize.divMatchParentSize(DivMatchParentSize.fromJson(json)!);
+        case DivWrapContentSize.type:
+          return DivSize.divWrapContentSize(DivWrapContentSize.fromJson(json)!);
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

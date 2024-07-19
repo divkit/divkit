@@ -44,14 +44,18 @@ enum DivSizeUnit {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'dp':
-        return DivSizeUnit.dp;
-      case 'sp':
-        return DivSizeUnit.sp;
-      case 'px':
-        return DivSizeUnit.px;
+    try {
+      switch (json) {
+        case 'dp':
+          return DivSizeUnit.dp;
+        case 'sp':
+          return DivSizeUnit.sp;
+        case 'px':
+          return DivSizeUnit.px;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

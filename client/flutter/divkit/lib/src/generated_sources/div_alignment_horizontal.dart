@@ -58,18 +58,22 @@ enum DivAlignmentHorizontal {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'left':
-        return DivAlignmentHorizontal.left;
-      case 'center':
-        return DivAlignmentHorizontal.center;
-      case 'right':
-        return DivAlignmentHorizontal.right;
-      case 'start':
-        return DivAlignmentHorizontal.start;
-      case 'end':
-        return DivAlignmentHorizontal.end;
+    try {
+      switch (json) {
+        case 'left':
+          return DivAlignmentHorizontal.left;
+        case 'center':
+          return DivAlignmentHorizontal.center;
+        case 'right':
+          return DivAlignmentHorizontal.right;
+        case 'start':
+          return DivAlignmentHorizontal.start;
+        case 'end':
+          return DivAlignmentHorizontal.end;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

@@ -47,20 +47,24 @@ class DivInputValidatorExpression with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivInputValidatorExpression(
-      allowEmpty: safeParseBoolExpr(
-        json['allow_empty'],
-        fallback: false,
-      )!,
-      condition: safeParseBoolExpr(
-        json['condition'],
-      )!,
-      labelId: safeParseStrExpr(
-        json['label_id']?.toString(),
-      )!,
-      variable: safeParseStr(
-        json['variable']?.toString(),
-      )!,
-    );
+    try {
+      return DivInputValidatorExpression(
+        allowEmpty: safeParseBoolExpr(
+          json['allow_empty'],
+          fallback: false,
+        )!,
+        condition: safeParseBoolExpr(
+          json['condition'],
+        )!,
+        labelId: safeParseStrExpr(
+          json['label_id']?.toString(),
+        )!,
+        variable: safeParseStr(
+          json['variable']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

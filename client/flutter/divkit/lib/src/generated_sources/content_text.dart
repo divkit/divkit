@@ -29,10 +29,14 @@ class ContentText with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return ContentText(
-      value: safeParseStrExpr(
-        json['value']?.toString(),
-      )!,
-    );
+    try {
+      return ContentText(
+        value: safeParseStrExpr(
+          json['value']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

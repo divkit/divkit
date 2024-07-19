@@ -51,16 +51,20 @@ enum DivImageScale {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'fill':
-        return DivImageScale.fill;
-      case 'no_scale':
-        return DivImageScale.noScale;
-      case 'fit':
-        return DivImageScale.fit;
-      case 'stretch':
-        return DivImageScale.stretch;
+    try {
+      switch (json) {
+        case 'fill':
+          return DivImageScale.fill;
+        case 'no_scale':
+          return DivImageScale.noScale;
+        case 'fit':
+          return DivImageScale.fit;
+        case 'stretch':
+          return DivImageScale.stretch;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

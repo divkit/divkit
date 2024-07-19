@@ -1,5 +1,6 @@
 ## 0.3.0-pre+2
 * Add visibility triggers feature
+* Isolate problematic divs
 
 ## 0.3.0-pre+1
 

@@ -62,34 +62,40 @@ class DivTimer with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivTimer(
-      duration: safeParseIntExpr(
-        json['duration'],
-        fallback: 0,
-      )!,
-      endActions: safeParseObj(
-        safeListMap(
+    try {
+      return DivTimer(
+        duration: safeParseIntExpr(
+          json['duration'],
+          fallback: 0,
+        )!,
+        endActions: safeParseObj(
+          safeListMap(
             json['end_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      id: safeParseStr(
-        json['id']?.toString(),
-      )!,
-      tickActions: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        id: safeParseStr(
+          json['id']?.toString(),
+        )!,
+        tickActions: safeParseObj(
+          safeListMap(
             json['tick_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      tickInterval: safeParseIntExpr(
-        json['tick_interval'],
-      ),
-      valueVariable: safeParseStr(
-        json['value_variable']?.toString(),
-      ),
-    );
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        tickInterval: safeParseIntExpr(
+          json['tick_interval'],
+        ),
+        valueVariable: safeParseStr(
+          json['value_variable']?.toString(),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

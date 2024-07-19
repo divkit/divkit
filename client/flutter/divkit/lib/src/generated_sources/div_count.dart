@@ -27,7 +27,8 @@ class DivCount with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivCount");
+      "Type ${value.runtimeType.toString()} is not generalized in DivCount",
+    );
   }
 
   T maybeMap<T>({
@@ -68,12 +69,16 @@ class DivCount with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivFixedCount.type:
-        return DivCount.divFixedCount(DivFixedCount.fromJson(json)!);
-      case DivInfinityCount.type:
-        return DivCount.divInfinityCount(DivInfinityCount.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivFixedCount.type:
+          return DivCount.divFixedCount(DivFixedCount.fromJson(json)!);
+        case DivInfinityCount.type:
+          return DivCount.divInfinityCount(DivInfinityCount.fromJson(json)!);
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

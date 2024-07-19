@@ -27,7 +27,8 @@ class DivPivot with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivPivot");
+      "Type ${value.runtimeType.toString()} is not generalized in DivPivot",
+    );
   }
 
   T maybeMap<T>({
@@ -68,12 +69,18 @@ class DivPivot with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivPivotFixed.type:
-        return DivPivot.divPivotFixed(DivPivotFixed.fromJson(json)!);
-      case DivPivotPercentage.type:
-        return DivPivot.divPivotPercentage(DivPivotPercentage.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivPivotFixed.type:
+          return DivPivot.divPivotFixed(DivPivotFixed.fromJson(json)!);
+        case DivPivotPercentage.type:
+          return DivPivot.divPivotPercentage(
+            DivPivotPercentage.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

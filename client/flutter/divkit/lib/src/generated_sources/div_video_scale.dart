@@ -44,14 +44,18 @@ enum DivVideoScale {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'fill':
-        return DivVideoScale.fill;
-      case 'no_scale':
-        return DivVideoScale.noScale;
-      case 'fit':
-        return DivVideoScale.fit;
+    try {
+      switch (json) {
+        case 'fill':
+          return DivVideoScale.fill;
+        case 'no_scale':
+          return DivVideoScale.noScale;
+        case 'fit':
+          return DivVideoScale.fit;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

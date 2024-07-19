@@ -29,10 +29,14 @@ class ColorValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return ColorValue(
-      value: safeParseColorExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return ColorValue(
+        value: safeParseColorExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

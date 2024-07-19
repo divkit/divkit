@@ -18,6 +18,7 @@ import 'package:divkit/src/generated_sources/div_extension.dart';
 import 'package:divkit/src/generated_sources/div_fixed_size.dart';
 import 'package:divkit/src/generated_sources/div_focus.dart';
 import 'package:divkit/src/generated_sources/div_indicator_item_placement.dart';
+import 'package:divkit/src/generated_sources/div_layout_provider.dart';
 import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
 import 'package:divkit/src/generated_sources/div_rounded_rectangle_shape.dart';
 import 'package:divkit/src/generated_sources/div_shape.dart';
@@ -52,10 +53,12 @@ class DivIndicator with EquatableMixin implements DivBase {
     this.inactiveMinimumShape,
     this.inactiveShape,
     this.itemsPlacement,
+    this.layoutProvider,
     this.margins = const DivEdgeInsets(),
     this.minimumItemSize = const ValueExpression(0.5),
     this.paddings = const DivEdgeInsets(),
     this.pagerId,
+    this.reuseId,
     this.rowSpan,
     this.selectedActions,
     this.shape =
@@ -131,6 +134,9 @@ class DivIndicator with EquatableMixin implements DivBase {
   final DivIndicatorItemPlacement? itemsPlacement;
 
   @override
+  final DivLayoutProvider? layoutProvider;
+
+  @override
   final DivEdgeInsets margins;
   // constraint: number > 0; default value: 0.5
   final Expression<double> minimumItemSize;
@@ -139,6 +145,9 @@ class DivIndicator with EquatableMixin implements DivBase {
   final DivEdgeInsets paddings;
 
   final String? pagerId;
+
+  @override
+  final Expression<String>? reuseId;
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
@@ -205,10 +214,12 @@ class DivIndicator with EquatableMixin implements DivBase {
         inactiveMinimumShape,
         inactiveShape,
         itemsPlacement,
+        layoutProvider,
         margins,
         minimumItemSize,
         paddings,
         pagerId,
+        reuseId,
         rowSpan,
         selectedActions,
         shape,
@@ -247,10 +258,12 @@ class DivIndicator with EquatableMixin implements DivBase {
     DivRoundedRectangleShape? Function()? inactiveMinimumShape,
     DivRoundedRectangleShape? Function()? inactiveShape,
     DivIndicatorItemPlacement? Function()? itemsPlacement,
+    DivLayoutProvider? Function()? layoutProvider,
     DivEdgeInsets? margins,
     Expression<double>? minimumItemSize,
     DivEdgeInsets? paddings,
     String? Function()? pagerId,
+    Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     List<DivAction>? Function()? selectedActions,
     DivShape? shape,
@@ -300,10 +313,14 @@ class DivIndicator with EquatableMixin implements DivBase {
         itemsPlacement: itemsPlacement != null
             ? itemsPlacement.call()
             : this.itemsPlacement,
+        layoutProvider: layoutProvider != null
+            ? layoutProvider.call()
+            : this.layoutProvider,
         margins: margins ?? this.margins,
         minimumItemSize: minimumItemSize ?? this.minimumItemSize,
         paddings: paddings ?? this.paddings,
         pagerId: pagerId != null ? pagerId.call() : this.pagerId,
+        reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
         selectedActions: selectedActions != null
             ? selectedActions.call()
@@ -337,181 +354,200 @@ class DivIndicator with EquatableMixin implements DivBase {
     if (json == null) {
       return null;
     }
-    return DivIndicator(
-      accessibility: safeParseObj(
-        DivAccessibility.fromJson(json['accessibility']),
-        fallback: const DivAccessibility(),
-      )!,
-      activeItemColor: safeParseColorExpr(
-        json['active_item_color'],
-        fallback: const Color(0xFFFFDC60),
-      )!,
-      activeItemSize: safeParseDoubleExpr(
-        json['active_item_size'],
-        fallback: 1.3,
-      )!,
-      activeShape: safeParseObj(
-        DivRoundedRectangleShape.fromJson(json['active_shape']),
-      ),
-      alignmentHorizontal: safeParseStrEnumExpr(
-        json['alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-      ),
-      alignmentVertical: safeParseStrEnumExpr(
-        json['alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-      ),
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 1.0,
-      )!,
-      animation: safeParseStrEnumExpr(
-        json['animation'],
-        parse: DivIndicatorAnimation.fromJson,
-        fallback: DivIndicatorAnimation.scale,
-      )!,
-      background: safeParseObj(
-        safeListMap(
+    try {
+      return DivIndicator(
+        accessibility: safeParseObj(
+          DivAccessibility.fromJson(json['accessibility']),
+          fallback: const DivAccessibility(),
+        )!,
+        activeItemColor: safeParseColorExpr(
+          json['active_item_color'],
+          fallback: const Color(0xFFFFDC60),
+        )!,
+        activeItemSize: safeParseDoubleExpr(
+          json['active_item_size'],
+          fallback: 1.3,
+        )!,
+        activeShape: safeParseObj(
+          DivRoundedRectangleShape.fromJson(json['active_shape']),
+        ),
+        alignmentHorizontal: safeParseStrEnumExpr(
+          json['alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+        ),
+        alignmentVertical: safeParseStrEnumExpr(
+          json['alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+        ),
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 1.0,
+        )!,
+        animation: safeParseStrEnumExpr(
+          json['animation'],
+          parse: DivIndicatorAnimation.fromJson,
+          fallback: DivIndicatorAnimation.scale,
+        )!,
+        background: safeParseObj(
+          safeListMap(
             json['background'],
             (v) => safeParseObj(
-                  DivBackground.fromJson(v),
-                )!),
-      ),
-      border: safeParseObj(
-        DivBorder.fromJson(json['border']),
-        fallback: const DivBorder(),
-      )!,
-      columnSpan: safeParseIntExpr(
-        json['column_span'],
-      ),
-      disappearActions: safeParseObj(
-        safeListMap(
+              DivBackground.fromJson(v),
+            )!,
+          ),
+        ),
+        border: safeParseObj(
+          DivBorder.fromJson(json['border']),
+          fallback: const DivBorder(),
+        )!,
+        columnSpan: safeParseIntExpr(
+          json['column_span'],
+        ),
+        disappearActions: safeParseObj(
+          safeListMap(
             json['disappear_actions'],
             (v) => safeParseObj(
-                  DivDisappearAction.fromJson(v),
-                )!),
-      ),
-      extensions: safeParseObj(
-        safeListMap(
+              DivDisappearAction.fromJson(v),
+            )!,
+          ),
+        ),
+        extensions: safeParseObj(
+          safeListMap(
             json['extensions'],
             (v) => safeParseObj(
-                  DivExtension.fromJson(v),
-                )!),
-      ),
-      focus: safeParseObj(
-        DivFocus.fromJson(json['focus']),
-      ),
-      height: safeParseObj(
-        DivSize.fromJson(json['height']),
-        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
-      )!,
-      id: safeParseStr(
-        json['id']?.toString(),
-      ),
-      inactiveItemColor: safeParseColorExpr(
-        json['inactive_item_color'],
-        fallback: const Color(0x33919CB5),
-      )!,
-      inactiveMinimumShape: safeParseObj(
-        DivRoundedRectangleShape.fromJson(json['inactive_minimum_shape']),
-      ),
-      inactiveShape: safeParseObj(
-        DivRoundedRectangleShape.fromJson(json['inactive_shape']),
-      ),
-      itemsPlacement: safeParseObj(
-        DivIndicatorItemPlacement.fromJson(json['items_placement']),
-      ),
-      margins: safeParseObj(
-        DivEdgeInsets.fromJson(json['margins']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      minimumItemSize: safeParseDoubleExpr(
-        json['minimum_item_size'],
-        fallback: 0.5,
-      )!,
-      paddings: safeParseObj(
-        DivEdgeInsets.fromJson(json['paddings']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      pagerId: safeParseStr(
-        json['pager_id']?.toString(),
-      ),
-      rowSpan: safeParseIntExpr(
-        json['row_span'],
-      ),
-      selectedActions: safeParseObj(
-        safeListMap(
+              DivExtension.fromJson(v),
+            )!,
+          ),
+        ),
+        focus: safeParseObj(
+          DivFocus.fromJson(json['focus']),
+        ),
+        height: safeParseObj(
+          DivSize.fromJson(json['height']),
+          fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
+        )!,
+        id: safeParseStr(
+          json['id']?.toString(),
+        ),
+        inactiveItemColor: safeParseColorExpr(
+          json['inactive_item_color'],
+          fallback: const Color(0x33919CB5),
+        )!,
+        inactiveMinimumShape: safeParseObj(
+          DivRoundedRectangleShape.fromJson(json['inactive_minimum_shape']),
+        ),
+        inactiveShape: safeParseObj(
+          DivRoundedRectangleShape.fromJson(json['inactive_shape']),
+        ),
+        itemsPlacement: safeParseObj(
+          DivIndicatorItemPlacement.fromJson(json['items_placement']),
+        ),
+        layoutProvider: safeParseObj(
+          DivLayoutProvider.fromJson(json['layout_provider']),
+        ),
+        margins: safeParseObj(
+          DivEdgeInsets.fromJson(json['margins']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        minimumItemSize: safeParseDoubleExpr(
+          json['minimum_item_size'],
+          fallback: 0.5,
+        )!,
+        paddings: safeParseObj(
+          DivEdgeInsets.fromJson(json['paddings']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        pagerId: safeParseStr(
+          json['pager_id']?.toString(),
+        ),
+        reuseId: safeParseStrExpr(
+          json['reuse_id']?.toString(),
+        ),
+        rowSpan: safeParseIntExpr(
+          json['row_span'],
+        ),
+        selectedActions: safeParseObj(
+          safeListMap(
             json['selected_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      shape: safeParseObj(
-        DivShape.fromJson(json['shape']),
-        fallback:
-            const DivShape.divRoundedRectangleShape(DivRoundedRectangleShape()),
-      )!,
-      spaceBetweenCenters: safeParseObj(
-        DivFixedSize.fromJson(json['space_between_centers']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(15),
+              DivAction.fromJson(v),
+            )!,
+          ),
         ),
-      )!,
-      tooltips: safeParseObj(
-        safeListMap(
+        shape: safeParseObj(
+          DivShape.fromJson(json['shape']),
+          fallback: const DivShape.divRoundedRectangleShape(
+            DivRoundedRectangleShape(),
+          ),
+        )!,
+        spaceBetweenCenters: safeParseObj(
+          DivFixedSize.fromJson(json['space_between_centers']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(15),
+          ),
+        )!,
+        tooltips: safeParseObj(
+          safeListMap(
             json['tooltips'],
             (v) => safeParseObj(
-                  DivTooltip.fromJson(v),
-                )!),
-      ),
-      transform: safeParseObj(
-        DivTransform.fromJson(json['transform']),
-        fallback: const DivTransform(),
-      )!,
-      transitionChange: safeParseObj(
-        DivChangeTransition.fromJson(json['transition_change']),
-      ),
-      transitionIn: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_in']),
-      ),
-      transitionOut: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_out']),
-      ),
-      transitionTriggers: safeParseObj(
-        safeListMap(
+              DivTooltip.fromJson(v),
+            )!,
+          ),
+        ),
+        transform: safeParseObj(
+          DivTransform.fromJson(json['transform']),
+          fallback: const DivTransform(),
+        )!,
+        transitionChange: safeParseObj(
+          DivChangeTransition.fromJson(json['transition_change']),
+        ),
+        transitionIn: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_in']),
+        ),
+        transitionOut: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_out']),
+        ),
+        transitionTriggers: safeParseObj(
+          safeListMap(
             json['transition_triggers'],
             (v) => safeParseStrEnum(
-                  v,
-                  parse: DivTransitionTrigger.fromJson,
-                )!),
-      ),
-      variables: safeParseObj(
-        safeListMap(
+              v,
+              parse: DivTransitionTrigger.fromJson,
+            )!,
+          ),
+        ),
+        variables: safeParseObj(
+          safeListMap(
             json['variables'],
             (v) => safeParseObj(
-                  DivVariable.fromJson(v),
-                )!),
-      ),
-      visibility: safeParseStrEnumExpr(
-        json['visibility'],
-        parse: DivVisibility.fromJson,
-        fallback: DivVisibility.visible,
-      )!,
-      visibilityAction: safeParseObj(
-        DivVisibilityAction.fromJson(json['visibility_action']),
-      ),
-      visibilityActions: safeParseObj(
-        safeListMap(
+              DivVariable.fromJson(v),
+            )!,
+          ),
+        ),
+        visibility: safeParseStrEnumExpr(
+          json['visibility'],
+          parse: DivVisibility.fromJson,
+          fallback: DivVisibility.visible,
+        )!,
+        visibilityAction: safeParseObj(
+          DivVisibilityAction.fromJson(json['visibility_action']),
+        ),
+        visibilityActions: safeParseObj(
+          safeListMap(
             json['visibility_actions'],
             (v) => safeParseObj(
-                  DivVisibilityAction.fromJson(v),
-                )!),
-      ),
-      width: safeParseObj(
-        DivSize.fromJson(json['width']),
-        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
-      )!,
-    );
+              DivVisibilityAction.fromJson(v),
+            )!,
+          ),
+        ),
+        width: safeParseObj(
+          DivSize.fromJson(json['width']),
+          fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -559,14 +595,18 @@ enum DivIndicatorAnimation {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'scale':
-        return DivIndicatorAnimation.scale;
-      case 'worm':
-        return DivIndicatorAnimation.worm;
-      case 'slider':
-        return DivIndicatorAnimation.slider;
+    try {
+      switch (json) {
+        case 'scale':
+          return DivIndicatorAnimation.scale;
+        case 'worm':
+          return DivIndicatorAnimation.worm;
+        case 'slider':
+          return DivIndicatorAnimation.slider;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

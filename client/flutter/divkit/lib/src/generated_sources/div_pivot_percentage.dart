@@ -29,10 +29,14 @@ class DivPivotPercentage with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivPivotPercentage(
-      value: safeParseDoubleExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return DivPivotPercentage(
+        value: safeParseDoubleExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

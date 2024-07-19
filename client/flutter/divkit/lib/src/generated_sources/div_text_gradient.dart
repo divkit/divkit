@@ -27,7 +27,8 @@ class DivTextGradient with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivTextGradient");
+      "Type ${value.runtimeType.toString()} is not generalized in DivTextGradient",
+    );
   }
 
   T maybeMap<T>({
@@ -68,14 +69,20 @@ class DivTextGradient with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivLinearGradient.type:
-        return DivTextGradient.divLinearGradient(
-            DivLinearGradient.fromJson(json)!);
-      case DivRadialGradient.type:
-        return DivTextGradient.divRadialGradient(
-            DivRadialGradient.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivLinearGradient.type:
+          return DivTextGradient.divLinearGradient(
+            DivLinearGradient.fromJson(json)!,
+          );
+        case DivRadialGradient.type:
+          return DivTextGradient.divRadialGradient(
+            DivRadialGradient.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

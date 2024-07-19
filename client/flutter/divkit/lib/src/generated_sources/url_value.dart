@@ -29,8 +29,12 @@ class UrlValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return UrlValue(
-      value: safeParseUriExpr(json['value'])!,
-    );
+    try {
+      return UrlValue(
+        value: safeParseUriExpr(json['value'])!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

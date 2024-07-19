@@ -27,7 +27,8 @@ class DivActionCopyToClipboardContent with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivActionCopyToClipboardContent");
+      "Type ${value.runtimeType.toString()} is not generalized in DivActionCopyToClipboardContent",
+    );
   }
 
   T maybeMap<T>({
@@ -68,14 +69,20 @@ class DivActionCopyToClipboardContent with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case ContentText.type:
-        return DivActionCopyToClipboardContent.contentText(
-            ContentText.fromJson(json)!);
-      case ContentUrl.type:
-        return DivActionCopyToClipboardContent.contentUrl(
-            ContentUrl.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case ContentText.type:
+          return DivActionCopyToClipboardContent.contentText(
+            ContentText.fromJson(json)!,
+          );
+        case ContentUrl.type:
+          return DivActionCopyToClipboardContent.contentUrl(
+            ContentUrl.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

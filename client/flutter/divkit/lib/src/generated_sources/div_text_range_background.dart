@@ -21,7 +21,8 @@ class DivTextRangeBackground with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivTextRangeBackground");
+      "Type ${value.runtimeType.toString()} is not generalized in DivTextRangeBackground",
+    );
   }
 
   T maybeMap<T>({
@@ -49,11 +50,16 @@ class DivTextRangeBackground with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivSolidBackground.type:
-        return DivTextRangeBackground.divSolidBackground(
-            DivSolidBackground.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivSolidBackground.type:
+          return DivTextRangeBackground.divSolidBackground(
+            DivSolidBackground.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

@@ -35,13 +35,17 @@ class StringVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return StringVariable(
-      name: safeParseStr(
-        json['name']?.toString(),
-      )!,
-      value: safeParseStr(
-        json['value']?.toString(),
-      )!,
-    );
+    try {
+      return StringVariable(
+        name: safeParseStr(
+          json['name']?.toString(),
+        )!,
+        value: safeParseStr(
+          json['value']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -29,10 +29,14 @@ class DivBlur with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivBlur(
-      radius: safeParseIntExpr(
-        json['radius'],
-      )!,
-    );
+    try {
+      return DivBlur(
+        radius: safeParseIntExpr(
+          json['radius'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

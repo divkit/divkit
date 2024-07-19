@@ -35,13 +35,17 @@ class BooleanVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return BooleanVariable(
-      name: safeParseStr(
-        json['name']?.toString(),
-      )!,
-      value: safeParseBool(
-        json['value'],
-      )!,
-    );
+    try {
+      return BooleanVariable(
+        name: safeParseStr(
+          json['name']?.toString(),
+        )!,
+        value: safeParseBool(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

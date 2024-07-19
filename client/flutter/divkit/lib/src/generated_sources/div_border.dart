@@ -57,23 +57,27 @@ class DivBorder with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivBorder(
-      cornerRadius: safeParseIntExpr(
-        json['corner_radius'],
-      ),
-      cornersRadius: safeParseObj(
-        DivCornersRadius.fromJson(json['corners_radius']),
-      ),
-      hasShadow: safeParseBoolExpr(
-        json['has_shadow'],
-        fallback: false,
-      )!,
-      shadow: safeParseObj(
-        DivShadow.fromJson(json['shadow']),
-      ),
-      stroke: safeParseObj(
-        DivStroke.fromJson(json['stroke']),
-      ),
-    );
+    try {
+      return DivBorder(
+        cornerRadius: safeParseIntExpr(
+          json['corner_radius'],
+        ),
+        cornersRadius: safeParseObj(
+          DivCornersRadius.fromJson(json['corners_radius']),
+        ),
+        hasShadow: safeParseBoolExpr(
+          json['has_shadow'],
+          fallback: false,
+        )!,
+        shadow: safeParseObj(
+          DivShadow.fromJson(json['shadow']),
+        ),
+        stroke: safeParseObj(
+          DivStroke.fromJson(json['stroke']),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

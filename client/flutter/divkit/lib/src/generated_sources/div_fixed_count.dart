@@ -29,10 +29,14 @@ class DivFixedCount with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivFixedCount(
-      value: safeParseIntExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return DivFixedCount(
+        value: safeParseIntExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

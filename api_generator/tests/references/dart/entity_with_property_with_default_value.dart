@@ -40,11 +40,15 @@ class EntityWithPropertyWithDefaultValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithPropertyWithDefaultValue(
-      iNum: safeParseIntExpr(json['iNum'], fallback: 0,)!,
-      nested: safeParseObj(EntityWithPropertyWithDefaultValueNested.fromJson(json['nested']),),
-      url: safeParseUriExpr(json['url'])!,
-    );
+    try {
+      return EntityWithPropertyWithDefaultValue(
+        iNum: safeParseIntExpr(json['iNum'], fallback: 0,)!,
+        nested: safeParseObj(EntityWithPropertyWithDefaultValueNested.fromJson(json['nested']),),
+        url: safeParseUriExpr(json['url'])!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }
 
@@ -83,10 +87,14 @@ class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithPropertyWithDefaultValueNested(
-      iNum: safeParseIntExpr(json['iNum'], fallback: 0,)!,
-      nonOptional: safeParseStrExpr(json['non_optional']?.toString(),)!,
-      url: safeParseUriExpr(json['url'])!,
-    );
+    try {
+      return EntityWithPropertyWithDefaultValueNested(
+        iNum: safeParseIntExpr(json['iNum'], fallback: 0,)!,
+        nonOptional: safeParseStrExpr(json['non_optional']?.toString(),)!,
+        url: safeParseUriExpr(json['url'])!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

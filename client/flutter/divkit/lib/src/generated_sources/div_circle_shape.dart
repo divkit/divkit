@@ -47,19 +47,23 @@ class DivCircleShape with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivCircleShape(
-      backgroundColor: safeParseColorExpr(
-        json['background_color'],
-      ),
-      radius: safeParseObj(
-        DivFixedSize.fromJson(json['radius']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(10),
+    try {
+      return DivCircleShape(
+        backgroundColor: safeParseColorExpr(
+          json['background_color'],
         ),
-      )!,
-      stroke: safeParseObj(
-        DivStroke.fromJson(json['stroke']),
-      ),
-    );
+        radius: safeParseObj(
+          DivFixedSize.fromJson(json['radius']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(10),
+          ),
+        )!,
+        stroke: safeParseObj(
+          DivStroke.fromJson(json['stroke']),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

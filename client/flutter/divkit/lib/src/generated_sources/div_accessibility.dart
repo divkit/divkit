@@ -60,31 +60,35 @@ class DivAccessibility with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivAccessibility(
-      description: safeParseStrExpr(
-        json['description']?.toString(),
-      ),
-      hint: safeParseStrExpr(
-        json['hint']?.toString(),
-      ),
-      mode: safeParseStrEnumExpr(
-        json['mode'],
-        parse: DivAccessibilityMode.fromJson,
-        fallback: DivAccessibilityMode.default_,
-      )!,
-      muteAfterAction: safeParseBoolExpr(
-        json['mute_after_action'],
-        fallback: false,
-      )!,
-      stateDescription: safeParseStrExpr(
-        json['state_description']?.toString(),
-      ),
-      type: safeParseStrEnum(
-        json['type'],
-        parse: DivAccessibilityType.fromJson,
-        fallback: DivAccessibilityType.auto,
-      )!,
-    );
+    try {
+      return DivAccessibility(
+        description: safeParseStrExpr(
+          json['description']?.toString(),
+        ),
+        hint: safeParseStrExpr(
+          json['hint']?.toString(),
+        ),
+        mode: safeParseStrEnumExpr(
+          json['mode'],
+          parse: DivAccessibilityMode.fromJson,
+          fallback: DivAccessibilityMode.default_,
+        )!,
+        muteAfterAction: safeParseBoolExpr(
+          json['mute_after_action'],
+          fallback: false,
+        )!,
+        stateDescription: safeParseStrExpr(
+          json['state_description']?.toString(),
+        ),
+        type: safeParseStrEnum(
+          json['type'],
+          parse: DivAccessibilityType.fromJson,
+          fallback: DivAccessibilityType.auto,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -181,29 +185,33 @@ enum DivAccessibilityType {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'none':
-        return DivAccessibilityType.none;
-      case 'button':
-        return DivAccessibilityType.button;
-      case 'image':
-        return DivAccessibilityType.image;
-      case 'text':
-        return DivAccessibilityType.text;
-      case 'edit_text':
-        return DivAccessibilityType.editText;
-      case 'header':
-        return DivAccessibilityType.header;
-      case 'tab_bar':
-        return DivAccessibilityType.tabBar;
-      case 'list':
-        return DivAccessibilityType.list;
-      case 'select':
-        return DivAccessibilityType.select;
-      case 'auto':
-        return DivAccessibilityType.auto;
+    try {
+      switch (json) {
+        case 'none':
+          return DivAccessibilityType.none;
+        case 'button':
+          return DivAccessibilityType.button;
+        case 'image':
+          return DivAccessibilityType.image;
+        case 'text':
+          return DivAccessibilityType.text;
+        case 'edit_text':
+          return DivAccessibilityType.editText;
+        case 'header':
+          return DivAccessibilityType.header;
+        case 'tab_bar':
+          return DivAccessibilityType.tabBar;
+        case 'list':
+          return DivAccessibilityType.list;
+        case 'select':
+          return DivAccessibilityType.select;
+        case 'auto':
+          return DivAccessibilityType.auto;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }
 
@@ -251,14 +259,18 @@ enum DivAccessibilityMode {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'default':
-        return DivAccessibilityMode.default_;
-      case 'merge':
-        return DivAccessibilityMode.merge;
-      case 'exclude':
-        return DivAccessibilityMode.exclude;
+    try {
+      switch (json) {
+        case 'default':
+          return DivAccessibilityMode.default_;
+        case 'merge':
+          return DivAccessibilityMode.merge;
+        case 'exclude':
+          return DivAccessibilityMode.exclude;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

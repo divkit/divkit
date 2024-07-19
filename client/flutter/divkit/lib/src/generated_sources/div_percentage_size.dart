@@ -29,10 +29,14 @@ class DivPercentageSize with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivPercentageSize(
-      value: safeParseDoubleExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return DivPercentageSize(
+        value: safeParseDoubleExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

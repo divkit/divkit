@@ -37,12 +37,16 @@ enum DivLineStyle {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'none':
-        return DivLineStyle.none;
-      case 'single':
-        return DivLineStyle.single;
+    try {
+      switch (json) {
+        case 'none':
+          return DivLineStyle.none;
+        case 'single':
+          return DivLineStyle.single;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

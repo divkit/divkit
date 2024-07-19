@@ -65,20 +65,24 @@ enum DivBlendMode {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'source_in':
-        return DivBlendMode.sourceIn;
-      case 'source_atop':
-        return DivBlendMode.sourceAtop;
-      case 'darken':
-        return DivBlendMode.darken;
-      case 'lighten':
-        return DivBlendMode.lighten;
-      case 'multiply':
-        return DivBlendMode.multiply;
-      case 'screen':
-        return DivBlendMode.screen;
+    try {
+      switch (json) {
+        case 'source_in':
+          return DivBlendMode.sourceIn;
+        case 'source_atop':
+          return DivBlendMode.sourceAtop;
+        case 'darken':
+          return DivBlendMode.darken;
+        case 'lighten':
+          return DivBlendMode.lighten;
+        case 'multiply':
+          return DivBlendMode.multiply;
+        case 'screen':
+          return DivBlendMode.screen;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

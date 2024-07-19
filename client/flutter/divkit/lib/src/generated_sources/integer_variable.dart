@@ -35,13 +35,17 @@ class IntegerVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return IntegerVariable(
-      name: safeParseStr(
-        json['name']?.toString(),
-      )!,
-      value: safeParseInt(
-        json['value'],
-      )!,
-    );
+    try {
+      return IntegerVariable(
+        name: safeParseStr(
+          json['name']?.toString(),
+        )!,
+        value: safeParseInt(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

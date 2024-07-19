@@ -73,38 +73,43 @@ class DivImageBackground with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivImageBackground(
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 1.0,
-      )!,
-      contentAlignmentHorizontal: safeParseStrEnumExpr(
-        json['content_alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-        fallback: DivAlignmentHorizontal.center,
-      )!,
-      contentAlignmentVertical: safeParseStrEnumExpr(
-        json['content_alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-        fallback: DivAlignmentVertical.center,
-      )!,
-      filters: safeParseObj(
-        safeListMap(
+    try {
+      return DivImageBackground(
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 1.0,
+        )!,
+        contentAlignmentHorizontal: safeParseStrEnumExpr(
+          json['content_alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+          fallback: DivAlignmentHorizontal.center,
+        )!,
+        contentAlignmentVertical: safeParseStrEnumExpr(
+          json['content_alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+          fallback: DivAlignmentVertical.center,
+        )!,
+        filters: safeParseObj(
+          safeListMap(
             json['filters'],
             (v) => safeParseObj(
-                  DivFilter.fromJson(v),
-                )!),
-      ),
-      imageUrl: safeParseUriExpr(json['image_url'])!,
-      preloadRequired: safeParseBoolExpr(
-        json['preload_required'],
-        fallback: false,
-      )!,
-      scale: safeParseStrEnumExpr(
-        json['scale'],
-        parse: DivImageScale.fromJson,
-        fallback: DivImageScale.fill,
-      )!,
-    );
+              DivFilter.fromJson(v),
+            )!,
+          ),
+        ),
+        imageUrl: safeParseUriExpr(json['image_url'])!,
+        preloadRequired: safeParseBoolExpr(
+          json['preload_required'],
+          fallback: false,
+        )!,
+        scale: safeParseStrEnumExpr(
+          json['scale'],
+          parse: DivImageScale.fromJson,
+          fallback: DivImageScale.fill,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

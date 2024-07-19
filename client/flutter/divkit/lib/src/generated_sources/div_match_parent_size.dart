@@ -29,10 +29,14 @@ class DivMatchParentSize with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivMatchParentSize(
-      weight: safeParseDoubleExpr(
-        json['weight'],
-      ),
-    );
+    try {
+      return DivMatchParentSize(
+        weight: safeParseDoubleExpr(
+          json['weight'],
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

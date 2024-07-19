@@ -29,10 +29,14 @@ class DivRadialGradientRelativeCenter with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivRadialGradientRelativeCenter(
-      value: safeParseDoubleExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return DivRadialGradientRelativeCenter(
+        value: safeParseDoubleExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

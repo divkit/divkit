@@ -65,34 +65,38 @@ class DivEdgeInsets with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivEdgeInsets(
-      bottom: safeParseIntExpr(
-        json['bottom'],
-        fallback: 0,
-      )!,
-      end: safeParseIntExpr(
-        json['end'],
-      ),
-      left: safeParseIntExpr(
-        json['left'],
-        fallback: 0,
-      )!,
-      right: safeParseIntExpr(
-        json['right'],
-        fallback: 0,
-      )!,
-      start: safeParseIntExpr(
-        json['start'],
-      ),
-      top: safeParseIntExpr(
-        json['top'],
-        fallback: 0,
-      )!,
-      unit: safeParseStrEnumExpr(
-        json['unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.dp,
-      )!,
-    );
+    try {
+      return DivEdgeInsets(
+        bottom: safeParseIntExpr(
+          json['bottom'],
+          fallback: 0,
+        )!,
+        end: safeParseIntExpr(
+          json['end'],
+        ),
+        left: safeParseIntExpr(
+          json['left'],
+          fallback: 0,
+        )!,
+        right: safeParseIntExpr(
+          json['right'],
+          fallback: 0,
+        )!,
+        start: safeParseIntExpr(
+          json['start'],
+        ),
+        top: safeParseIntExpr(
+          json['top'],
+          fallback: 0,
+        )!,
+        unit: safeParseStrEnumExpr(
+          json['unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.dp,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

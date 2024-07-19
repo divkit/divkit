@@ -28,8 +28,12 @@ class EntityWithArrayWithTransform with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithArrayWithTransform(
-      array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseColor(v,)!),)!,
-    );
+    try {
+      return EntityWithArrayWithTransform(
+        array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseColor(v,)!),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

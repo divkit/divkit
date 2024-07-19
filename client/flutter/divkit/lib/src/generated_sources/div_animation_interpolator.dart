@@ -65,20 +65,24 @@ enum DivAnimationInterpolator {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'linear':
-        return DivAnimationInterpolator.linear;
-      case 'ease':
-        return DivAnimationInterpolator.ease;
-      case 'ease_in':
-        return DivAnimationInterpolator.easeIn;
-      case 'ease_out':
-        return DivAnimationInterpolator.easeOut;
-      case 'ease_in_out':
-        return DivAnimationInterpolator.easeInOut;
-      case 'spring':
-        return DivAnimationInterpolator.spring;
+    try {
+      switch (json) {
+        case 'linear':
+          return DivAnimationInterpolator.linear;
+        case 'ease':
+          return DivAnimationInterpolator.ease;
+        case 'ease_in':
+          return DivAnimationInterpolator.easeIn;
+        case 'ease_out':
+          return DivAnimationInterpolator.easeOut;
+        case 'ease_in_out':
+          return DivAnimationInterpolator.easeInOut;
+        case 'spring':
+          return DivAnimationInterpolator.spring;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

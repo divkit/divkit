@@ -7,7 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:divkit/src/core/action/models/action.dart';
 
-import 'utils/div_text_range_model.dart';
+import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
 
 class DivTextWidget extends StatefulWidget {
   final DivText data;

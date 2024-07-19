@@ -30,14 +30,19 @@ class DivChangeSetTransition with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivChangeSetTransition(
-      items: safeParseObj(
-        safeListMap(
+    try {
+      return DivChangeSetTransition(
+        items: safeParseObj(
+          safeListMap(
             json['items'],
             (v) => safeParseObj(
-                  DivChangeTransition.fromJson(v),
-                )!),
-      )!,
-    );
+              DivChangeTransition.fromJson(v),
+            )!,
+          ),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

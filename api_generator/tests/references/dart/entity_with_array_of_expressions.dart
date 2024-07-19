@@ -28,8 +28,12 @@ class EntityWithArrayOfExpressions with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithArrayOfExpressions(
-      items: safeParseObjExpr(safeListMap(json['items'], (v) => safeParseStr(v?.toString(),)!),)!,
-    );
+    try {
+      return EntityWithArrayOfExpressions(
+        items: safeParseObjExpr(safeListMap(json['items'], (v) => safeParseStr(v?.toString(),)!),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

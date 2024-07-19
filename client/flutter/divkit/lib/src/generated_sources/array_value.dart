@@ -29,10 +29,14 @@ class ArrayValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return ArrayValue(
-      value: safeParseListExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return ArrayValue(
+        value: safeParseListExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

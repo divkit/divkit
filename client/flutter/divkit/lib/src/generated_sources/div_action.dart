@@ -85,38 +85,43 @@ class DivAction with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivAction(
-      downloadCallbacks: safeParseObj(
-        DivDownloadCallbacks.fromJson(json['download_callbacks']),
-      ),
-      isEnabled: safeParseBoolExpr(
-        json['is_enabled'],
-        fallback: true,
-      )!,
-      logId: safeParseStrExpr(
-        json['log_id']?.toString(),
-      )!,
-      logUrl: safeParseUriExpr(json['log_url']),
-      menuItems: safeParseObj(
-        safeListMap(
+    try {
+      return DivAction(
+        downloadCallbacks: safeParseObj(
+          DivDownloadCallbacks.fromJson(json['download_callbacks']),
+        ),
+        isEnabled: safeParseBoolExpr(
+          json['is_enabled'],
+          fallback: true,
+        )!,
+        logId: safeParseStrExpr(
+          json['log_id']?.toString(),
+        )!,
+        logUrl: safeParseUriExpr(json['log_url']),
+        menuItems: safeParseObj(
+          safeListMap(
             json['menu_items'],
             (v) => safeParseObj(
-                  DivActionMenuItem.fromJson(v),
-                )!),
-      ),
-      payload: safeParseMap(
-        json['payload'],
-      ),
-      referer: safeParseUriExpr(json['referer']),
-      target: safeParseStrEnumExpr(
-        json['target'],
-        parse: DivActionTarget.fromJson,
-      ),
-      typed: safeParseObj(
-        DivActionTyped.fromJson(json['typed']),
-      ),
-      url: safeParseUriExpr(json['url']),
-    );
+              DivActionMenuItem.fromJson(v),
+            )!,
+          ),
+        ),
+        payload: safeParseMap(
+          json['payload'],
+        ),
+        referer: safeParseUriExpr(json['referer']),
+        target: safeParseStrEnumExpr(
+          json['target'],
+          parse: DivActionTarget.fromJson,
+        ),
+        typed: safeParseObj(
+          DivActionTyped.fromJson(json['typed']),
+        ),
+        url: safeParseUriExpr(json['url']),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -155,21 +160,26 @@ class DivActionMenuItem with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivActionMenuItem(
-      action: safeParseObj(
-        DivAction.fromJson(json['action']),
-      ),
-      actions: safeParseObj(
-        safeListMap(
+    try {
+      return DivActionMenuItem(
+        action: safeParseObj(
+          DivAction.fromJson(json['action']),
+        ),
+        actions: safeParseObj(
+          safeListMap(
             json['actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      text: safeParseStrExpr(
-        json['text']?.toString(),
-      )!,
-    );
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        text: safeParseStrExpr(
+          json['text']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -210,12 +220,16 @@ enum DivActionTarget {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case '_self':
-        return DivActionTarget.self;
-      case '_blank':
-        return DivActionTarget.blank;
+    try {
+      switch (json) {
+        case '_self':
+          return DivActionTarget.self;
+        case '_blank':
+          return DivActionTarget.blank;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

@@ -36,13 +36,17 @@ class DivActionSetVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivActionSetVariable(
-      value: safeParseObj(
-        DivTypedValue.fromJson(json['value']),
-      )!,
-      variableName: safeParseStrExpr(
-        json['variable_name']?.toString(),
-      )!,
-    );
+    try {
+      return DivActionSetVariable(
+        value: safeParseObj(
+          DivTypedValue.fromJson(json['value']),
+        )!,
+        variableName: safeParseStrExpr(
+          json['variable_name']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

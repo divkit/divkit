@@ -47,18 +47,22 @@ class DivVideoSource with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivVideoSource(
-      bitrate: safeParseIntExpr(
-        json['bitrate'],
-      ),
-      mimeType: safeParseStrExpr(
-        json['mime_type']?.toString(),
-      )!,
-      resolution: safeParseObj(
-        DivVideoSourceResolution.fromJson(json['resolution']),
-      ),
-      url: safeParseUriExpr(json['url'])!,
-    );
+    try {
+      return DivVideoSource(
+        bitrate: safeParseIntExpr(
+          json['bitrate'],
+        ),
+        mimeType: safeParseStrExpr(
+          json['mime_type']?.toString(),
+        )!,
+        resolution: safeParseObj(
+          DivVideoSourceResolution.fromJson(json['resolution']),
+        ),
+        url: safeParseUriExpr(json['url'])!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -93,13 +97,17 @@ class DivVideoSourceResolution with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivVideoSourceResolution(
-      height: safeParseIntExpr(
-        json['height'],
-      )!,
-      width: safeParseIntExpr(
-        json['width'],
-      )!,
-    );
+    try {
+      return DivVideoSourceResolution(
+        height: safeParseIntExpr(
+          json['height'],
+        )!,
+        width: safeParseIntExpr(
+          json['width'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

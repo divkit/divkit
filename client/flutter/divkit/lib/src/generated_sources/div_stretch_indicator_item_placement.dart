@@ -35,21 +35,26 @@ class DivStretchIndicatorItemPlacement with EquatableMixin {
       );
 
   static DivStretchIndicatorItemPlacement? fromJson(
-      Map<String, dynamic>? json) {
+    Map<String, dynamic>? json,
+  ) {
     if (json == null) {
       return null;
     }
-    return DivStretchIndicatorItemPlacement(
-      itemSpacing: safeParseObj(
-        DivFixedSize.fromJson(json['item_spacing']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(5),
-        ),
-      )!,
-      maxVisibleItems: safeParseIntExpr(
-        json['max_visible_items'],
-        fallback: 10,
-      )!,
-    );
+    try {
+      return DivStretchIndicatorItemPlacement(
+        itemSpacing: safeParseObj(
+          DivFixedSize.fromJson(json['item_spacing']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(5),
+          ),
+        )!,
+        maxVisibleItems: safeParseIntExpr(
+          json['max_visible_items'],
+          fallback: 10,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

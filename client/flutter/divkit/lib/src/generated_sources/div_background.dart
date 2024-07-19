@@ -45,7 +45,8 @@ class DivBackground with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivBackground");
+      "Type ${value.runtimeType.toString()} is not generalized in DivBackground",
+    );
   }
 
   T maybeMap<T>({
@@ -125,23 +126,32 @@ class DivBackground with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivImageBackground.type:
-        return DivBackground.divImageBackground(
-            DivImageBackground.fromJson(json)!);
-      case DivLinearGradient.type:
-        return DivBackground.divLinearGradient(
-            DivLinearGradient.fromJson(json)!);
-      case DivNinePatchBackground.type:
-        return DivBackground.divNinePatchBackground(
-            DivNinePatchBackground.fromJson(json)!);
-      case DivRadialGradient.type:
-        return DivBackground.divRadialGradient(
-            DivRadialGradient.fromJson(json)!);
-      case DivSolidBackground.type:
-        return DivBackground.divSolidBackground(
-            DivSolidBackground.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivImageBackground.type:
+          return DivBackground.divImageBackground(
+            DivImageBackground.fromJson(json)!,
+          );
+        case DivLinearGradient.type:
+          return DivBackground.divLinearGradient(
+            DivLinearGradient.fromJson(json)!,
+          );
+        case DivNinePatchBackground.type:
+          return DivBackground.divNinePatchBackground(
+            DivNinePatchBackground.fromJson(json)!,
+          );
+        case DivRadialGradient.type:
+          return DivBackground.divRadialGradient(
+            DivRadialGradient.fromJson(json)!,
+          );
+        case DivSolidBackground.type:
+          return DivBackground.divSolidBackground(
+            DivSolidBackground.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

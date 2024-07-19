@@ -47,20 +47,24 @@ class DivInputValidatorRegex with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivInputValidatorRegex(
-      allowEmpty: safeParseBoolExpr(
-        json['allow_empty'],
-        fallback: false,
-      )!,
-      labelId: safeParseStrExpr(
-        json['label_id']?.toString(),
-      )!,
-      pattern: safeParseStrExpr(
-        json['pattern']?.toString(),
-      )!,
-      variable: safeParseStr(
-        json['variable']?.toString(),
-      )!,
-    );
+    try {
+      return DivInputValidatorRegex(
+        allowEmpty: safeParseBoolExpr(
+          json['allow_empty'],
+          fallback: false,
+        )!,
+        labelId: safeParseStrExpr(
+          json['label_id']?.toString(),
+        )!,
+        pattern: safeParseStrExpr(
+          json['pattern']?.toString(),
+        )!,
+        variable: safeParseStr(
+          json['variable']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

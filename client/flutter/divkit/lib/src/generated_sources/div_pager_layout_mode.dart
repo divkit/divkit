@@ -27,7 +27,8 @@ class DivPagerLayoutMode with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivPagerLayoutMode");
+      "Type ${value.runtimeType.toString()} is not generalized in DivPagerLayoutMode",
+    );
   }
 
   T maybeMap<T>({
@@ -68,13 +69,18 @@ class DivPagerLayoutMode with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivNeighbourPageSize.type:
-        return DivPagerLayoutMode.divNeighbourPageSize(
-            DivNeighbourPageSize.fromJson(json)!);
-      case DivPageSize.type:
-        return DivPagerLayoutMode.divPageSize(DivPageSize.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivNeighbourPageSize.type:
+          return DivPagerLayoutMode.divNeighbourPageSize(
+            DivNeighbourPageSize.fromJson(json)!,
+          );
+        case DivPageSize.type:
+          return DivPagerLayoutMode.divPageSize(DivPageSize.fromJson(json)!);
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }
