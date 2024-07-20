@@ -18,8 +18,8 @@ class DivBaseModel with EquatableMixin {
   final PassDivSize height;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
-  final BoxDecoration? boxDecoration;
-  final BoxDecoration focusDecoration;
+  final DivDecoration? decoration;
+  final DivDecoration focusDecoration;
   final String? divId;
   final DivVisibility divVisibility;
   final List<DivVisibilityActionModel> visibilityActions;
@@ -34,7 +34,7 @@ class DivBaseModel with EquatableMixin {
     this.visibilityActions = const [],
     this.padding,
     this.margin,
-    this.boxDecoration,
+    this.decoration,
     this.divId,
   });
 
@@ -98,7 +98,7 @@ class DivBaseModel with EquatableMixin {
             viewScale: viewScale,
           ),
           margin: margin,
-          boxDecoration: await data.resolveBoxDecoration(
+          decoration: await data.resolveBoxDecoration(
             context: context,
             viewScale: viewScale,
           ),
@@ -123,7 +123,7 @@ class DivBaseModel with EquatableMixin {
         height,
         padding,
         margin,
-        boxDecoration,
+        decoration,
         focusDecoration,
         divId,
         divVisibility,
@@ -132,7 +132,7 @@ class DivBaseModel with EquatableMixin {
 }
 
 extension PassDivBase on DivBase {
-  Future<BoxDecoration> resolveBoxDecoration({
+  Future<DivDecoration> resolveBoxDecoration({
     required DivVariableContext context,
     required double viewScale,
   }) async {
@@ -144,38 +144,39 @@ extension PassDivBase on DivBase {
       context: context,
       viewScale: viewScale,
     );
-    final boxShadow = await border.resolveShadow(
+    final outerShadow = await border.resolveShadow(
       context: context,
       viewScale: viewScale,
     );
     final backgrounds = background;
     if (backgrounds != null) {
-      final resolvedBackground = await PassDivBackground.resolve(
+      final backgroundWidgets = await PassDivBackground.resolve(
         backgrounds,
         context: context,
         viewScale: viewScale,
       );
-      return BoxDecoration(
-        color: resolvedBackground.bgColor,
-        gradient: resolvedBackground.bgGradient,
-        image: resolvedBackground.bgImage,
-        border: boxBorder,
-        borderRadius: borderRadius,
-        boxShadow: boxShadow,
+      return DivDecoration(
+        boxDecoration: BoxDecoration(
+          border: boxBorder,
+        ),
+        outerShadow: outerShadow,
+        customBorderRadius: borderRadius,
+        backgroundWidgets: backgroundWidgets,
       );
     }
-    return BoxDecoration(
-      border: boxBorder,
-      borderRadius: borderRadius,
-      boxShadow: boxShadow,
+    return DivDecoration(
+      outerShadow: outerShadow,
+      customBorderRadius: borderRadius,
+      boxDecoration: BoxDecoration(
+        border: boxBorder,
+      ),
     );
   }
 
-  Future<BoxDecoration> resolveFocusBoxDecoration({
+  Future<DivDecoration> resolveFocusBoxDecoration({
     required DivVariableContext context,
     required double viewScale,
   }) async {
-    final BoxDecoration focusDecoration;
     final focusBg = focus?.background;
     final focusBorder = focus?.border;
     final resolvedFocusBorder = await focusBorder?.resolveBorder(
@@ -187,26 +188,26 @@ extension PassDivBase on DivBase {
       viewScale: viewScale,
     );
     if (focusBg != null) {
-      final resolvedBackground = await PassDivBackground.resolve(
+      final backgroundWidgets = await PassDivBackground.resolve(
         focusBg,
         context: context,
         viewScale: viewScale,
       );
-      focusDecoration = BoxDecoration(
-        color: resolvedBackground.bgColor,
-        gradient: resolvedBackground.bgGradient,
-        image: resolvedBackground.bgImage,
-        border: resolvedFocusBorder,
-        borderRadius: focusRadius,
+      return DivDecoration(
+        boxDecoration: BoxDecoration(
+          border: resolvedFocusBorder,
+        ),
+        customBorderRadius: focusRadius ?? CustomBorderRadius(),
+        backgroundWidgets: backgroundWidgets,
       );
     } else {
-      focusDecoration = BoxDecoration(
-        border: resolvedFocusBorder,
-        borderRadius: focusRadius,
+      return DivDecoration(
+        customBorderRadius: focusRadius ?? CustomBorderRadius(),
+        boxDecoration: BoxDecoration(
+          border: resolvedFocusBorder,
+        ),
       );
     }
-
-    return focusDecoration;
   }
 
   Future<double> resolveOpacity({
@@ -250,4 +251,39 @@ extension PassDivBase on DivBase {
       );
     }
   }
+}
+
+class DivDecoration {
+  final BoxDecoration boxDecoration;
+  final List<Widget> backgroundWidgets;
+  final CustomBorderRadius customBorderRadius;
+  final BoxShadow? outerShadow;
+
+  DivDecoration({
+    required this.boxDecoration,
+    required this.customBorderRadius,
+    this.outerShadow,
+    this.backgroundWidgets = const <Widget>[],
+  });
+}
+
+class CustomBorderRadius {
+  final Radius? topLeft;
+  final Radius? topRight;
+  final Radius? bottomLeft;
+  final Radius? bottomRight;
+
+  CustomBorderRadius({
+    this.topLeft = Radius.zero,
+    this.topRight = Radius.zero,
+    this.bottomLeft = Radius.zero,
+    this.bottomRight = Radius.zero,
+  });
+
+  BorderRadius toBorderRadius() => BorderRadius.only(
+        topLeft: topLeft ?? Radius.zero,
+        topRight: topRight ?? Radius.zero,
+        bottomLeft: bottomLeft ?? Radius.zero,
+        bottomRight: bottomRight ?? Radius.zero,
+      );
 }
