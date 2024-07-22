@@ -363,7 +363,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       )
     }
 
-    updateContentHighlightState(animated: false)
+    updateContentBackgroundColor(animated: false)
+    updateContentAlpha(animated: false)
 
     applyAccessibility(model.accessibility)
     model.actions?
@@ -522,28 +523,8 @@ extension DecoratingView.Model {
     switch highlightState {
     case .normal:
       actionAnimation?.touchUp
-        .map { $0.modifyingFade(childAlpha: childAlpha) }
     case .highlighted:
       actionAnimation?.touchDown
-        .map { $0.modifyingFade(childAlpha: childAlpha) }
-    }
-  }
-}
-
-extension TransitioningAnimation {
-  fileprivate func modifyingFade(childAlpha: CGFloat) -> Self {
-    switch kind {
-    case .fade:
-      TransitioningAnimation(
-        kind: .fade,
-        start: start * childAlpha,
-        end: end * childAlpha,
-        duration: duration,
-        delay: delay,
-        timingFunction: timingFunction
-      )
-    case .scaleXY, .translationX, .translationY:
-      self
     }
   }
 }
