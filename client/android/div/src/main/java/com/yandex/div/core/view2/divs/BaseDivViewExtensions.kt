@@ -41,6 +41,7 @@ import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_H
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.core.getItemResolver
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
@@ -62,6 +63,7 @@ import com.yandex.div2.DivAspect
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivBorder
+import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
@@ -901,3 +903,12 @@ internal fun View.clearFocusOnClick(focusTracker: InputFocusTracker) {
 }
 
 internal val View.bindingContext get() = (this as? DivHolderView<*>)?.bindingContext
+
+internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: ExpressionResolver, callback: (Any) -> Unit) {
+    builder.data.observe(resolver, callback)
+
+    val itemResolver = builder.getItemResolver(resolver)
+    builder.prototypes.forEach {
+        it.selector.observe(itemResolver, callback)
+    }
+}

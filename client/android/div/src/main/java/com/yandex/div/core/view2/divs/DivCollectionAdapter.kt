@@ -84,4 +84,6 @@ internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
         subscribeOnElements()
         return true
     }
+
+    fun setItems(newItems: List<DivItemBuilderResult>) = Unit
 }

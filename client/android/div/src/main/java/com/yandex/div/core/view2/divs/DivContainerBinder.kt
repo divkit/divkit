@@ -36,8 +36,8 @@ import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.getItemResolver
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
@@ -147,18 +147,11 @@ internal class DivContainerBinder @Inject constructor(
         errorCollector: ErrorCollector,
     ) {
         val builder = div.itemBuilder ?: return
-
-        val callback = { _: Any ->
-            val newItems = div.buildItems(context.expressionResolver)
+        bindItemBuilder(builder, context.expressionResolver) {
+            val newItems = builder.build(context.expressionResolver)
             val oldItems = (this as DivCollectionHolder).items ?: emptyList()
             replaceWithReuse(context.divView, oldItems, newItems)
             applyItems(context, div, div, newItems, oldItems, path, errorCollector)
-        }
-        builder.data.observe(context.expressionResolver, callback)
-
-        val itemResolver = builder.getItemResolver(context.expressionResolver)
-        builder.prototypes.forEach {
-            it.selector.observe(itemResolver, callback)
         }
     }
 

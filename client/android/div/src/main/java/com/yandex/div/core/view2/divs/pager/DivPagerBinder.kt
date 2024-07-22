@@ -22,11 +22,13 @@ import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.ReleasingViewPool
+import com.yandex.div.core.view2.divs.bindItemBuilder
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.pager.DivPagerAdapter.Companion.OFFSET_TO_REAL_ITEM
 import com.yandex.div.core.view2.divs.toPxF
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
+import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.widget.PageItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -140,6 +142,8 @@ internal class DivPagerBinder @Inject constructor(
                 null
             }
         })
+
+        view.bindItemBuilder(context, div)
         if (a11yEnabled) {
             view.enableAccessibility()
         }
@@ -275,5 +279,12 @@ internal class DivPagerBinder @Inject constructor(
             removeItemDecorationAt(i)
         }
         addItemDecoration(decoration)
+    }
+
+    private fun DivPagerView.bindItemBuilder(context: BindingContext, div: DivPager) {
+        val builder = div.itemBuilder ?: return
+        bindItemBuilder(builder, context.expressionResolver) {
+            (viewPager.adapter as DivPagerAdapter?)?.setItems(builder.build(context.expressionResolver))
+        }
     }
 }
