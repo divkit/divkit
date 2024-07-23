@@ -201,7 +201,8 @@ final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
         to: scrollView.contentOffset.x
       ),
       firstVisibleItemIndex: firstItemIndex,
-      lastVisibleItemIndex: lastItemIndex
+      lastVisibleItemIndex: lastItemIndex,
+      itemsCount: tabs.count
     ).sendFrom(collectionView)
 
     self.scrollInfo = nil

@@ -318,7 +318,8 @@ extension TabContentsView: UICollectionViewDelegate {
         to: selectedPageIndex
       ),
       firstVisibleItemIndex: currentPageIndex,
-      lastVisibleItemIndex: currentPageIndex
+      lastVisibleItemIndex: currentPageIndex,
+      itemsCount: model.pages.count
     ).sendFrom(self)
   }
 }

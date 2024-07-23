@@ -391,7 +391,8 @@ extension GalleryView: ScrollDelegate {
         to: firstVisibleItemOffset
       ),
       firstVisibleItemIndex: firstVisibleItemIndex,
-      lastVisibleItemIndex: lastVisibleItemIndex
+      lastVisibleItemIndex: lastVisibleItemIndex,
+      itemsCount: model.items.count
     ).sendFrom(self)
   }
 }
