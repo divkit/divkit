@@ -17,6 +17,7 @@ public final class GalleryView: BlockView {
   private let collectionViewLayout: GenericCollectionViewLayout
   private let dataSource = GalleryDataSource()
   private let compoundScrollDelegate = CompoundScrollDelegate()
+  private let cellRegistrator = CollectionCellRegistrator()
   private var contentPager: ScrollableContentPager? {
     didSet {
       if let oldDelegate = oldValue {
@@ -104,6 +105,7 @@ public final class GalleryView: BlockView {
 
     if oldModel != model {
       let blocks = model.items.map(\.content)
+      cellRegistrator.register(blocks: blocks, in: collectionView)
       dataSource.blocks = blocks
       if oldModel?.layoutDirection != model.layoutDirection {
         collectionView.semanticContentAttribute = model
@@ -201,7 +203,6 @@ public final class GalleryView: BlockView {
     collectionView.clipsToBounds = false
     collectionView.backgroundColor = .clear
     collectionView.scrollsToTop = false
-    collectionView.register(CellType.self, forCellWithReuseIdentifier: reuseID)
     collectionView.dataSource = dataSource
 
     collectionView.disableContentInsetAdjustmentBehavior()
@@ -415,12 +416,13 @@ private final class GalleryDataSource: NSObject, UICollectionViewDataSource {
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
+    let block = blocks[indexPath.item]
     let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: reuseID,
+      withReuseIdentifier: block.reuseId,
       for: indexPath
     ) as! CellType
     cell.configure(
-      model: blocks[indexPath.item],
+      model: block,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
       renderingDelegate: renderingDelegate,
@@ -429,8 +431,6 @@ private final class GalleryDataSource: NSObject, UICollectionViewDataSource {
     return cell
   }
 }
-
-private let reuseID = "GalleryCollectionViewPlainCell"
 
 extension GalleryViewModel.ScrollMode {
   fileprivate var decelerationRate: UIScrollView.DecelerationRate {

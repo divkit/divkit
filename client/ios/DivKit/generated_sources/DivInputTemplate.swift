@@ -114,6 +114,7 @@ public final class DivInputTemplate: TemplateValue {
   public let maxVisibleLines: Field<Expression<Int>>? // constraint: number > 0
   public let nativeInterface: Field<NativeInterfaceTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectAllOnFocus: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>?
@@ -168,6 +169,7 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: dictionary.getOptionalExpressionField("max_visible_lines"),
       nativeInterface: dictionary.getOptionalField("native_interface", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       selectAllOnFocus: dictionary.getOptionalExpressionField("select_all_on_focus"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
@@ -223,6 +225,7 @@ public final class DivInputTemplate: TemplateValue {
     maxVisibleLines: Field<Expression<Int>>? = nil,
     nativeInterface: Field<NativeInterfaceTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectAllOnFocus: Field<Expression<Bool>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
@@ -275,6 +278,7 @@ public final class DivInputTemplate: TemplateValue {
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus
     self.selectedActions = selectedActions
@@ -328,6 +332,7 @@ public final class DivInputTemplate: TemplateValue {
     let maxVisibleLinesValue = parent?.maxVisibleLines?.resolveOptionalValue(context: context, validator: ResolvedValue.maxVisibleLinesValidator) ?? .noValue
     let nativeInterfaceValue = parent?.nativeInterface?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectAllOnFocusValue = parent?.selectAllOnFocus?.resolveOptionalValue(context: context) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -379,6 +384,7 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -439,6 +445,7 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
@@ -497,6 +504,7 @@ public final class DivInputTemplate: TemplateValue {
     var maxVisibleLinesValue: DeserializationResult<Expression<Int>> = parent?.maxVisibleLines?.value() ?? .noValue
     var nativeInterfaceValue: DeserializationResult<DivInput.NativeInterface> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectAllOnFocusValue: DeserializationResult<Expression<Bool>> = parent?.selectAllOnFocus?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -580,6 +588,8 @@ public final class DivInputTemplate: TemplateValue {
         nativeInterfaceValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputTemplate.NativeInterfaceTemplate.self).merged(with: nativeInterfaceValue)
       case "paddings":
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "select_all_on_focus":
@@ -680,6 +690,8 @@ public final class DivInputTemplate: TemplateValue {
         nativeInterfaceValue = nativeInterfaceValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputTemplate.NativeInterfaceTemplate.self) })
       case parent?.paddings?.link:
         paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.selectAllOnFocus?.link:
@@ -778,6 +790,7 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -838,6 +851,7 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
@@ -901,6 +915,7 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: maxVisibleLines ?? mergedParent.maxVisibleLines,
       nativeInterface: nativeInterface ?? mergedParent.nativeInterface,
       paddings: paddings ?? mergedParent.paddings,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectAllOnFocus: selectAllOnFocus ?? mergedParent.selectAllOnFocus,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
@@ -959,6 +974,7 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: merged.maxVisibleLines,
       nativeInterface: merged.nativeInterface?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       selectAllOnFocus: merged.selectAllOnFocus,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),

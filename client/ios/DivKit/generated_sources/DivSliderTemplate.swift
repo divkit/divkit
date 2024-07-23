@@ -308,6 +308,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let minValue: Field<Expression<Int>>? // default value: 0
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let ranges: Field<[RangeTemplate]>?
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let secondaryValueAccessibility: Field<DivAccessibilityTemplate>?
   public let selectedActions: Field<[DivActionTemplate]>?
@@ -354,6 +355,7 @@ public final class DivSliderTemplate: TemplateValue {
       minValue: dictionary.getOptionalExpressionField("min_value"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       ranges: dictionary.getOptionalArray("ranges", templateToType: templateToType),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       secondaryValueAccessibility: dictionary.getOptionalField("secondary_value_accessibility", templateToType: templateToType),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
@@ -401,6 +403,7 @@ public final class DivSliderTemplate: TemplateValue {
     minValue: Field<Expression<Int>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     ranges: Field<[RangeTemplate]>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     secondaryValueAccessibility: Field<DivAccessibilityTemplate>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
@@ -445,6 +448,7 @@ public final class DivSliderTemplate: TemplateValue {
     self.minValue = minValue
     self.paddings = paddings
     self.ranges = ranges
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.secondaryValueAccessibility = secondaryValueAccessibility
     self.selectedActions = selectedActions
@@ -490,6 +494,7 @@ public final class DivSliderTemplate: TemplateValue {
     let minValueValue = parent?.minValue?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let secondaryValueAccessibilityValue = parent?.secondaryValueAccessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -533,6 +538,7 @@ public final class DivSliderTemplate: TemplateValue {
       minValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_value", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       secondaryValueAccessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "secondary_value_accessibility", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -593,6 +599,7 @@ public final class DivSliderTemplate: TemplateValue {
       minValue: minValueValue.value,
       paddings: paddingsValue.value,
       ranges: rangesValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       secondaryValueAccessibility: secondaryValueAccessibilityValue.value,
       selectedActions: selectedActionsValue.value,
@@ -643,6 +650,7 @@ public final class DivSliderTemplate: TemplateValue {
     var minValueValue: DeserializationResult<Expression<Int>> = parent?.minValue?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var rangesValue: DeserializationResult<[DivSlider.Range]> = .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var secondaryValueAccessibilityValue: DeserializationResult<DivAccessibility> = .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -705,6 +713,8 @@ public final class DivSliderTemplate: TemplateValue {
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
       case "ranges":
         rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSliderTemplate.RangeTemplate.self).merged(with: rangesValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "secondary_value_accessibility":
@@ -789,6 +799,8 @@ public final class DivSliderTemplate: TemplateValue {
         paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.ranges?.link:
         rangesValue = rangesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSliderTemplate.RangeTemplate.self) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.secondaryValueAccessibility?.link:
@@ -891,6 +903,7 @@ public final class DivSliderTemplate: TemplateValue {
       minValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_value", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       secondaryValueAccessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "secondary_value_accessibility", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -951,6 +964,7 @@ public final class DivSliderTemplate: TemplateValue {
       minValue: minValueValue.value,
       paddings: paddingsValue.value,
       ranges: rangesValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       secondaryValueAccessibility: secondaryValueAccessibilityValue.value,
       selectedActions: selectedActionsValue.value,
@@ -1006,6 +1020,7 @@ public final class DivSliderTemplate: TemplateValue {
       minValue: minValue ?? mergedParent.minValue,
       paddings: paddings ?? mergedParent.paddings,
       ranges: ranges ?? mergedParent.ranges,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       secondaryValueAccessibility: secondaryValueAccessibility ?? mergedParent.secondaryValueAccessibility,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
@@ -1056,6 +1071,7 @@ public final class DivSliderTemplate: TemplateValue {
       minValue: merged.minValue,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       ranges: merged.ranges?.tryResolveParent(templates: templates),
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       secondaryValueAccessibility: merged.secondaryValueAccessibility?.tryResolveParent(templates: templates),
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),

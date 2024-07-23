@@ -134,6 +134,12 @@ extension DivBase {
       block = layoutProvider.apply(block: block, context: context)
     }
 
+    if let reuseId = resolveReuseId(expressionResolver) {
+      block = block.addingDecorations(
+        reuseId: reuseId
+      )
+    }
+
     return applyExtensionHandlersAfterBaseProperties(
       to: block,
       extensionHandlers: extensionHandlers,

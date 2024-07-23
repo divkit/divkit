@@ -47,7 +47,8 @@ extension DecoratingBlock {
       source: Variable { [weak self] in self },
       visibilityParams: visibilityParams,
       tooltips: tooltips,
-      accessibility: accessibilityElement
+      accessibility: accessibilityElement,
+      reuseId: reuseId
     )
     view.configure(
       model: model,
@@ -120,6 +121,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let visibilityParams: VisibilityParams?
     let tooltips: [BlockTooltip]
     let accessibility: AccessibilityElement?
+    let reuseId: String?
 
     var hasResponsiveUI: Bool {
       actions.hasPayload || longTapActions.hasPayload || doubleTapActions.hasPayload

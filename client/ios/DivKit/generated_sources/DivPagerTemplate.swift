@@ -33,6 +33,7 @@ public final class DivPagerTemplate: TemplateValue {
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let pageTransformation: Field<DivPageTransformationTemplate>?
   public let restrictParentScroll: Field<Expression<Bool>>? // default value: false
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>?
   public let tooltips: Field<[DivTooltipTemplate]>?
@@ -74,6 +75,7 @@ public final class DivPagerTemplate: TemplateValue {
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       pageTransformation: dictionary.getOptionalField("page_transformation", templateToType: templateToType),
       restrictParentScroll: dictionary.getOptionalExpressionField("restrict_parent_scroll"),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
       tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
@@ -116,6 +118,7 @@ public final class DivPagerTemplate: TemplateValue {
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     pageTransformation: Field<DivPageTransformationTemplate>? = nil,
     restrictParentScroll: Field<Expression<Bool>>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
@@ -155,6 +158,7 @@ public final class DivPagerTemplate: TemplateValue {
     self.paddings = paddings
     self.pageTransformation = pageTransformation
     self.restrictParentScroll = restrictParentScroll
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.tooltips = tooltips
@@ -195,6 +199,7 @@ public final class DivPagerTemplate: TemplateValue {
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let pageTransformationValue = parent?.pageTransformation?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let restrictParentScrollValue = parent?.restrictParentScroll?.resolveOptionalValue(context: context) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -233,6 +238,7 @@ public final class DivPagerTemplate: TemplateValue {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pageTransformationValue.errorsOrWarnings?.map { .nestedObjectError(field: "page_transformation", error: $0) },
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
@@ -280,6 +286,7 @@ public final class DivPagerTemplate: TemplateValue {
       paddings: paddingsValue.value,
       pageTransformation: pageTransformationValue.value,
       restrictParentScroll: restrictParentScrollValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       tooltips: tooltipsValue.value,
@@ -325,6 +332,7 @@ public final class DivPagerTemplate: TemplateValue {
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var pageTransformationValue: DeserializationResult<DivPageTransformation> = .noValue
     var restrictParentScrollValue: DeserializationResult<Expression<Bool>> = parent?.restrictParentScroll?.value() ?? .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
@@ -388,6 +396,8 @@ public final class DivPagerTemplate: TemplateValue {
         pageTransformationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPageTransformationTemplate.self).merged(with: pageTransformationValue)
       case "restrict_parent_scroll":
         restrictParentScrollValue = deserialize(__dictValue).merged(with: restrictParentScrollValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selected_actions":
@@ -462,6 +472,8 @@ public final class DivPagerTemplate: TemplateValue {
         pageTransformationValue = pageTransformationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPageTransformationTemplate.self) })
       case parent?.restrictParentScroll?.link:
         restrictParentScrollValue = restrictParentScrollValue.merged(with: { deserialize(__dictValue) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.selectedActions?.link:
@@ -543,6 +555,7 @@ public final class DivPagerTemplate: TemplateValue {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pageTransformationValue.errorsOrWarnings?.map { .nestedObjectError(field: "page_transformation", error: $0) },
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
@@ -590,6 +603,7 @@ public final class DivPagerTemplate: TemplateValue {
       paddings: paddingsValue.value,
       pageTransformation: pageTransformationValue.value,
       restrictParentScroll: restrictParentScrollValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       tooltips: tooltipsValue.value,
@@ -640,6 +654,7 @@ public final class DivPagerTemplate: TemplateValue {
       paddings: paddings ?? mergedParent.paddings,
       pageTransformation: pageTransformation ?? mergedParent.pageTransformation,
       restrictParentScroll: restrictParentScroll ?? mergedParent.restrictParentScroll,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       tooltips: tooltips ?? mergedParent.tooltips,
@@ -685,6 +700,7 @@ public final class DivPagerTemplate: TemplateValue {
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       pageTransformation: merged.pageTransformation?.tryResolveParent(templates: templates),
       restrictParentScroll: merged.restrictParentScroll,
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),

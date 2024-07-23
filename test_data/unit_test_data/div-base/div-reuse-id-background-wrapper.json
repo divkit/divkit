@@ -1,0 +1,11 @@
+{
+  "type": "text",
+  "background": [
+      {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
+      }
+  ],
+  "text": "Image",
+  "reuse_id": "test_reuse_id"
+}

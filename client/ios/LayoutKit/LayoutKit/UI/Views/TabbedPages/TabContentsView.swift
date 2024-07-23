@@ -78,6 +78,8 @@ final class TabContentsView: BlockView {
     }
   }
 
+  private let cellRegistrator = CollectionCellRegistrator()
+
   func configure(
     model: TabContentsViewModel,
     state: TabViewState,
@@ -99,7 +101,9 @@ final class TabContentsView: BlockView {
     }
 
     if oldModel == nil || oldModel.pages !== model.pages || oldObserver !== observer {
-      dataSource.models = [model.pages.map { $0.block as! CollectionCellModel }]
+      let cellModels = model.pages.map { $0.block }
+      cellRegistrator.register(blocks: cellModels, in: collectionView)
+      dataSource.models = [cellModels]
 
       if let backgroundView,
          let background = model.background,
@@ -151,10 +155,6 @@ final class TabContentsView: BlockView {
     collectionView.dataSource = dataSource
     collectionView.backgroundColor = .clear
     collectionView.scrollsToTop = false
-    collectionView.register(
-      GenericCollectionViewCell.self,
-      forCellWithReuseIdentifier: blockReuseID
-    )
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     collectionView.isPagingEnabled = true

@@ -39,6 +39,7 @@ public final class DivGalleryTemplate: TemplateValue {
   public let orientation: Field<Expression<Orientation>>? // default value: horizontal
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let restrictParentScroll: Field<Expression<Bool>>? // default value: false
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let scrollMode: Field<Expression<ScrollMode>>? // default value: default
   public let scrollbar: Field<Expression<Scrollbar>>? // default value: none
@@ -82,6 +83,7 @@ public final class DivGalleryTemplate: TemplateValue {
       orientation: dictionary.getOptionalExpressionField("orientation"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       restrictParentScroll: dictionary.getOptionalExpressionField("restrict_parent_scroll"),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       scrollMode: dictionary.getOptionalExpressionField("scroll_mode"),
       scrollbar: dictionary.getOptionalExpressionField("scrollbar"),
@@ -126,6 +128,7 @@ public final class DivGalleryTemplate: TemplateValue {
     orientation: Field<Expression<Orientation>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     restrictParentScroll: Field<Expression<Bool>>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     scrollMode: Field<Expression<ScrollMode>>? = nil,
     scrollbar: Field<Expression<Scrollbar>>? = nil,
@@ -167,6 +170,7 @@ public final class DivGalleryTemplate: TemplateValue {
     self.orientation = orientation
     self.paddings = paddings
     self.restrictParentScroll = restrictParentScroll
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.scrollMode = scrollMode
     self.scrollbar = scrollbar
@@ -209,6 +213,7 @@ public final class DivGalleryTemplate: TemplateValue {
     let orientationValue = parent?.orientation?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let restrictParentScrollValue = parent?.restrictParentScroll?.resolveOptionalValue(context: context) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let scrollModeValue = parent?.scrollMode?.resolveOptionalValue(context: context) ?? .noValue
     let scrollbarValue = parent?.scrollbar?.resolveOptionalValue(context: context) ?? .noValue
@@ -249,6 +254,7 @@ public final class DivGalleryTemplate: TemplateValue {
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       scrollModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_mode", error: $0) },
       scrollbarValue.errorsOrWarnings?.map { .nestedObjectError(field: "scrollbar", error: $0) },
@@ -290,6 +296,7 @@ public final class DivGalleryTemplate: TemplateValue {
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
       restrictParentScroll: restrictParentScrollValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       scrollMode: scrollModeValue.value,
       scrollbar: scrollbarValue.value,
@@ -337,6 +344,7 @@ public final class DivGalleryTemplate: TemplateValue {
     var orientationValue: DeserializationResult<Expression<DivGallery.Orientation>> = parent?.orientation?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var restrictParentScrollValue: DeserializationResult<Expression<Bool>> = parent?.restrictParentScroll?.value() ?? .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var scrollModeValue: DeserializationResult<Expression<DivGallery.ScrollMode>> = parent?.scrollMode?.value() ?? .noValue
     var scrollbarValue: DeserializationResult<Expression<DivGallery.Scrollbar>> = parent?.scrollbar?.value() ?? .noValue
@@ -402,6 +410,8 @@ public final class DivGalleryTemplate: TemplateValue {
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
       case "restrict_parent_scroll":
         restrictParentScrollValue = deserialize(__dictValue).merged(with: restrictParentScrollValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "scroll_mode":
@@ -480,6 +490,8 @@ public final class DivGalleryTemplate: TemplateValue {
         paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.restrictParentScroll?.link:
         restrictParentScrollValue = restrictParentScrollValue.merged(with: { deserialize(__dictValue) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.scrollMode?.link:
@@ -562,6 +574,7 @@ public final class DivGalleryTemplate: TemplateValue {
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       scrollModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_mode", error: $0) },
       scrollbarValue.errorsOrWarnings?.map { .nestedObjectError(field: "scrollbar", error: $0) },
@@ -603,6 +616,7 @@ public final class DivGalleryTemplate: TemplateValue {
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
       restrictParentScroll: restrictParentScrollValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       scrollMode: scrollModeValue.value,
       scrollbar: scrollbarValue.value,
@@ -655,6 +669,7 @@ public final class DivGalleryTemplate: TemplateValue {
       orientation: orientation ?? mergedParent.orientation,
       paddings: paddings ?? mergedParent.paddings,
       restrictParentScroll: restrictParentScroll ?? mergedParent.restrictParentScroll,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       scrollMode: scrollMode ?? mergedParent.scrollMode,
       scrollbar: scrollbar ?? mergedParent.scrollbar,
@@ -702,6 +717,7 @@ public final class DivGalleryTemplate: TemplateValue {
       orientation: merged.orientation,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       restrictParentScroll: merged.restrictParentScroll,
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       scrollMode: merged.scrollMode,
       scrollbar: merged.scrollbar,

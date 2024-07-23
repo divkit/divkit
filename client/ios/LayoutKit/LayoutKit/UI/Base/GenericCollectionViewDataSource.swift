@@ -3,15 +3,11 @@ import UIKit
 
 import VGSL
 
-public protocol CollectionCellModel: UIViewRenderable, AccessibilityContaining {
-  var reuseID: String { get }
-}
-
-public typealias CollectionHeaderModel = CollectionCellModel
-public typealias CollectionFooterModel = CollectionCellModel
+public typealias CollectionHeaderModel = Block
+public typealias CollectionFooterModel = Block
 
 public final class GenericCollectionViewDataSource: NSObject, UICollectionViewDataSource {
-  public var models: [[CollectionCellModel]] = []
+  public var models: [[Block]] = []
   public var headerModels: [CollectionHeaderModel] = []
   public var footerModels: [CollectionFooterModel] = []
   public weak var observer: ElementStateObserver?
@@ -32,7 +28,7 @@ public final class GenericCollectionViewDataSource: NSObject, UICollectionViewDa
   ) -> UICollectionViewCell {
     let model = models[indexPath.section][indexPath.item]
     let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: model.reuseID,
+      withReuseIdentifier: model.reuseId,
       for: indexPath
     ) as! GenericCollectionViewCell
     configureCell(cell, with: model)
@@ -49,7 +45,7 @@ public final class GenericCollectionViewDataSource: NSObject, UICollectionViewDa
       let model = headerModels[indexPath.section]
       let headerView = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
-        withReuseIdentifier: model.reuseID,
+        withReuseIdentifier: model.reuseId,
         for: indexPath
       ) as! GenericCollectionReusableView
       headerView.configure(model: model)
@@ -59,7 +55,7 @@ public final class GenericCollectionViewDataSource: NSObject, UICollectionViewDa
       let model = footerModels[indexPath.section]
       let footerView = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
-        withReuseIdentifier: model.reuseID,
+        withReuseIdentifier: model.reuseId,
         for: indexPath
       ) as! GenericCollectionReusableView
       footerView.configure(model: model)
@@ -73,7 +69,7 @@ public final class GenericCollectionViewDataSource: NSObject, UICollectionViewDa
       return
     }
     let model = models[path.section][path.item]
-    guard genericCell.reuseIdentifier == model.reuseID else {
+    guard genericCell.reuseIdentifier == model.reuseId else {
       assertionFailure()
       return
     }
@@ -81,7 +77,7 @@ public final class GenericCollectionViewDataSource: NSObject, UICollectionViewDa
     configureCell(genericCell, with: model)
   }
 
-  public func configureCell(_ cell: GenericCollectionViewCell, with model: CollectionCellModel) {
+  public func configureCell(_ cell: GenericCollectionViewCell, with model: Block) {
     cell.configure(
       model: model,
       observer: observer,

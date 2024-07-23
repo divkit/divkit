@@ -82,6 +82,7 @@ public final class DivContainer: DivBase {
   public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: vertical
   public let paddings: DivEdgeInsets?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let separator: Separator?
@@ -131,6 +132,10 @@ public final class DivContainer: DivBase {
 
   public func resolveOrientation(_ resolver: ExpressionResolver) -> Orientation {
     resolver.resolveEnum(orientation) ?? Orientation.vertical
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -183,6 +188,7 @@ public final class DivContainer: DivBase {
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
+    reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
     selectedActions: [DivAction]?,
     separator: Separator?,
@@ -227,6 +233,7 @@ public final class DivContainer: DivBase {
     self.margins = margins
     self.orientation = orientation ?? .value(.vertical)
     self.paddings = paddings
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.separator = separator
@@ -313,39 +320,40 @@ extension DivContainer: Equatable {
     guard
       lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.separator == rhs.separator,
-      lhs.tooltips == rhs.tooltips
+      lhs.separator == rhs.separator
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -388,6 +396,7 @@ extension DivContainer: Serializable {
     result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["separator"] = separator?.toDictionary()

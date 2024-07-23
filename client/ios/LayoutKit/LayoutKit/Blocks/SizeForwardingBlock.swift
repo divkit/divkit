@@ -54,4 +54,8 @@ extension SizeForwardingBlock {
   public var minHeight: CGFloat {
     sizeProvider.minHeight
   }
+
+  public var reuseId: String {
+    sizeProvider.reuseId
+  }
 }

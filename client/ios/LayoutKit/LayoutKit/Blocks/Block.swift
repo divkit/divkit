@@ -44,6 +44,8 @@ public protocol Block: AnyObject,
   func equals(_ other: Block) -> Bool
 
   var blockLayoutDirection: UserInterfaceLayoutDirection { get }
+
+  var reuseId: String { get }
 }
 
 extension Block {
@@ -144,6 +146,12 @@ extension Block {
 
   public var minWidth: CGFloat { 0 }
   public var minHeight: CGFloat { 0 }
+
+  public var reuseId: String { Self.defaultReuseId }
+
+  public static var defaultReuseId: String {
+    "DefaultReuseId"
+  }
 }
 
 public func ==(lhs: Block, rhs: Block) -> Bool {

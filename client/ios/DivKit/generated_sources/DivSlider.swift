@@ -105,6 +105,7 @@ public final class DivSlider: DivBase {
   public let minValue: Expression<Int> // default value: 0
   public let paddings: DivEdgeInsets?
   public let ranges: [Range]?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let secondaryValueAccessibility: DivAccessibility?
   public let selectedActions: [DivAction]?
@@ -154,6 +155,10 @@ public final class DivSlider: DivBase {
     resolver.resolveNumeric(minValue) ?? 0
   }
 
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
+  }
+
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(rowSpan)
   }
@@ -193,6 +198,7 @@ public final class DivSlider: DivBase {
     minValue: Expression<Int>? = nil,
     paddings: DivEdgeInsets? = nil,
     ranges: [Range]? = nil,
+    reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     secondaryValueAccessibility: DivAccessibility? = nil,
     selectedActions: [DivAction]? = nil,
@@ -236,6 +242,7 @@ public final class DivSlider: DivBase {
     self.minValue = minValue ?? .value(0)
     self.paddings = paddings
     self.ranges = ranges
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.secondaryValueAccessibility = secondaryValueAccessibility
     self.selectedActions = selectedActions
@@ -309,57 +316,62 @@ extension DivSlider: Equatable {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle,
-      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle,
-      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable
+      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle
     else {
       return false
     }
     guard
+      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable,
       lhs.thumbStyle == rhs.thumbStyle,
-      lhs.thumbTextStyle == rhs.thumbTextStyle,
-      lhs.thumbValueVariable == rhs.thumbValueVariable
+      lhs.thumbTextStyle == rhs.thumbTextStyle
     else {
       return false
     }
     guard
+      lhs.thumbValueVariable == rhs.thumbValueVariable,
       lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle,
-      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle,
-      lhs.tooltips == rhs.tooltips
+      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.trackActiveStyle == rhs.trackActiveStyle,
-      lhs.trackInactiveStyle == rhs.trackInactiveStyle,
-      lhs.transform == rhs.transform
+      lhs.trackInactiveStyle == rhs.trackInactiveStyle
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -391,6 +403,7 @@ extension DivSlider: Serializable {
     result["min_value"] = minValue.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
     result["ranges"] = ranges?.map { $0.toDictionary() }
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["secondary_value_accessibility"] = secondaryValueAccessibility?.toDictionary()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }

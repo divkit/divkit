@@ -55,6 +55,7 @@ public final class DivGallery: DivBase {
   public let orientation: Expression<Orientation> // default value: horizontal
   public let paddings: DivEdgeInsets?
   public let restrictParentScroll: Expression<Bool> // default value: false
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let scrollMode: Expression<ScrollMode> // default value: default
   public let scrollbar: Expression<Scrollbar> // default value: none
@@ -113,6 +114,10 @@ public final class DivGallery: DivBase {
 
   public func resolveRestrictParentScroll(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(restrictParentScroll) ?? false
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -180,6 +185,7 @@ public final class DivGallery: DivBase {
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
     restrictParentScroll: Expression<Bool>?,
+    reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
     scrollMode: Expression<ScrollMode>?,
     scrollbar: Expression<Scrollbar>?,
@@ -220,6 +226,7 @@ public final class DivGallery: DivBase {
     self.orientation = orientation ?? .value(.horizontal)
     self.paddings = paddings
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.scrollMode = scrollMode ?? .value(.default)
     self.scrollbar = scrollbar ?? .value(.none)
@@ -298,36 +305,41 @@ extension DivGallery: Equatable {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scrollMode == rhs.scrollMode,
-      lhs.scrollbar == rhs.scrollbar
+      lhs.scrollMode == rhs.scrollMode
     else {
       return false
     }
     guard
+      lhs.scrollbar == rhs.scrollbar,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -365,6 +377,7 @@ extension DivGallery: Serializable {
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["scroll_mode"] = scrollMode.toValidSerializationValue()
     result["scrollbar"] = scrollbar.toValidSerializationValue()

@@ -25,6 +25,7 @@ final class DecoratingBlock: WrapperBlock {
   let visibilityParams: VisibilityParams?
   let tooltips: [BlockTooltip]
   let accessibilityElement: AccessibilityElement?
+  let reuseId: String
 
   init(
     child: Block,
@@ -42,7 +43,8 @@ final class DecoratingBlock: WrapperBlock {
     paddings: EdgeInsets = .zero,
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip] = [],
-    accessibilityElement: AccessibilityElement? = nil
+    accessibilityElement: AccessibilityElement? = nil,
+    reuseId: String? = nil
   ) {
     self.child = child
     self.backgroundColor = backgroundColor
@@ -60,6 +62,7 @@ final class DecoratingBlock: WrapperBlock {
     self.visibilityParams = visibilityParams
     self.tooltips = tooltips
     self.accessibilityElement = accessibilityElement
+    self.reuseId = reuseId ?? DecoratingBlock.defaultReuseId
   }
 
   var intrinsicContentWidth: CGFloat {
@@ -114,6 +117,7 @@ final class DecoratingBlock: WrapperBlock {
       && visibilityParams == other.visibilityParams
       && tooltips == other.tooltips
       && accessibilityElement == other.accessibilityElement
+      && reuseId == other.reuseId
   }
 
   func makeCopy(wrapping child: Block) -> DecoratingBlock {
@@ -143,7 +147,8 @@ extension DecoratingBlock {
     paddings: EdgeInsets? = nil,
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
-    accessibilityElement: AccessibilityElement? = nil
+    accessibilityElement: AccessibilityElement? = nil,
+    reuseId: String? = nil
   ) -> DecoratingBlock {
     DecoratingBlock(
       child: child ?? self.child,
@@ -161,7 +166,8 @@ extension DecoratingBlock {
       paddings: paddings ?? self.paddings,
       visibilityParams: visibilityParams ?? self.visibilityParams,
       tooltips: tooltips ?? self.tooltips,
-      accessibilityElement: accessibilityElement ?? self.accessibilityElement
+      accessibilityElement: accessibilityElement ?? self.accessibilityElement,
+      reuseId: reuseId ?? self.reuseId
     )
   }
 }

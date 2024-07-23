@@ -34,6 +34,7 @@ public final class DivVideo: DivBase {
   public let preview: Expression<String>?
   public let repeatable: Expression<Bool> // default value: false
   public let resumeActions: [DivAction]?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let scale: Expression<DivVideoScale> // default value: fit
   public let selectedActions: [DivAction]?
@@ -84,6 +85,10 @@ public final class DivVideo: DivBase {
 
   public func resolveRepeatable(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(repeatable) ?? false
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -142,6 +147,7 @@ public final class DivVideo: DivBase {
     preview: Expression<String>? = nil,
     repeatable: Expression<Bool>? = nil,
     resumeActions: [DivAction]? = nil,
+    reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     scale: Expression<DivVideoScale>? = nil,
     selectedActions: [DivAction]? = nil,
@@ -186,6 +192,7 @@ public final class DivVideo: DivBase {
     self.preview = preview
     self.repeatable = repeatable ?? .value(false)
     self.resumeActions = resumeActions
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.scale = scale ?? .value(.fit)
     self.selectedActions = selectedActions
@@ -272,36 +279,41 @@ extension DivVideo: Equatable {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.scale == rhs.scale
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variables == rhs.variables,
-      lhs.videoSources == rhs.videoSources,
-      lhs.visibility == rhs.visibility
+      lhs.videoSources == rhs.videoSources
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -343,6 +355,7 @@ extension DivVideo: Serializable {
     result["preview"] = preview?.toValidSerializationValue()
     result["repeatable"] = repeatable.toValidSerializationValue()
     result["resume_actions"] = resumeActions?.map { $0.toDictionary() }
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["scale"] = scale.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
