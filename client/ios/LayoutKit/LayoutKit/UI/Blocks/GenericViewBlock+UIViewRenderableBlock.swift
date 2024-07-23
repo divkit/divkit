@@ -24,7 +24,7 @@ extension GenericViewBlock {
 private final class GenericView: UIView, BlockViewProtocol, VisibleBoundsTrackingLeaf {
   var content: GenericViewBlock.Content? {
     didSet {
-      guard oldValue !== content else {
+      guard oldValue !== content || content?.isChild(of: self) != true else {
         return
       }
 
@@ -76,6 +76,15 @@ extension GenericViewBlock.Content {
     switch self {
     case let .view(content): view.addSubview(content)
     case let .layer(content): view.layer.addSublayer(content)
+    }
+  }
+
+  fileprivate func isChild(of parent: UIView) -> Bool {
+    switch self {
+    case let .view(view):
+      return view.superview === parent
+    case let .layer(layer):
+      return layer.superlayer === parent.layer
     }
   }
 }
