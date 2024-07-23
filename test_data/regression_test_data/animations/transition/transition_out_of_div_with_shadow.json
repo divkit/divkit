@@ -1,0 +1,159 @@
+{
+  "card": {
+    "log_id": "92b24f9a-eddb-43a9-aaf0-dc3e03d64b20",
+    "variables": [
+      {
+        "type": "boolean",
+        "name": "button_is_visible",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "orientation": "overlap",
+          "items": [
+            {
+              "type": "text",
+              "width": {
+                "type": "fixed",
+                "value": 160
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "paddings": {
+                "left": 8,
+                "top": 8,
+                "right": 8,
+                "bottom": 8
+              },
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FDF6E3"
+                }
+              ],
+              "border": {
+                "corner_radius": 12
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "text_color": "#073642",
+              "text": "@{button_is_visible ? 'Hide button' : 'Show button'}",
+              "actions": [
+                {
+                  "log_id": "5403c967-9e0f-49a2-9784-7cfa4a7da3bc",
+                  "url": "div-action://set_variable?name=button_is_visible&value=@{!button_is_visible}"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "width": {
+                "type": "fixed",
+                "value": 64
+              },
+              "height": {
+                "type": "fixed",
+                "value": 64
+              },
+              "margins": {
+                "bottom": 120
+              },
+              "alignment_horizontal": "center",
+              "alignment_vertical": "bottom",
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "center",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FDF6E3"
+                }
+              ],
+              "border": {
+                "corner_radius": 32,
+                "has_shadow": true
+              },
+              "items": [
+                {
+                  "type": "image",
+                  "height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "tint_color": "#073642",
+                  "image_url": "https://avatars.mds.yandex.net/get-bunker/998550/f61f515d49626bd0d4d93e0ab938c293de8274f8/orig",
+                  "appearance_animation": {
+                    "type": "fade",
+                    "duration": 200,
+                    "alpha": 0.0
+                  }
+                }
+              ],
+              "visibility": "@{button_is_visible ? 'visible' : 'gone'}",
+              "transition_in": {
+                "type": "set",
+                "items": [
+                  {
+                    "type": "scale",
+                    "duration": 200,
+                    "scale": 0.25,
+                    "pivot_y": 0.25,
+                    "interpolator": "ease_in"
+                  },
+                  {
+                    "type": "slide",
+                    "duration": 100,
+                    "edge": "bottom",
+                    "distance": {
+                      "value": 20
+                    }
+                  }
+                ]
+              },
+              "transition_out": {
+                "type": "set",
+                "items": [
+                  {
+                    "type": "scale",
+                    "duration": 200,
+                    "scale": 0.25,
+                    "pivot_y": 0.25,
+                    "interpolator": "ease_out"
+                  },
+                  {
+                    "type": "slide",
+                    "duration": 100,
+                    "edge": "bottom",
+                    "distance": {
+                      "value": 20
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

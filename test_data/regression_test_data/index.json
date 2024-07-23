@@ -933,6 +933,25 @@
       "file": "animations/transition/inner_state_transition_data_change.json"
     },
     {
+      "title": "Disappear transition of div with shadow",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on 'Show button'",
+        "Click on 'Hide Button'"
+      ],
+      "expected_results": [
+        "Floating button do not draw shadow during disappear animation"
+      ],
+      "file": "animations/transition/transition_out_of_div_with_shadow.json"
+    },
+    {
       "title": "Lottie animation (repeat_mode=restart, repeat_count=5)",
       "platforms": [
         "android",

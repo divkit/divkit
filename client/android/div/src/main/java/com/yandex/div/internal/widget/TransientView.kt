@@ -24,7 +24,8 @@ interface TransientView {
     val isTransient: Boolean
 }
 
-class TransientViewMixin(): TransientView {
+class TransientViewMixin: TransientView {
+
     private var transitionCount = 0
 
     override fun transitionStarted(view: View) {
@@ -41,6 +42,13 @@ class TransientViewMixin(): TransientView {
 
     override val isTransient: Boolean
         get() = transitionCount != 0
+}
+
+/**
+ * Indicates whether this [View] is [TransientView] in a transient state.
+ */
+internal fun View.isTransient(): Boolean {
+    return this is TransientView && isTransient
 }
 
 /**

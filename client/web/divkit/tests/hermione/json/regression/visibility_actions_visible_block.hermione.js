@@ -1,7 +1,7 @@
 describe('regression', () => {
     describe('Visibility action in visible block', () => {
         beforeEach(async function() {
-            await this.browser.yaOpenRegressionJson('visibility_actions/visibility_aciton');
+            await this.browser.yaOpenRegressionJson('visibility_actions/visibility_action');
         });
 
         it('Actions in in visible block', async function() {
