@@ -72,6 +72,7 @@ class Text internal constructor(
             minHiddenLines = additive.minHiddenLines ?: properties.minHiddenLines,
             paddings = additive.paddings ?: properties.paddings,
             ranges = additive.ranges ?: properties.ranges,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectable = additive.selectable ?: properties.selectable,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -249,6 +250,10 @@ class Text internal constructor(
          */
         val ranges: Property<List<Range>>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -386,6 +391,7 @@ class Text internal constructor(
             result.tryPutProperty("min_hidden_lines", minHiddenLines)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("ranges", ranges)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selectable", selectable)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -729,6 +735,7 @@ class Text internal constructor(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -791,6 +798,7 @@ fun DivScope.text(
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
     ranges: List<Text.Range>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectable: Boolean? = null,
     selectedActions: List<Action>? = null,
@@ -851,6 +859,7 @@ fun DivScope.text(
         minHiddenLines = valueOrNull(minHiddenLines),
         paddings = valueOrNull(paddings),
         ranges = valueOrNull(ranges),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectable = valueOrNull(selectable),
         selectedActions = valueOrNull(selectedActions),
@@ -912,6 +921,7 @@ fun DivScope.text(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -974,6 +984,7 @@ fun DivScope.textProps(
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
     ranges: List<Text.Range>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectable: Boolean? = null,
     selectedActions: List<Action>? = null,
@@ -1033,6 +1044,7 @@ fun DivScope.textProps(
     minHiddenLines = valueOrNull(minHiddenLines),
     paddings = valueOrNull(paddings),
     ranges = valueOrNull(ranges),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectable = valueOrNull(selectable),
     selectedActions = valueOrNull(selectedActions),
@@ -1093,6 +1105,7 @@ fun DivScope.textProps(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1155,6 +1168,7 @@ fun TemplateScope.textRefs(
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectable: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1214,6 +1228,7 @@ fun TemplateScope.textRefs(
     minHiddenLines = minHiddenLines,
     paddings = paddings,
     ranges = ranges,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     selectable = selectable,
     selectedActions = selectedActions,
@@ -1274,6 +1289,7 @@ fun TemplateScope.textRefs(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1336,6 +1352,7 @@ fun Text.override(
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
     ranges: List<Text.Range>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectable: Boolean? = null,
     selectedActions: List<Action>? = null,
@@ -1396,6 +1413,7 @@ fun Text.override(
         minHiddenLines = valueOrNull(minHiddenLines) ?: properties.minHiddenLines,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         ranges = valueOrNull(ranges) ?: properties.ranges,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectable = valueOrNull(selectable) ?: properties.selectable,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -1457,6 +1475,7 @@ fun Text.override(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1519,6 +1538,7 @@ fun Text.defer(
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectable: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1579,6 +1599,7 @@ fun Text.defer(
         minHiddenLines = minHiddenLines ?: properties.minHiddenLines,
         paddings = paddings ?: properties.paddings,
         ranges = ranges ?: properties.ranges,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectable = selectable ?: properties.selectable,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1621,6 +1642,7 @@ fun Text.defer(
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param strike Strikethrough.
@@ -1651,6 +1673,7 @@ fun Text.evaluate(
     lineHeight: ExpressionProperty<Int>? = null,
     maxLines: ExpressionProperty<Int>? = null,
     minHiddenLines: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectable: ExpressionProperty<Boolean>? = null,
     strike: ExpressionProperty<LineStyle>? = null,
@@ -1698,6 +1721,7 @@ fun Text.evaluate(
         minHiddenLines = minHiddenLines ?: properties.minHiddenLines,
         paddings = properties.paddings,
         ranges = properties.ranges,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectable = selectable ?: properties.selectable,
         selectedActions = properties.selectedActions,
@@ -1759,6 +1783,7 @@ fun Text.evaluate(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1821,6 +1846,7 @@ fun Component<Text>.override(
     minHiddenLines: Int? = null,
     paddings: EdgeInsets? = null,
     ranges: List<Text.Range>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectable: Boolean? = null,
     selectedActions: List<Action>? = null,
@@ -1882,6 +1908,7 @@ fun Component<Text>.override(
         minHiddenLines = valueOrNull(minHiddenLines),
         paddings = valueOrNull(paddings),
         ranges = valueOrNull(ranges),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectable = valueOrNull(selectable),
         selectedActions = valueOrNull(selectedActions),
@@ -1943,6 +1970,7 @@ fun Component<Text>.override(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -2005,6 +2033,7 @@ fun Component<Text>.defer(
     minHiddenLines: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     ranges: ReferenceProperty<List<Text.Range>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectable: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -2066,6 +2095,7 @@ fun Component<Text>.defer(
         minHiddenLines = minHiddenLines,
         paddings = paddings,
         ranges = ranges,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectable = selectable,
         selectedActions = selectedActions,
@@ -2108,6 +2138,7 @@ fun Component<Text>.defer(
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param strike Strikethrough.
@@ -2138,6 +2169,7 @@ fun Component<Text>.evaluate(
     lineHeight: ExpressionProperty<Int>? = null,
     maxLines: ExpressionProperty<Int>? = null,
     minHiddenLines: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectable: ExpressionProperty<Boolean>? = null,
     strike: ExpressionProperty<LineStyle>? = null,
@@ -2186,6 +2218,7 @@ fun Component<Text>.evaluate(
         minHiddenLines = minHiddenLines,
         paddings = null,
         ranges = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectable = selectable,
         selectedActions = null,

@@ -54,6 +54,7 @@ class Custom internal constructor(
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             tooltips = additive.tooltips ?: properties.tooltips,
@@ -146,6 +147,10 @@ class Custom internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -221,6 +226,7 @@ class Custom internal constructor(
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("tooltips", tooltips)
@@ -258,6 +264,7 @@ class Custom internal constructor(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -293,6 +300,7 @@ fun DivScope.custom(
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -326,6 +334,7 @@ fun DivScope.custom(
         layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
@@ -361,6 +370,7 @@ fun DivScope.custom(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -396,6 +406,7 @@ fun DivScope.customProps(
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -428,6 +439,7 @@ fun DivScope.customProps(
     layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     tooltips = valueOrNull(tooltips),
@@ -462,6 +474,7 @@ fun DivScope.customProps(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -497,6 +510,7 @@ fun TemplateScope.customRefs(
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -529,6 +543,7 @@ fun TemplateScope.customRefs(
     layoutProvider = layoutProvider,
     margins = margins,
     paddings = paddings,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     tooltips = tooltips,
@@ -563,6 +578,7 @@ fun TemplateScope.customRefs(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -598,6 +614,7 @@ fun Custom.override(
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -631,6 +648,7 @@ fun Custom.override(
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
@@ -666,6 +684,7 @@ fun Custom.override(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -701,6 +720,7 @@ fun Custom.defer(
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -734,6 +754,7 @@ fun Custom.defer(
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         tooltips = tooltips ?: properties.tooltips,
@@ -755,6 +776,7 @@ fun Custom.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -765,6 +787,7 @@ fun Custom.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Custom = Custom(
@@ -787,6 +810,7 @@ fun Custom.evaluate(
         layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         paddings = properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
@@ -822,6 +846,7 @@ fun Custom.evaluate(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -857,6 +882,7 @@ fun Component<Custom>.override(
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -891,6 +917,7 @@ fun Component<Custom>.override(
         layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
@@ -926,6 +953,7 @@ fun Component<Custom>.override(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -961,6 +989,7 @@ fun Component<Custom>.defer(
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -995,6 +1024,7 @@ fun Component<Custom>.defer(
         layoutProvider = layoutProvider,
         margins = margins,
         paddings = paddings,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         tooltips = tooltips,
@@ -1016,6 +1046,7 @@ fun Component<Custom>.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1026,6 +1057,7 @@ fun Component<Custom>.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Custom> = Component(
@@ -1049,6 +1081,7 @@ fun Component<Custom>.evaluate(
         layoutProvider = null,
         margins = null,
         paddings = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = null,
         tooltips = null,

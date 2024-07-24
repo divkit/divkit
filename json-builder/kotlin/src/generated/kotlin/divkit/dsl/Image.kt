@@ -66,6 +66,7 @@ class Image internal constructor(
             placeholderColor = additive.placeholderColor ?: properties.placeholderColor,
             preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
             preview = additive.preview ?: properties.preview,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             scale = additive.scale ?: properties.scale,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -215,6 +216,10 @@ class Image internal constructor(
          */
         val preview: Property<String>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -316,6 +321,7 @@ class Image internal constructor(
             result.tryPutProperty("placeholder_color", placeholderColor)
             result.tryPutProperty("preload_required", preloadRequired)
             result.tryPutProperty("preview", preview)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("scale", scale)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -368,6 +374,7 @@ class Image internal constructor(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -418,6 +425,7 @@ fun DivScope.image(
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
     preview: String? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
@@ -466,6 +474,7 @@ fun DivScope.image(
         placeholderColor = valueOrNull(placeholderColor),
         preloadRequired = valueOrNull(preloadRequired),
         preview = valueOrNull(preview),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
@@ -516,6 +525,7 @@ fun DivScope.image(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -566,6 +576,7 @@ fun DivScope.imageProps(
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
     preview: String? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
@@ -613,6 +624,7 @@ fun DivScope.imageProps(
     placeholderColor = valueOrNull(placeholderColor),
     preloadRequired = valueOrNull(preloadRequired),
     preview = valueOrNull(preview),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     scale = valueOrNull(scale),
     selectedActions = valueOrNull(selectedActions),
@@ -662,6 +674,7 @@ fun DivScope.imageProps(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -712,6 +725,7 @@ fun TemplateScope.imageRefs(
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -759,6 +773,7 @@ fun TemplateScope.imageRefs(
     placeholderColor = placeholderColor,
     preloadRequired = preloadRequired,
     preview = preview,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     scale = scale,
     selectedActions = selectedActions,
@@ -808,6 +823,7 @@ fun TemplateScope.imageRefs(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -858,6 +874,7 @@ fun Image.override(
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
     preview: String? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
@@ -906,6 +923,7 @@ fun Image.override(
         placeholderColor = valueOrNull(placeholderColor) ?: properties.placeholderColor,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
         preview = valueOrNull(preview) ?: properties.preview,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         scale = valueOrNull(scale) ?: properties.scale,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -956,6 +974,7 @@ fun Image.override(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1006,6 +1025,7 @@ fun Image.defer(
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1054,6 +1074,7 @@ fun Image.defer(
         placeholderColor = placeholderColor ?: properties.placeholderColor,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1085,6 +1106,7 @@ fun Image.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param tintColor New color of a contour image.
@@ -1105,6 +1127,7 @@ fun Image.evaluate(
     placeholderColor: ExpressionProperty<Color>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scale: ExpressionProperty<ImageScale>? = null,
     tintColor: ExpressionProperty<Color>? = null,
@@ -1142,6 +1165,7 @@ fun Image.evaluate(
         placeholderColor = placeholderColor ?: properties.placeholderColor,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = properties.selectedActions,
@@ -1192,6 +1216,7 @@ fun Image.evaluate(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1242,6 +1267,7 @@ fun Component<Image>.override(
     placeholderColor: Color? = null,
     preloadRequired: Boolean? = null,
     preview: String? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
@@ -1291,6 +1317,7 @@ fun Component<Image>.override(
         placeholderColor = valueOrNull(placeholderColor),
         preloadRequired = valueOrNull(preloadRequired),
         preview = valueOrNull(preview),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
@@ -1341,6 +1368,7 @@ fun Component<Image>.override(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1391,6 +1419,7 @@ fun Component<Image>.defer(
     placeholderColor: ReferenceProperty<Color>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1440,6 +1469,7 @@ fun Component<Image>.defer(
         placeholderColor = placeholderColor,
         preloadRequired = preloadRequired,
         preview = preview,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = selectedActions,
@@ -1471,6 +1501,7 @@ fun Component<Image>.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param tintColor New color of a contour image.
@@ -1491,6 +1522,7 @@ fun Component<Image>.evaluate(
     placeholderColor: ExpressionProperty<Color>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scale: ExpressionProperty<ImageScale>? = null,
     tintColor: ExpressionProperty<Color>? = null,
@@ -1529,6 +1561,7 @@ fun Component<Image>.evaluate(
         placeholderColor = placeholderColor,
         preloadRequired = preloadRequired,
         preview = preview,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = null,

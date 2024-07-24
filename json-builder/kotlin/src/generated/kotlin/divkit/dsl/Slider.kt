@@ -54,6 +54,7 @@ class Slider internal constructor(
             minValue = additive.minValue ?: properties.minValue,
             paddings = additive.paddings ?: properties.paddings,
             ranges = additive.ranges ?: properties.ranges,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             secondaryValueAccessibility = additive.secondaryValueAccessibility ?: properties.secondaryValueAccessibility,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -158,6 +159,10 @@ class Slider internal constructor(
          * Section style.
          */
         val ranges: Property<List<Range>>?,
+        /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
         /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
@@ -278,6 +283,7 @@ class Slider internal constructor(
             result.tryPutProperty("min_value", minValue)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("ranges", ranges)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("secondary_value_accessibility", secondaryValueAccessibility)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -450,6 +456,7 @@ class Slider internal constructor(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -496,6 +503,7 @@ fun DivScope.slider(
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
     ranges: List<Slider.Range>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     secondaryValueAccessibility: Accessibility? = null,
     selectedActions: List<Action>? = null,
@@ -540,6 +548,7 @@ fun DivScope.slider(
         minValue = valueOrNull(minValue),
         paddings = valueOrNull(paddings),
         ranges = valueOrNull(ranges),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         secondaryValueAccessibility = valueOrNull(secondaryValueAccessibility),
         selectedActions = valueOrNull(selectedActions),
@@ -586,6 +595,7 @@ fun DivScope.slider(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -632,6 +642,7 @@ fun DivScope.sliderProps(
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
     ranges: List<Slider.Range>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     secondaryValueAccessibility: Accessibility? = null,
     selectedActions: List<Action>? = null,
@@ -675,6 +686,7 @@ fun DivScope.sliderProps(
     minValue = valueOrNull(minValue),
     paddings = valueOrNull(paddings),
     ranges = valueOrNull(ranges),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     secondaryValueAccessibility = valueOrNull(secondaryValueAccessibility),
     selectedActions = valueOrNull(selectedActions),
@@ -720,6 +732,7 @@ fun DivScope.sliderProps(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -766,6 +779,7 @@ fun TemplateScope.sliderRefs(
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     ranges: ReferenceProperty<List<Slider.Range>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     secondaryValueAccessibility: ReferenceProperty<Accessibility>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -809,6 +823,7 @@ fun TemplateScope.sliderRefs(
     minValue = minValue,
     paddings = paddings,
     ranges = ranges,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     secondaryValueAccessibility = secondaryValueAccessibility,
     selectedActions = selectedActions,
@@ -854,6 +869,7 @@ fun TemplateScope.sliderRefs(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -900,6 +916,7 @@ fun Slider.override(
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
     ranges: List<Slider.Range>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     secondaryValueAccessibility: Accessibility? = null,
     selectedActions: List<Action>? = null,
@@ -944,6 +961,7 @@ fun Slider.override(
         minValue = valueOrNull(minValue) ?: properties.minValue,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         ranges = valueOrNull(ranges) ?: properties.ranges,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         secondaryValueAccessibility = valueOrNull(secondaryValueAccessibility) ?: properties.secondaryValueAccessibility,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -990,6 +1008,7 @@ fun Slider.override(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1036,6 +1055,7 @@ fun Slider.defer(
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     ranges: ReferenceProperty<List<Slider.Range>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     secondaryValueAccessibility: ReferenceProperty<Accessibility>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1080,6 +1100,7 @@ fun Slider.defer(
         minValue = minValue ?: properties.minValue,
         paddings = paddings ?: properties.paddings,
         ranges = ranges ?: properties.ranges,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         secondaryValueAccessibility = secondaryValueAccessibility ?: properties.secondaryValueAccessibility,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1114,6 +1135,7 @@ fun Slider.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1126,6 +1148,7 @@ fun Slider.evaluate(
     columnSpan: ExpressionProperty<Int>? = null,
     maxValue: ExpressionProperty<Int>? = null,
     minValue: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Slider = Slider(
@@ -1148,6 +1171,7 @@ fun Slider.evaluate(
         minValue = minValue ?: properties.minValue,
         paddings = properties.paddings,
         ranges = properties.ranges,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         secondaryValueAccessibility = properties.secondaryValueAccessibility,
         selectedActions = properties.selectedActions,
@@ -1194,6 +1218,7 @@ fun Slider.evaluate(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1240,6 +1265,7 @@ fun Component<Slider>.override(
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
     ranges: List<Slider.Range>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     secondaryValueAccessibility: Accessibility? = null,
     selectedActions: List<Action>? = null,
@@ -1285,6 +1311,7 @@ fun Component<Slider>.override(
         minValue = valueOrNull(minValue),
         paddings = valueOrNull(paddings),
         ranges = valueOrNull(ranges),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         secondaryValueAccessibility = valueOrNull(secondaryValueAccessibility),
         selectedActions = valueOrNull(selectedActions),
@@ -1331,6 +1358,7 @@ fun Component<Slider>.override(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1377,6 +1405,7 @@ fun Component<Slider>.defer(
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     ranges: ReferenceProperty<List<Slider.Range>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     secondaryValueAccessibility: ReferenceProperty<Accessibility>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1422,6 +1451,7 @@ fun Component<Slider>.defer(
         minValue = minValue,
         paddings = paddings,
         ranges = ranges,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         secondaryValueAccessibility = secondaryValueAccessibility,
         selectedActions = selectedActions,
@@ -1456,6 +1486,7 @@ fun Component<Slider>.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1468,6 +1499,7 @@ fun Component<Slider>.evaluate(
     columnSpan: ExpressionProperty<Int>? = null,
     maxValue: ExpressionProperty<Int>? = null,
     minValue: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Slider> = Component(
@@ -1491,6 +1523,7 @@ fun Component<Slider>.evaluate(
         minValue = minValue,
         paddings = null,
         ranges = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         secondaryValueAccessibility = null,
         selectedActions = null,

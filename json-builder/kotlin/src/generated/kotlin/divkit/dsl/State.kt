@@ -53,6 +53,7 @@ class State internal constructor(
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             stateIdVariable = additive.stateIdVariable ?: properties.stateIdVariable,
@@ -145,6 +146,10 @@ class State internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -233,6 +238,7 @@ class State internal constructor(
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("state_id_variable", stateIdVariable)
@@ -334,6 +340,7 @@ class State internal constructor(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -371,6 +378,7 @@ fun DivScope.state(
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     stateIdVariable: String? = null,
@@ -406,6 +414,7 @@ fun DivScope.state(
         layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         stateIdVariable = valueOrNull(stateIdVariable),
@@ -443,6 +452,7 @@ fun DivScope.state(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -480,6 +490,7 @@ fun DivScope.stateProps(
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     stateIdVariable: String? = null,
@@ -514,6 +525,7 @@ fun DivScope.stateProps(
     layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     stateIdVariable = valueOrNull(stateIdVariable),
@@ -550,6 +562,7 @@ fun DivScope.stateProps(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -587,6 +600,7 @@ fun TemplateScope.stateRefs(
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     stateIdVariable: ReferenceProperty<String>? = null,
@@ -621,6 +635,7 @@ fun TemplateScope.stateRefs(
     layoutProvider = layoutProvider,
     margins = margins,
     paddings = paddings,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     stateIdVariable = stateIdVariable,
@@ -657,6 +672,7 @@ fun TemplateScope.stateRefs(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -694,6 +710,7 @@ fun State.override(
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     stateIdVariable: String? = null,
@@ -729,6 +746,7 @@ fun State.override(
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         stateIdVariable = valueOrNull(stateIdVariable) ?: properties.stateIdVariable,
@@ -766,6 +784,7 @@ fun State.override(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -803,6 +822,7 @@ fun State.defer(
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     stateIdVariable: ReferenceProperty<String>? = null,
@@ -838,6 +858,7 @@ fun State.defer(
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         stateIdVariable = stateIdVariable ?: properties.stateIdVariable,
@@ -863,6 +884,7 @@ fun State.defer(
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param visibility Element visibility.
@@ -875,6 +897,7 @@ fun State.evaluate(
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -897,6 +920,7 @@ fun State.evaluate(
         layoutProvider = properties.layoutProvider,
         margins = properties.margins,
         paddings = properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         stateIdVariable = properties.stateIdVariable,
@@ -934,6 +958,7 @@ fun State.evaluate(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -971,6 +996,7 @@ fun Component<State>.override(
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     stateIdVariable: String? = null,
@@ -1007,6 +1033,7 @@ fun Component<State>.override(
         layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         stateIdVariable = valueOrNull(stateIdVariable),
@@ -1044,6 +1071,7 @@ fun Component<State>.override(
  * @param layoutProvider Provides element real size values after a layout cycle.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
@@ -1081,6 +1109,7 @@ fun Component<State>.defer(
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     stateIdVariable: ReferenceProperty<String>? = null,
@@ -1117,6 +1146,7 @@ fun Component<State>.defer(
         layoutProvider = layoutProvider,
         margins = margins,
         paddings = paddings,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         stateIdVariable = stateIdVariable,
@@ -1142,6 +1172,7 @@ fun Component<State>.defer(
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param visibility Element visibility.
@@ -1154,6 +1185,7 @@ fun Component<State>.evaluate(
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1177,6 +1209,7 @@ fun Component<State>.evaluate(
         layoutProvider = null,
         margins = null,
         paddings = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = null,
         stateIdVariable = null,
