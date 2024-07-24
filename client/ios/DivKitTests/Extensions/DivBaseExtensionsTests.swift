@@ -287,6 +287,33 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_WithLocalVariables() {
+    let block = makeBlock(
+      divText(
+        textExpression: "@{local_var}",
+        variables: [variable("local_var", "Hello!")]
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: TextBlock(
+          widthTrait: .resizable,
+          text: "Hello!".withTypo(),
+          verticalAlignment: .leading,
+          accessibilityElement: nil
+        ),
+        accessibilityElement: accessibility(
+          traits: .staticText,
+          label: "Hello!"
+        )
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WhenCreatesBlockAfterItBeingGone_ReportsVisibility() throws {
     try expectVisibilityActionsToRun(
       forVisibleBlockFile: "div-text-visibility-actions-visible",
@@ -413,7 +440,7 @@ final class DivBaseExtensionsTests: XCTestCase {
 
 private func makeBlock(
   fromFile filename: String,
-  context: DivBlockModelingContext = .default
+  context: DivBlockModelingContext
 ) throws -> Block {
   return try DivTextTemplate.makeBlock(fromFile: filename, context: context)
 }
@@ -421,7 +448,7 @@ private func makeBlock(
 extension TemplateValue where ResolvedValue: DivBlockModeling {
   fileprivate static func makeBlock(
     fromFile filename: String,
-    context: DivBlockModelingContext = .default
+    context: DivBlockModelingContext
   ) throws -> Block {
     return try Self.make(
       fromFile: filename,
@@ -430,6 +457,5 @@ extension TemplateValue where ResolvedValue: DivBlockModeling {
     )
   }
 }
-
 
 private let testReuseId = "test_reuse_id"

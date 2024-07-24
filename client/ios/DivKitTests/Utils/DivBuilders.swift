@@ -95,6 +95,7 @@ func divText(
   text: String = "",
   textExpression: String? = nil,
   width: DivSize? = nil,
+  variables: [DivVariable]? = nil,
   visibilityActions: [DivVisibilityAction]? = nil
 ) -> Div {
   let textValue: Expression<String> = if let textExpression {
@@ -111,6 +112,7 @@ func divText(
     margins: margins,
     paddings: paddings,
     text: textValue,
+    variables: variables,
     visibilityActions: visibilityActions,
     width: width
   ))
@@ -457,4 +459,8 @@ func fixedSize(_ value: Int) -> DivSize {
 
 func wrapContentSize() -> DivSize {
   .divWrapContentSize(DivWrapContentSize())
+}
+
+func variable(_ name: String, _ value: String) -> DivVariable {
+  .stringVariable(StringVariable(name: name, value: value))
 }

@@ -57,7 +57,8 @@ final class DivGridExtensionsTests: XCTestCase {
 private func makeBlock(fromFile filename: String) throws -> Block {
   try DivGridTemplate.make(
     fromFile: filename,
-    subdirectory: "div-grid"
+    subdirectory: "div-grid",
+    context: .default
   )
 }
 

@@ -7,7 +7,7 @@ import VGSL
 
 func makeBlock(
   _ div: Div,
-  context: DivBlockModelingContext = .default
+  context: DivBlockModelingContext = DivBlockModelingContext()
 ) -> StateBlock {
   try! divData(div).makeBlock(context: context) as! StateBlock
 }
