@@ -105,28 +105,40 @@ public final class DivPatchTemplate: TemplateValue {
 
   public let changes: Field<[ChangeTemplate]>? // at least 1 elements
   public let mode: Field<Expression<Mode>>? // default value: partial
+  public let onAppliedActions: Field<[DivActionTemplate]>?
+  public let onFailedActions: Field<[DivActionTemplate]>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       changes: dictionary.getOptionalArray("changes", templateToType: templateToType),
-      mode: dictionary.getOptionalExpressionField("mode")
+      mode: dictionary.getOptionalExpressionField("mode"),
+      onAppliedActions: dictionary.getOptionalArray("on_applied_actions", templateToType: templateToType),
+      onFailedActions: dictionary.getOptionalArray("on_failed_actions", templateToType: templateToType)
     )
   }
 
   init(
     changes: Field<[ChangeTemplate]>? = nil,
-    mode: Field<Expression<Mode>>? = nil
+    mode: Field<Expression<Mode>>? = nil,
+    onAppliedActions: Field<[DivActionTemplate]>? = nil,
+    onFailedActions: Field<[DivActionTemplate]>? = nil
   ) {
     self.changes = changes
     self.mode = mode
+    self.onAppliedActions = onAppliedActions
+    self.onFailedActions = onFailedActions
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPatchTemplate?) -> DeserializationResult<DivPatch> {
     let changesValue = parent?.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) ?? .noValue
     let modeValue = parent?.mode?.resolveOptionalValue(context: context) ?? .noValue
+    let onAppliedActionsValue = parent?.onAppliedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let onFailedActionsValue = parent?.onFailedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       changesValue.errorsOrWarnings?.map { .nestedObjectError(field: "changes", error: $0) },
-      modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) }
+      modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) },
+      onAppliedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_applied_actions", error: $0) },
+      onFailedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_failed_actions", error: $0) }
     )
     if case .noValue = changesValue {
       errors.append(.requiredFieldIsMissing(field: "changes"))
@@ -138,7 +150,9 @@ public final class DivPatchTemplate: TemplateValue {
     }
     let result = DivPatch(
       changes: changesNonNil,
-      mode: modeValue.value
+      mode: modeValue.value,
+      onAppliedActions: onAppliedActionsValue.value,
+      onFailedActions: onFailedActionsValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -149,25 +163,39 @@ public final class DivPatchTemplate: TemplateValue {
     }
     var changesValue: DeserializationResult<[DivPatch.Change]> = .noValue
     var modeValue: DeserializationResult<Expression<DivPatch.Mode>> = parent?.mode?.value() ?? .noValue
+    var onAppliedActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var onFailedActionsValue: DeserializationResult<[DivAction]> = .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "changes":
         changesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self).merged(with: changesValue)
       case "mode":
         modeValue = deserialize(__dictValue).merged(with: modeValue)
+      case "on_applied_actions":
+        onAppliedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onAppliedActionsValue)
+      case "on_failed_actions":
+        onFailedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFailedActionsValue)
       case parent?.changes?.link:
         changesValue = changesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self) })
       case parent?.mode?.link:
         modeValue = modeValue.merged(with: { deserialize(__dictValue) })
+      case parent?.onAppliedActions?.link:
+        onAppliedActionsValue = onAppliedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+      case parent?.onFailedActions?.link:
+        onFailedActionsValue = onFailedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
       changesValue = changesValue.merged(with: { parent.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) })
+      onAppliedActionsValue = onAppliedActionsValue.merged(with: { parent.onAppliedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      onFailedActionsValue = onFailedActionsValue.merged(with: { parent.onFailedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       changesValue.errorsOrWarnings?.map { .nestedObjectError(field: "changes", error: $0) },
-      modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) }
+      modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) },
+      onAppliedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_applied_actions", error: $0) },
+      onFailedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_failed_actions", error: $0) }
     )
     if case .noValue = changesValue {
       errors.append(.requiredFieldIsMissing(field: "changes"))
@@ -179,7 +207,9 @@ public final class DivPatchTemplate: TemplateValue {
     }
     let result = DivPatch(
       changes: changesNonNil,
-      mode: modeValue.value
+      mode: modeValue.value,
+      onAppliedActions: onAppliedActionsValue.value,
+      onFailedActions: onFailedActionsValue.value
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -193,7 +223,9 @@ public final class DivPatchTemplate: TemplateValue {
 
     return DivPatchTemplate(
       changes: try merged.changes?.resolveParent(templates: templates),
-      mode: merged.mode
+      mode: merged.mode,
+      onAppliedActions: merged.onAppliedActions?.tryResolveParent(templates: templates),
+      onFailedActions: merged.onFailedActions?.tryResolveParent(templates: templates)
     )
   }
 }

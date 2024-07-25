@@ -26,6 +26,8 @@ public final class DivPatch {
 
   public let changes: [Change] // at least 1 elements
   public let mode: Expression<Mode> // default value: partial
+  public let onAppliedActions: [DivAction]?
+  public let onFailedActions: [DivAction]?
 
   public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
     resolver.resolveEnum(mode) ?? Mode.partial
@@ -36,10 +38,14 @@ public final class DivPatch {
 
   init(
     changes: [Change],
-    mode: Expression<Mode>? = nil
+    mode: Expression<Mode>? = nil,
+    onAppliedActions: [DivAction]? = nil,
+    onFailedActions: [DivAction]? = nil
   ) {
     self.changes = changes
     self.mode = mode ?? .value(.partial)
+    self.onAppliedActions = onAppliedActions
+    self.onFailedActions = onFailedActions
   }
 }
 
@@ -48,7 +54,13 @@ extension DivPatch: Equatable {
   public static func ==(lhs: DivPatch, rhs: DivPatch) -> Bool {
     guard
       lhs.changes == rhs.changes,
-      lhs.mode == rhs.mode
+      lhs.mode == rhs.mode,
+      lhs.onAppliedActions == rhs.onAppliedActions
+    else {
+      return false
+    }
+    guard
+      lhs.onFailedActions == rhs.onFailedActions
     else {
       return false
     }
@@ -62,6 +74,8 @@ extension DivPatch: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["changes"] = changes.map { $0.toDictionary() }
     result["mode"] = mode.toValidSerializationValue()
+    result["on_applied_actions"] = onAppliedActions?.map { $0.toDictionary() }
+    result["on_failed_actions"] = onFailedActions?.map { $0.toDictionary() }
     return result
   }
 }
