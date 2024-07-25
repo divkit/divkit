@@ -1,7 +1,8 @@
 {
   "description": "Inner data_element_name should override outer one.",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "card": {
     "log_id": "prototypes",
