@@ -2740,6 +2740,23 @@
         "On swipe on the bottom pager pages change alpha, size and stack in the middle of screen"
       ],
       "file": "pager/pagers-with-page-transformation.json"
+    },
+    {
+      "title": "Pager accessibility scroll",
+      "tags": [
+        "DivPager",
+        "Accessibility"
+      ],
+      "steps": [
+        "Enter accessibility mode",
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "Page change is logged"
+      ],
+      "file": "pager/pager.json"
     }
   ]
 }
