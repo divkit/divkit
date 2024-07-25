@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		435101E52C517C1F000EF4E6 /* Sample.json in Resources */ = {isa = PBXBuildFile; fileRef = 435101E42C517C1F000EF4E6 /* Sample.json */; };
+		435101E72C517E9B000EF4E6 /* SampleDivCustomBlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435101E62C517E9B000EF4E6 /* SampleDivCustomBlockFactory.swift */; };
+		4374FB452C51CD8F00C66A5C /* SampleDivActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4374FB442C51CD8F00C66A5C /* SampleDivActionHandler.swift */; };
 		43E33AE32A83DD7F00CEFAD5 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 43E33AE22A83DD7F00CEFAD5 /* DivKit */; };
 		43E33AE52A83DD7F00CEFAD5 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 43E33AE42A83DD7F00CEFAD5 /* DivKitExtensions */; };
 		8C705EF8258A3FDE00468EB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C705EF7258A3FDE00468EB6 /* AppDelegate.swift */; };
@@ -17,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		435101E42C517C1F000EF4E6 /* Sample.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Sample.json; sourceTree = "<group>"; };
+		435101E62C517E9B000EF4E6 /* SampleDivCustomBlockFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDivCustomBlockFactory.swift; sourceTree = "<group>"; };
+		4374FB442C51CD8F00C66A5C /* SampleDivActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDivActionHandler.swift; sourceTree = "<group>"; };
 		8C705EF4258A3FDE00468EB6 /* DivKitSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DivKitSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C705EF7258A3FDE00468EB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8C705EFB258A3FDE00468EB6 /* DivHostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivHostViewController.swift; sourceTree = "<group>"; };
@@ -60,9 +66,12 @@
 			children = (
 				8C705EF7258A3FDE00468EB6 /* AppDelegate.swift */,
 				8C705EFB258A3FDE00468EB6 /* DivHostViewController.swift */,
+				435101E62C517E9B000EF4E6 /* SampleDivCustomBlockFactory.swift */,
+				4374FB442C51CD8F00C66A5C /* SampleDivActionHandler.swift */,
 				8C705F00258A3FE000468EB6 /* Assets.xcassets */,
 				8C705F02258A3FE000468EB6 /* LaunchScreen.storyboard */,
 				8C705EFD258A3FDE00468EB6 /* Main.storyboard */,
+				435101E42C517C1F000EF4E6 /* Sample.json */,
 				8C705F05258A3FE000468EB6 /* Info.plist */,
 			);
 			path = DivKitSample;
@@ -134,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C705F01258A3FE000468EB6 /* Assets.xcassets in Resources */,
+				435101E52C517C1F000EF4E6 /* Sample.json in Resources */,
 				8C705F04258A3FE000468EB6 /* LaunchScreen.storyboard in Resources */,
 				8C705EFF258A3FDE00468EB6 /* Main.storyboard in Resources */,
 			);
@@ -146,6 +156,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4374FB452C51CD8F00C66A5C /* SampleDivActionHandler.swift in Sources */,
+				435101E72C517E9B000EF4E6 /* SampleDivCustomBlockFactory.swift in Sources */,
 				8C705EFC258A3FDE00468EB6 /* DivHostViewController.swift in Sources */,
 				8C705EF8258A3FDE00468EB6 /* AppDelegate.swift in Sources */,
 			);
