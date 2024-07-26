@@ -2,11 +2,11 @@
   "type": "object",
   "properties": {
     "width_variable_name": {
-      "type": "string",
+      "$ref": "div-variable-name.json",
       "$description": "translations.json#/div_layout_provider_width_variable_name"
     },
     "height_variable_name": {
-      "type": "string",
+      "$ref": "div-variable-name.json",
       "$description": "translations.json#/div_layout_provider_height_variable_name"
     }
   }
