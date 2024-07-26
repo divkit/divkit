@@ -233,7 +233,8 @@
       "type": "string",
       "$description": "translations.json#/div_reuse_id",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "unsupported_platforms": {
         "web": "No need for reuse identifier"
