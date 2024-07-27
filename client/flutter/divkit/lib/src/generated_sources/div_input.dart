@@ -57,7 +57,6 @@ class DivInput with EquatableMixin implements DivBase {
     this.keyboardType =
         const ValueExpression(DivInputKeyboardType.multiLineText),
     this.layoutProvider,
-    this.inputFormatters,
     this.letterSpacing = const ValueExpression(0),
     this.lineHeight,
     this.margins = const DivEdgeInsets(),
@@ -150,8 +149,6 @@ class DivInput with EquatableMixin implements DivBase {
 
   @override
   final DivLayoutProvider? layoutProvider;
-  // default value: DivInputFormatters.none
-  final Expression<DivInputFormatters>? inputFormatters;
   // default value: 0
   final Expression<double> letterSpacing;
   // constraint: number >= 0
@@ -250,7 +247,6 @@ class DivInput with EquatableMixin implements DivBase {
         isEnabled,
         keyboardType,
         layoutProvider,
-        inputFormatters,
         letterSpacing,
         lineHeight,
         margins,
@@ -305,7 +301,6 @@ class DivInput with EquatableMixin implements DivBase {
     Expression<bool>? isEnabled,
     Expression<DivInputKeyboardType>? keyboardType,
     DivLayoutProvider? Function()? layoutProvider,
-    Expression<DivInputFormatters>? inputFormatters,
     Expression<double>? letterSpacing,
     Expression<int>? Function()? lineHeight,
     DivEdgeInsets? margins,
@@ -371,7 +366,6 @@ class DivInput with EquatableMixin implements DivBase {
         layoutProvider: layoutProvider != null
             ? layoutProvider.call()
             : this.layoutProvider,
-        inputFormatters: inputFormatters ?? this.inputFormatters,
         letterSpacing: letterSpacing ?? this.letterSpacing,
         lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
         margins: margins ?? this.margins,
@@ -564,99 +558,6 @@ class DivInput with EquatableMixin implements DivBase {
         )!,
         selectedActions: safeParseObj(
           safeListMap(
-                  DivExtension.fromJson(v),
-                )!),
-      ),
-      focus: safeParseObj(
-        DivFocus.fromJson(json['focus']),
-      ),
-      fontFamily: safeParseStrExpr(
-        json['font_family']?.toString(),
-      ),
-      fontSize: safeParseIntExpr(
-        json['font_size'],
-        fallback: 12,
-      )!,
-      fontSizeUnit: safeParseStrEnumExpr(
-        json['font_size_unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.sp,
-      )!,
-      fontWeight: safeParseStrEnumExpr(
-        json['font_weight'],
-        parse: DivFontWeight.fromJson,
-        fallback: DivFontWeight.regular,
-      )!,
-      fontWeightValue: safeParseIntExpr(
-        json['font_weight_value'],
-      ),
-      height: safeParseObj(
-        DivSize.fromJson(json['height']),
-        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
-      )!,
-      highlightColor: safeParseColorExpr(
-        json['highlight_color'],
-      ),
-      hintColor: safeParseColorExpr(
-        json['hint_color'],
-        fallback: const Color(0x73000000),
-      )!,
-      hintText: safeParseStrExpr(
-        json['hint_text']?.toString(),
-      ),
-      id: safeParseStr(
-        json['id']?.toString(),
-      ),
-      isEnabled: safeParseBoolExpr(
-        json['is_enabled'],
-        fallback: true,
-      )!,
-      keyboardType: safeParseStrEnumExpr(
-        json['keyboard_type'],
-        parse: DivInputKeyboardType.fromJson,
-        fallback: DivInputKeyboardType.multiLineText,
-      )!,
-      inputFormatters: safeParseStrEnumExpr(
-        json['keyboard_type'],
-        parse: DivInputFormatters.fromJson,
-        fallback: DivInputFormatters.none,
-      )!,
-      letterSpacing: safeParseDoubleExpr(
-        json['letter_spacing'],
-        fallback: 0,
-      )!,
-      lineHeight: safeParseIntExpr(
-        json['line_height'],
-      ),
-      margins: safeParseObj(
-        DivEdgeInsets.fromJson(json['margins']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      mask: safeParseObj(
-        DivInputMask.fromJson(json['mask']),
-      ),
-      maxLength: safeParseIntExpr(
-        json['max_length'],
-      ),
-      maxVisibleLines: safeParseIntExpr(
-        json['max_visible_lines'],
-      ),
-      nativeInterface: safeParseObj(
-        DivInputNativeInterface.fromJson(json['native_interface']),
-      ),
-      paddings: safeParseObj(
-        DivEdgeInsets.fromJson(json['paddings']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      rowSpan: safeParseIntExpr(
-        json['row_span'],
-      ),
-      selectAllOnFocus: safeParseBoolExpr(
-        json['select_all_on_focus'],
-        fallback: false,
-      )!,
-      selectedActions: safeParseObj(
-        safeListMap(
             json['selected_actions'],
             (v) => safeParseObj(
               DivAction.fromJson(v),
