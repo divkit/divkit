@@ -1,7 +1,6 @@
 // Generated code. Do not modify.
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:divkit/src/generated_sources/div_accessibility.dart';
@@ -861,53 +860,26 @@ enum DivInputKeyboardType {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'single_line_text':
-        return DivInputKeyboardType.singleLineText;
-      case 'multi_line_text':
-        return DivInputKeyboardType.multiLineText;
-      case 'phone':
-        return DivInputKeyboardType.phone;
-      case 'number':
-        return DivInputKeyboardType.number;
-      case 'email':
-        return DivInputKeyboardType.email;
-      case 'uri':
-        return DivInputKeyboardType.uri;
-      case 'password':
-        return DivInputKeyboardType.password;
-    }
-    return null;
-  }
-}
-
-enum DivInputFormatters {
-  digitsOnly('number'),
-  none('none'); // Default for normal string input
-
-  final String value;
-
-  const DivInputFormatters(this.value);
-
-  static DivInputFormatters? fromJson(String? json) {
-    if (json == null) {
+    try {
+      switch (json) {
+        case 'single_line_text':
+          return DivInputKeyboardType.singleLineText;
+        case 'multi_line_text':
+          return DivInputKeyboardType.multiLineText;
+        case 'phone':
+          return DivInputKeyboardType.phone;
+        case 'number':
+          return DivInputKeyboardType.number;
+        case 'email':
+          return DivInputKeyboardType.email;
+        case 'uri':
+          return DivInputKeyboardType.uri;
+        case 'password':
+          return DivInputKeyboardType.password;
+      }
       return null;
-    }
-    switch (json) {
-      case 'number':
-        return DivInputFormatters.digitsOnly;
-      case 'none':
-      default:
-        return DivInputFormatters.none;
-    }
-  }
-
-  List<TextInputFormatter>? toTextInputFormatterList() {
-    switch (this) {
-      case DivInputFormatters.digitsOnly:
-        return [FilteringTextInputFormatter.digitsOnly];
-      default:
-        [];
+    } catch (e) {
+      return null;
     }
   }
 }

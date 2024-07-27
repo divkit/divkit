@@ -91,9 +91,8 @@ class DivInputModel with EquatableMixin {
         context: context,
       );
 
-      final inputFormatters = data.inputFormatters != null
-          ? (await data.inputFormatters!.resolveValue(context: context))
-              .toTextInputFormatterList()
+      final inputFormatters = keyboardType == DivInputKeyboardType.number
+          ? [FilteringTextInputFormatter.digitsOnly]
           : <TextInputFormatter>[];
 
       if (variables.context.current[data.textVariable] != controller.text) {
