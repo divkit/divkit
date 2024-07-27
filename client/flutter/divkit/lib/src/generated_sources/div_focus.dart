@@ -55,36 +55,43 @@ class DivFocus with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivFocus(
-      background: safeParseObj(
-        safeListMap(
+    try {
+      return DivFocus(
+        background: safeParseObj(
+          safeListMap(
             json['background'],
             (v) => safeParseObj(
-                  DivBackground.fromJson(v),
-                )!),
-      ),
-      border: safeParseObj(
-        DivBorder.fromJson(json['border']),
-        fallback: const DivBorder(),
-      )!,
-      nextFocusIds: safeParseObj(
-        DivFocusNextFocusIds.fromJson(json['next_focus_ids']),
-      ),
-      onBlur: safeParseObj(
-        safeListMap(
+              DivBackground.fromJson(v),
+            )!,
+          ),
+        ),
+        border: safeParseObj(
+          DivBorder.fromJson(json['border']),
+          fallback: const DivBorder(),
+        )!,
+        nextFocusIds: safeParseObj(
+          DivFocusNextFocusIds.fromJson(json['next_focus_ids']),
+        ),
+        onBlur: safeParseObj(
+          safeListMap(
             json['on_blur'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      onFocus: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        onFocus: safeParseObj(
+          safeListMap(
             json['on_focus'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-    );
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -135,22 +142,26 @@ class DivFocusNextFocusIds with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivFocusNextFocusIds(
-      down: safeParseStrExpr(
-        json['down']?.toString(),
-      ),
-      forward: safeParseStrExpr(
-        json['forward']?.toString(),
-      ),
-      left: safeParseStrExpr(
-        json['left']?.toString(),
-      ),
-      right: safeParseStrExpr(
-        json['right']?.toString(),
-      ),
-      up: safeParseStrExpr(
-        json['up']?.toString(),
-      ),
-    );
+    try {
+      return DivFocusNextFocusIds(
+        down: safeParseStrExpr(
+          json['down']?.toString(),
+        ),
+        forward: safeParseStrExpr(
+          json['forward']?.toString(),
+        ),
+        left: safeParseStrExpr(
+          json['left']?.toString(),
+        ),
+        right: safeParseStrExpr(
+          json['right']?.toString(),
+        ),
+        up: safeParseStrExpr(
+          json['up']?.toString(),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

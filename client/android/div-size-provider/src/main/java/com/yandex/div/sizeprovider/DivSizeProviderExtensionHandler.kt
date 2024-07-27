@@ -14,6 +14,7 @@ internal const val SIZE_PROVIDER_EXTENSION_ID = "size_provider"
 internal const val SIZE_PROVIDER_PARAM_HEIGHT = "height_variable_name"
 internal const val SIZE_PROVIDER_PARAM_WIDTH = "width_variable_name"
 
+@Deprecated("Use div-base.layout-provider.")
 class DivSizeProviderExtensionHandler(
     private val errorLogger: DivSizeProviderErrorLogger = DivSizeProviderErrorLogger.STUB
 ): DivExtensionHandler {

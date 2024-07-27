@@ -1,9 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
-import 'package:divkit/src/generated_sources/div_text.dart';
 import 'package:divkit/src/utils/converters.dart';
-import 'package:divkit/src/generated_sources/div_line_style.dart';
 import 'package:flutter/material.dart';
 import 'package:divkit/src/generated_sources/generated_sources.dart';
 import 'package:divkit/src/core/action/action_converter.dart';

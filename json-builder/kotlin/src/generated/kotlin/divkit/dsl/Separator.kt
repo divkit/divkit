@@ -57,6 +57,7 @@ class Separator internal constructor(
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             tooltips = additive.tooltips ?: properties.tooltips,
@@ -162,6 +163,10 @@ class Separator internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -240,6 +245,7 @@ class Separator internal constructor(
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("tooltips", tooltips)
@@ -331,6 +337,7 @@ class Separator internal constructor(
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -369,6 +376,7 @@ fun DivScope.separator(
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -405,6 +413,7 @@ fun DivScope.separator(
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
@@ -443,6 +452,7 @@ fun DivScope.separator(
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -481,6 +491,7 @@ fun DivScope.separatorProps(
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -516,6 +527,7 @@ fun DivScope.separatorProps(
     longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     tooltips = valueOrNull(tooltips),
@@ -553,6 +565,7 @@ fun DivScope.separatorProps(
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -591,6 +604,7 @@ fun TemplateScope.separatorRefs(
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -626,6 +640,7 @@ fun TemplateScope.separatorRefs(
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     tooltips = tooltips,
@@ -663,6 +678,7 @@ fun TemplateScope.separatorRefs(
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -701,6 +717,7 @@ fun Separator.override(
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -737,6 +754,7 @@ fun Separator.override(
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
@@ -775,6 +793,7 @@ fun Separator.override(
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -813,6 +832,7 @@ fun Separator.defer(
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -849,6 +869,7 @@ fun Separator.defer(
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         tooltips = tooltips ?: properties.tooltips,
@@ -870,6 +891,7 @@ fun Separator.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -880,6 +902,7 @@ fun Separator.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Separator = Separator(
@@ -905,6 +928,7 @@ fun Separator.evaluate(
         longtapActions = properties.longtapActions,
         margins = properties.margins,
         paddings = properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
@@ -943,6 +967,7 @@ fun Separator.evaluate(
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -981,6 +1006,7 @@ fun Component<Separator>.override(
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -1018,6 +1044,7 @@ fun Component<Separator>.override(
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
@@ -1056,6 +1083,7 @@ fun Component<Separator>.override(
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1094,6 +1122,7 @@ fun Component<Separator>.defer(
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1131,6 +1160,7 @@ fun Component<Separator>.defer(
         longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         tooltips = tooltips,
@@ -1152,6 +1182,7 @@ fun Component<Separator>.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1162,6 +1193,7 @@ fun Component<Separator>.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Separator> = Component(
@@ -1188,6 +1220,7 @@ fun Component<Separator>.evaluate(
         longtapActions = null,
         margins = null,
         paddings = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = null,
         tooltips = null,

@@ -60,6 +60,7 @@ class Gallery internal constructor(
             orientation = additive.orientation ?: properties.orientation,
             paddings = additive.paddings ?: properties.paddings,
             restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             scrollMode = additive.scrollMode ?: properties.scrollMode,
             scrollbar = additive.scrollbar ?: properties.scrollbar,
@@ -183,6 +184,10 @@ class Gallery internal constructor(
          */
         val restrictParentScroll: Property<Boolean>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -274,6 +279,7 @@ class Gallery internal constructor(
             result.tryPutProperty("orientation", orientation)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("scroll_mode", scrollMode)
             result.tryPutProperty("scrollbar", scrollbar)
@@ -351,6 +357,7 @@ class Gallery internal constructor(
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -394,6 +401,7 @@ fun DivScope.gallery(
     orientation: Gallery.Orientation? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
@@ -435,6 +443,7 @@ fun DivScope.gallery(
         orientation = valueOrNull(orientation),
         paddings = valueOrNull(paddings),
         restrictParentScroll = valueOrNull(restrictParentScroll),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         scrollMode = valueOrNull(scrollMode),
         scrollbar = valueOrNull(scrollbar),
@@ -478,6 +487,7 @@ fun DivScope.gallery(
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -521,6 +531,7 @@ fun DivScope.galleryProps(
     orientation: Gallery.Orientation? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
@@ -561,6 +572,7 @@ fun DivScope.galleryProps(
     orientation = valueOrNull(orientation),
     paddings = valueOrNull(paddings),
     restrictParentScroll = valueOrNull(restrictParentScroll),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     scrollMode = valueOrNull(scrollMode),
     scrollbar = valueOrNull(scrollbar),
@@ -603,6 +615,7 @@ fun DivScope.galleryProps(
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -646,6 +659,7 @@ fun TemplateScope.galleryRefs(
     orientation: ReferenceProperty<Gallery.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
@@ -686,6 +700,7 @@ fun TemplateScope.galleryRefs(
     orientation = orientation,
     paddings = paddings,
     restrictParentScroll = restrictParentScroll,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     scrollMode = scrollMode,
     scrollbar = scrollbar,
@@ -728,6 +743,7 @@ fun TemplateScope.galleryRefs(
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -771,6 +787,7 @@ fun Gallery.override(
     orientation: Gallery.Orientation? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
@@ -812,6 +829,7 @@ fun Gallery.override(
         orientation = valueOrNull(orientation) ?: properties.orientation,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         scrollMode = valueOrNull(scrollMode) ?: properties.scrollMode,
         scrollbar = valueOrNull(scrollbar) ?: properties.scrollbar,
@@ -855,6 +873,7 @@ fun Gallery.override(
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -898,6 +917,7 @@ fun Gallery.defer(
     orientation: ReferenceProperty<Gallery.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
@@ -939,6 +959,7 @@ fun Gallery.defer(
         orientation = orientation ?: properties.orientation,
         paddings = paddings ?: properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scrollMode = scrollMode ?: properties.scrollMode,
         scrollbar = scrollbar ?: properties.scrollbar,
@@ -969,6 +990,7 @@ fun Gallery.defer(
  * @param itemSpacing Spacing between elements.
  * @param orientation Gallery orientation.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -988,6 +1010,7 @@ fun Gallery.evaluate(
     itemSpacing: ExpressionProperty<Int>? = null,
     orientation: ExpressionProperty<Gallery.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scrollMode: ExpressionProperty<Gallery.ScrollMode>? = null,
     scrollbar: ExpressionProperty<Gallery.Scrollbar>? = null,
@@ -1018,6 +1041,7 @@ fun Gallery.evaluate(
         orientation = orientation ?: properties.orientation,
         paddings = properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scrollMode = scrollMode ?: properties.scrollMode,
         scrollbar = scrollbar ?: properties.scrollbar,
@@ -1061,6 +1085,7 @@ fun Gallery.evaluate(
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -1104,6 +1129,7 @@ fun Component<Gallery>.override(
     orientation: Gallery.Orientation? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
@@ -1146,6 +1172,7 @@ fun Component<Gallery>.override(
         orientation = valueOrNull(orientation),
         paddings = valueOrNull(paddings),
         restrictParentScroll = valueOrNull(restrictParentScroll),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         scrollMode = valueOrNull(scrollMode),
         scrollbar = valueOrNull(scrollbar),
@@ -1189,6 +1216,7 @@ fun Component<Gallery>.override(
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -1232,6 +1260,7 @@ fun Component<Gallery>.defer(
     orientation: ReferenceProperty<Gallery.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
@@ -1274,6 +1303,7 @@ fun Component<Gallery>.defer(
         orientation = orientation,
         paddings = paddings,
         restrictParentScroll = restrictParentScroll,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         scrollMode = scrollMode,
         scrollbar = scrollbar,
@@ -1304,6 +1334,7 @@ fun Component<Gallery>.defer(
  * @param itemSpacing Spacing between elements.
  * @param orientation Gallery orientation.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -1323,6 +1354,7 @@ fun Component<Gallery>.evaluate(
     itemSpacing: ExpressionProperty<Int>? = null,
     orientation: ExpressionProperty<Gallery.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scrollMode: ExpressionProperty<Gallery.ScrollMode>? = null,
     scrollbar: ExpressionProperty<Gallery.Scrollbar>? = null,
@@ -1354,6 +1386,7 @@ fun Component<Gallery>.evaluate(
         orientation = orientation,
         paddings = null,
         restrictParentScroll = restrictParentScroll,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         scrollMode = scrollMode,
         scrollbar = scrollbar,

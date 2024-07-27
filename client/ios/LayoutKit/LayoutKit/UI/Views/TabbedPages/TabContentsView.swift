@@ -65,8 +65,7 @@ final class TabContentsView: BlockView {
         contentSize.height = 0
         return GenericCollectionLayout(
           frames: $0.pageFrames,
-          contentSize: contentSize,
-          collectionDirection: .horizontal
+          contentSize: contentSize
         )
       }
     }
@@ -78,6 +77,8 @@ final class TabContentsView: BlockView {
       dataSource.observer = observer
     }
   }
+
+  private let cellRegistrator = CollectionCellRegistrator()
 
   func configure(
     model: TabContentsViewModel,
@@ -100,7 +101,9 @@ final class TabContentsView: BlockView {
     }
 
     if oldModel == nil || oldModel.pages !== model.pages || oldObserver !== observer {
-      dataSource.models = [model.pages.map { $0.block as! CollectionCellModel }]
+      let cellModels = model.pages.map { $0.block }
+      cellRegistrator.register(blocks: cellModels, in: collectionView)
+      dataSource.models = [cellModels]
 
       if let backgroundView,
          let background = model.background,
@@ -152,10 +155,6 @@ final class TabContentsView: BlockView {
     collectionView.dataSource = dataSource
     collectionView.backgroundColor = .clear
     collectionView.scrollsToTop = false
-    collectionView.register(
-      GenericCollectionViewCell.self,
-      forCellWithReuseIdentifier: blockReuseID
-    )
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     collectionView.isPagingEnabled = true
@@ -319,7 +318,8 @@ extension TabContentsView: UICollectionViewDelegate {
         to: selectedPageIndex
       ),
       firstVisibleItemIndex: currentPageIndex,
-      lastVisibleItemIndex: currentPageIndex
+      lastVisibleItemIndex: currentPageIndex,
+      itemsCount: model.pages.count
     ).sendFrom(self)
   }
 }

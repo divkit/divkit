@@ -250,6 +250,7 @@ public final class DivText: DivBase {
   public let minHiddenLines: Expression<Int>? // constraint: number >= 0
   public let paddings: DivEdgeInsets?
   public let ranges: [Range]?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectable: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]?
@@ -335,6 +336,10 @@ public final class DivText: DivBase {
 
   public func resolveMinHiddenLines(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(minHiddenLines)
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -436,6 +441,7 @@ public final class DivText: DivBase {
     minHiddenLines: Expression<Int>? = nil,
     paddings: DivEdgeInsets? = nil,
     ranges: [Range]? = nil,
+    reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     selectable: Expression<Bool>? = nil,
     selectedActions: [DivAction]? = nil,
@@ -494,6 +500,7 @@ public final class DivText: DivBase {
     self.minHiddenLines = minHiddenLines
     self.paddings = paddings
     self.ranges = ranges
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectable = selectable ?? .value(false)
     self.selectedActions = selectedActions
@@ -602,55 +609,60 @@ extension DivText: Equatable {
     guard
       lhs.paddings == rhs.paddings,
       lhs.ranges == rhs.ranges,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectable == rhs.selectable,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.strike == rhs.strike
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.strike == rhs.strike,
       lhs.text == rhs.text,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
     else {
       return false
     }
     guard
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
       lhs.textColor == rhs.textColor,
-      lhs.textGradient == rhs.textGradient,
-      lhs.textShadow == rhs.textShadow
+      lhs.textGradient == rhs.textGradient
     else {
       return false
     }
     guard
+      lhs.textShadow == rhs.textShadow,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.underline == rhs.underline,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -699,6 +711,7 @@ extension DivText: Serializable {
     result["min_hidden_lines"] = minHiddenLines?.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
     result["ranges"] = ranges?.map { $0.toDictionary() }
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selectable"] = selectable.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }

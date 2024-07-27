@@ -30,14 +30,19 @@ class DivAppearanceSetTransition with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivAppearanceSetTransition(
-      items: safeParseObj(
-        safeListMap(
+    try {
+      return DivAppearanceSetTransition(
+        items: safeParseObj(
+          safeListMap(
             json['items'],
             (v) => safeParseObj(
-                  DivAppearanceTransition.fromJson(v),
-                )!),
-      )!,
-    );
+              DivAppearanceTransition.fromJson(v),
+            )!,
+          ),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

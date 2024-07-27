@@ -148,11 +148,15 @@ class DartGenerator(Generator):
             result += '    if (json == null) {'
             result += '      return null;'
             result += '    }'
-            result += f'    return {full_name}('
+            result += '    try {'
+            result += f'      return {full_name}('
             for prop in entity.instance_properties:
                 decode_strategy = prop.get_parse_strategy()
-                result += f"      {utils.lower_camel_case(prop.name)}: {decode_strategy},"
-            result += '    );'
+                result += f"        {utils.lower_camel_case(prop.name)}: {decode_strategy},"
+            result += '      );'
+            result += '    } catch (e, st) {'
+            result += '      return null;'
+            result += '    }'
             result += '  }'
         else:
             result += EMPTY
@@ -248,14 +252,17 @@ class DartGenerator(Generator):
         result += '    if (json == null) {'
         result += '      return null;'
         result += '    }'
-        result += '    switch (json[\'type\']) {'
+        result += '    try {'
+        result += '      switch (json[\'type\']) {'
         for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
-            result += f'      case {utils.capitalize_camel_case(n)}.type :\n' \
-                      f'        return {full_name}.{utils.lower_camel_case(n)}({utils.capitalize_camel_case(n)}.fromJson(json)!);'
+            result += f'        case {utils.capitalize_camel_case(n)}.type :\n' \
+                      f'          return {full_name}.{utils.lower_camel_case(n)}({utils.capitalize_camel_case(n)}.fromJson(json)!);'
+        result += '      }'
+        result += '      return null;'
+        result += '    } catch (e, st) {'
+        result += '      return null;'
         result += '    }'
-        result += '    return null;'
         result += '  }'
-
         result += '}'
 
         return result
@@ -308,14 +315,17 @@ class DartGenerator(Generator):
         result += '    if (json == null) {'
         result += '      return null;'
         result += '    }'
-        result += '    switch (json) {'
+        result += '    try {'
+        result += '      switch (json) {'
         for i in range(cases_len):
-            result += f'      case \'{string_enumeration.cases[i][0]}\':\n        return ' \
+            result += f'        case \'{string_enumeration.cases[i][0]}\':\n        return ' \
                       f'{full_name}.{allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))};'
+        result += '      }'
+        result += '      return null;'
+        result += '    } catch (e, st) {'
+        result += '      return null;'
         result += '    }'
-        result += '    return null;'
         result += '  }'
-
         result += '}'
 
         return result

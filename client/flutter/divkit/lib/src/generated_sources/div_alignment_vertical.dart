@@ -51,16 +51,20 @@ enum DivAlignmentVertical {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'top':
-        return DivAlignmentVertical.top;
-      case 'center':
-        return DivAlignmentVertical.center;
-      case 'bottom':
-        return DivAlignmentVertical.bottom;
-      case 'baseline':
-        return DivAlignmentVertical.baseline;
+    try {
+      switch (json) {
+        case 'top':
+          return DivAlignmentVertical.top;
+        case 'center':
+          return DivAlignmentVertical.center;
+        case 'bottom':
+          return DivAlignmentVertical.bottom;
+        case 'baseline':
+          return DivAlignmentVertical.baseline;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

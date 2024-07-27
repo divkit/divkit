@@ -8,12 +8,16 @@ import 'package:divkit/src/generated_sources/div_pivot_percentage.dart';
 
 class DivTransform with EquatableMixin {
   const DivTransform({
-    this.pivotX = const DivPivot.divPivotPercentage(DivPivotPercentage(
-      value: ValueExpression(50),
-    )),
-    this.pivotY = const DivPivot.divPivotPercentage(DivPivotPercentage(
-      value: ValueExpression(50),
-    )),
+    this.pivotX = const DivPivot.divPivotPercentage(
+      DivPivotPercentage(
+        value: ValueExpression(50),
+      ),
+    ),
+    this.pivotY = const DivPivot.divPivotPercentage(
+      DivPivotPercentage(
+        value: ValueExpression(50),
+      ),
+    ),
     this.rotation,
   });
 
@@ -46,22 +50,30 @@ class DivTransform with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivTransform(
-      pivotX: safeParseObj(
-        DivPivot.fromJson(json['pivot_x']),
-        fallback: const DivPivot.divPivotPercentage(DivPivotPercentage(
-          value: ValueExpression(50),
-        )),
-      )!,
-      pivotY: safeParseObj(
-        DivPivot.fromJson(json['pivot_y']),
-        fallback: const DivPivot.divPivotPercentage(DivPivotPercentage(
-          value: ValueExpression(50),
-        )),
-      )!,
-      rotation: safeParseDoubleExpr(
-        json['rotation'],
-      ),
-    );
+    try {
+      return DivTransform(
+        pivotX: safeParseObj(
+          DivPivot.fromJson(json['pivot_x']),
+          fallback: const DivPivot.divPivotPercentage(
+            DivPivotPercentage(
+              value: ValueExpression(50),
+            ),
+          ),
+        )!,
+        pivotY: safeParseObj(
+          DivPivot.fromJson(json['pivot_y']),
+          fallback: const DivPivot.divPivotPercentage(
+            DivPivotPercentage(
+              value: ValueExpression(50),
+            ),
+          ),
+        )!,
+        rotation: safeParseDoubleExpr(
+          json['rotation'],
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

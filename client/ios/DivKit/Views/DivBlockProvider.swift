@@ -189,6 +189,14 @@ final class DivBlockProvider {
 
     reasons.compactMap { $0.patch(for: self.cardId) }.forEach {
       divData = divData.applyPatch($0)
+      $0.onAppliedActions?.forEach { action in
+        divKitComponents.actionHandler.handle(
+          action,
+          path: UIElementPath(cardId.rawValue),
+          source: .callback,
+          sender: nil
+        )
+      }
     }
     self.divData = divData
     let context = divKitComponents.makeContext(

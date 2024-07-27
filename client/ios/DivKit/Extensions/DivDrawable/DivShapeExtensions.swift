@@ -66,7 +66,7 @@ extension DivShapeDrawable {
       let expressionResolver = context.expressionResolver
       let stroke = stroke?.resolveWidth(expressionResolver) ?? 0
       return CGFloat(
-        (rectangle.itemHeight.resolveValue(expressionResolver) ?? 0) + stroke
+        Double(rectangle.itemHeight.resolveValue(expressionResolver) ?? 0) + stroke
       )
     case .divCircleShape:
       context.addError(message: "Unsupported shape type: circle")

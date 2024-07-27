@@ -63,31 +63,35 @@ class DivRoundedRectangleShape with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivRoundedRectangleShape(
-      backgroundColor: safeParseColorExpr(
-        json['background_color'],
-      ),
-      cornerRadius: safeParseObj(
-        DivFixedSize.fromJson(json['corner_radius']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(5),
+    try {
+      return DivRoundedRectangleShape(
+        backgroundColor: safeParseColorExpr(
+          json['background_color'],
         ),
-      )!,
-      itemHeight: safeParseObj(
-        DivFixedSize.fromJson(json['item_height']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(10),
+        cornerRadius: safeParseObj(
+          DivFixedSize.fromJson(json['corner_radius']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(5),
+          ),
+        )!,
+        itemHeight: safeParseObj(
+          DivFixedSize.fromJson(json['item_height']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(10),
+          ),
+        )!,
+        itemWidth: safeParseObj(
+          DivFixedSize.fromJson(json['item_width']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(10),
+          ),
+        )!,
+        stroke: safeParseObj(
+          DivStroke.fromJson(json['stroke']),
         ),
-      )!,
-      itemWidth: safeParseObj(
-        DivFixedSize.fromJson(json['item_width']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(10),
-        ),
-      )!,
-      stroke: safeParseObj(
-        DivStroke.fromJson(json['stroke']),
-      ),
-    );
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

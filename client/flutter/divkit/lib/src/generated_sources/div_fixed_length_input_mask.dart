@@ -49,25 +49,30 @@ class DivFixedLengthInputMask with EquatableMixin implements DivInputMaskBase {
     if (json == null) {
       return null;
     }
-    return DivFixedLengthInputMask(
-      alwaysVisible: safeParseBoolExpr(
-        json['always_visible'],
-        fallback: false,
-      )!,
-      pattern: safeParseStrExpr(
-        json['pattern']?.toString(),
-      )!,
-      patternElements: safeParseObj(
-        safeListMap(
+    try {
+      return DivFixedLengthInputMask(
+        alwaysVisible: safeParseBoolExpr(
+          json['always_visible'],
+          fallback: false,
+        )!,
+        pattern: safeParseStrExpr(
+          json['pattern']?.toString(),
+        )!,
+        patternElements: safeParseObj(
+          safeListMap(
             json['pattern_elements'],
             (v) => safeParseObj(
-                  DivFixedLengthInputMaskPatternElement.fromJson(v),
-                )!),
-      )!,
-      rawTextVariable: safeParseStr(
-        json['raw_text_variable']?.toString(),
-      )!,
-    );
+              DivFixedLengthInputMaskPatternElement.fromJson(v),
+            )!,
+          ),
+        )!,
+        rawTextVariable: safeParseStr(
+          json['raw_text_variable']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -104,21 +109,26 @@ class DivFixedLengthInputMaskPatternElement with EquatableMixin {
       );
 
   static DivFixedLengthInputMaskPatternElement? fromJson(
-      Map<String, dynamic>? json) {
+    Map<String, dynamic>? json,
+  ) {
     if (json == null) {
       return null;
     }
-    return DivFixedLengthInputMaskPatternElement(
-      key: safeParseStrExpr(
-        json['key']?.toString(),
-      )!,
-      placeholder: safeParseStrExpr(
-        json['placeholder']?.toString(),
-        fallback: "_",
-      )!,
-      regex: safeParseStrExpr(
-        json['regex']?.toString(),
-      ),
-    );
+    try {
+      return DivFixedLengthInputMaskPatternElement(
+        key: safeParseStrExpr(
+          json['key']?.toString(),
+        )!,
+        placeholder: safeParseStrExpr(
+          json['placeholder']?.toString(),
+          fallback: "_",
+        )!,
+        regex: safeParseStrExpr(
+          json['regex']?.toString(),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -27,7 +27,8 @@ class DivChangeTransition with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivChangeTransition");
+      "Type ${value.runtimeType.toString()} is not generalized in DivChangeTransition",
+    );
   }
 
   T maybeMap<T>({
@@ -68,14 +69,20 @@ class DivChangeTransition with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivChangeBoundsTransition.type:
-        return DivChangeTransition.divChangeBoundsTransition(
-            DivChangeBoundsTransition.fromJson(json)!);
-      case DivChangeSetTransition.type:
-        return DivChangeTransition.divChangeSetTransition(
-            DivChangeSetTransition.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivChangeBoundsTransition.type:
+          return DivChangeTransition.divChangeBoundsTransition(
+            DivChangeBoundsTransition.fromJson(json)!,
+          );
+        case DivChangeSetTransition.type:
+          return DivChangeTransition.divChangeSetTransition(
+            DivChangeSetTransition.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

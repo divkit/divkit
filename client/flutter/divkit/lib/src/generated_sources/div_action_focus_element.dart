@@ -29,10 +29,14 @@ class DivActionFocusElement with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivActionFocusElement(
-      elementId: safeParseStrExpr(
-        json['element_id']?.toString(),
-      )!,
-    );
+    try {
+      return DivActionFocusElement(
+        elementId: safeParseStrExpr(
+          json['element_id']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

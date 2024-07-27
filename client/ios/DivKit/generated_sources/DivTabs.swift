@@ -212,6 +212,7 @@ public final class DivTabs: DivBase {
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
   public let restrictParentScroll: Expression<Bool> // default value: false
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let selectedTab: Expression<Int> // constraint: number >= 0; default value: 0
@@ -259,6 +260,10 @@ public final class DivTabs: DivBase {
 
   public func resolveRestrictParentScroll(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(restrictParentScroll) ?? false
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -319,6 +324,7 @@ public final class DivTabs: DivBase {
     margins: DivEdgeInsets?,
     paddings: DivEdgeInsets?,
     restrictParentScroll: Expression<Bool>?,
+    reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
     selectedActions: [DivAction]?,
     selectedTab: Expression<Int>?,
@@ -359,6 +365,7 @@ public final class DivTabs: DivBase {
     self.margins = margins
     self.paddings = paddings
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.selectedTab = selectedTab ?? .value(0)
@@ -429,49 +436,54 @@ extension DivTabs: Equatable {
     }
     guard
       lhs.restrictParentScroll == rhs.restrictParentScroll,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.reuseId == rhs.reuseId,
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.selectedTab == rhs.selectedTab,
-      lhs.separatorColor == rhs.separatorColor,
-      lhs.separatorPaddings == rhs.separatorPaddings
+      lhs.separatorColor == rhs.separatorColor
     else {
       return false
     }
     guard
+      lhs.separatorPaddings == rhs.separatorPaddings,
       lhs.switchTabsByContentSwipeEnabled == rhs.switchTabsByContentSwipeEnabled,
-      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter,
-      lhs.tabTitleStyle == rhs.tabTitleStyle
+      lhs.tabTitleDelimiter == rhs.tabTitleDelimiter
     else {
       return false
     }
     guard
+      lhs.tabTitleStyle == rhs.tabTitleStyle,
       lhs.titlePaddings == rhs.titlePaddings,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -504,6 +516,7 @@ extension DivTabs: Serializable {
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["selected_tab"] = selectedTab.toValidSerializationValue()

@@ -29,9 +29,13 @@ class EntityWithArrayOfNestedItems with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithArrayOfNestedItems(
-      items: safeParseObj(safeListMap(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!),)!,
-    );
+    try {
+      return EntityWithArrayOfNestedItems(
+        items: safeParseObj(safeListMap(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }
 
@@ -64,9 +68,13 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithArrayOfNestedItemsItem(
-      entity: safeParseObj(Entity.fromJson(json['entity']),)!,
-      property: safeParseStrExpr(json['property']?.toString(),)!,
-    );
+    try {
+      return EntityWithArrayOfNestedItemsItem(
+        entity: safeParseObj(Entity.fromJson(json['entity']),)!,
+        property: safeParseStrExpr(json['property']?.toString(),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

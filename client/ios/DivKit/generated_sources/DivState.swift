@@ -45,6 +45,7 @@ public final class DivState: DivBase {
   public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let stateIdVariable: String?
@@ -80,6 +81,10 @@ public final class DivState: DivBase {
 
   public func resolveDefaultStateId(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(defaultStateId)
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -127,6 +132,7 @@ public final class DivState: DivBase {
     layoutProvider: DivLayoutProvider?,
     margins: DivEdgeInsets?,
     paddings: DivEdgeInsets?,
+    reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
     selectedActions: [DivAction]?,
     stateIdVariable: String?,
@@ -161,6 +167,7 @@ public final class DivState: DivBase {
     self.layoutProvider = layoutProvider
     self.margins = margins
     self.paddings = paddings
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.stateIdVariable = stateIdVariable
@@ -221,41 +228,46 @@ extension DivState: Equatable {
     guard
       lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.stateIdVariable == rhs.stateIdVariable,
-      lhs.states == rhs.states
+      lhs.stateIdVariable == rhs.stateIdVariable
     else {
       return false
     }
     guard
+      lhs.states == rhs.states,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -286,6 +298,7 @@ extension DivState: Serializable {
     result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["state_id_variable"] = stateIdVariable

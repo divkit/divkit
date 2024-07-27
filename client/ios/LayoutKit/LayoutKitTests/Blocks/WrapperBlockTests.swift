@@ -13,6 +13,20 @@ final class WrapperBlockTests: XCTestCase {
     let updatedGalleryBlock = updatedBlock.child as? GalleryBlock
     XCTAssertEqual(updatedGalleryBlock?.state, state)
   }
+
+  func test_whenChildHasReuseId_hasSameReuseId() throws {
+    let reuseId = "testReuseId"
+    let childBlock = GalleryBlockTestModels.base.addingDecorations(
+      reuseId: reuseId
+    )
+
+    let wrapperBlock: WrapperBlock = BackgroundBlock(
+      background: .solidColor(.clear),
+      child: childBlock
+    )
+    
+    XCTAssertEqual(wrapperBlock.reuseId, reuseId)
+  }
 }
 
 private let wrapperBlock: WrapperBlock = BackgroundBlock(

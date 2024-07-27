@@ -35,13 +35,17 @@ class DivActionArrayRemoveValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivActionArrayRemoveValue(
-      index: safeParseIntExpr(
-        json['index'],
-      )!,
-      variableName: safeParseStrExpr(
-        json['variable_name']?.toString(),
-      )!,
-    );
+    try {
+      return DivActionArrayRemoveValue(
+        index: safeParseIntExpr(
+          json['index'],
+        )!,
+        variableName: safeParseStrExpr(
+          json['variable_name']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

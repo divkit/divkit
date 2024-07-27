@@ -41,23 +41,28 @@ class DivTrigger with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivTrigger(
-      actions: safeParseObj(
-        safeListMap(
+    try {
+      return DivTrigger(
+        actions: safeParseObj(
+          safeListMap(
             json['actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      )!,
-      condition: safeParseBoolExpr(
-        json['condition'],
-      )!,
-      mode: safeParseStrEnumExpr(
-        json['mode'],
-        parse: DivTriggerMode.fromJson,
-        fallback: DivTriggerMode.onCondition,
-      )!,
-    );
+              DivAction.fromJson(v),
+            )!,
+          ),
+        )!,
+        condition: safeParseBoolExpr(
+          json['condition'],
+        )!,
+        mode: safeParseStrEnumExpr(
+          json['mode'],
+          parse: DivTriggerMode.fromJson,
+          fallback: DivTriggerMode.onCondition,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -98,12 +103,16 @@ enum DivTriggerMode {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'on_condition':
-        return DivTriggerMode.onCondition;
-      case 'on_variable':
-        return DivTriggerMode.onVariable;
+    try {
+      switch (json) {
+        case 'on_condition':
+          return DivTriggerMode.onCondition;
+        case 'on_variable':
+          return DivTriggerMode.onVariable;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

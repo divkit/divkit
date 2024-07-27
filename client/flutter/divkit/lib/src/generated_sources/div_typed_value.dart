@@ -63,7 +63,8 @@ class DivTypedValue with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivTypedValue");
+      "Type ${value.runtimeType.toString()} is not generalized in DivTypedValue",
+    );
   }
 
   T maybeMap<T>({
@@ -182,24 +183,28 @@ class DivTypedValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case ArrayValue.type:
-        return DivTypedValue.arrayValue(ArrayValue.fromJson(json)!);
-      case BooleanValue.type:
-        return DivTypedValue.booleanValue(BooleanValue.fromJson(json)!);
-      case ColorValue.type:
-        return DivTypedValue.colorValue(ColorValue.fromJson(json)!);
-      case DictValue.type:
-        return DivTypedValue.dictValue(DictValue.fromJson(json)!);
-      case IntegerValue.type:
-        return DivTypedValue.integerValue(IntegerValue.fromJson(json)!);
-      case NumberValue.type:
-        return DivTypedValue.numberValue(NumberValue.fromJson(json)!);
-      case StringValue.type:
-        return DivTypedValue.stringValue(StringValue.fromJson(json)!);
-      case UrlValue.type:
-        return DivTypedValue.urlValue(UrlValue.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case ArrayValue.type:
+          return DivTypedValue.arrayValue(ArrayValue.fromJson(json)!);
+        case BooleanValue.type:
+          return DivTypedValue.booleanValue(BooleanValue.fromJson(json)!);
+        case ColorValue.type:
+          return DivTypedValue.colorValue(ColorValue.fromJson(json)!);
+        case DictValue.type:
+          return DivTypedValue.dictValue(DictValue.fromJson(json)!);
+        case IntegerValue.type:
+          return DivTypedValue.integerValue(IntegerValue.fromJson(json)!);
+        case NumberValue.type:
+          return DivTypedValue.numberValue(NumberValue.fromJson(json)!);
+        case StringValue.type:
+          return DivTypedValue.stringValue(StringValue.fromJson(json)!);
+        case UrlValue.type:
+          return DivTypedValue.urlValue(UrlValue.fromJson(json)!);
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

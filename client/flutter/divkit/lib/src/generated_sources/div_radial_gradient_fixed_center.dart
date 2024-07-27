@@ -36,15 +36,19 @@ class DivRadialGradientFixedCenter with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivRadialGradientFixedCenter(
-      unit: safeParseStrEnumExpr(
-        json['unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.dp,
-      )!,
-      value: safeParseIntExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return DivRadialGradientFixedCenter(
+        unit: safeParseStrEnumExpr(
+          json['unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.dp,
+        )!,
+        value: safeParseIntExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

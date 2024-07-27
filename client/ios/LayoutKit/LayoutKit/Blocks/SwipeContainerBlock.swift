@@ -85,3 +85,5 @@ extension SwipeContainerBlock: ElementStateUpdating {
     )
   }
 }
+
+extension SwipeContainerBlock: PathHolder {}

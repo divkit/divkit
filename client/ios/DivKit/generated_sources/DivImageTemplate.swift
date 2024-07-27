@@ -37,6 +37,7 @@ public final class DivImageTemplate: TemplateValue {
   public let placeholderColor: Field<Expression<Color>>? // default value: #14000000
   public let preloadRequired: Field<Expression<Bool>>? // default value: false
   public let preview: Field<Expression<String>>?
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let scale: Field<Expression<DivImageScale>>? // default value: fill
   public let selectedActions: Field<[DivActionTemplate]>?
@@ -87,6 +88,7 @@ public final class DivImageTemplate: TemplateValue {
       placeholderColor: dictionary.getOptionalExpressionField("placeholder_color", transform: Color.color(withHexString:)),
       preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
       preview: dictionary.getOptionalExpressionField("preview"),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       scale: dictionary.getOptionalExpressionField("scale"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
@@ -138,6 +140,7 @@ public final class DivImageTemplate: TemplateValue {
     placeholderColor: Field<Expression<Color>>? = nil,
     preloadRequired: Field<Expression<Bool>>? = nil,
     preview: Field<Expression<String>>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     scale: Field<Expression<DivImageScale>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
@@ -186,6 +189,7 @@ public final class DivImageTemplate: TemplateValue {
     self.placeholderColor = placeholderColor
     self.preloadRequired = preloadRequired
     self.preview = preview
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.scale = scale
     self.selectedActions = selectedActions
@@ -235,6 +239,7 @@ public final class DivImageTemplate: TemplateValue {
     let placeholderColorValue = parent?.placeholderColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue
     let previewValue = parent?.preview?.resolveOptionalValue(context: context) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let scaleValue = parent?.scale?.resolveOptionalValue(context: context) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -282,6 +287,7 @@ public final class DivImageTemplate: TemplateValue {
       placeholderColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "placeholder_color", error: $0) },
       preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -338,6 +344,7 @@ public final class DivImageTemplate: TemplateValue {
       placeholderColor: placeholderColorValue.value,
       preloadRequired: preloadRequiredValue.value,
       preview: previewValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       scale: scaleValue.value,
       selectedActions: selectedActionsValue.value,
@@ -392,6 +399,7 @@ public final class DivImageTemplate: TemplateValue {
     var placeholderColorValue: DeserializationResult<Expression<Color>> = parent?.placeholderColor?.value() ?? .noValue
     var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?.value() ?? .noValue
     var previewValue: DeserializationResult<Expression<String>> = parent?.preview?.value() ?? .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var scaleValue: DeserializationResult<Expression<DivImageScale>> = parent?.scale?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -470,6 +478,8 @@ public final class DivImageTemplate: TemplateValue {
         preloadRequiredValue = deserialize(__dictValue).merged(with: preloadRequiredValue)
       case "preview":
         previewValue = deserialize(__dictValue).merged(with: previewValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "scale":
@@ -562,6 +572,8 @@ public final class DivImageTemplate: TemplateValue {
         preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
       case parent?.preview?.link:
         previewValue = previewValue.merged(with: { deserialize(__dictValue) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.scale?.link:
@@ -658,6 +670,7 @@ public final class DivImageTemplate: TemplateValue {
       placeholderColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "placeholder_color", error: $0) },
       preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -714,6 +727,7 @@ public final class DivImageTemplate: TemplateValue {
       placeholderColor: placeholderColorValue.value,
       preloadRequired: preloadRequiredValue.value,
       preview: previewValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       scale: scaleValue.value,
       selectedActions: selectedActionsValue.value,
@@ -773,6 +787,7 @@ public final class DivImageTemplate: TemplateValue {
       placeholderColor: placeholderColor ?? mergedParent.placeholderColor,
       preloadRequired: preloadRequired ?? mergedParent.preloadRequired,
       preview: preview ?? mergedParent.preview,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       scale: scale ?? mergedParent.scale,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
@@ -827,6 +842,7 @@ public final class DivImageTemplate: TemplateValue {
       placeholderColor: merged.placeholderColor,
       preloadRequired: merged.preloadRequired,
       preview: merged.preview,
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       scale: merged.scale,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),

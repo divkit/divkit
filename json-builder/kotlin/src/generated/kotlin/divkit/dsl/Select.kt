@@ -61,6 +61,7 @@ class Select internal constructor(
             margins = additive.margins ?: properties.margins,
             options = additive.options ?: properties.options,
             paddings = additive.paddings ?: properties.paddings,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             textColor = additive.textColor ?: properties.textColor,
@@ -185,6 +186,10 @@ class Select internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -276,6 +281,7 @@ class Select internal constructor(
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("options", options)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("text_color", textColor)
@@ -364,6 +370,7 @@ class Select internal constructor(
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
@@ -408,6 +415,7 @@ fun DivScope.select(
     margins: EdgeInsets? = null,
     options: List<Select.Option>? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
@@ -450,6 +458,7 @@ fun DivScope.select(
         margins = valueOrNull(margins),
         options = valueOrNull(options),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         textColor = valueOrNull(textColor),
@@ -493,6 +502,7 @@ fun DivScope.select(
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
@@ -537,6 +547,7 @@ fun DivScope.selectProps(
     margins: EdgeInsets? = null,
     options: List<Select.Option>? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
@@ -578,6 +589,7 @@ fun DivScope.selectProps(
     margins = valueOrNull(margins),
     options = valueOrNull(options),
     paddings = valueOrNull(paddings),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     textColor = valueOrNull(textColor),
@@ -620,6 +632,7 @@ fun DivScope.selectProps(
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
@@ -664,6 +677,7 @@ fun TemplateScope.selectRefs(
     margins: ReferenceProperty<EdgeInsets>? = null,
     options: ReferenceProperty<List<Select.Option>>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -705,6 +719,7 @@ fun TemplateScope.selectRefs(
     margins = margins,
     options = options,
     paddings = paddings,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     textColor = textColor,
@@ -747,6 +762,7 @@ fun TemplateScope.selectRefs(
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
@@ -791,6 +807,7 @@ fun Select.override(
     margins: EdgeInsets? = null,
     options: List<Select.Option>? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
@@ -833,6 +850,7 @@ fun Select.override(
         margins = valueOrNull(margins) ?: properties.margins,
         options = valueOrNull(options) ?: properties.options,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         textColor = valueOrNull(textColor) ?: properties.textColor,
@@ -876,6 +894,7 @@ fun Select.override(
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
@@ -920,6 +939,7 @@ fun Select.defer(
     margins: ReferenceProperty<EdgeInsets>? = null,
     options: ReferenceProperty<List<Select.Option>>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -962,6 +982,7 @@ fun Select.defer(
         margins = margins ?: properties.margins,
         options = options ?: properties.options,
         paddings = paddings ?: properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         textColor = textColor ?: properties.textColor,
@@ -994,6 +1015,7 @@ fun Select.defer(
  * @param hintText Hint text.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param textColor Text color.
  * @param visibility Element visibility.
@@ -1014,6 +1036,7 @@ fun Select.evaluate(
     hintText: ExpressionProperty<String>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     textColor: ExpressionProperty<Color>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1044,6 +1067,7 @@ fun Select.evaluate(
         margins = properties.margins,
         options = properties.options,
         paddings = properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         textColor = textColor ?: properties.textColor,
@@ -1087,6 +1111,7 @@ fun Select.evaluate(
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
@@ -1131,6 +1156,7 @@ fun Component<Select>.override(
     margins: EdgeInsets? = null,
     options: List<Select.Option>? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
@@ -1174,6 +1200,7 @@ fun Component<Select>.override(
         margins = valueOrNull(margins),
         options = valueOrNull(options),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         textColor = valueOrNull(textColor),
@@ -1217,6 +1244,7 @@ fun Component<Select>.override(
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
@@ -1261,6 +1289,7 @@ fun Component<Select>.defer(
     margins: ReferenceProperty<EdgeInsets>? = null,
     options: ReferenceProperty<List<Select.Option>>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -1304,6 +1333,7 @@ fun Component<Select>.defer(
         margins = margins,
         options = options,
         paddings = paddings,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         textColor = textColor,
@@ -1336,6 +1366,7 @@ fun Component<Select>.defer(
  * @param hintText Hint text.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param textColor Text color.
  * @param visibility Element visibility.
@@ -1356,6 +1387,7 @@ fun Component<Select>.evaluate(
     hintText: ExpressionProperty<String>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     textColor: ExpressionProperty<Color>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1387,6 +1419,7 @@ fun Component<Select>.evaluate(
         margins = null,
         options = null,
         paddings = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = null,
         textColor = textColor,

@@ -1,7 +1,8 @@
 {
   "description": "Only the first matched selector should be used. Zero matched selectors means no error.",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "card": {
     "log_id": "prototypes",

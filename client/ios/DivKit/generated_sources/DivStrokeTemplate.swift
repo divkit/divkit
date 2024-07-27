@@ -7,7 +7,7 @@ import VGSL
 public final class DivStrokeTemplate: TemplateValue {
   public let color: Field<Expression<Color>>?
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
-  public let width: Field<Expression<Int>>? // constraint: number >= 0; default value: 1
+  public let width: Field<Expression<Double>>? // constraint: number >= 0; default value: 1
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
@@ -20,7 +20,7 @@ public final class DivStrokeTemplate: TemplateValue {
   init(
     color: Field<Expression<Color>>? = nil,
     unit: Field<Expression<DivSizeUnit>>? = nil,
-    width: Field<Expression<Int>>? = nil
+    width: Field<Expression<Double>>? = nil
   ) {
     self.color = color
     self.unit = unit
@@ -58,7 +58,7 @@ public final class DivStrokeTemplate: TemplateValue {
     }
     var colorValue: DeserializationResult<Expression<Color>> = parent?.color?.value() ?? .noValue
     var unitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.unit?.value() ?? .noValue
-    var widthValue: DeserializationResult<Expression<Int>> = parent?.width?.value() ?? .noValue
+    var widthValue: DeserializationResult<Expression<Double>> = parent?.width?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "color":

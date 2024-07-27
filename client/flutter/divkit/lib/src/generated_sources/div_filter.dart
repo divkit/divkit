@@ -27,7 +27,8 @@ class DivFilter with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivFilter");
+      "Type ${value.runtimeType.toString()} is not generalized in DivFilter",
+    );
   }
 
   T maybeMap<T>({
@@ -68,12 +69,18 @@ class DivFilter with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivBlur.type:
-        return DivFilter.divBlur(DivBlur.fromJson(json)!);
-      case DivFilterRtlMirror.type:
-        return DivFilter.divFilterRtlMirror(DivFilterRtlMirror.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivBlur.type:
+          return DivFilter.divBlur(DivBlur.fromJson(json)!);
+        case DivFilterRtlMirror.type:
+          return DivFilter.divFilterRtlMirror(
+            DivFilterRtlMirror.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

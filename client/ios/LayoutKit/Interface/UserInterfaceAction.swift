@@ -59,6 +59,7 @@ public struct UserInterfaceAction: Equatable, Codable {
     case disappear
     case timer
     case trigger
+    case callback
   }
 
   public let payload: Payload

@@ -42,16 +42,20 @@ class DivActionDictSetValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivActionDictSetValue(
-      key: safeParseStrExpr(
-        json['key']?.toString(),
-      )!,
-      value: safeParseObj(
-        DivTypedValue.fromJson(json['value']),
-      ),
-      variableName: safeParseStrExpr(
-        json['variable_name']?.toString(),
-      )!,
-    );
+    try {
+      return DivActionDictSetValue(
+        key: safeParseStrExpr(
+          json['key']?.toString(),
+        )!,
+        value: safeParseObj(
+          DivTypedValue.fromJson(json['value']),
+        ),
+        variableName: safeParseStrExpr(
+          json['variable_name']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

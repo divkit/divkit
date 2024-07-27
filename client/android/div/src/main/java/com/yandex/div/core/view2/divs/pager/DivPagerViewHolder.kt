@@ -13,6 +13,7 @@ import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
+import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 
 internal class DivPagerViewHolder(
@@ -58,9 +59,17 @@ internal class DivPagerViewHolder(
     }
 
     private fun createChildView(bindingContext: BindingContext, div: Div): View {
+        oldDiv?.let {
+            KLog.d(TAG) { "Pager holder reuse failed" }
+        }
+
         frameLayout.releaseAndRemoveChildren(bindingContext.divView)
         return viewCreator.create(div, bindingContext.expressionResolver).also {
             frameLayout.addView(it)
         }
+    }
+
+    companion object {
+        const val TAG = "DivPagerViewHolder"
     }
 }

@@ -28,8 +28,12 @@ class EntityWithJsonProperty with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithJsonProperty(
-      jsonProperty: safeParseMap(json['json_property'], fallback: None,)!,
-    );
+    try {
+      return EntityWithJsonProperty(
+        jsonProperty: safeParseMap(json['json_property'], fallback: None,)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

@@ -30,10 +30,14 @@ class DivNeighbourPageSize with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivNeighbourPageSize(
-      neighbourPageWidth: safeParseObj(
-        DivFixedSize.fromJson(json['neighbour_page_width']),
-      )!,
-    );
+    try {
+      return DivNeighbourPageSize(
+        neighbourPageWidth: safeParseObj(
+          DivFixedSize.fromJson(json['neighbour_page_width']),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

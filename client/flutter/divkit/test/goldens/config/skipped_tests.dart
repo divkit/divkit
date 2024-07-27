@@ -590,6 +590,9 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-pager/vertical-pager-resizable-height.json',
     'example/assets/test_data/snapshot_test_data/div-pager/vertical-pager-resizable-width.json',
     'example/assets/test_data/snapshot_test_data/div-pager/vertical-pager-wrap-content-width-with-paddings.json',
+    'example/assets/test_data/snapshot_test_data/div-pager/item-builder/item-builder.json',
+    'example/assets/test_data/snapshot_test_data/div-pager/item-builder/nested-builders.json',
+    'example/assets/test_data/snapshot_test_data/div-pager/item-builder/non-unique-matched-selectors.json',
   ].map(
     (e) => _SkipTest(
       e,

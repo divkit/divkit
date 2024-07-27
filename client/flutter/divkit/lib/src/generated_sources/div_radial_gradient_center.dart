@@ -29,7 +29,8 @@ class DivRadialGradientCenter with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivRadialGradientCenter");
+      "Type ${value.runtimeType.toString()} is not generalized in DivRadialGradientCenter",
+    );
   }
 
   T maybeMap<T>({
@@ -71,14 +72,20 @@ class DivRadialGradientCenter with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivRadialGradientFixedCenter.type:
-        return DivRadialGradientCenter.divRadialGradientFixedCenter(
-            DivRadialGradientFixedCenter.fromJson(json)!);
-      case DivRadialGradientRelativeCenter.type:
-        return DivRadialGradientCenter.divRadialGradientRelativeCenter(
-            DivRadialGradientRelativeCenter.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivRadialGradientFixedCenter.type:
+          return DivRadialGradientCenter.divRadialGradientFixedCenter(
+            DivRadialGradientFixedCenter.fromJson(json)!,
+          );
+        case DivRadialGradientRelativeCenter.type:
+          return DivRadialGradientCenter.divRadialGradientRelativeCenter(
+            DivRadialGradientRelativeCenter.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

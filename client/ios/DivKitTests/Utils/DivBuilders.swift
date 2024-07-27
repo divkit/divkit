@@ -95,6 +95,7 @@ func divText(
   text: String = "",
   textExpression: String? = nil,
   width: DivSize? = nil,
+  variables: [DivVariable]? = nil,
   visibilityActions: [DivVisibilityAction]? = nil
 ) -> Div {
   let textValue: Expression<String> = if let textExpression {
@@ -111,6 +112,7 @@ func divText(
     margins: margins,
     paddings: paddings,
     text: textValue,
+    variables: variables,
     visibilityActions: visibilityActions,
     width: width
   ))
@@ -181,6 +183,7 @@ func divContainer(
     margins: nil,
     orientation: nil,
     paddings: nil,
+    reuseId: nil,
     rowSpan: nil,
     selectedActions: nil,
     separator: nil,
@@ -226,6 +229,7 @@ func divGallery(
     orientation: nil,
     paddings: nil,
     restrictParentScroll: nil,
+    reuseId: nil,
     rowSpan: nil,
     scrollMode: nil,
     scrollbar: nil,
@@ -273,6 +277,7 @@ func divGrid(
     longtapActions: nil,
     margins: nil,
     paddings: nil,
+    reuseId: nil,
     rowSpan: nil,
     selectedActions: nil,
     tooltips: nil,
@@ -318,6 +323,7 @@ func divPager(
     paddings: nil,
     pageTransformation: nil,
     restrictParentScroll: nil,
+    reuseId: nil,
     rowSpan: nil,
     selectedActions: nil,
     tooltips: nil,
@@ -356,6 +362,7 @@ func divState(
     layoutProvider: nil,
     margins: nil,
     paddings: nil,
+    reuseId: nil,
     rowSpan: nil,
     selectedActions: nil,
     stateIdVariable: nil,
@@ -411,6 +418,7 @@ func divTabs(
     margins: nil,
     paddings: nil,
     restrictParentScroll: nil,
+    reuseId: nil,
     rowSpan: nil,
     selectedActions: nil,
     selectedTab: nil,
@@ -451,4 +459,8 @@ func fixedSize(_ value: Int) -> DivSize {
 
 func wrapContentSize() -> DivSize {
   .divWrapContentSize(DivWrapContentSize())
+}
+
+func variable(_ name: String, _ value: String) -> DivVariable {
+  .stringVariable(StringVariable(name: name, value: value))
 }

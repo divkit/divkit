@@ -51,16 +51,20 @@ enum DivTransitionSelector {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'none':
-        return DivTransitionSelector.none;
-      case 'data_change':
-        return DivTransitionSelector.dataChange;
-      case 'state_change':
-        return DivTransitionSelector.stateChange;
-      case 'any_change':
-        return DivTransitionSelector.anyChange;
+    try {
+      switch (json) {
+        case 'none':
+          return DivTransitionSelector.none;
+        case 'data_change':
+          return DivTransitionSelector.dataChange;
+        case 'state_change':
+          return DivTransitionSelector.stateChange;
+        case 'any_change':
+          return DivTransitionSelector.anyChange;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

@@ -28,7 +28,8 @@ class DivInputValidator with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivInputValidator");
+      "Type ${value.runtimeType.toString()} is not generalized in DivInputValidator",
+    );
   }
 
   T maybeMap<T>({
@@ -69,14 +70,20 @@ class DivInputValidator with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivInputValidatorExpression.type:
-        return DivInputValidator.divInputValidatorExpression(
-            DivInputValidatorExpression.fromJson(json)!);
-      case DivInputValidatorRegex.type:
-        return DivInputValidator.divInputValidatorRegex(
-            DivInputValidatorRegex.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivInputValidatorExpression.type:
+          return DivInputValidator.divInputValidatorExpression(
+            DivInputValidatorExpression.fromJson(json)!,
+          );
+        case DivInputValidatorRegex.type:
+          return DivInputValidator.divInputValidatorRegex(
+            DivInputValidatorRegex.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

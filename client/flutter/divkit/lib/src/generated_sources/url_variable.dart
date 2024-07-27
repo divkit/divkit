@@ -35,11 +35,15 @@ class UrlVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return UrlVariable(
-      name: safeParseStr(
-        json['name']?.toString(),
-      )!,
-      value: safeParseUri(json['value'])!,
-    );
+    try {
+      return UrlVariable(
+        name: safeParseStr(
+          json['name']?.toString(),
+        )!,
+        value: safeParseUri(json['value'])!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

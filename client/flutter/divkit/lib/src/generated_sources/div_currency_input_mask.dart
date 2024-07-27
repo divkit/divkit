@@ -37,13 +37,17 @@ class DivCurrencyInputMask with EquatableMixin implements DivInputMaskBase {
     if (json == null) {
       return null;
     }
-    return DivCurrencyInputMask(
-      locale: safeParseStrExpr(
-        json['locale']?.toString(),
-      ),
-      rawTextVariable: safeParseStr(
-        json['raw_text_variable']?.toString(),
-      )!,
-    );
+    try {
+      return DivCurrencyInputMask(
+        locale: safeParseStrExpr(
+          json['locale']?.toString(),
+        ),
+        rawTextVariable: safeParseStr(
+          json['raw_text_variable']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

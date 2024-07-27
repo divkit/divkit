@@ -27,7 +27,8 @@ class DivShape with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivShape");
+      "Type ${value.runtimeType.toString()} is not generalized in DivShape",
+    );
   }
 
   T maybeMap<T>({
@@ -68,13 +69,18 @@ class DivShape with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivCircleShape.type:
-        return DivShape.divCircleShape(DivCircleShape.fromJson(json)!);
-      case DivRoundedRectangleShape.type:
-        return DivShape.divRoundedRectangleShape(
-            DivRoundedRectangleShape.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivCircleShape.type:
+          return DivShape.divCircleShape(DivCircleShape.fromJson(json)!);
+        case DivRoundedRectangleShape.type:
+          return DivShape.divRoundedRectangleShape(
+            DivRoundedRectangleShape.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

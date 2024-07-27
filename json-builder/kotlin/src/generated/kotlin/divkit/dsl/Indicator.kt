@@ -61,6 +61,7 @@ class Indicator internal constructor(
             minimumItemSize = additive.minimumItemSize ?: properties.minimumItemSize,
             paddings = additive.paddings ?: properties.paddings,
             pagerId = additive.pagerId ?: properties.pagerId,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             shape = additive.shape ?: properties.shape,
@@ -192,6 +193,10 @@ class Indicator internal constructor(
          */
         val pagerId: Property<String>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -286,6 +291,7 @@ class Indicator internal constructor(
             result.tryPutProperty("minimum_item_size", minimumItemSize)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("pager_id", pagerId)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("shape", shape)
@@ -340,6 +346,7 @@ class Indicator internal constructor(
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -384,6 +391,7 @@ fun DivScope.indicator(
     minimumItemSize: Double? = null,
     paddings: EdgeInsets? = null,
     pagerId: String? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     shape: Shape? = null,
@@ -426,6 +434,7 @@ fun DivScope.indicator(
         minimumItemSize = valueOrNull(minimumItemSize),
         paddings = valueOrNull(paddings),
         pagerId = valueOrNull(pagerId),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         shape = valueOrNull(shape),
@@ -470,6 +479,7 @@ fun DivScope.indicator(
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -514,6 +524,7 @@ fun DivScope.indicatorProps(
     minimumItemSize: Double? = null,
     paddings: EdgeInsets? = null,
     pagerId: String? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     shape: Shape? = null,
@@ -555,6 +566,7 @@ fun DivScope.indicatorProps(
     minimumItemSize = valueOrNull(minimumItemSize),
     paddings = valueOrNull(paddings),
     pagerId = valueOrNull(pagerId),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     shape = valueOrNull(shape),
@@ -598,6 +610,7 @@ fun DivScope.indicatorProps(
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -642,6 +655,7 @@ fun TemplateScope.indicatorRefs(
     minimumItemSize: ReferenceProperty<Double>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pagerId: ReferenceProperty<String>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     shape: ReferenceProperty<Shape>? = null,
@@ -683,6 +697,7 @@ fun TemplateScope.indicatorRefs(
     minimumItemSize = minimumItemSize,
     paddings = paddings,
     pagerId = pagerId,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     shape = shape,
@@ -726,6 +741,7 @@ fun TemplateScope.indicatorRefs(
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -770,6 +786,7 @@ fun Indicator.override(
     minimumItemSize: Double? = null,
     paddings: EdgeInsets? = null,
     pagerId: String? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     shape: Shape? = null,
@@ -812,6 +829,7 @@ fun Indicator.override(
         minimumItemSize = valueOrNull(minimumItemSize) ?: properties.minimumItemSize,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         pagerId = valueOrNull(pagerId) ?: properties.pagerId,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         shape = valueOrNull(shape) ?: properties.shape,
@@ -856,6 +874,7 @@ fun Indicator.override(
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -900,6 +919,7 @@ fun Indicator.defer(
     minimumItemSize: ReferenceProperty<Double>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pagerId: ReferenceProperty<String>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     shape: ReferenceProperty<Shape>? = null,
@@ -942,6 +962,7 @@ fun Indicator.defer(
         minimumItemSize = minimumItemSize ?: properties.minimumItemSize,
         paddings = paddings ?: properties.paddings,
         pagerId = pagerId ?: properties.pagerId,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         shape = shape ?: properties.shape,
@@ -970,6 +991,7 @@ fun Indicator.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -985,6 +1007,7 @@ fun Indicator.evaluate(
     columnSpan: ExpressionProperty<Int>? = null,
     inactiveItemColor: ExpressionProperty<Color>? = null,
     minimumItemSize: ExpressionProperty<Double>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Indicator = Indicator(
@@ -1014,6 +1037,7 @@ fun Indicator.evaluate(
         minimumItemSize = minimumItemSize ?: properties.minimumItemSize,
         paddings = properties.paddings,
         pagerId = properties.pagerId,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         shape = properties.shape,
@@ -1058,6 +1082,7 @@ fun Indicator.evaluate(
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -1102,6 +1127,7 @@ fun Component<Indicator>.override(
     minimumItemSize: Double? = null,
     paddings: EdgeInsets? = null,
     pagerId: String? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     shape: Shape? = null,
@@ -1145,6 +1171,7 @@ fun Component<Indicator>.override(
         minimumItemSize = valueOrNull(minimumItemSize),
         paddings = valueOrNull(paddings),
         pagerId = valueOrNull(pagerId),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         shape = valueOrNull(shape),
@@ -1189,6 +1216,7 @@ fun Component<Indicator>.override(
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -1233,6 +1261,7 @@ fun Component<Indicator>.defer(
     minimumItemSize: ReferenceProperty<Double>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pagerId: ReferenceProperty<String>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     shape: ReferenceProperty<Shape>? = null,
@@ -1276,6 +1305,7 @@ fun Component<Indicator>.defer(
         minimumItemSize = minimumItemSize,
         paddings = paddings,
         pagerId = pagerId,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         shape = shape,
@@ -1304,6 +1334,7 @@ fun Component<Indicator>.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1319,6 +1350,7 @@ fun Component<Indicator>.evaluate(
     columnSpan: ExpressionProperty<Int>? = null,
     inactiveItemColor: ExpressionProperty<Color>? = null,
     minimumItemSize: ExpressionProperty<Double>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Indicator> = Component(
@@ -1349,6 +1381,7 @@ fun Component<Indicator>.evaluate(
         minimumItemSize = minimumItemSize,
         paddings = null,
         pagerId = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = null,
         shape = null,

@@ -78,6 +78,7 @@ export './div_input_validator.dart';
 export './div_input_validator_base.dart';
 export './div_input_validator_expression.dart';
 export './div_input_validator_regex.dart';
+export './div_layout_provider.dart';
 export './div_line_style.dart';
 export './div_linear_gradient.dart';
 export './div_match_parent_size.dart';

@@ -53,24 +53,28 @@ class DivFadeTransition with EquatableMixin implements DivTransitionBase {
     if (json == null) {
       return null;
     }
-    return DivFadeTransition(
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 0.0,
-      )!,
-      duration: safeParseIntExpr(
-        json['duration'],
-        fallback: 200,
-      )!,
-      interpolator: safeParseStrEnumExpr(
-        json['interpolator'],
-        parse: DivAnimationInterpolator.fromJson,
-        fallback: DivAnimationInterpolator.easeInOut,
-      )!,
-      startDelay: safeParseIntExpr(
-        json['start_delay'],
-        fallback: 0,
-      )!,
-    );
+    try {
+      return DivFadeTransition(
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 0.0,
+        )!,
+        duration: safeParseIntExpr(
+          json['duration'],
+          fallback: 200,
+        )!,
+        interpolator: safeParseStrEnumExpr(
+          json['interpolator'],
+          parse: DivAnimationInterpolator.fromJson,
+          fallback: DivAnimationInterpolator.easeInOut,
+        )!,
+        startDelay: safeParseIntExpr(
+          json['start_delay'],
+          fallback: 0,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

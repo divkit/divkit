@@ -37,21 +37,27 @@ class DivDownloadCallbacks with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivDownloadCallbacks(
-      onFailActions: safeParseObj(
-        safeListMap(
+    try {
+      return DivDownloadCallbacks(
+        onFailActions: safeParseObj(
+          safeListMap(
             json['on_fail_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      onSuccessActions: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        onSuccessActions: safeParseObj(
+          safeListMap(
             json['on_success_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-    );
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -28,9 +28,13 @@ class EntityWithStringEnumProperty with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithStringEnumProperty(
-      property: safeParseStrEnumExpr(json['property'], parse: EntityWithStringEnumPropertyProperty.fromJson,)!,
-    );
+    try {
+      return EntityWithStringEnumProperty(
+        property: safeParseStrEnumExpr(json['property'], parse: EntityWithStringEnumPropertyProperty.fromJson,)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }
 
@@ -72,12 +76,16 @@ enum EntityWithStringEnumPropertyProperty {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'first':
+    try {
+      switch (json) {
+        case 'first':
         return EntityWithStringEnumPropertyProperty.first;
-      case 'second':
+        case 'second':
         return EntityWithStringEnumPropertyProperty.second;
+      }
+      return null;
+    } catch (e, st) {
+      return null;
     }
-    return null;
   }
 }

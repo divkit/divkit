@@ -5,8 +5,10 @@ import 'package:divkit/src/core/expression/expression.dart';
 import 'package:divkit/src/core/expression/resolver.dart';
 import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:divkit/src/generated_sources/generated_sources.dart';
-import 'package:flutter/widgets.dart';
 import 'package:divkit/src/core/action/models/action.dart';
+import 'package:flutter/material.dart';
+
+import 'package:divkit/src/core/widgets/base/div_base_model.dart';
 
 enum DivAxisAlignment {
   start,
@@ -266,60 +268,121 @@ class PassDivTextAlignment {
 }
 
 class PassDivBackground {
-  final Color? bgColor;
-  final Gradient? bgGradient;
-  final DecorationImage? bgImage;
+  final List<Widget> backgroundWidgets;
 
-  const PassDivBackground({this.bgColor, this.bgImage, this.bgGradient});
+  const PassDivBackground({
+    required this.backgroundWidgets,
+  });
 
-  static Future<PassDivBackground> resolve(
+  static Future<List<Widget>> resolve(
     List<DivBackground> backgrounds, {
     required DivVariableContext context,
     required double viewScale,
   }) async {
-    Color? bgColor;
-    Gradient? bgGradient;
-    DecorationImage? bgImage;
-
+    final backgroundWidgets = <Widget>[];
     // TODO: complicated DivBackground support
     for (var bg in backgrounds) {
       await bg.map(
         divImageBackground: (divImageBackground) async {
-          bgImage = DecorationImage(
-            image: NetworkImage(
-              (await divImageBackground.imageUrl.resolveValue(context: context))
-                  .toString(),
-            ),
-            alignment: await PassDivAlignment(
-                  divImageBackground.contentAlignmentVertical,
-                  divImageBackground.contentAlignmentHorizontal,
-                ).resolve(context: context) ??
-                Alignment.center,
-            fit: (await divImageBackground.scale.resolveValue(context: context))
-                .asBoxFit,
-            opacity: await divImageBackground.alpha.resolveValue(
-              context: context,
+          final filters = divImageBackground.filters;
+          final divBlur = filters?[0] as DivBlur?;
+          final isRtl = (filters?[1] as DivFilterRtlMirror?) != null;
+          final blurRadius =
+              await resolveBlurRadius(divBlur: divBlur, context: context);
+          backgroundWidgets.add(
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(isRtl ? math.pi : 0),
+              child: Container(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      (await divImageBackground.imageUrl
+                              .resolveValue(context: context))
+                          .toString(),
+                    ),
+                    alignment: await PassDivAlignment(
+                          divImageBackground.contentAlignmentVertical,
+                          divImageBackground.contentAlignmentHorizontal,
+                        ).resolve(context: context) ??
+                        Alignment.center,
+                    fit: (await divImageBackground.scale
+                            .resolveValue(context: context))
+                        .asBoxFit,
+                    opacity: await divImageBackground.alpha.resolveValue(
+                      context: context,
+                    ),
+                  ),
+                ),
+                child: BackdropFilter(
+                  filter:
+                      ImageFilter.blur(sigmaX: blurRadius, sigmaY: blurRadius),
+                  child: Container(
+                    decoration:
+                        BoxDecoration(color: Colors.white.withOpacity(0.0)),
+                  ),
+                ),
+              ),
             ),
           );
         },
-        divNinePatchBackground: (divNinePatchBackground) {
-          throw UnimplementedError();
+        divNinePatchBackground: (divNinePatchBackground) async {
+          final insetsLeft = await divNinePatchBackground.insets.left
+              .resolveValue(context: context);
+          final insetsTop = await divNinePatchBackground.insets.top
+              .resolveValue(context: context);
+          final insetsRight = await divNinePatchBackground.insets.right
+              .resolveValue(context: context);
+          final insetsBottom = await divNinePatchBackground.insets.bottom
+              .resolveValue(context: context);
+          backgroundWidgets.add(
+            Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(
+                    (await divNinePatchBackground.imageUrl
+                            .resolveValue(context: context))
+                        .toString(),
+                  ),
+                  centerSlice: Rect.fromLTRB(
+                    insetsLeft.toDouble(),
+                    insetsTop.toDouble(),
+                    insetsRight.toDouble(),
+                    insetsBottom.toDouble(),
+                  ),
+                ),
+              ),
+            ),
+          );
         },
         divRadialGradient: (divRadialGradient) async {
-          bgGradient = RadialGradient(
-            colors:
-                (await divRadialGradient.colors.resolveValue(context: context))
-                    .map((code) => Color(code.value))
-                    .toList(),
-            radius: await divRadialGradient.radius.map(
-              divFixedSize: (divFixedSize) async =>
-                  (await divFixedSize.value.resolveValue(context: context))
-                      .toDouble() *
-                  viewScale,
-              divRadialGradientRelativeRadius:
-                  (divRadialGradientRelativeRadius) async {
-                throw UnimplementedError();
-              },
+          backgroundWidgets.add(
+            Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: (await divRadialGradient.colors
+                          .resolveValue(context: context))
+                      .map((code) => Color(code.value))
+                      .toList(),
+                  radius: await divRadialGradient.radius.map(
+                    divFixedSize: (divFixedSize) async =>
+                        (await divFixedSize.value
+                                .resolveValue(context: context))
+                            .toDouble() *
+                        viewScale,
+                    divRadialGradientRelativeRadius:
+                        (divRadialGradientRelativeRadius) async {
+                      throw UnimplementedError();
+                    },
+                  ),
+                ),
+              ),
             ),
           );
         },
@@ -332,31 +395,54 @@ class PassDivBackground {
             math.cos(resolvedRadians),
             math.sin(resolvedRadians),
           );
-
-          bgGradient = LinearGradient(
-            begin: -angleAlignment,
-            end: angleAlignment,
-            colors: (await divLinearGradient.colors.resolveValue(
-              context: context,
-            ))
-                .map((code) => Color(code.value))
-                .toList(),
+          backgroundWidgets.add(
+            Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: -angleAlignment,
+                  end: angleAlignment,
+                  colors: (await divLinearGradient.colors.resolveValue(
+                    context: context,
+                  ))
+                      .map((code) => Color(code.value))
+                      .toList(),
+                ),
+              ),
+            ),
           );
         },
         divSolidBackground: (divSolidBackground) async {
-          bgColor = Color(
-            (await divSolidBackground.color.resolveValue(context: context))
-                .value,
+          backgroundWidgets.add(
+            Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                color: Color(
+                  (await divSolidBackground.color
+                          .resolveValue(context: context))
+                      .value,
+                ),
+              ),
+            ),
           );
         },
       );
     }
-    return PassDivBackground(
-      bgColor: bgColor,
-      bgGradient: bgGradient,
-      bgImage: bgImage,
-    );
+    return backgroundWidgets;
   }
+}
+
+Future<double> resolveBlurRadius({
+  required DivVariableContext context,
+  DivBlur? divBlur,
+}) async {
+  if (divBlur == null) {
+    return 0.0;
+  }
+  final radius = await divBlur.radius.resolveValue(context: context);
+  return radius.toDouble();
 }
 
 class DivFilters {
@@ -516,7 +602,7 @@ extension DivPointAsOffset on DivPoint {
 }
 
 extension PassDivBorder on DivBorder {
-  Future<BorderRadius> resolveBorderRadius({
+  Future<CustomBorderRadius> resolveBorderRadius({
     required DivVariableContext context,
     required double viewScale,
   }) async {
@@ -548,7 +634,7 @@ extension PassDivBorder on DivBorder {
               singleCornerRadius ??
               0) *
           viewScale;
-      return BorderRadius.only(
+      return CustomBorderRadius(
         topLeft: Radius.circular(resolvedTopLeft.toDouble()),
         topRight: Radius.circular(resolvedTopRight.toDouble()),
         bottomLeft: Radius.circular(resolvedBottomLeft.toDouble()),
@@ -556,11 +642,19 @@ extension PassDivBorder on DivBorder {
       );
     } else if (singleCornerRadius != null) {
       // corner_radius has lower priority than corners_radius
-      return BorderRadius.circular(
-        singleCornerRadius.toDouble() * viewScale,
+      return CustomBorderRadius(
+        topLeft: Radius.circular(singleCornerRadius.toDouble() * viewScale),
+        topRight: Radius.circular(singleCornerRadius.toDouble() * viewScale),
+        bottomLeft: Radius.circular(singleCornerRadius.toDouble() * viewScale),
+        bottomRight: Radius.circular(singleCornerRadius.toDouble() * viewScale),
       );
     }
-    return BorderRadius.zero;
+    return CustomBorderRadius(
+      topLeft: Radius.zero,
+      topRight: Radius.zero,
+      bottomLeft: Radius.zero,
+      bottomRight: Radius.zero,
+    );
   }
 
   Future<Border?> resolveBorder({
@@ -582,32 +676,30 @@ extension PassDivBorder on DivBorder {
     return null;
   }
 
-  Future<List<BoxShadow>> resolveShadow({
+  Future<BoxShadow?> resolveShadow({
     required DivVariableContext context,
     required double viewScale,
   }) async {
     final borderShadow = shadow;
     if (borderShadow != null &&
         (await hasShadow.resolveValue(context: context))) {
-      return [
-        BoxShadow(
-          color: Color(
-            (await borderShadow.color.resolveValue(context: context)).value,
-          ).withAlpha(
-            (await borderShadow.alpha.resolveValue(context: context) * 255)
-                .toInt(),
-          ),
-          blurRadius: (await borderShadow.blur.resolveValue(context: context))
-                  .toDouble() *
-              viewScale,
-          offset: await borderShadow.offset.resolveOffset(
-            context: context,
-            viewScale: viewScale,
-          ),
+      return BoxShadow(
+        color: Color(
+          (await borderShadow.color.resolveValue(context: context)).value,
+        ).withAlpha(
+          (await borderShadow.alpha.resolveValue(context: context) * 255)
+              .toInt(),
         ),
-      ];
+        blurRadius: (await borderShadow.blur.resolveValue(context: context))
+                .toDouble() *
+            viewScale,
+        offset: await borderShadow.offset.resolveOffset(
+          context: context,
+          viewScale: viewScale,
+        ),
+      );
     }
-    return [];
+    return null;
   }
 }
 

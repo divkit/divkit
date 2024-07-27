@@ -49,20 +49,24 @@ class DivChangeBoundsTransition
     if (json == null) {
       return null;
     }
-    return DivChangeBoundsTransition(
-      duration: safeParseIntExpr(
-        json['duration'],
-        fallback: 200,
-      )!,
-      interpolator: safeParseStrEnumExpr(
-        json['interpolator'],
-        parse: DivAnimationInterpolator.fromJson,
-        fallback: DivAnimationInterpolator.easeInOut,
-      )!,
-      startDelay: safeParseIntExpr(
-        json['start_delay'],
-        fallback: 0,
-      )!,
-    );
+    try {
+      return DivChangeBoundsTransition(
+        duration: safeParseIntExpr(
+          json['duration'],
+          fallback: 200,
+        )!,
+        interpolator: safeParseStrEnumExpr(
+          json['interpolator'],
+          parse: DivAnimationInterpolator.fromJson,
+          fallback: DivAnimationInterpolator.easeInOut,
+        )!,
+        startDelay: safeParseIntExpr(
+          json['start_delay'],
+          fallback: 0,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

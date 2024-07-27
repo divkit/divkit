@@ -36,6 +36,7 @@ public final class DivImage: DivBase {
   public let placeholderColor: Expression<Color> // default value: #14000000
   public let preloadRequired: Expression<Bool> // default value: false
   public let preview: Expression<String>?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let scale: Expression<DivImageScale> // default value: fill
   public let selectedActions: [DivAction]?
@@ -95,6 +96,10 @@ public final class DivImage: DivBase {
 
   public func resolvePreview(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(preview)
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -160,6 +165,7 @@ public final class DivImage: DivBase {
     placeholderColor: Expression<Color>? = nil,
     preloadRequired: Expression<Bool>? = nil,
     preview: Expression<String>? = nil,
+    reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     scale: Expression<DivImageScale>? = nil,
     selectedActions: [DivAction]? = nil,
@@ -207,6 +213,7 @@ public final class DivImage: DivBase {
     self.placeholderColor = placeholderColor ?? .value(Color.colorWithARGBHexCode(0x14000000))
     self.preloadRequired = preloadRequired ?? .value(false)
     self.preview = preview
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.scale = scale ?? .value(.fill)
     self.selectedActions = selectedActions
@@ -300,41 +307,42 @@ extension DivImage: Equatable {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.scale == rhs.scale
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tintColor == rhs.tintColor,
-      lhs.tintMode == rhs.tintMode,
-      lhs.tooltips == rhs.tooltips
+      lhs.tintMode == rhs.tintMode
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -378,6 +386,7 @@ extension DivImage: Serializable {
     result["placeholder_color"] = placeholderColor.toValidSerializationValue()
     result["preload_required"] = preloadRequired.toValidSerializationValue()
     result["preview"] = preview?.toValidSerializationValue()
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["scale"] = scale.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }

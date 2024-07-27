@@ -34,7 +34,8 @@ class DivInputMask with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivInputMask");
+      "Type ${value.runtimeType.toString()} is not generalized in DivInputMask",
+    );
   }
 
   T maybeMap<T>({
@@ -88,17 +89,24 @@ class DivInputMask with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivCurrencyInputMask.type:
-        return DivInputMask.divCurrencyInputMask(
-            DivCurrencyInputMask.fromJson(json)!);
-      case DivFixedLengthInputMask.type:
-        return DivInputMask.divFixedLengthInputMask(
-            DivFixedLengthInputMask.fromJson(json)!);
-      case DivPhoneInputMask.type:
-        return DivInputMask.divPhoneInputMask(
-            DivPhoneInputMask.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivCurrencyInputMask.type:
+          return DivInputMask.divCurrencyInputMask(
+            DivCurrencyInputMask.fromJson(json)!,
+          );
+        case DivFixedLengthInputMask.type:
+          return DivInputMask.divFixedLengthInputMask(
+            DivFixedLengthInputMask.fromJson(json)!,
+          );
+        case DivPhoneInputMask.type:
+          return DivInputMask.divPhoneInputMask(
+            DivPhoneInputMask.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

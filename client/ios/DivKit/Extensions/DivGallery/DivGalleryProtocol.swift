@@ -5,6 +5,7 @@ import VGSL
 
 protocol DivGalleryProtocol: DivBase {
   var items: [Div]? { get }
+  var itemBuilder: DivCollectionItemBuilder? { get }
 }
 
 extension DivGalleryProtocol {
@@ -25,14 +26,9 @@ extension DivGalleryProtocol {
     transformation: ElementsTransformation? = nil
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
-    var children: [GalleryViewModel.Item] = nonNilItems.makeBlocks(
-      context: context,
-      sizeModifier: DivGallerySizeModifier(
-        context: context,
-        gallery: self,
-        direction: direction
-      ),
-      mappedBy: { div, block, _ in
+    var children: [GalleryViewModel.Item]
+    let blockMapper: (Div, Block, DivBlockModelingContext) -> GalleryViewModel
+      .Item = { div, block, _ in
         GalleryViewModel.Item(
           crossAlignment: (
             direction.isHorizontal
@@ -42,7 +38,20 @@ extension DivGalleryProtocol {
           content: block
         )
       }
-    )
+
+    if let itemBuilder {
+      children = itemBuilder.makeBlocks(context: context, mappedBy: blockMapper)
+    } else {
+      children = nonNilItems.makeBlocks(
+        context: context,
+        sizeModifier: DivGallerySizeModifier(
+          context: context,
+          gallery: self,
+          direction: direction
+        ),
+        mappedBy: blockMapper
+      )
+    }
 
     if infiniteScroll,
        let last = children.last,

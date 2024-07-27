@@ -47,22 +47,26 @@ class DivShadow with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivShadow(
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 0.19,
-      )!,
-      blur: safeParseIntExpr(
-        json['blur'],
-        fallback: 2,
-      )!,
-      color: safeParseColorExpr(
-        json['color'],
-        fallback: const Color(0xFF000000),
-      )!,
-      offset: safeParseObj(
-        DivPoint.fromJson(json['offset']),
-      )!,
-    );
+    try {
+      return DivShadow(
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 0.19,
+        )!,
+        blur: safeParseIntExpr(
+          json['blur'],
+          fallback: 2,
+        )!,
+        color: safeParseColorExpr(
+          json['color'],
+          fallback: const Color(0xFF000000),
+        )!,
+        offset: safeParseObj(
+          DivPoint.fromJson(json['offset']),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

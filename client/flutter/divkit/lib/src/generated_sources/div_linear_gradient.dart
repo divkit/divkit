@@ -35,18 +35,23 @@ class DivLinearGradient with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivLinearGradient(
-      angle: safeParseIntExpr(
-        json['angle'],
-        fallback: 0,
-      )!,
-      colors: safeParseObjExpr(
-        safeListMap(
+    try {
+      return DivLinearGradient(
+        angle: safeParseIntExpr(
+          json['angle'],
+          fallback: 0,
+        )!,
+        colors: safeParseObjExpr(
+          safeListMap(
             json['colors'],
             (v) => safeParseColor(
-                  v,
-                )!),
-      )!,
-    );
+              v,
+            )!,
+          ),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

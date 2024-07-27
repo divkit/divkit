@@ -1,0 +1,54 @@
+{
+  "type": "pager",
+  "orientation": "vertical",
+  "layout_mode": {
+                                        "type": "fixed",
+                                        "neighbour_page_width": {
+                                            "type": "fixed",
+                                            "value": 20
+                                        }
+                                    },
+  "items": [
+    {
+      "type": "text",
+      "text": "It is a dark time for the Rebellion",
+      "font_size": 12,
+      "width": {
+        "type": "wrap_content",
+        "constrained": true
+      },
+      "reuse_id": "test_reuse_id0"
+    },
+    {
+      "type": "gif",
+      "gif_url": "https://yastatic.net/s3/home/divkit/chess.png",
+      "width": {
+          "type": "fixed",
+          "value": 15
+      },
+      "height": {
+          "type": "fixed",
+          "value": 15
+      },
+      "margins": {
+          "left": 4
+      },
+      "reuse_id": "test_reuse_id1"
+    },
+    {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "text": "It is a dark time for the Rebellion",
+          "font_size": 12,
+          "width": {
+            "type": "wrap_content",
+            "constrained": true
+          }
+        }
+      ],
+      "reuse_id": "test_reuse_id2"
+    }
+  ]
+}

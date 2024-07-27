@@ -29,8 +29,12 @@ class EntityWithArray with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithArray(
-      array: safeParseObj(safeListMap(json['array'], (v) => safeParseObj(Entity.fromJson(v),)!),)!,
-    );
+    try {
+      return EntityWithArray(
+        array: safeParseObj(safeListMap(json['array'], (v) => safeParseObj(Entity.fromJson(v),)!),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

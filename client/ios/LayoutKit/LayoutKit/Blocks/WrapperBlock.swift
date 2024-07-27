@@ -12,6 +12,10 @@ public protocol WrapperBlock: SizeForwardingBlock {
 extension WrapperBlock {
   public var sizeProvider: Block { child }
 
+  public var reuseId: String {
+    child.reuseId
+  }
+
   public func getImageHolders() -> [ImageHolder] {
     child.getImageHolders()
   }

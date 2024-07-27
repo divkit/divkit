@@ -30,10 +30,14 @@ class DivPageSize with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivPageSize(
-      pageWidth: safeParseObj(
-        DivPercentageSize.fromJson(json['page_width']),
-      )!,
-    );
+    try {
+      return DivPageSize(
+        pageWidth: safeParseObj(
+          DivPercentageSize.fromJson(json['page_width']),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

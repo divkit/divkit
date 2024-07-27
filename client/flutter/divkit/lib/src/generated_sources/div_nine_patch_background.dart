@@ -36,12 +36,16 @@ class DivNinePatchBackground with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivNinePatchBackground(
-      imageUrl: safeParseUriExpr(json['image_url'])!,
-      insets: safeParseObj(
-        DivAbsoluteEdgeInsets.fromJson(json['insets']),
-        fallback: const DivAbsoluteEdgeInsets(),
-      )!,
-    );
+    try {
+      return DivNinePatchBackground(
+        imageUrl: safeParseUriExpr(json['image_url'])!,
+        insets: safeParseObj(
+          DivAbsoluteEdgeInsets.fromJson(json['insets']),
+          fallback: const DivAbsoluteEdgeInsets(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

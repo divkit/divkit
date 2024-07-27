@@ -33,13 +33,17 @@ class DivExtension with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivExtension(
-      id: safeParseStr(
-        json['id']?.toString(),
-      )!,
-      params: safeParseMap(
-        json['params'],
-      ),
-    );
+    try {
+      return DivExtension(
+        id: safeParseStr(
+          json['id']?.toString(),
+        )!,
+        params: safeParseMap(
+          json['params'],
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

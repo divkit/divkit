@@ -354,11 +354,31 @@ extension UnicodeScalarView {
   }
 
   private mutating func parseOperator() -> Subexpression? {
-    if let op = scanCharacters({ "+-*/%=<>!&|?:".unicodeScalars.contains($0) })
-      ?? scanCharacter({ "(.".unicodeScalars.contains($0) }) {
-      return .symbol(.infix(op), [])
+    guard let op1 = scanCharacter({ "+-*/%=<>!&|?:(.".unicodeScalars.contains($0) }) else {
+      return nil
     }
-    return nil
+
+    let op2: String?
+    switch op1 {
+    case "=", "<", ">":
+      op2 = scanCharacter { "=" == $0 }
+    case "|":
+      op2 = scanCharacter { "|" == $0 }
+    case "&":
+      op2 = scanCharacter { "&" == $0 }
+    case "!":
+      op2 = scanCharacter { "=:".unicodeScalars.contains($0) }
+    case "+", "-":
+      op2 = scanCharacter { "+-".unicodeScalars.contains($0) }
+    default:
+      op2 = nil
+    }
+
+    if let op2 {
+      return .symbol(.infix(op1 + op2), [])
+    }
+
+    return .symbol(.infix(op1), [])
   }
 
   private mutating func parseIdentifier() throws -> Subexpression? {
@@ -475,12 +495,9 @@ extension UnicodeScalarView {
             } else if case let .symbol(symbol2, _) = rhs {
               if case .prefix = symbol2 {
                 try collapseStack(from: i + 2)
-              } else if ["+", "-", "/", "*"].contains(symbol.name) { // Assume infix
+              } else {
                 stack[i + 2] = .symbol(.prefix(symbol2.name), [])
                 try collapseStack(from: i + 2)
-              } else { // Assume postfix
-                stack[i + 1] = .symbol(.postfix(symbol.name), [])
-                try collapseStack(from: i)
               }
             }
           }

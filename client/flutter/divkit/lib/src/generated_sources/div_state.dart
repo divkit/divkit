@@ -18,6 +18,7 @@ import 'package:divkit/src/generated_sources/div_disappear_action.dart';
 import 'package:divkit/src/generated_sources/div_edge_insets.dart';
 import 'package:divkit/src/generated_sources/div_extension.dart';
 import 'package:divkit/src/generated_sources/div_focus.dart';
+import 'package:divkit/src/generated_sources/div_layout_provider.dart';
 import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
 import 'package:divkit/src/generated_sources/div_size.dart';
 import 'package:divkit/src/generated_sources/div_tooltip.dart';
@@ -45,8 +46,10 @@ class DivState with EquatableMixin implements DivBase {
     this.focus,
     this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
+    this.layoutProvider,
     this.margins = const DivEdgeInsets(),
     this.paddings = const DivEdgeInsets(),
+    this.reuseId,
     this.rowSpan,
     this.selectedActions,
     this.stateIdVariable,
@@ -109,10 +112,16 @@ class DivState with EquatableMixin implements DivBase {
   final String? id;
 
   @override
+  final DivLayoutProvider? layoutProvider;
+
+  @override
   final DivEdgeInsets margins;
 
   @override
   final DivEdgeInsets paddings;
+
+  @override
+  final Expression<String>? reuseId;
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
@@ -175,8 +184,10 @@ class DivState with EquatableMixin implements DivBase {
         focus,
         height,
         id,
+        layoutProvider,
         margins,
         paddings,
+        reuseId,
         rowSpan,
         selectedActions,
         stateIdVariable,
@@ -210,8 +221,10 @@ class DivState with EquatableMixin implements DivBase {
     DivFocus? Function()? focus,
     DivSize? height,
     String? Function()? id,
+    DivLayoutProvider? Function()? layoutProvider,
     DivEdgeInsets? margins,
     DivEdgeInsets? paddings,
+    Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     List<DivAction>? Function()? selectedActions,
     String? Function()? stateIdVariable,
@@ -252,8 +265,12 @@ class DivState with EquatableMixin implements DivBase {
         focus: focus != null ? focus.call() : this.focus,
         height: height ?? this.height,
         id: id != null ? id.call() : this.id,
+        layoutProvider: layoutProvider != null
+            ? layoutProvider.call()
+            : this.layoutProvider,
         margins: margins ?? this.margins,
         paddings: paddings ?? this.paddings,
+        reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
         selectedActions: selectedActions != null
             ? selectedActions.call()
@@ -291,155 +308,174 @@ class DivState with EquatableMixin implements DivBase {
     if (json == null) {
       return null;
     }
-    return DivState(
-      accessibility: safeParseObj(
-        DivAccessibility.fromJson(json['accessibility']),
-        fallback: const DivAccessibility(),
-      )!,
-      alignmentHorizontal: safeParseStrEnumExpr(
-        json['alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-      ),
-      alignmentVertical: safeParseStrEnumExpr(
-        json['alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-      ),
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 1.0,
-      )!,
-      background: safeParseObj(
-        safeListMap(
+    try {
+      return DivState(
+        accessibility: safeParseObj(
+          DivAccessibility.fromJson(json['accessibility']),
+          fallback: const DivAccessibility(),
+        )!,
+        alignmentHorizontal: safeParseStrEnumExpr(
+          json['alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+        ),
+        alignmentVertical: safeParseStrEnumExpr(
+          json['alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+        ),
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 1.0,
+        )!,
+        background: safeParseObj(
+          safeListMap(
             json['background'],
             (v) => safeParseObj(
-                  DivBackground.fromJson(v),
-                )!),
-      ),
-      border: safeParseObj(
-        DivBorder.fromJson(json['border']),
-        fallback: const DivBorder(),
-      )!,
-      columnSpan: safeParseIntExpr(
-        json['column_span'],
-      ),
-      defaultStateId: safeParseStrExpr(
-        json['default_state_id']?.toString(),
-      ),
-      disappearActions: safeParseObj(
-        safeListMap(
+              DivBackground.fromJson(v),
+            )!,
+          ),
+        ),
+        border: safeParseObj(
+          DivBorder.fromJson(json['border']),
+          fallback: const DivBorder(),
+        )!,
+        columnSpan: safeParseIntExpr(
+          json['column_span'],
+        ),
+        defaultStateId: safeParseStrExpr(
+          json['default_state_id']?.toString(),
+        ),
+        disappearActions: safeParseObj(
+          safeListMap(
             json['disappear_actions'],
             (v) => safeParseObj(
-                  DivDisappearAction.fromJson(v),
-                )!),
-      ),
-      divId: safeParseStr(
-        json['div_id']?.toString(),
-      ),
-      extensions: safeParseObj(
-        safeListMap(
+              DivDisappearAction.fromJson(v),
+            )!,
+          ),
+        ),
+        divId: safeParseStr(
+          json['div_id']?.toString(),
+        ),
+        extensions: safeParseObj(
+          safeListMap(
             json['extensions'],
             (v) => safeParseObj(
-                  DivExtension.fromJson(v),
-                )!),
-      ),
-      focus: safeParseObj(
-        DivFocus.fromJson(json['focus']),
-      ),
-      height: safeParseObj(
-        DivSize.fromJson(json['height']),
-        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
-      )!,
-      id: safeParseStr(
-        json['id']?.toString(),
-      ),
-      margins: safeParseObj(
-        DivEdgeInsets.fromJson(json['margins']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      paddings: safeParseObj(
-        DivEdgeInsets.fromJson(json['paddings']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      rowSpan: safeParseIntExpr(
-        json['row_span'],
-      ),
-      selectedActions: safeParseObj(
-        safeListMap(
+              DivExtension.fromJson(v),
+            )!,
+          ),
+        ),
+        focus: safeParseObj(
+          DivFocus.fromJson(json['focus']),
+        ),
+        height: safeParseObj(
+          DivSize.fromJson(json['height']),
+          fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
+        )!,
+        id: safeParseStr(
+          json['id']?.toString(),
+        ),
+        layoutProvider: safeParseObj(
+          DivLayoutProvider.fromJson(json['layout_provider']),
+        ),
+        margins: safeParseObj(
+          DivEdgeInsets.fromJson(json['margins']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        paddings: safeParseObj(
+          DivEdgeInsets.fromJson(json['paddings']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        reuseId: safeParseStrExpr(
+          json['reuse_id']?.toString(),
+        ),
+        rowSpan: safeParseIntExpr(
+          json['row_span'],
+        ),
+        selectedActions: safeParseObj(
+          safeListMap(
             json['selected_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      stateIdVariable: safeParseStr(
-        json['state_id_variable']?.toString(),
-      ),
-      states: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        stateIdVariable: safeParseStr(
+          json['state_id_variable']?.toString(),
+        ),
+        states: safeParseObj(
+          safeListMap(
             json['states'],
             (v) => safeParseObj(
-                  DivStateState.fromJson(v),
-                )!),
-      )!,
-      tooltips: safeParseObj(
-        safeListMap(
+              DivStateState.fromJson(v),
+            )!,
+          ),
+        )!,
+        tooltips: safeParseObj(
+          safeListMap(
             json['tooltips'],
             (v) => safeParseObj(
-                  DivTooltip.fromJson(v),
-                )!),
-      ),
-      transform: safeParseObj(
-        DivTransform.fromJson(json['transform']),
-        fallback: const DivTransform(),
-      )!,
-      transitionAnimationSelector: safeParseStrEnumExpr(
-        json['transition_animation_selector'],
-        parse: DivTransitionSelector.fromJson,
-        fallback: DivTransitionSelector.stateChange,
-      )!,
-      transitionChange: safeParseObj(
-        DivChangeTransition.fromJson(json['transition_change']),
-      ),
-      transitionIn: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_in']),
-      ),
-      transitionOut: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_out']),
-      ),
-      transitionTriggers: safeParseObj(
-        safeListMap(
+              DivTooltip.fromJson(v),
+            )!,
+          ),
+        ),
+        transform: safeParseObj(
+          DivTransform.fromJson(json['transform']),
+          fallback: const DivTransform(),
+        )!,
+        transitionAnimationSelector: safeParseStrEnumExpr(
+          json['transition_animation_selector'],
+          parse: DivTransitionSelector.fromJson,
+          fallback: DivTransitionSelector.stateChange,
+        )!,
+        transitionChange: safeParseObj(
+          DivChangeTransition.fromJson(json['transition_change']),
+        ),
+        transitionIn: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_in']),
+        ),
+        transitionOut: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_out']),
+        ),
+        transitionTriggers: safeParseObj(
+          safeListMap(
             json['transition_triggers'],
             (v) => safeParseStrEnum(
-                  v,
-                  parse: DivTransitionTrigger.fromJson,
-                )!),
-      ),
-      variables: safeParseObj(
-        safeListMap(
+              v,
+              parse: DivTransitionTrigger.fromJson,
+            )!,
+          ),
+        ),
+        variables: safeParseObj(
+          safeListMap(
             json['variables'],
             (v) => safeParseObj(
-                  DivVariable.fromJson(v),
-                )!),
-      ),
-      visibility: safeParseStrEnumExpr(
-        json['visibility'],
-        parse: DivVisibility.fromJson,
-        fallback: DivVisibility.visible,
-      )!,
-      visibilityAction: safeParseObj(
-        DivVisibilityAction.fromJson(json['visibility_action']),
-      ),
-      visibilityActions: safeParseObj(
-        safeListMap(
+              DivVariable.fromJson(v),
+            )!,
+          ),
+        ),
+        visibility: safeParseStrEnumExpr(
+          json['visibility'],
+          parse: DivVisibility.fromJson,
+          fallback: DivVisibility.visible,
+        )!,
+        visibilityAction: safeParseObj(
+          DivVisibilityAction.fromJson(json['visibility_action']),
+        ),
+        visibilityActions: safeParseObj(
+          safeListMap(
             json['visibility_actions'],
             (v) => safeParseObj(
-                  DivVisibilityAction.fromJson(v),
-                )!),
-      ),
-      width: safeParseObj(
-        DivSize.fromJson(json['width']),
-        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
-      )!,
-    );
+              DivVisibilityAction.fromJson(v),
+            )!,
+          ),
+        ),
+        width: safeParseObj(
+          DivSize.fromJson(json['width']),
+          fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -494,26 +530,31 @@ class DivStateState with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivStateState(
-      animationIn: safeParseObj(
-        DivAnimation.fromJson(json['animation_in']),
-      ),
-      animationOut: safeParseObj(
-        DivAnimation.fromJson(json['animation_out']),
-      ),
-      div: safeParseObj(
-        Div.fromJson(json['div']),
-      ),
-      stateId: safeParseStr(
-        json['state_id']?.toString(),
-      )!,
-      swipeOutActions: safeParseObj(
-        safeListMap(
+    try {
+      return DivStateState(
+        animationIn: safeParseObj(
+          DivAnimation.fromJson(json['animation_in']),
+        ),
+        animationOut: safeParseObj(
+          DivAnimation.fromJson(json['animation_out']),
+        ),
+        div: safeParseObj(
+          Div.fromJson(json['div']),
+        ),
+        stateId: safeParseStr(
+          json['state_id']?.toString(),
+        )!,
+        swipeOutActions: safeParseObj(
+          safeListMap(
             json['swipe_out_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-    );
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

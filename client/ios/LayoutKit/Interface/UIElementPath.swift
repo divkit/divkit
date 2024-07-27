@@ -106,20 +106,31 @@ extension UIElementPath {
   }
 }
 
-private final class ListNode: Codable, Hashable {
+private final class ListNode: Codable {
   let value: String
   let next: ListNode?
-  let nextHash: Int
+
+  private lazy var cachedHash: Int = {
+    var hasher = Hasher()
+    hasher.combine(value)
+    hasher.combine(next)
+
+    return hasher.finalize()
+  }()
 
   init(value: String, next: ListNode? = nil) {
     self.value = value
     self.next = next
-    nextHash = next?.hashValue ?? 0
   }
 
+  enum CodingKeys: CodingKey {
+    case value, next
+  }
+}
+
+extension ListNode: Hashable {
   func hash(into hasher: inout Hasher) {
-    value.hash(into: &hasher)
-    nextHash.hash(into: &hasher)
+    hasher.combine(cachedHash)
   }
 }
 
@@ -128,7 +139,7 @@ extension ListNode: Equatable {
     if lhs === rhs {
       return true
     }
-    return lhs.nextHash == rhs.nextHash && lhs.value == rhs.value && lhs.next == rhs.next
+    return lhs.cachedHash == rhs.cachedHash && lhs.value == rhs.value && lhs.next == rhs.next
   }
 }
 

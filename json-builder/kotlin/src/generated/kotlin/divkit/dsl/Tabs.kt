@@ -55,6 +55,7 @@ class Tabs internal constructor(
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
             restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             selectedTab = additive.selectedTab ?: properties.selectedTab,
@@ -160,6 +161,10 @@ class Tabs internal constructor(
          * Default value: `false`.
          */
         val restrictParentScroll: Property<Boolean>?,
+        /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
         /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
@@ -270,6 +275,7 @@ class Tabs internal constructor(
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("selected_tab", selectedTab)
@@ -572,6 +578,7 @@ class Tabs internal constructor(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -615,6 +622,7 @@ fun DivScope.tabs(
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     selectedTab: Int? = null,
@@ -656,6 +664,7 @@ fun DivScope.tabs(
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         restrictParentScroll = valueOrNull(restrictParentScroll),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         selectedTab = valueOrNull(selectedTab),
@@ -699,6 +708,7 @@ fun DivScope.tabs(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -742,6 +752,7 @@ fun DivScope.tabsProps(
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     selectedTab: Int? = null,
@@ -782,6 +793,7 @@ fun DivScope.tabsProps(
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
     restrictParentScroll = valueOrNull(restrictParentScroll),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     selectedTab = valueOrNull(selectedTab),
@@ -824,6 +836,7 @@ fun DivScope.tabsProps(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -867,6 +880,7 @@ fun TemplateScope.tabsRefs(
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     selectedTab: ReferenceProperty<Int>? = null,
@@ -907,6 +921,7 @@ fun TemplateScope.tabsRefs(
     margins = margins,
     paddings = paddings,
     restrictParentScroll = restrictParentScroll,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     selectedTab = selectedTab,
@@ -949,6 +964,7 @@ fun TemplateScope.tabsRefs(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -992,6 +1008,7 @@ fun Tabs.override(
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     selectedTab: Int? = null,
@@ -1033,6 +1050,7 @@ fun Tabs.override(
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         selectedTab = valueOrNull(selectedTab) ?: properties.selectedTab,
@@ -1076,6 +1094,7 @@ fun Tabs.override(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -1119,6 +1138,7 @@ fun Tabs.defer(
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     selectedTab: ReferenceProperty<Int>? = null,
@@ -1160,6 +1180,7 @@ fun Tabs.defer(
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         selectedTab = selectedTab ?: properties.selectedTab,
@@ -1191,6 +1212,7 @@ fun Tabs.defer(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param hasSeparator A separating line between tabs and contents.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
@@ -1207,6 +1229,7 @@ fun Tabs.evaluate(
     dynamicHeight: ExpressionProperty<Boolean>? = null,
     hasSeparator: ExpressionProperty<Boolean>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectedTab: ExpressionProperty<Int>? = null,
     separatorColor: ExpressionProperty<Color>? = null,
@@ -1233,6 +1256,7 @@ fun Tabs.evaluate(
         margins = properties.margins,
         paddings = properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         selectedTab = selectedTab ?: properties.selectedTab,
@@ -1276,6 +1300,7 @@ fun Tabs.evaluate(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -1319,6 +1344,7 @@ fun Component<Tabs>.override(
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     selectedTab: Int? = null,
@@ -1361,6 +1387,7 @@ fun Component<Tabs>.override(
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
         restrictParentScroll = valueOrNull(restrictParentScroll),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         selectedTab = valueOrNull(selectedTab),
@@ -1404,6 +1431,7 @@ fun Component<Tabs>.override(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -1447,6 +1475,7 @@ fun Component<Tabs>.defer(
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     selectedTab: ReferenceProperty<Int>? = null,
@@ -1489,6 +1518,7 @@ fun Component<Tabs>.defer(
         margins = margins,
         paddings = paddings,
         restrictParentScroll = restrictParentScroll,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         selectedTab = selectedTab,
@@ -1520,6 +1550,7 @@ fun Component<Tabs>.defer(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param hasSeparator A separating line between tabs and contents.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
@@ -1536,6 +1567,7 @@ fun Component<Tabs>.evaluate(
     dynamicHeight: ExpressionProperty<Boolean>? = null,
     hasSeparator: ExpressionProperty<Boolean>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectedTab: ExpressionProperty<Int>? = null,
     separatorColor: ExpressionProperty<Color>? = null,
@@ -1563,6 +1595,7 @@ fun Component<Tabs>.evaluate(
         margins = null,
         paddings = null,
         restrictParentScroll = restrictParentScroll,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = null,
         selectedTab = selectedTab,

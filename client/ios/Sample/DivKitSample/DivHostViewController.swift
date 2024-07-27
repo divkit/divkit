@@ -1,31 +1,43 @@
 import UIKit
 
 import DivKit
+import DivKitExtensions
 
 final class DivHostViewController: UIViewController {
-  private var divHostView: DivHostView!
-  private var components: DivKitComponents!
+  lazy var divKitComponents = makeDivKitComponents()
+  lazy var divView = DivView(divKitComponents: divKitComponents)
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    components = DivKitComponents(
-      urlHandler: DivUrlHandlerDelegate { UIApplication.shared.open($0) }
-    )
-    let preloader = DivViewPreloader(divKitComponents: components)
-    divHostView = DivHostView(components: components, preloader: preloader)
+    view.addSubview(divView)
 
-    if let cards = try? DivJson.loadCards() {
-      view.addSubview(divHostView)
-      Task {
-        await preloader
-          .setSources(cards.map { DivViewSource(kind: .divData($0), cardId: $0.cardId) })
-        divHostView.items = cards.map(\.cardId)
-      }
+    Task {
+      await configureDivView()
     }
   }
 
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    divHostView.frame = view.bounds.inset(by: view.safeAreaInsets)
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    divView.frame = view.bounds.inset(by: view.safeAreaInsets)
+  }
+
+  private func configureDivView() async {
+    let url = Bundle.main.url(forResource: "Sample", withExtension: "json")!
+    let data = try! Data(contentsOf: url)
+    await divView.setSource(
+      .init(kind: .data(data), cardId: "Sample"),
+      debugParams: DebugParams(isDebugInfoEnabled: true)
+    )
+  }
+
+  private func makeDivKitComponents() -> DivKitComponents {
+    let extensionHandlers = [PinchToZoomExtensionHandler(overlayView: view)]
+    let customBlockFactory = SampleDivCustomBlockFactory()
+    let urlHandler = SampleDivActionHandler(hostViewController: self)
+    return DivKitComponents(
+      divCustomBlockFactory: customBlockFactory,
+      extensionHandlers: extensionHandlers,
+      urlHandler: urlHandler
+    )
   }
 }

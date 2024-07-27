@@ -1,0 +1,136 @@
+{
+  "description": "Inner data_element_name should override outer one.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "card": {
+    "log_id": "prototypes",
+    "variables": [
+      {
+        "name": "data",
+        "type": "array",
+        "value": [
+          {
+            "title": "First array",
+            "items": [
+              {
+                "title": "First subarray",
+                "text": "First text"
+              },
+              {
+                "title": "First subarray",
+                "text": "Second text"
+              }
+            ]
+          },
+          {
+            "title": "Second array",
+            "items": [
+              {
+                "title": "Second subarray",
+                "text": "First text"
+              },
+              {
+                "text": "Second text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "orientation": "vertical",
+          "layout_mode": {
+            "type": "percentage",
+            "page_width": {
+              "type": "percentage",
+              "value": 50
+            },
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            }
+          },
+          "item_builder": {
+            "type": "prototype",
+            "data": "@{data}",
+            "prototypes": [
+              {
+                "div": {
+                  "type": "pager",
+                  "orientation": "horizontal",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "layout_mode": {
+                    "type": "percentage",
+                    "page_width": {
+                      "type": "percentage",
+                      "value": 50
+                    },
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    }
+                  },
+                  "item_builder": {
+                    "type": "prototype",
+                    "data": "@{getArrayFromDict(it, 'items')}",
+                    "prototypes": [
+                      {
+                        "div": {
+                          "type": "container",
+                          "height": {
+                            "type": "match_parent"
+                          },
+                          "orientation": "vertical",
+                          "border": {
+                            "corner_radius": 16,
+                            "stroke": {
+                              "color": "#aaaaaa",
+                              "width": 1
+                            }
+                          },
+                          "paddings": {
+                            "top": 12,
+                            "bottom": 12,
+                            "left": 12,
+                            "right": 12
+                          },
+                          "items": [
+                            {
+                              "type": "text",
+                              "text": "@{getOptStringFromDict('<title is missing>', it, 'title')}",
+                              "font_size": 16
+                            },
+                            {
+                              "type": "text",
+                              "text": "@{getStringFromDict(it, 'text')}"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

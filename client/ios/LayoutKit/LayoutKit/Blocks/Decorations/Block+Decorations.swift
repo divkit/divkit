@@ -27,7 +27,8 @@ extension Block {
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool,
-    accessibilityElement: AccessibilityElement? = nil
+    accessibilityElement: AccessibilityElement? = nil,
+    reuseId: String?
   ) -> Block {
     let anythingToApplyExceptBoundary =
       (border != nil && border?.width.isApproximatelyEqualTo(0) != true)
@@ -42,6 +43,7 @@ extension Block {
         || tooltips?.isEmpty == false
         || forceWrapping
         || accessibilityElement != nil
+        || reuseId != nil
 
     if !forceWrapping, let block = self as? DecoratingBlock {
       #if INTERNAL_BUILD
@@ -91,7 +93,8 @@ extension Block {
         blurEffect: blurEffect ?? block.blurEffect,
         visibilityParams: visibilityParams ?? block.visibilityParams,
         tooltips: [tooltips, block.tooltips].compactMap { $0 }.flatMap { $0 },
-        accessibilityElement: accessibilityElement
+        accessibilityElement: accessibilityElement,
+        reuseId: reuseId
       )
     }
 
@@ -115,7 +118,8 @@ extension Block {
       blurEffect: blurEffect,
       visibilityParams: visibilityParams,
       tooltips: tooltips ?? [],
-      accessibilityElement: accessibilityElement
+      accessibilityElement: accessibilityElement,
+      reuseId: reuseId
     )
   }
 
@@ -143,7 +147,8 @@ extension Block {
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool = false,
-    accessibilityElement: AccessibilityElement? = nil
+    accessibilityElement: AccessibilityElement? = nil,
+    reuseId: String? = nil
   ) -> Block {
     let decoratedBlock = applyDecoratingBlockProperties(
       boundary: boundary,
@@ -160,7 +165,8 @@ extension Block {
       visibilityParams: visibilityParams,
       tooltips: tooltips,
       forceWrapping: forceWrapping,
-      accessibilityElement: accessibilityElement
+      accessibilityElement: accessibilityElement,
+      reuseId: reuseId
     )
     return decoratedBlock.shaded(with: shadow)
   }

@@ -112,7 +112,8 @@ class Div with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in Div");
+      "Type ${value.runtimeType.toString()} is not generalized in Div",
+    );
   }
 
   T maybeMap<T>({
@@ -335,40 +336,44 @@ class Div with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivContainer.type:
-        return Div.divContainer(DivContainer.fromJson(json)!);
-      case DivCustom.type:
-        return Div.divCustom(DivCustom.fromJson(json)!);
-      case DivGallery.type:
-        return Div.divGallery(DivGallery.fromJson(json)!);
-      case DivGifImage.type:
-        return Div.divGifImage(DivGifImage.fromJson(json)!);
-      case DivGrid.type:
-        return Div.divGrid(DivGrid.fromJson(json)!);
-      case DivImage.type:
-        return Div.divImage(DivImage.fromJson(json)!);
-      case DivIndicator.type:
-        return Div.divIndicator(DivIndicator.fromJson(json)!);
-      case DivInput.type:
-        return Div.divInput(DivInput.fromJson(json)!);
-      case DivPager.type:
-        return Div.divPager(DivPager.fromJson(json)!);
-      case DivSelect.type:
-        return Div.divSelect(DivSelect.fromJson(json)!);
-      case DivSeparator.type:
-        return Div.divSeparator(DivSeparator.fromJson(json)!);
-      case DivSlider.type:
-        return Div.divSlider(DivSlider.fromJson(json)!);
-      case DivState.type:
-        return Div.divState(DivState.fromJson(json)!);
-      case DivTabs.type:
-        return Div.divTabs(DivTabs.fromJson(json)!);
-      case DivText.type:
-        return Div.divText(DivText.fromJson(json)!);
-      case DivVideo.type:
-        return Div.divVideo(DivVideo.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivContainer.type:
+          return Div.divContainer(DivContainer.fromJson(json)!);
+        case DivCustom.type:
+          return Div.divCustom(DivCustom.fromJson(json)!);
+        case DivGallery.type:
+          return Div.divGallery(DivGallery.fromJson(json)!);
+        case DivGifImage.type:
+          return Div.divGifImage(DivGifImage.fromJson(json)!);
+        case DivGrid.type:
+          return Div.divGrid(DivGrid.fromJson(json)!);
+        case DivImage.type:
+          return Div.divImage(DivImage.fromJson(json)!);
+        case DivIndicator.type:
+          return Div.divIndicator(DivIndicator.fromJson(json)!);
+        case DivInput.type:
+          return Div.divInput(DivInput.fromJson(json)!);
+        case DivPager.type:
+          return Div.divPager(DivPager.fromJson(json)!);
+        case DivSelect.type:
+          return Div.divSelect(DivSelect.fromJson(json)!);
+        case DivSeparator.type:
+          return Div.divSeparator(DivSeparator.fromJson(json)!);
+        case DivSlider.type:
+          return Div.divSlider(DivSlider.fromJson(json)!);
+        case DivState.type:
+          return Div.divState(DivState.fromJson(json)!);
+        case DivTabs.type:
+          return Div.divTabs(DivTabs.fromJson(json)!);
+        case DivText.type:
+          return Div.divText(DivText.fromJson(json)!);
+        case DivVideo.type:
+          return Div.divVideo(DivVideo.fromJson(json)!);
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

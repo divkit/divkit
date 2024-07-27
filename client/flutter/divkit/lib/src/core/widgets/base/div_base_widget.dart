@@ -5,7 +5,7 @@ import 'package:divkit/src/generated_sources/div_animation.dart';
 import 'package:divkit/src/generated_sources/div_base.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:divkit/src/utils/size_converters.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:divkit/src/core/widgets/div_visibility_emitter.dart';
 
 class DivBaseWidget extends StatefulWidget {
@@ -90,16 +90,20 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
                               margin: model.margin,
                               decoration: focusNode.hasFocus
                                   ? model.focusDecoration
-                                  : model.boxDecoration,
-                              child: RepaintBoundary(child: widget.child),
+                                  : model.decoration,
+                              child: RepaintBoundary(
+                                child: widget.child,
+                              ),
                             ),
                           )
                         : _DecoratedBox(
                             key: key,
                             padding: model.padding,
                             margin: model.margin,
-                            decoration: model.boxDecoration,
-                            child: RepaintBoundary(child: widget.child),
+                            decoration: model.decoration,
+                            child: RepaintBoundary(
+                              child: widget.child,
+                            ),
                           ),
                   ),
                 ),
@@ -119,7 +123,7 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
 }
 
 class _DecoratedBox extends StatelessWidget {
-  final BoxDecoration? decoration;
+  final DivDecoration? decoration;
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -134,35 +138,106 @@ class _DecoratedBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final image = decoration?.image;
-    final gradient = decoration?.gradient;
-    final color = decoration?.color;
+    final backgroundWidgets = decoration?.backgroundWidgets ?? <Widget>[];
     return Container(
       margin: margin,
-      child: Container(
-        decoration: image != null
-            ? BoxDecoration(
-                border: decoration?.border,
-                borderRadius: decoration?.borderRadius,
-                boxShadow: decoration?.boxShadow,
-                image: image,
-              )
-            : null,
+      child: CustomPaint(
+        painter: _OuterShadowPainter(
+          outerShadow: decoration?.outerShadow,
+          borderRadiusCustom: decoration?.customBorderRadius,
+        ),
         child: ClipRRect(
-          borderRadius: decoration?.borderRadius ?? BorderRadius.zero,
-          child: Container(
-            padding: padding,
-            decoration: BoxDecoration(
-              border: decoration?.border,
-              borderRadius: decoration?.borderRadius,
-              boxShadow: decoration?.boxShadow,
-              gradient: gradient,
-              color: color,
-            ),
-            child: child,
+          borderRadius: decoration?.customBorderRadius.toBorderRadius() ??
+              BorderRadius.zero,
+          child: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              ...backgroundWidgets
+                  .map(
+                    (widget) => Positioned.fill(
+                      child: widget,
+                    ),
+                  )
+                  .toList(),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: decoration?.customBorderRadius.toBorderRadius(),
+                  border: decoration?.boxDecoration.border,
+                ),
+                padding: padding,
+                child: child,
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+class _OuterShadowPainter extends CustomPainter {
+  final CustomBorderRadius? borderRadiusCustom;
+  final BoxShadow? outerShadow;
+
+  _OuterShadowPainter({
+    this.borderRadiusCustom,
+    this.outerShadow,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final blurRadius = outerShadow?.blurRadius ?? 0.0;
+    final shadowColor = outerShadow?.color ?? Colors.transparent;
+    final offset = outerShadow?.offset ?? Offset.zero;
+    Path path = Path()
+      ..addRRect(
+        RRect.fromRectAndCorners(
+          Rect.fromLTWH(
+            0,
+            0,
+            size.width,
+            size.height,
+          ),
+          bottomLeft: borderRadiusCustom?.bottomLeft ?? Radius.zero,
+          topLeft: borderRadiusCustom?.topLeft ?? Radius.zero,
+          bottomRight: borderRadiusCustom?.bottomRight ?? Radius.zero,
+          topRight: borderRadiusCustom?.topRight ?? Radius.zero,
+        ),
+      );
+
+    Path outerPath = Path()
+      ..addRRect(
+        RRect.fromRectAndCorners(
+          Rect.fromLTWH(
+            offset.dx,
+            offset.dy,
+            size.width,
+            size.height,
+          ),
+          bottomLeft: borderRadiusCustom?.bottomLeft ?? Radius.zero,
+          topLeft: borderRadiusCustom?.topLeft ?? Radius.zero,
+          bottomRight: borderRadiusCustom?.bottomRight ?? Radius.zero,
+          topRight: borderRadiusCustom?.topRight ?? Radius.zero,
+        ),
+      );
+
+    final shadowPaint = Paint()
+      ..color = shadowColor
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, blurRadius);
+
+    canvas.saveLayer(Rect.largest, Paint());
+    canvas.drawPath(outerPath, shadowPaint);
+    canvas.drawPath(
+      path,
+      Paint()
+        ..blendMode = BlendMode.clear
+        ..color = Colors.transparent,
+    );
+
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(_OuterShadowPainter oldDelegate) =>
+      outerShadow != oldDelegate.outerShadow;
 }

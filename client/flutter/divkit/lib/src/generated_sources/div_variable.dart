@@ -63,7 +63,8 @@ class DivVariable with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivVariable");
+      "Type ${value.runtimeType.toString()} is not generalized in DivVariable",
+    );
   }
 
   T maybeMap<T>({
@@ -182,24 +183,28 @@ class DivVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case ArrayVariable.type:
-        return DivVariable.arrayVariable(ArrayVariable.fromJson(json)!);
-      case BooleanVariable.type:
-        return DivVariable.booleanVariable(BooleanVariable.fromJson(json)!);
-      case ColorVariable.type:
-        return DivVariable.colorVariable(ColorVariable.fromJson(json)!);
-      case DictVariable.type:
-        return DivVariable.dictVariable(DictVariable.fromJson(json)!);
-      case IntegerVariable.type:
-        return DivVariable.integerVariable(IntegerVariable.fromJson(json)!);
-      case NumberVariable.type:
-        return DivVariable.numberVariable(NumberVariable.fromJson(json)!);
-      case StringVariable.type:
-        return DivVariable.stringVariable(StringVariable.fromJson(json)!);
-      case UrlVariable.type:
-        return DivVariable.urlVariable(UrlVariable.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case ArrayVariable.type:
+          return DivVariable.arrayVariable(ArrayVariable.fromJson(json)!);
+        case BooleanVariable.type:
+          return DivVariable.booleanVariable(BooleanVariable.fromJson(json)!);
+        case ColorVariable.type:
+          return DivVariable.colorVariable(ColorVariable.fromJson(json)!);
+        case DictVariable.type:
+          return DivVariable.dictVariable(DictVariable.fromJson(json)!);
+        case IntegerVariable.type:
+          return DivVariable.integerVariable(IntegerVariable.fromJson(json)!);
+        case NumberVariable.type:
+          return DivVariable.numberVariable(NumberVariable.fromJson(json)!);
+        case StringVariable.type:
+          return DivVariable.stringVariable(StringVariable.fromJson(json)!);
+        case UrlVariable.type:
+          return DivVariable.urlVariable(UrlVariable.fromJson(json)!);
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

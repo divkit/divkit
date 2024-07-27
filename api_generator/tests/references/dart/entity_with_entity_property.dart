@@ -30,8 +30,12 @@ class EntityWithEntityProperty with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithEntityProperty(
-      entity: safeParseObj(Entity.fromJson(json['entity']), fallback: const Entity.entityWithStringEnumProperty(const EntityWithStringEnumProperty(property: ValueExpression(EntityWithStringEnumPropertyProperty.second),)),)!,
-    );
+    try {
+      return EntityWithEntityProperty(
+        entity: safeParseObj(Entity.fromJson(json['entity']), fallback: const Entity.entityWithStringEnumProperty(const EntityWithStringEnumProperty(property: ValueExpression(EntityWithStringEnumPropertyProperty.second),)),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

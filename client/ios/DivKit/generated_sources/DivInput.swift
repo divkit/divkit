@@ -62,6 +62,7 @@ public final class DivInput: DivBase {
   public let maxVisibleLines: Expression<Int>? // constraint: number > 0
   public let nativeInterface: NativeInterface?
   public let paddings: DivEdgeInsets?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectAllOnFocus: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]?
@@ -154,6 +155,10 @@ public final class DivInput: DivBase {
     resolver.resolveNumeric(maxVisibleLines)
   }
 
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
+  }
+
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(rowSpan)
   }
@@ -237,6 +242,7 @@ public final class DivInput: DivBase {
     maxVisibleLines: Expression<Int>? = nil,
     nativeInterface: NativeInterface? = nil,
     paddings: DivEdgeInsets? = nil,
+    reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     selectAllOnFocus: Expression<Bool>? = nil,
     selectedActions: [DivAction]? = nil,
@@ -288,6 +294,7 @@ public final class DivInput: DivBase {
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus ?? .value(false)
     self.selectedActions = selectedActions
@@ -385,47 +392,48 @@ extension DivInput: Equatable {
     }
     guard
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectAllOnFocus == rhs.selectAllOnFocus
+      lhs.reuseId == rhs.reuseId,
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectAllOnFocus == rhs.selectAllOnFocus,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
     else {
       return false
     }
     guard
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
       lhs.textColor == rhs.textColor,
-      lhs.textVariable == rhs.textVariable,
-      lhs.tooltips == rhs.tooltips
+      lhs.textVariable == rhs.textVariable
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.validators == rhs.validators
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.validators == rhs.validators,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -471,6 +479,7 @@ extension DivInput: Serializable {
     result["max_visible_lines"] = maxVisibleLines?.toValidSerializationValue()
     result["native_interface"] = nativeInterface?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["select_all_on_focus"] = selectAllOnFocus.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }

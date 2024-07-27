@@ -287,6 +287,33 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_WithLocalVariables() {
+    let block = makeBlock(
+      divText(
+        textExpression: "@{local_var}",
+        variables: [variable("local_var", "Hello!")]
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: TextBlock(
+          widthTrait: .resizable,
+          text: "Hello!".withTypo(),
+          verticalAlignment: .leading,
+          accessibilityElement: nil
+        ),
+        accessibilityElement: accessibility(
+          traits: .staticText,
+          label: "Hello!"
+        )
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WhenCreatesBlockAfterItBeingGone_ReportsVisibility() throws {
     try expectVisibilityActionsToRun(
       forVisibleBlockFile: "div-text-visibility-actions-visible",
@@ -364,6 +391,32 @@ final class DivBaseExtensionsTests: XCTestCase {
     )
   }
 
+  func test_WithBackroundReuseId() throws {
+    let context = DivBlockModelingContext()
+    let block = try makeBlock(fromFile: "div-reuse-id-background-wrapper", context: context)
+
+    XCTAssertEqual(block.reuseId, testReuseId)
+  }
+
+  func test_WithLottieExtensionReuseId() throws {
+    let block = try makeBlock(fromFile: "div-reuse-id-lottie-wrapper", context: DivBlockModelingContext())
+
+    XCTAssertEqual(block.reuseId, testReuseId)
+  }
+
+  func test_WithPagerItemsReuseIds() throws {
+    let block = try DivPagerTemplate.makeBlock(
+      fromFile: "div-reuse-id-pager-items",
+      context: DivBlockModelingContext()
+    ) as! DecoratingBlock
+    let pagerBlock = block.child as! PagerBlock
+
+    let itemBlocks = pagerBlock.gallery.items.map(\.content)
+    for (index, itemBlock) in itemBlocks.enumerated() {
+      XCTAssertEqual(itemBlock.reuseId, testReuseId + String(index))
+    }
+  }
+
   private func expectVisibilityActionsToRun(
     forVisibleBlockFile file: String,
     invisibleBlockFile: String
@@ -387,11 +440,22 @@ final class DivBaseExtensionsTests: XCTestCase {
 
 private func makeBlock(
   fromFile filename: String,
-  context: DivBlockModelingContext = .default
+  context: DivBlockModelingContext
 ) throws -> Block {
-  try DivTextTemplate.make(
-    fromFile: filename,
-    subdirectory: "div-base",
-    context: context
-  )
+  return try DivTextTemplate.makeBlock(fromFile: filename, context: context)
 }
+
+extension TemplateValue where ResolvedValue: DivBlockModeling {
+  fileprivate static func makeBlock(
+    fromFile filename: String,
+    context: DivBlockModelingContext
+  ) throws -> Block {
+    return try Self.make(
+      fromFile: filename,
+      subdirectory: "div-base",
+      context: context
+    )
+  }
+}
+
+private let testReuseId = "test_reuse_id"

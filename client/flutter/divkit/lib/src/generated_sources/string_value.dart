@@ -29,10 +29,14 @@ class StringValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return StringValue(
-      value: safeParseStrExpr(
-        json['value']?.toString(),
-      )!,
-    );
+    try {
+      return StringValue(
+        value: safeParseStrExpr(
+          json['value']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

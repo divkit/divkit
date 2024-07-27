@@ -34,6 +34,7 @@ public final class DivIndicatorTemplate: TemplateValue {
   public let minimumItemSize: Field<Expression<Double>>? // constraint: number > 0; default value: 0.5
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let pagerId: Field<String>?
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>?
   public let shape: Field<DivShapeTemplate>? // default value: .divRoundedRectangleShape(DivRoundedRectangleShape())
@@ -78,6 +79,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       minimumItemSize: dictionary.getOptionalExpressionField("minimum_item_size"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       pagerId: dictionary.getOptionalField("pager_id"),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
       shape: dictionary.getOptionalField("shape", templateToType: templateToType),
@@ -123,6 +125,7 @@ public final class DivIndicatorTemplate: TemplateValue {
     minimumItemSize: Field<Expression<Double>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     pagerId: Field<String>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     shape: Field<DivShapeTemplate>? = nil,
@@ -165,6 +168,7 @@ public final class DivIndicatorTemplate: TemplateValue {
     self.minimumItemSize = minimumItemSize
     self.paddings = paddings
     self.pagerId = pagerId
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.shape = shape
@@ -208,6 +212,7 @@ public final class DivIndicatorTemplate: TemplateValue {
     let minimumItemSizeValue = parent?.minimumItemSize?.resolveOptionalValue(context: context, validator: ResolvedValue.minimumItemSizeValidator) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let pagerIdValue = parent?.pagerId?.resolveOptionalValue(context: context) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let shapeValue = parent?.shape?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -249,6 +254,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       minimumItemSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "minimum_item_size", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pagerIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "pager_id", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       shapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "shape", error: $0) },
@@ -291,6 +297,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       minimumItemSize: minimumItemSizeValue.value,
       paddings: paddingsValue.value,
       pagerId: pagerIdValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       shape: shapeValue.value,
@@ -339,6 +346,7 @@ public final class DivIndicatorTemplate: TemplateValue {
     var minimumItemSizeValue: DeserializationResult<Expression<Double>> = parent?.minimumItemSize?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var pagerIdValue: DeserializationResult<String> = parent?.pagerId?.value() ?? .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var shapeValue: DeserializationResult<DivShape> = .noValue
@@ -406,6 +414,8 @@ public final class DivIndicatorTemplate: TemplateValue {
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
       case "pager_id":
         pagerIdValue = deserialize(__dictValue).merged(with: pagerIdValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selected_actions":
@@ -486,6 +496,8 @@ public final class DivIndicatorTemplate: TemplateValue {
         paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.pagerId?.link:
         pagerIdValue = pagerIdValue.merged(with: { deserialize(__dictValue) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.selectedActions?.link:
@@ -573,6 +585,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       minimumItemSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "minimum_item_size", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pagerIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "pager_id", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       shapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "shape", error: $0) },
@@ -615,6 +628,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       minimumItemSize: minimumItemSizeValue.value,
       paddings: paddingsValue.value,
       pagerId: pagerIdValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       shape: shapeValue.value,
@@ -668,6 +682,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       minimumItemSize: minimumItemSize ?? mergedParent.minimumItemSize,
       paddings: paddings ?? mergedParent.paddings,
       pagerId: pagerId ?? mergedParent.pagerId,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       shape: shape ?? mergedParent.shape,
@@ -716,6 +731,7 @@ public final class DivIndicatorTemplate: TemplateValue {
       minimumItemSize: merged.minimumItemSize,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       pagerId: merged.pagerId,
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       shape: merged.shape?.tryResolveParent(templates: templates),

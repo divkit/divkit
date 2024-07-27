@@ -7,7 +7,7 @@ import VGSL
 public final class DivStroke {
   public let color: Expression<Color>
   public let unit: Expression<DivSizeUnit> // default value: dp
-  public let width: Expression<Int> // constraint: number >= 0; default value: 1
+  public let width: Expression<Double> // constraint: number >= 0; default value: 1
 
   public func resolveColor(_ resolver: ExpressionResolver) -> Color? {
     resolver.resolveColor(color)
@@ -17,17 +17,17 @@ public final class DivStroke {
     resolver.resolveEnum(unit) ?? DivSizeUnit.dp
   }
 
-  public func resolveWidth(_ resolver: ExpressionResolver) -> Int {
+  public func resolveWidth(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(width) ?? 1
   }
 
-  static let widthValidator: AnyValueValidator<Int> =
+  static let widthValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
   init(
     color: Expression<Color>,
     unit: Expression<DivSizeUnit>? = nil,
-    width: Expression<Int>? = nil
+    width: Expression<Double>? = nil
   ) {
     self.color = color
     self.unit = unit ?? .value(.dp)

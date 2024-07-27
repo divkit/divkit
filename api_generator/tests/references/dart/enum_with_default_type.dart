@@ -58,12 +58,16 @@ class EnumWithDefaultType with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case WithDefault.type :
-        return EnumWithDefaultType.withDefault(WithDefault.fromJson(json)!);
-      case WithoutDefault.type :
-        return EnumWithDefaultType.withoutDefault(WithoutDefault.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case WithDefault.type :
+          return EnumWithDefaultType.withDefault(WithDefault.fromJson(json)!);
+        case WithoutDefault.type :
+          return EnumWithDefaultType.withoutDefault(WithoutDefault.fromJson(json)!);
+      }
+      return null;
+    } catch (e, st) {
+      return null;
     }
-    return null;
   }
 }

@@ -29,10 +29,14 @@ class DictValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DictValue(
-      value: safeParseMap(
-        json['value'],
-      )!,
-    );
+    try {
+      return DictValue(
+        value: safeParseMap(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -35,13 +35,17 @@ class NumberVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return NumberVariable(
-      name: safeParseStr(
-        json['name']?.toString(),
-      )!,
-      value: safeParseDouble(
-        json['value'],
-      )!,
-    );
+    try {
+      return NumberVariable(
+        name: safeParseStr(
+          json['name']?.toString(),
+        )!,
+        value: safeParseDouble(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

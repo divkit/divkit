@@ -28,10 +28,14 @@ class DivAspect with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivAspect(
-      ratio: safeParseDoubleExpr(
-        json['ratio'],
-      )!,
-    );
+    try {
+      return DivAspect(
+        ratio: safeParseDoubleExpr(
+          json['ratio'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

@@ -35,13 +35,17 @@ class ColorVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return ColorVariable(
-      name: safeParseStr(
-        json['name']?.toString(),
-      )!,
-      value: safeParseColor(
-        json['value'],
-      )!,
-    );
+    try {
+      return ColorVariable(
+        name: safeParseStr(
+          json['name']?.toString(),
+        )!,
+        value: safeParseColor(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

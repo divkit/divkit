@@ -85,12 +85,14 @@ internal class DivCustomBinder @Inject constructor(
         }
 
         val divView = context.divView
-        bindView(customView)
-        baseBinder.bindId(divView, customView, div.id)
 
         if (oldCustomView != customView) {
             replaceInParent(previousWrapper, customView, divView)
         }
+
+        bindView(customView)
+        baseBinder.bindId(divView, customView, div.id)
+
         extensionController.bindView(divView, context.expressionResolver, customView, div)
     }
 

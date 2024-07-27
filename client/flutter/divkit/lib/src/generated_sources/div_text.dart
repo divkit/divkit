@@ -20,6 +20,7 @@ import 'package:divkit/src/generated_sources/div_extension.dart';
 import 'package:divkit/src/generated_sources/div_fixed_size.dart';
 import 'package:divkit/src/generated_sources/div_focus.dart';
 import 'package:divkit/src/generated_sources/div_font_weight.dart';
+import 'package:divkit/src/generated_sources/div_layout_provider.dart';
 import 'package:divkit/src/generated_sources/div_line_style.dart';
 import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
 import 'package:divkit/src/generated_sources/div_shadow.dart';
@@ -69,6 +70,7 @@ class DivText with EquatableMixin implements DivBase {
     this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
     this.images,
+    this.layoutProvider,
     this.letterSpacing = const ValueExpression(0),
     this.lineHeight,
     this.longtapActions,
@@ -77,6 +79,7 @@ class DivText with EquatableMixin implements DivBase {
     this.minHiddenLines,
     this.paddings = const DivEdgeInsets(),
     this.ranges,
+    this.reuseId,
     this.rowSpan,
     this.selectable = const ValueExpression(false),
     this.selectedActions,
@@ -169,6 +172,9 @@ class DivText with EquatableMixin implements DivBase {
   final String? id;
 
   final List<DivTextImage>? images;
+
+  @override
+  final DivLayoutProvider? layoutProvider;
   // default value: 0
   final Expression<double> letterSpacing;
   // constraint: number >= 0
@@ -187,6 +193,9 @@ class DivText with EquatableMixin implements DivBase {
   final DivEdgeInsets paddings;
 
   final List<DivTextRange>? ranges;
+
+  @override
+  final Expression<String>? reuseId;
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
@@ -275,6 +284,7 @@ class DivText with EquatableMixin implements DivBase {
         height,
         id,
         images,
+        layoutProvider,
         letterSpacing,
         lineHeight,
         longtapActions,
@@ -283,6 +293,7 @@ class DivText with EquatableMixin implements DivBase {
         minHiddenLines,
         paddings,
         ranges,
+        reuseId,
         rowSpan,
         selectable,
         selectedActions,
@@ -335,6 +346,7 @@ class DivText with EquatableMixin implements DivBase {
     DivSize? height,
     String? Function()? id,
     List<DivTextImage>? Function()? images,
+    DivLayoutProvider? Function()? layoutProvider,
     Expression<double>? letterSpacing,
     Expression<int>? Function()? lineHeight,
     List<DivAction>? Function()? longtapActions,
@@ -343,6 +355,7 @@ class DivText with EquatableMixin implements DivBase {
     Expression<int>? Function()? minHiddenLines,
     DivEdgeInsets? paddings,
     List<DivTextRange>? Function()? ranges,
+    Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     Expression<bool>? selectable,
     List<DivAction>? Function()? selectedActions,
@@ -409,6 +422,9 @@ class DivText with EquatableMixin implements DivBase {
         height: height ?? this.height,
         id: id != null ? id.call() : this.id,
         images: images != null ? images.call() : this.images,
+        layoutProvider: layoutProvider != null
+            ? layoutProvider.call()
+            : this.layoutProvider,
         letterSpacing: letterSpacing ?? this.letterSpacing,
         lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
         longtapActions: longtapActions != null
@@ -421,6 +437,7 @@ class DivText with EquatableMixin implements DivBase {
             : this.minHiddenLines,
         paddings: paddings ?? this.paddings,
         ranges: ranges != null ? ranges.call() : this.ranges,
+        reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
         selectable: selectable ?? this.selectable,
         selectedActions: selectedActions != null
@@ -465,268 +482,291 @@ class DivText with EquatableMixin implements DivBase {
     if (json == null) {
       return null;
     }
-    return DivText(
-      accessibility: safeParseObj(
-        DivAccessibility.fromJson(json['accessibility']),
-        fallback: const DivAccessibility(),
-      )!,
-      action: safeParseObj(
-        DivAction.fromJson(json['action']),
-      ),
-      actionAnimation: safeParseObj(
-        DivAnimation.fromJson(json['action_animation']),
-        fallback: const DivAnimation(
-          duration: ValueExpression(100),
-          endValue: ValueExpression(0.6),
-          name: ValueExpression(DivAnimationName.fade),
-          startValue: ValueExpression(1),
+    try {
+      return DivText(
+        accessibility: safeParseObj(
+          DivAccessibility.fromJson(json['accessibility']),
+          fallback: const DivAccessibility(),
+        )!,
+        action: safeParseObj(
+          DivAction.fromJson(json['action']),
         ),
-      )!,
-      actions: safeParseObj(
-        safeListMap(
+        actionAnimation: safeParseObj(
+          DivAnimation.fromJson(json['action_animation']),
+          fallback: const DivAnimation(
+            duration: ValueExpression(100),
+            endValue: ValueExpression(0.6),
+            name: ValueExpression(DivAnimationName.fade),
+            startValue: ValueExpression(1),
+          ),
+        )!,
+        actions: safeParseObj(
+          safeListMap(
             json['actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      alignmentHorizontal: safeParseStrEnumExpr(
-        json['alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-      ),
-      alignmentVertical: safeParseStrEnumExpr(
-        json['alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-      ),
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 1.0,
-      )!,
-      autoEllipsize: safeParseBoolExpr(
-        json['auto_ellipsize'],
-      ),
-      background: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        alignmentHorizontal: safeParseStrEnumExpr(
+          json['alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+        ),
+        alignmentVertical: safeParseStrEnumExpr(
+          json['alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+        ),
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 1.0,
+        )!,
+        autoEllipsize: safeParseBoolExpr(
+          json['auto_ellipsize'],
+        ),
+        background: safeParseObj(
+          safeListMap(
             json['background'],
             (v) => safeParseObj(
-                  DivBackground.fromJson(v),
-                )!),
-      ),
-      border: safeParseObj(
-        DivBorder.fromJson(json['border']),
-        fallback: const DivBorder(),
-      )!,
-      columnSpan: safeParseIntExpr(
-        json['column_span'],
-      ),
-      disappearActions: safeParseObj(
-        safeListMap(
+              DivBackground.fromJson(v),
+            )!,
+          ),
+        ),
+        border: safeParseObj(
+          DivBorder.fromJson(json['border']),
+          fallback: const DivBorder(),
+        )!,
+        columnSpan: safeParseIntExpr(
+          json['column_span'],
+        ),
+        disappearActions: safeParseObj(
+          safeListMap(
             json['disappear_actions'],
             (v) => safeParseObj(
-                  DivDisappearAction.fromJson(v),
-                )!),
-      ),
-      doubletapActions: safeParseObj(
-        safeListMap(
+              DivDisappearAction.fromJson(v),
+            )!,
+          ),
+        ),
+        doubletapActions: safeParseObj(
+          safeListMap(
             json['doubletap_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      ellipsis: safeParseObj(
-        DivTextEllipsis.fromJson(json['ellipsis']),
-      ),
-      extensions: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        ellipsis: safeParseObj(
+          DivTextEllipsis.fromJson(json['ellipsis']),
+        ),
+        extensions: safeParseObj(
+          safeListMap(
             json['extensions'],
             (v) => safeParseObj(
-                  DivExtension.fromJson(v),
-                )!),
-      ),
-      focus: safeParseObj(
-        DivFocus.fromJson(json['focus']),
-      ),
-      focusedTextColor: safeParseColorExpr(
-        json['focused_text_color'],
-      ),
-      fontFamily: safeParseStrExpr(
-        json['font_family']?.toString(),
-      ),
-      fontFeatureSettings: safeParseStrExpr(
-        json['font_feature_settings']?.toString(),
-      ),
-      fontSize: safeParseIntExpr(
-        json['font_size'],
-        fallback: 12,
-      )!,
-      fontSizeUnit: safeParseStrEnumExpr(
-        json['font_size_unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.sp,
-      )!,
-      fontWeight: safeParseStrEnumExpr(
-        json['font_weight'],
-        parse: DivFontWeight.fromJson,
-        fallback: DivFontWeight.regular,
-      )!,
-      fontWeightValue: safeParseIntExpr(
-        json['font_weight_value'],
-      ),
-      height: safeParseObj(
-        DivSize.fromJson(json['height']),
-        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
-      )!,
-      id: safeParseStr(
-        json['id']?.toString(),
-      ),
-      images: safeParseObj(
-        safeListMap(
+              DivExtension.fromJson(v),
+            )!,
+          ),
+        ),
+        focus: safeParseObj(
+          DivFocus.fromJson(json['focus']),
+        ),
+        focusedTextColor: safeParseColorExpr(
+          json['focused_text_color'],
+        ),
+        fontFamily: safeParseStrExpr(
+          json['font_family']?.toString(),
+        ),
+        fontFeatureSettings: safeParseStrExpr(
+          json['font_feature_settings']?.toString(),
+        ),
+        fontSize: safeParseIntExpr(
+          json['font_size'],
+          fallback: 12,
+        )!,
+        fontSizeUnit: safeParseStrEnumExpr(
+          json['font_size_unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.sp,
+        )!,
+        fontWeight: safeParseStrEnumExpr(
+          json['font_weight'],
+          parse: DivFontWeight.fromJson,
+          fallback: DivFontWeight.regular,
+        )!,
+        fontWeightValue: safeParseIntExpr(
+          json['font_weight_value'],
+        ),
+        height: safeParseObj(
+          DivSize.fromJson(json['height']),
+          fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
+        )!,
+        id: safeParseStr(
+          json['id']?.toString(),
+        ),
+        images: safeParseObj(
+          safeListMap(
             json['images'],
             (v) => safeParseObj(
-                  DivTextImage.fromJson(v),
-                )!),
-      ),
-      letterSpacing: safeParseDoubleExpr(
-        json['letter_spacing'],
-        fallback: 0,
-      )!,
-      lineHeight: safeParseIntExpr(
-        json['line_height'],
-      ),
-      longtapActions: safeParseObj(
-        safeListMap(
+              DivTextImage.fromJson(v),
+            )!,
+          ),
+        ),
+        layoutProvider: safeParseObj(
+          DivLayoutProvider.fromJson(json['layout_provider']),
+        ),
+        letterSpacing: safeParseDoubleExpr(
+          json['letter_spacing'],
+          fallback: 0,
+        )!,
+        lineHeight: safeParseIntExpr(
+          json['line_height'],
+        ),
+        longtapActions: safeParseObj(
+          safeListMap(
             json['longtap_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      margins: safeParseObj(
-        DivEdgeInsets.fromJson(json['margins']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      maxLines: safeParseIntExpr(
-        json['max_lines'],
-      ),
-      minHiddenLines: safeParseIntExpr(
-        json['min_hidden_lines'],
-      ),
-      paddings: safeParseObj(
-        DivEdgeInsets.fromJson(json['paddings']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      ranges: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        margins: safeParseObj(
+          DivEdgeInsets.fromJson(json['margins']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        maxLines: safeParseIntExpr(
+          json['max_lines'],
+        ),
+        minHiddenLines: safeParseIntExpr(
+          json['min_hidden_lines'],
+        ),
+        paddings: safeParseObj(
+          DivEdgeInsets.fromJson(json['paddings']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        ranges: safeParseObj(
+          safeListMap(
             json['ranges'],
             (v) => safeParseObj(
-                  DivTextRange.fromJson(v),
-                )!),
-      ),
-      rowSpan: safeParseIntExpr(
-        json['row_span'],
-      ),
-      selectable: safeParseBoolExpr(
-        json['selectable'],
-        fallback: false,
-      )!,
-      selectedActions: safeParseObj(
-        safeListMap(
+              DivTextRange.fromJson(v),
+            )!,
+          ),
+        ),
+        reuseId: safeParseStrExpr(
+          json['reuse_id']?.toString(),
+        ),
+        rowSpan: safeParseIntExpr(
+          json['row_span'],
+        ),
+        selectable: safeParseBoolExpr(
+          json['selectable'],
+          fallback: false,
+        )!,
+        selectedActions: safeParseObj(
+          safeListMap(
             json['selected_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      strike: safeParseStrEnumExpr(
-        json['strike'],
-        parse: DivLineStyle.fromJson,
-        fallback: DivLineStyle.none,
-      )!,
-      text: safeParseStrExpr(
-        json['text']?.toString(),
-      )!,
-      textAlignmentHorizontal: safeParseStrEnumExpr(
-        json['text_alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-        fallback: DivAlignmentHorizontal.start,
-      )!,
-      textAlignmentVertical: safeParseStrEnumExpr(
-        json['text_alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-        fallback: DivAlignmentVertical.top,
-      )!,
-      textColor: safeParseColorExpr(
-        json['text_color'],
-        fallback: const Color(0xFF000000),
-      )!,
-      textGradient: safeParseObj(
-        DivTextGradient.fromJson(json['text_gradient']),
-      ),
-      textShadow: safeParseObj(
-        DivShadow.fromJson(json['text_shadow']),
-      ),
-      tooltips: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        strike: safeParseStrEnumExpr(
+          json['strike'],
+          parse: DivLineStyle.fromJson,
+          fallback: DivLineStyle.none,
+        )!,
+        text: safeParseStrExpr(
+          json['text']?.toString(),
+        )!,
+        textAlignmentHorizontal: safeParseStrEnumExpr(
+          json['text_alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+          fallback: DivAlignmentHorizontal.start,
+        )!,
+        textAlignmentVertical: safeParseStrEnumExpr(
+          json['text_alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+          fallback: DivAlignmentVertical.top,
+        )!,
+        textColor: safeParseColorExpr(
+          json['text_color'],
+          fallback: const Color(0xFF000000),
+        )!,
+        textGradient: safeParseObj(
+          DivTextGradient.fromJson(json['text_gradient']),
+        ),
+        textShadow: safeParseObj(
+          DivShadow.fromJson(json['text_shadow']),
+        ),
+        tooltips: safeParseObj(
+          safeListMap(
             json['tooltips'],
             (v) => safeParseObj(
-                  DivTooltip.fromJson(v),
-                )!),
-      ),
-      transform: safeParseObj(
-        DivTransform.fromJson(json['transform']),
-        fallback: const DivTransform(),
-      )!,
-      transitionChange: safeParseObj(
-        DivChangeTransition.fromJson(json['transition_change']),
-      ),
-      transitionIn: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_in']),
-      ),
-      transitionOut: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_out']),
-      ),
-      transitionTriggers: safeParseObj(
-        safeListMap(
+              DivTooltip.fromJson(v),
+            )!,
+          ),
+        ),
+        transform: safeParseObj(
+          DivTransform.fromJson(json['transform']),
+          fallback: const DivTransform(),
+        )!,
+        transitionChange: safeParseObj(
+          DivChangeTransition.fromJson(json['transition_change']),
+        ),
+        transitionIn: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_in']),
+        ),
+        transitionOut: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_out']),
+        ),
+        transitionTriggers: safeParseObj(
+          safeListMap(
             json['transition_triggers'],
             (v) => safeParseStrEnum(
-                  v,
-                  parse: DivTransitionTrigger.fromJson,
-                )!),
-      ),
-      truncate: safeParseStrEnumExpr(
-        json['truncate'],
-        parse: DivTextTruncate.fromJson,
-        fallback: DivTextTruncate.end,
-      )!,
-      underline: safeParseStrEnumExpr(
-        json['underline'],
-        parse: DivLineStyle.fromJson,
-        fallback: DivLineStyle.none,
-      )!,
-      variables: safeParseObj(
-        safeListMap(
+              v,
+              parse: DivTransitionTrigger.fromJson,
+            )!,
+          ),
+        ),
+        truncate: safeParseStrEnumExpr(
+          json['truncate'],
+          parse: DivTextTruncate.fromJson,
+          fallback: DivTextTruncate.end,
+        )!,
+        underline: safeParseStrEnumExpr(
+          json['underline'],
+          parse: DivLineStyle.fromJson,
+          fallback: DivLineStyle.none,
+        )!,
+        variables: safeParseObj(
+          safeListMap(
             json['variables'],
             (v) => safeParseObj(
-                  DivVariable.fromJson(v),
-                )!),
-      ),
-      visibility: safeParseStrEnumExpr(
-        json['visibility'],
-        parse: DivVisibility.fromJson,
-        fallback: DivVisibility.visible,
-      )!,
-      visibilityAction: safeParseObj(
-        DivVisibilityAction.fromJson(json['visibility_action']),
-      ),
-      visibilityActions: safeParseObj(
-        safeListMap(
+              DivVariable.fromJson(v),
+            )!,
+          ),
+        ),
+        visibility: safeParseStrEnumExpr(
+          json['visibility'],
+          parse: DivVisibility.fromJson,
+          fallback: DivVisibility.visible,
+        )!,
+        visibilityAction: safeParseObj(
+          DivVisibilityAction.fromJson(json['visibility_action']),
+        ),
+        visibilityActions: safeParseObj(
+          safeListMap(
             json['visibility_actions'],
             (v) => safeParseObj(
-                  DivVisibilityAction.fromJson(v),
-                )!),
-      ),
-      width: safeParseObj(
-        DivSize.fromJson(json['width']),
-        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
-      )!,
-    );
+              DivVisibilityAction.fromJson(v),
+            )!,
+          ),
+        ),
+        width: safeParseObj(
+          DivSize.fromJson(json['width']),
+          fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -860,71 +900,76 @@ class DivTextRange with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivTextRange(
-      actions: safeParseObj(
-        safeListMap(
+    try {
+      return DivTextRange(
+        actions: safeParseObj(
+          safeListMap(
             json['actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      background: safeParseObj(
-        DivTextRangeBackground.fromJson(json['background']),
-      ),
-      border: safeParseObj(
-        DivTextRangeBorder.fromJson(json['border']),
-      ),
-      end: safeParseIntExpr(
-        json['end'],
-      )!,
-      fontFamily: safeParseStrExpr(
-        json['font_family']?.toString(),
-      ),
-      fontFeatureSettings: safeParseStrExpr(
-        json['font_feature_settings']?.toString(),
-      ),
-      fontSize: safeParseIntExpr(
-        json['font_size'],
-      ),
-      fontSizeUnit: safeParseStrEnumExpr(
-        json['font_size_unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.sp,
-      )!,
-      fontWeight: safeParseStrEnumExpr(
-        json['font_weight'],
-        parse: DivFontWeight.fromJson,
-      ),
-      fontWeightValue: safeParseIntExpr(
-        json['font_weight_value'],
-      ),
-      letterSpacing: safeParseDoubleExpr(
-        json['letter_spacing'],
-      ),
-      lineHeight: safeParseIntExpr(
-        json['line_height'],
-      ),
-      start: safeParseIntExpr(
-        json['start'],
-      )!,
-      strike: safeParseStrEnumExpr(
-        json['strike'],
-        parse: DivLineStyle.fromJson,
-      ),
-      textColor: safeParseColorExpr(
-        json['text_color'],
-      ),
-      textShadow: safeParseObj(
-        DivShadow.fromJson(json['text_shadow']),
-      ),
-      topOffset: safeParseIntExpr(
-        json['top_offset'],
-      ),
-      underline: safeParseStrEnumExpr(
-        json['underline'],
-        parse: DivLineStyle.fromJson,
-      ),
-    );
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        background: safeParseObj(
+          DivTextRangeBackground.fromJson(json['background']),
+        ),
+        border: safeParseObj(
+          DivTextRangeBorder.fromJson(json['border']),
+        ),
+        end: safeParseIntExpr(
+          json['end'],
+        )!,
+        fontFamily: safeParseStrExpr(
+          json['font_family']?.toString(),
+        ),
+        fontFeatureSettings: safeParseStrExpr(
+          json['font_feature_settings']?.toString(),
+        ),
+        fontSize: safeParseIntExpr(
+          json['font_size'],
+        ),
+        fontSizeUnit: safeParseStrEnumExpr(
+          json['font_size_unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.sp,
+        )!,
+        fontWeight: safeParseStrEnumExpr(
+          json['font_weight'],
+          parse: DivFontWeight.fromJson,
+        ),
+        fontWeightValue: safeParseIntExpr(
+          json['font_weight_value'],
+        ),
+        letterSpacing: safeParseDoubleExpr(
+          json['letter_spacing'],
+        ),
+        lineHeight: safeParseIntExpr(
+          json['line_height'],
+        ),
+        start: safeParseIntExpr(
+          json['start'],
+        )!,
+        strike: safeParseStrEnumExpr(
+          json['strike'],
+          parse: DivLineStyle.fromJson,
+        ),
+        textColor: safeParseColorExpr(
+          json['text_color'],
+        ),
+        textShadow: safeParseObj(
+          DivShadow.fromJson(json['text_shadow']),
+        ),
+        topOffset: safeParseIntExpr(
+          json['top_offset'],
+        ),
+        underline: safeParseStrEnumExpr(
+          json['underline'],
+          parse: DivLineStyle.fromJson,
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -992,36 +1037,40 @@ class DivTextImage with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivTextImage(
-      height: safeParseObj(
-        DivFixedSize.fromJson(json['height']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(20),
+    try {
+      return DivTextImage(
+        height: safeParseObj(
+          DivFixedSize.fromJson(json['height']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(20),
+          ),
+        )!,
+        preloadRequired: safeParseBoolExpr(
+          json['preload_required'],
+          fallback: false,
+        )!,
+        start: safeParseIntExpr(
+          json['start'],
+        )!,
+        tintColor: safeParseColorExpr(
+          json['tint_color'],
         ),
-      )!,
-      preloadRequired: safeParseBoolExpr(
-        json['preload_required'],
-        fallback: false,
-      )!,
-      start: safeParseIntExpr(
-        json['start'],
-      )!,
-      tintColor: safeParseColorExpr(
-        json['tint_color'],
-      ),
-      tintMode: safeParseStrEnumExpr(
-        json['tint_mode'],
-        parse: DivBlendMode.fromJson,
-        fallback: DivBlendMode.sourceIn,
-      )!,
-      url: safeParseUriExpr(json['url'])!,
-      width: safeParseObj(
-        DivFixedSize.fromJson(json['width']),
-        fallback: const DivFixedSize(
-          value: ValueExpression(20),
-        ),
-      )!,
-    );
+        tintMode: safeParseStrEnumExpr(
+          json['tint_mode'],
+          parse: DivBlendMode.fromJson,
+          fallback: DivBlendMode.sourceIn,
+        )!,
+        url: safeParseUriExpr(json['url'])!,
+        width: safeParseObj(
+          DivFixedSize.fromJson(json['width']),
+          fallback: const DivFixedSize(
+            value: ValueExpression(20),
+          ),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -1066,32 +1115,39 @@ class DivTextEllipsis with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivTextEllipsis(
-      actions: safeParseObj(
-        safeListMap(
+    try {
+      return DivTextEllipsis(
+        actions: safeParseObj(
+          safeListMap(
             json['actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      images: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        images: safeParseObj(
+          safeListMap(
             json['images'],
             (v) => safeParseObj(
-                  DivTextImage.fromJson(v),
-                )!),
-      ),
-      ranges: safeParseObj(
-        safeListMap(
+              DivTextImage.fromJson(v),
+            )!,
+          ),
+        ),
+        ranges: safeParseObj(
+          safeListMap(
             json['ranges'],
             (v) => safeParseObj(
-                  DivTextRange.fromJson(v),
-                )!),
-      ),
-      text: safeParseStrExpr(
-        json['text']?.toString(),
-      )!,
-    );
+              DivTextRange.fromJson(v),
+            )!,
+          ),
+        ),
+        text: safeParseStrExpr(
+          json['text']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -1146,16 +1202,20 @@ enum DivTextTruncate {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'none':
-        return DivTextTruncate.none;
-      case 'start':
-        return DivTextTruncate.start;
-      case 'end':
-        return DivTextTruncate.end;
-      case 'middle':
-        return DivTextTruncate.middle;
+    try {
+      switch (json) {
+        case 'none':
+          return DivTextTruncate.none;
+        case 'start':
+          return DivTextTruncate.start;
+        case 'end':
+          return DivTextTruncate.end;
+        case 'middle':
+          return DivTextTruncate.middle;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

@@ -66,44 +66,52 @@ class DivData with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivData(
-      logId: safeParseStr(
-        json['log_id']?.toString(),
-      )!,
-      states: safeParseObj(
-        safeListMap(
+    try {
+      return DivData(
+        logId: safeParseStr(
+          json['log_id']?.toString(),
+        )!,
+        states: safeParseObj(
+          safeListMap(
             json['states'],
             (v) => safeParseObj(
-                  DivDataState.fromJson(v),
-                )!),
-      )!,
-      timers: safeParseObj(
-        safeListMap(
+              DivDataState.fromJson(v),
+            )!,
+          ),
+        )!,
+        timers: safeParseObj(
+          safeListMap(
             json['timers'],
             (v) => safeParseObj(
-                  DivTimer.fromJson(v),
-                )!),
-      ),
-      transitionAnimationSelector: safeParseStrEnumExpr(
-        json['transition_animation_selector'],
-        parse: DivTransitionSelector.fromJson,
-        fallback: DivTransitionSelector.none,
-      )!,
-      variableTriggers: safeParseObj(
-        safeListMap(
+              DivTimer.fromJson(v),
+            )!,
+          ),
+        ),
+        transitionAnimationSelector: safeParseStrEnumExpr(
+          json['transition_animation_selector'],
+          parse: DivTransitionSelector.fromJson,
+          fallback: DivTransitionSelector.none,
+        )!,
+        variableTriggers: safeParseObj(
+          safeListMap(
             json['variable_triggers'],
             (v) => safeParseObj(
-                  DivTrigger.fromJson(v),
-                )!),
-      ),
-      variables: safeParseObj(
-        safeListMap(
+              DivTrigger.fromJson(v),
+            )!,
+          ),
+        ),
+        variables: safeParseObj(
+          safeListMap(
             json['variables'],
             (v) => safeParseObj(
-                  DivVariable.fromJson(v),
-                )!),
-      ),
-    );
+              DivVariable.fromJson(v),
+            )!,
+          ),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -136,13 +144,17 @@ class DivDataState with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivDataState(
-      div: safeParseObj(
-        Div.fromJson(json['div']),
-      )!,
-      stateId: safeParseInt(
-        json['state_id'],
-      )!,
-    );
+    try {
+      return DivDataState(
+        div: safeParseObj(
+          Div.fromJson(json['div']),
+        )!,
+        stateId: safeParseInt(
+          json['state_id'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

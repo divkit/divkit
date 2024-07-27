@@ -24,6 +24,7 @@ public final class DivCustom: DivBase {
   public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
   public let paddings: DivEdgeInsets?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
@@ -52,6 +53,10 @@ public final class DivCustom: DivBase {
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(columnSpan)
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -93,6 +98,7 @@ public final class DivCustom: DivBase {
     layoutProvider: DivLayoutProvider? = nil,
     margins: DivEdgeInsets? = nil,
     paddings: DivEdgeInsets? = nil,
+    reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     selectedActions: [DivAction]? = nil,
     tooltips: [DivTooltip]? = nil,
@@ -125,6 +131,7 @@ public final class DivCustom: DivBase {
     self.layoutProvider = layoutProvider
     self.margins = margins
     self.paddings = paddings
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.tooltips = tooltips
@@ -183,34 +190,39 @@ extension DivCustom: Equatable {
     guard
       lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -242,6 +254,7 @@ extension DivCustom: Serializable {
     result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
     result["paddings"] = paddings?.toDictionary()
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }

@@ -226,13 +226,17 @@
       "$ref": "div-layout-provider.json",
       "$description": "translations.json#/div_layout_provider",
       "platforms": [
+        "android",
         "ios"
       ]
     },
     "reuse_id": {
       "type": "string",
       "$description": "translations.json#/div_reuse_id",
-      "platforms": [ ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "unsupported_platforms": {
         "web": "No need for reuse identifier"
       }

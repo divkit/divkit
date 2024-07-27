@@ -51,16 +51,20 @@ enum DivFontWeight {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'light':
-        return DivFontWeight.light;
-      case 'medium':
-        return DivFontWeight.medium;
-      case 'regular':
-        return DivFontWeight.regular;
-      case 'bold':
-        return DivFontWeight.bold;
+    try {
+      switch (json) {
+        case 'light':
+          return DivFontWeight.light;
+        case 'medium':
+          return DivFontWeight.medium;
+        case 'regular':
+          return DivFontWeight.regular;
+        case 'bold':
+          return DivFontWeight.bold;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

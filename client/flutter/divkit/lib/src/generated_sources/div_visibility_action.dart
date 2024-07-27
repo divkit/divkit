@@ -94,37 +94,41 @@ class DivVisibilityAction with EquatableMixin implements DivSightAction {
     if (json == null) {
       return null;
     }
-    return DivVisibilityAction(
-      downloadCallbacks: safeParseObj(
-        DivDownloadCallbacks.fromJson(json['download_callbacks']),
-      ),
-      isEnabled: safeParseBoolExpr(
-        json['is_enabled'],
-        fallback: true,
-      )!,
-      logId: safeParseStrExpr(
-        json['log_id']?.toString(),
-      )!,
-      logLimit: safeParseIntExpr(
-        json['log_limit'],
-        fallback: 1,
-      )!,
-      payload: safeParseMap(
-        json['payload'],
-      ),
-      referer: safeParseUriExpr(json['referer']),
-      typed: safeParseObj(
-        DivActionTyped.fromJson(json['typed']),
-      ),
-      url: safeParseUriExpr(json['url']),
-      visibilityDuration: safeParseIntExpr(
-        json['visibility_duration'],
-        fallback: 800,
-      )!,
-      visibilityPercentage: safeParseIntExpr(
-        json['visibility_percentage'],
-        fallback: 50,
-      )!,
-    );
+    try {
+      return DivVisibilityAction(
+        downloadCallbacks: safeParseObj(
+          DivDownloadCallbacks.fromJson(json['download_callbacks']),
+        ),
+        isEnabled: safeParseBoolExpr(
+          json['is_enabled'],
+          fallback: true,
+        )!,
+        logId: safeParseStrExpr(
+          json['log_id']?.toString(),
+        )!,
+        logLimit: safeParseIntExpr(
+          json['log_limit'],
+          fallback: 1,
+        )!,
+        payload: safeParseMap(
+          json['payload'],
+        ),
+        referer: safeParseUriExpr(json['referer']),
+        typed: safeParseObj(
+          DivActionTyped.fromJson(json['typed']),
+        ),
+        url: safeParseUriExpr(json['url']),
+        visibilityDuration: safeParseIntExpr(
+          json['visibility_duration'],
+          fallback: 800,
+        )!,
+        visibilityPercentage: safeParseIntExpr(
+          json['visibility_percentage'],
+          fallback: 50,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

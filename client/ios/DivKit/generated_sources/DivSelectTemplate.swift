@@ -120,6 +120,7 @@ public final class DivSelectTemplate: TemplateValue {
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let options: Field<[OptionTemplate]>? // at least 1 elements
   public let paddings: Field<DivEdgeInsetsTemplate>?
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>?
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
@@ -164,6 +165,7 @@ public final class DivSelectTemplate: TemplateValue {
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       options: dictionary.getOptionalArray("options", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
       textColor: dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:)),
@@ -209,6 +211,7 @@ public final class DivSelectTemplate: TemplateValue {
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     options: Field<[OptionTemplate]>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     textColor: Field<Expression<Color>>? = nil,
@@ -251,6 +254,7 @@ public final class DivSelectTemplate: TemplateValue {
     self.margins = margins
     self.options = options
     self.paddings = paddings
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.textColor = textColor
@@ -294,6 +298,7 @@ public final class DivSelectTemplate: TemplateValue {
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let optionsValue = parent?.options?.resolveValue(context: context, validator: ResolvedValue.optionsValidator, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
@@ -335,6 +340,7 @@ public final class DivSelectTemplate: TemplateValue {
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       optionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "options", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
@@ -389,6 +395,7 @@ public final class DivSelectTemplate: TemplateValue {
       margins: marginsValue.value,
       options: optionsNonNil,
       paddings: paddingsValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       textColor: textColorValue.value,
@@ -437,6 +444,7 @@ public final class DivSelectTemplate: TemplateValue {
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var optionsValue: DeserializationResult<[DivSelect.Option]> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
@@ -504,6 +512,8 @@ public final class DivSelectTemplate: TemplateValue {
         optionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.optionsValidator, type: DivSelectTemplate.OptionTemplate.self).merged(with: optionsValue)
       case "paddings":
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selected_actions":
@@ -584,6 +594,8 @@ public final class DivSelectTemplate: TemplateValue {
         optionsValue = optionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.optionsValidator, type: DivSelectTemplate.OptionTemplate.self) })
       case parent?.paddings?.link:
         paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.selectedActions?.link:
@@ -666,6 +678,7 @@ public final class DivSelectTemplate: TemplateValue {
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       optionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "options", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
@@ -720,6 +733,7 @@ public final class DivSelectTemplate: TemplateValue {
       margins: marginsValue.value,
       options: optionsNonNil,
       paddings: paddingsValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       textColor: textColorValue.value,
@@ -773,6 +787,7 @@ public final class DivSelectTemplate: TemplateValue {
       margins: margins ?? mergedParent.margins,
       options: options ?? mergedParent.options,
       paddings: paddings ?? mergedParent.paddings,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       textColor: textColor ?? mergedParent.textColor,
@@ -821,6 +836,7 @@ public final class DivSelectTemplate: TemplateValue {
       margins: merged.margins?.tryResolveParent(templates: templates),
       options: try merged.options?.resolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       textColor: merged.textColor,

@@ -1,3 +1,29 @@
+## 30.11.0
+
+# Android Client:
+* Supported `reuse_id` field. Use `reuse_id` for more efficient reuse of items with same structure in `gallery`/`pager`.
+* Fixed gallery not reusing items.
+* Fixed custom shadow drawing when view is in transient state.
+
+# iOS Client:
+* Supported page transformations in pager.
+* Supported reuse_id field for items in pager, gallery, tabs, grid
+* Update alpha while changing states with action_animation params.
+* Fixed operators in expressions parsing.
+* Fixed div-custom configuration
+* Added items count info to gallery scroll event
+
+
+## 30.10.0
+
+# Android Client:
+* Make `div-stroke.width` a number.
+* Now visual errors dump includes card's json and all global variables states.
+
+# iOS Client:
+* Fixed video player initialization in `VideoBlock`.
+
+
 ## 30.9.0
 
 # Android Client:

@@ -36,13 +36,17 @@ class DivTextRangeBorder with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivTextRangeBorder(
-      cornerRadius: safeParseIntExpr(
-        json['corner_radius'],
-      ),
-      stroke: safeParseObj(
-        DivStroke.fromJson(json['stroke']),
-      ),
-    );
+    try {
+      return DivTextRangeBorder(
+        cornerRadius: safeParseIntExpr(
+          json['corner_radius'],
+        ),
+        stroke: safeParseObj(
+          DivStroke.fromJson(json['stroke']),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

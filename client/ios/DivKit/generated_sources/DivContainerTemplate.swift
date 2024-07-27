@@ -182,6 +182,7 @@ public final class DivContainerTemplate: TemplateValue {
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let orientation: Field<Expression<Orientation>>? // default value: vertical
   public let paddings: Field<DivEdgeInsetsTemplate>?
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>?
   public let separator: Field<SeparatorTemplate>?
@@ -229,6 +230,7 @@ public final class DivContainerTemplate: TemplateValue {
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       orientation: dictionary.getOptionalExpressionField("orientation"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
       separator: dictionary.getOptionalField("separator", templateToType: templateToType),
@@ -277,6 +279,7 @@ public final class DivContainerTemplate: TemplateValue {
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     orientation: Field<Expression<Orientation>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     separator: Field<SeparatorTemplate>? = nil,
@@ -322,6 +325,7 @@ public final class DivContainerTemplate: TemplateValue {
     self.margins = margins
     self.orientation = orientation
     self.paddings = paddings
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.separator = separator
@@ -368,6 +372,7 @@ public final class DivContainerTemplate: TemplateValue {
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let orientationValue = parent?.orientation?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let separatorValue = parent?.separator?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -412,6 +417,7 @@ public final class DivContainerTemplate: TemplateValue {
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       separatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "separator", error: $0) },
@@ -457,6 +463,7 @@ public final class DivContainerTemplate: TemplateValue {
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       separator: separatorValue.value,
@@ -508,6 +515,7 @@ public final class DivContainerTemplate: TemplateValue {
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var orientationValue: DeserializationResult<Expression<DivContainer.Orientation>> = parent?.orientation?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var separatorValue: DeserializationResult<DivContainer.Separator> = .noValue
@@ -582,6 +590,8 @@ public final class DivContainerTemplate: TemplateValue {
         orientationValue = deserialize(__dictValue).merged(with: orientationValue)
       case "paddings":
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selected_actions":
@@ -668,6 +678,8 @@ public final class DivContainerTemplate: TemplateValue {
         orientationValue = orientationValue.merged(with: { deserialize(__dictValue) })
       case parent?.paddings?.link:
         paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.selectedActions?.link:
@@ -761,6 +773,7 @@ public final class DivContainerTemplate: TemplateValue {
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       orientationValue.errorsOrWarnings?.map { .nestedObjectError(field: "orientation", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       separatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "separator", error: $0) },
@@ -806,6 +819,7 @@ public final class DivContainerTemplate: TemplateValue {
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       separator: separatorValue.value,
@@ -862,6 +876,7 @@ public final class DivContainerTemplate: TemplateValue {
       margins: margins ?? mergedParent.margins,
       orientation: orientation ?? mergedParent.orientation,
       paddings: paddings ?? mergedParent.paddings,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       separator: separator ?? mergedParent.separator,
@@ -913,6 +928,7 @@ public final class DivContainerTemplate: TemplateValue {
       margins: merged.margins?.tryResolveParent(templates: templates),
       orientation: merged.orientation,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       separator: merged.separator?.tryResolveParent(templates: templates),

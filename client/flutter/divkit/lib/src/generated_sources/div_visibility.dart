@@ -44,14 +44,18 @@ enum DivVisibility {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'visible':
-        return DivVisibility.visible;
-      case 'invisible':
-        return DivVisibility.invisible;
-      case 'gone':
-        return DivVisibility.gone;
+    try {
+      switch (json) {
+        case 'visible':
+          return DivVisibility.visible;
+        case 'invisible':
+          return DivVisibility.invisible;
+        case 'gone':
+          return DivVisibility.gone;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

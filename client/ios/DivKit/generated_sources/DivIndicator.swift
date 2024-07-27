@@ -38,6 +38,7 @@ public final class DivIndicator: DivBase {
   public let minimumItemSize: Expression<Double> // constraint: number > 0; default value: 0.5
   public let paddings: DivEdgeInsets?
   public let pagerId: String?
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let shape: DivShape // default value: .divRoundedRectangleShape(DivRoundedRectangleShape())
@@ -88,6 +89,10 @@ public final class DivIndicator: DivBase {
 
   public func resolveMinimumItemSize(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(minimumItemSize) ?? 0.5
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -142,6 +147,7 @@ public final class DivIndicator: DivBase {
     minimumItemSize: Expression<Double>? = nil,
     paddings: DivEdgeInsets? = nil,
     pagerId: String? = nil,
+    reuseId: Expression<String>? = nil,
     rowSpan: Expression<Int>? = nil,
     selectedActions: [DivAction]? = nil,
     shape: DivShape? = nil,
@@ -183,6 +189,7 @@ public final class DivIndicator: DivBase {
     self.minimumItemSize = minimumItemSize ?? .value(0.5)
     self.paddings = paddings
     self.pagerId = pagerId
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.shape = shape ?? .divRoundedRectangleShape(DivRoundedRectangleShape())
@@ -262,40 +269,41 @@ extension DivIndicator: Equatable {
     }
     guard
       lhs.pagerId == rhs.pagerId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.reuseId == rhs.reuseId,
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.shape == rhs.shape,
-      lhs.spaceBetweenCenters == rhs.spaceBetweenCenters,
-      lhs.tooltips == rhs.tooltips
+      lhs.spaceBetweenCenters == rhs.spaceBetweenCenters
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -334,6 +342,7 @@ extension DivIndicator: Serializable {
     result["minimum_item_size"] = minimumItemSize.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
     result["pager_id"] = pagerId
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["shape"] = shape.toDictionary()

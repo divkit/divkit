@@ -21,7 +21,8 @@ class DivDrawable with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivDrawable");
+      "Type ${value.runtimeType.toString()} is not generalized in DivDrawable",
+    );
   }
 
   T maybeMap<T>({
@@ -49,10 +50,14 @@ class DivDrawable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivShapeDrawable.type:
-        return DivDrawable.divShapeDrawable(DivShapeDrawable.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivShapeDrawable.type:
+          return DivDrawable.divShapeDrawable(DivShapeDrawable.fromJson(json)!);
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

@@ -44,14 +44,18 @@ enum DivTransitionTrigger {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'data_change':
-        return DivTransitionTrigger.dataChange;
-      case 'state_change':
-        return DivTransitionTrigger.stateChange;
-      case 'visibility_change':
-        return DivTransitionTrigger.visibilityChange;
+    try {
+      switch (json) {
+        case 'data_change':
+          return DivTransitionTrigger.dataChange;
+        case 'state_change':
+          return DivTransitionTrigger.stateChange;
+        case 'visibility_change':
+          return DivTransitionTrigger.visibilityChange;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

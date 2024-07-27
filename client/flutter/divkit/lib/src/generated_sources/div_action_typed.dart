@@ -63,7 +63,8 @@ class DivActionTyped with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivActionTyped");
+      "Type ${value.runtimeType.toString()} is not generalized in DivActionTyped",
+    );
   }
 
   T maybeMap<T>({
@@ -182,32 +183,44 @@ class DivActionTyped with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivActionArrayInsertValue.type:
-        return DivActionTyped.divActionArrayInsertValue(
-            DivActionArrayInsertValue.fromJson(json)!);
-      case DivActionArrayRemoveValue.type:
-        return DivActionTyped.divActionArrayRemoveValue(
-            DivActionArrayRemoveValue.fromJson(json)!);
-      case DivActionArraySetValue.type:
-        return DivActionTyped.divActionArraySetValue(
-            DivActionArraySetValue.fromJson(json)!);
-      case DivActionClearFocus.type:
-        return DivActionTyped.divActionClearFocus(
-            DivActionClearFocus.fromJson(json)!);
-      case DivActionCopyToClipboard.type:
-        return DivActionTyped.divActionCopyToClipboard(
-            DivActionCopyToClipboard.fromJson(json)!);
-      case DivActionDictSetValue.type:
-        return DivActionTyped.divActionDictSetValue(
-            DivActionDictSetValue.fromJson(json)!);
-      case DivActionFocusElement.type:
-        return DivActionTyped.divActionFocusElement(
-            DivActionFocusElement.fromJson(json)!);
-      case DivActionSetVariable.type:
-        return DivActionTyped.divActionSetVariable(
-            DivActionSetVariable.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivActionArrayInsertValue.type:
+          return DivActionTyped.divActionArrayInsertValue(
+            DivActionArrayInsertValue.fromJson(json)!,
+          );
+        case DivActionArrayRemoveValue.type:
+          return DivActionTyped.divActionArrayRemoveValue(
+            DivActionArrayRemoveValue.fromJson(json)!,
+          );
+        case DivActionArraySetValue.type:
+          return DivActionTyped.divActionArraySetValue(
+            DivActionArraySetValue.fromJson(json)!,
+          );
+        case DivActionClearFocus.type:
+          return DivActionTyped.divActionClearFocus(
+            DivActionClearFocus.fromJson(json)!,
+          );
+        case DivActionCopyToClipboard.type:
+          return DivActionTyped.divActionCopyToClipboard(
+            DivActionCopyToClipboard.fromJson(json)!,
+          );
+        case DivActionDictSetValue.type:
+          return DivActionTyped.divActionDictSetValue(
+            DivActionDictSetValue.fromJson(json)!,
+          );
+        case DivActionFocusElement.type:
+          return DivActionTyped.divActionFocusElement(
+            DivActionFocusElement.fromJson(json)!,
+          );
+        case DivActionSetVariable.type:
+          return DivActionTyped.divActionSetVariable(
+            DivActionSetVariable.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

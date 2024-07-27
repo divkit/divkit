@@ -55,28 +55,32 @@ class DivPageTransformationSlide with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivPageTransformationSlide(
-      interpolator: safeParseStrEnumExpr(
-        json['interpolator'],
-        parse: DivAnimationInterpolator.fromJson,
-        fallback: DivAnimationInterpolator.easeInOut,
-      )!,
-      nextPageAlpha: safeParseDoubleExpr(
-        json['next_page_alpha'],
-        fallback: 1.0,
-      )!,
-      nextPageScale: safeParseDoubleExpr(
-        json['next_page_scale'],
-        fallback: 1.0,
-      )!,
-      previousPageAlpha: safeParseDoubleExpr(
-        json['previous_page_alpha'],
-        fallback: 1.0,
-      )!,
-      previousPageScale: safeParseDoubleExpr(
-        json['previous_page_scale'],
-        fallback: 1.0,
-      )!,
-    );
+    try {
+      return DivPageTransformationSlide(
+        interpolator: safeParseStrEnumExpr(
+          json['interpolator'],
+          parse: DivAnimationInterpolator.fromJson,
+          fallback: DivAnimationInterpolator.easeInOut,
+        )!,
+        nextPageAlpha: safeParseDoubleExpr(
+          json['next_page_alpha'],
+          fallback: 1.0,
+        )!,
+        nextPageScale: safeParseDoubleExpr(
+          json['next_page_scale'],
+          fallback: 1.0,
+        )!,
+        previousPageAlpha: safeParseDoubleExpr(
+          json['previous_page_alpha'],
+          fallback: 1.0,
+        )!,
+        previousPageScale: safeParseDoubleExpr(
+          json['previous_page_scale'],
+          fallback: 1.0,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

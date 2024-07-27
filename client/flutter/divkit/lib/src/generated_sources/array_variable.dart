@@ -35,13 +35,17 @@ class ArrayVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return ArrayVariable(
-      name: safeParseStr(
-        json['name']?.toString(),
-      )!,
-      value: safeParseList(
-        json['value'],
-      )!,
-    );
+    try {
+      return ArrayVariable(
+        name: safeParseStr(
+          json['name']?.toString(),
+        )!,
+        value: safeParseList(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

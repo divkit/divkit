@@ -28,7 +28,8 @@ class DivRadialGradientRadius with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivRadialGradientRadius");
+      "Type ${value.runtimeType.toString()} is not generalized in DivRadialGradientRadius",
+    );
   }
 
   T maybeMap<T>({
@@ -70,14 +71,20 @@ class DivRadialGradientRadius with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivFixedSize.type:
-        return DivRadialGradientRadius.divFixedSize(
-            DivFixedSize.fromJson(json)!);
-      case DivRadialGradientRelativeRadius.type:
-        return DivRadialGradientRadius.divRadialGradientRelativeRadius(
-            DivRadialGradientRelativeRadius.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivFixedSize.type:
+          return DivRadialGradientRadius.divFixedSize(
+            DivFixedSize.fromJson(json)!,
+          );
+        case DivRadialGradientRelativeRadius.type:
+          return DivRadialGradientRadius.divRadialGradientRelativeRadius(
+            DivRadialGradientRelativeRadius.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

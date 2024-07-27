@@ -64,6 +64,7 @@ class Video internal constructor(
             preview = additive.preview ?: properties.preview,
             repeatable = additive.repeatable ?: properties.repeatable,
             resumeActions = additive.resumeActions ?: properties.resumeActions,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             scale = additive.scale ?: properties.scale,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -202,6 +203,10 @@ class Video internal constructor(
          */
         val resumeActions: Property<List<Action>>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -293,6 +298,7 @@ class Video internal constructor(
             result.tryPutProperty("preview", preview)
             result.tryPutProperty("repeatable", repeatable)
             result.tryPutProperty("resume_actions", resumeActions)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("scale", scale)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -342,6 +348,7 @@ class Video internal constructor(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -388,6 +395,7 @@ fun DivScope.video(
     preview: String? = null,
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scale: VideoScale? = null,
     selectedActions: List<Action>? = null,
@@ -433,6 +441,7 @@ fun DivScope.video(
         preview = valueOrNull(preview),
         repeatable = valueOrNull(repeatable),
         resumeActions = valueOrNull(resumeActions),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
@@ -480,6 +489,7 @@ fun DivScope.video(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -526,6 +536,7 @@ fun DivScope.videoProps(
     preview: String? = null,
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scale: VideoScale? = null,
     selectedActions: List<Action>? = null,
@@ -570,6 +581,7 @@ fun DivScope.videoProps(
     preview = valueOrNull(preview),
     repeatable = valueOrNull(repeatable),
     resumeActions = valueOrNull(resumeActions),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     scale = valueOrNull(scale),
     selectedActions = valueOrNull(selectedActions),
@@ -616,6 +628,7 @@ fun DivScope.videoProps(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -662,6 +675,7 @@ fun TemplateScope.videoRefs(
     preview: ReferenceProperty<String>? = null,
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<VideoScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -706,6 +720,7 @@ fun TemplateScope.videoRefs(
     preview = preview,
     repeatable = repeatable,
     resumeActions = resumeActions,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     scale = scale,
     selectedActions = selectedActions,
@@ -752,6 +767,7 @@ fun TemplateScope.videoRefs(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -798,6 +814,7 @@ fun Video.override(
     preview: String? = null,
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scale: VideoScale? = null,
     selectedActions: List<Action>? = null,
@@ -843,6 +860,7 @@ fun Video.override(
         preview = valueOrNull(preview) ?: properties.preview,
         repeatable = valueOrNull(repeatable) ?: properties.repeatable,
         resumeActions = valueOrNull(resumeActions) ?: properties.resumeActions,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         scale = valueOrNull(scale) ?: properties.scale,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -890,6 +908,7 @@ fun Video.override(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -936,6 +955,7 @@ fun Video.defer(
     preview: ReferenceProperty<String>? = null,
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<VideoScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -981,6 +1001,7 @@ fun Video.defer(
         preview = preview ?: properties.preview,
         repeatable = repeatable ?: properties.repeatable,
         resumeActions = resumeActions ?: properties.resumeActions,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1009,6 +1030,7 @@ fun Video.defer(
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param visibility Element visibility.
@@ -1025,6 +1047,7 @@ fun Video.evaluate(
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     repeatable: ExpressionProperty<Boolean>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scale: ExpressionProperty<VideoScale>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1058,6 +1081,7 @@ fun Video.evaluate(
         preview = preview ?: properties.preview,
         repeatable = repeatable ?: properties.repeatable,
         resumeActions = properties.resumeActions,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = properties.selectedActions,
@@ -1105,6 +1129,7 @@ fun Video.evaluate(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1151,6 +1176,7 @@ fun Component<Video>.override(
     preview: String? = null,
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     scale: VideoScale? = null,
     selectedActions: List<Action>? = null,
@@ -1197,6 +1223,7 @@ fun Component<Video>.override(
         preview = valueOrNull(preview),
         repeatable = valueOrNull(repeatable),
         resumeActions = valueOrNull(resumeActions),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
@@ -1244,6 +1271,7 @@ fun Component<Video>.override(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1290,6 +1318,7 @@ fun Component<Video>.defer(
     preview: ReferenceProperty<String>? = null,
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<VideoScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1336,6 +1365,7 @@ fun Component<Video>.defer(
         preview = preview,
         repeatable = repeatable,
         resumeActions = resumeActions,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = selectedActions,
@@ -1364,6 +1394,7 @@ fun Component<Video>.defer(
  * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param visibility Element visibility.
@@ -1380,6 +1411,7 @@ fun Component<Video>.evaluate(
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     repeatable: ExpressionProperty<Boolean>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scale: ExpressionProperty<VideoScale>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1414,6 +1446,7 @@ fun Component<Video>.evaluate(
         preview = preview,
         repeatable = repeatable,
         resumeActions = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = null,

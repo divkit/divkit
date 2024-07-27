@@ -67,6 +67,7 @@ class Input internal constructor(
             maxVisibleLines = additive.maxVisibleLines ?: properties.maxVisibleLines,
             nativeInterface = additive.nativeInterface ?: properties.nativeInterface,
             paddings = additive.paddings ?: properties.paddings,
+            reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectAllOnFocus = additive.selectAllOnFocus ?: properties.selectAllOnFocus,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -224,6 +225,10 @@ class Input internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
+         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         */
+        val reuseId: Property<String>?,
+        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -340,6 +345,7 @@ class Input internal constructor(
             result.tryPutProperty("max_visible_lines", maxVisibleLines)
             result.tryPutProperty("native_interface", nativeInterface)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("select_all_on_focus", selectAllOnFocus)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -441,6 +447,7 @@ class Input internal constructor(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -495,6 +502,7 @@ fun DivScope.input(
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
@@ -547,6 +555,7 @@ fun DivScope.input(
         maxVisibleLines = valueOrNull(maxVisibleLines),
         nativeInterface = valueOrNull(nativeInterface),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectAllOnFocus = valueOrNull(selectAllOnFocus),
         selectedActions = valueOrNull(selectedActions),
@@ -601,6 +610,7 @@ fun DivScope.input(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -655,6 +665,7 @@ fun DivScope.inputProps(
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
@@ -706,6 +717,7 @@ fun DivScope.inputProps(
     maxVisibleLines = valueOrNull(maxVisibleLines),
     nativeInterface = valueOrNull(nativeInterface),
     paddings = valueOrNull(paddings),
+    reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectAllOnFocus = valueOrNull(selectAllOnFocus),
     selectedActions = valueOrNull(selectedActions),
@@ -759,6 +771,7 @@ fun DivScope.inputProps(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -813,6 +826,7 @@ fun TemplateScope.inputRefs(
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -864,6 +878,7 @@ fun TemplateScope.inputRefs(
     maxVisibleLines = maxVisibleLines,
     nativeInterface = nativeInterface,
     paddings = paddings,
+    reuseId = reuseId,
     rowSpan = rowSpan,
     selectAllOnFocus = selectAllOnFocus,
     selectedActions = selectedActions,
@@ -917,6 +932,7 @@ fun TemplateScope.inputRefs(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -971,6 +987,7 @@ fun Input.override(
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
@@ -1023,6 +1040,7 @@ fun Input.override(
         maxVisibleLines = valueOrNull(maxVisibleLines) ?: properties.maxVisibleLines,
         nativeInterface = valueOrNull(nativeInterface) ?: properties.nativeInterface,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectAllOnFocus = valueOrNull(selectAllOnFocus) ?: properties.selectAllOnFocus,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -1077,6 +1095,7 @@ fun Input.override(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1131,6 +1150,7 @@ fun Input.defer(
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1183,6 +1203,7 @@ fun Input.defer(
         maxVisibleLines = maxVisibleLines ?: properties.maxVisibleLines,
         nativeInterface = nativeInterface ?: properties.nativeInterface,
         paddings = paddings ?: properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectAllOnFocus = selectAllOnFocus ?: properties.selectAllOnFocus,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1224,6 +1245,7 @@ fun Input.defer(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param textAlignmentHorizontal Horizontal text alignment.
@@ -1252,6 +1274,7 @@ fun Input.evaluate(
     lineHeight: ExpressionProperty<Int>? = null,
     maxLength: ExpressionProperty<Int>? = null,
     maxVisibleLines: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
     textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
@@ -1291,6 +1314,7 @@ fun Input.evaluate(
         maxVisibleLines = maxVisibleLines ?: properties.maxVisibleLines,
         nativeInterface = properties.nativeInterface,
         paddings = properties.paddings,
+        reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectAllOnFocus = selectAllOnFocus ?: properties.selectAllOnFocus,
         selectedActions = properties.selectedActions,
@@ -1345,6 +1369,7 @@ fun Input.evaluate(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1399,6 +1424,7 @@ fun Component<Input>.override(
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
+    reuseId: String? = null,
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
@@ -1452,6 +1478,7 @@ fun Component<Input>.override(
         maxVisibleLines = valueOrNull(maxVisibleLines),
         nativeInterface = valueOrNull(nativeInterface),
         paddings = valueOrNull(paddings),
+        reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectAllOnFocus = valueOrNull(selectAllOnFocus),
         selectedActions = valueOrNull(selectedActions),
@@ -1506,6 +1533,7 @@ fun Component<Input>.override(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1560,6 +1588,7 @@ fun Component<Input>.defer(
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1613,6 +1642,7 @@ fun Component<Input>.defer(
         maxVisibleLines = maxVisibleLines,
         nativeInterface = nativeInterface,
         paddings = paddings,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectAllOnFocus = selectAllOnFocus,
         selectedActions = selectedActions,
@@ -1654,6 +1684,7 @@ fun Component<Input>.defer(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
+ * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param textAlignmentHorizontal Horizontal text alignment.
@@ -1682,6 +1713,7 @@ fun Component<Input>.evaluate(
     lineHeight: ExpressionProperty<Int>? = null,
     maxLength: ExpressionProperty<Int>? = null,
     maxVisibleLines: ExpressionProperty<Int>? = null,
+    reuseId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
     textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
@@ -1722,6 +1754,7 @@ fun Component<Input>.evaluate(
         maxVisibleLines = maxVisibleLines,
         nativeInterface = null,
         paddings = null,
+        reuseId = reuseId,
         rowSpan = rowSpan,
         selectAllOnFocus = selectAllOnFocus,
         selectedActions = null,

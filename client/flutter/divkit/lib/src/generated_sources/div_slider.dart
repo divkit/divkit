@@ -18,6 +18,7 @@ import 'package:divkit/src/generated_sources/div_edge_insets.dart';
 import 'package:divkit/src/generated_sources/div_extension.dart';
 import 'package:divkit/src/generated_sources/div_focus.dart';
 import 'package:divkit/src/generated_sources/div_font_weight.dart';
+import 'package:divkit/src/generated_sources/div_layout_provider.dart';
 import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
 import 'package:divkit/src/generated_sources/div_point.dart';
 import 'package:divkit/src/generated_sources/div_size.dart';
@@ -44,11 +45,13 @@ class DivSlider with EquatableMixin implements DivBase {
     this.focus,
     this.height = const DivSize.divWrapContentSize(DivWrapContentSize()),
     this.id,
+    this.layoutProvider,
     this.margins = const DivEdgeInsets(),
     this.maxValue = const ValueExpression(100),
     this.minValue = const ValueExpression(0),
     this.paddings = const DivEdgeInsets(),
     this.ranges,
+    this.reuseId,
     this.rowSpan,
     this.secondaryValueAccessibility = const DivAccessibility(),
     this.selectedActions,
@@ -114,6 +117,9 @@ class DivSlider with EquatableMixin implements DivBase {
   final String? id;
 
   @override
+  final DivLayoutProvider? layoutProvider;
+
+  @override
   final DivEdgeInsets margins;
   // default value: 100
   final Expression<int> maxValue;
@@ -124,6 +130,9 @@ class DivSlider with EquatableMixin implements DivBase {
   final DivEdgeInsets paddings;
 
   final List<DivSliderRange>? ranges;
+
+  @override
+  final Expression<String>? reuseId;
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
@@ -200,11 +209,13 @@ class DivSlider with EquatableMixin implements DivBase {
         focus,
         height,
         id,
+        layoutProvider,
         margins,
         maxValue,
         minValue,
         paddings,
         ranges,
+        reuseId,
         rowSpan,
         secondaryValueAccessibility,
         selectedActions,
@@ -244,11 +255,13 @@ class DivSlider with EquatableMixin implements DivBase {
     DivFocus? Function()? focus,
     DivSize? height,
     String? Function()? id,
+    DivLayoutProvider? Function()? layoutProvider,
     DivEdgeInsets? margins,
     Expression<int>? maxValue,
     Expression<int>? minValue,
     DivEdgeInsets? paddings,
     List<DivSliderRange>? Function()? ranges,
+    Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     DivAccessibility? secondaryValueAccessibility,
     List<DivAction>? Function()? selectedActions,
@@ -293,11 +306,15 @@ class DivSlider with EquatableMixin implements DivBase {
         focus: focus != null ? focus.call() : this.focus,
         height: height ?? this.height,
         id: id != null ? id.call() : this.id,
+        layoutProvider: layoutProvider != null
+            ? layoutProvider.call()
+            : this.layoutProvider,
         margins: margins ?? this.margins,
         maxValue: maxValue ?? this.maxValue,
         minValue: minValue ?? this.minValue,
         paddings: paddings ?? this.paddings,
         ranges: ranges != null ? ranges.call() : this.ranges,
+        reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
         secondaryValueAccessibility:
             secondaryValueAccessibility ?? this.secondaryValueAccessibility,
@@ -355,183 +372,202 @@ class DivSlider with EquatableMixin implements DivBase {
     if (json == null) {
       return null;
     }
-    return DivSlider(
-      accessibility: safeParseObj(
-        DivAccessibility.fromJson(json['accessibility']),
-        fallback: const DivAccessibility(),
-      )!,
-      alignmentHorizontal: safeParseStrEnumExpr(
-        json['alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-      ),
-      alignmentVertical: safeParseStrEnumExpr(
-        json['alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-      ),
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 1.0,
-      )!,
-      background: safeParseObj(
-        safeListMap(
+    try {
+      return DivSlider(
+        accessibility: safeParseObj(
+          DivAccessibility.fromJson(json['accessibility']),
+          fallback: const DivAccessibility(),
+        )!,
+        alignmentHorizontal: safeParseStrEnumExpr(
+          json['alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+        ),
+        alignmentVertical: safeParseStrEnumExpr(
+          json['alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+        ),
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 1.0,
+        )!,
+        background: safeParseObj(
+          safeListMap(
             json['background'],
             (v) => safeParseObj(
-                  DivBackground.fromJson(v),
-                )!),
-      ),
-      border: safeParseObj(
-        DivBorder.fromJson(json['border']),
-        fallback: const DivBorder(),
-      )!,
-      columnSpan: safeParseIntExpr(
-        json['column_span'],
-      ),
-      disappearActions: safeParseObj(
-        safeListMap(
+              DivBackground.fromJson(v),
+            )!,
+          ),
+        ),
+        border: safeParseObj(
+          DivBorder.fromJson(json['border']),
+          fallback: const DivBorder(),
+        )!,
+        columnSpan: safeParseIntExpr(
+          json['column_span'],
+        ),
+        disappearActions: safeParseObj(
+          safeListMap(
             json['disappear_actions'],
             (v) => safeParseObj(
-                  DivDisappearAction.fromJson(v),
-                )!),
-      ),
-      extensions: safeParseObj(
-        safeListMap(
+              DivDisappearAction.fromJson(v),
+            )!,
+          ),
+        ),
+        extensions: safeParseObj(
+          safeListMap(
             json['extensions'],
             (v) => safeParseObj(
-                  DivExtension.fromJson(v),
-                )!),
-      ),
-      focus: safeParseObj(
-        DivFocus.fromJson(json['focus']),
-      ),
-      height: safeParseObj(
-        DivSize.fromJson(json['height']),
-        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
-      )!,
-      id: safeParseStr(
-        json['id']?.toString(),
-      ),
-      margins: safeParseObj(
-        DivEdgeInsets.fromJson(json['margins']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      maxValue: safeParseIntExpr(
-        json['max_value'],
-        fallback: 100,
-      )!,
-      minValue: safeParseIntExpr(
-        json['min_value'],
-        fallback: 0,
-      )!,
-      paddings: safeParseObj(
-        DivEdgeInsets.fromJson(json['paddings']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      ranges: safeParseObj(
-        safeListMap(
+              DivExtension.fromJson(v),
+            )!,
+          ),
+        ),
+        focus: safeParseObj(
+          DivFocus.fromJson(json['focus']),
+        ),
+        height: safeParseObj(
+          DivSize.fromJson(json['height']),
+          fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
+        )!,
+        id: safeParseStr(
+          json['id']?.toString(),
+        ),
+        layoutProvider: safeParseObj(
+          DivLayoutProvider.fromJson(json['layout_provider']),
+        ),
+        margins: safeParseObj(
+          DivEdgeInsets.fromJson(json['margins']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        maxValue: safeParseIntExpr(
+          json['max_value'],
+          fallback: 100,
+        )!,
+        minValue: safeParseIntExpr(
+          json['min_value'],
+          fallback: 0,
+        )!,
+        paddings: safeParseObj(
+          DivEdgeInsets.fromJson(json['paddings']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        ranges: safeParseObj(
+          safeListMap(
             json['ranges'],
             (v) => safeParseObj(
-                  DivSliderRange.fromJson(v),
-                )!),
-      ),
-      rowSpan: safeParseIntExpr(
-        json['row_span'],
-      ),
-      secondaryValueAccessibility: safeParseObj(
-        DivAccessibility.fromJson(json['secondary_value_accessibility']),
-        fallback: const DivAccessibility(),
-      )!,
-      selectedActions: safeParseObj(
-        safeListMap(
+              DivSliderRange.fromJson(v),
+            )!,
+          ),
+        ),
+        reuseId: safeParseStrExpr(
+          json['reuse_id']?.toString(),
+        ),
+        rowSpan: safeParseIntExpr(
+          json['row_span'],
+        ),
+        secondaryValueAccessibility: safeParseObj(
+          DivAccessibility.fromJson(json['secondary_value_accessibility']),
+          fallback: const DivAccessibility(),
+        )!,
+        selectedActions: safeParseObj(
+          safeListMap(
             json['selected_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      thumbSecondaryStyle: safeParseObj(
-        DivDrawable.fromJson(json['thumb_secondary_style']),
-      ),
-      thumbSecondaryTextStyle: safeParseObj(
-        DivSliderTextStyle.fromJson(json['thumb_secondary_text_style']),
-      ),
-      thumbSecondaryValueVariable: safeParseStr(
-        json['thumb_secondary_value_variable']?.toString(),
-      ),
-      thumbStyle: safeParseObj(
-        DivDrawable.fromJson(json['thumb_style']),
-      )!,
-      thumbTextStyle: safeParseObj(
-        DivSliderTextStyle.fromJson(json['thumb_text_style']),
-      ),
-      thumbValueVariable: safeParseStr(
-        json['thumb_value_variable']?.toString(),
-      ),
-      tickMarkActiveStyle: safeParseObj(
-        DivDrawable.fromJson(json['tick_mark_active_style']),
-      ),
-      tickMarkInactiveStyle: safeParseObj(
-        DivDrawable.fromJson(json['tick_mark_inactive_style']),
-      ),
-      tooltips: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        thumbSecondaryStyle: safeParseObj(
+          DivDrawable.fromJson(json['thumb_secondary_style']),
+        ),
+        thumbSecondaryTextStyle: safeParseObj(
+          DivSliderTextStyle.fromJson(json['thumb_secondary_text_style']),
+        ),
+        thumbSecondaryValueVariable: safeParseStr(
+          json['thumb_secondary_value_variable']?.toString(),
+        ),
+        thumbStyle: safeParseObj(
+          DivDrawable.fromJson(json['thumb_style']),
+        )!,
+        thumbTextStyle: safeParseObj(
+          DivSliderTextStyle.fromJson(json['thumb_text_style']),
+        ),
+        thumbValueVariable: safeParseStr(
+          json['thumb_value_variable']?.toString(),
+        ),
+        tickMarkActiveStyle: safeParseObj(
+          DivDrawable.fromJson(json['tick_mark_active_style']),
+        ),
+        tickMarkInactiveStyle: safeParseObj(
+          DivDrawable.fromJson(json['tick_mark_inactive_style']),
+        ),
+        tooltips: safeParseObj(
+          safeListMap(
             json['tooltips'],
             (v) => safeParseObj(
-                  DivTooltip.fromJson(v),
-                )!),
-      ),
-      trackActiveStyle: safeParseObj(
-        DivDrawable.fromJson(json['track_active_style']),
-      )!,
-      trackInactiveStyle: safeParseObj(
-        DivDrawable.fromJson(json['track_inactive_style']),
-      )!,
-      transform: safeParseObj(
-        DivTransform.fromJson(json['transform']),
-        fallback: const DivTransform(),
-      )!,
-      transitionChange: safeParseObj(
-        DivChangeTransition.fromJson(json['transition_change']),
-      ),
-      transitionIn: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_in']),
-      ),
-      transitionOut: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_out']),
-      ),
-      transitionTriggers: safeParseObj(
-        safeListMap(
+              DivTooltip.fromJson(v),
+            )!,
+          ),
+        ),
+        trackActiveStyle: safeParseObj(
+          DivDrawable.fromJson(json['track_active_style']),
+        )!,
+        trackInactiveStyle: safeParseObj(
+          DivDrawable.fromJson(json['track_inactive_style']),
+        )!,
+        transform: safeParseObj(
+          DivTransform.fromJson(json['transform']),
+          fallback: const DivTransform(),
+        )!,
+        transitionChange: safeParseObj(
+          DivChangeTransition.fromJson(json['transition_change']),
+        ),
+        transitionIn: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_in']),
+        ),
+        transitionOut: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_out']),
+        ),
+        transitionTriggers: safeParseObj(
+          safeListMap(
             json['transition_triggers'],
             (v) => safeParseStrEnum(
-                  v,
-                  parse: DivTransitionTrigger.fromJson,
-                )!),
-      ),
-      variables: safeParseObj(
-        safeListMap(
+              v,
+              parse: DivTransitionTrigger.fromJson,
+            )!,
+          ),
+        ),
+        variables: safeParseObj(
+          safeListMap(
             json['variables'],
             (v) => safeParseObj(
-                  DivVariable.fromJson(v),
-                )!),
-      ),
-      visibility: safeParseStrEnumExpr(
-        json['visibility'],
-        parse: DivVisibility.fromJson,
-        fallback: DivVisibility.visible,
-      )!,
-      visibilityAction: safeParseObj(
-        DivVisibilityAction.fromJson(json['visibility_action']),
-      ),
-      visibilityActions: safeParseObj(
-        safeListMap(
+              DivVariable.fromJson(v),
+            )!,
+          ),
+        ),
+        visibility: safeParseStrEnumExpr(
+          json['visibility'],
+          parse: DivVisibility.fromJson,
+          fallback: DivVisibility.visible,
+        )!,
+        visibilityAction: safeParseObj(
+          DivVisibilityAction.fromJson(json['visibility_action']),
+        ),
+        visibilityActions: safeParseObj(
+          safeListMap(
             json['visibility_actions'],
             (v) => safeParseObj(
-                  DivVisibilityAction.fromJson(v),
-                )!),
-      ),
-      width: safeParseObj(
-        DivSize.fromJson(json['width']),
-        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
-      )!,
-    );
+              DivVisibilityAction.fromJson(v),
+            )!,
+          ),
+        ),
+        width: safeParseObj(
+          DivSize.fromJson(json['width']),
+          fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -591,31 +627,35 @@ class DivSliderTextStyle with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivSliderTextStyle(
-      fontSize: safeParseIntExpr(
-        json['font_size'],
-      )!,
-      fontSizeUnit: safeParseStrEnumExpr(
-        json['font_size_unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.sp,
-      )!,
-      fontWeight: safeParseStrEnumExpr(
-        json['font_weight'],
-        parse: DivFontWeight.fromJson,
-        fallback: DivFontWeight.regular,
-      )!,
-      fontWeightValue: safeParseIntExpr(
-        json['font_weight_value'],
-      ),
-      offset: safeParseObj(
-        DivPoint.fromJson(json['offset']),
-      ),
-      textColor: safeParseColorExpr(
-        json['text_color'],
-        fallback: const Color(0xFF000000),
-      )!,
-    );
+    try {
+      return DivSliderTextStyle(
+        fontSize: safeParseIntExpr(
+          json['font_size'],
+        )!,
+        fontSizeUnit: safeParseStrEnumExpr(
+          json['font_size_unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.sp,
+        )!,
+        fontWeight: safeParseStrEnumExpr(
+          json['font_weight'],
+          parse: DivFontWeight.fromJson,
+          fallback: DivFontWeight.regular,
+        )!,
+        fontWeightValue: safeParseIntExpr(
+          json['font_weight_value'],
+        ),
+        offset: safeParseObj(
+          DivPoint.fromJson(json['offset']),
+        ),
+        textColor: safeParseColorExpr(
+          json['text_color'],
+          fallback: const Color(0xFF000000),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -670,23 +710,27 @@ class DivSliderRange with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivSliderRange(
-      end: safeParseIntExpr(
-        json['end'],
-      ),
-      margins: safeParseObj(
-        DivEdgeInsets.fromJson(json['margins']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      start: safeParseIntExpr(
-        json['start'],
-      ),
-      trackActiveStyle: safeParseObj(
-        DivDrawable.fromJson(json['track_active_style']),
-      ),
-      trackInactiveStyle: safeParseObj(
-        DivDrawable.fromJson(json['track_inactive_style']),
-      ),
-    );
+    try {
+      return DivSliderRange(
+        end: safeParseIntExpr(
+          json['end'],
+        ),
+        margins: safeParseObj(
+          DivEdgeInsets.fromJson(json['margins']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        start: safeParseIntExpr(
+          json['start'],
+        ),
+        trackActiveStyle: safeParseObj(
+          DivDrawable.fromJson(json['track_active_style']),
+        ),
+        trackInactiveStyle: safeParseObj(
+          DivDrawable.fromJson(json['track_inactive_style']),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

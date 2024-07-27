@@ -65,32 +65,36 @@ class DivScaleTransition with EquatableMixin implements DivTransitionBase {
     if (json == null) {
       return null;
     }
-    return DivScaleTransition(
-      duration: safeParseIntExpr(
-        json['duration'],
-        fallback: 200,
-      )!,
-      interpolator: safeParseStrEnumExpr(
-        json['interpolator'],
-        parse: DivAnimationInterpolator.fromJson,
-        fallback: DivAnimationInterpolator.easeInOut,
-      )!,
-      pivotX: safeParseDoubleExpr(
-        json['pivot_x'],
-        fallback: 0.5,
-      )!,
-      pivotY: safeParseDoubleExpr(
-        json['pivot_y'],
-        fallback: 0.5,
-      )!,
-      scale: safeParseDoubleExpr(
-        json['scale'],
-        fallback: 0.0,
-      )!,
-      startDelay: safeParseIntExpr(
-        json['start_delay'],
-        fallback: 0,
-      )!,
-    );
+    try {
+      return DivScaleTransition(
+        duration: safeParseIntExpr(
+          json['duration'],
+          fallback: 200,
+        )!,
+        interpolator: safeParseStrEnumExpr(
+          json['interpolator'],
+          parse: DivAnimationInterpolator.fromJson,
+          fallback: DivAnimationInterpolator.easeInOut,
+        )!,
+        pivotX: safeParseDoubleExpr(
+          json['pivot_x'],
+          fallback: 0.5,
+        )!,
+        pivotY: safeParseDoubleExpr(
+          json['pivot_y'],
+          fallback: 0.5,
+        )!,
+        scale: safeParseDoubleExpr(
+          json['scale'],
+          fallback: 0.0,
+        )!,
+        startDelay: safeParseIntExpr(
+          json['start_delay'],
+          fallback: 0,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

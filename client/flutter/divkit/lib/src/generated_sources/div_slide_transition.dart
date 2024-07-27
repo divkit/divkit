@@ -60,29 +60,33 @@ class DivSlideTransition with EquatableMixin implements DivTransitionBase {
     if (json == null) {
       return null;
     }
-    return DivSlideTransition(
-      distance: safeParseObj(
-        DivDimension.fromJson(json['distance']),
-      ),
-      duration: safeParseIntExpr(
-        json['duration'],
-        fallback: 200,
-      )!,
-      edge: safeParseStrEnumExpr(
-        json['edge'],
-        parse: DivSlideTransitionEdge.fromJson,
-        fallback: DivSlideTransitionEdge.bottom,
-      )!,
-      interpolator: safeParseStrEnumExpr(
-        json['interpolator'],
-        parse: DivAnimationInterpolator.fromJson,
-        fallback: DivAnimationInterpolator.easeInOut,
-      )!,
-      startDelay: safeParseIntExpr(
-        json['start_delay'],
-        fallback: 0,
-      )!,
-    );
+    try {
+      return DivSlideTransition(
+        distance: safeParseObj(
+          DivDimension.fromJson(json['distance']),
+        ),
+        duration: safeParseIntExpr(
+          json['duration'],
+          fallback: 200,
+        )!,
+        edge: safeParseStrEnumExpr(
+          json['edge'],
+          parse: DivSlideTransitionEdge.fromJson,
+          fallback: DivSlideTransitionEdge.bottom,
+        )!,
+        interpolator: safeParseStrEnumExpr(
+          json['interpolator'],
+          parse: DivAnimationInterpolator.fromJson,
+          fallback: DivAnimationInterpolator.easeInOut,
+        )!,
+        startDelay: safeParseIntExpr(
+          json['start_delay'],
+          fallback: 0,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -137,16 +141,20 @@ enum DivSlideTransitionEdge {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'left':
-        return DivSlideTransitionEdge.left;
-      case 'top':
-        return DivSlideTransitionEdge.top;
-      case 'right':
-        return DivSlideTransitionEdge.right;
-      case 'bottom':
-        return DivSlideTransitionEdge.bottom;
+    try {
+      switch (json) {
+        case 'left':
+          return DivSlideTransitionEdge.left;
+        case 'top':
+          return DivSlideTransitionEdge.top;
+        case 'right':
+          return DivSlideTransitionEdge.right;
+        case 'bottom':
+          return DivSlideTransitionEdge.bottom;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

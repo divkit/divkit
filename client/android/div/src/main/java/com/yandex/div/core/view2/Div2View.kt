@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
@@ -44,6 +45,7 @@ import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
+import com.yandex.div.core.view2.divs.DivLayoutProviderVariablesHolder
 import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.drawChildrenShadows
@@ -170,6 +172,10 @@ class Div2View private constructor(
         )
     }
     internal val inputFocusTracker = viewComponent.inputFocusTracker
+
+    internal val layoutSizes = mutableMapOf<String, Int>()
+    internal val variablesHolders = mutableMapOf<DivData, DivLayoutProviderVariablesHolder>()
+    internal var clearVariablesListener: ViewTreeObserver.OnPreDrawListener? = null
 
     var dataTag: DivDataTag = DivDataTag.INVALID
         internal set(value) {

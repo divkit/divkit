@@ -28,9 +28,13 @@ class EntityWithComplexProperty with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithComplexProperty(
-      property: safeParseObj(EntityWithComplexPropertyProperty.fromJson(json['property']),)!,
-    );
+    try {
+      return EntityWithComplexProperty(
+        property: safeParseObj(EntityWithComplexPropertyProperty.fromJson(json['property']),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }
 
@@ -57,8 +61,12 @@ class EntityWithComplexPropertyProperty with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithComplexPropertyProperty(
-      value: safeParseUriExpr(json['value'])!,
-    );
+    try {
+      return EntityWithComplexPropertyProperty(
+        value: safeParseUriExpr(json['value'])!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

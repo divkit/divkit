@@ -29,10 +29,14 @@ class BooleanValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return BooleanValue(
-      value: safeParseBoolExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return BooleanValue(
+        value: safeParseBoolExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

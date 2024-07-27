@@ -30,10 +30,14 @@ class DivActionCopyToClipboard with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivActionCopyToClipboard(
-      content: safeParseObj(
-        DivActionCopyToClipboardContent.fromJson(json['content']),
-      )!,
-    );
+    try {
+      return DivActionCopyToClipboard(
+        content: safeParseObj(
+          DivActionCopyToClipboardContent.fromJson(json['content']),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

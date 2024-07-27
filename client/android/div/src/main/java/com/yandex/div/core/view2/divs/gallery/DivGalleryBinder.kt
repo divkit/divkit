@@ -18,10 +18,12 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.ReleasingViewPool
+import com.yandex.div.core.view2.divs.bindItemBuilder
 import com.yandex.div.core.view2.divs.bindStates
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
+import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.widget.PaddingItemDecoration
 import com.yandex.div2.Div
@@ -82,6 +84,7 @@ internal class DivGalleryBinder @Inject constructor(
             itemStateBinder,
             path
         )
+        view.bindItemBuilder(context, div)
         view.resetAnimatorAndRestoreOnLayout()
 
         updateDecorations(view, div, context)
@@ -206,6 +209,13 @@ internal class DivGalleryBinder @Inject constructor(
     private fun DivRecyclerView.removeItemDecorations() {
         for (i in itemDecorationCount - 1 downTo 0) {
             removeItemDecorationAt(i)
+        }
+    }
+
+    private fun DivRecyclerView.bindItemBuilder(context: BindingContext, div: DivGallery) {
+        val builder = div.itemBuilder ?: return
+        bindItemBuilder(builder, context.expressionResolver) {
+            (adapter as DivGalleryAdapter?)?.setItems(builder.build(context.expressionResolver))
         }
     }
 }

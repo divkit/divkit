@@ -29,8 +29,12 @@ class ContentUrl with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return ContentUrl(
-      value: safeParseUriExpr(json['value'])!,
-    );
+    try {
+      return ContentUrl(
+        value: safeParseUriExpr(json['value'])!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

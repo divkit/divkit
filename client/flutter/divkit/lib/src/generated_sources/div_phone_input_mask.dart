@@ -31,10 +31,14 @@ class DivPhoneInputMask with EquatableMixin implements DivInputMaskBase {
     if (json == null) {
       return null;
     }
-    return DivPhoneInputMask(
-      rawTextVariable: safeParseStr(
-        json['raw_text_variable']?.toString(),
-      )!,
-    );
+    try {
+      return DivPhoneInputMask(
+        rawTextVariable: safeParseStr(
+          json['raw_text_variable']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

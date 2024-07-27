@@ -581,6 +581,7 @@ public final class DivTabsTemplate: TemplateValue {
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let restrictParentScroll: Field<Expression<Bool>>? // default value: false
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>?
   public let selectedTab: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
@@ -624,6 +625,7 @@ public final class DivTabsTemplate: TemplateValue {
       margins: dictionary.getOptionalField("margins", templateToType: templateToType),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       restrictParentScroll: dictionary.getOptionalExpressionField("restrict_parent_scroll"),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
       selectedTab: dictionary.getOptionalExpressionField("selected_tab"),
@@ -668,6 +670,7 @@ public final class DivTabsTemplate: TemplateValue {
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     restrictParentScroll: Field<Expression<Bool>>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     selectedTab: Field<Expression<Int>>? = nil,
@@ -709,6 +712,7 @@ public final class DivTabsTemplate: TemplateValue {
     self.margins = margins
     self.paddings = paddings
     self.restrictParentScroll = restrictParentScroll
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.selectedTab = selectedTab
@@ -751,6 +755,7 @@ public final class DivTabsTemplate: TemplateValue {
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let restrictParentScrollValue = parent?.restrictParentScroll?.resolveOptionalValue(context: context) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let selectedTabValue = parent?.selectedTab?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedTabValidator) ?? .noValue
@@ -791,6 +796,7 @@ public final class DivTabsTemplate: TemplateValue {
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       selectedTabValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_tab", error: $0) },
@@ -840,6 +846,7 @@ public final class DivTabsTemplate: TemplateValue {
       margins: marginsValue.value,
       paddings: paddingsValue.value,
       restrictParentScroll: restrictParentScrollValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       selectedTab: selectedTabValue.value,
@@ -887,6 +894,7 @@ public final class DivTabsTemplate: TemplateValue {
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var restrictParentScrollValue: DeserializationResult<Expression<Bool>> = parent?.restrictParentScroll?.value() ?? .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var selectedTabValue: DeserializationResult<Expression<Int>> = parent?.selectedTab?.value() ?? .noValue
@@ -947,6 +955,8 @@ public final class DivTabsTemplate: TemplateValue {
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
       case "restrict_parent_scroll":
         restrictParentScrollValue = deserialize(__dictValue).merged(with: restrictParentScrollValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selected_actions":
@@ -1025,6 +1035,8 @@ public final class DivTabsTemplate: TemplateValue {
         paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.restrictParentScroll?.link:
         restrictParentScrollValue = restrictParentScrollValue.merged(with: { deserialize(__dictValue) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.selectedActions?.link:
@@ -1115,6 +1127,7 @@ public final class DivTabsTemplate: TemplateValue {
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       selectedTabValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_tab", error: $0) },
@@ -1164,6 +1177,7 @@ public final class DivTabsTemplate: TemplateValue {
       margins: marginsValue.value,
       paddings: paddingsValue.value,
       restrictParentScroll: restrictParentScrollValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
       selectedTab: selectedTabValue.value,
@@ -1216,6 +1230,7 @@ public final class DivTabsTemplate: TemplateValue {
       margins: margins ?? mergedParent.margins,
       paddings: paddings ?? mergedParent.paddings,
       restrictParentScroll: restrictParentScroll ?? mergedParent.restrictParentScroll,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       selectedTab: selectedTab ?? mergedParent.selectedTab,
@@ -1263,6 +1278,7 @@ public final class DivTabsTemplate: TemplateValue {
       margins: merged.margins?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       restrictParentScroll: merged.restrictParentScroll,
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       selectedTab: merged.selectedTab,

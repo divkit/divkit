@@ -697,6 +697,7 @@ public final class DivTextTemplate: TemplateValue {
   public let minHiddenLines: Field<Expression<Int>>? // constraint: number >= 0
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let ranges: Field<[RangeTemplate]>?
+  public let reuseId: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectable: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>?
@@ -758,6 +759,7 @@ public final class DivTextTemplate: TemplateValue {
       minHiddenLines: dictionary.getOptionalExpressionField("min_hidden_lines"),
       paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
       ranges: dictionary.getOptionalArray("ranges", templateToType: templateToType),
+      reuseId: dictionary.getOptionalExpressionField("reuse_id"),
       rowSpan: dictionary.getOptionalExpressionField("row_span"),
       selectable: dictionary.getOptionalExpressionField("selectable"),
       selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
@@ -820,6 +822,7 @@ public final class DivTextTemplate: TemplateValue {
     minHiddenLines: Field<Expression<Int>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     ranges: Field<[RangeTemplate]>? = nil,
+    reuseId: Field<Expression<String>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectable: Field<Expression<Bool>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
@@ -879,6 +882,7 @@ public final class DivTextTemplate: TemplateValue {
     self.minHiddenLines = minHiddenLines
     self.paddings = paddings
     self.ranges = ranges
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectable = selectable
     self.selectedActions = selectedActions
@@ -939,6 +943,7 @@ public final class DivTextTemplate: TemplateValue {
     let minHiddenLinesValue = parent?.minHiddenLines?.resolveOptionalValue(context: context, validator: ResolvedValue.minHiddenLinesValidator) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectableValue = parent?.selectable?.resolveOptionalValue(context: context) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -997,6 +1002,7 @@ public final class DivTextTemplate: TemplateValue {
       minHiddenLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_hidden_lines", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectableValue.errorsOrWarnings?.map { .nestedObjectError(field: "selectable", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -1064,6 +1070,7 @@ public final class DivTextTemplate: TemplateValue {
       minHiddenLines: minHiddenLinesValue.value,
       paddings: paddingsValue.value,
       ranges: rangesValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectable: selectableValue.value,
       selectedActions: selectedActionsValue.value,
@@ -1129,6 +1136,7 @@ public final class DivTextTemplate: TemplateValue {
     var minHiddenLinesValue: DeserializationResult<Expression<Int>> = parent?.minHiddenLines?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var rangesValue: DeserializationResult<[DivText.Range]> = .noValue
+    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectableValue: DeserializationResult<Expression<Bool>> = parent?.selectable?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -1223,6 +1231,8 @@ public final class DivTextTemplate: TemplateValue {
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
       case "ranges":
         rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self).merged(with: rangesValue)
+      case "reuse_id":
+        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selectable":
@@ -1337,6 +1347,8 @@ public final class DivTextTemplate: TemplateValue {
         paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
       case parent?.ranges?.link:
         rangesValue = rangesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self) })
+      case parent?.reuseId?.link:
+        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
       case parent?.selectable?.link:
@@ -1452,6 +1464,7 @@ public final class DivTextTemplate: TemplateValue {
       minHiddenLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_hidden_lines", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
+      reuseIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "reuse_id", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectableValue.errorsOrWarnings?.map { .nestedObjectError(field: "selectable", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -1519,6 +1532,7 @@ public final class DivTextTemplate: TemplateValue {
       minHiddenLines: minHiddenLinesValue.value,
       paddings: paddingsValue.value,
       ranges: rangesValue.value,
+      reuseId: reuseIdValue.value,
       rowSpan: rowSpanValue.value,
       selectable: selectableValue.value,
       selectedActions: selectedActionsValue.value,
@@ -1589,6 +1603,7 @@ public final class DivTextTemplate: TemplateValue {
       minHiddenLines: minHiddenLines ?? mergedParent.minHiddenLines,
       paddings: paddings ?? mergedParent.paddings,
       ranges: ranges ?? mergedParent.ranges,
+      reuseId: reuseId ?? mergedParent.reuseId,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectable: selectable ?? mergedParent.selectable,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
@@ -1654,6 +1669,7 @@ public final class DivTextTemplate: TemplateValue {
       minHiddenLines: merged.minHiddenLines,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       ranges: merged.ranges?.tryResolveParent(templates: templates),
+      reuseId: merged.reuseId,
       rowSpan: merged.rowSpan,
       selectable: merged.selectable,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),

@@ -27,17 +27,20 @@ public final class GalleryScrollEvent: AppActionEventProtocol {
   public let direction: Direction
   public let firstVisibleItemIndex: Int
   public let lastVisibleItemIndex: Int
+  public let itemsCount: Int
 
   public init(
     path: UIElementPath,
     direction: Direction,
     firstVisibleItemIndex: Int,
-    lastVisibleItemIndex: Int
+    lastVisibleItemIndex: Int,
+    itemsCount: Int
   ) {
     self.path = path
     self.direction = direction
     self.firstVisibleItemIndex = firstVisibleItemIndex
     self.lastVisibleItemIndex = lastVisibleItemIndex
+    self.itemsCount = itemsCount
   }
 
   public func makeHandler(responder: UIResponder) -> Handler? {

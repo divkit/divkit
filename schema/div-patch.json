@@ -36,7 +36,11 @@
         "transactional", "partial"
       ],
       "default_value": "partial",
-      "$description": "translations.json#/div_patch_mode"
+      "$description": "translations.json#/div_patch_mode",
+      "platforms": [
+        "android",
+        "web"
+      ]
     },
     "changes": {
       "type": "array",
@@ -45,6 +49,24 @@
       },
       "minItems": 1,
       "$description": "translations.json#/div_patch_changes"
+    },
+    "on_applied_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_patch_on_applied_actions",
+      "platforms": [
+        "ios"
+      ]
+    },
+    "on_failed_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_patch_on_failed_actions",
+      "platforms": []
     }
   },
   "platforms": [

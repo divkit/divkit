@@ -42,16 +42,20 @@ class DivActionArrayInsertValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivActionArrayInsertValue(
-      index: safeParseIntExpr(
-        json['index'],
-      ),
-      value: safeParseObj(
-        DivTypedValue.fromJson(json['value']),
-      )!,
-      variableName: safeParseStrExpr(
-        json['variable_name']?.toString(),
-      )!,
-    );
+    try {
+      return DivActionArrayInsertValue(
+        index: safeParseIntExpr(
+          json['index'],
+        ),
+        value: safeParseObj(
+          DivTypedValue.fromJson(json['value']),
+        )!,
+        variableName: safeParseStrExpr(
+          json['variable_name']?.toString(),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

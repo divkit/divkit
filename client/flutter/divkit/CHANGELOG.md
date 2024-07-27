@@ -1,5 +1,7 @@
 ## 0.3.0-pre+2
 * Add visibility triggers feature
+* Add Full support div-background
+* Isolate problematic divs
 
 ## 0.3.0-pre+1
 

@@ -1,7 +1,6 @@
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/protocol/div_data_provider.dart';
 import 'package:divkit/src/core/protocol/div_patch.dart';
-import 'package:divkit/src/core/protocol/div_visibility_action.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:flutter/widgets.dart';
 

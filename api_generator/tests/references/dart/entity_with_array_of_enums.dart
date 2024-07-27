@@ -28,9 +28,13 @@ class EntityWithArrayOfEnums with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithArrayOfEnums(
-      items: safeParseObj(safeListMap(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!),)!,
-    );
+    try {
+      return EntityWithArrayOfEnums(
+        items: safeParseObj(safeListMap(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }
 
@@ -72,12 +76,16 @@ enum EntityWithArrayOfEnumsItem {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'first':
+    try {
+      switch (json) {
+        case 'first':
         return EntityWithArrayOfEnumsItem.first;
-      case 'second':
+        case 'second':
         return EntityWithArrayOfEnumsItem.second;
+      }
+      return null;
+    } catch (e, st) {
+      return null;
     }
-    return null;
   }
 }

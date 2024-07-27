@@ -20,6 +20,7 @@ public protocol DivBase: DivBlockModeling {
   var layoutProvider: DivLayoutProvider? { get }
   var margins: DivEdgeInsets? { get }
   var paddings: DivEdgeInsets? { get }
+  var reuseId: Expression<String>? { get }
   var rowSpan: Expression<Int>? { get } // constraint: number >= 0
   var selectedActions: [DivAction]? { get }
   var tooltips: [DivTooltip]? { get }
@@ -37,6 +38,7 @@ public protocol DivBase: DivBlockModeling {
   func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical?
   func resolveAlpha(_ resolver: ExpressionResolver) -> Double
   func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int?
+  func resolveReuseId(_ resolver: ExpressionResolver) -> String?
   func resolveRowSpan(_ resolver: ExpressionResolver) -> Int?
   func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility
 }

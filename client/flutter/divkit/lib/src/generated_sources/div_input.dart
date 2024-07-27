@@ -19,6 +19,7 @@ import 'package:divkit/src/generated_sources/div_focus.dart';
 import 'package:divkit/src/generated_sources/div_font_weight.dart';
 import 'package:divkit/src/generated_sources/div_input_mask.dart';
 import 'package:divkit/src/generated_sources/div_input_validator.dart';
+import 'package:divkit/src/generated_sources/div_layout_provider.dart';
 import 'package:divkit/src/generated_sources/div_match_parent_size.dart';
 import 'package:divkit/src/generated_sources/div_size.dart';
 import 'package:divkit/src/generated_sources/div_size_unit.dart';
@@ -55,6 +56,7 @@ class DivInput with EquatableMixin implements DivBase {
     this.isEnabled = const ValueExpression(true),
     this.keyboardType =
         const ValueExpression(DivInputKeyboardType.multiLineText),
+    this.layoutProvider,
     this.letterSpacing = const ValueExpression(0),
     this.lineHeight,
     this.margins = const DivEdgeInsets(),
@@ -63,6 +65,7 @@ class DivInput with EquatableMixin implements DivBase {
     this.maxVisibleLines,
     this.nativeInterface,
     this.paddings = const DivEdgeInsets(),
+    this.reuseId,
     this.rowSpan,
     this.selectAllOnFocus = const ValueExpression(false),
     this.selectedActions,
@@ -143,6 +146,9 @@ class DivInput with EquatableMixin implements DivBase {
   final Expression<bool> isEnabled;
   // default value: DivInputKeyboardType.multiLineText
   final Expression<DivInputKeyboardType> keyboardType;
+
+  @override
+  final DivLayoutProvider? layoutProvider;
   // default value: 0
   final Expression<double> letterSpacing;
   // constraint: number >= 0
@@ -161,6 +167,9 @@ class DivInput with EquatableMixin implements DivBase {
 
   @override
   final DivEdgeInsets paddings;
+
+  @override
+  final Expression<String>? reuseId;
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
@@ -237,6 +246,7 @@ class DivInput with EquatableMixin implements DivBase {
         id,
         isEnabled,
         keyboardType,
+        layoutProvider,
         letterSpacing,
         lineHeight,
         margins,
@@ -245,6 +255,7 @@ class DivInput with EquatableMixin implements DivBase {
         maxVisibleLines,
         nativeInterface,
         paddings,
+        reuseId,
         rowSpan,
         selectAllOnFocus,
         selectedActions,
@@ -289,6 +300,7 @@ class DivInput with EquatableMixin implements DivBase {
     String? Function()? id,
     Expression<bool>? isEnabled,
     Expression<DivInputKeyboardType>? keyboardType,
+    DivLayoutProvider? Function()? layoutProvider,
     Expression<double>? letterSpacing,
     Expression<int>? Function()? lineHeight,
     DivEdgeInsets? margins,
@@ -297,6 +309,7 @@ class DivInput with EquatableMixin implements DivBase {
     Expression<int>? Function()? maxVisibleLines,
     DivInputNativeInterface? Function()? nativeInterface,
     DivEdgeInsets? paddings,
+    Expression<String>? Function()? reuseId,
     Expression<int>? Function()? rowSpan,
     Expression<bool>? selectAllOnFocus,
     List<DivAction>? Function()? selectedActions,
@@ -350,6 +363,9 @@ class DivInput with EquatableMixin implements DivBase {
         id: id != null ? id.call() : this.id,
         isEnabled: isEnabled ?? this.isEnabled,
         keyboardType: keyboardType ?? this.keyboardType,
+        layoutProvider: layoutProvider != null
+            ? layoutProvider.call()
+            : this.layoutProvider,
         letterSpacing: letterSpacing ?? this.letterSpacing,
         lineHeight: lineHeight != null ? lineHeight.call() : this.lineHeight,
         margins: margins ?? this.margins,
@@ -362,6 +378,7 @@ class DivInput with EquatableMixin implements DivBase {
             ? nativeInterface.call()
             : this.nativeInterface,
         paddings: paddings ?? this.paddings,
+        reuseId: reuseId != null ? reuseId.call() : this.reuseId,
         rowSpan: rowSpan != null ? rowSpan.call() : this.rowSpan,
         selectAllOnFocus: selectAllOnFocus ?? this.selectAllOnFocus,
         selectedActions: selectedActions != null
@@ -401,220 +418,239 @@ class DivInput with EquatableMixin implements DivBase {
     if (json == null) {
       return null;
     }
-    return DivInput(
-      accessibility: safeParseObj(
-        DivAccessibility.fromJson(json['accessibility']),
-        fallback: const DivAccessibility(),
-      )!,
-      alignmentHorizontal: safeParseStrEnumExpr(
-        json['alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-      ),
-      alignmentVertical: safeParseStrEnumExpr(
-        json['alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-      ),
-      alpha: safeParseDoubleExpr(
-        json['alpha'],
-        fallback: 1.0,
-      )!,
-      background: safeParseObj(
-        safeListMap(
+    try {
+      return DivInput(
+        accessibility: safeParseObj(
+          DivAccessibility.fromJson(json['accessibility']),
+          fallback: const DivAccessibility(),
+        )!,
+        alignmentHorizontal: safeParseStrEnumExpr(
+          json['alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+        ),
+        alignmentVertical: safeParseStrEnumExpr(
+          json['alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+        ),
+        alpha: safeParseDoubleExpr(
+          json['alpha'],
+          fallback: 1.0,
+        )!,
+        background: safeParseObj(
+          safeListMap(
             json['background'],
             (v) => safeParseObj(
-                  DivBackground.fromJson(v),
-                )!),
-      ),
-      border: safeParseObj(
-        DivBorder.fromJson(json['border']),
-        fallback: const DivBorder(),
-      )!,
-      columnSpan: safeParseIntExpr(
-        json['column_span'],
-      ),
-      disappearActions: safeParseObj(
-        safeListMap(
+              DivBackground.fromJson(v),
+            )!,
+          ),
+        ),
+        border: safeParseObj(
+          DivBorder.fromJson(json['border']),
+          fallback: const DivBorder(),
+        )!,
+        columnSpan: safeParseIntExpr(
+          json['column_span'],
+        ),
+        disappearActions: safeParseObj(
+          safeListMap(
             json['disappear_actions'],
             (v) => safeParseObj(
-                  DivDisappearAction.fromJson(v),
-                )!),
-      ),
-      extensions: safeParseObj(
-        safeListMap(
+              DivDisappearAction.fromJson(v),
+            )!,
+          ),
+        ),
+        extensions: safeParseObj(
+          safeListMap(
             json['extensions'],
             (v) => safeParseObj(
-                  DivExtension.fromJson(v),
-                )!),
-      ),
-      focus: safeParseObj(
-        DivFocus.fromJson(json['focus']),
-      ),
-      fontFamily: safeParseStrExpr(
-        json['font_family']?.toString(),
-      ),
-      fontSize: safeParseIntExpr(
-        json['font_size'],
-        fallback: 12,
-      )!,
-      fontSizeUnit: safeParseStrEnumExpr(
-        json['font_size_unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.sp,
-      )!,
-      fontWeight: safeParseStrEnumExpr(
-        json['font_weight'],
-        parse: DivFontWeight.fromJson,
-        fallback: DivFontWeight.regular,
-      )!,
-      fontWeightValue: safeParseIntExpr(
-        json['font_weight_value'],
-      ),
-      height: safeParseObj(
-        DivSize.fromJson(json['height']),
-        fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
-      )!,
-      highlightColor: safeParseColorExpr(
-        json['highlight_color'],
-      ),
-      hintColor: safeParseColorExpr(
-        json['hint_color'],
-        fallback: const Color(0x73000000),
-      )!,
-      hintText: safeParseStrExpr(
-        json['hint_text']?.toString(),
-      ),
-      id: safeParseStr(
-        json['id']?.toString(),
-      ),
-      isEnabled: safeParseBoolExpr(
-        json['is_enabled'],
-        fallback: true,
-      )!,
-      keyboardType: safeParseStrEnumExpr(
-        json['keyboard_type'],
-        parse: DivInputKeyboardType.fromJson,
-        fallback: DivInputKeyboardType.multiLineText,
-      )!,
-      letterSpacing: safeParseDoubleExpr(
-        json['letter_spacing'],
-        fallback: 0,
-      )!,
-      lineHeight: safeParseIntExpr(
-        json['line_height'],
-      ),
-      margins: safeParseObj(
-        DivEdgeInsets.fromJson(json['margins']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      mask: safeParseObj(
-        DivInputMask.fromJson(json['mask']),
-      ),
-      maxLength: safeParseIntExpr(
-        json['max_length'],
-      ),
-      maxVisibleLines: safeParseIntExpr(
-        json['max_visible_lines'],
-      ),
-      nativeInterface: safeParseObj(
-        DivInputNativeInterface.fromJson(json['native_interface']),
-      ),
-      paddings: safeParseObj(
-        DivEdgeInsets.fromJson(json['paddings']),
-        fallback: const DivEdgeInsets(),
-      )!,
-      rowSpan: safeParseIntExpr(
-        json['row_span'],
-      ),
-      selectAllOnFocus: safeParseBoolExpr(
-        json['select_all_on_focus'],
-        fallback: false,
-      )!,
-      selectedActions: safeParseObj(
-        safeListMap(
+              DivExtension.fromJson(v),
+            )!,
+          ),
+        ),
+        focus: safeParseObj(
+          DivFocus.fromJson(json['focus']),
+        ),
+        fontFamily: safeParseStrExpr(
+          json['font_family']?.toString(),
+        ),
+        fontSize: safeParseIntExpr(
+          json['font_size'],
+          fallback: 12,
+        )!,
+        fontSizeUnit: safeParseStrEnumExpr(
+          json['font_size_unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.sp,
+        )!,
+        fontWeight: safeParseStrEnumExpr(
+          json['font_weight'],
+          parse: DivFontWeight.fromJson,
+          fallback: DivFontWeight.regular,
+        )!,
+        fontWeightValue: safeParseIntExpr(
+          json['font_weight_value'],
+        ),
+        height: safeParseObj(
+          DivSize.fromJson(json['height']),
+          fallback: const DivSize.divWrapContentSize(DivWrapContentSize()),
+        )!,
+        highlightColor: safeParseColorExpr(
+          json['highlight_color'],
+        ),
+        hintColor: safeParseColorExpr(
+          json['hint_color'],
+          fallback: const Color(0x73000000),
+        )!,
+        hintText: safeParseStrExpr(
+          json['hint_text']?.toString(),
+        ),
+        id: safeParseStr(
+          json['id']?.toString(),
+        ),
+        isEnabled: safeParseBoolExpr(
+          json['is_enabled'],
+          fallback: true,
+        )!,
+        keyboardType: safeParseStrEnumExpr(
+          json['keyboard_type'],
+          parse: DivInputKeyboardType.fromJson,
+          fallback: DivInputKeyboardType.multiLineText,
+        )!,
+        layoutProvider: safeParseObj(
+          DivLayoutProvider.fromJson(json['layout_provider']),
+        ),
+        letterSpacing: safeParseDoubleExpr(
+          json['letter_spacing'],
+          fallback: 0,
+        )!,
+        lineHeight: safeParseIntExpr(
+          json['line_height'],
+        ),
+        margins: safeParseObj(
+          DivEdgeInsets.fromJson(json['margins']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        mask: safeParseObj(
+          DivInputMask.fromJson(json['mask']),
+        ),
+        maxLength: safeParseIntExpr(
+          json['max_length'],
+        ),
+        maxVisibleLines: safeParseIntExpr(
+          json['max_visible_lines'],
+        ),
+        nativeInterface: safeParseObj(
+          DivInputNativeInterface.fromJson(json['native_interface']),
+        ),
+        paddings: safeParseObj(
+          DivEdgeInsets.fromJson(json['paddings']),
+          fallback: const DivEdgeInsets(),
+        )!,
+        reuseId: safeParseStrExpr(
+          json['reuse_id']?.toString(),
+        ),
+        rowSpan: safeParseIntExpr(
+          json['row_span'],
+        ),
+        selectAllOnFocus: safeParseBoolExpr(
+          json['select_all_on_focus'],
+          fallback: false,
+        )!,
+        selectedActions: safeParseObj(
+          safeListMap(
             json['selected_actions'],
             (v) => safeParseObj(
-                  DivAction.fromJson(v),
-                )!),
-      ),
-      textAlignmentHorizontal: safeParseStrEnumExpr(
-        json['text_alignment_horizontal'],
-        parse: DivAlignmentHorizontal.fromJson,
-        fallback: DivAlignmentHorizontal.start,
-      )!,
-      textAlignmentVertical: safeParseStrEnumExpr(
-        json['text_alignment_vertical'],
-        parse: DivAlignmentVertical.fromJson,
-        fallback: DivAlignmentVertical.center,
-      )!,
-      textColor: safeParseColorExpr(
-        json['text_color'],
-        fallback: const Color(0xFF000000),
-      )!,
-      textVariable: safeParseStr(
-        json['text_variable']?.toString(),
-      )!,
-      tooltips: safeParseObj(
-        safeListMap(
+              DivAction.fromJson(v),
+            )!,
+          ),
+        ),
+        textAlignmentHorizontal: safeParseStrEnumExpr(
+          json['text_alignment_horizontal'],
+          parse: DivAlignmentHorizontal.fromJson,
+          fallback: DivAlignmentHorizontal.start,
+        )!,
+        textAlignmentVertical: safeParseStrEnumExpr(
+          json['text_alignment_vertical'],
+          parse: DivAlignmentVertical.fromJson,
+          fallback: DivAlignmentVertical.center,
+        )!,
+        textColor: safeParseColorExpr(
+          json['text_color'],
+          fallback: const Color(0xFF000000),
+        )!,
+        textVariable: safeParseStr(
+          json['text_variable']?.toString(),
+        )!,
+        tooltips: safeParseObj(
+          safeListMap(
             json['tooltips'],
             (v) => safeParseObj(
-                  DivTooltip.fromJson(v),
-                )!),
-      ),
-      transform: safeParseObj(
-        DivTransform.fromJson(json['transform']),
-        fallback: const DivTransform(),
-      )!,
-      transitionChange: safeParseObj(
-        DivChangeTransition.fromJson(json['transition_change']),
-      ),
-      transitionIn: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_in']),
-      ),
-      transitionOut: safeParseObj(
-        DivAppearanceTransition.fromJson(json['transition_out']),
-      ),
-      transitionTriggers: safeParseObj(
-        safeListMap(
+              DivTooltip.fromJson(v),
+            )!,
+          ),
+        ),
+        transform: safeParseObj(
+          DivTransform.fromJson(json['transform']),
+          fallback: const DivTransform(),
+        )!,
+        transitionChange: safeParseObj(
+          DivChangeTransition.fromJson(json['transition_change']),
+        ),
+        transitionIn: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_in']),
+        ),
+        transitionOut: safeParseObj(
+          DivAppearanceTransition.fromJson(json['transition_out']),
+        ),
+        transitionTriggers: safeParseObj(
+          safeListMap(
             json['transition_triggers'],
             (v) => safeParseStrEnum(
-                  v,
-                  parse: DivTransitionTrigger.fromJson,
-                )!),
-      ),
-      validators: safeParseObj(
-        safeListMap(
+              v,
+              parse: DivTransitionTrigger.fromJson,
+            )!,
+          ),
+        ),
+        validators: safeParseObj(
+          safeListMap(
             json['validators'],
             (v) => safeParseObj(
-                  DivInputValidator.fromJson(v),
-                )!),
-      ),
-      variables: safeParseObj(
-        safeListMap(
+              DivInputValidator.fromJson(v),
+            )!,
+          ),
+        ),
+        variables: safeParseObj(
+          safeListMap(
             json['variables'],
             (v) => safeParseObj(
-                  DivVariable.fromJson(v),
-                )!),
-      ),
-      visibility: safeParseStrEnumExpr(
-        json['visibility'],
-        parse: DivVisibility.fromJson,
-        fallback: DivVisibility.visible,
-      )!,
-      visibilityAction: safeParseObj(
-        DivVisibilityAction.fromJson(json['visibility_action']),
-      ),
-      visibilityActions: safeParseObj(
-        safeListMap(
+              DivVariable.fromJson(v),
+            )!,
+          ),
+        ),
+        visibility: safeParseStrEnumExpr(
+          json['visibility'],
+          parse: DivVisibility.fromJson,
+          fallback: DivVisibility.visible,
+        )!,
+        visibilityAction: safeParseObj(
+          DivVisibilityAction.fromJson(json['visibility_action']),
+        ),
+        visibilityActions: safeParseObj(
+          safeListMap(
             json['visibility_actions'],
             (v) => safeParseObj(
-                  DivVisibilityAction.fromJson(v),
-                )!),
-      ),
-      width: safeParseObj(
-        DivSize.fromJson(json['width']),
-        fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
-      )!,
-    );
+              DivVisibilityAction.fromJson(v),
+            )!,
+          ),
+        ),
+        width: safeParseObj(
+          DivSize.fromJson(json['width']),
+          fallback: const DivSize.divMatchParentSize(DivMatchParentSize()),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -641,11 +677,15 @@ class DivInputNativeInterface with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivInputNativeInterface(
-      color: safeParseColorExpr(
-        json['color'],
-      )!,
-    );
+    try {
+      return DivInputNativeInterface(
+        color: safeParseColorExpr(
+          json['color'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -721,22 +761,26 @@ enum DivInputKeyboardType {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'single_line_text':
-        return DivInputKeyboardType.singleLineText;
-      case 'multi_line_text':
-        return DivInputKeyboardType.multiLineText;
-      case 'phone':
-        return DivInputKeyboardType.phone;
-      case 'number':
-        return DivInputKeyboardType.number;
-      case 'email':
-        return DivInputKeyboardType.email;
-      case 'uri':
-        return DivInputKeyboardType.uri;
-      case 'password':
-        return DivInputKeyboardType.password;
+    try {
+      switch (json) {
+        case 'single_line_text':
+          return DivInputKeyboardType.singleLineText;
+        case 'multi_line_text':
+          return DivInputKeyboardType.multiLineText;
+        case 'phone':
+          return DivInputKeyboardType.phone;
+        case 'number':
+          return DivInputKeyboardType.number;
+        case 'email':
+          return DivInputKeyboardType.email;
+        case 'uri':
+          return DivInputKeyboardType.uri;
+        case 'password':
+          return DivInputKeyboardType.password;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

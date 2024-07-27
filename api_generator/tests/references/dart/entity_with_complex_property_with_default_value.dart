@@ -28,9 +28,13 @@ class EntityWithComplexPropertyWithDefaultValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithComplexPropertyWithDefaultValue(
-      property: safeParseObj(EntityWithComplexPropertyWithDefaultValueProperty.fromJson(json['property']), fallback: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text"),),)!,
-    );
+    try {
+      return EntityWithComplexPropertyWithDefaultValue(
+        property: safeParseObj(EntityWithComplexPropertyWithDefaultValueProperty.fromJson(json['property']), fallback: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text"),),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }
 
@@ -57,8 +61,12 @@ class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithComplexPropertyWithDefaultValueProperty(
-      value: safeParseStrExpr(json['value']?.toString(),)!,
-    );
+    try {
+      return EntityWithComplexPropertyWithDefaultValueProperty(
+        value: safeParseStrExpr(json['value']?.toString(),)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }

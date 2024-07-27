@@ -28,9 +28,13 @@ class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return EntityWithStringEnumPropertyWithDefaultValue(
-      value: safeParseStrEnumExpr(json['value'], parse: EntityWithStringEnumPropertyWithDefaultValueValue.fromJson, fallback: EntityWithStringEnumPropertyWithDefaultValueValue.second,)!,
-    );
+    try {
+      return EntityWithStringEnumPropertyWithDefaultValue(
+        value: safeParseStrEnumExpr(json['value'], parse: EntityWithStringEnumPropertyWithDefaultValueValue.fromJson, fallback: EntityWithStringEnumPropertyWithDefaultValueValue.second,)!,
+      );
+    } catch (e, st) {
+      return null;
+    }
   }
 }
 
@@ -79,14 +83,18 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'first':
+    try {
+      switch (json) {
+        case 'first':
         return EntityWithStringEnumPropertyWithDefaultValueValue.first;
-      case 'second':
+        case 'second':
         return EntityWithStringEnumPropertyWithDefaultValueValue.second;
-      case 'third':
+        case 'third':
         return EntityWithStringEnumPropertyWithDefaultValueValue.third;
+      }
+      return null;
+    } catch (e, st) {
+      return null;
     }
-    return null;
   }
 }

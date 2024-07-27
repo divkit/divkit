@@ -40,22 +40,27 @@ class DivCollectionItemBuilder with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivCollectionItemBuilder(
-      data: safeParseListExpr(
-        json['data'],
-      )!,
-      dataElementName: safeParseStr(
-        json['data_element_name']?.toString(),
-        fallback: "it",
-      )!,
-      prototypes: safeParseObj(
-        safeListMap(
+    try {
+      return DivCollectionItemBuilder(
+        data: safeParseListExpr(
+          json['data'],
+        )!,
+        dataElementName: safeParseStr(
+          json['data_element_name']?.toString(),
+          fallback: "it",
+        )!,
+        prototypes: safeParseObj(
+          safeListMap(
             json['prototypes'],
             (v) => safeParseObj(
-                  DivCollectionItemBuilderPrototype.fromJson(v),
-                )!),
-      )!,
-    );
+              DivCollectionItemBuilderPrototype.fromJson(v),
+            )!,
+          ),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -91,21 +96,26 @@ class DivCollectionItemBuilderPrototype with EquatableMixin {
       );
 
   static DivCollectionItemBuilderPrototype? fromJson(
-      Map<String, dynamic>? json) {
+    Map<String, dynamic>? json,
+  ) {
     if (json == null) {
       return null;
     }
-    return DivCollectionItemBuilderPrototype(
-      div: safeParseObj(
-        Div.fromJson(json['div']),
-      )!,
-      id: safeParseStrExpr(
-        json['id']?.toString(),
-      ),
-      selector: safeParseBoolExpr(
-        json['selector'],
-        fallback: true,
-      )!,
-    );
+    try {
+      return DivCollectionItemBuilderPrototype(
+        div: safeParseObj(
+          Div.fromJson(json['div']),
+        )!,
+        id: safeParseStrExpr(
+          json['id']?.toString(),
+        ),
+        selector: safeParseBoolExpr(
+          json['selector'],
+          fallback: true,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

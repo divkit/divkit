@@ -40,7 +40,7 @@ extension TemplateValue where ResolvedValue: DivBlockModeling {
   static func make(
     fromFile filename: String,
     subdirectory: String? = nil,
-    context: DivBlockModelingContext = .default
+    context: DivBlockModelingContext
   ) throws -> Block {
     let dict = try jsonDictFromFile(
       named: filename,

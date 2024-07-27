@@ -28,7 +28,8 @@ class DivPageTransformation with EquatableMixin {
         );
     }
     throw Exception(
-        "Type ${value.runtimeType.toString()} is not generalized in DivPageTransformation");
+      "Type ${value.runtimeType.toString()} is not generalized in DivPageTransformation",
+    );
   }
 
   T maybeMap<T>({
@@ -69,14 +70,20 @@ class DivPageTransformation with EquatableMixin {
     if (json == null) {
       return null;
     }
-    switch (json['type']) {
-      case DivPageTransformationOverlap.type:
-        return DivPageTransformation.divPageTransformationOverlap(
-            DivPageTransformationOverlap.fromJson(json)!);
-      case DivPageTransformationSlide.type:
-        return DivPageTransformation.divPageTransformationSlide(
-            DivPageTransformationSlide.fromJson(json)!);
+    try {
+      switch (json['type']) {
+        case DivPageTransformationOverlap.type:
+          return DivPageTransformation.divPageTransformationOverlap(
+            DivPageTransformationOverlap.fromJson(json)!,
+          );
+        case DivPageTransformationSlide.type:
+          return DivPageTransformation.divPageTransformationSlide(
+            DivPageTransformationSlide.fromJson(json)!,
+          );
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

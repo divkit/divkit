@@ -43,17 +43,21 @@ class DivWrapContentSize with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivWrapContentSize(
-      constrained: safeParseBoolExpr(
-        json['constrained'],
-      ),
-      maxSize: safeParseObj(
-        DivWrapContentSizeConstraintSize.fromJson(json['max_size']),
-      ),
-      minSize: safeParseObj(
-        DivWrapContentSizeConstraintSize.fromJson(json['min_size']),
-      ),
-    );
+    try {
+      return DivWrapContentSize(
+        constrained: safeParseBoolExpr(
+          json['constrained'],
+        ),
+        maxSize: safeParseObj(
+          DivWrapContentSizeConstraintSize.fromJson(json['max_size']),
+        ),
+        minSize: safeParseObj(
+          DivWrapContentSizeConstraintSize.fromJson(json['min_size']),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -84,19 +88,24 @@ class DivWrapContentSizeConstraintSize with EquatableMixin {
       );
 
   static DivWrapContentSizeConstraintSize? fromJson(
-      Map<String, dynamic>? json) {
+    Map<String, dynamic>? json,
+  ) {
     if (json == null) {
       return null;
     }
-    return DivWrapContentSizeConstraintSize(
-      unit: safeParseStrEnumExpr(
-        json['unit'],
-        parse: DivSizeUnit.fromJson,
-        fallback: DivSizeUnit.dp,
-      )!,
-      value: safeParseIntExpr(
-        json['value'],
-      )!,
-    );
+    try {
+      return DivWrapContentSizeConstraintSize(
+        unit: safeParseStrEnumExpr(
+          json['unit'],
+          parse: DivSizeUnit.fromJson,
+          fallback: DivSizeUnit.dp,
+        )!,
+        value: safeParseIntExpr(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

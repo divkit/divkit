@@ -35,13 +35,17 @@ class DictVariable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DictVariable(
-      name: safeParseStr(
-        json['name']?.toString(),
-      )!,
-      value: safeParseMap(
-        json['value'],
-      )!,
-    );
+    try {
+      return DictVariable(
+        name: safeParseStr(
+          json['name']?.toString(),
+        )!,
+        value: safeParseMap(
+          json['value'],
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

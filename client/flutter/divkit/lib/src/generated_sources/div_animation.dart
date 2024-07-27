@@ -73,42 +73,47 @@ class DivAnimation with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivAnimation(
-      duration: safeParseIntExpr(
-        json['duration'],
-        fallback: 300,
-      )!,
-      endValue: safeParseDoubleExpr(
-        json['end_value'],
-      ),
-      interpolator: safeParseStrEnumExpr(
-        json['interpolator'],
-        parse: DivAnimationInterpolator.fromJson,
-        fallback: DivAnimationInterpolator.spring,
-      )!,
-      items: safeParseObj(
-        safeListMap(
+    try {
+      return DivAnimation(
+        duration: safeParseIntExpr(
+          json['duration'],
+          fallback: 300,
+        )!,
+        endValue: safeParseDoubleExpr(
+          json['end_value'],
+        ),
+        interpolator: safeParseStrEnumExpr(
+          json['interpolator'],
+          parse: DivAnimationInterpolator.fromJson,
+          fallback: DivAnimationInterpolator.spring,
+        )!,
+        items: safeParseObj(
+          safeListMap(
             json['items'],
             (v) => safeParseObj(
-                  DivAnimation.fromJson(v),
-                )!),
-      ),
-      name: safeParseStrEnumExpr(
-        json['name'],
-        parse: DivAnimationName.fromJson,
-      )!,
-      repeat: safeParseObj(
-        DivCount.fromJson(json['repeat']),
-        fallback: const DivCount.divInfinityCount(DivInfinityCount()),
-      )!,
-      startDelay: safeParseIntExpr(
-        json['start_delay'],
-        fallback: 0,
-      )!,
-      startValue: safeParseDoubleExpr(
-        json['start_value'],
-      ),
-    );
+              DivAnimation.fromJson(v),
+            )!,
+          ),
+        ),
+        name: safeParseStrEnumExpr(
+          json['name'],
+          parse: DivAnimationName.fromJson,
+        )!,
+        repeat: safeParseObj(
+          DivCount.fromJson(json['repeat']),
+          fallback: const DivCount.divInfinityCount(DivInfinityCount()),
+        )!,
+        startDelay: safeParseIntExpr(
+          json['start_delay'],
+          fallback: 0,
+        )!,
+        startValue: safeParseDoubleExpr(
+          json['start_value'],
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
 
@@ -177,20 +182,24 @@ enum DivAnimationName {
     if (json == null) {
       return null;
     }
-    switch (json) {
-      case 'fade':
-        return DivAnimationName.fade;
-      case 'translate':
-        return DivAnimationName.translate;
-      case 'scale':
-        return DivAnimationName.scale;
-      case 'native':
-        return DivAnimationName.native;
-      case 'set':
-        return DivAnimationName.set;
-      case 'no_animation':
-        return DivAnimationName.noAnimation;
+    try {
+      switch (json) {
+        case 'fade':
+          return DivAnimationName.fade;
+        case 'translate':
+          return DivAnimationName.translate;
+        case 'scale':
+          return DivAnimationName.scale;
+        case 'native':
+          return DivAnimationName.native;
+        case 'set':
+          return DivAnimationName.set;
+        case 'no_animation':
+          return DivAnimationName.noAnimation;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

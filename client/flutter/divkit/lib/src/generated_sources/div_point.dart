@@ -34,13 +34,17 @@ class DivPoint with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivPoint(
-      x: safeParseObj(
-        DivDimension.fromJson(json['x']),
-      )!,
-      y: safeParseObj(
-        DivDimension.fromJson(json['y']),
-      )!,
-    );
+    try {
+      return DivPoint(
+        x: safeParseObj(
+          DivDimension.fromJson(json['x']),
+        )!,
+        y: safeParseObj(
+          DivDimension.fromJson(json['y']),
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

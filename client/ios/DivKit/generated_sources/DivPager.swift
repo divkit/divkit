@@ -36,6 +36,7 @@ public final class DivPager: DivBase {
   public let paddings: DivEdgeInsets?
   public let pageTransformation: DivPageTransformation?
   public let restrictParentScroll: Expression<Bool> // default value: false
+  public let reuseId: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
@@ -80,6 +81,10 @@ public final class DivPager: DivBase {
 
   public func resolveRestrictParentScroll(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(restrictParentScroll) ?? false
+  }
+
+  public func resolveReuseId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(reuseId)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -130,6 +135,7 @@ public final class DivPager: DivBase {
     paddings: DivEdgeInsets?,
     pageTransformation: DivPageTransformation?,
     restrictParentScroll: Expression<Bool>?,
+    reuseId: Expression<String>?,
     rowSpan: Expression<Int>?,
     selectedActions: [DivAction]?,
     tooltips: [DivTooltip]?,
@@ -168,6 +174,7 @@ public final class DivPager: DivBase {
     self.paddings = paddings
     self.pageTransformation = pageTransformation
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
+    self.reuseId = reuseId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.tooltips = tooltips
@@ -244,34 +251,35 @@ extension DivPager: Equatable {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -309,6 +317,7 @@ extension DivPager: Serializable {
     result["paddings"] = paddings?.toDictionary()
     result["page_transformation"] = pageTransformation?.toDictionary()
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
+    result["reuse_id"] = reuseId?.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }

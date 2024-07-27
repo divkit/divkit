@@ -43,16 +43,20 @@ class DivShapeDrawable with EquatableMixin {
     if (json == null) {
       return null;
     }
-    return DivShapeDrawable(
-      color: safeParseColorExpr(
-        json['color'],
-      )!,
-      shape: safeParseObj(
-        DivShape.fromJson(json['shape']),
-      )!,
-      stroke: safeParseObj(
-        DivStroke.fromJson(json['stroke']),
-      ),
-    );
+    try {
+      return DivShapeDrawable(
+        color: safeParseColorExpr(
+          json['color'],
+        )!,
+        shape: safeParseObj(
+          DivShape.fromJson(json['shape']),
+        )!,
+        stroke: safeParseObj(
+          DivStroke.fromJson(json['stroke']),
+        ),
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }
