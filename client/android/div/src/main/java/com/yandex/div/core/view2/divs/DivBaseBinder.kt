@@ -437,6 +437,11 @@ internal class DivBaseBinder @Inject constructor(
         subscriber.addSubscription(
             newDiv.accessibility?.mode?.observe(resolver) { mode ->
                 applyAccessibilityMode(divView, newDiv, mode)
+
+                val type = newDiv.accessibility?.type ?: DivAccessibility.Type.AUTO
+                if (type == DivAccessibility.Type.AUTO) {
+                    divAccessibilityBinder.bindType(this, newDiv, type, resolver)
+                }
             }
         )
     }
