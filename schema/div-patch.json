@@ -57,6 +57,7 @@
       },
       "$description": "translations.json#/div_patch_on_applied_actions",
       "platforms": [
+        "android",
         "ios"
       ]
     },
@@ -66,7 +67,9 @@
         "$ref": "div-action.json"
       },
       "$description": "translations.json#/div_patch_on_failed_actions",
-      "platforms": []
+      "platforms": [
+        "android"
+      ]
     }
   },
   "platforms": [

@@ -407,8 +407,10 @@ class Div2View private constructor(
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
             reporter.onPatchSuccess()
+            div2Component.actionBinder.handleActions(this, expressionResolver, patch.onAppliedActions, DivActionReason.PATCH)
             return true
         }
+        div2Component.actionBinder.handleActions(this, expressionResolver, patch.onFailedActions, DivActionReason.PATCH)
         reporter.onPatchNoState()
         return false
     }
