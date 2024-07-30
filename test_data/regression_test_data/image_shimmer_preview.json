@@ -24,7 +24,15 @@
               },
               "extensions": [
                 {
-                  "id": "shimmer"
+                  "id": "shimmer",
+                  "params": {
+                    "corner_radius": {
+                      "top-left": 0,
+                      "top-right": 8,
+                      "bottom-left": 16,
+                      "bottom-right": 32
+                    }
+                  }
                 }
               ]
             }
