@@ -27,7 +27,7 @@
     let hasError = false;
 
     let animationRoot: HTMLElement | undefined;
-    let transitionChangeBoxes: Map<string, DOMRect> = new Map();
+    let transitionChangeBoxes: Map<string, ChildTransitionChangeData> = new Map();
     let childrenIds = new Set<string>();
 
     let childStateMap: Map<string, StateInterface> | null = null;
@@ -151,9 +151,14 @@
         id: string;
         json: DivBaseData;
         parentComponentContext: ComponentContext;
-        transitions: TransitionChange;
+        transitions: TransitionChange | undefined;
         node: HTMLElement;
         resolvePromise?: (val?: void) => void;
+    }
+
+    interface ChildTransitionChangeData {
+        transitions: TransitionChange;
+        rect: DOMRect;
     }
 
     function haveFadeTransition(list: AnyTransition[]): boolean {
@@ -223,7 +228,12 @@
                 .map(it => getItemAnimation(rootBbox, it, 'out'));
         }
         childrenWithTransitionChange.forEach(child => {
-            transitionChangeBoxes.set(child.id, child.node.getBoundingClientRect());
+            if (child.transitions) {
+                transitionChangeBoxes.set(child.id, {
+                    transitions: child.transitions,
+                    rect: child.node.getBoundingClientRect()
+                });
+            }
         });
         childrenWithTransitionIn = [];
         childrenWithTransitionOut = [];
@@ -285,17 +295,19 @@
                     height: { type: 'match_parent' },
                 };
 
+                const saved = transitionChangeBoxes.get(child.id) as ChildTransitionChangeData;
+
                 const res: ChangeBoundsItem = {
                     json: jsonCopy,
                     componentContextCopy: child.parentComponentContext.produceChildContext(jsonCopy, {
                         fake: true
                     }),
                     rootBbox,
-                    beforeBbox: transitionChangeBoxes.get(child.id) as DOMRect,
+                    beforeBbox: saved.rect,
                     afterBbox: child.node.getBoundingClientRect(),
                     node: child.node,
                     transition: componentContext.getJsonWithVars(
-                        getTransitionChange(child.transitions)
+                        getTransitionChange(saved.transitions)
                     ) as ChangeBoundsTransition,
                     resolvePromise: child.resolvePromise
                 };
@@ -441,7 +453,7 @@
         registerChildWithTransitionChange(
             json: DivBaseData,
             parentComponentContext: ComponentContext,
-            transitions: TransitionChange,
+            transitions: TransitionChange | undefined,
             node: HTMLElement
         ) {
             const id = json.id;

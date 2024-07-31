@@ -590,7 +590,7 @@
     $: {
         transitionChangeInProgress = undefined;
         if (
-            hasStateChangeTrigger && componentContext.json.transition_change &&
+            hasStateChangeTrigger &&
             rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(componentContext.json.id)
         ) {
             transitionChangeInProgress = true;
@@ -880,7 +880,7 @@
                 node
             );
         }
-        if (hasStateChangeTrigger && componentContext.json.transition_change) {
+        if (!componentContext.fakeElement) {
             stateCtx.registerChildWithTransitionChange(
                 componentContext.json as DivBaseData,
                 componentContext,
