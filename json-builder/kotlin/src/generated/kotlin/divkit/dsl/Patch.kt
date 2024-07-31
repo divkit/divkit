@@ -42,12 +42,22 @@ class Patch internal constructor(
          * Default value: `partial`.
          */
         val mode: Property<Mode>?,
+        /**
+         * Actions after applying patch.
+         */
+        val onAppliedActions: Property<List<Action>>?,
+        /**
+         * Actions after an error applying patch in transactional mode.
+         */
+        val onFailedActions: Property<List<Action>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
             result.tryPutProperty("changes", changes)
             result.tryPutProperty("mode", mode)
+            result.tryPutProperty("on_applied_actions", onAppliedActions)
+            result.tryPutProperty("on_failed_actions", onFailedActions)
             return result
         }
     }
@@ -105,76 +115,106 @@ class Patch internal constructor(
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions after applying patch.
+ * @param onFailedActions Actions after an error applying patch in transactional mode.
  */
 @Generated
 fun DivScope.patch(
     `use named arguments`: Guard = Guard.instance,
     changes: List<Patch.Change>,
     mode: Patch.Mode? = null,
+    onAppliedActions: List<Action>? = null,
+    onFailedActions: List<Action>? = null,
 ): Patch = Patch(
     Patch.Properties(
         changes = valueOrNull(changes),
         mode = valueOrNull(mode),
+        onAppliedActions = valueOrNull(onAppliedActions),
+        onFailedActions = valueOrNull(onFailedActions),
     )
 )
 
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions after applying patch.
+ * @param onFailedActions Actions after an error applying patch in transactional mode.
  */
 @Generated
 fun DivScope.patchProps(
     `use named arguments`: Guard = Guard.instance,
     changes: List<Patch.Change>? = null,
     mode: Patch.Mode? = null,
+    onAppliedActions: List<Action>? = null,
+    onFailedActions: List<Action>? = null,
 ) = Patch.Properties(
     changes = valueOrNull(changes),
     mode = valueOrNull(mode),
+    onAppliedActions = valueOrNull(onAppliedActions),
+    onFailedActions = valueOrNull(onFailedActions),
 )
 
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions after applying patch.
+ * @param onFailedActions Actions after an error applying patch in transactional mode.
  */
 @Generated
 fun TemplateScope.patchRefs(
     `use named arguments`: Guard = Guard.instance,
     changes: ReferenceProperty<List<Patch.Change>>? = null,
     mode: ReferenceProperty<Patch.Mode>? = null,
+    onAppliedActions: ReferenceProperty<List<Action>>? = null,
+    onFailedActions: ReferenceProperty<List<Action>>? = null,
 ) = Patch.Properties(
     changes = changes,
     mode = mode,
+    onAppliedActions = onAppliedActions,
+    onFailedActions = onFailedActions,
 )
 
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions after applying patch.
+ * @param onFailedActions Actions after an error applying patch in transactional mode.
  */
 @Generated
 fun Patch.override(
     `use named arguments`: Guard = Guard.instance,
     changes: List<Patch.Change>? = null,
     mode: Patch.Mode? = null,
+    onAppliedActions: List<Action>? = null,
+    onFailedActions: List<Action>? = null,
 ): Patch = Patch(
     Patch.Properties(
         changes = valueOrNull(changes) ?: properties.changes,
         mode = valueOrNull(mode) ?: properties.mode,
+        onAppliedActions = valueOrNull(onAppliedActions) ?: properties.onAppliedActions,
+        onFailedActions = valueOrNull(onFailedActions) ?: properties.onFailedActions,
     )
 )
 
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ * @param onAppliedActions Actions after applying patch.
+ * @param onFailedActions Actions after an error applying patch in transactional mode.
  */
 @Generated
 fun Patch.defer(
     `use named arguments`: Guard = Guard.instance,
     changes: ReferenceProperty<List<Patch.Change>>? = null,
     mode: ReferenceProperty<Patch.Mode>? = null,
+    onAppliedActions: ReferenceProperty<List<Action>>? = null,
+    onFailedActions: ReferenceProperty<List<Action>>? = null,
 ): Patch = Patch(
     Patch.Properties(
         changes = changes ?: properties.changes,
         mode = mode ?: properties.mode,
+        onAppliedActions = onAppliedActions ?: properties.onAppliedActions,
+        onFailedActions = onFailedActions ?: properties.onFailedActions,
     )
 )
 
@@ -189,6 +229,8 @@ fun Patch.evaluate(
     Patch.Properties(
         changes = properties.changes,
         mode = mode ?: properties.mode,
+        onAppliedActions = properties.onAppliedActions,
+        onFailedActions = properties.onFailedActions,
     )
 )
 
