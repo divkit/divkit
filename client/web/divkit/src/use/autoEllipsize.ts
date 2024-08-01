@@ -20,17 +20,17 @@ export function autoEllipsize(node: HTMLElement, opts: AutoEllipsizeOptions) {
         const offsetHeight = node.offsetHeight;
         const scrollHeight = node.scrollHeight;
 
-        if (scrollHeight <= offsetHeight + 1e-9) {
-            return;
-        }
-
         let lines = Math.max(1, Math.floor(offsetHeight / lineHeight));
         if (opts.maxLines && opts.maxLines < lines) {
             lines = opts.maxLines;
         }
 
-        node.style.webkitLineClamp = String(lines);
-        node.style.maxHeight = lineHeight * lines + 'px';
+        const shouldLimit = scrollHeight > lines * lineHeight + 1e-9;
+
+        if (shouldLimit) {
+            node.style.webkitLineClamp = String(lines);
+            node.style.maxHeight = lineHeight * lines + 'px';
+        }
     };
     const debouncedRecalc = debounce(recalc, 50);
 
