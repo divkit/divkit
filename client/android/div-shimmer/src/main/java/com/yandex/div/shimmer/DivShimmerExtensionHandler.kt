@@ -1,9 +1,13 @@
 package com.yandex.div.shimmer
 
+import android.content.res.Resources
 import android.os.SystemClock
+import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.core.extension.DivExtensionHandler
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
@@ -77,11 +81,30 @@ open class DivShimmerExtensionHandler(
         val locations = locations.evaluate(resolver)
         val angle = angle.evaluate(resolver)
         val duration = duration.evaluate(resolver)
+        val cornerRadius = this.cornerRadius
+        val cornerRadiusConfig = if (cornerRadius != null) {
+            val metrics: DisplayMetrics = Resources.getSystem().displayMetrics
+            ShimmerDrawable.CornerRadiusConfig(
+                topLeft = cornerRadius.topLeft?.evaluate(resolver).dpToPx(metrics),
+                topRight = cornerRadius.topRight?.evaluate(resolver).dpToPx(metrics),
+                bottomLeft = cornerRadius.bottomLeft?.evaluate(resolver).dpToPx(metrics),
+                bottomRight = cornerRadius.bottomRight?.evaluate(resolver).dpToPx(metrics),
+            )
+        } else {
+            null
+        }
+
         return ShimmerDrawable.Config(
                 colors = colors.toIntArray(),
                 locations = locations.map { it.toFloat() }.toFloatArray(),
                 angle = angle,
-                duration = (duration * MILLIS_IN_SECOND).roundToLong()
+                duration = (duration * MILLIS_IN_SECOND).roundToLong(),
+                cornerRadius = cornerRadiusConfig,
         )
     }
 }
+
+private fun Long?.dpToPx(metrics: DisplayMetrics): Float {
+    return this?.toIntSafely()?.dpToPxF(metrics) ?: 0f
+}
+

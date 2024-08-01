@@ -131,21 +131,5 @@ fun LayoutProvider.defer(
     )
 )
 
-/**
- * @param heightVariableName Variable name to store element height.
- * @param widthVariableName Variable name to store element width.
- */
-@Generated
-fun LayoutProvider.evaluate(
-    `use named arguments`: Guard = Guard.instance,
-    heightVariableName: ExpressionProperty<String>? = null,
-    widthVariableName: ExpressionProperty<String>? = null,
-): LayoutProvider = LayoutProvider(
-    LayoutProvider.Properties(
-        heightVariableName = heightVariableName ?: properties.heightVariableName,
-        widthVariableName = widthVariableName ?: properties.widthVariableName,
-    )
-)
-
 @Generated
 fun LayoutProvider.asList() = listOf(this)

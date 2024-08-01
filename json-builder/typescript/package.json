@@ -1,6 +1,6 @@
 {
     "name": "@divkitframework/jsonbuilder",
-    "version": "30.11.0",
+    "version": "30.12.0",
     "description": "DivKit TypeScript JSON Builder",
     "main": "./dist/jsonbuilder.js",
     "module": "./dist/es/jsonbuilder.js",

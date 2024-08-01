@@ -226,7 +226,9 @@ class Div2Activity : AppCompatActivity() {
                 putExtra(URL, input)
             })
             return
-        } catch (ignored: Exception){}
+        } catch (ignored: Exception){
+            ignored.printStackTrace()
+        }
 
         try {
             JSONObject(input)
@@ -235,7 +237,9 @@ class Div2Activity : AppCompatActivity() {
                 putExtra(JSON, input)
             })
             return
-        } catch (ignored: Exception){}
+        } catch (ignored: Exception){
+            ignored.printStackTrace()
+        }
 
         Toast.makeText(this, "Incorrect URL or JSON", Toast.LENGTH_LONG)
             .show()

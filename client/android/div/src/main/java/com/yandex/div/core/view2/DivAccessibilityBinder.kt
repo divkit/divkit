@@ -188,6 +188,7 @@ internal class DivAccessibilityBinder @Inject constructor(
         div: DivBase, resolver: ExpressionResolver
     ): AccessibilityType = when (this) {
             DivAccessibility.Type.AUTO -> when {
+                div.accessibility?.mode?.evaluate(resolver) == DivAccessibility.Mode.EXCLUDE -> AccessibilityType.NONE
                 div is DivInput -> AccessibilityType.EDIT_TEXT
                 div is DivText -> AccessibilityType.TEXT
                 div is DivTabs -> AccessibilityType.TAB_WIDGET

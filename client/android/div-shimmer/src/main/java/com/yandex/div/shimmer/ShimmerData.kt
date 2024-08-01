@@ -12,12 +12,14 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionList
+import com.yandex.div2.DivCornersRadius
 import org.json.JSONObject
 
 private const val SHIMMER_PARAM_COLORS = "colors"
 private const val SHIMMER_PARAM_LOCATIONS = "locations"
 private const val SHIMMER_PARAM_ANGLE = "angle"
 private const val SHIMMER_PARAM_DURATION = "duration"
+private const val SHIMMER_PARAM_CORNER_RADIUS = "corner_radius"
 private const val FROM_COLOR: Int = 0xFF7F7F7F.toInt()
 private const val TO_COLOR: Int = 0xFFAAAAAA.toInt()
 
@@ -33,7 +35,8 @@ internal data class ShimmerData(
         val angle: Expression<Double> = DEFAULT_ANGLE,
         val duration: Expression<Double> = DEFAULT_DURATION,
         val colors: ExpressionList<Int> = DEFAULT_COLORS,
-        val locations: ExpressionList<Double> = DEFAULT_LOCATIONS
+        val locations: ExpressionList<Double> = DEFAULT_LOCATIONS,
+        val cornerRadius: DivCornersRadius? = null,
 ) {
     companion object {
 
@@ -83,7 +86,10 @@ internal data class ShimmerData(
                             logger,
                             env,
                             TYPE_HELPER_DOUBLE
-                    ) ?: DEFAULT_LOCATIONS
+                    ) ?: DEFAULT_LOCATIONS,
+                    cornerRadius = json.optJSONObject(SHIMMER_PARAM_CORNER_RADIUS)?.let {
+                        DivCornersRadius(env, it)
+                    },
             )
         }
     }

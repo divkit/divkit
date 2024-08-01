@@ -47,7 +47,7 @@
       ],
       "expected_results": [
         "input has focus, label says that timer is started",
-        "input had lost the foucs, label says that timer is finished"
+        "input had lost the focus, label says that timer is finished"
       ],
       "file": "actions/clear-focus.json",
       "automated": [
@@ -89,7 +89,7 @@
       ],
       "expected_results": [
         "Text 'Click on me' changed to 'You clicked on me'",
-        "Second click chande text to 'Click on me'"
+        "Second click changes text to 'Click on me'"
       ],
       "file": "simple_tap.json"
     },
@@ -106,7 +106,7 @@
         "Long tap on button 'Long tap menu'"
       ],
       "expected_results": [
-        "Menu with butons 'show' and 'hide' is appearing",
+        "Menu with buttons 'show' and 'hide' is appearing",
         "longtap_actions logged"
       ],
       "file": "long_tap.json"
@@ -181,7 +181,7 @@
         "Click on the empty space inside the gallery"
       ],
       "expected_results": [
-        "Check view shown with text 'Last catched action: tap_container'"
+        "Check view shown with text 'Last caught action: tap_container'"
       ],
       "file": "gallery/incompletely_filled_gallery_throws_taps.json"
     },
@@ -250,7 +250,7 @@
       ],
       "steps": [
         "Click on button 'Expand' in gallery item",
-        "Click on button 'Collpse' in expanded items"
+        "Click on button 'Collapse' in expanded items"
       ],
       "expected_results": [
         "Only clicked gallery item change state"
@@ -269,7 +269,7 @@
       ],
       "steps": [
         "Click on button 'Expand' in gallery item",
-        "Click on button 'Collpse' in expanded items",
+        "Click on button 'Collapse' in expanded items",
         "Scroll gallery"
       ],
       "expected_results": [
@@ -407,7 +407,7 @@
       "file": "action_animation/animations.json"
     },
     {
-      "title": "Recomendation slider",
+      "title": "Recommendation slider",
       "tags": [
         "Slider"
       ],
@@ -458,7 +458,7 @@
         "Interact with slider"
       ],
       "expected_results": [
-        "Slider poiner shange it's position"
+        "Slider pointer change it's position"
       ],
       "file": "slider_presets.json"
     },
@@ -506,7 +506,7 @@
         "Switch focus to idle"
       ],
       "expected_results": [
-        "Start state of the right evement is 'init'",
+        "Start state of the right element is 'init'",
         "When handler gets focus, state of the right element is 'focus'",
         "When handler lost focus, state of the right element is 'blur'"
       ],
@@ -622,7 +622,7 @@
         "Focus on items from top to bottom"
       ],
       "expected_results": [
-        "Focuse on 5-th item",
+        "Focus on 5-th item",
         "\u0423\u0441\u043b\u044b\u0448\u0438\u043c '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 5'",
         "\u041f\u0440\u0438 \u0432\u044b\u043a\u043b\u044e\u0447\u0435\u043d\u043d\u043e\u043c Screen reader \u043d\u0430 \u043a\u0430\u0436\u0434\u043e\u0439 \u043a\u043d\u043e\u043f\u043a\u0435 \u043f\u0440\u0438 \u0442\u0430\u043f\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u043f\u043e\u044f\u0432\u043b\u044f\u0442\u044c\u0441\u044f \u043c\u0435\u043d\u044e \u0441 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c \u044d\u0442\u043e\u0439 \u043a\u043d\u043e\u043f\u043a\u0438"
       ],
@@ -671,7 +671,7 @@
         "Menu with text 'Double tap' appears",
         "Menu with text 'Long tap' appears",
         "Menu with text 'Single tap' appears without delay",
-        "Menu with text 'Single tap' appears and than desappears",
+        "Menu with text 'Single tap' appears and than disappears",
         "Menu with text 'Long tap' appears",
         "Menu with text 'Single tap' appears with delay",
         "Menu with text 'Double tap' appears",
@@ -714,7 +714,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing the transparency"
+        "Image should appears and disappears changing the transparency"
       ],
       "file": "animations/transition/fade_full_src.json"
     },
@@ -731,7 +731,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing the transparency starting or ending with transparency = 0.5"
+        "Image should appears and disappears changing the transparency starting or ending with transparency = 0.5"
       ],
       "file": "animations/transition/fade_part_src.json"
     },
@@ -748,7 +748,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing the scale"
+        "Image should appears and disappears changing the scale"
       ],
       "file": "animations/transition/scale_full_src.json"
     },
@@ -765,7 +765,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing the scale starting or ending with scale = 0.75"
+        "Image should appears and disappears changing the scale starting or ending with scale = 0.75"
       ],
       "file": "animations/transition/scale_part_src.json"
     },
@@ -782,7 +782,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears sliding from under the top edge of the card"
+        "Image should appears and disappears sliding from under the top edge of the card"
       ],
       "file": "animations/transition/slide_full_src.json"
     },
@@ -799,7 +799,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears sliding from under the top edge of the card, but not reaching it"
+        "Image should appears and disappears sliding from under the top edge of the card, but not reaching it"
       ],
       "file": "animations/transition/slide_part_src.json"
     },
@@ -816,7 +816,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears and desapears changing trancparency and sliding from center to edge"
+        "Image should appears and disappears changing transparency and sliding from center to edge"
       ],
       "file": "animations/transition/set_src.json"
     },
@@ -833,7 +833,7 @@
         "After image appears press 'GO BACK'"
       ],
       "expected_results": [
-        "Image should appears from diffrent edges of card"
+        "Image should appears from different edges of card"
       ],
       "file": "animations/transition/change_bounds_diff_ids_src.json"
     },
@@ -899,7 +899,7 @@
         "After expanding of elements click on 'COLLAPSE'"
       ],
       "expected_results": [
-        "Expanding and collapsing the elements shoud be with animation"
+        "Expanding and collapsing the elements should be with animation"
       ],
       "file": "animations/article.json"
     },
@@ -914,7 +914,7 @@
         "After expanding of elements click on 'COLLAPSE'"
       ],
       "expected_results": [
-        "Expanding end collapsing the elements shoud be with animation"
+        "Expanding end collapsing the elements should be with animation"
       ],
       "file": "animations/article_with_transitions.json"
     },
@@ -927,7 +927,7 @@
         "Click on 'BLINK'"
       ],
       "expected_results": [
-        "Red sircle should appear and disappear"
+        "Red circle should appear and disappear"
       ],
       "file": "animations/blink.json"
     },
@@ -1022,7 +1022,7 @@
       "file": "animations/lottie/spinner_restart_repeat_mode.json"
     },
     {
-      "title": "Lottie animation (repeate_mode=revese, repeat_count=3)",
+      "title": "Lottie animation (repeat_mode=reverse, repeat_count=3)",
       "platforms": [
         "android",
         "ios",
@@ -1042,7 +1042,7 @@
       "file": "animations/lottie/spinner_reverse_repeat_mode.json"
     },
     {
-      "title": "Lottie animation (repeat_mode=restart, repeate_count=-1)",
+      "title": "Lottie animation (repeat_mode=restart, repeat_count=-1)",
       "platforms": [
         "android",
         "ios",
@@ -1154,10 +1154,10 @@
       ],
       "steps": [
         "Scroll to positions from 0 to 4",
-        "Check view shown with text 'Last catched visibility action: item_{item_position}'"
+        "Check view shown with text 'Last caught visibility action: item_{item_position}'"
       ],
       "expected_results": [
-        "View shown with text 'Last catched visibility action: item_{item_position}'"
+        "View shown with text 'Last caught visibility action: item_{item_position}'"
       ],
       "file": "visibility_actions/gallery_child_of_item.json"
     },
@@ -1173,13 +1173,13 @@
       ],
       "steps": [
         "Scroll to last position",
-        "Check view shown with text 'Last catched visibility action: none'",
+        "Check view shown with text 'Last caught visibility action: none'",
         "Click on view with text 'Enable actions'",
-        "Check view shown with text 'Last catched visibility action: item_4'"
+        "Check view shown with text 'Last caught visibility action: item_4'"
       ],
       "expected_results": [
-        "When actions disabled view shown with text 'Last catched visibility action: none'",
-        "When actions enabled view shown with text 'Last catched visibility action: item_{index}'"
+        "When actions disabled view shown with text 'Last caught visibility action: none'",
+        "When actions enabled view shown with text 'Last caught visibility action: item_{index}'"
       ],
       "file": "visibility_actions/is_enabled.json"
     },
@@ -1199,8 +1199,8 @@
         "Click on view with text 'Enable actions' and repeat steps before"
       ],
       "expected_results": [
-        "When actions disabled view shown with text 'Last catched action: none'",
-        "When actions enabled view shown with text 'Last catched action: {click | long_click | double_click}'"
+        "When actions disabled view shown with text 'Last caught action: none'",
+        "When actions enabled view shown with text 'Last caught action: {click | long_click | double_click}'"
       ],
       "file": "actions/is_enabled.json"
     },
@@ -1224,7 +1224,7 @@
       ],
       "expected_results": [
         "First element logged, example Ya:PagerSelectedActionsTracker onPageSelected(0) Ya:PagerSelectedActionsTracker dispatch selected actions for page 0",
-        "Second element logged, exapmle logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
+        "Second element logged, example logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
       ],
       "file": "visibility_actions/pager_selected_actions.json"
     },
@@ -1279,7 +1279,7 @@
       "expected_results": [
         "Text is changed to 'Triggered!'"
       ],
-      "file": "visibility_actions/visibility_aciton.json"
+      "file": "visibility_actions/visibility_action.json"
     },
     {
       "title": "Visibility actions in DivState",
@@ -1439,7 +1439,7 @@
         "Animations"
       ],
       "expected_results": [
-        "Image appeares with described animation"
+        "Image appears with described animation"
       ],
       "file": "action_animation/image_loading_animation.json"
     },
@@ -1453,7 +1453,7 @@
         "Scroll pager to the end, click on buttons, check the indicator"
       ],
       "expected_results": [
-        "Indicator appearence changes and it changes according to the clicked buttin description"
+        "Indicator appearance changes and it changes according to the clicked button description"
       ],
       "file": "variables/div_indicator.json"
     },
@@ -1554,7 +1554,7 @@
       ],
       "expected_results": [
         "Click items",
-        "Corresponding varibale values change"
+        "Corresponding variable values change"
       ],
       "file": "variables/local.json"
     },
@@ -1624,8 +1624,8 @@
         "Click 'PRESS AGAIN'"
       ],
       "expected_results": [
-        "After first click image appers with animation, the container extendes with animation.",
-        "After second click extendes buton, text changes, container extendes again."
+        "After first click image appears with animation, the container extends with animation.",
+        "After second click extends button, text changes, container extends again."
       ],
       "file": "action_animation/nested_change_bounds.json"
     },
@@ -1712,7 +1712,7 @@
         "On tap on 'pause' video pause",
         "On tap on 'reset' video starts from the beginning",
         "If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused",
-        "If video wasn't paused, on tap on 'reset' the video starts playing from beginnging"
+        "If video wasn't paused, on tap on 'reset' the video starts playing from beginning"
       ],
       "file": "video/video_controls.json"
     },
@@ -2519,7 +2519,7 @@
         "Wait 1 second"
       ],
       "expected_results": [
-        "2 orignal items should be replaced with the new ones, which background is red"
+        "2 original items should be replaced with the new ones, which background is red"
       ],
       "file": "patch/grid.json"
     },

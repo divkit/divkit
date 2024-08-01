@@ -21,6 +21,9 @@
         "compat": {
             "android": {
                 "version_added": "30.5.0"
+            },
+            "ios": {
+                "version_added": "30.11.0"
             }
         }
     }, {
