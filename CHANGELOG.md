@@ -1,3 +1,16 @@
+## 30.12.0
+
+# Android Client:
+* Supported `layout_provider` property.
+* Supported `div-patch.on_applied_actions` and `div-patch.on_failed_actions`.
+* Support custom corner radius at `shimmer` extension.
+* Fixed pages in `pager` not switching in accessibility.
+
+# iOS Client:
+* Supported `item_builder` for pager and gallery.
+* Added callbacks with div actions in div-patch. Called after applying patches.
+
+
 ## 30.11.0
 
 # Android Client:

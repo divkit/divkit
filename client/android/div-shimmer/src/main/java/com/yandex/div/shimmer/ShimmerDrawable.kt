@@ -7,10 +7,12 @@ import android.graphics.ColorFilter
 import android.graphics.LinearGradient
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.PixelFormat
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
@@ -50,8 +52,10 @@ class ShimmerDrawable(
         isAntiAlias = true
         updateShader()
     }
-    private val drawRect = Rect()
+    private val drawRect = RectF()
     private val shaderMatrix = Matrix()
+    private val customRoundRectPath = Path()
+    private val pathRadii = FloatArray(8)
     private var valueAnimator: ValueAnimator = createValueAnimator()
     private var isStopped = false
 
@@ -122,7 +126,35 @@ class ShimmerDrawable(
         if (!isStopped) {
             start()
         }
-        canvas.drawRect(drawRect, shimmerPaint)
+
+        val cornerRadius = config.cornerRadius
+        if (cornerRadius != null) {
+            drawCustomRoundRect(canvas, drawRect, cornerRadius, shimmerPaint)
+        } else {
+            canvas.drawRect(drawRect, shimmerPaint)
+        }
+    }
+
+    private fun drawCustomRoundRect(
+        canvas: Canvas,
+        drawRect: RectF,
+        config: CornerRadiusConfig,
+        shimmerPaint: Paint
+    ) {
+        customRoundRectPath.apply {
+            reset()
+            pathRadii[0] = config.topLeft
+            pathRadii[1] = config.topLeft
+            pathRadii[2] = config.topRight
+            pathRadii[3] = config.topRight
+            pathRadii[4] = config.bottomRight
+            pathRadii[5] = config.bottomRight
+            pathRadii[6] = config.bottomLeft
+            pathRadii[7] = config.bottomLeft
+            addRoundRect(drawRect, pathRadii, Path.Direction.CW)
+        }
+        canvas.drawPath(customRoundRectPath, shimmerPaint)
+
     }
 
     override fun setAlpha(alpha: Int) {
@@ -196,12 +228,20 @@ class ShimmerDrawable(
     /**
      * Configuration class for [ShimmerDrawable]
      */
-    class Config constructor(
+    class Config(
             val colors: IntArray,
             val locations: FloatArray,
             val angle: Double,
             val duration: Long,
             val repeatDelay: Long = 0,
             val startDelay: Long = 0,
+            val cornerRadius: CornerRadiusConfig? = null,
+    )
+
+    class CornerRadiusConfig(
+        val topLeft: Float,
+        val topRight: Float,
+        val bottomLeft: Float,
+        val bottomRight: Float,
     )
 }

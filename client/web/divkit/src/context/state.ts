@@ -32,7 +32,7 @@ export interface StateCtxValue {
     registerChildWithTransitionChange(
         json: DivBaseData,
         componentContext: ComponentContext,
-        transitions: MaybeMissing<TransitionChange>,
+        transitions: MaybeMissing<TransitionChange> | undefined,
         node: HTMLElement
     ): Promise<void>;
 
