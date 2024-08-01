@@ -1,8 +1,7 @@
 {
   "description": "Gallery paging default item states",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "card": {

@@ -1,9 +1,7 @@
 {
   "description": "Endless timer",
   "platforms": [
-    "android",
-    "web",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

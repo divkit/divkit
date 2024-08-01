@@ -1,8 +1,7 @@
 {
   "description": "Phone input mask",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

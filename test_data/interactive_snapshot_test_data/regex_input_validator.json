@@ -1,8 +1,7 @@
 {
   "description": "Regex Input",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

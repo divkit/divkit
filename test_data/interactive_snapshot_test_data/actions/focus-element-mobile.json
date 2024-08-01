@@ -1,7 +1,7 @@
 {
   "description": "Focus action",
   "platforms": [
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

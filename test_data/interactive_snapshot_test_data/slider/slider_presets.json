@@ -1,9 +1,7 @@
 {
   "description": "Slider preferences",
   "platforms": [
-    "android",
-    "ios",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {

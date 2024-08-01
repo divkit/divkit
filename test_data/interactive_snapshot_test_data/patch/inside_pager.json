@@ -1,9 +1,7 @@
 {
   "description": "Patch inside pager",
   "platforms": [
-    "android",
-    "web",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

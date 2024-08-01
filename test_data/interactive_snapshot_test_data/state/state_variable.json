@@ -1,9 +1,7 @@
 {
     "description": "state_id_variable",
     "platforms": [
-        "android",
-        "ios",
-        "web"
+        "android"
     ],
     "div_data": {
         "templates": {

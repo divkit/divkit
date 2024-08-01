@@ -1,9 +1,7 @@
 {
   "description": "Patch tabs partial",
   "platforms": [
-    "android",
-    "web",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

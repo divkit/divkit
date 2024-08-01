@@ -1,9 +1,7 @@
 {
   "description": "Patch grid",
   "platforms": [
-    "android",
-    "web",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

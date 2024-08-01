@@ -1,9 +1,7 @@
 {
   "description": "Tabs item actions",
   "platforms": [
-    "android",
-    "ios",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {

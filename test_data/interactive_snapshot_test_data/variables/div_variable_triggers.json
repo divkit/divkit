@@ -1,8 +1,7 @@
 {
   "description": "Variables triggers",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

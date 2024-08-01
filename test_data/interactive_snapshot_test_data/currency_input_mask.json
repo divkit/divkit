@@ -1,8 +1,7 @@
 {
   "description": "Currency input mask",
   "platforms": [
-    "android",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {

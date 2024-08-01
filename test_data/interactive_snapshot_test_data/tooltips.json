@@ -1,9 +1,7 @@
 {
   "description": "Tooltips",
   "platforms": [
-    "android",
-    "ios",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {

@@ -1,9 +1,7 @@
 {
   "description": "Sliders shapes",
   "platforms": [
-    "android",
-    "ios",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {

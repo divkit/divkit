@@ -1,8 +1,7 @@
 {
   "description": "Visibility action in DivStates",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

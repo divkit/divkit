@@ -1,8 +1,6 @@
 {
   "description": "State with variable binding",
   "platforms": [
-    "web",
-    "ios"
   ],
   "div_data": {
     "templates": {

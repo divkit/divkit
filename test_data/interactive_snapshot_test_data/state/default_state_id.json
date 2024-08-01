@@ -1,9 +1,7 @@
 {
   "description": "Variables in default state id",
   "platforms": [
-    "android",
-    "ios",
-    "web"
+    "android"
   ],
   "div_data": {
     "card": {

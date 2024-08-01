@@ -1,8 +1,7 @@
 {
   "description": "Variables in gallery",
   "platforms": [
-    "android",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {

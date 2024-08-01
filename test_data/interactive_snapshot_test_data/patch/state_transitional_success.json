@@ -1,9 +1,7 @@
 {
   "description": "Patch state transitional success",
   "platforms": [
-    "android",
-    "web",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

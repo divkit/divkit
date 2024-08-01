@@ -1,8 +1,7 @@
 {
   "description": "Expression input validator",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

@@ -1,9 +1,7 @@
 {
   "description": "Shortcuts",
   "platforms": [
-    "android",
-    "ios",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {

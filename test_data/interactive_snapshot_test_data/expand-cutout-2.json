@@ -1,8 +1,7 @@
 {
   "description": "Expand cutout 2",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

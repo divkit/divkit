@@ -1,8 +1,7 @@
 {
   "description": "Gallery columns",
   "platforms": [
-    "android",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

@@ -1,9 +1,7 @@
 {
   "description": "Gallery bottom multiline select option",
   "platforms": [
-    "android",
-    "web",
-    "ios"
+    "android"
   ],
   "div_data": {
     "templates": {

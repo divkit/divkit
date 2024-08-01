@@ -1,8 +1,7 @@
 {
   "description": "Vector scale",
   "platforms": [
-    "android",
-    "web"
+    "android"
   ],
   "div_data": {
     "card": {

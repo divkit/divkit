@@ -1,8 +1,7 @@
 {
   "description": "Slider with two pointers",
   "platforms": [
-    "ios",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {

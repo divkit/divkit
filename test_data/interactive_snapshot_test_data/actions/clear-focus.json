@@ -1,8 +1,7 @@
 {
   "description": "Clear focus actions",
   "platforms": [
-    "android",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {
