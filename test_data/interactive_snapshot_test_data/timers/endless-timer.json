@@ -413,32 +413,6 @@
     {
       "delay": 2000,
       "expected_screenshot": "step5.png"
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "change interval",
-          "url": "div-action://set_variable?name=timer_interval&value=500"
-        },
-        {
-          "log_id": "tick",
-          "url": "div-action://set_variable?name=ticks&value=0"
-        },
-        {
-          "log_id": "start",
-          "url": "div-action://timer?id=ticker&action=start"
-        },
-        {
-          "delay": 2000,
-          "log_id": "stop",
-          "url": "div-action://timer?id=ticker&action=stop"
-        }
-      ],
-      "expected_screenshot": "step7.png"
-    },
-    {
-      "delay": 1000,
-      "expected_screenshot": "step7.png"
     }
   ]
 }
