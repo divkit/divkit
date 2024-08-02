@@ -32,6 +32,7 @@ public struct DivBlockModelingContext {
   private let persistentValuesStorage: DivPersistentValuesStorage
   let tooltipViewFactory: DivTooltipViewFactory?
   public let variablesStorage: DivVariablesStorage
+  let triggersStorage: DivTriggersStorage?
   public private(set) var expressionResolver: ExpressionResolver
   private let functionsProvider: FunctionsProvider
   public let variableTracker: DivVariableTracker?
@@ -58,6 +59,7 @@ public struct DivBlockModelingContext {
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
+    triggersStorage: DivTriggersStorage? = nil,
     playerFactory: PlayerFactory? = nil,
     debugParams: DebugParams = DebugParams(),
     scheduler: Scheduling? = nil,
@@ -94,6 +96,7 @@ public struct DivBlockModelingContext {
       flagsInfo: flagsInfo,
       extensionHandlers: extensionsHandlersDictionary,
       variablesStorage: variablesStorage,
+      triggersStorage: triggersStorage,
       playerFactory: playerFactory,
       debugParams: debugParams,
       scheduler: scheduler,
@@ -123,6 +126,7 @@ public struct DivBlockModelingContext {
     flagsInfo: DivFlagsInfo,
     extensionHandlers: [String: DivExtensionHandler],
     variablesStorage: DivVariablesStorage,
+    triggersStorage: DivTriggersStorage?,
     playerFactory: PlayerFactory?,
     debugParams: DebugParams,
     scheduler: Scheduling?,
@@ -161,6 +165,7 @@ public struct DivBlockModelingContext {
     self.persistentValuesStorage = persistentValuesStorage
     self.tooltipViewFactory = tooltipViewFactory
     self.variablesStorage = variablesStorage
+    self.triggersStorage = triggersStorage
     self.extensionHandlers = extensionHandlers
     self.layoutProviderHandler = layoutProviderHandler
     self.functionsProvider = FunctionsProvider(

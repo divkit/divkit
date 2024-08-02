@@ -209,6 +209,7 @@ public final class DivKitComponents {
     lastVisibleBoundsCache.reset()
     stateManagement.reset()
     variablesStorage.reset()
+    triggersStorage.reset()
     visibilityCounter.reset()
     timerStorage.reset()
   }
@@ -218,6 +219,7 @@ public final class DivKitComponents {
     lastVisibleBoundsCache.dropVisibleBounds(prefix: UIElementPath(cardId.rawValue))
     stateManagement.reset(cardId: cardId)
     variablesStorage.reset(cardId: cardId)
+    triggersStorage.reset(cardId: cardId)
     visibilityCounter.reset(cardId: cardId)
     timerStorage.reset(cardId: cardId)
   }
@@ -295,6 +297,7 @@ public final class DivKitComponents {
       flagsInfo: flagsInfo,
       extensionHandlers: extensionHandlers,
       variablesStorage: variablesStorage,
+      triggersStorage: triggersStorage,
       playerFactory: playerFactory,
       debugParams: debugParams,
       parentScrollView: parentScrollView,

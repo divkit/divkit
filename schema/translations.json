@@ -315,6 +315,10 @@
     "en": "Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.",
     "ru": "Объявление переменных, которые могут использоваться внутри элемента. Переменные, объявленные в данном массиве могут использоваться только внутри самого элемента и его дочерних элементов."
   },
+  "div_base_variable_triggers": {
+    "en": "Triggers for changing variables within an element.",
+    "ru": "Триггеры изменения переменных внутри элемента."
+  },
   "div_base_visibility": {
     "en": "Element visibility.",
     "ru": "Видимость элемента."
