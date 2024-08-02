@@ -20,6 +20,11 @@ class VisibilityActionsSteps {
         VisibilityActionsIdlingResource("logViewShown").register().use { Espresso.onIdle() }
     }
 
+    fun awaitViewShownLogged(cardId: String, actionId: String) {
+        val log = "logViewShown\\(cardId = $cardId, id = $actionId"
+        VisibilityActionsIdlingResource(log, pollingIntervalMs = 200L).register().use { Espresso.onIdle() }
+    }
+
     fun click(text: String): Unit = step("Click on view with text='$text'") {
         onView(withText(text)).perform(ViewActions.click())
     }
@@ -33,7 +38,10 @@ private fun getMatcher(visibilityActions: List<String>, matcher: String): Boolea
     return visibilityActions.any { Regex(matcher).containsMatchIn(it) }
 }
 
-private class VisibilityActionsIdlingResource(private val log: String) : SimpleIdlingResource() {
+private class VisibilityActionsIdlingResource(
+    private val log: String,
+    pollingIntervalMs: Long = 500L,
+) : SimpleIdlingResource(pollingIntervalMs) {
 
     override fun checkIdle(): Boolean = getMatcher(DemoDiv2Logger.logActions, log)
 
@@ -48,14 +56,14 @@ class VisibilityActionsAssertions() {
             onView(withText(text)).check(matches(ViewMatchers.isDisplayed()))
         }
 
-    fun checkViewShownLogged(cardId: String, tabId: String) =
-        step("Check gallery view shown logged") {
-            val log = "logViewShown\\(cardId = $cardId, id = $tabId"
+    fun checkViewShownLogged(cardId: String, actionId: String) =
+        step("Check view shown logged") {
+            val log = "logViewShown\\(cardId = $cardId, id = $actionId"
             VisibilityActionsIdlingResource(log).register().use { Espresso.onIdle() }
         }
 
     fun checkPagerChangePageLogged(cardId: String, currentPageIndex: Int) =
-        step("Check gallery view shown logged") {
+        step("Check page change logged") {
             val log = "logPagerChangePage\\(cardId = $cardId, currentPageIndex =" +
                     " $currentPageIndex\\), scrollDirection = next\\)"
             VisibilityActionsIdlingResource(log).register().use { Espresso.onIdle() }

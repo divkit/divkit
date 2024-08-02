@@ -3,13 +3,15 @@ package com.yandex.div
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
 import androidx.test.rule.ActivityTestRule
-import com.yandex.divkit.demo.DummyActivity
-import com.yandex.divkit.demo.div.DemoDiv2Logger
+import com.yandex.div.rule.uiTestRule
+import com.yandex.div.steps.divView
 import com.yandex.div.steps.gallery
 import com.yandex.div.steps.includedActions
 import com.yandex.div.steps.pager
 import com.yandex.div.steps.visibilityActions
-import com.yandex.div.rule.uiTestRule
+import com.yandex.divkit.demo.DummyActivity
+import com.yandex.divkit.demo.div.DemoDiv2Logger
+import com.yandex.divkit.demo.div.divContext
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -167,6 +169,34 @@ class VisibilityActionsTest {
             gallery { scrollTo(4) }
             assert {
                 checkViewShownWithText("Last catched visibility action: item_4")
+            }
+        }
+    }
+
+    @Test
+    fun visibilityActionsInMultipleViews() {
+        val divContext = divContext(activityRule.activity)
+
+        divView {
+            testAsset = "ui_test_data/visibility_actions/visibility_action_cycle.json"
+            divContext.buildContainer("test_card_tag")
+
+            visibilityActions {
+                awaitViewShownLogged("card", "second_state_is_visible")
+            }
+
+            cleanUp()
+            detachFromParent()
+        }
+
+        divView {
+            testAsset = "ui_test_data/visibility_actions/visibility_action_cycle.json"
+            divContext.buildContainer("test_card_tag")
+
+            visibilityActions {
+                assert {
+                    checkViewShownLogged("card", "fourth_state_is_visible")
+                }
             }
         }
     }
