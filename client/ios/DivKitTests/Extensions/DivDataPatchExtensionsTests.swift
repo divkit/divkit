@@ -5,6 +5,11 @@ import XCTest
 import VGSL
 
 final class DivDataPatchExtensionsTests: XCTestCase {
+  private var callbacksCount = 0
+  private lazy var divPatchCallbacks = Callbacks { _ in
+    self.callbacksCount += 1
+  }
+
   func test_WhenNoSuitableChanges_DoesNothing() throws {
     let originalData = divData(
       divContainer(
@@ -365,6 +370,56 @@ final class DivDataPatchExtensionsTests: XCTestCase {
     )
     XCTAssertEqual(patchedData, originalData)
   }
+
+  func test_WhenReplacesSuitableDiv_CallElementChangedCallback() throws {
+    let originalData = divData(
+      divContainer(
+        items: [
+          divText(id: "some_div", text: "Old text"),
+          divSeparator(),
+        ]
+      )
+    )
+    _ = originalData.applyPatch(
+      ("some_div", divSeparator()),
+      callbacks: divPatchCallbacks
+    )
+    XCTAssertEqual(callbacksCount, 1)
+  }
+
+  func test_WhenNoSuitableChanges_DoesNotCallElementChangedCallback() throws {
+    let originalData = divData(
+      divContainer(
+        items: [
+          divText(id: "some_div", text: "Old text"),
+          divSeparator(),
+        ]
+      )
+    )
+    _ = originalData.applyPatch(
+      ("div_to_replace", divSeparator()),
+      callbacks: divPatchCallbacks
+    )
+    XCTAssertEqual(callbacksCount, 0)
+  }
+
+  func test_WhenReplacingDivInMultipleItemsContainer_CallOnlyElementChangedCallbacks() throws {
+    let originalData = divData(
+      divContainer(
+        items: [
+          divSeparator(),
+          divText(id: "div_to_replace", text: "Old text"),
+          divText(id: "some_div", text: "Old text 2"),
+          divSeparator(),
+        ]
+      )
+    )
+    _ = originalData.applyPatch(
+      ("div_to_replace", [newDivText1]), ("div_to_replace_2", [newDivText1]),
+      callbacks: divPatchCallbacks
+    )
+    XCTAssertEqual(callbacksCount, 1)
+  }
 }
 
 private let newDivText1 = divText(text: "New text 1")
@@ -395,16 +450,22 @@ private func makeTabs(items: [Div]) -> Div {
 }
 
 extension DivData {
-  fileprivate func applyPatch(_ changes: (String, [Div]?)...) -> DivData {
+  fileprivate func applyPatch(
+    _ changes: (String, [Div]?)...,
+    callbacks: DivPatchCallbacks = Callbacks.empty
+  ) -> DivData {
     let patch = DivPatch(
       changes: changes.map { id, items in
         DivPatch.Change(id: id, items: items)
       }
     )
-    return applyPatch(patch)
+    return applyPatch(patch, callbacks: callbacks)
   }
 
-  fileprivate func applyPatch(_ change: (String, Div)) -> DivData {
-    applyPatch((change.0, [change.1]))
+  fileprivate func applyPatch(
+    _ change: (String, Div),
+    callbacks: DivPatchCallbacks = Callbacks.empty
+  ) -> DivData {
+    applyPatch((change.0, [change.1]), callbacks: callbacks)
   }
 }

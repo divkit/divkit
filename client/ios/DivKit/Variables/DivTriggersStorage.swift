@@ -101,6 +101,17 @@ public final class DivTriggersStorage {
       }
     }
   }
+  
+  func reset(elementId: String) {
+    lock.withLock {
+      triggersByPath.keys.forEach { path in
+        if path.contains(elementId) {
+          triggersByPath.removeValue(forKey: path)
+          disposablesByPath.removeValue(forKey: path)
+        }
+      }
+    }
+  }
 
   func enableTriggers(path: UIElementPath) {
     let item = lock.withLock {
@@ -190,5 +201,18 @@ extension Expression {
     case .value:
       []
     }
+  }
+}
+
+extension UIElementPath {
+  fileprivate func contains(_ part: String) -> Bool {
+    var currPath: UIElementPath? = self
+    while let path = currPath {
+      if path.leaf == part {
+        return true
+      }
+      currPath = currPath?.parent
+    }
+    return false
   }
 }

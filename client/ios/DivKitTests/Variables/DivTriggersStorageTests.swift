@@ -304,6 +304,54 @@ final class DivTriggerTests: XCTestCase {
     XCTAssertEqual(triggersCount, 0)
   }
 
+  func test_DoesNotLocalTrigger_WhenElementTriggersReset() throws {
+    let variables: DivVariables = [
+      "should_trigger": .bool(false),
+    ]
+    let elementId = "element_id"
+    let path = UIElementPath("card_id") + elementId
+
+    variablesStorage.initializeIfNeeded(path: path, variables: variables)
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    triggerStorage.reset(elementId: elementId)
+
+    variablesStorage.update(path: path, name: "should_trigger", value: .bool(true))
+
+    XCTAssertEqual(triggersCount, 0)
+  }
+
+  func test_DoesNotLocalTrigger_WhenParentTriggersReset() throws {
+    let variables: DivVariables = [
+      "should_trigger": .bool(false),
+    ]
+    let elementId = "element_id"
+    let state1 = "state_1"
+    let state2 = "state_2"
+    let pathState1 = UIElementPath("card_id") + elementId + state1
+    let pathState2 = UIElementPath("card_id") + elementId + state2
+
+    variablesStorage.initializeIfNeeded(path: pathState1, variables: variables)
+    variablesStorage.initializeIfNeeded(path: pathState2, variables: variables)
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.setIfNeeded(path: pathState1, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: pathState2, triggers: [trigger])
+    triggerStorage.reset(elementId: elementId)
+
+    variablesStorage.update(path: pathState1, name: "should_trigger", value: .bool(true))
+    variablesStorage.update(path: pathState2, name: "should_trigger", value: .bool(true))
+
+    XCTAssertEqual(triggersCount, 0)
+  }
+
   private func setVariable(_ name: DivVariableName, _ value: Bool) {
     variablesStorage.append(variables: [name: .bool(value)], triggerUpdate: true)
   }
