@@ -362,7 +362,12 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     if window != nil {
       startKeyboardTracking()
       if isInputFocused {
-        focusTextInput()
+        // The didMoveToWindow method in UIView is not a direct replacement for the viewDidAppear method in UIViewController.
+        // This causes the focusTextInput method to be called too early, before the view is actually in the view hierarchy.
+        // As a result, the keyboard does not appear as expected.
+        DispatchQueue.main.async {
+          self.focusTextInput()
+        }
       }
     } else {
       stopAllTracking()
