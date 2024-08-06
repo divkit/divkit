@@ -408,7 +408,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       return updateContentAlpha(animated: animated)
     }
 
-    perform(actionAnimation, animated: animated)
+    childView?.perform(actionAnimation, animated: animated)
   }
 
   private func updateContentAlpha(animated: Bool) {
