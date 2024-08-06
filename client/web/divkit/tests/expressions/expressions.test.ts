@@ -41,7 +41,7 @@ function runCase(item: any) {
     }
     let ast;
     try {
-        ast = parse(item.expression /* '@{5 - + 3}' */, {
+        ast = parse(item.expression, {
             startRule: 'JsonStringContents'
         });
     } catch (err: any) {
