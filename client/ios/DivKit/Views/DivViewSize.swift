@@ -36,10 +36,15 @@ public struct DivViewSize: Equatable {
     let height = makeHeightDimensionSize(block: block, width: width)
     self.width = width
     self.height = height
+    self.constrainedWidth = block.isHorizontallyConstrained
+    self.constrainedHeight = block.isVerticallyConstrained
   }
 
   public let width: DivDimension
   public let height: DivDimension
+
+  private let constrainedWidth: Bool
+  private let constrainedHeight: Bool
 
   /// Computes the actual size for a ``DivView`` given its parent's size.
   ///
@@ -54,18 +59,27 @@ public struct DivViewSize: Equatable {
     case .matchParent:
       width = parentViewSize.width
     case let .desired(value):
-      width = value
+      if constrainedWidth {
+        width = min(value, parentViewSize.width)
+      } else {
+        width = value
+      }
     case .dependsOnOtherDimensionSize:
       assertionFailure("Unexpected width")
       width = -1
     }
+
     let height: CGFloat = switch self.height {
     case .matchParent:
       parentViewSize.height
     case let .desired(value):
       value
     case let .dependsOnOtherDimensionSize(heightForWidth):
-      heightForWidth(width)
+      if constrainedHeight {
+        min(heightForWidth(width), parentViewSize.height)
+      } else {
+        heightForWidth(width)
+      }
     }
     return CGSize(width: width, height: height)
   }
@@ -77,10 +91,8 @@ private func makeHeightDimensionSize(block: Block, width: DivViewSize.DivDimensi
     return .matchParent
   }
   switch width {
-  case .matchParent:
+  case .matchParent, .desired:
     return .dependsOnOtherDimensionSize { block.heightOfVerticallyNonResizableBlock(forWidth: $0) }
-  case let .desired(width):
-    return .desired(block.heightOfVerticallyNonResizableBlock(forWidth: width))
   case .dependsOnOtherDimensionSize:
     assertionFailure("Unexpected width")
     return .desired(.zero)

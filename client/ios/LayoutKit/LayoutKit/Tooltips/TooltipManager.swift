@@ -108,7 +108,6 @@ public final class DefaultTooltipManager: TooltipManager {
   public func hideTooltip(id: String) {
     guard let tooltipView = showingTooltips[id] else { return }
     tooltipView.close()
-    tooltipWindow?.isHidden = true
   }
 
   public func tooltipAnchorViewAdded(anchorView: TooltipAnchorView) {

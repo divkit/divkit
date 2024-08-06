@@ -209,7 +209,7 @@ public final class DivVariablesStorage {
     changeEvents.addObserver(action)
   }
 
-  private func getNearestStorage(_ path: UIElementPath?) -> DivVariableStorage {
+  func getNearestStorage(_ path: UIElementPath?) -> DivVariableStorage {
     var currentPath: UIElementPath? = path
     while let path = currentPath {
       let localStorage = localStorages[path]

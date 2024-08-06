@@ -44,6 +44,7 @@ public final class DivVideo: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
   public let videoSources: [DivVideoSource] // at least 1 elements
   public let visibility: Expression<DivVisibility> // default value: visible
@@ -157,6 +158,7 @@ public final class DivVideo: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    variableTriggers: [DivTrigger]? = nil,
     variables: [DivVariable]? = nil,
     videoSources: [DivVideoSource],
     visibility: Expression<DivVisibility>? = nil,
@@ -202,6 +204,7 @@ public final class DivVideo: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.variableTriggers = variableTriggers
     self.variables = variables
     self.videoSources = videoSources
     self.visibility = visibility ?? .value(.visible)
@@ -301,19 +304,20 @@ extension DivVideo: Equatable {
     }
     guard
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variables == rhs.variables,
-      lhs.videoSources == rhs.videoSources
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.videoSources == rhs.videoSources,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -365,6 +369,7 @@ extension DivVideo: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
     result["video_sources"] = videoSources.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()

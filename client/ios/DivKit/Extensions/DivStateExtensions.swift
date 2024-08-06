@@ -52,6 +52,9 @@ extension DivState: DivBlockModeling {
        let previousState = getPreviousState(stateManagerItem: stateManagerItem),
        previousState.stateId != activeStateId,
        let previousDiv = previousState.div {
+      context.triggersStorage?.disableTriggers(path: context.parentPath + id + previousState.stateId)
+      context.triggersStorage?.enableTriggers(path: context.parentPath + id + activeStateId)
+
       // state changed -> drop visibility cache for all children
       context.lastVisibleBoundsCache.dropVisibleBounds(prefix: context.parentPath)
       previousBlock = try previousDiv.value.makeBlock(

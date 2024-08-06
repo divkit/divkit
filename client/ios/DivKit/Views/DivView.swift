@@ -214,6 +214,7 @@ public final class DivView: VisibleBoundsTrackingView {
 extension DivView: ElementStateObserver {
   public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.elementStateChanged(state, forPath: path)
+    divKitComponents.triggersStorage.elementStateChanged(state, forPath: path)
     blockProvider?.update(withStates: [path: state])
   }
 

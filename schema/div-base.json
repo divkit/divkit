@@ -213,6 +213,16 @@
         "ios"
       ]
     },
+    "variable_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-trigger.json"
+      },
+      "$description": "translations.json#/div_base_variable_triggers",
+      "platforms": [
+        "ios"
+      ]
+    },
     "transform": {
       "$ref": "div-transform.json",
       "$description": "translations.json#/div_base_transform",

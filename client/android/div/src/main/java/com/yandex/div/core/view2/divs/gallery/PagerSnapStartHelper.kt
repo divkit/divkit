@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.util.isLayoutRtl
 
 internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
     private var _verticalHelper: OrientationHelper? = null
@@ -48,20 +47,28 @@ internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
     override fun calculateDistanceToFinalSnap(layoutManager: RecyclerView.LayoutManager, targetView: View): IntArray {
         val array = IntArray(2)
         if (layoutManager.canScrollHorizontally()) {
-            array[0] = distanceToStart(targetView, getHorizontalHelper(layoutManager))
+            array[0] = distanceToCenter(layoutManager, targetView, getHorizontalHelper(layoutManager))
         } else if (layoutManager.canScrollVertically()) {
-            array[1] = distanceToStart(targetView, getVerticalHelper(layoutManager))
+            array[1] = distanceToCenter(layoutManager, targetView, getVerticalHelper(layoutManager))
         }
         return array
     }
 
-    private fun distanceToStart(view: View, helper: OrientationHelper): Int {
-        helper.run {
-            return if (view.isLayoutRtl()) {
-                getDecoratedEnd(view) - if (layoutManager.getPosition(view) == 0) endAfterPadding else (layoutManager.width + itemSpacing / 2)
-            } else {
-                getDecoratedStart(view) - if (layoutManager.getPosition(view) == 0) startAfterPadding else itemSpacing / 2
-            }
+    private fun distanceToCenter(
+        layoutManager: RecyclerView.LayoutManager,
+        targetView: View,
+        helper: OrientationHelper
+    ): Int {
+        val childCenter = if (layoutManager.canScrollHorizontally()) {
+            (targetView.x + targetView.width / 2).toInt()
+        } else {
+            (targetView.y + targetView.height / 2).toInt()
         }
+        val containerCenter = if (layoutManager.clipToPadding) {
+            helper.startAfterPadding + helper.totalSpace / 2
+        } else {
+            helper.end / 2
+        }
+        return childCenter - containerCenter
     }
 }

@@ -458,6 +458,12 @@ class Div2View private constructor(
         trackChildrenVisibility()
     }
 
+    private fun discardVisibilityTracking() {
+        val state = divData?.states?.firstOrNull { it.stateId == stateId }
+        state?.let { discardStateVisibility(it) }
+        discardChildrenVisibility()
+    }
+
     private fun trackStateVisibility(state: DivData.State) {
         div2Component.visibilityActionTracker.trackVisibilityActionsOf(this, expressionResolver, view, state.div)
     }
@@ -474,10 +480,21 @@ class Div2View private constructor(
     fun trackChildrenVisibility() {
         val visibilityActionTracker = div2Component.visibilityActionTracker
         viewToDivBindings.forEach { (view, div) ->
-            if (ViewCompat.isAttachedToWindow(view)) {
-                view.bindingContext?.expressionResolver?.let {
+            view.bindingContext?.expressionResolver?.let {
+                if (ViewCompat.isAttachedToWindow(view)) {
                     visibilityActionTracker.trackVisibilityActionsOf(this, it, view, div)
+                } else {
+                    visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
                 }
+            }
+        }
+    }
+
+    private fun discardChildrenVisibility() {
+        val visibilityActionTracker = div2Component.visibilityActionTracker
+        viewToDivBindings.forEach { (view, div) ->
+            view.bindingContext?.expressionResolver?.let {
+                visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
             }
         }
     }
@@ -528,7 +545,7 @@ class Div2View private constructor(
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        tryLogVisibility()
+        discardVisibilityTracking()
         divTimerEventDispatcher?.onDetach(this)
     }
 
@@ -575,6 +592,7 @@ class Div2View private constructor(
         rebindTask?.clear()?.let {
             rebindTask = null
         }
+        discardVisibilityTracking()
         cancelImageLoads()
         stopLoadAndSubscriptions() // Depends on children, should be called before removing them
         if (removeChildren) {

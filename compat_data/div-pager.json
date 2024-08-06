@@ -37,5 +37,13 @@
                 "version_added": "28.11.0"
             }
         }
+    }, {
+        "id": "pager_item_builder",
+        "name": "Pager property <code>item_builder</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.12.0"
+            }
+        }
     }]
 }

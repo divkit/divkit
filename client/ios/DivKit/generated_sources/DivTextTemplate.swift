@@ -715,6 +715,7 @@ public final class DivTextTemplate: TemplateValue {
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
   public let underline: Field<Expression<DivLineStyle>>? // default value: none
+  public let variableTriggers: Field<[DivTriggerTemplate]>?
   public let variables: Field<[DivVariableTemplate]>?
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
@@ -777,6 +778,7 @@ public final class DivTextTemplate: TemplateValue {
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
       transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
       underline: dictionary.getOptionalExpressionField("underline"),
+      variableTriggers: dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
       variables: dictionary.getOptionalArray("variables", templateToType: templateToType),
       visibility: dictionary.getOptionalExpressionField("visibility"),
       visibilityAction: dictionary.getOptionalField("visibility_action", templateToType: templateToType),
@@ -840,6 +842,7 @@ public final class DivTextTemplate: TemplateValue {
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionTriggers: Field<[DivTransitionTrigger]>? = nil,
     underline: Field<Expression<DivLineStyle>>? = nil,
+    variableTriggers: Field<[DivTriggerTemplate]>? = nil,
     variables: Field<[DivVariableTemplate]>? = nil,
     visibility: Field<Expression<DivVisibility>>? = nil,
     visibilityAction: Field<DivVisibilityActionTemplate>? = nil,
@@ -900,6 +903,7 @@ public final class DivTextTemplate: TemplateValue {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.underline = underline
+    self.variableTriggers = variableTriggers
     self.variables = variables
     self.visibility = visibility
     self.visibilityAction = visibilityAction
@@ -961,6 +965,7 @@ public final class DivTextTemplate: TemplateValue {
     let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
     let underlineValue = parent?.underline?.resolveOptionalValue(context: context) ?? .noValue
+    let variableTriggersValue = parent?.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let variablesValue = parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -1020,6 +1025,7 @@ public final class DivTextTemplate: TemplateValue {
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
       underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) },
+      variableTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_triggers", error: $0) },
       variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
@@ -1088,6 +1094,7 @@ public final class DivTextTemplate: TemplateValue {
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
       underline: underlineValue.value,
+      variableTriggers: variableTriggersValue.value,
       variables: variablesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
@@ -1154,6 +1161,7 @@ public final class DivTextTemplate: TemplateValue {
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue
     var underlineValue: DeserializationResult<Expression<DivLineStyle>> = parent?.underline?.value() ?? .noValue
+    var variableTriggersValue: DeserializationResult<[DivTrigger]> = .noValue
     var variablesValue: DeserializationResult<[DivVariable]> = .noValue
     var visibilityValue: DeserializationResult<Expression<DivVisibility>> = parent?.visibility?.value() ?? .noValue
     var visibilityActionValue: DeserializationResult<DivVisibilityAction> = .noValue
@@ -1267,6 +1275,8 @@ public final class DivTextTemplate: TemplateValue {
         transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
       case "underline":
         underlineValue = deserialize(__dictValue).merged(with: underlineValue)
+      case "variable_triggers":
+        variableTriggersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self).merged(with: variableTriggersValue)
       case "variables":
         variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
       case "visibility":
@@ -1383,6 +1393,8 @@ public final class DivTextTemplate: TemplateValue {
         transitionTriggersValue = transitionTriggersValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator) })
       case parent?.underline?.link:
         underlineValue = underlineValue.merged(with: { deserialize(__dictValue) })
+      case parent?.variableTriggers?.link:
+        variableTriggersValue = variableTriggersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self) })
       case parent?.variables?.link:
         variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
       case parent?.visibility?.link:
@@ -1423,6 +1435,7 @@ public final class DivTextTemplate: TemplateValue {
       transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      variableTriggersValue = variableTriggersValue.merged(with: { parent.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionValue = visibilityActionValue.merged(with: { parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -1482,6 +1495,7 @@ public final class DivTextTemplate: TemplateValue {
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
       underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) },
+      variableTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_triggers", error: $0) },
       variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
@@ -1550,6 +1564,7 @@ public final class DivTextTemplate: TemplateValue {
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
       underline: underlineValue.value,
+      variableTriggers: variableTriggersValue.value,
       variables: variablesValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
@@ -1621,6 +1636,7 @@ public final class DivTextTemplate: TemplateValue {
       transitionOut: transitionOut ?? mergedParent.transitionOut,
       transitionTriggers: transitionTriggers ?? mergedParent.transitionTriggers,
       underline: underline ?? mergedParent.underline,
+      variableTriggers: variableTriggers ?? mergedParent.variableTriggers,
       variables: variables ?? mergedParent.variables,
       visibility: visibility ?? mergedParent.visibility,
       visibilityAction: visibilityAction ?? mergedParent.visibilityAction,
@@ -1687,6 +1703,7 @@ public final class DivTextTemplate: TemplateValue {
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),
       transitionTriggers: merged.transitionTriggers,
       underline: merged.underline,
+      variableTriggers: merged.variableTriggers?.tryResolveParent(templates: templates),
       variables: merged.variables?.tryResolveParent(templates: templates),
       visibility: merged.visibility,
       visibilityAction: merged.visibilityAction?.tryResolveParent(templates: templates),

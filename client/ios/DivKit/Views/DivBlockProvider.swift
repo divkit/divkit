@@ -188,7 +188,12 @@ final class DivBlockProvider {
     }
 
     reasons.compactMap { $0.patch(for: self.cardId) }.forEach {
-      divData = divData.applyPatch($0)
+      divData = divData.applyPatch(
+        $0,
+        callbacks: Callbacks(elementChanged: { [weak self] id in
+          self?.divKitComponents.triggersStorage.reset(elementId: id)
+        })
+      )
       $0.onAppliedActions?.forEach { action in
         divKitComponents.actionHandler.handle(
           action,

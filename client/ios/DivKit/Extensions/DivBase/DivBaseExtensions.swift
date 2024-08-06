@@ -18,6 +18,10 @@ extension DivBase {
       path: path,
       variables: variables?.extractDivVariableValues() ?? [:]
     )
+    context.triggersStorage?.setIfNeeded(
+      path: path,
+      triggers: variableTriggers ?? []
+    )
 
     let extensionHandlers = context.getExtensionHandlers(for: self)
     for extensionHandler in extensionHandlers {

@@ -23,6 +23,7 @@ import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.bindItemBuilder
+import com.yandex.div.core.view2.divs.bindStates
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.pager.DivPagerAdapter.Companion.OFFSET_TO_REAL_ITEM
 import com.yandex.div.core.view2.divs.toPxF
@@ -66,6 +67,7 @@ internal class DivPagerBinder @Inject constructor(
                 view.pageTransformer?.onItemsCountChanged()
                 view.pagerOnItemsCountChange?.onItemsUpdated()
             }
+            view.bindStates(divView.rootDiv(), context, resolver, divBinder.get())
             return
         }
 
