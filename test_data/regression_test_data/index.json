@@ -2467,9 +2467,6 @@
       "tags": [
         "patch"
       ],
-      "automated": [
-        "android"
-      ],
       "steps": [
         "Wait 1 second"
       ],
