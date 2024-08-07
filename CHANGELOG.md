@@ -1,3 +1,22 @@
+## 30.13.0
+
+# Android Client:
+* Now `next_focus_ids.after` supports accessibility order.
+* Now `div-gallery` in `paging` scroll mode will be centered like in other platforms.
+* Fixed visibility action tracking when `DivData` moved to another `Div2View`.
+* Fixed multiple state switching within pager items.
+
+# iOS Client:
+* Added variable triggers to div-base. They can be triggered by parent variables.
+* Reset local triggers in the elements after applying div-patch.
+
+# Web Client:
+* Updated the layout of the `grid`, in which elements are superimposed on each other to match the behavior of Android.
+* The logic of `transition_change` has been brought into line with other platforms: with this change, there is no need to contain the `transition_change` property in the final state. In addition, parameters from the previous state will be used, not from the new one.
+* Fixed the `auto_ellipsize` property in the presence of `max_lines` for the `text` component.
+* Performance optimizations.
+
+
 ## 30.12.0
 
 # Android Client:
