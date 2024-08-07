@@ -72,6 +72,7 @@ class Select internal constructor(
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             valueVariable = additive.valueVariable ?: properties.valueVariable,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -231,6 +232,10 @@ class Select internal constructor(
          */
         val valueVariable: Property<String>?,
         /**
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
          * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
          */
         val variables: Property<List<Variable>>?,
@@ -292,6 +297,7 @@ class Select internal constructor(
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("value_variable", valueVariable)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -381,6 +387,7 @@ class Select internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -426,6 +433,7 @@ fun DivScope.select(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -469,6 +477,7 @@ fun DivScope.select(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         valueVariable = valueOrNull(valueVariable),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -513,6 +522,7 @@ fun DivScope.select(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -558,6 +568,7 @@ fun DivScope.selectProps(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -600,6 +611,7 @@ fun DivScope.selectProps(
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
     valueVariable = valueOrNull(valueVariable),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -643,6 +655,7 @@ fun DivScope.selectProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -688,6 +701,7 @@ fun TemplateScope.selectRefs(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -730,6 +744,7 @@ fun TemplateScope.selectRefs(
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
     valueVariable = valueVariable,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -773,6 +788,7 @@ fun TemplateScope.selectRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -818,6 +834,7 @@ fun Select.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -861,6 +878,7 @@ fun Select.override(
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         valueVariable = valueOrNull(valueVariable) ?: properties.valueVariable,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -905,6 +923,7 @@ fun Select.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -950,6 +969,7 @@ fun Select.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -993,6 +1013,7 @@ fun Select.defer(
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         valueVariable = valueVariable ?: properties.valueVariable,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1078,6 +1099,7 @@ fun Select.evaluate(
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
         valueVariable = properties.valueVariable,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1122,6 +1144,7 @@ fun Select.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1167,6 +1190,7 @@ fun Component<Select>.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     valueVariable: String? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1211,6 +1235,7 @@ fun Component<Select>.override(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         valueVariable = valueOrNull(valueVariable),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1255,6 +1280,7 @@ fun Component<Select>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param valueVariable Name of the variable that stores the selected option value (`value`).
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1300,6 +1326,7 @@ fun Component<Select>.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     valueVariable: ReferenceProperty<String>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1344,6 +1371,7 @@ fun Component<Select>.defer(
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
         valueVariable = valueVariable,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1430,6 +1458,7 @@ fun Component<Select>.evaluate(
         transitionOut = null,
         transitionTriggers = null,
         valueVariable = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,

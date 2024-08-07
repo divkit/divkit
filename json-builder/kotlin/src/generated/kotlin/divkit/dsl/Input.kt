@@ -82,6 +82,7 @@ class Input internal constructor(
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             validators = additive.validators ?: properties.validators,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -289,6 +290,10 @@ class Input internal constructor(
          */
         val validators: Property<List<InputValidator>>?,
         /**
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
          * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
          */
         val variables: Property<List<Variable>>?,
@@ -360,6 +365,7 @@ class Input internal constructor(
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("validators", validators)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -462,6 +468,7 @@ class Input internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -517,6 +524,7 @@ fun DivScope.input(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -570,6 +578,7 @@ fun DivScope.input(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         validators = valueOrNull(validators),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -625,6 +634,7 @@ fun DivScope.input(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -680,6 +690,7 @@ fun DivScope.inputProps(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -732,6 +743,7 @@ fun DivScope.inputProps(
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
     validators = valueOrNull(validators),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -786,6 +798,7 @@ fun DivScope.inputProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -841,6 +854,7 @@ fun TemplateScope.inputRefs(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -893,6 +907,7 @@ fun TemplateScope.inputRefs(
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
     validators = validators,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -947,6 +962,7 @@ fun TemplateScope.inputRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1002,6 +1018,7 @@ fun Input.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1055,6 +1072,7 @@ fun Input.override(
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         validators = valueOrNull(validators) ?: properties.validators,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -1110,6 +1128,7 @@ fun Input.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1165,6 +1184,7 @@ fun Input.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1218,6 +1238,7 @@ fun Input.defer(
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         validators = validators ?: properties.validators,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1329,6 +1350,7 @@ fun Input.evaluate(
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
         validators = properties.validators,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1384,6 +1406,7 @@ fun Input.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1439,6 +1462,7 @@ fun Component<Input>.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1493,6 +1517,7 @@ fun Component<Input>.override(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         validators = valueOrNull(validators),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1548,6 +1573,7 @@ fun Component<Input>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1603,6 +1629,7 @@ fun Component<Input>.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1657,6 +1684,7 @@ fun Component<Input>.defer(
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
         validators = validators,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1769,6 +1797,7 @@ fun Component<Input>.evaluate(
         transitionOut = null,
         transitionTriggers = null,
         validators = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,
