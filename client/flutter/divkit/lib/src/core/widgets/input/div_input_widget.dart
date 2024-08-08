@@ -103,6 +103,7 @@ class _DivInputWidget extends State<DivInputWidget> {
                       maxLines: model.maxLines,
                       obscureText: model.obscureText,
                       keyboardType: model.keyboardType,
+                      inputFormatters: model.inputFormatters,
                       controller: controller,
                       onEditingComplete: model.onForwardFocus,
                       textInputAction: model.onForwardFocus != null
