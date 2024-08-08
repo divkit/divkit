@@ -6,8 +6,8 @@ class DivScalingModel with EquatableMixin {
   final double textScale;
 
   const DivScalingModel({
-    required this.viewScale,
-    required this.textScale,
+    this.viewScale = 1.0,
+    this.textScale = 1.0,
   });
 
   @override

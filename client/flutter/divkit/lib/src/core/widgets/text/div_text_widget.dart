@@ -1,13 +1,9 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/text/div_text_model.dart';
-import 'package:divkit/src/generated_sources/div_text.dart';
+import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:divkit/src/core/action/models/action.dart';
-
-import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
 
 class DivTextWidget extends StatefulWidget {
   final DivText data;
@@ -22,32 +18,35 @@ class DivTextWidget extends StatefulWidget {
 }
 
 class _DivTextWidgetState extends State<DivTextWidget> {
-  // ToDo: Optimize repeated calculations on the same context.
-  // The model itself is not long-lived, so you need to keep the stream in the state?
+  DivTextModel? value;
+
   Stream<DivTextModel>? stream;
+
+  @override
+  void initState() {
+    super.initState();
+    value = DivTextModel.value(context, widget.data);
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    stream ??= DivTextModel.from(
-      context,
-      widget.data,
-    );
+
+    stream ??= DivTextModel.from(context, widget.data);
   }
 
   @override
   void didUpdateWidget(covariant DivTextWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (widget.data != oldWidget.data) {
-      stream = DivTextModel.from(
-        context,
-        widget.data,
-      );
+      value = DivTextModel.value(context, widget.data);
+      stream = DivTextModel.from(context, widget.data);
     }
   }
 
   Future<void> _onTapRanges(DivTextRangeModel item) async {
-    final divContext = DivKitProvider.watch<DivContext>(
+    final divContext = watch<DivContext>(
       context,
     );
     if (divContext != null) {
@@ -61,11 +60,14 @@ class _DivTextWidgetState extends State<DivTextWidget> {
   @override
   Widget build(BuildContext context) => DivBaseWidget(
         data: widget.data,
-        action: widget.data.action,
-        actions: widget.data.actions,
-        longtapActions: widget.data.longtapActions,
-        actionAnimation: widget.data.actionAnimation,
+        tapActionData: DivTapActionData(
+          action: widget.data.action,
+          actions: widget.data.actions,
+          longtapActions: widget.data.longtapActions,
+          actionAnimation: widget.data.actionAnimation,
+        ),
         child: StreamBuilder<DivTextModel>(
+          initialData: value,
           stream: stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -122,6 +124,7 @@ class _DivTextWidgetState extends State<DivTextWidget> {
 
   @override
   void dispose() {
+    value = null;
     stream = null;
     super.dispose();
   }

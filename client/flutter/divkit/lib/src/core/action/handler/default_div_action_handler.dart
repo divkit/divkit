@@ -1,11 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/action/models/action.dart';
-import 'package:divkit/src/core/action/handler/div_action_handler_typed.dart';
-import 'package:divkit/src/core/action/handler/div_action_handler_url.dart';
-import 'package:divkit/src/core/protocol/div_action.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
+import 'package:divkit/divkit.dart';
 
 class DefaultDivActionHandler implements DivActionHandler {
   final typedHandler = DefaultDivActionHandlerTyped();

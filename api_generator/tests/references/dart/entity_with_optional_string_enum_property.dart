@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithOptionalStringEnumProperty with EquatableMixin {
+class EntityWithOptionalStringEnumProperty extends Preloadable with EquatableMixin  {
   const EntityWithOptionalStringEnumProperty({
     this.property,
   });
@@ -24,7 +24,7 @@ class EntityWithOptionalStringEnumProperty with EquatableMixin {
       property: property != null ? property.call() : this.property,
     );
 
-  static EntityWithOptionalStringEnumProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithOptionalStringEnumProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,9 +36,30 @@ class EntityWithOptionalStringEnumProperty with EquatableMixin {
       return null;
     }
   }
+
+  static Future<EntityWithOptionalStringEnumProperty?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithOptionalStringEnumProperty(
+        property: await safeParseStrEnumExprAsync(json['property'], parse: EntityWithOptionalStringEnumPropertyProperty.fromJson,),
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await property?.preload(context);
+    } catch (e, st) {
+      return;
+    }
+  }
 }
 
-enum EntityWithOptionalStringEnumPropertyProperty {
+enum EntityWithOptionalStringEnumPropertyProperty implements Preloadable {
   first('first'),
   second('second');
 
@@ -71,8 +92,26 @@ enum EntityWithOptionalStringEnumPropertyProperty {
      }
   }
 
+  Future<void> preload(Map<String, dynamic> context) async {}
 
-  static EntityWithOptionalStringEnumPropertyProperty? fromJson(String? json) {
+  static EntityWithOptionalStringEnumPropertyProperty? fromJson(String? json,) {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'first':
+        return EntityWithOptionalStringEnumPropertyProperty.first;
+        case 'second':
+        return EntityWithOptionalStringEnumPropertyProperty.second;
+      }
+      return null;
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  static Future<EntityWithOptionalStringEnumPropertyProperty?> parse(String? json,) async {
     if (json == null) {
       return null;
     }

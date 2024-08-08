@@ -1,15 +1,8 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/core/visibility/visibility_action_converter.dart';
-import 'package:divkit/src/generated_sources/div_base.dart';
-import 'package:divkit/src/generated_sources/div_visibility.dart';
-import 'package:divkit/src/utils/converters.dart';
+import 'package:divkit/divkit.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
-import 'package:divkit/src/utils/size_converters.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
-import 'package:divkit/src/utils/div_scaling_model.dart';
-import 'package:divkit/src/core/visibility/models/visibility_action.dart';
 
 class DivBaseModel with EquatableMixin {
   final double opacity;
@@ -38,14 +31,74 @@ class DivBaseModel with EquatableMixin {
     this.divId,
   });
 
+  static DivBaseModel? value(
+    BuildContext context,
+    DivBase data,
+  ) {
+    final divScalingModel = read<DivScalingModel>(context);
+    final viewScale = divScalingModel?.viewScale ?? 1;
+
+    try {
+      final margin = data.margins.value(
+        viewScale: viewScale,
+      );
+
+      final List<DivVisibilityActionModel> visibilityActionsList = [];
+      final dtoVisibilityActionsList = [
+        ...?data.visibilityActions,
+      ];
+      final visibilityAction = data.visibilityAction;
+      if (data.visibilityActions == null && visibilityAction != null) {
+        dtoVisibilityActionsList.add(visibilityAction);
+      }
+      for (final dtoAction in dtoVisibilityActionsList) {
+        visibilityActionsList.add(dtoAction.value());
+      }
+
+      return DivBaseModel(
+        opacity: data.valueOpacity().clamp(0.0, 1.0),
+        alignment: PassDivAlignment(
+          data.alignmentVertical,
+          data.alignmentHorizontal,
+        ).valueAlignment(),
+        width: data.valueWidth(
+          extension: margin.horizontal,
+          viewScale: viewScale,
+        ),
+        height: data.valueHeight(
+          extension: margin.vertical,
+          viewScale: viewScale,
+        ),
+        visibilityActions: visibilityActionsList,
+        padding: data.paddings.value(
+          viewScale: viewScale,
+        ),
+        margin: margin,
+        decoration: data.valueBoxDecoration(
+          viewScale: viewScale,
+        ),
+        divId: data.id,
+        focusDecoration: data.valueFocusBoxDecoration(
+          viewScale: viewScale,
+        ),
+        divVisibility: data.visibility.requireValue,
+      );
+    } catch (e, st) {
+      logger.warning(
+        'Expression cache is corrupted! Instant rendering is not available for div',
+        error: e,
+        stackTrace: st,
+      );
+      return null;
+    }
+  }
+
   static Stream<DivBaseModel> from(
     BuildContext context,
     DivBase data,
   ) {
-    final variables =
-        DivKitProvider.watch<DivContext>(context)!.variableManager;
-
-    final divScalingModel = DivKitProvider.watch<DivScalingModel>(context);
+    final variables = watch<DivContext>(context)!.variableManager;
+    final divScalingModel = watch<DivScalingModel>(context);
     final viewScale = divScalingModel?.viewScale ?? 1;
 
     return variables.watch<DivBaseModel>(
@@ -173,6 +226,42 @@ extension PassDivBase on DivBase {
     );
   }
 
+  DivDecoration valueBoxDecoration({
+    required double viewScale,
+  }) {
+    final boxBorder = border.valueBorder(
+      viewScale: viewScale,
+    );
+    final borderRadius = border.valueBorderRadius(
+      viewScale: viewScale,
+    );
+    final outerShadow = border.valueShadow(
+      viewScale: viewScale,
+    );
+    final backgrounds = background;
+    if (backgrounds != null) {
+      final backgroundWidgets = PassDivBackground.value(
+        backgrounds,
+        viewScale: viewScale,
+      );
+      return DivDecoration(
+        boxDecoration: BoxDecoration(
+          border: boxBorder,
+        ),
+        outerShadow: outerShadow,
+        customBorderRadius: borderRadius,
+        backgroundWidgets: backgroundWidgets,
+      );
+    }
+    return DivDecoration(
+      outerShadow: outerShadow,
+      customBorderRadius: borderRadius,
+      boxDecoration: BoxDecoration(
+        border: boxBorder,
+      ),
+    );
+  }
+
   Future<DivDecoration> resolveFocusBoxDecoration({
     required DivVariableContext context,
     required double viewScale,
@@ -210,6 +299,39 @@ extension PassDivBase on DivBase {
     }
   }
 
+  DivDecoration valueFocusBoxDecoration({
+    required double viewScale,
+  }) {
+    final focusBg = focus?.background;
+    final focusBorder = focus?.border;
+    final resolvedFocusBorder = focusBorder?.valueBorder(
+      viewScale: viewScale,
+    );
+    final focusRadius = focusBorder?.valueBorderRadius(
+      viewScale: viewScale,
+    );
+    if (focusBg != null) {
+      final backgroundWidgets = PassDivBackground.value(
+        focusBg,
+        viewScale: viewScale,
+      );
+      return DivDecoration(
+        boxDecoration: BoxDecoration(
+          border: resolvedFocusBorder,
+        ),
+        customBorderRadius: focusRadius ?? CustomBorderRadius(),
+        backgroundWidgets: backgroundWidgets,
+      );
+    } else {
+      return DivDecoration(
+        customBorderRadius: focusRadius ?? CustomBorderRadius(),
+        boxDecoration: BoxDecoration(
+          border: resolvedFocusBorder,
+        ),
+      );
+    }
+  }
+
   Future<double> resolveOpacity({
     required DivVariableContext context,
   }) async {
@@ -218,6 +340,14 @@ extension PassDivBase on DivBase {
       return 0;
     }
     return await alpha.resolveValue(context: context);
+  }
+
+  double valueOpacity() {
+    final opacity = visibility.value!.asOpacity;
+    if (opacity != 1) {
+      return 0;
+    }
+    return alpha.value!;
   }
 
   Future<PassDivSize> resolveWidth({
@@ -230,6 +360,20 @@ extension PassDivBase on DivBase {
     } else {
       return await width.resolve(
         context: context,
+        extension: extension,
+        viewScale: viewScale,
+      );
+    }
+  }
+
+  PassDivSize valueWidth({
+    required double viewScale,
+    double extension = 0,
+  }) {
+    if (visibility.value!.isGone) {
+      return const FixedDivSize(0);
+    } else {
+      return width.passValue(
         extension: extension,
         viewScale: viewScale,
       );
@@ -251,39 +395,18 @@ extension PassDivBase on DivBase {
       );
     }
   }
-}
 
-class DivDecoration {
-  final BoxDecoration boxDecoration;
-  final List<Widget> backgroundWidgets;
-  final CustomBorderRadius customBorderRadius;
-  final BoxShadow? outerShadow;
-
-  DivDecoration({
-    required this.boxDecoration,
-    required this.customBorderRadius,
-    this.outerShadow,
-    this.backgroundWidgets = const <Widget>[],
-  });
-}
-
-class CustomBorderRadius {
-  final Radius? topLeft;
-  final Radius? topRight;
-  final Radius? bottomLeft;
-  final Radius? bottomRight;
-
-  CustomBorderRadius({
-    this.topLeft = Radius.zero,
-    this.topRight = Radius.zero,
-    this.bottomLeft = Radius.zero,
-    this.bottomRight = Radius.zero,
-  });
-
-  BorderRadius toBorderRadius() => BorderRadius.only(
-        topLeft: topLeft ?? Radius.zero,
-        topRight: topRight ?? Radius.zero,
-        bottomLeft: bottomLeft ?? Radius.zero,
-        bottomRight: bottomRight ?? Radius.zero,
+  PassDivSize valueHeight({
+    required double viewScale,
+    double extension = 0,
+  }) {
+    if (visibility.value!.isGone) {
+      return const FixedDivSize(0);
+    } else {
+      return height.passValue(
+        extension: extension,
+        viewScale: viewScale,
       );
+    }
+  }
 }

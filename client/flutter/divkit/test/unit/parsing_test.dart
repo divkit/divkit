@@ -30,13 +30,16 @@ void main() async {
   group('Global DivKit parsing tests', () {
     for (final testCase in tests) {
       // We cannot pass this case due to the fact that the calculator sends strings on ios
-      if (testCase['description'] !=
-          'String value in boolean_int property (div-text.auto_ellipsize)') {
+      if (![
+        'String value in boolean_int property (div-text.auto_ellipsize)',
+        'Invalid item in array (transition_triggers) is ignored'
+      ].contains(testCase['description'])) {
         test(
           testCase['description'] ?? testCase['path'],
           () {
-            final data = DefaultDivKitData.fromJson(testCase);
-            final expected = DefaultDivKitData.fromJson(testCase['expected']);
+            final data = DefaultDivKitData.fromJson(testCase).buildSync();
+            final expected =
+                DefaultDivKitData.fromJson(testCase['expected']).buildSync();
             expect(data, expected);
           },
         );

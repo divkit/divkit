@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithArrayOfExpressions with EquatableMixin {
+class EntityWithArrayOfExpressions extends Preloadable with EquatableMixin  {
   const EntityWithArrayOfExpressions({
     required this.items,
   });
@@ -24,16 +24,37 @@ class EntityWithArrayOfExpressions with EquatableMixin {
       items: items ?? this.items,
     );
 
-  static EntityWithArrayOfExpressions? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArrayOfExpressions? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       return EntityWithArrayOfExpressions(
-        items: safeParseObjExpr(safeListMap(json['items'], (v) => safeParseStr(v?.toString(),)!),)!,
+        items: safeParseObjExpr(safeListMap(json['items'], (v) => safeParseStr(v?.toString(),)!,),)!,
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithArrayOfExpressions?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithArrayOfExpressions(
+        items: (await safeParseObjExprAsync(await safeListMapAsync(json['items'], (v) => safeParseStr(v?.toString(),)!,),))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await items.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

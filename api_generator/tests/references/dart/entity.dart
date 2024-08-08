@@ -2,6 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
+import 'package:divkit/src/utils/parsing_utils.dart';
+
 import 'entity_with_array.dart';
 import 'entity_with_array_of_enums.dart';
 import 'entity_with_array_of_expressions.dart';
@@ -22,8 +24,8 @@ import 'entity_with_string_enum_property.dart';
 import 'entity_with_string_enum_property_with_default_value.dart';
 import 'entity_without_properties.dart';
 
-class Entity with EquatableMixin {
-  final Object value;
+class Entity extends Preloadable with EquatableMixin {
+  final Preloadable value;
   final int _index;
 
   @override
@@ -71,7 +73,7 @@ class Entity with EquatableMixin {
       case 17: return entityWithStringEnumPropertyWithDefaultValue(value as EntityWithStringEnumPropertyWithDefaultValue,);
       case 18: return entityWithoutProperties(value as EntityWithoutProperties,);
     }
-    throw Exception("Type ${value.runtimeType.toString()} is not generalized in Entity");
+    throw Exception("Type ${value.runtimeType.toString()} is not generalized in Entity",);
   }
 
   T maybeMap<T>({
@@ -291,52 +293,104 @@ class Entity with EquatableMixin {
   ) : value = obj,
       _index = 18;
 
+  Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 
-  static Entity? fromJson(Map<String, dynamic>? json) {
+  static Entity? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       switch (json['type']) {
-        case EntityWithArray.type :
-          return Entity.entityWithArray(EntityWithArray.fromJson(json)!);
-        case EntityWithArrayOfEnums.type :
-          return Entity.entityWithArrayOfEnums(EntityWithArrayOfEnums.fromJson(json)!);
-        case EntityWithArrayOfExpressions.type :
-          return Entity.entityWithArrayOfExpressions(EntityWithArrayOfExpressions.fromJson(json)!);
-        case EntityWithArrayOfNestedItems.type :
-          return Entity.entityWithArrayOfNestedItems(EntityWithArrayOfNestedItems.fromJson(json)!);
-        case EntityWithArrayWithTransform.type :
-          return Entity.entityWithArrayWithTransform(EntityWithArrayWithTransform.fromJson(json)!);
-        case EntityWithComplexProperty.type :
-          return Entity.entityWithComplexProperty(EntityWithComplexProperty.fromJson(json)!);
-        case EntityWithComplexPropertyWithDefaultValue.type :
-          return Entity.entityWithComplexPropertyWithDefaultValue(EntityWithComplexPropertyWithDefaultValue.fromJson(json)!);
-        case EntityWithEntityProperty.type :
-          return Entity.entityWithEntityProperty(EntityWithEntityProperty.fromJson(json)!);
-        case EntityWithOptionalComplexProperty.type :
-          return Entity.entityWithOptionalComplexProperty(EntityWithOptionalComplexProperty.fromJson(json)!);
-        case EntityWithOptionalProperty.type :
-          return Entity.entityWithOptionalProperty(EntityWithOptionalProperty.fromJson(json)!);
-        case EntityWithOptionalStringEnumProperty.type :
-          return Entity.entityWithOptionalStringEnumProperty(EntityWithOptionalStringEnumProperty.fromJson(json)!);
-        case EntityWithPropertyWithDefaultValue.type :
-          return Entity.entityWithPropertyWithDefaultValue(EntityWithPropertyWithDefaultValue.fromJson(json)!);
-        case EntityWithRawArray.type :
-          return Entity.entityWithRawArray(EntityWithRawArray.fromJson(json)!);
-        case EntityWithRequiredProperty.type :
-          return Entity.entityWithRequiredProperty(EntityWithRequiredProperty.fromJson(json)!);
-        case EntityWithSimpleProperties.type :
-          return Entity.entityWithSimpleProperties(EntityWithSimpleProperties.fromJson(json)!);
-        case EntityWithStringArrayProperty.type :
-          return Entity.entityWithStringArrayProperty(EntityWithStringArrayProperty.fromJson(json)!);
-        case EntityWithStringEnumProperty.type :
-          return Entity.entityWithStringEnumProperty(EntityWithStringEnumProperty.fromJson(json)!);
-        case EntityWithStringEnumPropertyWithDefaultValue.type :
-          return Entity.entityWithStringEnumPropertyWithDefaultValue(EntityWithStringEnumPropertyWithDefaultValue.fromJson(json)!);
-        case EntityWithoutProperties.type :
-          return Entity.entityWithoutProperties(EntityWithoutProperties.fromJson(json)!);
-      }
+      case EntityWithArray.type :
+        return Entity.entityWithArray(EntityWithArray.fromJson(json)!,);
+      case EntityWithArrayOfEnums.type :
+        return Entity.entityWithArrayOfEnums(EntityWithArrayOfEnums.fromJson(json)!,);
+      case EntityWithArrayOfExpressions.type :
+        return Entity.entityWithArrayOfExpressions(EntityWithArrayOfExpressions.fromJson(json)!,);
+      case EntityWithArrayOfNestedItems.type :
+        return Entity.entityWithArrayOfNestedItems(EntityWithArrayOfNestedItems.fromJson(json)!,);
+      case EntityWithArrayWithTransform.type :
+        return Entity.entityWithArrayWithTransform(EntityWithArrayWithTransform.fromJson(json)!,);
+      case EntityWithComplexProperty.type :
+        return Entity.entityWithComplexProperty(EntityWithComplexProperty.fromJson(json)!,);
+      case EntityWithComplexPropertyWithDefaultValue.type :
+        return Entity.entityWithComplexPropertyWithDefaultValue(EntityWithComplexPropertyWithDefaultValue.fromJson(json)!,);
+      case EntityWithEntityProperty.type :
+        return Entity.entityWithEntityProperty(EntityWithEntityProperty.fromJson(json)!,);
+      case EntityWithOptionalComplexProperty.type :
+        return Entity.entityWithOptionalComplexProperty(EntityWithOptionalComplexProperty.fromJson(json)!,);
+      case EntityWithOptionalProperty.type :
+        return Entity.entityWithOptionalProperty(EntityWithOptionalProperty.fromJson(json)!,);
+      case EntityWithOptionalStringEnumProperty.type :
+        return Entity.entityWithOptionalStringEnumProperty(EntityWithOptionalStringEnumProperty.fromJson(json)!,);
+      case EntityWithPropertyWithDefaultValue.type :
+        return Entity.entityWithPropertyWithDefaultValue(EntityWithPropertyWithDefaultValue.fromJson(json)!,);
+      case EntityWithRawArray.type :
+        return Entity.entityWithRawArray(EntityWithRawArray.fromJson(json)!,);
+      case EntityWithRequiredProperty.type :
+        return Entity.entityWithRequiredProperty(EntityWithRequiredProperty.fromJson(json)!,);
+      case EntityWithSimpleProperties.type :
+        return Entity.entityWithSimpleProperties(EntityWithSimpleProperties.fromJson(json)!,);
+      case EntityWithStringArrayProperty.type :
+        return Entity.entityWithStringArrayProperty(EntityWithStringArrayProperty.fromJson(json)!,);
+      case EntityWithStringEnumProperty.type :
+        return Entity.entityWithStringEnumProperty(EntityWithStringEnumProperty.fromJson(json)!,);
+      case EntityWithStringEnumPropertyWithDefaultValue.type :
+        return Entity.entityWithStringEnumPropertyWithDefaultValue(EntityWithStringEnumPropertyWithDefaultValue.fromJson(json)!,);
+      case EntityWithoutProperties.type :
+        return Entity.entityWithoutProperties(EntityWithoutProperties.fromJson(json)!,);
+    }
+      return null;
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  static Future<Entity?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json['type']) {
+      case EntityWithArray.type :
+        return Entity.entityWithArray((await EntityWithArray.parse(json))!,);
+      case EntityWithArrayOfEnums.type :
+        return Entity.entityWithArrayOfEnums((await EntityWithArrayOfEnums.parse(json))!,);
+      case EntityWithArrayOfExpressions.type :
+        return Entity.entityWithArrayOfExpressions((await EntityWithArrayOfExpressions.parse(json))!,);
+      case EntityWithArrayOfNestedItems.type :
+        return Entity.entityWithArrayOfNestedItems((await EntityWithArrayOfNestedItems.parse(json))!,);
+      case EntityWithArrayWithTransform.type :
+        return Entity.entityWithArrayWithTransform((await EntityWithArrayWithTransform.parse(json))!,);
+      case EntityWithComplexProperty.type :
+        return Entity.entityWithComplexProperty((await EntityWithComplexProperty.parse(json))!,);
+      case EntityWithComplexPropertyWithDefaultValue.type :
+        return Entity.entityWithComplexPropertyWithDefaultValue((await EntityWithComplexPropertyWithDefaultValue.parse(json))!,);
+      case EntityWithEntityProperty.type :
+        return Entity.entityWithEntityProperty((await EntityWithEntityProperty.parse(json))!,);
+      case EntityWithOptionalComplexProperty.type :
+        return Entity.entityWithOptionalComplexProperty((await EntityWithOptionalComplexProperty.parse(json))!,);
+      case EntityWithOptionalProperty.type :
+        return Entity.entityWithOptionalProperty((await EntityWithOptionalProperty.parse(json))!,);
+      case EntityWithOptionalStringEnumProperty.type :
+        return Entity.entityWithOptionalStringEnumProperty((await EntityWithOptionalStringEnumProperty.parse(json))!,);
+      case EntityWithPropertyWithDefaultValue.type :
+        return Entity.entityWithPropertyWithDefaultValue((await EntityWithPropertyWithDefaultValue.parse(json))!,);
+      case EntityWithRawArray.type :
+        return Entity.entityWithRawArray((await EntityWithRawArray.parse(json))!,);
+      case EntityWithRequiredProperty.type :
+        return Entity.entityWithRequiredProperty((await EntityWithRequiredProperty.parse(json))!,);
+      case EntityWithSimpleProperties.type :
+        return Entity.entityWithSimpleProperties((await EntityWithSimpleProperties.parse(json))!,);
+      case EntityWithStringArrayProperty.type :
+        return Entity.entityWithStringArrayProperty((await EntityWithStringArrayProperty.parse(json))!,);
+      case EntityWithStringEnumProperty.type :
+        return Entity.entityWithStringEnumProperty((await EntityWithStringEnumProperty.parse(json))!,);
+      case EntityWithStringEnumPropertyWithDefaultValue.type :
+        return Entity.entityWithStringEnumPropertyWithDefaultValue((await EntityWithStringEnumPropertyWithDefaultValue.parse(json))!,);
+      case EntityWithoutProperties.type :
+        return Entity.entityWithoutProperties((await EntityWithoutProperties.parse(json))!,);
+    }
       return null;
     } catch (e, st) {
       return null;

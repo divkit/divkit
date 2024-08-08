@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
+import 'package:divkit/divkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const reference = Div.divContainer(

@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithOptionalComplexProperty with EquatableMixin {
+class EntityWithOptionalComplexProperty extends Preloadable with EquatableMixin  {
   const EntityWithOptionalComplexProperty({
     this.property,
   });
@@ -24,7 +24,7 @@ class EntityWithOptionalComplexProperty with EquatableMixin {
       property: property != null ? property.call() : this.property,
     );
 
-  static EntityWithOptionalComplexProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithOptionalComplexProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,9 +36,30 @@ class EntityWithOptionalComplexProperty with EquatableMixin {
       return null;
     }
   }
+
+  static Future<EntityWithOptionalComplexProperty?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithOptionalComplexProperty(
+        property: await safeParseObjAsync(EntityWithOptionalComplexPropertyProperty.fromJson(json['property']),),
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await property?.preload(context);
+    } catch (e, st) {
+      return;
+    }
+  }
 }
 
-class EntityWithOptionalComplexPropertyProperty with EquatableMixin {
+class EntityWithOptionalComplexPropertyProperty extends Preloadable with EquatableMixin  {
   const EntityWithOptionalComplexPropertyProperty({
     required this.value,
   });
@@ -57,7 +78,7 @@ class EntityWithOptionalComplexPropertyProperty with EquatableMixin {
       value: value ?? this.value,
     );
 
-  static EntityWithOptionalComplexPropertyProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithOptionalComplexPropertyProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -67,6 +88,27 @@ class EntityWithOptionalComplexPropertyProperty with EquatableMixin {
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithOptionalComplexPropertyProperty?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithOptionalComplexPropertyProperty(
+        value: (await safeParseUriExprAsync(json['value']))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await value.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

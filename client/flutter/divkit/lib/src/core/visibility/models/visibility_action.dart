@@ -1,5 +1,5 @@
-import 'package:equatable/equatable.dart';
 import 'package:divkit/src/core/action/models/action.dart';
+import 'package:equatable/equatable.dart';
 
 class DivVisibilityActionModel with EquatableMixin {
   const DivVisibilityActionModel({

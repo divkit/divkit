@@ -2,45 +2,59 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:divkit/divkit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class SamplesPage extends StatefulWidget {
-  const SamplesPage({super.key});
+class Box {
+  final RootIsolateToken token;
+  final List<String> data;
 
-  @override
-  State<StatefulWidget> createState() => _SamplesPage();
+  Box(this.data) : token = ServicesBinding.rootIsolateToken!;
 }
 
-class _SamplesPage extends State<SamplesPage> {
-  final _controller = ScrollController(keepScrollOffset: true);
+Future<List<DivKitData>> process(Box box) async {
+  // Register the background isolate with the root isolate.
+  BackgroundIsolateBinaryMessenger.ensureInitialized(box.token);
 
-  Future<List<Map<String, dynamic>>> loadAssetsList() async {
-    final Map<String, dynamic> manifestMap = json.decode(
-      await rootBundle.loadString('AssetManifest.json'),
-    );
-    manifestMap.removeWhere(
-      (key, value) =>
-          !key.startsWith('assets/test_data/samples') || !key.endsWith('json'),
-    );
-    List<Map<String, dynamic>> testCases = [];
-    for (var el in manifestMap.keys) {
-      final testCaseData = await jsonDecode(
-        await rootBundle.loadString(
-          el.replaceAll('../', ''),
-        ),
-      );
-      testCases.add(testCaseData);
-    }
-
-    return testCases;
+  final it = <DivKitData>[];
+  for (final str in box.data) {
+    final json = jsonDecode(str);
+    final data = DefaultDivKitData.fromJson(json);
+    await data.build();
+    await data.preload();
+    it.add(data);
   }
+  return it;
+}
+
+Future<List<DivKitData>> loadList() async {
+  final Map<String, dynamic> manifestMap = json.decode(
+    await rootBundle.loadString('AssetManifest.json'),
+  );
+  manifestMap.removeWhere(
+    (key, value) =>
+        !key.startsWith('assets/test_data/samples') || !key.endsWith('json'),
+  );
+
+  List<String> strings = [];
+  for (var el in manifestMap.keys) {
+    strings.add(await rootBundle.loadString(
+      el.replaceAll('../', ''),
+    ));
+  }
+
+  return compute<Box, List<DivKitData>>(process, Box(strings));
+}
+
+class SamplesPage extends StatelessWidget {
+  const SamplesPage({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: const Color(0xFFA09DE5),
-        body: FutureBuilder<List<Map<String, dynamic>>>(
-          future: loadAssetsList(),
+        body: FutureBuilder<List<DivKitData>>(
+          future: loadList(),
           builder: (_, snapshot) {
             if (snapshot.hasError) {
               return Center(
@@ -51,7 +65,6 @@ class _SamplesPage extends State<SamplesPage> {
               final data = snapshot.data;
               if (data != null) {
                 return CustomScrollView(
-                  controller: _controller,
                   slivers: [
                     SliverAppBar(
                       foregroundColor: Colors.black,
@@ -106,29 +119,24 @@ class _SamplesPage extends State<SamplesPage> {
                       ),
                       backgroundColor: const Color(0xFFA09DE5),
                     ),
-                    SliverToBoxAdapter(
-                      child: Column(
-                        children: List.generate(data.length, (i) {
-                          try {
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: i == 0
-                                    ? const BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30),
-                                      )
-                                    : null,
-                                color: Colors.white,
-                              ),
-                              child: DivKitView(
-                                showUnsupportedDivs: true,
-                                data: DefaultDivKitData.fromJson(data[i]),
-                              ),
-                            );
-                          } catch (e) {
-                            return const SizedBox.shrink();
-                          }
-                        }),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, i) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: i == 0
+                                ? const BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30),
+                                  )
+                                : null,
+                            color: Colors.white,
+                          ),
+                          child: DivKitView(
+                            showUnsupportedDivs: true,
+                            data: data[i],
+                          ),
+                        ),
+                        childCount: data.length,
                       ),
                     ),
                   ],
@@ -141,10 +149,4 @@ class _SamplesPage extends State<SamplesPage> {
           },
         ),
       );
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 }

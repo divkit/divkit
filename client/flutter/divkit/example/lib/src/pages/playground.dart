@@ -25,13 +25,15 @@ class _PlaygroundPage extends State<PlaygroundPage> {
     variableStorage.put(DivVariableModel(name: demoInputVariable, value: ''));
   }
 
-  Future<Map<String, dynamic>> loadJson() async {
+  Future<DivKitData> load() async {
     final jsonData = await jsonDecode(
       await rootBundle.loadString(
         'assets/application/demo.json',
       ),
     );
-    return jsonData;
+    return (await DefaultDivKitData.fromJson(jsonData).build()).preload(
+      variableStorage: variableStorage,
+    );
   }
 
   @override
@@ -82,8 +84,8 @@ class _PlaygroundPage extends State<PlaygroundPage> {
                   topRight: Radius.circular(30),
                 ),
               ),
-              child: FutureBuilder<Map<String, dynamic>>(
-                future: loadJson(),
+              child: FutureBuilder<DivKitData>(
+                future: load(),
                 builder: (_, snapshot) {
                   if (snapshot.hasError) {
                     return Center(
@@ -93,11 +95,6 @@ class _PlaygroundPage extends State<PlaygroundPage> {
                   if (snapshot.hasData) {
                     final data = snapshot.data;
                     if (data != null) {
-                      if (!data.containsKey('card')) {
-                        return const Center(
-                          child: Text('No card field was provided'),
-                        );
-                      }
                       return Listener(
                         onPointerDown: (_) {
                           if (showInfo) {
@@ -108,7 +105,7 @@ class _PlaygroundPage extends State<PlaygroundPage> {
                         },
                         child: SafeArea(
                           child: DivKitView(
-                            data: DefaultDivKitData.fromJson(data),
+                            data: data,
                             actionHandler: PlaygroundActionHandler(
                               navigator: navigatorKey,
                             ),

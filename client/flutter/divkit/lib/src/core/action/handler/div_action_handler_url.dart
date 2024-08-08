@@ -2,11 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:divkit/src/core/patch/patch_converter.dart';
-import 'package:divkit/src/core/protocol/div_action.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
-import 'package:divkit/src/core/template/templates_resolver.dart';
-import 'package:divkit/src/generated_sources/div_patch.dart';
+import 'package:divkit/divkit.dart';
 
 class DefaultDivActionHandlerUrl implements DivActionHandler {
   static const handlers = [
@@ -197,8 +193,8 @@ class DivDownloadHandlerUrl implements DivActionHandler {
         final json = await fetchPatch(urlArg);
 
         if (json != null) {
-          final patch = DivPatch.fromJson(
-            TemplatesResolver(
+          final patch = await DivPatch.parse(
+            await TemplatesResolver(
               layout: json['patch']!,
               templates: json['templates'],
             ).merge(),
@@ -207,7 +203,7 @@ class DivDownloadHandlerUrl implements DivActionHandler {
           if (patch != null) {
             final success = await context.patchManager.applyPatch(
               await patch.resolve(
-                context: context.variableManager.context,
+                context: context.variables,
               ),
             );
 

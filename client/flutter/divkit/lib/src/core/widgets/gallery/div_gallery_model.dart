@@ -1,6 +1,4 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/widgets/div_widget.dart';
-import 'package:divkit/src/generated_sources/div_gallery.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
@@ -19,14 +17,50 @@ class DivGalleryModel with EquatableMixin {
     required this.itemSpacing,
   });
 
+  static DivGalleryModel? value(
+    BuildContext context,
+    DivGallery data,
+  ) {
+    try {
+      final divScalingModel = read<DivScalingModel>(context);
+      final viewScale = divScalingModel?.viewScale ?? 1;
+
+      final rawAlignment = data.crossContentAlignment.value!;
+      final alignment = _convertAlignment(rawAlignment);
+
+      final rawOrientation = data.orientation.value!;
+      final orientation = _convertOrientation(rawOrientation);
+
+      final children = data.items
+              ?.map(
+                (e) => DivWidget(e),
+              )
+              .toList(growable: false) ??
+          [];
+
+      return DivGalleryModel(
+        children: children,
+        crossContentAlignment: alignment,
+        orientation: orientation,
+        itemSpacing: data.itemSpacing.value!.toDouble() * viewScale,
+      );
+    } catch (e, st) {
+      logger.warning(
+        'Expression cache is corrupted! Instant rendering is not available for div',
+        error: e,
+        stackTrace: st,
+      );
+      return null;
+    }
+  }
+
   static Stream<DivGalleryModel> from(
     BuildContext context,
     DivGallery data,
   ) {
-    final variables =
-        DivKitProvider.watch<DivContext>(context)!.variableManager;
+    final variables = watch<DivContext>(context)!.variableManager;
 
-    final divScalingModel = DivKitProvider.watch<DivScalingModel>(context);
+    final divScalingModel = watch<DivScalingModel>(context);
     final viewScale = divScalingModel?.viewScale ?? 1;
 
     return variables.watch<DivGalleryModel>((context) async {
@@ -62,7 +96,6 @@ class DivGalleryModel with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        children,
         crossContentAlignment,
         orientation,
         itemSpacing,

@@ -15,13 +15,8 @@ class ShowPage extends ConsumerStatefulWidget {
 }
 
 class _ShowPageState extends ConsumerState<ShowPage> {
-  late final DivKitData data;
-
-  @override
-  void initState() {
-    super.initState();
-
-    data = DefaultDivKitData.fromJson(widget.data);
+  Future<DivKitData> load() async {
+    return (await DefaultDivKitData.fromJson(widget.data).build()).preload();
   }
 
   @override
@@ -70,10 +65,18 @@ class _ShowPageState extends ConsumerState<ShowPage> {
           ),
         ],
       ),
-      body: DivKitView(
-        customHandler: PlaygroundAppCustomHandler(),
-        key: ObjectKey(reloadN),
-        data: data,
+      body: FutureBuilder<DivKitData>(
+        future: load(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return DivKitView(
+              key: ObjectKey(reloadN),
+              data: snapshot.requireData,
+              customHandler: PlaygroundAppCustomHandler(),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

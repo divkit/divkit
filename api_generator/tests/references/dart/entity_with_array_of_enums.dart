@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithArrayOfEnums with EquatableMixin {
+class EntityWithArrayOfEnums extends Preloadable with EquatableMixin  {
   const EntityWithArrayOfEnums({
     required this.items,
   });
@@ -24,21 +24,42 @@ class EntityWithArrayOfEnums with EquatableMixin {
       items: items ?? this.items,
     );
 
-  static EntityWithArrayOfEnums? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArrayOfEnums? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       return EntityWithArrayOfEnums(
-        items: safeParseObj(safeListMap(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!),)!,
+        items: safeParseObj(safeListMap(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!,),)!,
       );
     } catch (e, st) {
       return null;
     }
   }
+
+  static Future<EntityWithArrayOfEnums?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithArrayOfEnums(
+        items: (await safeParseObjAsync(await safeListMapAsync(json['items'], (v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!,),))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await safeFuturesWait(items, (v) => v.preload(context));
+    } catch (e, st) {
+      return;
+    }
+  }
 }
 
-enum EntityWithArrayOfEnumsItem {
+enum EntityWithArrayOfEnumsItem implements Preloadable {
   first('first'),
   second('second');
 
@@ -71,8 +92,26 @@ enum EntityWithArrayOfEnumsItem {
      }
   }
 
+  Future<void> preload(Map<String, dynamic> context) async {}
 
-  static EntityWithArrayOfEnumsItem? fromJson(String? json) {
+  static EntityWithArrayOfEnumsItem? fromJson(String? json,) {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'first':
+        return EntityWithArrayOfEnumsItem.first;
+        case 'second':
+        return EntityWithArrayOfEnumsItem.second;
+      }
+      return null;
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  static Future<EntityWithArrayOfEnumsItem?> parse(String? json,) async {
     if (json == null) {
       return null;
     }

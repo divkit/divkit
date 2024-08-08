@@ -1,10 +1,9 @@
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/generated_sources/div_size.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/utils/content_alignment_converters.dart';
-import 'package:divkit/src/utils/converters.dart';
 import 'package:divkit/src/utils/provider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class PassDivSize {
   const PassDivSize();
@@ -40,19 +39,25 @@ abstract class PassDivSize {
       );
 }
 
-class FixedDivSize extends PassDivSize {
+class FixedDivSize extends PassDivSize with EquatableMixin {
   final double size;
 
   const FixedDivSize(this.size);
+
+  @override
+  List<Object?> get props => [size];
 }
 
-class FlexDivSize extends PassDivSize {
+class FlexDivSize extends PassDivSize with EquatableMixin {
   final int? weight;
 
   const FlexDivSize(this.weight);
+
+  @override
+  List<Object?> get props => [weight];
 }
 
-class WrapDivSize extends PassDivSize {
+class WrapDivSize extends PassDivSize with EquatableMixin {
   final bool? constrained;
   final FixedDivSize? maxSize;
   final FixedDivSize? minSize;
@@ -62,6 +67,9 @@ class WrapDivSize extends PassDivSize {
     required this.maxSize,
     required this.minSize,
   });
+
+  @override
+  List<Object?> get props => [constrained, maxSize, minSize];
 }
 
 extension PassDivSizeImpl on DivSize {
@@ -110,6 +118,53 @@ extension PassDivSizeImpl on DivSize {
 
           return WrapDivSize(
             await wrapped.constrained?.resolveValue(context: context),
+            maxSize: parsedMax,
+            minSize: parsedMin,
+          );
+        },
+      );
+
+  PassDivSize passValue({
+    required double viewScale,
+    double extension = 0,
+  }) =>
+      map(
+        divFixedSize: (fixed) => FixedDivSize(
+          fixed.valueDimension(
+                viewScale: viewScale,
+              ) +
+              extension * viewScale,
+        ),
+        divMatchParentSize: (flex) => FlexDivSize(
+          flex.weight?.requireValue.toInt(),
+        ),
+        divWrapContentSize: (wrapped) {
+          final FixedDivSize? parsedMax, parsedMin;
+          final maxSize = wrapped.maxSize;
+          final minSize = wrapped.minSize;
+          if (maxSize != null) {
+            parsedMax = FixedDivSize(
+              maxSize.valueDimension(
+                    viewScale: viewScale,
+                  ) +
+                  extension * viewScale,
+            );
+          } else {
+            parsedMax = null;
+          }
+          if (minSize != null) {
+            parsedMin = FixedDivSize(
+              minSize.valueDimension(
+                    viewScale: viewScale,
+                  ) +
+                  extension * viewScale,
+            );
+          } else {
+            parsedMin = null;
+          }
+
+          return WrapDivSize(
+            wrapped.constrained?.requireValue,
             maxSize: parsedMax,
             minSize: parsedMin,
           );
@@ -225,19 +280,50 @@ class _VerticalWrapper extends _AxisWrapper {
   }
 }
 
+enum DivParentData {
+  none,
+  box,
+  wrap,
+  flex,
+  stack;
+
+  bool get isBox => this == DivParentData.box;
+
+  bool get isWrap => this == DivParentData.wrap;
+
+  bool get isFlex => this == DivParentData.flex;
+
+  bool get isStack => this == DivParentData.stack;
+
+  static DivParentData? from(ParentData? data) {
+    if (data is FlexParentData) {
+      return DivParentData.flex;
+    } else if (data is StackParentData) {
+      return DivParentData.stack;
+    } else if (data is WrapParentData) {
+      return DivParentData.wrap;
+    } else if (data is BoxParentData) {
+      return DivParentData.box;
+    }
+    return null;
+  }
+}
+
 class DivSizeWrapper extends StatelessWidget {
   final PassDivSize width;
   final PassDivSize height;
   final Widget child;
   final DivAlignment alignment;
-  final ParentData? parentData;
+  final ContentAlignment? contentAlignment;
+  final DivParentData? parent;
 
   const DivSizeWrapper({
     required this.child,
     required this.height,
     required this.width,
     required this.alignment,
-    this.parentData,
+    required this.contentAlignment,
+    required this.parent,
     super.key,
   });
 
@@ -252,10 +338,10 @@ class DivSizeWrapper extends StatelessWidget {
     final maxHeight = safeHeight.maxConstraint;
     final minHeight = safeHeight.minConstraint;
 
-    final contentAlignment = DivKitProvider.watch<ContentAlignment>(context);
+    final safeContentAlignment = contentAlignment;
 
-    final isStack = parentData is StackParentData;
-    final isFlex = parentData is FlexParentData;
+    final isFlex = parent?.isFlex ?? false;
+    final isStack = parent?.isStack ?? false;
 
     final Widget wrapper;
 
@@ -271,20 +357,20 @@ class DivSizeWrapper extends StatelessWidget {
       final canBeWrappedVertical = safeHeight is! WrapDivSize;
 
       final isFlexibleOnVerticalAxis =
-          contentAlignment is FlexContentAlignment &&
-              contentAlignment.direction == Axis.vertical;
+          safeContentAlignment is FlexContentAlignment &&
+              safeContentAlignment.direction == Axis.vertical;
       final isFlexibleOnHorizontalAxis =
-          contentAlignment is FlexContentAlignment &&
-              contentAlignment.direction == Axis.horizontal;
+          safeContentAlignment is FlexContentAlignment &&
+              safeContentAlignment.direction == Axis.horizontal;
 
       if (canBeWrappedHorizontal && canBeWrappedVertical) {
         wrapper = _VerticalWrapper(
           sizeOnCrossAxis: safeWidth,
-          contentAlignment: contentAlignment,
+          contentAlignment: safeContentAlignment,
           alignment: safeAlignment.vertical,
           child: _HorizontalWrapper(
             sizeOnCrossAxis: safeHeight,
-            contentAlignment: contentAlignment,
+            contentAlignment: safeContentAlignment,
             alignment: safeAlignment.horizontal,
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -304,7 +390,7 @@ class DivSizeWrapper extends StatelessWidget {
           alignment: safeAlignment.vertical,
           child: _HorizontalWrapper(
             sizeOnCrossAxis: safeHeight,
-            contentAlignment: contentAlignment,
+            contentAlignment: safeContentAlignment,
             alignment: safeAlignment.horizontal,
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -320,7 +406,7 @@ class DivSizeWrapper extends StatelessWidget {
       } else if (canBeWrappedVertical || isFlexibleOnVerticalAxis) {
         wrapper = _VerticalWrapper(
           sizeOnCrossAxis: safeWidth,
-          contentAlignment: contentAlignment,
+          contentAlignment: safeContentAlignment,
           alignment: safeAlignment.vertical,
           child: _HorizontalWrapper(
             sizeOnCrossAxis: safeHeight,
@@ -353,7 +439,7 @@ class DivSizeWrapper extends StatelessWidget {
       if (safeWidth is FlexDivSize) {
         localWrapper = _HorizontalWrapper(
           sizeOnCrossAxis: safeHeight,
-          contentAlignment: isFlex ? contentAlignment : null,
+          contentAlignment: isFlex ? safeContentAlignment : null,
           alignment: safeAlignment.horizontal,
           child: Expanded(
             flex: safeWidth.weight ?? 1,
@@ -382,7 +468,7 @@ class DivSizeWrapper extends StatelessWidget {
       }
       wrapper = _VerticalWrapper(
         sizeOnCrossAxis: safeWidth,
-        contentAlignment: isFlex ? contentAlignment : null,
+        contentAlignment: isFlex ? safeContentAlignment : null,
         alignment: safeAlignment.vertical,
         child: localWrapper,
       );
@@ -391,7 +477,7 @@ class DivSizeWrapper extends StatelessWidget {
       if (safeHeight is FlexDivSize) {
         localWrapper = _VerticalWrapper(
           sizeOnCrossAxis: safeWidth,
-          contentAlignment: isFlex ? contentAlignment : null,
+          contentAlignment: isFlex ? safeContentAlignment : null,
           alignment: safeAlignment.vertical,
           child: Expanded(
             flex: safeHeight.weight ?? 1,
@@ -420,7 +506,7 @@ class DivSizeWrapper extends StatelessWidget {
       }
       wrapper = _HorizontalWrapper(
         sizeOnCrossAxis: safeHeight,
-        contentAlignment: isFlex ? contentAlignment : null,
+        contentAlignment: isFlex ? safeContentAlignment : null,
         alignment: safeAlignment.horizontal,
         child: localWrapper,
       );
@@ -472,6 +558,9 @@ class DivSizeWrapper extends StatelessWidget {
             : wrapper,
       );
     }
-    return wrapper;
+    return provide(
+      DivParentData.none,
+      child: wrapper,
+    );
   }
 }

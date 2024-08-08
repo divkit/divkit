@@ -18,7 +18,7 @@ JSON → DivData → DivKitView
 
 - JSON – raw data with templates in DivKit format (see [DivKit schema](https://github.com/divkit/divkit/tree/main/schema)).
 
-- DivData – data objects parsed from JSON (see [Generated DTO](https://github.com/divkit/divkit/tree/main/client/flutter/divkit/lib/src/generated_sources)).
+- DivData – data objects parsed from JSON (see [Generated DTO](https://github.com/divkit/divkit/tree/main/client/flutter/divkit/lib/src/schema)).
 
 - DivKitView — plain Flutter Widget (you use it directly)
 
@@ -65,7 +65,15 @@ Supported components (may contain unavailable features for more info look at doc
     );
     ```
 
-   P.s. The process of building a DTO is quite expensive, so it is better to create it outside the widget in order to avoid frame loss.
+    P.s. The process of building a DTO is quite expensive, so it is better to create it outside the widget in order to avoid frame loss.
+
+    Build and preload data to ensure instant rendering:
+    ```dart
+    await data.build(); 
+    // Or sync variant for small layouts
+    // data.buildSync();
+    await data.preload();  // Provide the storage built into DivKitView
+    ```
 
 4. Use DivKitView inside your widget tree with layout passed by param "data":
     ```dart

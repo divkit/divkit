@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithComplexProperty with EquatableMixin {
+class EntityWithComplexProperty extends Preloadable with EquatableMixin  {
   const EntityWithComplexProperty({
     required this.property,
   });
@@ -24,7 +24,7 @@ class EntityWithComplexProperty with EquatableMixin {
       property: property ?? this.property,
     );
 
-  static EntityWithComplexProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithComplexProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,9 +36,30 @@ class EntityWithComplexProperty with EquatableMixin {
       return null;
     }
   }
+
+  static Future<EntityWithComplexProperty?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithComplexProperty(
+        property: (await safeParseObjAsync(EntityWithComplexPropertyProperty.fromJson(json['property']),))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await property.preload(context);
+    } catch (e, st) {
+      return;
+    }
+  }
 }
 
-class EntityWithComplexPropertyProperty with EquatableMixin {
+class EntityWithComplexPropertyProperty extends Preloadable with EquatableMixin  {
   const EntityWithComplexPropertyProperty({
     required this.value,
   });
@@ -57,7 +78,7 @@ class EntityWithComplexPropertyProperty with EquatableMixin {
       value: value ?? this.value,
     );
 
-  static EntityWithComplexPropertyProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithComplexPropertyProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -67,6 +88,27 @@ class EntityWithComplexPropertyProperty with EquatableMixin {
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithComplexPropertyProperty?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithComplexPropertyProperty(
+        value: (await safeParseUriExprAsync(json['value']))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await value.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

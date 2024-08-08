@@ -86,15 +86,6 @@ class DartEntity(Entity):
         return [] if not unique_types else make_imports(sorted(unique_types))
 
     @property
-    def import_parsing_utils(self) -> List[str]:
-        # ToDo(man-y): Follow the import execution logic if necessary.
-        # if any(isinstance(item, (Color, Int, Bool, BoolInt, Double, Url)) for item in
-        #        [p.property_type for p in self.instance_properties]):
-        return ["import '../utils/parsing_utils.dart';"]
-        # else:
-        #     return []
-
-    @property
     def is_main_declaration(self) -> bool:
         return self.parent is None
 
@@ -172,33 +163,37 @@ class DartProperty(Property):
                 return utils.capitalize_camel_case(enum_case[0])
 
     # ToDo(man-y): Transfer the parsing strategy to the subtypes themselves.
-    def get_parse_strategy(self) -> str:
+    def get_parse_strategy(self, is_future=False) -> str:
         prop_type = cast(DartPropertyType, self.property_type)
         prop_type_decl = prop_type.declaration()
         required = '' if self.optional and not self.has_default else '!'
         fallback = f' fallback: {self.fallback_declaration},' if self.has_default else ''
         expr = 'Expr' if self.supports_expressions else ''
+        _async = 'Async' if is_future else ''
+        _await = 'await ' if is_future else ''
+        br0 = '(' if is_future and (not self.optional or self.has_default) else ''
+        br1 = ')' if is_future and (not self.optional or self.has_default) else ''
 
         if isinstance(prop_type, Int):
-            return f"safeParseInt{expr}(json['{self.name}'],{fallback}){required}"
+            return f"{br0}{_await}safeParseInt{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
         elif isinstance(prop_type, Color):
-            return f"safeParseColor{expr}(json['{self.name}'],{fallback}){required}"
+            return f"{br0}{_await}safeParseColor{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
         elif isinstance(prop_type, Double):
-            return f"safeParseDouble{expr}(json['{self.name}'],{fallback}){required}"
+            return f"{br0}{_await}safeParseDouble{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
         elif isinstance(prop_type, (Bool, BoolInt)):
-            return f"safeParseBool{expr}(json['{self.name}'],{fallback}){required}"
+            return f"{br0}{_await}safeParseBool{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
         elif isinstance(prop_type, (String, StaticString)):
-            return f"safeParseStr{expr}(json['{self.name}']?.toString(),{fallback}){required}"
+            return f"{br0}{_await}safeParseStr{expr}{_async}(json['{self.name}']?.toString(),{fallback}){br1}{required}"
         elif isinstance(prop_type, Dictionary):
-            return f"safeParseMap{expr}(json['{self.name}'],{fallback}){required}"
+            return f"{br0}{_await}safeParseMap{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
         elif isinstance(prop_type, RawArray):
-            return f"safeParseList{expr}(json['{self.name}'],{fallback}){required}"
+            return f"{br0}{_await}safeParseList{expr}{_async}(json['{self.name}'],{fallback}){br1}{required}"
         elif isinstance(prop_type, Url):
-            return f"safeParseUri{expr}(json['{self.name}']){required}"
+            return f"{br0}{_await}safeParseUri{expr}{_async}(json['{self.name}']){br1}{required}"
         elif prop_type.is_string_enumeration():
-            return f"safeParseStrEnum{expr}(json['{self.name}'], parse: {prop_type_decl}.fromJson,{fallback}){required}"
+            return f"{br0}{_await}safeParseStrEnum{expr}{_async}(json['{self.name}'], parse: {prop_type_decl}.fromJson,{fallback}){br1}{required}"
         elif prop_type.is_class():
-            return f"safeParseObj{expr}({prop_type_decl}.fromJson(json['{self.name}']),{fallback}){required}"
+            return f"{br0}{_await}safeParseObj{expr}{_async}({prop_type_decl}.fromJson(json['{self.name}']),{fallback}){br1}{required}"
         elif prop_type.is_list():
             list_item_type = prop_type.get_list_inner_class()
             list_item_decl = list_item_type.declaration()
@@ -225,8 +220,21 @@ class DartProperty(Property):
             else:
                 strategy = ""
 
-            return f"safeParseObj{expr}(safeListMap(json['{self.name}'], (v) => {strategy})," \
-                   f"{fallback}){'' if self.optional or self.has_default else '!'}"
+            return f"{br0}{_await}safeParseObj{expr}{_async}({_await}safeListMap{_async}(json['{self.name}'], (v) => {strategy},)," \
+                   f"{fallback}){br1}{required}"
+
+    def get_preload_strategy(self) -> Optional[str]:
+        prop_type = cast(DartPropertyType, self.property_type)
+        option = '?' if self.optional else ''
+        name = utils.lower_camel_case(self.name)
+
+        if self.supports_expressions:
+            return f'await {name}{option}.preload(context);'
+        else:
+            if prop_type.is_class():
+                return f'await {name}{option}.preload(context);'
+            elif prop_type.is_list():
+                return f'await safeFuturesWait({name}, (v) => v.preload(context));'
 
     @property
     def fallback_declaration(self) -> str:
@@ -391,9 +399,10 @@ class DartPropertyType(PropertyType):
                 if case_constructor is None:
                     return None
 
-                if isinstance(self, Object) and prop_type.object is not None and isinstance(prop_type.object, DartEntity):
+                if isinstance(self, Object) and prop_type.object is not None and isinstance(prop_type.object,
+                                                                                            DartEntity):
                     entity = cast(DartEntity, prop_type.object)
-                    return f'const {get_full_name(self.object)}.{utils.lower_camel_case(entity.name)}({case_constructor})'
+                    return f'const {get_full_name(self.object)}.{utils.lower_camel_case(entity.name)}({case_constructor},)'
 
                 return f'const {get_full_name(self.object)}({case_constructor},)'
 
@@ -411,7 +420,7 @@ class DartPropertyType(PropertyType):
                     declaration = cast(DartPropertyType, prop.property_type).internal_declaration(str_type)
 
                     if prop.supports_expressions:
-                        declaration = f'ValueExpression({declaration})'
+                        declaration = f'ValueExpression({declaration},)'
 
                     args.append(f'{prop.declaration_name}: {declaration}')
 

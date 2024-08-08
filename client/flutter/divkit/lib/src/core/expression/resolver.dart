@@ -33,42 +33,40 @@ class DefaultDivExpressionResolver implements DivExpressionResolver {
   }) async {
     if (expression is ResolvableExpression) {
       final expr = expression as ResolvableExpression;
+      try {
+        var result = await _platform.resolve(
+          expr.source!,
+          context: context.current,
+        );
 
-      final hasValue = expr.value != null;
-
-      final hasUpdate =
-          expr.variables?.intersection(context.update).isNotEmpty ?? false;
-
-      if (hasUpdate || !hasValue) {
-        try {
-          var result = await _platform.resolve(
-            expr.source!,
-            context: context.current,
-          );
-
-          if (expr.parse != null) {
-            result = expr.parse!(result);
-          }
-
-          logger.debug(
-            "Expr ${expr.source} with args ${context.current}"
-            "and result $result [${result.runtimeType}]",
-          );
-
-          return result as T;
-        } on Exception {
-          // Try to apply a fallback
-          if (expr.fallback != null) {
-            return expr.fallback!;
-          }
-
-          rethrow;
+        if (expr.parse != null) {
+          result = expr.parse!(result);
         }
+
+        logger.debug(
+          "Expr ${expr.source} with args ${context.current}"
+          "and result $result [${result.runtimeType}]",
+        );
+
+        return result as T;
+      } catch (e, st) {
+        // Try to apply a fallback
+        if (expr.fallback != null) {
+          logger.warning(
+            "Expr ${expr.source} with fallback ${expr.fallback}",
+            error: e,
+          );
+          return expr.fallback!;
+        }
+        logger.error("Expr ${expr.source}", error: e, stackTrace: st);
+        rethrow;
       }
     }
 
     if (expression.value == null) {
-      throw Exception('The calculation ended with an unhandled error');
+      final error = Exception('The calculation ended with an unhandled error');
+      logger.error("Fatal", error: error);
+      throw error;
     }
 
     return expression.value!;

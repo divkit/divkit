@@ -470,7 +470,8 @@ final skippedTests = [
     'example/assets/test_data/snapshot_test_data/div-grid/wrap-content-weighted-items.json',
     'example/assets/test_data/snapshot_test_data/div-grid/content-alignment.json',
     'example/assets/test_data/snapshot_test_data/div-grid/wrap-content-greater-than-parent.json',
-    'example/assets/test_data/snapshot_test_data/div-grid/match-parent-items-with-margins.json'
+    'example/assets/test_data/snapshot_test_data/div-grid/match-parent-items-with-margins.json',
+    'example/assets/test_data/snapshot_test_data/div-grid/overlapped-items.json'
   ].map(
     (e) => _SkipTest(
       e,

@@ -1,5 +1,4 @@
-import 'package:divkit/src/core/trigger/trigger.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
+import 'package:divkit/divkit.dart';
 
 extension PassDivTrigger on DivTrigger {
   DivTriggerModel get pass => DivTriggerModel(

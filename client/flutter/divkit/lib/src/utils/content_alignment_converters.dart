@@ -1,7 +1,5 @@
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
-import 'package:divkit/src/utils/converters.dart';
+import 'package:divkit/divkit.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
 const _defaultCrossAxisAlignment = CrossAxisAlignment.center;
@@ -99,7 +97,7 @@ abstract class ContentAlignment {
   }
 }
 
-class FlexContentAlignment extends ContentAlignment {
+class FlexContentAlignment extends ContentAlignment with EquatableMixin {
   final Axis direction;
 
   final CrossAxisAlignment crossAxisAlignment;
@@ -110,9 +108,12 @@ class FlexContentAlignment extends ContentAlignment {
     required this.crossAxisAlignment,
     required this.mainAxisAlignment,
   });
+
+  @override
+  List<Object?> get props => [direction, crossAxisAlignment, mainAxisAlignment];
 }
 
-class WrapContentAlignment extends ContentAlignment {
+class WrapContentAlignment extends ContentAlignment with EquatableMixin {
   final Axis direction;
 
   final WrapAlignment wrapAlignment;
@@ -123,14 +124,20 @@ class WrapContentAlignment extends ContentAlignment {
     required this.wrapAlignment,
     required this.runAlignment,
   });
+
+  @override
+  List<Object?> get props => [direction, wrapAlignment, runAlignment];
 }
 
-class StackContentAlignment extends ContentAlignment {
+class StackContentAlignment extends ContentAlignment with EquatableMixin {
   final AlignmentGeometry? contentAlignment;
 
   const StackContentAlignment({
     required this.contentAlignment,
   });
+
+  @override
+  List<Object?> get props => [contentAlignment];
 }
 
 class PassDivContentAlignment {
@@ -151,13 +158,108 @@ class PassDivContentAlignment {
   }) async {
     final safeVertical = vertical;
     final safeHorizontal = horizontal;
-    final resolvedOrientation = await orientation.resolve(context: context);
+    final resolvedOrientation =
+        await orientation.resolveValue(context: context);
 
     final divVertical = await safeVertical.resolveValue(context: context);
     final divHorizontal = await safeHorizontal.resolveValue(context: context);
 
     final isWrap = await layoutMode.resolveValue(context: context) ==
         DivContainerLayoutMode.wrap;
+
+    return resolvedOrientation.map(
+      vertical: () {
+        if (isWrap) {
+          return WrapContentAlignment(
+            direction: Axis.vertical,
+            wrapAlignment: divVertical.asWrapAlignment,
+            runAlignment: divHorizontal.asWrapAlignment,
+          );
+        }
+        return FlexContentAlignment(
+          direction: Axis.vertical,
+          mainAxisAlignment: divVertical.asMainAxisAlignment,
+          crossAxisAlignment: divHorizontal.asCrossAxisAlignment,
+        );
+      },
+      horizontal: () {
+        if (isWrap) {
+          return WrapContentAlignment(
+            direction: Axis.horizontal,
+            wrapAlignment: divHorizontal.asWrapAlignment,
+            runAlignment: divVertical.asWrapAlignment,
+          );
+        }
+        return FlexContentAlignment(
+          direction: Axis.horizontal,
+          mainAxisAlignment: divHorizontal.asMainAxisAlignment,
+          crossAxisAlignment: divVertical.asCrossAxisAlignment,
+        );
+      },
+      overlap: () => StackContentAlignment(
+        contentAlignment: divHorizontal.map(
+          left: () => divVertical.map(
+            top: () => Alignment.topLeft,
+            center: () => Alignment.centerLeft,
+            bottom: () => Alignment.bottomLeft,
+            baseline: () => null,
+            spaceBetween: () => null,
+            spaceAround: () => null,
+            spaceEvenly: () => null,
+          ),
+          center: () => divVertical.map(
+            top: () => Alignment.topCenter,
+            center: () => Alignment.center,
+            bottom: () => Alignment.bottomCenter,
+            baseline: () => null,
+            spaceBetween: () => null,
+            spaceAround: () => null,
+            spaceEvenly: () => null,
+          ),
+          right: () => divVertical.map(
+            top: () => Alignment.topRight,
+            center: () => Alignment.centerLeft,
+            bottom: () => Alignment.bottomRight,
+            baseline: () => null,
+            spaceBetween: () => null,
+            spaceAround: () => null,
+            spaceEvenly: () => null,
+          ),
+          start: () => divVertical.map(
+            top: () => AlignmentDirectional.topStart,
+            center: () => AlignmentDirectional.centerStart,
+            bottom: () => AlignmentDirectional.bottomStart,
+            baseline: () => null,
+            spaceBetween: () => null,
+            spaceAround: () => null,
+            spaceEvenly: () => null,
+          ),
+          end: () => divVertical.map(
+            top: () => AlignmentDirectional.topEnd,
+            center: () => AlignmentDirectional.centerEnd,
+            bottom: () => AlignmentDirectional.bottomEnd,
+            baseline: () => null,
+            spaceBetween: () => null,
+            spaceAround: () => null,
+            spaceEvenly: () => null,
+          ),
+          spaceBetween: () => null,
+          spaceAround: () => null,
+          spaceEvenly: () => null,
+        ),
+      ),
+    );
+  }
+
+  ContentAlignment get requireValue {
+    final safeVertical = vertical;
+    final safeHorizontal = horizontal;
+    final resolvedOrientation = orientation.requireValue;
+
+    final divVertical = safeVertical.requireValue;
+    final divHorizontal = safeHorizontal.requireValue;
+
+    final isWrap = layoutMode.requireValue == DivContainerLayoutMode.wrap;
 
     return resolvedOrientation.map(
       vertical: () {

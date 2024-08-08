@@ -1,7 +1,8 @@
 export 'base/div_base_widget.dart';
-export 'card_state/div_card_state_widget.dart';
 export 'container/div_container_widget.dart';
-export 'custom/div_custom_widget.dart';
+export 'div_custom_widget.dart';
+export 'div_error_widget.dart';
+export 'div_tap_action_emitter.dart';
 export 'div_widget.dart';
 export 'gallery/div_gallery_widget.dart';
 export 'image/div_image_widget.dart';

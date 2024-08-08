@@ -1,12 +1,10 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
+import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/widgets/text/utils/div_range_helper.dart';
 import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
-import 'package:divkit/src/generated_sources/div_text.dart';
-import 'package:divkit/src/utils/converters.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:divkit/src/utils/div_scaling_model.dart';
-import 'package:divkit/src/core/widgets/text/utils/div_range_helper.dart';
 
 class DivTextModel with EquatableMixin {
   final TextStyle? style;
@@ -25,14 +23,90 @@ class DivTextModel with EquatableMixin {
     this.ranges = const [],
   });
 
+  static DivTextModel? value(
+    BuildContext context,
+    DivText data,
+  ) {
+    try {
+      final divScalingModel = read<DivScalingModel>(context);
+      final textScale = divScalingModel?.textScale ?? 1;
+      final viewScale = divScalingModel?.viewScale ?? 1;
+
+      final alignment = PassDivAlignment(
+        data.textAlignmentVertical,
+        data.textAlignmentHorizontal,
+      );
+
+      final autoEllipsize = data.autoEllipsize?.value ?? false;
+
+      final fontSize = data.fontSize.value!.toDouble() *
+          data.fontSizeUnit.value!.asPx *
+          textScale;
+
+      final lineHeight = data.lineHeight?.value!.toDouble();
+
+      final underline = data.underline.value!;
+
+      final strike = data.strike.value!;
+
+      final linesStyleList = [
+        underline,
+        strike,
+      ];
+
+      final style = TextStyle(
+        fontSize: fontSize,
+        height: lineHeight != null
+            ? (lineHeight * data.fontSizeUnit.value!.asPx) *
+                viewScale /
+                fontSize
+            : null,
+        color: data.textColor.value!,
+        fontWeight: data.fontWeight.passValue(),
+        decoration: TextDecoration.combine(
+          [
+            underline.asUnderline,
+            strike.asLineThrough,
+          ],
+        ),
+        decorationColor: data.textColor.value!,
+        overflow: autoEllipsize ? TextOverflow.ellipsis : null,
+      );
+
+      final text = data.text.value!;
+
+      final rangesList = DivRangeHelper.getRangeItemsSync(
+        text,
+        data.ranges ?? [],
+        style,
+        linesStyleList,
+      );
+
+      return DivTextModel(
+        ranges: rangesList,
+        text: text,
+        style: style,
+        textBoxAlignment: alignment.valueAlignmentGeometry(),
+        textAlign: alignment.valueTextAlign(),
+        maxLines: data.maxLines?.value!,
+      );
+    } catch (e, st) {
+      logger.warning(
+        'Expression cache is corrupted! Instant rendering is not available for div',
+        error: e,
+        stackTrace: st,
+      );
+      return null;
+    }
+  }
+
   static Stream<DivTextModel> from(
     BuildContext context,
     DivText data,
   ) {
-    final variables =
-        DivKitProvider.watch<DivContext>(context)!.variableManager;
+    final variables = watch<DivContext>(context)!.variableManager;
 
-    final divScalingModel = DivKitProvider.watch<DivScalingModel>(context);
+    final divScalingModel = watch<DivScalingModel>(context);
     final textScale = divScalingModel?.textScale ?? 1;
     final viewScale = divScalingModel?.viewScale ?? 1;
 

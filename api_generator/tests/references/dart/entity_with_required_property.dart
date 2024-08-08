@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithRequiredProperty with EquatableMixin {
+class EntityWithRequiredProperty extends Preloadable with EquatableMixin  {
   const EntityWithRequiredProperty({
     required this.property,
   });
@@ -24,7 +24,7 @@ class EntityWithRequiredProperty with EquatableMixin {
       property: property ?? this.property,
     );
 
-  static EntityWithRequiredProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithRequiredProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -34,6 +34,27 @@ class EntityWithRequiredProperty with EquatableMixin {
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithRequiredProperty?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithRequiredProperty(
+        property: (await safeParseStrExprAsync(json['property']?.toString(),))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await property.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

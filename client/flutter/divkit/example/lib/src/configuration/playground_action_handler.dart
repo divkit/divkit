@@ -62,8 +62,7 @@ class PlaygroundActionHandler implements DivActionHandler {
     }
     switch (uri.queryParameters[_paramAction]) {
       case _activityShowResult:
-        final value =
-            context.variableManager.context.current[demoInputVariable];
+        final value = context.variables.current[demoInputVariable];
         // try {
         //   // TODO: support URL parsing inside playground app
         // } catch (_) {}
@@ -107,7 +106,9 @@ class PlaygroundActionHandler implements DivActionHandler {
     ScaffoldMessenger.of(_navigator.currentContext!).hideCurrentSnackBar();
     ScaffoldMessenger.of(_navigator.currentContext!).showSnackBar(
       SnackBar(
+        showCloseIcon: true,
         content: Text(text),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

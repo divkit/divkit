@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class WithDefault with EquatableMixin {
+class WithDefault extends Preloadable with EquatableMixin  {
   const WithDefault();
 
   static const type = "default";
@@ -14,10 +14,19 @@ class WithDefault with EquatableMixin {
 
   WithDefault? copyWith() => this;
 
-  static WithDefault? fromJson(Map<String, dynamic>? json) {
+  static WithDefault? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     return const WithDefault();
   }
+
+  static Future<WithDefault?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    return const WithDefault();
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {}
 }

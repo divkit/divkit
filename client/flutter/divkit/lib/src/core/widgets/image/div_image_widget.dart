@@ -5,11 +5,11 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/image/div_image_model.dart';
-import 'package:divkit/src/generated_sources/div_image.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
 
 class DivImageWidget extends StatefulWidget {
@@ -25,8 +25,14 @@ class DivImageWidget extends StatefulWidget {
 }
 
 class _DivImageWidgetState extends State<DivImageWidget> {
-  // ToDo: Optimize repeated calculations on the same context
+  DivImageModel? value;
   Stream<DivImageModel>? stream;
+
+  @override
+  void initState() {
+    super.initState();
+    value = DivImageModel.value(context, widget.data);
+  }
 
   @override
   void didChangeDependencies() {
@@ -40,6 +46,7 @@ class _DivImageWidgetState extends State<DivImageWidget> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
+      value = DivImageModel.value(context, widget.data);
       stream = DivImageModel.from(context, widget.data);
     }
   }
@@ -47,11 +54,14 @@ class _DivImageWidgetState extends State<DivImageWidget> {
   @override
   Widget build(BuildContext context) => DivBaseWidget(
         data: widget.data,
-        action: widget.data.action,
-        actions: widget.data.actions,
-        longtapActions: widget.data.longtapActions,
-        actionAnimation: widget.data.actionAnimation,
+        tapActionData: DivTapActionData(
+          action: widget.data.action,
+          actions: widget.data.actions,
+          longtapActions: widget.data.longtapActions,
+          actionAnimation: widget.data.actionAnimation,
+        ),
         child: StreamBuilder<DivImageModel>(
+          initialData: value,
           stream: stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -105,7 +115,7 @@ class _DivImageWidgetState extends State<DivImageWidget> {
                     alignment: model.contentAlignment.resolve(
                       Directionality.maybeOf(context),
                     ),
-                    cacheManager: DivKitProvider.watch(context),
+                    cacheManager: watch<BaseCacheManager>(context),
                   );
                 }
               }
@@ -154,6 +164,7 @@ class _DivImageWidgetState extends State<DivImageWidget> {
 
   @override
   void dispose() {
+    value = null;
     stream = null;
     super.dispose();
   }

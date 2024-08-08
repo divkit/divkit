@@ -11,13 +11,13 @@ import '../state.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  Future<Map<String, dynamic>> loadJson(String name) async {
+  Future<DivKitData> load(String name) async {
     final jsonData = await jsonDecode(
       await rootBundle.loadString(
         'assets/application/$name',
       ),
     );
-    return jsonData;
+    return (await DefaultDivKitData.fromJson(jsonData).build()).preload();
   }
 
   @override
@@ -26,17 +26,12 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: OrientationBuilder(builder: (context, orientation) {
-          return FutureBuilder<Map<String, dynamic>>(
+          return FutureBuilder<DivKitData>(
             key: ObjectKey(orientation),
             builder: (_, snapshot) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(snapshot.error.toString()),
-                );
-              }
               if (snapshot.hasData) {
                 return DivKitView(
-                  data: DefaultDivKitData.fromJson(snapshot.requireData),
+                  data: snapshot.requireData,
                   customHandler: PlaygroundAppCustomHandler(),
                   actionHandler: PlaygroundAppRootActionHandler(
                     navigator: navigatorKey,
@@ -48,8 +43,8 @@ class HomePage extends StatelessWidget {
               );
             },
             future: orientation == Orientation.portrait
-                ? loadJson('menu.json')
-                : loadJson('menu-land.json'),
+                ? load('menu.json')
+                : load('menu-land.json'),
           );
         }),
       ),

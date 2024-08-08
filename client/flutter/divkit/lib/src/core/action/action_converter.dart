@@ -1,7 +1,4 @@
-import 'package:divkit/src/core/action/models/action.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
-import 'package:divkit/src/core/action/models/download_callbacks.dart';
+import 'package:divkit/divkit.dart';
 
 extension PassDivAction on DivAction {
   Future<DivActionModel> resolve({
@@ -14,6 +11,15 @@ extension PassDivAction on DivAction {
         payload: payload,
         logId: await logId.resolveValue(context: context),
         downloadCallbacks: await downloadCallbacks?.resolve(context: context),
+      );
+
+  DivActionModel value() => DivActionModel(
+        url: url?.value,
+        enabled: isEnabled.value!,
+        typedAction: typed,
+        payload: payload,
+        logId: logId.value!,
+        downloadCallbacks: downloadCallbacks?.value(),
       );
 }
 
@@ -34,6 +40,29 @@ extension PassDivDownloadCallbacks on DivDownloadCallbacks {
       fail = [];
       for (final a in onFailActions!) {
         fail.add(await a.resolve(context: context));
+      }
+    }
+
+    return DivDownloadCallbacksModel(
+      onSuccessActions: success,
+      onFailActions: fail,
+    );
+  }
+
+  DivDownloadCallbacksModel value() {
+    List<DivActionModel>? success;
+    if (onSuccessActions != null) {
+      success = [];
+      for (final a in onSuccessActions!) {
+        success.add(a.value());
+      }
+    }
+
+    List<DivActionModel>? fail;
+    if (onFailActions != null) {
+      fail = [];
+      for (final a in onFailActions!) {
+        fail.add(a.value());
       }
     }
 

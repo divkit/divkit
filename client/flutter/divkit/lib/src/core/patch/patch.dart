@@ -1,5 +1,7 @@
-import 'package:divkit/src/generated_sources/div_patch.dart';
+import 'package:divkit/divkit.dart';
 import 'package:equatable/equatable.dart';
+
+export 'patch_converter.dart';
 
 class DivPatchModel with EquatableMixin {
   const DivPatchModel({

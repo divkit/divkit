@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithArrayWithTransform with EquatableMixin {
+class EntityWithArrayWithTransform extends Preloadable with EquatableMixin  {
   const EntityWithArrayWithTransform({
     required this.array,
   });
@@ -24,16 +24,37 @@ class EntityWithArrayWithTransform with EquatableMixin {
       array: array ?? this.array,
     );
 
-  static EntityWithArrayWithTransform? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArrayWithTransform? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       return EntityWithArrayWithTransform(
-        array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseColor(v,)!),)!,
+        array: safeParseObjExpr(safeListMap(json['array'], (v) => safeParseColor(v,)!,),)!,
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithArrayWithTransform?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithArrayWithTransform(
+        array: (await safeParseObjExprAsync(await safeListMapAsync(json['array'], (v) => safeParseColor(v,)!,),))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await array.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

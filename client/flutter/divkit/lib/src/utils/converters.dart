@@ -1,14 +1,9 @@
 import 'dart:math' as math;
 import 'dart:ui';
-import 'package:divkit/src/core/action/action_converter.dart';
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/core/expression/resolver.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
-import 'package:divkit/src/core/action/models/action.dart';
-import 'package:flutter/material.dart';
 
-import 'package:divkit/src/core/widgets/base/div_base_model.dart';
+import 'package:divkit/divkit.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 
 enum DivAxisAlignment {
   start,
@@ -53,7 +48,7 @@ enum DivAxisAlignment {
   }
 }
 
-class DivAlignment {
+class DivAlignment with EquatableMixin {
   final DivAxisAlignment? vertical;
   final DivAxisAlignment? horizontal;
 
@@ -98,6 +93,9 @@ class DivAlignment {
     }
     return null;
   }
+
+  @override
+  List<Object?> get props => [vertical, horizontal];
 }
 
 class PassDivAlignment {
@@ -111,6 +109,30 @@ class PassDivAlignment {
   }) async {
     final safeVertical = await vertical?.resolveValue(context: context);
     final safeHorizontal = await horizontal?.resolveValue(context: context);
+    final mappedVertical = safeVertical?.map(
+      top: () => DivAxisAlignment.start,
+      center: () => DivAxisAlignment.center,
+      bottom: () => DivAxisAlignment.end,
+      // TODO: support baseline alignment in flutter
+      baseline: () => null,
+    );
+    final mappedHorizontal = safeHorizontal?.map(
+      center: () => DivAxisAlignment.center,
+      start: () => DivAxisAlignment.start,
+      end: () => DivAxisAlignment.end,
+      // TODO: support RTL
+      right: () => DivAxisAlignment.end,
+      left: () => DivAxisAlignment.start,
+    );
+    return DivAlignment(
+      horizontal: mappedHorizontal,
+      vertical: mappedVertical,
+    );
+  }
+
+  DivAlignment valueAlignment() {
+    final safeVertical = vertical?.value;
+    final safeHorizontal = horizontal?.value;
     final mappedVertical = safeVertical?.map(
       top: () => DivAxisAlignment.start,
       center: () => DivAxisAlignment.center,
@@ -207,10 +229,84 @@ class PassDivAlignment {
     return null;
   }
 
+  AlignmentGeometry? valueAlignmentGeometry() {
+    final vertical = this.vertical?.value;
+    final horizontal = this.horizontal?.value;
+
+    if (vertical != null && horizontal != null) {
+      return vertical.map(
+        top: () => horizontal.map(
+          left: () => Alignment.topLeft,
+          center: () => Alignment.topCenter,
+          right: () => Alignment.topRight,
+          start: () => AlignmentDirectional.topStart,
+          end: () => AlignmentDirectional.topEnd,
+        ),
+        center: () => horizontal.map(
+          left: () => Alignment.centerLeft,
+          center: () => Alignment.center,
+          right: () => Alignment.centerRight,
+          start: () => AlignmentDirectional.centerStart,
+          end: () => AlignmentDirectional.centerEnd,
+        ),
+        bottom: () => horizontal.map(
+          left: () => Alignment.bottomLeft,
+          center: () => Alignment.bottomCenter,
+          right: () => Alignment.bottomRight,
+          start: () => AlignmentDirectional.bottomStart,
+          end: () => AlignmentDirectional.bottomEnd,
+        ),
+        // TODO: support baseline alignment in flutter
+        baseline: () => horizontal.map(
+          left: () => Alignment.centerLeft,
+          center: () => Alignment.center,
+          right: () => Alignment.centerRight,
+          start: () => AlignmentDirectional.centerStart,
+          end: () => AlignmentDirectional.centerEnd,
+        ),
+      );
+    } else if (vertical != null) {
+      return vertical.map(
+        top: () => Alignment.topCenter,
+        center: () => Alignment.center,
+        bottom: () => Alignment.bottomCenter,
+        // TODO: support baseline alignment in flutter
+        baseline: () => Alignment.center,
+      );
+    } else if (horizontal != null) {
+      return horizontal.map(
+        left: () => Alignment.centerLeft,
+        center: () => Alignment.center,
+        right: () => Alignment.centerRight,
+        start: () => AlignmentDirectional.centerStart,
+        end: () => AlignmentDirectional.centerEnd,
+      );
+    }
+
+    return null;
+  }
+
   Future<TextAlign?> resolveTextAlign({
     required DivVariableContext context,
   }) async {
     switch (await horizontal?.resolveValue(context: context)) {
+      case DivAlignmentHorizontal.left:
+        return TextAlign.left;
+      case DivAlignmentHorizontal.center:
+        return TextAlign.center;
+      case DivAlignmentHorizontal.right:
+        return TextAlign.right;
+      case DivAlignmentHorizontal.start:
+        return TextAlign.start;
+      case DivAlignmentHorizontal.end:
+        return TextAlign.end;
+      case null:
+        return null;
+    }
+  }
+
+  TextAlign? valueTextAlign() {
+    switch (horizontal?.value) {
       case DivAlignmentHorizontal.left:
         return TextAlign.left;
       case DivAlignmentHorizontal.center:
@@ -250,10 +346,39 @@ class PassDivTextAlignment {
     }
   }
 
+  TextAlign valueTextAlign() {
+    switch (horizontal.requireValue) {
+      case DivAlignmentHorizontal.left:
+        return TextAlign.left;
+      case DivAlignmentHorizontal.center:
+        return TextAlign.center;
+      case DivAlignmentHorizontal.right:
+        return TextAlign.right;
+      case DivAlignmentHorizontal.start:
+        return TextAlign.start;
+      case DivAlignmentHorizontal.end:
+        return TextAlign.end;
+    }
+  }
+
   Future<TextAlignVertical> resolveTextAlignVertical({
     required DivVariableContext context,
   }) async {
     switch (await vertical.resolveValue(context: context)) {
+      case DivAlignmentVertical.top:
+        return TextAlignVertical.top;
+      case DivAlignmentVertical.center:
+        return TextAlignVertical.center;
+      case DivAlignmentVertical.bottom:
+        return TextAlignVertical.bottom;
+      // TODO: support baseline alignment in flutter
+      case DivAlignmentVertical.baseline:
+        return TextAlignVertical.center;
+    }
+  }
+
+  TextAlignVertical valueTextAlignVertical() {
+    switch (vertical.requireValue) {
       case DivAlignmentVertical.top:
         return TextAlignVertical.top;
       case DivAlignmentVertical.center:
@@ -320,8 +445,9 @@ class PassDivBackground {
                   filter:
                       ImageFilter.blur(sigmaX: blurRadius, sigmaY: blurRadius),
                   child: Container(
-                    decoration:
-                        BoxDecoration(color: Colors.white.withOpacity(0.0)),
+                    decoration: const BoxDecoration(
+                      color: Color(0x00ffffff),
+                    ),
                   ),
                 ),
               ),
@@ -432,6 +558,154 @@ class PassDivBackground {
     }
     return backgroundWidgets;
   }
+
+  static List<Widget> value(
+    List<DivBackground> backgrounds, {
+    required double viewScale,
+  }) {
+    final backgroundWidgets = <Widget>[];
+    // TODO: complicated DivBackground support
+    for (var bg in backgrounds) {
+      bg.map(
+        divImageBackground: (divImageBackground) {
+          final filters = divImageBackground.filters;
+          final divBlur = filters?[0] as DivBlur?;
+          final isRtl = (filters?[1] as DivFilterRtlMirror?) != null;
+          final blurRadius = valueBlurRadius(divBlur: divBlur);
+          backgroundWidgets.add(
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(isRtl ? math.pi : 0),
+              child: Container(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      divImageBackground.imageUrl.requireValue.toString(),
+                    ),
+                    alignment: PassDivAlignment(
+                          divImageBackground.contentAlignmentVertical,
+                          divImageBackground.contentAlignmentHorizontal,
+                        ).valueAlignmentGeometry() ??
+                        Alignment.center,
+                    fit: divImageBackground.scale.requireValue.asBoxFit,
+                    opacity: divImageBackground.alpha.requireValue,
+                  ),
+                ),
+                child: BackdropFilter(
+                  filter:
+                      ImageFilter.blur(sigmaX: blurRadius, sigmaY: blurRadius),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0x00ffffff),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        divNinePatchBackground: (divNinePatchBackground) {
+          final insetsLeft = divNinePatchBackground.insets.left.requireValue;
+          final insetsTop = divNinePatchBackground.insets.top.requireValue;
+          final insetsRight = divNinePatchBackground.insets.right.requireValue;
+          final insetsBottom =
+              divNinePatchBackground.insets.bottom.requireValue;
+          backgroundWidgets.add(
+            Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(
+                    divNinePatchBackground.imageUrl.requireValue.toString(),
+                  ),
+                  centerSlice: Rect.fromLTRB(
+                    insetsLeft.toDouble(),
+                    insetsTop.toDouble(),
+                    insetsRight.toDouble(),
+                    insetsBottom.toDouble(),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        divRadialGradient: (divRadialGradient) {
+          backgroundWidgets.add(
+            Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: divRadialGradient.colors.requireValue
+                      .map((code) => Color(code.value))
+                      .toList(),
+                  radius: divRadialGradient.radius.map(
+                    divFixedSize: (divFixedSize) =>
+                        divFixedSize.value.requireValue.toDouble() * viewScale,
+                    divRadialGradientRelativeRadius:
+                        (divRadialGradientRelativeRadius) {
+                      throw UnimplementedError();
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        divLinearGradient: (divLinearGradient) {
+          final resolvedRadians = divLinearGradient.angle.requireValue *
+              viewScale /
+              (-180 / math.pi);
+          final angleAlignment = Alignment(
+            math.cos(resolvedRadians),
+            math.sin(resolvedRadians),
+          );
+          backgroundWidgets.add(
+            Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: -angleAlignment,
+                  end: angleAlignment,
+                  colors: divLinearGradient.colors.requireValue
+                      .map((code) => Color(code.value))
+                      .toList(),
+                ),
+              ),
+            ),
+          );
+        },
+        divSolidBackground: (divSolidBackground) {
+          backgroundWidgets.add(
+            Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                color: Color(
+                  divSolidBackground.color.requireValue.value,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
+    return backgroundWidgets;
+  }
+}
+
+double valueBlurRadius({
+  DivBlur? divBlur,
+}) {
+  if (divBlur == null) {
+    return 0.0;
+  }
+  final radius = divBlur.radius.requireValue;
+  return radius.toDouble();
 }
 
 Future<double> resolveBlurRadius({
@@ -475,6 +749,28 @@ class DivFilters {
       isRtl: isRtl,
     );
   }
+
+  static DivFilters value({
+    required List<DivFilter> filters,
+    required double viewScale,
+  }) {
+    double? blurRadius;
+    bool isRtl = false;
+    for (var el in filters) {
+      el.map(
+        divBlur: (divBlur) async {
+          blurRadius = divBlur.radius.requireValue.toDouble() * viewScale;
+        },
+        divFilterRtlMirror: (divFilterRtlMirror) {
+          isRtl = true;
+        },
+      );
+    }
+    return DivFilters(
+      blurRadius: blurRadius,
+      isRtl: isRtl,
+    );
+  }
 }
 
 extension PassDivEdgeInsets on DivEdgeInsets {
@@ -488,6 +784,32 @@ extension PassDivEdgeInsets on DivEdgeInsets {
     final safeRight = await right.resolveValue(context: context);
     final safeTop = await top.resolveValue(context: context);
     final safeBottom = await bottom.resolveValue(context: context);
+
+    if (safeStart != null || safeEnd != null) {
+      return EdgeInsetsDirectional.fromSTEB(
+        (safeStart?.toDouble() ?? 0) * viewScale,
+        safeTop.toDouble() * viewScale,
+        (safeEnd?.toDouble() ?? 0) * viewScale,
+        safeBottom.toDouble() * viewScale,
+      );
+    }
+    return EdgeInsets.fromLTRB(
+      safeLeft.toDouble() * viewScale,
+      safeTop.toDouble() * viewScale,
+      safeRight.toDouble() * viewScale,
+      safeBottom.toDouble() * viewScale,
+    );
+  }
+
+  EdgeInsetsGeometry value({
+    required double viewScale,
+  }) {
+    final safeStart = start?.requireValue;
+    final safeEnd = end?.requireValue;
+    final safeLeft = left.requireValue;
+    final safeRight = right.requireValue;
+    final safeTop = top.requireValue;
+    final safeBottom = bottom.requireValue;
 
     if (safeStart != null || safeEnd != null) {
       return EdgeInsetsDirectional.fromSTEB(
@@ -561,6 +883,11 @@ extension PassDivDimension on DivDimension {
       (await value.resolveValue(context: context)) *
       (await unit.resolveValue(context: context)).asPx *
       viewScale;
+
+  double valueDimension({
+    required double viewScale,
+  }) =>
+      (value.requireValue) * (unit.requireValue).asPx * viewScale;
 }
 
 extension PassDivFixedSize on DivFixedSize {
@@ -571,6 +898,11 @@ extension PassDivFixedSize on DivFixedSize {
       (await value.resolveValue(context: context)) *
       (await unit.resolveValue(context: context)).asPx *
       viewScale;
+
+  double valueDimension({
+    required double viewScale,
+  }) =>
+      (value.requireValue) * (unit.requireValue).asPx * viewScale;
 }
 
 extension PassDivWrapContentSizeConstraintSize
@@ -582,6 +914,11 @@ extension PassDivWrapContentSizeConstraintSize
       (await value.resolveValue(context: context)) *
       (await unit.resolveValue(context: context)).asPx *
       viewScale;
+
+  double valueDimension({
+    required double viewScale,
+  }) =>
+      (value.requireValue) * (unit.requireValue).asPx * viewScale;
 }
 
 extension DivPointAsOffset on DivPoint {
@@ -598,6 +935,53 @@ extension DivPointAsOffset on DivPoint {
           context: context,
           viewScale: viewScale,
         ),
+      );
+
+  Offset valueOffset({
+    required double viewScale,
+  }) =>
+      Offset(
+        x.valueDimension(
+          viewScale: viewScale,
+        ),
+        y.valueDimension(
+          viewScale: viewScale,
+        ),
+      );
+}
+
+class DivDecoration {
+  final BoxDecoration boxDecoration;
+  final List<Widget> backgroundWidgets;
+  final CustomBorderRadius customBorderRadius;
+  final BoxShadow? outerShadow;
+
+  DivDecoration({
+    required this.boxDecoration,
+    required this.customBorderRadius,
+    this.outerShadow,
+    this.backgroundWidgets = const <Widget>[],
+  });
+}
+
+class CustomBorderRadius {
+  final Radius? topLeft;
+  final Radius? topRight;
+  final Radius? bottomLeft;
+  final Radius? bottomRight;
+
+  CustomBorderRadius({
+    this.topLeft = Radius.zero,
+    this.topRight = Radius.zero,
+    this.bottomLeft = Radius.zero,
+    this.bottomRight = Radius.zero,
+  });
+
+  BorderRadius toBorderRadius() => BorderRadius.only(
+        topLeft: topLeft ?? Radius.zero,
+        topRight: topRight ?? Radius.zero,
+        bottomLeft: bottomLeft ?? Radius.zero,
+        bottomRight: bottomRight ?? Radius.zero,
       );
 }
 
@@ -657,6 +1041,53 @@ extension PassDivBorder on DivBorder {
     );
   }
 
+  CustomBorderRadius valueBorderRadius({
+    required double viewScale,
+  }) {
+    final singleCornerRadius = cornerRadius?.requireValue;
+
+    final multipleCornerRadius = cornersRadius;
+
+    if (multipleCornerRadius != null) {
+      // If corners_radius of any corner is null — should use corner_radius
+      // https://divkit.tech/en/doc/overview/concepts/divs/2/div-border.html
+      final resolvedTopLeft = multipleCornerRadius.topLeft?.requireValue ??
+          singleCornerRadius ??
+          0 * viewScale;
+      final resolvedTopRight = multipleCornerRadius.topRight?.requireValue ??
+          singleCornerRadius ??
+          0 * viewScale;
+      final resolvedBottomLeft =
+          multipleCornerRadius.bottomLeft?.requireValue ??
+              singleCornerRadius ??
+              0 * viewScale;
+      final resolvedBottomRight =
+          multipleCornerRadius.bottomRight?.requireValue ??
+              singleCornerRadius ??
+              0 * viewScale;
+      return CustomBorderRadius(
+        topLeft: Radius.circular(resolvedTopLeft.toDouble()),
+        topRight: Radius.circular(resolvedTopRight.toDouble()),
+        bottomLeft: Radius.circular(resolvedBottomLeft.toDouble()),
+        bottomRight: Radius.circular(resolvedBottomRight.toDouble()),
+      );
+    } else if (singleCornerRadius != null) {
+      // corner_radius has lower priority than corners_radius
+      return CustomBorderRadius(
+        topLeft: Radius.circular(singleCornerRadius.toDouble() * viewScale),
+        topRight: Radius.circular(singleCornerRadius.toDouble() * viewScale),
+        bottomLeft: Radius.circular(singleCornerRadius.toDouble() * viewScale),
+        bottomRight: Radius.circular(singleCornerRadius.toDouble() * viewScale),
+      );
+    }
+    return CustomBorderRadius(
+      topLeft: Radius.zero,
+      topRight: Radius.zero,
+      bottomLeft: Radius.zero,
+      bottomRight: Radius.zero,
+    );
+  }
+
   Future<Border?> resolveBorder({
     required DivVariableContext context,
     required double viewScale,
@@ -670,6 +1101,23 @@ extension PassDivBorder on DivBorder {
             viewScale,
         color: Color(
           (await borderStroke.color.resolveValue(context: context)).value,
+        ),
+      );
+    }
+    return null;
+  }
+
+  Border? valueBorder({
+    required double viewScale,
+  }) {
+    final borderStroke = stroke;
+    if (borderStroke != null) {
+      return Border.all(
+        width: ((borderStroke.unit.requireValue).asPx) *
+            (borderStroke.width.requireValue).toDouble() *
+            viewScale,
+        color: Color(
+          (borderStroke.color.requireValue).value,
         ),
       );
     }
@@ -701,6 +1149,26 @@ extension PassDivBorder on DivBorder {
     }
     return null;
   }
+
+  BoxShadow? valueShadow({
+    required double viewScale,
+  }) {
+    final borderShadow = shadow;
+    if (borderShadow != null && hasShadow.requireValue) {
+      return BoxShadow(
+        color: Color(
+          borderShadow.color.requireValue.value,
+        ).withAlpha(
+          (borderShadow.alpha.requireValue * 255).toInt(),
+        ),
+        blurRadius: borderShadow.blur.requireValue.toDouble() * viewScale,
+        offset: borderShadow.offset.valueOffset(
+          viewScale: viewScale,
+        ),
+      );
+    }
+    return null;
+  }
 }
 
 extension PassDivFontWeight on Expression<DivFontWeight> {
@@ -708,6 +1176,19 @@ extension PassDivFontWeight on Expression<DivFontWeight> {
     required DivVariableContext context,
   }) async {
     switch (await exprResolver.resolve(this, context: context)) {
+      case DivFontWeight.light:
+        return FontWeight.w200;
+      case DivFontWeight.medium:
+        return FontWeight.w500;
+      case DivFontWeight.regular:
+        return FontWeight.w400;
+      case DivFontWeight.bold:
+        return FontWeight.w700;
+    }
+  }
+
+  FontWeight passValue() {
+    switch (requireValue) {
       case DivFontWeight.light:
         return FontWeight.w200;
       case DivFontWeight.medium:
@@ -738,20 +1219,6 @@ extension PassTextDecoration on DivLineStyle {
         return TextDecoration.underline;
     }
   }
-}
-
-extension PassDivContainerOrientation on Expression<DivContainerOrientation> {
-  Future<DivContainerOrientation> resolve({
-    required DivVariableContext context,
-  }) =>
-      exprResolver.resolve(this, context: context);
-}
-
-extension PassDivAspect on DivAspect {
-  Future<double> resolve({
-    required DivVariableContext context,
-  }) =>
-      ratio.resolveValue(context: context);
 }
 
 extension PassDivBlendMode on DivBlendMode {
@@ -790,6 +1257,20 @@ extension PassActions on DivFocus {
     return result;
   }
 
+  List<DivActionModel> valueOnBlurActions() {
+    List<DivActionModel> result = [];
+    final blurAction = onBlur;
+    if (blurAction != null) {
+      for (final action in blurAction) {
+        final rAction = action.value();
+        if (rAction.enabled) {
+          result.add(rAction);
+        }
+      }
+    }
+    return result;
+  }
+
   Future<List<DivActionModel>> resolveOnFocusActions({
     required DivVariableContext context,
   }) async {
@@ -798,6 +1279,20 @@ extension PassActions on DivFocus {
     if (blurAction != null) {
       for (final action in blurAction) {
         final rAction = await action.resolve(context: context);
+        if (rAction.enabled) {
+          result.add(rAction);
+        }
+      }
+    }
+    return result;
+  }
+
+  List<DivActionModel> valueOnFocusActions() {
+    List<DivActionModel> result = [];
+    final blurAction = onFocus;
+    if (blurAction != null) {
+      for (final action in blurAction) {
+        final rAction = action.value();
         if (rAction.enabled) {
           result.add(rAction);
         }

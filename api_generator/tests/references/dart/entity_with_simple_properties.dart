@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithSimpleProperties with EquatableMixin {
+class EntityWithSimpleProperties extends Preloadable with EquatableMixin  {
   const EntityWithSimpleProperties({
     this.boolean,
     this.booleanInt,
@@ -72,7 +72,7 @@ class EntityWithSimpleProperties with EquatableMixin {
       url: url != null ? url.call() : this.url,
     );
 
-  static EntityWithSimpleProperties? fromJson(Map<String, dynamic>? json) {
+  static EntityWithSimpleProperties? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -90,6 +90,42 @@ class EntityWithSimpleProperties with EquatableMixin {
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithSimpleProperties?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithSimpleProperties(
+        boolean: await safeParseBoolExprAsync(json['boolean'],),
+        booleanInt: await safeParseBoolExprAsync(json['boolean_int'],),
+        color: await safeParseColorExprAsync(json['color'],),
+        dNum: await safeParseDoubleExprAsync(json['dNum'],),
+        id: (await safeParseIntAsync(json['id'], fallback: 0,))!,
+        integer: (await safeParseIntExprAsync(json['integer'], fallback: 0,))!,
+        positiveInteger: await safeParseIntExprAsync(json['positive_integer'],),
+        string: await safeParseStrExprAsync(json['string']?.toString(),),
+        url: await safeParseUriExprAsync(json['url']),
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await boolean?.preload(context);
+    await booleanInt?.preload(context);
+    await color?.preload(context);
+    await dNum?.preload(context);
+    await integer?.preload(context);
+    await positiveInteger?.preload(context);
+    await string?.preload(context);
+    await url?.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+export 'variable_converter.dart';
+
 class DivVariableModel<T> with EquatableMixin {
   final String name;
   T value;

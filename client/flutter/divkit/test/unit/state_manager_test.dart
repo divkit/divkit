@@ -1,4 +1,4 @@
-import 'package:divkit/src/core/state/div_state_manager.dart';
+import 'package:divkit/divkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -8,7 +8,7 @@ void main() {
       () async {
         final manager = DefaultDivStateManager();
         manager.registerState('root', '0');
-        expect(manager.states.value, {'root': '0'});
+        expect(manager.states, {'root': '0'});
         await manager.dispose();
       },
       timeout: const Timeout(Duration(seconds: 1)),
@@ -19,7 +19,7 @@ void main() {
         final manager = DefaultDivStateManager();
         manager.registerState('root', '0');
         manager.unregisterState('root');
-        expect(manager.states.value, {});
+        expect(manager.states, {});
         await manager.dispose();
       },
       timeout: const Timeout(Duration(seconds: 1)),
@@ -30,7 +30,7 @@ void main() {
         final manager = DefaultDivStateManager();
         manager.registerState('root', '0');
         manager.updateState('root', '1');
-        expect(manager.states.value, {'root': '1'});
+        expect(manager.states, {'root': '1'});
         await manager.dispose();
       },
       timeout: const Timeout(Duration(seconds: 1)),
@@ -53,7 +53,7 @@ void main() {
         final manager = DefaultDivStateManager();
         manager.registerState('root', '0');
         await manager.dispose();
-        expect(manager.states.value, {'root': '0'});
+        expect(manager.states, {'root': '0'});
       },
       timeout: const Timeout(Duration(seconds: 1)),
     );

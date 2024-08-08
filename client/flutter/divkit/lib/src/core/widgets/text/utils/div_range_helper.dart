@@ -1,11 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
-import 'package:divkit/src/utils/converters.dart';
 import 'package:flutter/material.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
-import 'package:divkit/src/core/action/action_converter.dart';
-import 'package:divkit/src/core/action/models/action.dart';
 
 class DivRangeHelper {
   static Future<List<DivTextRangeModel>> getRangeItems(
@@ -21,6 +17,39 @@ class DivRangeHelper {
         range,
         style,
         context,
+        linesStyleList,
+      );
+      inputMap.addEntries([mapEntry]);
+    }
+
+    inputMap.forEach(
+      (key, value) {
+        if (value.isDefault) {
+          inputMap.remove(key);
+        }
+      },
+    );
+    if (inputMap.isEmpty) {
+      return [];
+    }
+
+    return _getListTextRange(
+      text,
+      inputMap,
+    );
+  }
+
+  static List<DivTextRangeModel> getRangeItemsSync(
+    String text,
+    List<DivTextRange> divTextRange,
+    TextStyle style,
+    List<DivLineStyle> linesStyleList,
+  ) {
+    final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
+    for (var range in divTextRange) {
+      final mapEntry = _getRangeInputMapEntrySync(
+        range,
+        style,
         linesStyleList,
       );
       inputMap.addEntries([mapEntry]);
@@ -109,6 +138,76 @@ class DivRangeHelper {
       final resAction = await action.resolve(
         context: context,
       );
+      if (resAction.enabled) {
+        actions.add(resAction);
+      }
+    }
+    style = TextStyle(
+      color: textColor,
+      fontSize: fontSize?.toDouble(),
+      fontWeight: fontWeight,
+      backgroundColor: background,
+      letterSpacing: letterSpacing,
+      decoration: TextDecoration.combine(
+        [
+          strike.asLineThrough,
+          underline.asUnderline,
+        ],
+      ),
+    );
+
+    return MapEntry(
+      DivTextRangeInterval(
+        start,
+        end - 1,
+      ),
+      DivTextRangeOptionModel(
+        style: style,
+        actions: actions,
+        topOffset: topOffset,
+      ),
+    );
+  }
+
+  static MapEntry<DivTextRangeInterval, DivTextRangeOptionModel>
+      _getRangeInputMapEntrySync(
+    DivTextRange divTextRange,
+    TextStyle style,
+    List<DivLineStyle> linesStyleList,
+  ) {
+    final start = divTextRange.start.value!;
+    final end = divTextRange.end.value!;
+
+    final topOffset = divTextRange.topOffset?.value!;
+
+    final strike = divTextRange.strike?.value! ?? linesStyleList[1];
+
+    final underline = divTextRange.underline?.value! ?? linesStyleList[0];
+
+    final textColor = divTextRange.textColor?.value!;
+
+    Color? background;
+    divTextRange.background?.map(
+      divSolidBackground: (divSolidBackground) {
+        background = divSolidBackground.color.value!;
+      },
+    );
+
+    final fontSize = divTextRange.fontSize?.value!;
+
+    final fontWeightValue = divTextRange.fontWeightValue?.value!;
+
+    FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
+      (element) => element.value == fontWeightValue,
+    );
+    fontWeight ??= divTextRange.fontWeight?.passValue();
+
+    final letterSpacing = divTextRange.letterSpacing?.value!;
+
+    List<DivActionModel> actions = [];
+    List<DivAction>? actionsDto = [...?divTextRange.actions];
+    for (final action in actionsDto) {
+      final resAction = action.value();
       if (resAction.enabled) {
         actions.add(resAction);
       }

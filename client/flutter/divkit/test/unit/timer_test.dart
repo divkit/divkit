@@ -1,17 +1,13 @@
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/timer/timer.dart';
-import 'package:divkit/src/core/variable/variable_storage.dart';
-import 'package:divkit/src/core/variable/variable_storage_manager.dart';
-import 'package:divkit/src/generated_sources/div_action.dart';
+import 'package:divkit/divkit.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:divkit/src/core/variable/variable_manager.dart';
 
 void main() {
   group('Timer test', () {
-    final divContext = DivRootContext();
-    divContext.variableManager = DefaultDivVariableManager(
-      storage: DefaultDivVariableStorage(),
-    );
+    final divContext = DivRootContext()
+      ..variableManager = DefaultDivVariableManager(
+        storage: DefaultDivVariableStorage(),
+      );
 
     test("clockwork can not sync init", () async {
       final timer = DivTimerModel(

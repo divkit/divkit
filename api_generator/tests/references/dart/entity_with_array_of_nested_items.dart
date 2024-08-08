@@ -2,10 +2,10 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
 import 'entity.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithArrayOfNestedItems with EquatableMixin {
+class EntityWithArrayOfNestedItems extends Preloadable with EquatableMixin  {
   const EntityWithArrayOfNestedItems({
     required this.items,
   });
@@ -25,21 +25,42 @@ class EntityWithArrayOfNestedItems with EquatableMixin {
       items: items ?? this.items,
     );
 
-  static EntityWithArrayOfNestedItems? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArrayOfNestedItems? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
     try {
       return EntityWithArrayOfNestedItems(
-        items: safeParseObj(safeListMap(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!),)!,
+        items: safeParseObj(safeListMap(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!,),)!,
       );
     } catch (e, st) {
       return null;
     }
   }
+
+  static Future<EntityWithArrayOfNestedItems?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithArrayOfNestedItems(
+        items: (await safeParseObjAsync(await safeListMapAsync(json['items'], (v) => safeParseObj(EntityWithArrayOfNestedItemsItem.fromJson(v),)!,),))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await safeFuturesWait(items, (v) => v.preload(context));
+    } catch (e, st) {
+      return;
+    }
+  }
 }
 
-class EntityWithArrayOfNestedItemsItem with EquatableMixin {
+class EntityWithArrayOfNestedItemsItem extends Preloadable with EquatableMixin  {
   const EntityWithArrayOfNestedItemsItem({
     required this.entity,
     required this.property,
@@ -64,7 +85,7 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
       property: property ?? this.property,
     );
 
-  static EntityWithArrayOfNestedItemsItem? fromJson(Map<String, dynamic>? json) {
+  static EntityWithArrayOfNestedItemsItem? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -75,6 +96,29 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithArrayOfNestedItemsItem?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithArrayOfNestedItemsItem(
+        entity: (await safeParseObjAsync(Entity.fromJson(json['entity']),))!,
+        property: (await safeParseStrExprAsync(json['property']?.toString(),))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await entity.preload(context);
+    await property.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

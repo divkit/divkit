@@ -81,7 +81,7 @@ class PlaygroundAppCustomHandler implements DivCustomHandler {
     final actionList = <Future<DivActionModel>>[];
     for (var action in actions) {
       final actionModel = DivAction.fromJson(action)?.resolve(
-        context: context.variableManager.context,
+        context: context.variables,
       );
       if (actionModel != null) {
         actionList.add(actionModel);

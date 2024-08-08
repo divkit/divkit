@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
+class EntityWithStringEnumPropertyWithDefaultValue extends Preloadable with EquatableMixin  {
   const EntityWithStringEnumPropertyWithDefaultValue({
     this.value = const ValueExpression(EntityWithStringEnumPropertyWithDefaultValueValue.second),
   });
@@ -24,7 +24,7 @@ class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
       value: value ?? this.value,
     );
 
-  static EntityWithStringEnumPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json) {
+  static EntityWithStringEnumPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,9 +36,30 @@ class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
   }
+
+  static Future<EntityWithStringEnumPropertyWithDefaultValue?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithStringEnumPropertyWithDefaultValue(
+        value: (await safeParseStrEnumExprAsync(json['value'], parse: EntityWithStringEnumPropertyWithDefaultValueValue.fromJson, fallback: EntityWithStringEnumPropertyWithDefaultValueValue.second,))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await value?.preload(context);
+    } catch (e, st) {
+      return;
+    }
+  }
 }
 
-enum EntityWithStringEnumPropertyWithDefaultValueValue {
+enum EntityWithStringEnumPropertyWithDefaultValueValue implements Preloadable {
   first('first'),
   second('second'),
   third('third');
@@ -78,8 +99,28 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue {
      }
   }
 
+  Future<void> preload(Map<String, dynamic> context) async {}
 
-  static EntityWithStringEnumPropertyWithDefaultValueValue? fromJson(String? json) {
+  static EntityWithStringEnumPropertyWithDefaultValueValue? fromJson(String? json,) {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'first':
+        return EntityWithStringEnumPropertyWithDefaultValueValue.first;
+        case 'second':
+        return EntityWithStringEnumPropertyWithDefaultValueValue.second;
+        case 'third':
+        return EntityWithStringEnumPropertyWithDefaultValueValue.third;
+      }
+      return null;
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  static Future<EntityWithStringEnumPropertyWithDefaultValueValue?> parse(String? json,) async {
     if (json == null) {
       return null;
     }
