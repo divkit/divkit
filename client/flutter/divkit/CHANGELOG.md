@@ -1,5 +1,6 @@
 ## 0.3.0-pre+3
 
+* Add div-pager
 * Provide instant rendering of DivKitView, asynchronous parsing and preloading
 * Change the layout system, refuse ParentData
 * Add call tracking tools

@@ -22,6 +22,7 @@ class DivWidget extends StatelessWidget {
               divImage: (data) => DivImageWidget(data),
               divInput: (data) => DivInputWidget(data),
               divCustom: (data) => DivCustomWidget(data),
+              divPager: (data) => DivPagerWidget(data),
               orElse: () {
                 logger.warning("Attempt to render an unsupported div!");
                 return DivErrorWidget(

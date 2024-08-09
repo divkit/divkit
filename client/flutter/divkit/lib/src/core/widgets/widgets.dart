@@ -7,5 +7,6 @@ export 'div_widget.dart';
 export 'gallery/div_gallery_widget.dart';
 export 'image/div_image_widget.dart';
 export 'input/div_input_widget.dart';
+export 'pager/div_pager_widget.dart';
 export 'state/div_state_widget.dart';
 export 'text/div_text_widget.dart';
