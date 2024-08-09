@@ -102,7 +102,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.3.0-pre+2"
+    version: "0.3.0-pre+3"
   equatable:
     dependency: "direct main"
     description:

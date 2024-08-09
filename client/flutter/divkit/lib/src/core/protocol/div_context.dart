@@ -12,6 +12,9 @@ import 'package:flutter/widgets.dart';
 abstract class DivContext {
   const DivContext();
 
+  /// Allows to get the context at the DivKitView level.
+  BuildContext get buildContext;
+
   /// Allows to manage variables and reactively rebuild the interface.
   DivVariableManager get variableManager;
 
@@ -44,7 +47,10 @@ abstract class DivContext {
 }
 
 class DivRootContext extends DivContext {
-  BuildContext? buildContext;
+  BuildContext? _buildContext;
+
+  @override
+  BuildContext get buildContext => _buildContext!;
 
   DivDataProvider? dataProvider;
 
@@ -111,7 +117,9 @@ class DivRootContext extends DivContext {
 
   DivTriggerManager? triggerManager;
 
-  DivRootContext([this.buildContext]);
+  DivRootContext([
+    BuildContext? buildContext,
+  ]) : _buildContext = buildContext;
 
   static Future<DivRootContext?> init({
     required BuildContext context,
@@ -227,8 +235,8 @@ class DivRootContext extends DivContext {
 
   @override
   FocusNode? getFocusNode(String divId) {
-    if (buildContext?.mounted ?? false) {
-      return FocusScope.of(buildContext!).getById(divId);
+    if (buildContext.mounted) {
+      return FocusScope.of(buildContext).getById(divId);
     }
     return null;
   }
@@ -243,7 +251,6 @@ class DivRootContext extends DivContext {
     await dataProvider?.dispose();
     await triggerManager?.dispose();
 
-    buildContext = null;
     dataProvider = null;
     _loggerContext = null;
     _stateManager = null;
