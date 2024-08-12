@@ -43,12 +43,12 @@ public final class GalleryBlock: BlockWithTraits {
     }
   }
 
-  public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
+  public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     switch heightTrait {
     case let .fixed(value):
       return value
     case let .intrinsic(_, minSize, maxSize):
-      let height = contentSize.height
+      let height = model.intrinsicSize(width: width).height
       return clamp(height, min: minSize, max: maxSize)
     case .weighted:
       return 0
