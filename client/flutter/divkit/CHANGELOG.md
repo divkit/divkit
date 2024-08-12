@@ -1,6 +1,5 @@
-## 0.3.0-pre+3
+## 0.3.0
 
-* Add div-pager
 * Provide instant rendering of DivKitView, asynchronous parsing and preloading
 * Change the layout system, refuse ParentData
 * Add call tracking tools
@@ -13,8 +12,9 @@
 * Isolate problematic divs with parsing errors
 * Expansion of logged incidents
 * Public BuildContext in DivContext
+* Add div-pager
 
-## Migration 0.2 → 0.3.0-pre+3
+## Migration 0.2 → 0.3.0
 
 * Now DTO has changed the folder from schema to schema
 * Now DefaultDivKitData needs to be built and preloaded for instant rendering
