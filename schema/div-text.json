@@ -164,6 +164,29 @@
           "platforms": [
             "web"
           ]
+        },
+        "accessibility": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string",
+              "$description": "translations.json#/div_accessibility_description"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "none",
+                "button",
+                "image",
+                "text",
+                "auto"
+              ],
+              "default_value": "auto",
+              "supports_expressions": false,
+              "$description": "translations.json#/div_accessibility_type"
+            }
+          },
+          "platforms": []  
         }
       },
       "required": [
