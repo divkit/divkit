@@ -19,11 +19,21 @@ public struct IdAndCardId: Hashable {
 }
 
 public final class DivBlockStateStorage {
+  public struct ChangeEvent {
+    public let id: IdAndCardId
+    public let state: ElementState
+  }
+
   public private(set) var states: BlocksState
   private var statesById: [IdAndCardId: ElementState] = [:]
   private var focusedElement: UIElementPath?
   private var focusedElementById: IdAndCardId?
   private let lock = AllocatedUnfairLock()
+  private let stateUpdatesPipe = SignalPipe<ChangeEvent>()
+
+  var stateUpdates: Signal<ChangeEvent> {
+    stateUpdatesPipe.signal
+  }
 
   public init(states: BlocksState = [:]) {
     self.states = states
@@ -53,16 +63,20 @@ public final class DivBlockStateStorage {
   }
 
   public func setState(path: UIElementPath, state: ElementState) {
+    let id = IdAndCardId(path: path)
     lock.withLock {
-      statesById[IdAndCardId(path: path)] = nil
+      statesById[id] = nil
       states[path] = state
     }
+    stateUpdatesPipe.send(ChangeEvent(id: id, state: state))
   }
 
   public func setState(id: String, cardId: DivCardID, state: ElementState) {
+    let id = IdAndCardId(id: id, cardId: cardId)
     lock.withLock {
-      statesById[IdAndCardId(id: id, cardId: cardId)] = state
+      statesById[id] = state
     }
+    stateUpdatesPipe.send(ChangeEvent(id: id, state: state))
   }
 
   public func setFocused(isFocused: Bool, element: IdAndCardId) {

@@ -17,8 +17,11 @@ final class DivTriggerTests: XCTestCase {
     persistentValuesStorage: DivPersistentValuesStorage()
   )
 
+  private lazy var blockStateStorage = DivBlockStateStorage()
+
   private lazy var triggerStorage = DivTriggersStorage(
     variablesStorage: variablesStorage,
+    stateUpdates: blockStateStorage.stateUpdates,
     actionHandler: actionHandler,
     persistentValuesStorage: DivPersistentValuesStorage()
   )
@@ -349,6 +352,75 @@ final class DivTriggerTests: XCTestCase {
     variablesStorage.update(path: pathState1, name: "should_trigger", value: .bool(true))
     variablesStorage.update(path: pathState2, name: "should_trigger", value: .bool(true))
 
+    XCTAssertEqual(triggersCount, 0)
+  }
+
+  func test_DoesLocalTrigger_WhenTabIsActive() throws {
+    let variables: DivVariables = [
+      "should_trigger": .bool(false),
+    ]
+    let tabsPath = UIElementPath("card_id") + "tabs_id"
+    let tabPath = tabsPath + "0"
+
+    variablesStorage.initializeIfNeeded(path: tabPath, variables: variables)
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.setIfNeeded(path: tabPath, triggers: [trigger])
+    blockStateStorage.setState(
+      path: tabsPath,
+      state: TabViewState(selectedPageIndex: 0, countOfPages: 2)
+    )
+
+    variablesStorage.update(path: tabPath, name: "should_trigger", value: .bool(true))
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_DoesNotLocalTrigger_WhenTabIsInactive() throws {
+    let variables: DivVariables = [
+      "should_trigger": .bool(false),
+    ]
+    let tabsPath = UIElementPath("card_id") + "tabs_id"
+    let tabPath = tabsPath + "0"
+
+    variablesStorage.initializeIfNeeded(path: tabPath, variables: variables)
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.setIfNeeded(path: tabPath, triggers: [trigger])
+    blockStateStorage.setState(
+      path: tabsPath,
+      state: TabViewState(selectedPageIndex: 1, countOfPages: 2)
+    )
+
+    variablesStorage.update(path: tabPath, name: "should_trigger", value: .bool(true))
+    XCTAssertEqual(triggersCount, 0)
+  }
+
+  func test_DoesNotLocalTrigger_WhenTabIsInactiveAndTriggersInChildElement() throws {
+    let variables: DivVariables = [
+      "should_trigger": .bool(false),
+    ]
+    let path = UIElementPath("card_id") + "tabs_id" + "0" + "5"
+
+    variablesStorage.initializeIfNeeded(path: path, variables: variables)
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    blockStateStorage.setState(
+      id: "tabs_id",
+      cardId: "card_id",
+      state: TabViewState(selectedPageIndex: 1, countOfPages: 2)
+    )
+
+    variablesStorage.update(path: path, name: "should_trigger", value: .bool(true))
     XCTAssertEqual(triggersCount, 0)
   }
 

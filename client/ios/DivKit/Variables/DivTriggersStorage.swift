@@ -34,6 +34,7 @@ public final class DivTriggersStorage {
 
   public init(
     variablesStorage: DivVariablesStorage,
+    stateUpdates: Signal<DivBlockStateStorage.ChangeEvent> = .empty,
     actionHandler: DivActionHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter? = nil
@@ -42,6 +43,10 @@ public final class DivTriggersStorage {
     self.actionHandler = actionHandler
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter ?? DefaultDivReporter()
+
+    stateUpdates.addObserver { [weak self] stateEvent in
+      self?.handleStateEvent(stateEvent)
+    }.dispose(in: disposePool)
   }
 
   public func set(
@@ -114,19 +119,30 @@ public final class DivTriggersStorage {
   }
 
   func enableTriggers(path: UIElementPath) {
-    let item = lock.withLock {
-      let item = triggersByPath[path]
-      item?.active = true
-      return item
-    }
-    guard let item else { return }
-
-    runActions(path: path, item: item, changedVariablesNames: nil)
+    enableTriggers(predicate: { $0.starts(with: path) })
   }
 
   func disableTriggers(path: UIElementPath) {
+    disableTriggers(predicate: { $0.starts(with: path) })
+  }
+
+  private func enableTriggers(predicate: (UIElementPath) -> Bool) {
+    let items = lock.withLock {
+      let triggers = triggersByPath.filter { predicate($0.key) }
+      triggers.forEach { $0.value.active = true }
+      return triggers
+    }
+
+    items.forEach { path, item in
+      runActions(path: path, item: item, changedVariablesNames: nil)
+    }
+  }
+
+  private func disableTriggers(predicate: (UIElementPath) -> Bool) {
     lock.withLock {
-      triggersByPath[path]?.active = false
+      triggersByPath
+        .filter { predicate($0.key) }
+        .forEach { $0.value.active = false }
     }
   }
 
@@ -175,20 +191,24 @@ public final class DivTriggersStorage {
       }
     }
   }
-}
 
-extension DivTriggersStorage: ElementStateObserver {
-  public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
-    if let tabState = state as? TabViewState {
+  private func handleStateEvent(_ stateEvent: DivBlockStateStorage.ChangeEvent) {
+    if let tabState = stateEvent.state as? TabViewState {
       let activeTab = Int(tabState.selectedPageIndex)
 
       for index in 0..<tabState.countOfPages {
         if index != activeTab {
-          disableTriggers(path: path + index)
+          disableTriggers(predicate: {
+            $0.cardId == stateEvent.id.cardId
+            && $0.findTabId(stateEvent.id.id) == String(index)
+          })
         }
       }
 
-      enableTriggers(path: path + activeTab)
+      enableTriggers(predicate: {
+        $0.cardId == stateEvent.id.cardId
+        && $0.findTabId(stateEvent.id.id) == String(activeTab)
+      })
     }
   }
 }
@@ -214,5 +234,16 @@ extension UIElementPath {
       currPath = currPath?.parent
     }
     return false
+  }
+
+  fileprivate func findTabId(_ tabsId: String) -> String? {
+    var currPath: UIElementPath? = self
+    while let path = currPath {
+      if path.parent?.leaf == tabsId {
+        return path.leaf
+      }
+      currPath = currPath?.parent
+    }
+    return nil
   }
 }
