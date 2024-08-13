@@ -17,6 +17,7 @@
     import { flattenTransition } from '../../utils/flattenTransition';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivStateData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -591,4 +592,8 @@
             {/each}
         </div>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

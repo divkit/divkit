@@ -39,7 +39,6 @@
     let columnsMinWidth: number[] = [];
     let rowsMinHeight: number[] = [];
     let rowCount = 0;
-    let hasLayoutError = false;
     let contentVAlign: AlignmentVerticalMapped = 'start';
     let contentHAlign: AlignmentHorizontal = 'start';
 
@@ -113,7 +112,6 @@
         rowsWeight = [];
         columnsMinWidth = [];
         rowsMinHeight = [];
-        hasLayoutError = false;
 
         resultItems = items.map((item, index) => {
             const childInfo = $childStore[index];
@@ -218,24 +216,20 @@
         'grid-template-columns': gridCalcTemplates(columnsWeight, columnsMinWidth, columnCount),
         'grid-template-rows': gridCalcTemplates(rowsWeight, rowsMinHeight, rowCount)
     };
-
-    $: hasError = hasLayoutError;
 </script>
 
-{#if !hasError}
-    <Outer
-        cls={genClassName('grid', css, mods)}
-        {componentContext}
-        {style}
-        {layoutParams}
-        parentOf={items.map(it => it.json)}
-        {replaceItems}
-    >
-        {#each resultItems as item}
-            <Unknown
-                componentContext={item.componentContext}
-                layoutParams={item.layoutParams}
-            />
-        {/each}
-    </Outer>
-{/if}
+<Outer
+    cls={genClassName('grid', css, mods)}
+    {componentContext}
+    {style}
+    {layoutParams}
+    parentOf={items.map(it => it.json)}
+    {replaceItems}
+>
+    {#each resultItems as item}
+        <Unknown
+            componentContext={item.componentContext}
+            layoutParams={item.layoutParams}
+        />
+    {/each}
+</Outer>

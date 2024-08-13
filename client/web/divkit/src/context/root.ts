@@ -25,10 +25,6 @@ export interface FocusableMethods {
 export interface RootCtxValue {
     logStat(type: string, action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
     hasTemplate(templateName: string): boolean;
-    processTemplate(json: MaybeMissing<DivBaseData>, templateContext: TemplateContext): {
-        json: MaybeMissing<DivBaseData>;
-        templateContext: TemplateContext;
-    };
     genId(key: string): string;
     genClass(key: string): string;
     execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
@@ -69,7 +65,7 @@ export interface RootCtxValue {
         templateContext
     }: {
         type: 'mount' | 'update' | 'destroy';
-        node: HTMLElement;
+        node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;

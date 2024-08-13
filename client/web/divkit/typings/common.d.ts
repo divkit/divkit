@@ -248,7 +248,7 @@ export type CustomActionCallback = (action: Action & { url: string }) => void;
 
 export type ComponentCallback = (details: {
     type: 'mount' | 'update' | 'destroy';
-    node: HTMLElement;
+    node: HTMLElement | null;
     json: DivBase;
     origJson: DivBase | undefined;
     templateContext: TemplateContext;

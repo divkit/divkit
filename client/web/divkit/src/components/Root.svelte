@@ -378,7 +378,7 @@
         templateContext
     }: {
         type: 'mount' | 'update' | 'destroy';
-        node: HTMLElement;
+        node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
@@ -1321,7 +1321,6 @@
     setContext<RootCtxValue>(ROOT_CTX, {
         logStat,
         hasTemplate,
-        processTemplate,
         genId,
         genClass,
         execAction: execActionInternal,
