@@ -157,12 +157,16 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(StringToString)
         registry.register(StringToColor)
         registry.register(StringToUrl)
+        registry.register(DictToString)
+        registry.register(ArrayToString)
         registry.registerMethod(IntegerToString)
         registry.registerMethod(NumberToString)
         registry.registerMethod(BooleanToString)
         registry.registerMethod(ColorToString)
         registry.registerMethod(UrlToString)
         registry.registerMethod(StringToString)
+        registry.registerMethod(DictToString)
+        registry.registerMethod(ArrayToString)
 
         // Variable functions
         registry.register(GetIntegerValue)
