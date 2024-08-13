@@ -114,6 +114,7 @@
         "jest-environment-jsdom": "29.6.2",
         "jest-html-reporter": "3.10.1",
         "lottie-web": "5.11.0",
+        "markdown-it": "14.1.0",
         "mini-css-extract-plugin": "2.7.5",
         "peggy": "3.0.2",
         "postcss": "8.4.31",

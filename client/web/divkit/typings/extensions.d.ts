@@ -6,6 +6,8 @@ export class Gesture implements DivExtension {}
 
 declare class Lottie implements DivExtension {}
 
+declare class Markdown implements DivExtension {}
+
 interface Params {
     lottie_url?: string;
     lottie_json?: object;
@@ -40,3 +42,11 @@ interface LoadAnimationParamsWidthData {
 type LoadAnimation = (opts: LoadAnimationParamsWidthPath | LoadAnimationParamsWidthData) => AnimationItem;
 
 export function lottieExtensionBuilder(loadAnimation: LoadAnimation): typeof Lottie;
+
+export type MarkdownProcessor = (markdown: string) => string;
+
+export interface MarkdownOptions {
+    cssClass?: string;
+}
+
+export function markdownExtensionBuilder(process: MarkdownProcessor, options?: MarkdownOptions): typeof Markdown;

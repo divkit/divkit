@@ -744,7 +744,7 @@
 
     function unmountExtensions(): void {
         if (extensions && currentNode) {
-            const ctx = rootCtx.getExtensionContext();
+            const ctx = rootCtx.getExtensionContext(componentContext);
             extensions.forEach(it => {
                 it.unmountView?.(currentNode, ctx);
             });
@@ -763,7 +763,7 @@
             unmountExtensions();
 
             if (Array.isArray(componentContext.json.extensions)) {
-                const ctx = rootCtx.getExtensionContext();
+                const ctx = rootCtx.getExtensionContext(componentContext);
                 extensions = componentContext.json.extensions.map(it => {
                     const id = it.id;
                     if (!id) {
@@ -782,7 +782,13 @@
         });
     }
 
-    function updateDevtool(): void {
+    function afterInstanceUpdate(): void {
+        if (extensions?.length) {
+            const ctx = rootCtx.getExtensionContext(componentContext);
+            extensions.forEach(instance => {
+                instance.updateView?.(currentNode, ctx);
+            });
+        }
         if (dev) {
             dev.update(componentContext);
         }
@@ -969,7 +975,7 @@
         componentContext.execAnyActions(blurActions);
     }
 
-    afterUpdate(updateDevtool);
+    afterUpdate(afterInstanceUpdate);
 
     onDestroy(() => {
         prevChilds.forEach(id => {

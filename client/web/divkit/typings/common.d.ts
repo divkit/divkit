@@ -298,6 +298,7 @@ export interface DivExtensionContext {
     processExpressions<T>(t: T): T;
     execAction(action: Action | VisibilityAction | DisappearAction): void;
     logError(error: WrappedError): void;
+    getComponentProperty<T>(property: string): T;
 }
 
 export interface DivExtensionClass {
@@ -307,6 +308,8 @@ export interface DivExtensionClass {
 
 export interface DivExtension {
     mountView?(node: HTMLElement, context: DivExtensionContext): void;
+
+    updateView?(node: HTMLElement, context: DivExtensionContext): void;
 
     unmountView?(node: HTMLElement, context: DivExtensionContext): void;
 }

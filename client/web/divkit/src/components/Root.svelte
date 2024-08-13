@@ -1180,7 +1180,7 @@
         }
     }
 
-    function getExtensionContext(): DivExtensionContext {
+    function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
             variables,
             processExpressions<T>(t: T) {
@@ -1190,7 +1190,10 @@
                 ) as T;
             },
             execAction,
-            logError
+            logError,
+            getComponentProperty<T>(property: string): T {
+                return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
+            },
         };
     }
 

@@ -28,7 +28,7 @@
     ) {
         desc = rootCtx.customComponents.get(componentContext.json.custom_type)!;
         if (typeof desc.template === 'function') {
-            const ctx = rootCtx.getExtensionContext();
+            const ctx = rootCtx.getExtensionContext(componentContext);
             const variables: Map<string, string | number | boolean | unknown[] | object> = new Map();
             for (const [key, varaible] of ctx.variables) {
                 variables.set(key, varaible.getValue());
@@ -71,7 +71,7 @@
 
     onMount(() => {
         if (customElem && 'divKitApiCallback' in customElem && typeof customElem.divKitApiCallback === 'function') {
-            const ctx = rootCtx.getExtensionContext();
+            const ctx = rootCtx.getExtensionContext(componentContext);
             customElem.divKitApiCallback(ctx);
         }
     });
