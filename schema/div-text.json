@@ -186,7 +186,9 @@
               "$description": "translations.json#/div_accessibility_type"
             }
           },
-          "platforms": []  
+          "platforms": [
+            "android"
+          ]
         }
       },
       "required": [

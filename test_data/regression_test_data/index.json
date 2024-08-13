@@ -486,6 +486,29 @@
       "file": "accessibility/descriptions.json"
     },
     {
+      "title": "Accessibility image range",
+      "tags": [
+        "Accessibility"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Set focus on text",
+        "Listen to Screen reader",
+        "Set focus on image in text",
+        "Listen to Screen reader",
+        "Click on image in text"
+      ],
+      "expected_results": [
+        "After setting focus to text you can hear the text itself.",
+        "After setting focus on image, you should here that this image is a button and you can click on it to trigger an action.",
+        "After click on image action triggered"
+      ],
+      "file": "accessibility/image_and_clickable_range.json"
+    },
+    {
       "title": "Accessibility types",
       "tags": [
         "Accessibility"

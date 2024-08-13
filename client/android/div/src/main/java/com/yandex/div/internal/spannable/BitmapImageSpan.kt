@@ -27,7 +27,10 @@ internal class BitmapImageSpan @JvmOverloads constructor(
     @ColorInt tintColor: Int? = null,
     tintMode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN,
     isSquare: Boolean = true,
-    private val anchorPoint: AnchorPoint = AnchorPoint.LINE_BOTTOM
+    internal val accessibilityDescription: String?,
+    internal val accessibilityType: String,
+    internal val onClickAccessibilityAction: OnAccessibilityClickAction?,
+    internal val anchorPoint: AnchorPoint = AnchorPoint.LINE_BOTTOM
 ) : PositionAwareReplacementSpan() {
 
     enum class AnchorPoint {
@@ -36,6 +39,11 @@ internal class BitmapImageSpan @JvmOverloads constructor(
     }
 
     private val drawable: Drawable
+
+    internal var drawnTop = 0f
+    internal var drawnBottom = 0f
+    internal var drawnLeft = 0f
+    internal var drawnRight = 0f
 
     init {
         drawable = BitmapDrawable(context.resources, bitmap)
@@ -99,6 +107,11 @@ internal class BitmapImageSpan @JvmOverloads constructor(
         }
         val offset = getImageOffset(drawable.bounds.height(), paint)
         val translationY = anchor - drawable.bounds.bottom + offset
+
+        drawnBottom = translationY + drawable.bounds.bottom + offset
+        drawnTop = translationY + offset
+        drawnLeft = x
+        drawnRight = x + drawable.bounds.right
         canvas.translate(x, translationY)
         drawable.draw(canvas)
         canvas.restore()
@@ -109,5 +122,9 @@ internal class BitmapImageSpan @JvmOverloads constructor(
         val textCenter = (paint.ascent() + paint.descent()) / 2.0f * textScale
         val imageCenter = -imageHeight.toFloat() / 2.0f
         return textCenter - imageCenter
+    }
+
+    internal fun interface OnAccessibilityClickAction {
+        fun perform()
     }
 }
