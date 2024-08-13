@@ -96,7 +96,7 @@ extension DivStoredValue {
       } else {
         nil
       }
-    case .bool:
+    case .bool, .boolean:
       switch value.lowercased() {
       case "0", "false":
         .bool(false)

@@ -19,22 +19,48 @@ final class DivPersistentValuesStorageTests: XCTestCase {
     storage = makeStorage()
   }
 
-  func test_setValue_GetSameValue() {
-    let value = DivStoredValue(name: "var", value: "value", type: .string, lifetimeInSec: 1)
-    storage.set(value: value)
-    XCTAssertEqual(
-      storage.get(name: value.name),
-      value.value
-    )
+  func test_get_UnknownValue_ReturnsNil() {
+    XCTAssertNil(storage.get(name: "unknown_var"))
   }
 
-  func test_setColorValue_GetSameValue() {
-    let value = DivStoredValue(name: "var", value: "#FFFFFF", type: .color, lifetimeInSec: 1)
-    storage.set(value: value)
-    XCTAssertEqual(
-      storage.get(name: value.name),
-      color(value.value)
+  func test_set_StringValue() {
+    storage.set(
+      value: DivStoredValue(name: "var", value: "value", type: .string, lifetimeInSec: 1)
     )
+
+    XCTAssertEqual(storage.get(name: "var"), "value")
+  }
+
+  func test_set_ColorValue() {
+    storage.set(
+      value: DivStoredValue(name: "var", value: "#FFFFFF", type: .color, lifetimeInSec: 1)
+    )
+
+    XCTAssertEqual(storage.get(name: "var"), color("#FFFFFF"))
+  }
+
+  func test_set_BooleanValue_false() {
+    storage.set(
+      value: DivStoredValue(name: "var", value: "false", type: .boolean, lifetimeInSec: 1)
+    )
+
+    XCTAssertEqual(storage.get(name: "var"), false)
+  }
+
+  func test_set_BooleanValue_true() {
+    storage.set(
+      value: DivStoredValue(name: "var", value: "true", type: .boolean, lifetimeInSec: 1)
+    )
+
+    XCTAssertEqual(storage.get(name: "var"), true)
+  }
+
+  func test_set_BooleanValue_1() {
+    storage.set(
+      value: DivStoredValue(name: "var", value: "1", type: .boolean, lifetimeInSec: 1)
+    )
+
+    XCTAssertEqual(storage.get(name: "var"), true)
   }
 
   func test_getSameValueInDay() {
