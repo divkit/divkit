@@ -1,7 +1,7 @@
 ## 30.13.0
 
 # Android Client:
-* Now `next_focus_ids.after` supports accessibility order.
+* Now `next_focus_ids.forward` supports accessibility order.
 * Now `div-gallery` in `paging` scroll mode will be centered like in other platforms.
 * Fixed visibility action tracking when `DivData` moved to another `Div2View`.
 * Fixed multiple state switching within pager items.
