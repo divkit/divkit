@@ -62,7 +62,6 @@ import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
 import com.yandex.div.core.view2.reuse.ComplexRebindReporter
 import com.yandex.div.core.view2.reuse.RebindTask
 import com.yandex.div.core.view2.reuse.ReusableTokenList
-import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
@@ -129,10 +128,10 @@ class Div2View private constructor(
         get() = viewComponent.releaseViewVisitor
     internal val mediaReleaseViewVisitor: MediaReleaseViewVisitor
         get() = viewComponent.mediaReleaseViewVisitor
-    private var _expressionsRuntime: ExpressionsRuntime? = null
+    internal var expressionsRuntime: ExpressionsRuntime? = null
     private var oldExpressionsRuntime: ExpressionsRuntime? = null
     private val variableController: VariableController?
-        get() = _expressionsRuntime?.variableController
+        get() = expressionsRuntime?.variableController
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
 
@@ -197,10 +196,10 @@ class Div2View private constructor(
 
     private fun updateExpressionsRuntime(data: DivData? = divData, tag: DivDataTag = dataTag) {
         data ?: return
-        oldExpressionsRuntime = _expressionsRuntime
-        _expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data, this)
-        _expressionsRuntime?.updateSubscriptions()
-        if (oldExpressionsRuntime != _expressionsRuntime) {
+        oldExpressionsRuntime = expressionsRuntime
+        expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data, this)
+        expressionsRuntime?.runtimeStore?.updateSubscriptions()
+        if (oldExpressionsRuntime != expressionsRuntime) {
             oldExpressionsRuntime?.clearBinding()
         }
         bindingContext = bindingContext.getFor(expressionResolver)
@@ -209,10 +208,10 @@ class Div2View private constructor(
     private fun attachVariableTriggers() {
         if (bindOnAttachEnabled) {
             setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
-                _expressionsRuntime?.onAttachedToWindow(this)
+                expressionsRuntime?.onAttachedToWindow(this)
             }
         } else {
-            _expressionsRuntime?.onAttachedToWindow(this)
+            expressionsRuntime?.onAttachedToWindow(this)
         }
     }
 
@@ -327,7 +326,7 @@ class Div2View private constructor(
         div2Component.divBinder.attachIndicators()
 
         sendCreationHistograms()
-        oldExpressionsRuntime = _expressionsRuntime
+        oldExpressionsRuntime = expressionsRuntime
         persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
         return result
     }
@@ -387,7 +386,7 @@ class Div2View private constructor(
         }
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
-        oldExpressionsRuntime = _expressionsRuntime
+        oldExpressionsRuntime = expressionsRuntime
         persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
         return result
     }
@@ -999,7 +998,7 @@ class Div2View private constructor(
     override fun getView() = this
 
     override fun getExpressionResolver(): ExpressionResolver {
-        return _expressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
+        return expressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
     }
 
     override fun showTooltip(tooltipId: String) {
@@ -1072,34 +1071,17 @@ class Div2View private constructor(
         return null
     }
 
-    /**
-     * @return exception if setting variable failed, null otherwise.
-     * @param valueMutation - gets variable as argument for modification opportunities
-     */
-    internal fun <T : Variable> setVariable(name: String, valueMutation: (T) -> T): VariableMutationException? {
-        val mutableVariable = variableController?.getMutableVariable(name) ?: run {
-            val error = VariableMutationException("Variable '$name' not defined!")
-            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
-            return error
-        }
-
-        try {
-            val newValue = valueMutation.invoke(mutableVariable as T)
-            mutableVariable.setValue(newValue)
-        } catch (e: VariableMutationException) {
-            val error = VariableMutationException("Variable '$name' mutation failed!", e)
-            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
-            return error
-        }
-        return null
-    }
-
     fun applyTimerCommand(id: String, command: String) {
         divTimerEventDispatcher?.changeState(id, command)
     }
 
-    fun applyVideoCommand(divId: String, command: String): Boolean {
-        return divVideoActionHandler.handleAction(this, divId, command)
+    @JvmOverloads
+    fun applyVideoCommand(
+        divId: String,
+        command: String,
+        expressionResolver: ExpressionResolver = getExpressionResolver()
+    ): Boolean {
+        return divVideoActionHandler.handleAction(this, divId, command, expressionResolver)
     }
 
     internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)

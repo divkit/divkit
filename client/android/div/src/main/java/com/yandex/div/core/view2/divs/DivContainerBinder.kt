@@ -242,8 +242,17 @@ internal class DivContainerBinder @Inject constructor(
             if (patchShift > NO_PATCH_SHIFT) {
                 shift += patchShift
             } else {
-                val childBindingContext = bindingContext.getFor(item.expressionResolver)
-                binder.bind(childBindingContext, childView, item.div, path)
+                val id = item.div.value().getChildPathUnit(index)
+
+                setPathToRuntimeWith(
+                    divView = bindingContext.divView,
+                    pathUnit = id,
+                    parentPath = path.fullPath,
+                    variables = item.div.value().variables,
+                    resolver = item.expressionResolver
+                )
+
+                binder.bind(bindingContext, childView, item.div, path.appendDiv(id))
                 childView.bindChildAlignment(
                     newDiv,
                     oldDiv,

@@ -260,7 +260,9 @@ internal class DivStateBinder @Inject constructor(
                     override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
                         this@observeStateIdVariable.valueUpdater = valueUpdater
                     }
-                })
+                },
+                path = divStatePath
+            )
         addSubscription(subscription)
     }
 

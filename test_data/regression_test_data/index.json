@@ -1487,7 +1487,11 @@
     },
     {
       "title": "Local variables",
+      "automated": [
+        "android"
+      ],
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [

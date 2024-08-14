@@ -15,6 +15,7 @@ import com.yandex.div.core.view2.Div2View;
 import com.yandex.div.core.view2.items.DivItemChangeActionHandler;
 import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
+import com.yandex.div.internal.core.VariableMutationHandler;
 import com.yandex.div.json.expressions.ExpressionResolver;
 import com.yandex.div2.DivAction;
 import com.yandex.div2.DivDisappearAction;
@@ -390,7 +391,7 @@ public class DivActionHandler {
                 return false;
             }
             try {
-                div2View.setVariable(name, value);
+                VariableMutationHandler.setVariable(div2View, name, value, resolver);
             } catch (VariableMutationException e) {
                 Assert.fail("Variable '" + name + "' mutation failed: " + e.getMessage(), e);
                 return false;
@@ -437,7 +438,7 @@ public class DivActionHandler {
                 return false;
             }
 
-            return div2View.applyVideoCommand(id, command);
+            return div2View.applyVideoCommand(id, command, resolver);
         } else if (DivItemChangeActionHandler.canHandle(action)) {
             return DivItemChangeActionHandler.handleAction(uri, view, resolver);
         } else if (StoredValuesActionHandler.canHandle(action)) {

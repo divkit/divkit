@@ -19,6 +19,7 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
+import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivPathUtils.findDivState
@@ -26,6 +27,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -38,6 +40,7 @@ import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.FixedLineHeightView
 import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
+import com.yandex.div.data.Variable
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -89,6 +92,7 @@ import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
 import com.yandex.div2.DivTransform
+import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
 import kotlin.math.max
@@ -599,6 +603,39 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
     applyAlignment(div.alignmentHorizontal?.evaluate(resolver),
         div.alignmentVertical?.evaluate(resolver))
 }
+
+internal fun getOrCreateRuntime(
+    divView: Div2View,
+    path: String,
+    parentPath: String?,
+    variables: List<DivVariable>? = null
+): ExpressionsRuntime? {
+    return divView.expressionsRuntime?.runtimeStore?.getOrCreateRuntime(
+        path = path,
+        parentPath = parentPath,
+        variables = variables?.toVariables()
+    ).apply {
+        Log.d("hi?", "return $this for path = $path")
+    }
+}
+
+internal fun getRuntimeFor(divView: Div2View, resolver: ExpressionResolver) =
+    divView.expressionsRuntime?.runtimeStore?.getRuntimeWithOrNull(resolver)
+
+internal fun setPathToRuntimeWith(
+    divView: Div2View,
+    pathUnit: String,
+    parentPath: String,
+    variables: List<DivVariable>?,
+    resolver: ExpressionResolver,
+) = divView.expressionsRuntime?.runtimeStore?.setPathToRuntimeWith(
+        path = "$parentPath/$pathUnit",
+        parentPath = parentPath,
+        variables = variables?.toVariables(),
+        resolver = resolver
+    )
+
+internal fun DivBase.getChildPathUnit(index: Int) = id ?: "child#$index"
 
 /**
  * Binds all descendants of [this] which are [DivStateLayout]s corresponding to DivStates in [div]

@@ -30,4 +30,8 @@ internal class LocalVariableController(
 
     override fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit) =
         delegate.setOnAnyVariableChangeCallback(callback)
+
+    override fun cleanupSubscriptions() = delegate.cleanupSubscriptions()
+
+    override fun restoreSubscriptions() = delegate.restoreSubscriptions()
 }

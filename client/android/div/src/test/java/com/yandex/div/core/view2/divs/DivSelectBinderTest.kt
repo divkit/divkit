@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.expression.variables.TwoWayVariableBinder
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -26,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 class DivSelectBinderTest : DivBinderTest() {
     private val divTypefaceResolver = mock<DivTypefaceResolver>()
     private val variableBinder = mock<TwoWayStringVariableBinder> {
-        on { bindVariable(any(), any(), any()) } doReturn mock()
+        on { bindVariable(any(), any(), any(), any()) } doReturn mock()
     }
     private val errorCollectors = mock<ErrorCollectors> {
         on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn mock()
@@ -40,6 +41,7 @@ class DivSelectBinderTest : DivBinderTest() {
         errorCollectors = errorCollectors
     )
 
+    private val path = DivStatePath(0)
     private val div = UnitTestData(SELECT_DIR, "with_options.json").div as Div.Select
     private val divSelect = div.value
     private val view = (viewCreator.create(div, ExpressionResolver.EMPTY) as DivSelectView).apply {
@@ -48,16 +50,16 @@ class DivSelectBinderTest : DivBinderTest() {
 
     @Test
     fun `bind value_variable`() {
-        underTest.bindView(bindingContext, view, divSelect)
+        underTest.bindView(bindingContext, view, divSelect, path)
 
-        verify(variableBinder).bindVariable(any(), eq(divSelect.valueVariable), any())
+        verify(variableBinder).bindVariable(any(), eq(divSelect.valueVariable), any(), any())
         verifyNoMoreInteractions(variableBinder)
     }
 
     @Test
     fun `update text after variable changed`() {
-        underTest.bindView(bindingContext, view, divSelect)
-        verify(variableBinder).bindVariable(any(), any(), captor.capture())
+        underTest.bindView(bindingContext, view, divSelect, path)
+        verify(variableBinder).bindVariable(any(), any(), captor.capture(), any())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
 
@@ -73,8 +75,8 @@ class DivSelectBinderTest : DivBinderTest() {
     fun `update text and variable after option selected`() {
         val viewStateChangeListener = mock<(String) -> Unit>()
 
-        underTest.bindView(bindingContext, view, divSelect)
-        verify(variableBinder).bindVariable(any(), any(), captor.capture())
+        underTest.bindView(bindingContext, view, divSelect, path)
+        verify(variableBinder).bindVariable(any(), any(), captor.capture(), any())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
 

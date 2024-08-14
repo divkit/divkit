@@ -51,7 +51,7 @@ public class DivMarkdownExtensionHandler(
         div: DivBase
     ) {
         if (view is TextView && view is ExpressionSubscriber && div is DivText) {
-            view.subscribeOnText(div, divView.expressionResolver)
+            view.subscribeOnText(div, expressionResolver)
         }
     }
 

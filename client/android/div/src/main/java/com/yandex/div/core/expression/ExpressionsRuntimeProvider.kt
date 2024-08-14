@@ -4,6 +4,8 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.local.ROOT_RUNTIME_PATH
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -47,7 +49,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val errorCollector = errorCollectors.getOrCreate(tag, data)
         divDataTags.getOrPut(div2View, ::mutableSetOf).add(tag.id)
         ensureVariablesSynced(result.variableController, data, errorCollector)
-        result.triggersController.ensureTriggersSynced(data.variableTriggers ?: emptyList())
+        result.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
         return result
     }
 
@@ -62,8 +64,8 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     }
 
     internal fun cleanupRuntime(view: Div2View) {
-        divDataTags[view]?.forEach {
-            runtimes[it]?.cleanup()
+        divDataTags[view]?.forEach { tag ->
+            runtimes[tag]?.runtimeStore?.cleanup()
         }
         divDataTags.remove(view)
     }
@@ -140,10 +142,20 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
         val evaluator = Evaluator(evaluationContext)
 
+        val runtimeStore = RuntimeStore(evaluator, errorCollector)
+        val callback = ExpressionResolverImpl.OnCreateCallback { resolver, variableController ->
+            runtimeStore.putRuntime(
+                runtime = ExpressionsRuntime(resolver, variableController, null, runtimeStore).also {
+                    it.updateSubscriptions()
+                }
+            )
+        }
+
         val expressionResolver = ExpressionResolverImpl(
             variableController,
             evaluator,
             errorCollector,
+            callback,
         )
 
         val triggersController = TriggersController(
@@ -159,7 +171,10 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             expressionResolver,
             variableController,
             triggersController,
-        )
+            runtimeStore,
+        ).also {
+            runtimeStore.putRuntime(it, ROOT_RUNTIME_PATH)
+        }
     }
 }
 

@@ -94,7 +94,8 @@ internal class DivGridBinder @Inject constructor(
                 }
             }
             childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            divBinder.get().bind(context, childView, items[gridIndex], path)
+            val id = childDivValue.getChildPathUnit(gridIndex)
+            divBinder.get().bind(context, childView, items[gridIndex], path.appendDiv(id))
             bindLayoutParams(childView, childDivValue, resolver)
             if (childDivValue.hasSightActions) {
                 divView.bindViewToDiv(childView, items[gridIndex])

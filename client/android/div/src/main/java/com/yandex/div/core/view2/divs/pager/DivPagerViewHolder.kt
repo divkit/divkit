@@ -10,6 +10,8 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.divs.getChildPathUnit
+import com.yandex.div.core.view2.divs.setPathToRuntimeWith
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
@@ -55,7 +57,18 @@ internal class DivPagerViewHolder(
             frameLayout.setTag(R.id.div_pager_item_clip_id, position)
         }
         oldDiv = div
-        divBinder.bind(bindingContext, divView, div, path)
+        val id = div.value().getChildPathUnit(position)
+
+        setPathToRuntimeWith(
+            divView = bindingContext.divView,
+            pathUnit = id,
+            parentPath = path.fullPath,
+            variables = div.value().variables,
+            resolver = resolver
+        )
+
+        bindingContext.divView.expressionsRuntime?.runtimeStore?.showWarningIfNeeded(div.value())
+        divBinder.bind(bindingContext, divView, div, path.appendDiv(id))
     }
 
     private fun createChildView(bindingContext: BindingContext, div: Div): View {

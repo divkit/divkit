@@ -7,6 +7,8 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.state.DivPathUtils
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
@@ -41,7 +43,12 @@ internal class DivSliderBinder @Inject constructor(
 
     private var errorCollector: ErrorCollector? = null
 
-    override fun bindView(context: BindingContext, view: DivSliderView, div: DivSlider) {
+    override fun bindView(
+        context: BindingContext,
+        view: DivSliderView,
+        div: DivSlider,
+        path: DivStatePath
+    ) {
         val oldDiv = view.div
         val divView = context.divView
         errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
@@ -67,8 +74,8 @@ internal class DivSliderBinder @Inject constructor(
         )
 
         view.clearOnThumbChangedListener()
-        view.setupThumb(div, divView, expressionResolver)
-        view.setupSecondaryThumb(div, divView, expressionResolver)
+        view.setupThumb(div, divView, path, expressionResolver)
+        view.setupSecondaryThumb(div, divView, path, expressionResolver)
 
         view.setupTrack(div, expressionResolver)
         view.setupTickMarks(div, expressionResolver)
@@ -79,14 +86,19 @@ internal class DivSliderBinder @Inject constructor(
     private fun DivSliderView.setupThumb(
         div: DivSlider,
         divView: Div2View,
+        path: DivStatePath,
         resolver: ExpressionResolver
     ) {
-        observeThumbValue(div, divView)
+        observeThumbValue(div, divView, path)
         observeThumbStyle(resolver, div.thumbStyle)
         observeThumbTextStyle(resolver, div.thumbTextStyle)
     }
 
-    private fun DivSliderView.observeThumbValue(div: DivSlider, divView: Div2View) {
+    private fun DivSliderView.observeThumbValue(
+        div: DivSlider,
+        divView: Div2View,
+        path: DivStatePath,
+    ) {
         val variableName = div.thumbValueVariable ?: return
         val callbacks = object : TwoWayIntegerVariableBinder.Callbacks {
             override fun onVariableChanged(value: Long?) {
@@ -103,7 +115,7 @@ internal class DivSliderBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, variableName, callbacks))
+        addSubscription(variableBinder.bindVariable(divView, variableName, callbacks, path))
     }
 
     private fun DivSliderView.observeThumbStyle(resolver: ExpressionResolver, thumbStyle: DivDrawable) {
@@ -181,6 +193,7 @@ internal class DivSliderBinder @Inject constructor(
     private fun DivSliderView.setupSecondaryThumb(
         div: DivSlider,
         divView: Div2View,
+        path: DivStatePath,
         resolver: ExpressionResolver
     ) {
         val variableName = div.thumbSecondaryValueVariable
@@ -190,13 +203,17 @@ internal class DivSliderBinder @Inject constructor(
             return
         }
 
-        observeThumbSecondaryValue(variableName, divView)
+        observeThumbSecondaryValue(variableName, divView, path)
         div.thumbSecondaryStyle?.let { observeThumbSecondaryStyle(resolver, it) }
             ?: observeThumbSecondaryStyle(resolver, div.thumbStyle)
         observeThumbSecondaryTextStyle(resolver, div.thumbSecondaryTextStyle)
     }
 
-    private fun DivSliderView.observeThumbSecondaryValue(variableName: String, divView: Div2View) {
+    private fun DivSliderView.observeThumbSecondaryValue(
+        variableName: String,
+        divView: Div2View,
+        path: DivStatePath,
+    ) {
         val callbacks = object : TwoWayIntegerVariableBinder.Callbacks {
             override fun onVariableChanged(value: Long?) {
                 setThumbSecondaryValue(value?.toFloat(), false)
@@ -212,7 +229,7 @@ internal class DivSliderBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, variableName, callbacks))
+        addSubscription(variableBinder.bindVariable(divView, variableName, callbacks, path))
     }
 
     private fun DivSliderView.setupTrack(div: DivSlider, resolver: ExpressionResolver) {

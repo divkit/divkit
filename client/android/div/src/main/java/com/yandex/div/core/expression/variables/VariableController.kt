@@ -29,4 +29,8 @@ internal interface VariableController : VariableProvider {
     fun declare(variable: Variable)
 
     fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit)
+
+    fun cleanupSubscriptions()
+
+    fun restoreSubscriptions()
 }
