@@ -42,20 +42,24 @@ object NoneEnumValue : EnumValue("none"),
     Gallery.Scrollbar,
     LineStyle,
     Tabs.TabTitleStyle.AnimationType,
+    Text.Image.Accessibility.Type,
     Text.Truncate,
     TransitionSelector
 
 @Generated
 object ButtonEnumValue : EnumValue("button"),
-    Accessibility.Type
+    Accessibility.Type,
+    Text.Image.Accessibility.Type
 
 @Generated
 object ImageEnumValue : EnumValue("image"),
-    Accessibility.Type
+    Accessibility.Type,
+    Text.Image.Accessibility.Type
 
 @Generated
 object TextEnumValue : EnumValue("text"),
-    Accessibility.Type
+    Accessibility.Type,
+    Text.Image.Accessibility.Type
 
 @Generated
 object EditTextEnumValue : EnumValue("edit_text"),
@@ -80,7 +84,8 @@ object SelectEnumValue : EnumValue("select"),
 @Generated
 object AutoEnumValue : EnumValue("auto"),
     Accessibility.Type,
-    Gallery.Scrollbar
+    Gallery.Scrollbar,
+    Text.Image.Accessibility.Type
 
 @Generated
 object SelfEnumValue : EnumValue("_self"),

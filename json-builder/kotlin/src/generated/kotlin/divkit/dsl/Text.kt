@@ -504,6 +504,7 @@ class Text internal constructor(
 
         operator fun plus(additive: Properties): Image = Image(
             Properties(
+                accessibility = additive.accessibility ?: properties.accessibility,
                 height = additive.height ?: properties.height,
                 preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
                 start = additive.start ?: properties.start,
@@ -515,6 +516,7 @@ class Text internal constructor(
         )
 
         class Properties internal constructor(
+            val accessibility: Property<Accessibility>?,
             /**
              * Image height.
              * Default value: `{"type": "fixed","value":20}`.
@@ -551,6 +553,7 @@ class Text internal constructor(
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
+                result.tryPutProperty("accessibility", accessibility)
                 result.tryPutProperty("height", height)
                 result.tryPutProperty("preload_required", preloadRequired)
                 result.tryPutProperty("start", start)
@@ -561,6 +564,54 @@ class Text internal constructor(
                 return result
             }
         }
+
+        /**
+         * Can be created using the method [textImageAccessibility].
+         */
+        @Generated
+        class Accessibility internal constructor(
+            @JsonIgnore
+            val properties: Properties,
+        ) {
+            @JsonAnyGetter
+            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+            operator fun plus(additive: Properties): Accessibility = Accessibility(
+                Properties(
+                    description = additive.description ?: properties.description,
+                    type = additive.type ?: properties.type,
+                )
+            )
+
+            class Properties internal constructor(
+                /**
+                 * Element description. It is used as the main description for screen reading applications.
+                 */
+                val description: Property<String>?,
+                /**
+                 * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
+                 * Default value: `auto`.
+                 */
+                val type: Property<Type>?,
+            ) {
+                internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                    val result = mutableMapOf<String, Any>()
+                    result.putAll(properties)
+                    result.tryPutProperty("description", description)
+                    result.tryPutProperty("type", type)
+                    return result
+                }
+            }
+
+            /**
+             * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
+             * 
+             * Possible values: [none], [button], [image], [text], [auto].
+             */
+            @Generated
+            sealed interface Type
+        }
+
     }
 
 
@@ -2419,6 +2470,7 @@ fun Text.Ellipsis.asList() = listOf(this)
 @Generated
 fun DivScope.textImage(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: Text.Image.Accessibility? = null,
     height: FixedSize? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
@@ -2428,6 +2480,7 @@ fun DivScope.textImage(
     width: FixedSize? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
+        accessibility = valueOrNull(accessibility),
         height = valueOrNull(height),
         preloadRequired = valueOrNull(preloadRequired),
         start = valueOrNull(start),
@@ -2450,6 +2503,7 @@ fun DivScope.textImage(
 @Generated
 fun DivScope.textImageProps(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: Text.Image.Accessibility? = null,
     height: FixedSize? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
@@ -2458,6 +2512,7 @@ fun DivScope.textImageProps(
     url: Url? = null,
     width: FixedSize? = null,
 ) = Text.Image.Properties(
+    accessibility = valueOrNull(accessibility),
     height = valueOrNull(height),
     preloadRequired = valueOrNull(preloadRequired),
     start = valueOrNull(start),
@@ -2479,6 +2534,7 @@ fun DivScope.textImageProps(
 @Generated
 fun TemplateScope.textImageRefs(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
     height: ReferenceProperty<FixedSize>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
@@ -2487,6 +2543,7 @@ fun TemplateScope.textImageRefs(
     url: ReferenceProperty<Url>? = null,
     width: ReferenceProperty<FixedSize>? = null,
 ) = Text.Image.Properties(
+    accessibility = accessibility,
     height = height,
     preloadRequired = preloadRequired,
     start = start,
@@ -2508,6 +2565,7 @@ fun TemplateScope.textImageRefs(
 @Generated
 fun Text.Image.override(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: Text.Image.Accessibility? = null,
     height: FixedSize? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
@@ -2517,6 +2575,7 @@ fun Text.Image.override(
     width: FixedSize? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
+        accessibility = valueOrNull(accessibility) ?: properties.accessibility,
         height = valueOrNull(height) ?: properties.height,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
         start = valueOrNull(start) ?: properties.start,
@@ -2539,6 +2598,7 @@ fun Text.Image.override(
 @Generated
 fun Text.Image.defer(
     `use named arguments`: Guard = Guard.instance,
+    accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
     height: ReferenceProperty<FixedSize>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
@@ -2548,6 +2608,7 @@ fun Text.Image.defer(
     width: ReferenceProperty<FixedSize>? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
+        accessibility = accessibility ?: properties.accessibility,
         height = height ?: properties.height,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
@@ -2575,6 +2636,7 @@ fun Text.Image.evaluate(
     url: ExpressionProperty<Url>? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
+        accessibility = properties.accessibility,
         height = properties.height,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
