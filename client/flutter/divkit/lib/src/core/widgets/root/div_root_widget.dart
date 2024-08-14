@@ -90,6 +90,8 @@ class _DivRendererState extends State<DivRenderer> {
           return provide(
             DivStateId(model.path),
             child: DivWidget(
+              // The unique identifier of the state subtree
+              key: ValueKey(model.path),
               model.state.div,
             ),
           );

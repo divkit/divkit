@@ -56,6 +56,8 @@ class _DivStateWidgetState extends State<DivStateWidget> {
               return provide(
                 DivStateId(model.divId),
                 child: DivWidget(
+                  // The unique identifier of the state subtree
+                  key: ValueKey(model.path),
                   model.state?.div,
                 ),
               );

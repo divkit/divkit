@@ -1,3 +1,7 @@
+## 0.3.1-rc.1
+
+* Fix sticky switching of states
+
 ## 0.3.0
 
 * Provide instant rendering of DivKitView, asynchronous parsing and preloading
@@ -14,9 +18,9 @@
 * Public BuildContext in DivContext
 * Add div-pager
 
-## Migration 0.2 → 0.3.0
+## Migration 0.2 → 0.3
 
-* Now DTO has changed the folder from schema to schema
+* Now DTO has changed the folder from generated_sources to schema
 * Now DefaultDivKitData needs to be built and preloaded for instant rendering
 * Now we have fixed the error and extract the value of dict type values when parsing
   This change affected the following structures: dict_value, dict_variable, div_action, div_custom,
