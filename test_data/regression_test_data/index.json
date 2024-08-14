@@ -1902,7 +1902,7 @@
         "Try to scroll again"
       ],
       "expected_results": [
-        "Current item always stick to the text"
+        "Current item always stick to the text."
       ],
       "file": "gallery/gallery-items-posing.json"
     },
