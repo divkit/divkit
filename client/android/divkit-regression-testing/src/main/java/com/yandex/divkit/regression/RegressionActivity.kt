@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,6 +72,10 @@ class RegressionActivity : AppCompatActivity() {
                     }
                 }
             })
+        }
+
+        binding.scenarioFilter.doOnTextChanged { text, start, before, count ->
+            regressionViewModel.updateFilter(text?.toString())
         }
     }
 
