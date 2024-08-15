@@ -405,6 +405,7 @@ class Div2View private constructor(
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
+            div2Component.divBinder.attachIndicators()
             reporter.onPatchSuccess()
             div2Component.actionBinder.handleActions(this, expressionResolver, patch.onAppliedActions, DivActionReason.PATCH)
             return true
