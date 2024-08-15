@@ -1,3 +1,9 @@
+## 30.14.0 (August 19, 2024)
+
+* Added `markdownExtensionBuilder` function, which accepts the markdown processing function and produces a `markdown` extension.
+* Added `getComponentProperty` extension API.
+
+
 ## 30.13.0 (August 12, 2024)
 
 * Updated the layout of the `grid`, in which elements are superimposed on each other to match the behavior of Android.

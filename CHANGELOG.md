@@ -1,3 +1,21 @@
+## 30.14.0
+
+# Android Client:
+* Added support for local `variables` field.
+* Fixed an issue when items built from prototypes couldn't receive variable updates.
+* Deprecated method `DivCustomContainerChildFactory#bindChildView`. Use a new method implementation with `childIndex` param instead. Otherwise, local variables inside custom containers wouldn't work.
+* Support toString() methods for dicts and arrays.
+
+# iOS Client:
+* Moved edits from the patch for the swipe_down fix.
+* Fixed a bug when scrolling from page to another page.
+* Fixed boolean type parsing in `set_stored_value` action.
+
+# Web Client:
+* Added `markdownExtensionBuilder` function, which accepts the markdown processing function and produces a `markdown` extension.
+* Added `getComponentProperty` extension API.
+
+
 ## 30.13.0
 
 # Android Client:
