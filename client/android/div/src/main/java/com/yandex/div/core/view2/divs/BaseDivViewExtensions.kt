@@ -40,7 +40,6 @@ import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.FixedLineHeightView
 import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
-import com.yandex.div.data.Variable
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -614,9 +613,7 @@ internal fun getOrCreateRuntime(
         path = path,
         parentPath = parentPath,
         variables = variables?.toVariables()
-    ).apply {
-        Log.d("hi?", "return $this for path = $path")
-    }
+    )
 }
 
 internal fun getRuntimeFor(divView: Div2View, resolver: ExpressionResolver) =
