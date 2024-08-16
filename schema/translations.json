@@ -1919,6 +1919,10 @@
     "en": "Image.",
     "ru": "Изображение."
   },
+  "div_text_image_alignment_vertical": {
+    "en": "Vertical text image alignment within a string.",
+    "ru": "Вертикальное выравнивание изображения внутри строки."
+  },
   "div_text_image_height": {
     "en": "Image height.",
     "ru": "Высота изображения."
@@ -1970,6 +1974,10 @@
   "div_text_range_actions": {
     "en": "Action when clicking on text.",
     "ru": "Действие при нажатии на текст."
+  },
+  "div_text_range_alignment_vertical": {
+    "en": "Vertical text range alignment within a string.",
+    "ru": "Вертикальное выравнивание текстового диапазона внутри строки."
   },
   "div_text_range_background": {
     "en": "Character range background.",
