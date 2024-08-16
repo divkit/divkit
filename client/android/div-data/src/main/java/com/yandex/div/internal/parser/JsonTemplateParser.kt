@@ -2,8 +2,6 @@ package com.yandex.div.internal.parser
 
 import com.yandex.div.internal.parser.JsonParser.alwaysValid
 import com.yandex.div.internal.parser.JsonParser.alwaysValidList
-import com.yandex.div.json.expressions.Expression
-import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div.internal.parser.JsonParser.doNotConvert
 import com.yandex.div.internal.template.Field
 import com.yandex.div.internal.template.clone
@@ -12,6 +10,8 @@ import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.ParsingExceptionReason
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionList
 import org.json.JSONObject
 
 fun <T : Any> JSONObject.readField(

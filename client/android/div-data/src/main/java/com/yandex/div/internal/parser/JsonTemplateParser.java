@@ -2,17 +2,16 @@ package com.yandex.div.internal.parser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.yandex.div.json.expressions.Expression;
-import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.internal.template.Field;
 import com.yandex.div.internal.template.FieldKt;
 import com.yandex.div.json.ParsingEnvironment;
 import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.ParsingException;
+import com.yandex.div.json.expressions.Expression;
+import com.yandex.div.json.expressions.ExpressionList;
 import kotlin.PublishedApi;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
-
 import org.json.JSONObject;
 
 import java.util.List;
