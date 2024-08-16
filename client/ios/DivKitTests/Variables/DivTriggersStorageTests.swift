@@ -182,6 +182,24 @@ final class DivTriggerTests: XCTestCase {
     XCTAssertEqual(triggersCount, 1)
   }
 
+  func test_Triggers_WhenVariableAppendForCardIdInStorage() throws {
+    let variables: DivVariables = [
+      "should_trigger": .bool(false),
+    ]
+    let path = UIElementPath("card_id")
+
+    variablesStorage.initializeIfNeeded(path: path, variables: variables)
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+
+    variablesStorage.append(variables: ["should_trigger": .bool(true)], for: "card_id")
+    XCTAssertEqual(triggersCount, 1)
+  }
+
   func test_DoesNotTrigger_WhenLocalVariableIsChanged() throws {
     let variables: DivVariables = [
       "should_trigger": .bool(false),
