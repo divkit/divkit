@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.customview.widget.ExploreByTouchHelper
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.internal.spannable.BitmapImageSpan
 
 internal open class TextViewWithAccessibleSpans(
@@ -20,34 +21,47 @@ internal open class TextViewWithAccessibleSpans(
 ): EllipsizedTextView(context, attrs, defStyleAttr) {
     private val accessibleImageSpans = mutableListOf<BitmapImageSpan>()
     private val imageSpans = mutableListOf<BitmapImageSpan>()
-    private val spanHelper = SpanHelper()
+    private val spanHelper: SpanHelper?
     private var _contentDescription: String? = null
 
     init {
-        ViewCompat.setAccessibilityDelegate(this, spanHelper)
-        accessibilityLiveRegion = ACCESSIBILITY_LIVE_REGION_POLITE
+        AccessibilityStateProvider.evaluateTouchModeEnabled(context)
+        if (AccessibilityStateProvider.touchModeEnabled == true) {
+            spanHelper = SpanHelper()
+            ViewCompat.setAccessibilityDelegate(this, spanHelper)
+            accessibilityLiveRegion = ACCESSIBILITY_LIVE_REGION_POLITE
+        } else {
+            spanHelper = null
+        }
     }
 
     internal fun addImageSpan(span: BitmapImageSpan) {
-        imageSpans.add(span)
-        if (span.accessibilityDescription != null || span.onClickAccessibilityAction != null) {
-            accessibleImageSpans.add(span)
-        }
+        if (AccessibilityStateProvider.touchModeEnabled == true) {
+            imageSpans.add(span)
+            if (span.accessibilityDescription != null || span.onClickAccessibilityAction != null) {
+                accessibleImageSpans.add(span)
+            }
 
-        spanHelper.invalidateVirtualView(accessibleImageSpans.size - 1)
+            spanHelper?.invalidateVirtualView(accessibleImageSpans.size - 1)
+        }
     }
 
     internal fun clearImageSpans() {
         accessibleImageSpans.clear()
         imageSpans.clear()
-        spanHelper.invalidateRoot()
+        spanHelper?.invalidateRoot()
         evaluateAndSetContentDescription()
     }
 
     private fun evaluateAndSetContentDescription() {
+        if (AccessibilityStateProvider.touchModeEnabled != true) {
+            super.setContentDescription(_contentDescription)
+            return
+        }
+
         val evaluated = when {
             _contentDescription != null -> _contentDescription
-            imageSpans == null || imageSpans.size == 0 -> null
+            imageSpans.size == 0 -> null
             text.isEmpty() -> null
             /* no content description, had to remove '#' from read text */ else ->
                 (text as? SpannableString)?.let { spannable ->
@@ -79,20 +93,20 @@ internal open class TextViewWithAccessibleSpans(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        accessibleImageSpans.forEachIndexed { index, _ -> spanHelper.invalidateVirtualView(index) }
+        accessibleImageSpans.forEachIndexed { index, _ -> spanHelper?.invalidateVirtualView(index) }
     }
 
     override fun onFocusChanged(gainFocus: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect)
-        spanHelper.onFocusChanged(gainFocus, direction, previouslyFocusedRect)
+        spanHelper?.onFocusChanged(gainFocus, direction, previouslyFocusedRect)
     }
 
     override fun dispatchHoverEvent(event: MotionEvent): Boolean {
-        return spanHelper.dispatchHoverEvent(event) || super.dispatchHoverEvent(event)
+        return spanHelper?.dispatchHoverEvent(event) == true || super.dispatchHoverEvent(event)
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        return spanHelper.dispatchKeyEvent(event) || super.dispatchKeyEvent(event)
+        return spanHelper?.dispatchKeyEvent(event) == true || super.dispatchKeyEvent(event)
     }
 
     private inner class SpanHelper : ExploreByTouchHelper(this@TextViewWithAccessibleSpans) {
