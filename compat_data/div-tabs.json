@@ -5,6 +5,9 @@
         "compat": {
             "web": {
                 "version_added": "29.10.0"
+            },
+            "android": {
+                "version_added": "29.8.0"
             }
         }
     }, {
@@ -13,6 +16,9 @@
         "compat": {
             "web": {
                 "version_added": "29.10.0"
+            },
+            "android": {
+                "version_added": "29.8.0"
             }
         }
     }, {

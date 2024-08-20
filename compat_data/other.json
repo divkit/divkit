@@ -8,6 +8,9 @@
             },
             "android": {
                 "version_added": "29.13.0"
+            },
+            "web": {
+                "notes": "Web support is not planned"
             }
         }
     }, {

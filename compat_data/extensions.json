@@ -66,6 +66,9 @@
         "compat": {
             "android": {
                 "version_added": "30.8.0"
+            },
+            "web": {
+                "version_added": "30.14.0"
             }
         }
     }, {

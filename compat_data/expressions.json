@@ -33,6 +33,9 @@
             },
             "web": {
                 "version_added": "29.15.0"
+            },
+            "android": {
+                "version_added": "30.14.0"
             }
         }
     }, {
