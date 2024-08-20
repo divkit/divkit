@@ -95,7 +95,7 @@ packages:
       path: "../../div_expressions_resolver"
       relative: true
     source: path
-    version: "0.4.2"
+    version: "0.4.3"
   divkit:
     dependency: "direct main"
     description:
