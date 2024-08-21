@@ -130,6 +130,17 @@
             "android"
           ]
         },
+        "autocapitalization": {
+          "type": "string",
+          "enum": [
+            "auto", "none", "words", "sentences", "all_characters"
+          ],
+          "default_value": "auto",
+          "$description": "translations.json#/div_input_autocapitalization",
+          "platforms": [
+            "ios"
+          ]
+        },
         "keyboard_type": {
           "type": "string",
           "enum": [

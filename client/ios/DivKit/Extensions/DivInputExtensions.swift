@@ -43,6 +43,7 @@ extension DivInput: DivBlockModeling {
 
     let hintValue = resolveHintText(expressionResolver) ?? ""
     let keyboardType = resolveKeyboardType(expressionResolver)
+    let autocapitalizationType = resolveAutocapitalization(expressionResolver)
 
     let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
@@ -59,6 +60,7 @@ extension DivInput: DivBlockModeling {
       textTypo: typo.with(color: resolveTextColor(expressionResolver)),
       multiLineMode: keyboardType == .multiLineText,
       inputType: keyboardType.system,
+      autocapitalizationType: autocapitalizationType.system,
       highlightColor: resolveHighlightColor(expressionResolver),
       maxVisibleLines: resolveMaxVisibleLines(expressionResolver),
       selectAllOnFocus: resolveSelectAllOnFocus(expressionResolver),
@@ -184,6 +186,17 @@ extension DivInput.KeyboardType {
     case .password:
       DivKitLogger.warning("Keyboard type '\(self.rawValue)' is not supported")
       return .default
+    }
+  }
+}
+
+extension DivInput.Autocapitalization {
+  fileprivate var system: TextInputBlock.AutocapitalizationType {
+    switch self {
+    case .none: .none
+    case .words: .words
+    case .auto, .sentences: .sentences
+    case .allCharacters: .allCharacters
     }
   }
 }

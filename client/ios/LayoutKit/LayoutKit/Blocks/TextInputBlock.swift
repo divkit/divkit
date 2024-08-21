@@ -36,6 +36,13 @@ public final class TextInputBlock: BlockWithTraits {
     public static let `default`: Self = .keyboard(.default)
   }
 
+  public enum AutocapitalizationType {
+    case none
+    case words
+    case sentences
+    case allCharacters
+  }
+
   public enum TextAlignmentHorizontal: Equatable {
     case left
     case center
@@ -58,6 +65,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let textTypo: Typo
   public let multiLineMode: Bool
   public let inputType: InputType
+  public let autocapitalizationType: AutocapitalizationType
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
@@ -83,6 +91,7 @@ public final class TextInputBlock: BlockWithTraits {
     textTypo: Typo,
     multiLineMode: Bool = true,
     inputType: InputType = .default,
+    autocapitalizationType: AutocapitalizationType = .sentences,
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
@@ -107,6 +116,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.textTypo = textTypo
     self.multiLineMode = multiLineMode
     self.inputType = inputType
+    self.autocapitalizationType = autocapitalizationType
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus

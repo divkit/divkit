@@ -1035,6 +1035,10 @@
     "en": "Keyboard type.",
     "ru": "Тип клавиатуры."
   },
+  "div_input_autocapitalization": {
+    "en": "Automatic text capitalization type.",
+    "ru": "Тип автоматической капитализации текста."
+  },
   "div_input_letter_spacing": {
     "en": "Spacing between characters.",
     "ru": "Интервал между символами."

@@ -79,6 +79,8 @@ public final class DivInputTemplate: TemplateValue {
     }
   }
 
+  public typealias Autocapitalization = DivInput.Autocapitalization
+
   public typealias KeyboardType = DivInput.KeyboardType
 
   public static let type: String = "input"
@@ -87,6 +89,7 @@ public final class DivInputTemplate: TemplateValue {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let autocapitalization: Field<Expression<Autocapitalization>>? // default value: auto
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
@@ -143,6 +146,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
+      autocapitalization: dictionary.getOptionalExpressionField("autocapitalization"),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
@@ -200,6 +204,7 @@ public final class DivInputTemplate: TemplateValue {
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
+    autocapitalization: Field<Expression<Autocapitalization>>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
@@ -254,6 +259,7 @@ public final class DivInputTemplate: TemplateValue {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
+    self.autocapitalization = autocapitalization
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
@@ -309,6 +315,7 @@ public final class DivInputTemplate: TemplateValue {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let autocapitalizationValue = parent?.autocapitalization?.resolveOptionalValue(context: context) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
@@ -362,6 +369,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
@@ -424,6 +432,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      autocapitalization: autocapitalizationValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
@@ -484,6 +493,7 @@ public final class DivInputTemplate: TemplateValue {
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var autocapitalizationValue: DeserializationResult<Expression<DivInput.Autocapitalization>> = parent?.autocapitalization?.value() ?? .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
@@ -542,6 +552,8 @@ public final class DivInputTemplate: TemplateValue {
         alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+      case "autocapitalization":
+        autocapitalizationValue = deserialize(__dictValue).merged(with: autocapitalizationValue)
       case "background":
         backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
       case "border":
@@ -646,6 +658,8 @@ public final class DivInputTemplate: TemplateValue {
         alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+      case parent?.autocapitalization?.link:
+        autocapitalizationValue = autocapitalizationValue.merged(with: { deserialize(__dictValue) })
       case parent?.background?.link:
         backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self) })
       case parent?.border?.link:
@@ -776,6 +790,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
@@ -838,6 +853,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      autocapitalization: autocapitalizationValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
@@ -903,6 +919,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
+      autocapitalization: autocapitalization ?? mergedParent.autocapitalization,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
@@ -963,6 +980,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
+      autocapitalization: merged.autocapitalization,
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,

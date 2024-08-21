@@ -6,6 +6,15 @@ import VGSL
 
 public final class DivInput: DivBase {
   @frozen
+  public enum Autocapitalization: String, CaseIterable {
+    case auto = "auto"
+    case none = "none"
+    case words = "words"
+    case sentences = "sentences"
+    case allCharacters = "all_characters"
+  }
+
+  @frozen
   public enum KeyboardType: String, CaseIterable {
     case singleLineText = "single_line_text"
     case multiLineText = "multi_line_text"
@@ -35,6 +44,7 @@ public final class DivInput: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let autocapitalization: Expression<Autocapitalization> // default value: auto
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
@@ -94,6 +104,10 @@ public final class DivInput: DivBase {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
+  }
+
+  public func resolveAutocapitalization(_ resolver: ExpressionResolver) -> Autocapitalization {
+    resolver.resolveEnum(autocapitalization) ?? Autocapitalization.auto
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -216,6 +230,7 @@ public final class DivInput: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    autocapitalization: Expression<Autocapitalization>? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
@@ -269,6 +284,7 @@ public final class DivInput: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.autocapitalization = autocapitalization ?? .value(.auto)
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
@@ -332,117 +348,118 @@ extension DivInput: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.autocapitalization == rhs.autocapitalization,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize
+      lhs.fontFamily == rhs.fontFamily
     else {
       return false
     }
     guard
+      lhs.fontSize == rhs.fontSize,
       lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight,
-      lhs.fontWeightValue == rhs.fontWeightValue
+      lhs.fontWeight == rhs.fontWeight
     else {
       return false
     }
     guard
+      lhs.fontWeightValue == rhs.fontWeightValue,
       lhs.height == rhs.height,
-      lhs.highlightColor == rhs.highlightColor,
-      lhs.hintColor == rhs.hintColor
+      lhs.highlightColor == rhs.highlightColor
     else {
       return false
     }
     guard
+      lhs.hintColor == rhs.hintColor,
       lhs.hintText == rhs.hintText,
-      lhs.id == rhs.id,
-      lhs.isEnabled == rhs.isEnabled
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.isEnabled == rhs.isEnabled,
       lhs.keyboardType == rhs.keyboardType,
-      lhs.layoutProvider == rhs.layoutProvider,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.margins == rhs.margins,
-      lhs.mask == rhs.mask
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.mask == rhs.mask,
       lhs.maxLength == rhs.maxLength,
-      lhs.maxVisibleLines == rhs.maxVisibleLines,
-      lhs.nativeInterface == rhs.nativeInterface
+      lhs.maxVisibleLines == rhs.maxVisibleLines
     else {
       return false
     }
     guard
+      lhs.nativeInterface == rhs.nativeInterface,
       lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
       lhs.textAlignmentVertical == rhs.textAlignmentVertical,
-      lhs.textColor == rhs.textColor,
-      lhs.textVariable == rhs.textVariable
+      lhs.textColor == rhs.textColor
     else {
       return false
     }
     guard
+      lhs.textVariable == rhs.textVariable,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.validators == rhs.validators,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -460,6 +477,7 @@ extension DivInput: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["autocapitalization"] = autocapitalization.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()

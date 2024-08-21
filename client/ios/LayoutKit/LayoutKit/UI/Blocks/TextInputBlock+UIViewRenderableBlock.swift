@@ -14,6 +14,7 @@ extension TextInputBlock {
     let inputView = view as! TextInputBlockView
     inputView.setLayoutDirection(layoutDirection)
     inputView.setInputType(inputType)
+    inputView.setAutocapitalizationType(autocapitalizationType)
     inputView.setValidators(validators)
     inputView.setTextAlignmentHorizontal(textAlignmentHorizontal)
     inputView.setTextAlignmentVertical(textAlignmentVertical)
@@ -180,6 +181,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       multiLineInput.tintColor = multiLineInput.backgroundColor
       multiLineInput.inputView = selectionView
     }
+  }
+
+  func setAutocapitalizationType(_ type: TextInputBlock.AutocapitalizationType) {
+    singleLineInput.autocapitalizationType = type.uiType
+    multiLineInput.autocapitalizationType = type.uiType
   }
 
   func setTextAlignmentHorizontal(_ alignment: TextInputBlock.TextAlignmentHorizontal) {
@@ -735,6 +741,17 @@ extension TextInputBlock.TextAlignmentVertical {
       .center
     case .bottom:
       .bottom
+    }
+  }
+}
+
+extension TextInputBlock.AutocapitalizationType {
+  fileprivate var uiType: UITextAutocapitalizationType {
+    switch self {
+    case .none: .none
+    case .words: .words
+    case .sentences: .sentences
+    case .allCharacters: .allCharacters
     }
   }
 }
