@@ -505,6 +505,7 @@ class Text internal constructor(
         operator fun plus(additive: Properties): Image = Image(
             Properties(
                 accessibility = additive.accessibility ?: properties.accessibility,
+                alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
                 height = additive.height ?: properties.height,
                 preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
                 start = additive.start ?: properties.start,
@@ -517,6 +518,11 @@ class Text internal constructor(
 
         class Properties internal constructor(
             val accessibility: Property<Accessibility>?,
+            /**
+             * Vertical text image alignment within a string.
+             * Default value: `baseline`.
+             */
+            val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
              * Image height.
              * Default value: `{"type": "fixed","value":20}`.
@@ -554,6 +560,7 @@ class Text internal constructor(
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
                 result.tryPutProperty("accessibility", accessibility)
+                result.tryPutProperty("alignment_vertical", alignmentVertical)
                 result.tryPutProperty("height", height)
                 result.tryPutProperty("preload_required", preloadRequired)
                 result.tryPutProperty("start", start)
@@ -633,6 +640,7 @@ class Text internal constructor(
         operator fun plus(additive: Properties): Range = Range(
             Properties(
                 actions = additive.actions ?: properties.actions,
+                alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
                 background = additive.background ?: properties.background,
                 border = additive.border ?: properties.border,
                 end = additive.end ?: properties.end,
@@ -658,6 +666,11 @@ class Text internal constructor(
              * Action when clicking on text.
              */
             val actions: Property<List<Action>>?,
+            /**
+             * Vertical text range alignment within a string.
+             * Default value: `baseline`.
+             */
+            val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
              * Character range background.
              */
@@ -732,6 +745,7 @@ class Text internal constructor(
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
                 result.tryPutProperty("actions", actions)
+                result.tryPutProperty("alignment_vertical", alignmentVertical)
                 result.tryPutProperty("background", background)
                 result.tryPutProperty("border", border)
                 result.tryPutProperty("end", end)
@@ -2459,6 +2473,7 @@ fun Text.Ellipsis.evaluate(
 fun Text.Ellipsis.asList() = listOf(this)
 
 /**
+ * @param alignmentVertical Vertical text image alignment within a string.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2471,6 +2486,7 @@ fun Text.Ellipsis.asList() = listOf(this)
 fun DivScope.textImage(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Text.Image.Accessibility? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
@@ -2481,6 +2497,7 @@ fun DivScope.textImage(
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         accessibility = valueOrNull(accessibility),
+        alignmentVertical = valueOrNull(alignmentVertical),
         height = valueOrNull(height),
         preloadRequired = valueOrNull(preloadRequired),
         start = valueOrNull(start),
@@ -2492,6 +2509,7 @@ fun DivScope.textImage(
 )
 
 /**
+ * @param alignmentVertical Vertical text image alignment within a string.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2504,6 +2522,7 @@ fun DivScope.textImage(
 fun DivScope.textImageProps(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Text.Image.Accessibility? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
@@ -2513,6 +2532,7 @@ fun DivScope.textImageProps(
     width: FixedSize? = null,
 ) = Text.Image.Properties(
     accessibility = valueOrNull(accessibility),
+    alignmentVertical = valueOrNull(alignmentVertical),
     height = valueOrNull(height),
     preloadRequired = valueOrNull(preloadRequired),
     start = valueOrNull(start),
@@ -2523,6 +2543,7 @@ fun DivScope.textImageProps(
 )
 
 /**
+ * @param alignmentVertical Vertical text image alignment within a string.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2535,6 +2556,7 @@ fun DivScope.textImageProps(
 fun TemplateScope.textImageRefs(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
+    alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     height: ReferenceProperty<FixedSize>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
@@ -2544,6 +2566,7 @@ fun TemplateScope.textImageRefs(
     width: ReferenceProperty<FixedSize>? = null,
 ) = Text.Image.Properties(
     accessibility = accessibility,
+    alignmentVertical = alignmentVertical,
     height = height,
     preloadRequired = preloadRequired,
     start = start,
@@ -2554,6 +2577,7 @@ fun TemplateScope.textImageRefs(
 )
 
 /**
+ * @param alignmentVertical Vertical text image alignment within a string.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2566,6 +2590,7 @@ fun TemplateScope.textImageRefs(
 fun Text.Image.override(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Text.Image.Accessibility? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     height: FixedSize? = null,
     preloadRequired: Boolean? = null,
     start: Int? = null,
@@ -2576,6 +2601,7 @@ fun Text.Image.override(
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
+        alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         height = valueOrNull(height) ?: properties.height,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
         start = valueOrNull(start) ?: properties.start,
@@ -2587,6 +2613,7 @@ fun Text.Image.override(
 )
 
 /**
+ * @param alignmentVertical Vertical text image alignment within a string.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2599,6 +2626,7 @@ fun Text.Image.override(
 fun Text.Image.defer(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
+    alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     height: ReferenceProperty<FixedSize>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
@@ -2609,6 +2637,7 @@ fun Text.Image.defer(
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         accessibility = accessibility ?: properties.accessibility,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         height = height ?: properties.height,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
@@ -2620,6 +2649,7 @@ fun Text.Image.defer(
 )
 
 /**
+ * @param alignmentVertical Vertical text image alignment within a string.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2629,6 +2659,7 @@ fun Text.Image.defer(
 @Generated
 fun Text.Image.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     start: ExpressionProperty<Int>? = null,
     tintColor: ExpressionProperty<Color>? = null,
@@ -2637,6 +2668,7 @@ fun Text.Image.evaluate(
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         accessibility = properties.accessibility,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         height = properties.height,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
@@ -2652,6 +2684,7 @@ fun Text.Image.asList() = listOf(this)
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
@@ -2674,6 +2707,7 @@ fun Text.Image.asList() = listOf(this)
 fun DivScope.textRange(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
@@ -2694,6 +2728,7 @@ fun DivScope.textRange(
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = valueOrNull(actions),
+        alignmentVertical = valueOrNull(alignmentVertical),
         background = valueOrNull(background),
         border = valueOrNull(border),
         end = valueOrNull(end),
@@ -2716,6 +2751,7 @@ fun DivScope.textRange(
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
@@ -2738,6 +2774,7 @@ fun DivScope.textRange(
 fun DivScope.textRangeProps(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
@@ -2757,6 +2794,7 @@ fun DivScope.textRangeProps(
     underline: LineStyle? = null,
 ) = Text.Range.Properties(
     actions = valueOrNull(actions),
+    alignmentVertical = valueOrNull(alignmentVertical),
     background = valueOrNull(background),
     border = valueOrNull(border),
     end = valueOrNull(end),
@@ -2778,6 +2816,7 @@ fun DivScope.textRangeProps(
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
@@ -2800,6 +2839,7 @@ fun DivScope.textRangeProps(
 fun TemplateScope.textRangeRefs(
     `use named arguments`: Guard = Guard.instance,
     actions: ReferenceProperty<List<Action>>? = null,
+    alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     background: ReferenceProperty<TextRangeBackground>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
@@ -2819,6 +2859,7 @@ fun TemplateScope.textRangeRefs(
     underline: ReferenceProperty<LineStyle>? = null,
 ) = Text.Range.Properties(
     actions = actions,
+    alignmentVertical = alignmentVertical,
     background = background,
     border = border,
     end = end,
@@ -2840,6 +2881,7 @@ fun TemplateScope.textRangeRefs(
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
@@ -2862,6 +2904,7 @@ fun TemplateScope.textRangeRefs(
 fun Text.Range.override(
     `use named arguments`: Guard = Guard.instance,
     actions: List<Action>? = null,
+    alignmentVertical: TextAlignmentVertical? = null,
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
@@ -2882,6 +2925,7 @@ fun Text.Range.override(
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = valueOrNull(actions) ?: properties.actions,
+        alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         end = valueOrNull(end) ?: properties.end,
@@ -2904,6 +2948,7 @@ fun Text.Range.override(
 
 /**
  * @param actions Action when clicking on text.
+ * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
  * @param end Ordinal number of the last character to be included in the range.
@@ -2926,6 +2971,7 @@ fun Text.Range.override(
 fun Text.Range.defer(
     `use named arguments`: Guard = Guard.instance,
     actions: ReferenceProperty<List<Action>>? = null,
+    alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
     background: ReferenceProperty<TextRangeBackground>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
@@ -2946,6 +2992,7 @@ fun Text.Range.defer(
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = actions ?: properties.actions,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         background = background ?: properties.background,
         border = border ?: properties.border,
         end = end ?: properties.end,
@@ -2967,6 +3014,7 @@ fun Text.Range.defer(
 )
 
 /**
+ * @param alignmentVertical Vertical text range alignment within a string.
  * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
@@ -2985,6 +3033,7 @@ fun Text.Range.defer(
 @Generated
 fun Text.Range.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
     end: ExpressionProperty<Int>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontFeatureSettings: ExpressionProperty<String>? = null,
@@ -3002,6 +3051,7 @@ fun Text.Range.evaluate(
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = properties.actions,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         background = properties.background,
         border = properties.border,
         end = end ?: properties.end,

@@ -109,6 +109,7 @@ object CenterEnumValue : EnumValue("center"),
     ContentAlignmentHorizontal,
     ContentAlignmentVertical,
     Gallery.CrossContentAlignment,
+    TextAlignmentVertical,
     Tooltip.Position
 
 @Generated
@@ -137,6 +138,7 @@ object TopEnumValue : EnumValue("top"),
     AlignmentVertical,
     ContentAlignmentVertical,
     SlideTransition.Edge,
+    TextAlignmentVertical,
     Tooltip.Position
 
 @Generated
@@ -144,12 +146,14 @@ object BottomEnumValue : EnumValue("bottom"),
     AlignmentVertical,
     ContentAlignmentVertical,
     SlideTransition.Edge,
+    TextAlignmentVertical,
     Tooltip.Position
 
 @Generated
 object BaselineEnumValue : EnumValue("baseline"),
     AlignmentVertical,
-    ContentAlignmentVertical
+    ContentAlignmentVertical,
+    TextAlignmentVertical
 
 @Generated
 object FadeEnumValue : EnumValue("fade"),
