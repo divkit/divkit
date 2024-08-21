@@ -10,6 +10,7 @@ class DivRangeHelper {
     DivVariableContext context,
     TextStyle style,
     List<DivLineStyle> linesStyleList,
+    double viewScale,
   ) async {
     final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
     for (var range in divTextRange) {
@@ -18,6 +19,7 @@ class DivRangeHelper {
         style,
         context,
         linesStyleList,
+        viewScale,
       );
       inputMap.addEntries([mapEntry]);
     }
@@ -44,6 +46,7 @@ class DivRangeHelper {
     List<DivTextRange> divTextRange,
     TextStyle style,
     List<DivLineStyle> linesStyleList,
+    double viewScale,
   ) {
     final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
     for (var range in divTextRange) {
@@ -51,6 +54,7 @@ class DivRangeHelper {
         range,
         style,
         linesStyleList,
+        viewScale,
       );
       inputMap.addEntries([mapEntry]);
     }
@@ -78,6 +82,7 @@ class DivRangeHelper {
     TextStyle style,
     DivVariableContext context,
     List<DivLineStyle> linesStyleList,
+    double viewScale,
   ) async {
     final start = await divTextRange.start.resolveValue(
       context: context,
@@ -113,6 +118,10 @@ class DivRangeHelper {
       },
     );
 
+    final fontFamily = await divTextRange.fontFamily?.resolveValue(
+      context: context,
+    );
+
     final fontSize = await divTextRange.fontSize?.resolveValue(
       context: context,
     );
@@ -120,7 +129,6 @@ class DivRangeHelper {
     final fontWeightValue = await divTextRange.fontWeightValue?.resolveValue(
       context: context,
     );
-
     FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
       (element) => element.value == fontWeightValue,
     );
@@ -131,6 +139,9 @@ class DivRangeHelper {
     final letterSpacing = await divTextRange.letterSpacing?.resolveValue(
       context: context,
     );
+
+    final shadow = await divTextRange.textShadow
+        ?.resolveShadow(context: context, viewScale: viewScale);
 
     List<DivActionModel> actions = [];
     List<DivAction>? actionsDto = [...?divTextRange.actions];
@@ -144,6 +155,8 @@ class DivRangeHelper {
     }
     style = TextStyle(
       color: textColor,
+      shadows: shadow != null ? [shadow] : null,
+      fontFamily: fontFamily,
       fontSize: fontSize?.toDouble(),
       fontWeight: fontWeight,
       backgroundColor: background,
@@ -174,6 +187,7 @@ class DivRangeHelper {
     DivTextRange divTextRange,
     TextStyle style,
     List<DivLineStyle> linesStyleList,
+    double viewScale,
   ) {
     final start = divTextRange.start.value!;
     final end = divTextRange.end.value!;
@@ -193,16 +207,19 @@ class DivRangeHelper {
       },
     );
 
+    final fontFamily = divTextRange.fontFamily?.value!;
+
     final fontSize = divTextRange.fontSize?.value!;
 
     final fontWeightValue = divTextRange.fontWeightValue?.value!;
-
     FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
       (element) => element.value == fontWeightValue,
     );
     fontWeight ??= divTextRange.fontWeight?.passValue();
 
     final letterSpacing = divTextRange.letterSpacing?.value!;
+
+    final shadow = divTextRange.textShadow?.valueShadow(viewScale: viewScale);
 
     List<DivActionModel> actions = [];
     List<DivAction>? actionsDto = [...?divTextRange.actions];
@@ -214,6 +231,8 @@ class DivRangeHelper {
     }
     style = TextStyle(
       color: textColor,
+      shadows: shadow != null ? [shadow] : null,
+      fontFamily: fontFamily,
       fontSize: fontSize?.toDouble(),
       fontWeight: fontWeight,
       backgroundColor: background,
