@@ -68,6 +68,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var textAlignmentHorizontal: TextInputBlock.TextAlignmentHorizontal = .start
   private var textAlignmentVertical: TextInputBlock.TextAlignmentVertical = .center
   private var isInputFocused = false
+  private var keyboardHeight: CGFloat?
   var paddings: EdgeInsets = .zero
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
@@ -292,6 +293,12 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     singleLineInput.frame.origin = CGPoint(x: 0, y: singleLineOffsetY)
   }
 
+  private func updateScrollOnMultilineChange() {
+    guard let keyboardHeight else { return }
+    scrollingWasDone = false
+    tryScrollToMultiLine(keyboardHeight)
+  }
+
   private func updateHintViewOffset() {
     guard !hintView.isHidden else { return }
     hintView.frame.origin = CGPoint(x: hintViewOffsetX, y: hintViewOffsetY)
@@ -393,6 +400,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       .userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
       let keyboardRectangle = keyboardFrame.cgRectValue
       let keyboardHeight = keyboardRectangle.height
+      self.keyboardHeight = keyboardHeight
       tryScrollToMultiLine(keyboardHeight)
       tryScrollToSingleLine(keyboardHeight)
     }
@@ -464,6 +472,7 @@ extension TextInputBlockView {
   func inputViewDidEndEditing(_: UIView) {
     stopListeningTap()
     scrollingWasDone = false
+    keyboardHeight = nil
     onBlur()
   }
 
@@ -537,6 +546,7 @@ extension TextInputBlockView: UITextViewDelegate {
   func textViewDidChange(_ textView: UITextView) {
     updateMultiLineOffset()
     inputViewDidChange(textView)
+    updateScrollOnMultilineChange()
   }
 
   func textViewDidEndEditing(_ textView: UITextView) {
