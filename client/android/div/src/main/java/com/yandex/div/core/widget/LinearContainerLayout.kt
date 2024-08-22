@@ -182,8 +182,12 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             val centerVertical = (top + bottom) / 2f
             val halfWidth = dividerWidth / 2f
             val halfHeight = dividerHeight / 2f
-            setBounds((centerHorizontal - halfWidth).toInt(), (centerVertical - halfHeight).toInt(),
-                (centerHorizontal + halfWidth).toInt(), (centerVertical + halfHeight).toInt())
+            setBounds(
+                /* left = */ max((centerHorizontal - halfWidth).toInt(), left),
+                /* top = */ max((centerVertical - halfHeight).toInt(), top),
+                /* right = */ min((centerHorizontal + halfWidth).toInt(), right),
+                /* bottom = */ min((centerVertical + halfHeight).toInt(), bottom)
+            )
             draw(canvas)
         }
 
