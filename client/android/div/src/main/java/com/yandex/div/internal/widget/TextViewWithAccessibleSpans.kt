@@ -60,7 +60,7 @@ internal open class TextViewWithAccessibleSpans(
         }
 
         val evaluated = when {
-            _contentDescription != null -> _contentDescription
+            imageSpans == null || _contentDescription != null -> _contentDescription
             imageSpans.size == 0 -> null
             text.isEmpty() -> null
             /* no content description, had to remove '#' from read text */ else ->
