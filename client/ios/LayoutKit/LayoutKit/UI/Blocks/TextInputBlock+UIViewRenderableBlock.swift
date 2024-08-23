@@ -16,6 +16,7 @@ extension TextInputBlock {
     inputView.setInputType(inputType)
     inputView.setAutocapitalizationType(autocapitalizationType)
     inputView.setValidators(validators)
+    inputView.setFilters(filters)
     inputView.setTextAlignmentHorizontal(textAlignmentHorizontal)
     inputView.setTextAlignmentVertical(textAlignmentVertical)
     inputView.setText(
@@ -63,6 +64,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var typo: Typo?
   private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
   private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
+  private var filters: [TextInputFilter]?
   private var validators: [TextInputValidator]?
   private let disposePool = AutodisposePool()
   private var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
@@ -278,6 +280,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setValidators(_ validators: [TextInputValidator]?) {
     self.validators = validators
+  }
+
+  func setFilters(_ filters: [TextInputFilter]?) {
+    self.filters = filters
   }
 
   func setHint(_ value: NSAttributedString) {
@@ -539,6 +545,12 @@ extension TextInputBlockView {
         userInputPipe.send(.insert(string: text, range: range))
       }
       return false
+    }
+
+    if let filters, text != "" {
+      return filters.allSatisfy { filter in
+        filter(currentText + text)
+      }
     }
     return true
   }

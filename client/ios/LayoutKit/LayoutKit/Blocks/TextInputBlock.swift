@@ -3,6 +3,8 @@ import Foundation
 
 import VGSL
 
+public typealias TextInputFilter = (String) -> Bool
+
 public final class TextInputBlock: BlockWithTraits {
   public enum InputType: Equatable {
     public enum KeyboardType: Equatable {
@@ -77,6 +79,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let textAlignmentHorizontal: TextAlignmentHorizontal
   public let textAlignmentVertical: TextAlignmentVertical
   public weak var parentScrollView: ScrollView?
+  public let filters: [TextInputFilter]?
   public let validators: [TextInputValidator]?
   public let layoutDirection: UserInterfaceLayoutDirection
   public let paddings: EdgeInsets?
@@ -101,6 +104,7 @@ public final class TextInputBlock: BlockWithTraits {
     onFocusActions: [UserInterfaceAction] = [],
     onBlurActions: [UserInterfaceAction] = [],
     parentScrollView: ScrollView? = nil,
+    filters: [TextInputFilter]? = nil,
     validators: [TextInputValidator]? = nil,
     layoutDirection: UserInterfaceLayoutDirection,
     textAlignmentHorizontal: TextAlignmentHorizontal = .start,
@@ -126,6 +130,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.onFocusActions = onFocusActions
     self.onBlurActions = onBlurActions
     self.parentScrollView = parentScrollView
+    self.filters = filters
     self.validators = validators
     self.layoutDirection = layoutDirection
     self.textAlignmentHorizontal = textAlignmentHorizontal

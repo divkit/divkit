@@ -70,6 +70,7 @@ extension DivInput: DivBlockModeling {
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
       parentScrollView: context.parentScrollView,
+      filters: makeFilters(context),
       validators: makeValidators(context),
       layoutDirection: context.layoutDirection,
       textAlignmentHorizontal: resolveTextAlignmentHorizontal(expressionResolver).textAlignment,
@@ -113,6 +114,27 @@ extension DivInput: DivBlockModeling {
             cardId: context.cardId
           )
         )
+      }
+    }
+  }
+
+  private func makeFilters(_ context: DivBlockModelingContext) -> [TextInputFilter]? {
+    let expressionResolver = context.expressionResolver
+    return filters?.compactMap { filter -> TextInputFilter? in
+      switch filter {
+      case let .divInputFilterExpression(expressionFilter):
+        return { _ in
+          expressionFilter.resolveCondition(context.expressionResolver) ?? true
+        }
+      case let .divInputFilterRegex(regexFilter):
+        let pattern = regexFilter.resolvePattern(expressionResolver) ?? ""
+        guard let regex = try? NSRegularExpression(pattern: pattern) else {
+          DivKitLogger.error("Invalid regex pattern '\(pattern)'")
+          return nil
+        }
+        return { text in
+          text.fullMatchesRegex(regex)
+        }
       }
     }
   }

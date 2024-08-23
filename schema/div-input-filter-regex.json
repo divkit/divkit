@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_input_filters_regex",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "regex"
+      ]
+    },
+    "pattern": {
+      "type": "string",
+      "$description": "translations.json#/div_input_filters_regex_pattern"
+    }
+  },
+  "platforms": [
+    "ios"
+  ],
+  "required": [
+    "type",
+    "pattern"
+  ]
+}

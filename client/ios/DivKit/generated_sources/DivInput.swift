@@ -50,6 +50,7 @@ public final class DivInput: DivBase {
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
+  public let filters: [DivInputFilter]?
   public let focus: DivFocus?
   public let fontFamily: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
@@ -236,6 +237,7 @@ public final class DivInput: DivBase {
     columnSpan: Expression<Int>? = nil,
     disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
+    filters: [DivInputFilter]? = nil,
     focus: DivFocus? = nil,
     fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
@@ -290,6 +292,7 @@ public final class DivInput: DivBase {
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
+    self.filters = filters
     self.focus = focus
     self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
@@ -362,103 +365,104 @@ extension DivInput: Equatable {
     }
     guard
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.fontFamily == rhs.fontFamily
+      lhs.filters == rhs.filters,
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
+      lhs.fontFamily == rhs.fontFamily,
       lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight
+      lhs.fontSizeUnit == rhs.fontSizeUnit
     else {
       return false
     }
     guard
+      lhs.fontWeight == rhs.fontWeight,
       lhs.fontWeightValue == rhs.fontWeightValue,
-      lhs.height == rhs.height,
-      lhs.highlightColor == rhs.highlightColor
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.highlightColor == rhs.highlightColor,
       lhs.hintColor == rhs.hintColor,
-      lhs.hintText == rhs.hintText,
-      lhs.id == rhs.id
+      lhs.hintText == rhs.hintText
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.isEnabled == rhs.isEnabled,
-      lhs.keyboardType == rhs.keyboardType,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.keyboardType == rhs.keyboardType
     else {
       return false
     }
     guard
+      lhs.layoutProvider == rhs.layoutProvider,
       lhs.letterSpacing == rhs.letterSpacing,
-      lhs.lineHeight == rhs.lineHeight,
-      lhs.margins == rhs.margins
+      lhs.lineHeight == rhs.lineHeight
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.mask == rhs.mask,
-      lhs.maxLength == rhs.maxLength,
-      lhs.maxVisibleLines == rhs.maxVisibleLines
+      lhs.maxLength == rhs.maxLength
     else {
       return false
     }
     guard
+      lhs.maxVisibleLines == rhs.maxVisibleLines,
       lhs.nativeInterface == rhs.nativeInterface,
-      lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectAllOnFocus == rhs.selectAllOnFocus
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
-      lhs.textColor == rhs.textColor
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical
     else {
       return false
     }
     guard
+      lhs.textColor == rhs.textColor,
       lhs.textVariable == rhs.textVariable,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.validators == rhs.validators,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.validators == rhs.validators
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -483,6 +487,7 @@ extension DivInput: Serializable {
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
+    result["filters"] = filters?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()

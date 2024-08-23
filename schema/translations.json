@@ -1015,6 +1015,26 @@
     "en": "Text input element.",
     "ru": "Элемент для ввода текста."
   },
+  "div_input_filters": {
+    "en": "Filtering that prevents the entry of text that does not meet specified conditions.",
+    "ru": "Фильтрация, которая не допускает ввод текста, не соответствующего заданным условиям."
+  },
+  "div_input_filters_regex": {
+    "en": "Regex filter.",
+    "ru": "Фильтр на основе регулярных выражений."
+  },
+  "div_input_filters_regex_pattern": {
+    "en": "A regular expression (pattern) that the input value must match.",
+    "ru": "Регулярное выражение (паттерн), которому должно соответствовать вводимое значение."
+  },
+  "div_input_filters_expression": {
+    "en": "[Calculated expression](../../expressions) filter.",
+    "ru": "Фильтр на основе [вычисляемых выражений](../../expressions)."
+  },
+  "div_input_filters_expression_condition": {
+    "en": "[Calculated expression](../../expressions) used as a value validity condition.",
+    "ru": "[Вычисляемое выражение](../../expressions), которое используется как условие валидности значения."
+  },
   "div_input_highlight_color": {
     "en": "Text highlight color. If the value isn't set, the color set in the client will be used instead.",
     "ru": "Цвет выделения текста. Если значение не задано, будет использован цвет, установленный на клиенте."

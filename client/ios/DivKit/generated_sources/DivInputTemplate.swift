@@ -95,6 +95,7 @@ public final class DivInputTemplate: TemplateValue {
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
   public let extensions: Field<[DivExtensionTemplate]>?
+  public let filters: Field<[DivInputFilterTemplate]>?
   public let focus: Field<DivFocusTemplate>?
   public let fontFamily: Field<Expression<String>>?
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
@@ -152,6 +153,7 @@ public final class DivInputTemplate: TemplateValue {
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
+      filters: dictionary.getOptionalArray("filters", templateToType: templateToType),
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       fontFamily: dictionary.getOptionalExpressionField("font_family"),
       fontSize: dictionary.getOptionalExpressionField("font_size"),
@@ -210,6 +212,7 @@ public final class DivInputTemplate: TemplateValue {
     columnSpan: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
+    filters: Field<[DivInputFilterTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
     fontFamily: Field<Expression<String>>? = nil,
     fontSize: Field<Expression<Int>>? = nil,
@@ -265,6 +268,7 @@ public final class DivInputTemplate: TemplateValue {
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
+    self.filters = filters
     self.focus = focus
     self.fontFamily = fontFamily
     self.fontSize = fontSize
@@ -321,6 +325,7 @@ public final class DivInputTemplate: TemplateValue {
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let filtersValue = parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue
     let fontSizeValue = parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
@@ -375,6 +380,7 @@ public final class DivInputTemplate: TemplateValue {
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
+      filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
@@ -438,6 +444,7 @@ public final class DivInputTemplate: TemplateValue {
       columnSpan: columnSpanValue.value,
       disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
+      filters: filtersValue.value,
       focus: focusValue.value,
       fontFamily: fontFamilyValue.value,
       fontSize: fontSizeValue.value,
@@ -499,6 +506,7 @@ public final class DivInputTemplate: TemplateValue {
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
+    var filtersValue: DeserializationResult<[DivInputFilter]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
     var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
@@ -564,6 +572,8 @@ public final class DivInputTemplate: TemplateValue {
         disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "extensions":
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self).merged(with: extensionsValue)
+      case "filters":
+        filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputFilterTemplate.self).merged(with: filtersValue)
       case "focus":
         focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self).merged(with: focusValue)
       case "font_family":
@@ -670,6 +680,8 @@ public final class DivInputTemplate: TemplateValue {
         disappearActionsValue = disappearActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self) })
       case parent?.extensions?.link:
         extensionsValue = extensionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self) })
+      case parent?.filters?.link:
+        filtersValue = filtersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputFilterTemplate.self) })
       case parent?.focus?.link:
         focusValue = focusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self) })
       case parent?.fontFamily?.link:
@@ -765,6 +777,7 @@ public final class DivInputTemplate: TemplateValue {
       borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       disappearActionsValue = disappearActionsValue.merged(with: { parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -796,6 +809,7 @@ public final class DivInputTemplate: TemplateValue {
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
+      filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
@@ -859,6 +873,7 @@ public final class DivInputTemplate: TemplateValue {
       columnSpan: columnSpanValue.value,
       disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
+      filters: filtersValue.value,
       focus: focusValue.value,
       fontFamily: fontFamilyValue.value,
       fontSize: fontSizeValue.value,
@@ -925,6 +940,7 @@ public final class DivInputTemplate: TemplateValue {
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
       extensions: extensions ?? mergedParent.extensions,
+      filters: filters ?? mergedParent.filters,
       focus: focus ?? mergedParent.focus,
       fontFamily: fontFamily ?? mergedParent.fontFamily,
       fontSize: fontSize ?? mergedParent.fontSize,
@@ -986,6 +1002,7 @@ public final class DivInputTemplate: TemplateValue {
       columnSpan: merged.columnSpan,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
+      filters: merged.filters?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
       fontFamily: merged.fontFamily,
       fontSize: merged.fontSize,

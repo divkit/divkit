@@ -60,6 +60,16 @@
             "android"
           ]
         },
+        "filters": {
+          "type": "array",
+          "$description": "translations.json#/div_input_filters",
+          "platforms": [
+            "ios"
+          ],
+          "items": {
+            "$ref": "div-input-filter.json"
+          }
+        },
         "text_color": {
           "$ref": "common.json#/color",
           "default_value": "#FF000000",

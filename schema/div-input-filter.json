@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-input-filter-regex.json",
+      "$description": "translations.json#/div_input_filters_regex"
+    },
+    {
+      "$ref": "div-input-filter-expression.json",
+      "$description": "translations.json#/div_input_filters_expression"
+    }
+  ]
+}
