@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/text/utils/div_range_helper.dart';
 import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
@@ -38,16 +39,25 @@ class DivTextModel with EquatableMixin {
       );
 
       final autoEllipsize = data.autoEllipsize?.value ?? false;
+      final fontFamily = data.fontFamily?.requireValue;
 
-      final fontSize = data.fontSize.value!.toDouble() *
-          data.fontSizeUnit.value!.asPx *
+      final fontSize = data.fontSize.requireValue.toDouble() *
+          data.fontSizeUnit.requireValue.asPx *
           textScale;
 
-      final lineHeight = data.lineHeight?.value!.toDouble();
+      final lineHeight = data.lineHeight?.requireValue.toDouble();
 
-      final underline = data.underline.value!;
+      final letterSpacing = data.letterSpacing.requireValue;
+      final underline = data.underline.requireValue;
 
-      final strike = data.strike.value!;
+      final strike = data.strike.requireValue;
+      final shadow = data.textShadow?.valueShadow(viewScale: viewScale);
+
+      final fontWeightValue = data.fontWeightValue?.requireValue;
+      FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
+        (element) => element.value == fontWeightValue,
+      );
+      fontWeight ??= data.fontWeight.passValue();
 
       final linesStyleList = [
         underline,
@@ -56,30 +66,34 @@ class DivTextModel with EquatableMixin {
 
       final style = TextStyle(
         fontSize: fontSize,
+        fontFamily: fontFamily,
+        shadows: shadow != null ? [shadow] : null,
         height: lineHeight != null
-            ? (lineHeight * data.fontSizeUnit.value!.asPx) *
+            ? (lineHeight * data.fontSizeUnit.requireValue.asPx) *
                 viewScale /
                 fontSize
             : null,
         color: data.textColor.value!,
-        fontWeight: data.fontWeight.passValue(),
+        fontWeight: fontWeight,
+        letterSpacing: letterSpacing,
         decoration: TextDecoration.combine(
           [
             underline.asUnderline,
             strike.asLineThrough,
           ],
         ),
-        decorationColor: data.textColor.value!,
+        decorationColor: data.textColor.requireValue,
         overflow: autoEllipsize ? TextOverflow.ellipsis : null,
       );
 
-      final text = data.text.value!;
+      final text = data.text.requireValue;
 
       final rangesList = DivRangeHelper.getRangeItemsSync(
         text,
         data.ranges ?? [],
         style,
         linesStyleList,
+        viewScale,
       );
 
       return DivTextModel(
@@ -88,7 +102,7 @@ class DivTextModel with EquatableMixin {
         style: style,
         textBoxAlignment: alignment.valueAlignmentGeometry(),
         textAlign: alignment.valueTextAlign(),
-        maxLines: data.maxLines?.value!,
+        maxLines: data.maxLines?.requireValue,
       );
     } catch (e, st) {
       logger.warning(
@@ -122,6 +136,10 @@ class DivTextModel with EquatableMixin {
             ) ??
             false;
 
+        final fontFamily = (await data.fontFamily?.resolveValue(
+          context: context,
+        ));
+
         final fontSize = (await data.fontSize.resolveValue(
               context: context,
             ))
@@ -145,13 +163,33 @@ class DivTextModel with EquatableMixin {
           context: context,
         );
 
+        final letterSpacing = await data.letterSpacing.resolveValue(
+          context: context,
+        );
+
         final linesStyleList = [
           underline,
           strike,
         ];
 
+        final fontWeightValue = await data.fontWeightValue?.resolveValue(
+          context: context,
+        );
+        FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
+          (element) => element.value == fontWeightValue,
+        );
+        fontWeight ??= await data.fontWeight.resolve(context: context);
+
+        final shadow = await data.textShadow?.resolveShadow(
+          context: context,
+          viewScale: viewScale,
+        );
+
         final style = TextStyle(
+          fontFamily: fontFamily,
           fontSize: fontSize,
+          letterSpacing: letterSpacing,
+          shadows: shadow != null ? [shadow] : null,
           height: lineHeight != null
               ? (lineHeight *
                       (await data.fontSizeUnit.resolveValue(
@@ -164,9 +202,7 @@ class DivTextModel with EquatableMixin {
           color: await data.textColor.resolveValue(
             context: context,
           ),
-          fontWeight: await data.fontWeight.resolve(
-            context: context,
-          ),
+          fontWeight: fontWeight,
           decoration: TextDecoration.combine(
             [
               underline.asUnderline,
@@ -189,6 +225,7 @@ class DivTextModel with EquatableMixin {
           context,
           style,
           linesStyleList,
+          viewScale,
         );
 
         return DivTextModel(

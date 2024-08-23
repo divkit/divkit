@@ -1171,6 +1171,58 @@ extension PassDivBorder on DivBorder {
   }
 }
 
+extension PassDivShadow on DivShadow {
+  Future<BoxShadow?> resolveBoxShadow({
+    required DivVariableContext context,
+    required double viewScale,
+  }) async =>
+      BoxShadow(
+        color: (await color.resolveValue(context: context)).withOpacity(
+          await alpha.resolveValue(context: context),
+        ),
+        blurRadius:
+            (await blur.resolveValue(context: context)).toDouble() * viewScale,
+        offset:
+            await offset.resolveOffset(context: context, viewScale: viewScale),
+      );
+
+  BoxShadow? valueBoxShadow({
+    required double viewScale,
+  }) =>
+      BoxShadow(
+        color: color.requireValue.withOpacity(alpha.requireValue),
+        blurRadius: blur.requireValue.toDouble() * viewScale,
+        offset: offset.valueOffset(
+          viewScale: viewScale,
+        ),
+      );
+
+  Future<Shadow?> resolveShadow({
+    required DivVariableContext context,
+    required double viewScale,
+  }) async =>
+      Shadow(
+        color: (await color.resolveValue(context: context)).withOpacity(
+          await alpha.resolveValue(context: context),
+        ),
+        blurRadius:
+            (await blur.resolveValue(context: context)).toDouble() * viewScale,
+        offset:
+            await offset.resolveOffset(context: context, viewScale: viewScale),
+      );
+
+  Shadow? valueShadow({
+    required double viewScale,
+  }) =>
+      Shadow(
+        color: color.requireValue.withOpacity(alpha.requireValue),
+        blurRadius: blur.requireValue.toDouble() * viewScale,
+        offset: offset.valueOffset(
+          viewScale: viewScale,
+        ),
+      );
+}
+
 extension PassDivFontWeight on Expression<DivFontWeight> {
   Future<FontWeight> resolve({
     required DivVariableContext context,

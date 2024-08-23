@@ -50,11 +50,13 @@ class DivInputModel with EquatableMixin {
         }
       });
 
-      final styleUnit = data.fontSizeUnit.value!.asPx;
-      final lineHeight = data.lineHeight?.value!;
+      final styleUnit = data.fontSizeUnit.requireValue.asPx;
+      final lineHeight = data.lineHeight?.requireValue;
+      final fontFamily = data.fontFamily?.requireValue;
       final fontSize = data.fontSize.value!.toDouble() * textScale;
 
       final style = TextStyle(
+        fontFamily: fontFamily,
         fontSize: fontSize * styleUnit,
         color: data.textColor.value!,
         height: lineHeight != null ? lineHeight * viewScale / fontSize : null,
@@ -62,15 +64,15 @@ class DivInputModel with EquatableMixin {
       );
 
       final hintStyle = style.copyWith(
-        color: data.hintColor.value!,
+        color: data.hintColor.requireValue,
       );
 
-      final keyboardType = data.keyboardType.value!;
+      final keyboardType = data.keyboardType.requireValue;
       if (variables.context.current[data.textVariable] != controller.text) {
         controller.text = variables.context.current[data.textVariable] ?? '';
       }
 
-      final newFocusNodeId = data.focus?.nextFocusIds?.forward?.value!;
+      final newFocusNodeId = data.focus?.nextFocusIds?.forward?.requireValue;
 
       final alignment = PassDivTextAlignment(
         data.textAlignmentVertical,
@@ -82,8 +84,8 @@ class DivInputModel with EquatableMixin {
       return DivInputModel(
         textStyle: style,
         hintStyle: hintStyle,
-        hintText: data.hintText?.value!,
-        maxLines: obscureText ? 1 : data.maxVisibleLines?.value!,
+        hintText: data.hintText?.requireValue,
+        maxLines: obscureText ? 1 : data.maxVisibleLines?.requireValue,
         obscureText: obscureText,
         keyboardType: keyboardType.map(
           singleLineText: () => TextInputType.text,
@@ -124,6 +126,7 @@ class DivInputModel with EquatableMixin {
     final textScale = divScalingModel?.textScale ?? 1;
 
     return variables.watch<DivInputModel>((context) async {
+      final fontFamily = await data.fontFamily?.resolveValue(context: context);
       final styleUnit = (await data.fontSizeUnit.resolveValue(
         context: context,
       ))
@@ -138,6 +141,7 @@ class DivInputModel with EquatableMixin {
           textScale;
 
       final style = TextStyle(
+        fontFamily: fontFamily,
         fontSize: fontSize * styleUnit,
         color: await data.textColor.resolveValue(
           context: context,
@@ -236,5 +240,6 @@ class DivInputModel with EquatableMixin {
         onFocusActions,
         textAlign,
         textAlignVertical,
+        obscureText,
       ];
 }
