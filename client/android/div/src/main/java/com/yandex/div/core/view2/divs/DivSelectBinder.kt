@@ -91,6 +91,7 @@ internal class DivSelectBinder @Inject constructor(
 
         val subscription = variableBinder.bindVariable(
             bindingContext.divView,
+            bindingContext.runtimeStore,
             div.valueVariable,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
                 override fun onVariableChanged(value: String?) {

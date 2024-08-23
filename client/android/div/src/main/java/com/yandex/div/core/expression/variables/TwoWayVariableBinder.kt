@@ -5,7 +5,9 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.getOrCreateRuntime
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -51,6 +53,7 @@ internal abstract class TwoWayVariableBinder<T>(
 
     fun bindVariable(
         divView: Div2View,
+        runtimeStore: RuntimeStore?,
         variableName: String,
         callbacks: Callbacks<T>,
         path: DivStatePath,
@@ -60,8 +63,9 @@ internal abstract class TwoWayVariableBinder<T>(
         var pendingValue: T? = null
         val tag = divView.dataTag
         var variable: Variable? = null
-        val variableController = getOrCreateRuntime(divView, path.fullPath, path.parentFullPath)?.variableController
-            ?: expressionsRuntimeProvider.getOrCreate(tag, data, divView).variableController
+        val variableController = (getOrCreateRuntime(
+            runtimeStore, path.fullPath, path.parentFullPath
+        ) ?: expressionsRuntimeProvider.getOrCreate(tag, data, divView)).variableController
 
         callbacks.setViewStateChangeListener { value ->
             if (pendingValue == value) return@setViewStateChangeListener

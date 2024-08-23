@@ -355,7 +355,9 @@ internal class DivInputBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, primaryVariable, callbacks, path))
+        addSubscription(variableBinder.bindVariable(
+            divView, bindingContext?.runtimeStore, primaryVariable, callbacks, path)
+        )
 
         observeValidators(div, resolver, divView)
     }

@@ -31,6 +31,7 @@ import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.downloader.DivDataChangedObserver
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.images.LoadReference
@@ -134,6 +135,7 @@ class Div2View private constructor(
         get() = expressionsRuntime?.variableController
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
+    internal var runtimeStore: RuntimeStore? = null
 
     internal var bindingContext: BindingContext = BindingContext.createEmpty(this)
 
@@ -202,7 +204,8 @@ class Div2View private constructor(
         if (oldExpressionsRuntime != expressionsRuntime) {
             oldExpressionsRuntime?.clearBinding()
         }
-        bindingContext = bindingContext.getFor(expressionResolver)
+        runtimeStore = expressionsRuntime?.runtimeStore
+        bindingContext = bindingContext.getFor(expressionResolver, runtimeStore)
     }
 
     private fun attachVariableTriggers() {

@@ -24,7 +24,6 @@ import com.yandex.div.core.view2.divs.DivTextBinder
 import com.yandex.div.core.view2.divs.DivVideoBinder
 import com.yandex.div.core.view2.divs.applyMargins
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
-import com.yandex.div.core.view2.divs.getOrCreateRuntime
 import com.yandex.div.core.view2.divs.pager.DivPagerBinder
 import com.yandex.div.core.view2.divs.pager.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.tabs.DivTabsBinder
@@ -90,9 +89,15 @@ internal class DivBinder @Inject constructor(
 ) {
     @MainThread
     fun bind(parentContext: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
-        val divView = parentContext.divView
-        val resolver = getResolverForPath(div.value(), path, parentContext)
-        val context = parentContext.getFor(resolver)
+        val context = parentContext.getFor(
+            parentContext.runtimeStore?.getOrCreateRuntime(
+                path = path.fullPath,
+                parentPath = path.parentFullPath,
+                variables = div.value().variables?.toVariables()
+            )?.expressionResolver ?: parentContext.expressionResolver
+        )
+        val divView = context.divView
+        val resolver = context.expressionResolver
         divView.currentRebindReusableList?.pop(div)?.let {
             return@suppressExpressionErrors
         }
@@ -237,11 +242,4 @@ internal class DivBinder @Inject constructor(
     private fun setGridData(context: BindingContext, view: View, data: DivGrid) {
         gridBinder.setDataWithoutBinding(context, view as DivGridLayout, data)
     }
-
-    private fun getResolverForPath(div: DivBase, path: DivStatePath, context: BindingContext) =
-        with(context) {
-            getOrCreateRuntime(
-                context.divView, path.fullPath, path.parentFullPath, div.variables
-            )?.expressionResolver ?: expressionResolver
-        }
 }

@@ -226,6 +226,9 @@ internal class DivContainerBinder @Inject constructor(
         val binder = divBinder.get()
         var shift = 0
         val subscriber = expressionSubscriber
+        val parentRuntime = getOrCreateRuntime(
+            bindingContext.runtimeStore, path.fullPath, path.parentFullPath, null
+        )
         items.forEachIndexed { index, item ->
             val childView = getChildAt(index + shift)
             val oldChildDiv = (childView as? DivHolderView<*>)?.div
@@ -244,15 +247,17 @@ internal class DivContainerBinder @Inject constructor(
             } else {
                 val id = item.div.value().getChildPathUnit(index)
 
-                setPathToRuntimeWith(
-                    divView = bindingContext.divView,
+                resolveRuntime(
+                    runtimeStore = bindingContext.runtimeStore,
                     pathUnit = id,
                     parentPath = path.fullPath,
                     variables = item.div.value().variables,
-                    resolver = item.expressionResolver
+                    resolver = item.expressionResolver,
+                    parentRuntime = parentRuntime
                 )
 
-                binder.bind(bindingContext, childView, item.div, path.appendDiv(id))
+                val childContext = bindingContext.getFor(item.expressionResolver)
+                binder.bind(childContext, childView, item.div, path.appendDiv(id))
                 childView.bindChildAlignment(
                     newDiv,
                     oldDiv,
