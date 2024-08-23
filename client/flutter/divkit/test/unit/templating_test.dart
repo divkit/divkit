@@ -1181,5 +1181,80 @@ void main() {
       // Assert
       expect(layout, result);
     });
+
+    /// Inner object in templates must be moved without changes.
+    test(
+        'TemplatesResolver should move the internal object in the templates without any changes',
+        () {
+      final json = {
+        "card": {
+          "states": [
+            {
+              "state_id": 0,
+              "div": {"type": "example"}
+            }
+          ]
+        },
+        "templates": {
+          "example": {
+            "type": "container",
+            "height": {"type": "fixed", "value": 100},
+            "background": [
+              {
+                "type": "gradient",
+                "colors": ["#999", "#fff"],
+                "angle": 45
+              }
+            ],
+            "content_alignment_vertical": "center",
+            "content_alignment_horizontal": "center",
+            "items": [
+              {
+                "type": "text",
+                "text": "Inner object in templates example",
+                "width": {"type": "wrap_content"}
+              }
+            ]
+          }
+        }
+      };
+
+      final result = {
+        "states": [
+          {
+            "state_id": 0,
+            "div": {
+              "type": "container",
+              "height": {"type": "fixed", "value": 100},
+              "background": [
+                {
+                  "type": "gradient",
+                  "colors": ["#999", "#fff"],
+                  "angle": 45
+                }
+              ],
+              "content_alignment_vertical": "center",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Inner object in templates example",
+                  "width": {"type": "wrap_content"}
+                }
+              ]
+            }
+          }
+        ]
+      };
+
+      // Act
+      final layout = TemplatesResolver(
+        layout: json['card']!,
+        templates: json['templates'],
+      ).mergeSync();
+
+      // Assert
+      expect(layout, result);
+    });
   });
 }

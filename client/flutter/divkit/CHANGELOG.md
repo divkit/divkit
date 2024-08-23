@@ -1,6 +1,7 @@
 ## 0.3.1-rc.1
 
 * Fix sticky switching of states
+* Fix inner objects in templates breaks rendering
 
 ## 0.3.0
 

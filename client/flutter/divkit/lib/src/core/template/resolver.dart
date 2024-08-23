@@ -156,6 +156,11 @@ class TemplatesResolver {
         } else if (value is Arr) {
           final list = [];
           for (final e in value) {
+            if (e != null && e is! Obj) {
+              list.add(e);
+              continue;
+            }
+
             final res = _replaceSync(e ?? value, e, ctx);
             for (final r in res.used) {
               if (result.containsKey(r)) {
@@ -298,6 +303,11 @@ class TemplatesResolver {
         } else if (value is Arr) {
           final list = [];
           for (final e in value) {
+            if (e != null && e is! Obj) {
+              list.add(e);
+              continue;
+            }
+
             final res = await _replace(e ?? value, e, ctx);
             for (final r in res.used) {
               if (result.containsKey(r)) {
