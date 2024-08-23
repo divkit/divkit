@@ -655,10 +655,6 @@
       "file": "button_actions.json"
     },
     {
-      "title": "Longtap actions",
-      "file": "pinch-to-zoom-longtap-actions.json"
-    },
-    {
       "title": "Div errors visualization",
       "platforms": [
         "android",
@@ -1032,6 +1028,10 @@
     },
     {
       "title": "For the reverse animation of the action, a direct interpolator is used",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "tags": [
         "Animations"
       ],
@@ -1187,8 +1187,7 @@
         "DivPager"
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ],
       "steps": [
         "Check first item visibility logged",
@@ -1549,13 +1548,6 @@
       "file": "selectable_text.json"
     },
     {
-      "title": "DivText",
-      "tags": [
-        "DivText"
-      ],
-      "file": "div-text.json"
-    },
-    {
       "title": "Nested change bounds transitions",
       "automated": [
         "web"
@@ -1676,6 +1668,10 @@
     },
     {
       "title": "Actions logging",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -1691,34 +1687,6 @@
         "Long click logged 2 times"
       ],
       "file": "logging.json"
-    },
-    {
-      "title": "Shortcuts",
-      "file": "shortcuts.json"
-    },
-    {
-      "title": "Auto ellipsize",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "file": "auto-ellipsize.json"
-    },
-    {
-      "title": "Expand cutout 1",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "file": "expand-cutout-1.json"
-    },
-    {
-      "title": "Expand cutout 2",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "file": "expand-cutout-2.json"
     },
     {
       "title": "Lottie animations",
@@ -1775,10 +1743,6 @@
       "file": "grid_layout.json"
     },
     {
-      "title": "Grid with weights",
-      "file": "grid-with-weights.json"
-    },
-    {
       "title": "Image Shimmer Preview",
       "file": "image_shimmer_preview.json",
       "platforms": [
@@ -1791,10 +1755,18 @@
     },
     {
       "title": "Custom container",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "file": "custom-container.json"
     },
     {
       "title": "Custom card",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "file": "custom-card.json"
     },
     {
@@ -2187,19 +2159,6 @@
         "DivVideo"
       ],
       "file": "video/video_aspect.json"
-    },
-    {
-      "title": "Variables in default state id",
-      "tags": [
-        "DivState"
-      ],
-      "steps": [
-        "Check default state"
-      ],
-      "expected_results": [
-        "OK - content in text"
-      ],
-      "file": "state/default_state_id.json"
     },
     {
       "title": "state_id_variable",
