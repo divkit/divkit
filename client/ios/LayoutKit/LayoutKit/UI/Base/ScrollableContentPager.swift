@@ -24,60 +24,54 @@ public final class ScrollableContentPager: NSObject {
   public func setInitialOffset(_ offset: CGFloat) {
     guard isPagingEnabled else { return }
     
-    if currentPageIndex == nil, lastContentOffset == nil, indexedPageOrigins.count > 0 {
-      let initialPageIndex = pageIndex(forOffset: offset)
-      let pageOrigin = indexedPageOrigins[initialPageIndex].origin
-      let initialContentOffset = isHorizontal ? CGPoint(x: pageOrigin, y: 0) : CGPoint(x: 0, y: pageOrigin)
-      
-      currentPageIndex = initialPageIndex
-      lastContentOffset = initialContentOffset
+    if currentPageIndex == nil, indexedPageOrigins.count > 0 {
+      currentPageIndex = pageIndex(forOffset: offset)
     }
   }
 
   public private(set) var currentPageIndex: Int?
-  public private(set) var lastContentOffset: CGPoint?
 
-  public func targetPageOffset(forProposedOffset offset: CGFloat, isHorizontal: Bool) -> CGFloat? {
-    guard currentPageIndex != nil,
-          var newLastContentOffset = lastContentOffset else {
+  public func targetPageOffset(
+    forProposedOffset offset: CGFloat,
+    direction: CGPoint,
+    isHorizontal: Bool
+  ) -> CGFloat? {
+    guard let currentIndex = currentPageIndex else {
       return nil
     }
     
-    var resultPageIndex = pageIndex(forOffset: offset)
-
-    var forcedIndexOffset = 0
-    if newLastContentOffset.forceIndexOffset(isHorizontal: isHorizontal).isApproximatelyNotEqualTo(offset) {
-      forcedIndexOffset = newLastContentOffset.forceIndexOffset(isHorizontal: isHorizontal) < offset ? 1 : 0
+    let forcedIndexOffset = direction.forceIndexOffset(isHorizontal: isHorizontal) > 0 ? -1 : 0
+    var resultPageIndex = pageIndex(forOffset: offset) + forcedIndexOffset
+    
+    // If we scrolled to the first/last page, which may be "small" and try to scroll to the next/previous page,
+    // we may be thrown to 2 pages instead of the required 1 page.
+    // These checks reduce the "sensitivity" of scrolling on corner cases and shift us to 1 page instead of 2 pages.
+    if currentPageIndex == indexedPageOrigins.first?.index && resultPageIndex - currentIndex == 2 {
+      resultPageIndex = currentIndex + 1
+    } else if currentPageIndex == indexedPageOrigins.last?.index && currentIndex - resultPageIndex == 2 {
+      resultPageIndex = currentIndex - 1
     }
-    resultPageIndex += forcedIndexOffset
     
     resultPageIndex = clamp(
       resultPageIndex,
       min: 0,
       max: indexedPageOrigins.count - 1
     )
-    
-    let targetPageOffset = indexedPageOrigins[resultPageIndex].origin
-    if isHorizontal {
-      newLastContentOffset.x = targetPageOffset
-    } else {
-      newLastContentOffset.y = targetPageOffset
-    }
-    lastContentOffset = newLastContentOffset
     currentPageIndex = resultPageIndex
-    return targetPageOffset
+    
+    return indexedPageOrigins[resultPageIndex].origin
   }
   
   private func pageIndex(forOffset offset: CGFloat) -> Int {
-    guard indexedPageOrigins.first(where: {
+    guard let rightBound = indexedPageOrigins.first(where: {
       $0.origin.isApproximatelyGreaterOrEqualThan(offset)
-    }) != nil else { return indexedPageOrigins.count - 1 }
+    }) else { return indexedPageOrigins.count - 1 }
     
-    guard let leftBound = indexedPageOrigins.reversed().first(where: {
+    guard indexedPageOrigins.reversed().first(where: {
       $0.origin.isApproximatelyLessOrEqualThan(offset)
-    }) else { return 0 }
+    }) != nil else { return 0 }
     
-    return leftBound.index
+    return rightBound.index
   }
 }
 
