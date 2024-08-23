@@ -249,6 +249,7 @@ internal class DivStateBinder @Inject constructor(
 
         val subscription = variableBinder.bindVariable(
                 divView,
+                bindingContext?.runtimeStore,
                 stateIdVariable,
                 callbacks = object : TwoWayStringVariableBinder.Callbacks {
                     override fun onVariableChanged(value: String?) {

@@ -20,6 +20,7 @@ import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivPathUtils.findDivState
@@ -604,32 +605,34 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
 }
 
 internal fun getOrCreateRuntime(
-    divView: Div2View,
+    runtimeStore: RuntimeStore?,
     path: String,
     parentPath: String?,
     variables: List<DivVariable>? = null
 ): ExpressionsRuntime? {
-    return divView.expressionsRuntime?.runtimeStore?.getOrCreateRuntime(
+    return runtimeStore?.getOrCreateRuntime(
         path = path,
         parentPath = parentPath,
         variables = variables?.toVariables()
     )
 }
 
-internal fun getRuntimeFor(divView: Div2View, resolver: ExpressionResolver) =
-    divView.expressionsRuntime?.runtimeStore?.getRuntimeWithOrNull(resolver)
+internal fun getRuntimeFor(runtimeStore: RuntimeStore?, resolver: ExpressionResolver) =
+    runtimeStore?.getRuntimeWithOrNull(resolver)
 
-internal fun setPathToRuntimeWith(
-    divView: Div2View,
+internal fun resolveRuntime(
+    runtimeStore: RuntimeStore?,
     pathUnit: String,
     parentPath: String,
     variables: List<DivVariable>?,
     resolver: ExpressionResolver,
-) = divView.expressionsRuntime?.runtimeStore?.setPathToRuntimeWith(
+    parentRuntime: ExpressionsRuntime?,
+) = runtimeStore?.resolveRuntimeWith(
         path = "$parentPath/$pathUnit",
         parentPath = parentPath,
         variables = variables?.toVariables(),
-        resolver = resolver
+        resolver = resolver,
+        parentRuntime = parentRuntime
     )
 
 internal fun DivBase.getChildPathUnit(index: Int) = id ?: "child#$index"

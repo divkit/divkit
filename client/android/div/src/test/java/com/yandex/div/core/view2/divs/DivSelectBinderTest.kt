@@ -27,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 class DivSelectBinderTest : DivBinderTest() {
     private val divTypefaceResolver = mock<DivTypefaceResolver>()
     private val variableBinder = mock<TwoWayStringVariableBinder> {
-        on { bindVariable(any(), any(), any(), any()) } doReturn mock()
+        on { bindVariable(any(), anyOrNull(), any(), any(), any()) } doReturn mock()
     }
     private val errorCollectors = mock<ErrorCollectors> {
         on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn mock()
@@ -52,14 +52,14 @@ class DivSelectBinderTest : DivBinderTest() {
     fun `bind value_variable`() {
         underTest.bindView(bindingContext, view, divSelect, path)
 
-        verify(variableBinder).bindVariable(any(), eq(divSelect.valueVariable), any(), any())
+        verify(variableBinder).bindVariable(any(), anyOrNull(), eq(divSelect.valueVariable), any(), any())
         verifyNoMoreInteractions(variableBinder)
     }
 
     @Test
     fun `update text after variable changed`() {
         underTest.bindView(bindingContext, view, divSelect, path)
-        verify(variableBinder).bindVariable(any(), any(), captor.capture(), any())
+        verify(variableBinder).bindVariable(any(), anyOrNull(), any(), captor.capture(), any())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
 
@@ -76,7 +76,7 @@ class DivSelectBinderTest : DivBinderTest() {
         val viewStateChangeListener = mock<(String) -> Unit>()
 
         underTest.bindView(bindingContext, view, divSelect, path)
-        verify(variableBinder).bindVariable(any(), any(), captor.capture(), any())
+        verify(variableBinder).bindVariable(any(), anyOrNull(), any(), captor.capture(), any())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
 

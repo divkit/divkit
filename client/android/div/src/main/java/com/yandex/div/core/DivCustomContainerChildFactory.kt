@@ -79,6 +79,6 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
             div,
             divStatePath.appendDiv(div.value().getChildPathUnit(childIndex))
         )
-        divView.expressionsRuntime?.runtimeStore?.showWarningIfNeeded(div.value())
+        divView.runtimeStore?.showWarningIfNeeded(div.value())
     }
 }

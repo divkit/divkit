@@ -64,7 +64,7 @@ class VariableMutationHandler {
             name: String,
             resolver: ExpressionResolver,
         ): Variable? {
-            val runtime = getRuntimeFor(div2View, resolver) ?: div2View.expressionsRuntime
+            val runtime = getRuntimeFor(div2View.runtimeStore, resolver) ?: div2View.expressionsRuntime
 
             return runtime?.variableController?.getMutableVariable(name)
         }

@@ -8,7 +8,6 @@ import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.internal.Assert
-import com.yandex.div.internal.Log
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 
@@ -38,7 +37,6 @@ internal class RuntimeStore(
                  * receive the same callback and override runtime for provided path.
                  */
                 putRuntime(runtime = it)
-                it.updateSubscriptions()
             }
         }
     }
@@ -51,7 +49,7 @@ internal class RuntimeStore(
     }
 
     internal fun getOrCreateRuntime(path: String, parentPath: String?, variables: List<Variable>?) =
-         pathToRuntimes[path] ?: getRuntimeOrCreateChild(path, parentPath, variables)
+        pathToRuntimes[path] ?: getRuntimeOrCreateChild(path, parentPath, variables)
 
     internal fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
 
@@ -59,23 +57,29 @@ internal class RuntimeStore(
         resolverToRuntime[runtime.expressionResolver] = runtime
         allRuntimes.add(runtime)
 
-        if (path != null) pathToRuntimes[path] = runtime
+        if (path != null) {
+            pathToRuntimes[path] = runtime
+            runtime.updateSubscriptions()
+        }
     }
 
-    internal fun setPathToRuntimeWith(
+    internal fun resolveRuntimeWith(
         path: String,
         parentPath: String?,
         variables: List<Variable>?,
         resolver: ExpressionResolver,
-    ) {
-        if (resolver == pathToRuntimes[path]?.expressionResolver) return
+        parentRuntime: ExpressionsRuntime? = null,
+    ): ExpressionsRuntime? {
+        val runtimeForPath = pathToRuntimes[path]
+        if (resolver == runtimeForPath?.expressionResolver) return runtimeForPath
+
         val existingRuntime = getRuntimeWithOrNull(resolver) ?: run {
             reportError(ERROR_UNKNOWN_RESOLVER)
-            return
+            return null
         }
 
-        removeRuntimesFor(path)
-        getRuntimeOrCreateChild(path, parentPath, variables, existingRuntime)
+        if (runtimeForPath != null) removeRuntimesFor(path)
+        return getRuntimeOrCreateChild(path, parentPath, variables, existingRuntime, parentRuntime)
     }
 
     internal fun cleanup() {
@@ -134,8 +138,9 @@ internal class RuntimeStore(
         parentPath: String?,
         variables: List<Variable>?,
         existingRuntime: ExpressionsRuntime? = null,
+        parentRuntime: ExpressionsRuntime? = null,
     ): ExpressionsRuntime? {
-        val runtime = (existingRuntime ?: parentPath?.let { pathToRuntimes[it] })
+        val runtime = (existingRuntime ?: parentRuntime ?: parentPath?.let { pathToRuntimes[it] })
             ?: pathToRuntimes[ROOT_RUNTIME_PATH]
             ?: run {
                 reportError(ERROR_ROOT_RUNTIME_NOT_SPECIFIED)
@@ -143,7 +148,10 @@ internal class RuntimeStore(
             }
 
         return if (variables.isNullOrEmpty()) {
-            runtime.also { pathToRuntimes[path] = it }
+            runtime.also {
+                pathToRuntimes[path] = it
+                runtime.updateSubscriptions()
+            }
         } else {
             createChildRuntime(runtime, path, variables)
         }

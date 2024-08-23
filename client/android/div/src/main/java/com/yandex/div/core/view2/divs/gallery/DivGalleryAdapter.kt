@@ -35,7 +35,7 @@ internal class DivGalleryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryViewHolder {
         val view = DivViewWrapper(bindingContext.divView.context)
-        return DivGalleryViewHolder(view, divBinder, viewCreator, itemStateBinder, path)
+        return DivGalleryViewHolder(bindingContext, view, divBinder, viewCreator, itemStateBinder, path)
     }
 
     override fun getItemId(position: Int): Long {

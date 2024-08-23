@@ -166,7 +166,9 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, elapsedTimeVariable, callbacks, path))
+        addSubscription(variableBinder.bindVariable(
+            divView, bindingContext?.runtimeStore, elapsedTimeVariable, callbacks, path)
+        )
     }
 
     private fun DivVideoView.observeMuted(
