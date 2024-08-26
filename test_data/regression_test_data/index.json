@@ -2460,6 +2460,19 @@
       "file": "input_inside_pager.json"
     },
     {
+      "title": "Input keyboard types",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "The keyboard type when clicking on an input field should differ depending on the select"
+      ],
+      "file": "input_keyboard_types.json"
+    },
+    {
       "title": "Slider vertical scroll interruption",
       "automated": [
         "android"
