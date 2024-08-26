@@ -106,17 +106,27 @@ class _TestingPage extends State<TestingPage> {
                     MenuAnchor(
                       controller: menuController,
                       menuChildren: [
-                        MenuItemButton(
-                          onPressed: selectedTags.isNotEmpty
+                        InkWell(
+                          onTap: selectedTags.isNotEmpty
                               ? () => setState(() => selectedTags = {})
                               : null,
-                          child: const Text('Reset'),
+                          child: AbsorbPointer(
+                            child: MenuItemButton(
+                              onPressed: selectedTags.isNotEmpty ? () {} : null,
+                              child: const Text('Reset'),
+                            ),
+                          ),
                         ),
                         for (final tag in tags) //
-                          CheckboxMenuButton(
-                            value: selectedTags.contains(tag),
-                            onChanged: (value) => toggleTag(tag),
-                            child: Text(tag),
+                          InkWell(
+                            onTap: () => toggleTag(tag),
+                            child: AbsorbPointer(
+                              child: CheckboxMenuButton(
+                                value: selectedTags.contains(tag),
+                                onChanged: (value) {},
+                                child: Text(tag),
+                              ),
+                            ),
                           ),
                       ],
                       child: IconButton(
