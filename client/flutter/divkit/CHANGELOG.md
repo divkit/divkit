@@ -2,7 +2,8 @@
 
 * Fix sticky switching of states
 * Fix inner objects in templates breaks rendering
-* Add support div-text features: font_family, letter_spacing font_weight_value, text_shadow
+* Add support div-text features: font_family, letter_spacing font_weight_value, text_shadow 
+* Add scenario list to testing page
 
 ## 0.3.0
 
