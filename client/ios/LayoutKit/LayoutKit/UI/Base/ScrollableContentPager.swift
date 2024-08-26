@@ -20,69 +20,53 @@ public final class ScrollableContentPager: NSObject {
       currentPageIndex = nil
     }
   }
-  
+
   public func setInitialOffset(_ offset: CGFloat) {
     guard isPagingEnabled else { return }
-    
-    if currentPageIndex == nil, lastContentOffset == nil, indexedPageOrigins.count > 0 {
-      let initialPageIndex = pageIndex(forOffset: offset)
-      let pageOrigin = indexedPageOrigins[initialPageIndex].origin
-      let initialContentOffset = isHorizontal ? CGPoint(x: pageOrigin, y: 0) : CGPoint(x: 0, y: pageOrigin)
-      
-      currentPageIndex = initialPageIndex
-      lastContentOffset = initialContentOffset
-    }
+
+    currentPageIndex = pageIndex(forOffset: offset)
   }
 
   public private(set) var currentPageIndex: Int?
-  public private(set) var lastContentOffset: CGPoint?
 
-  public func targetPageOffset(forProposedOffset offset: CGFloat, isHorizontal: Bool) -> CGFloat? {
-    guard currentPageIndex != nil,
-          var newLastContentOffset = lastContentOffset else {
-      return nil
-    }
-    
+  public func targetPageOffset(forProposedOffset offset: CGFloat, velocity: CGFloat) -> CGFloat? {
+    guard let startPageIndex = currentPageIndex else { return nil }
+
     var resultPageIndex = pageIndex(forOffset: offset)
 
-    var forcedIndexOffset = 0
-    if newLastContentOffset.forceIndexOffset(isHorizontal: isHorizontal).isApproximatelyNotEqualTo(offset) {
-      forcedIndexOffset = newLastContentOffset.forceIndexOffset(isHorizontal: isHorizontal) < offset ? 1 : 0
+    if resultPageIndex == startPageIndex, velocity.isApproximatelyNotEqualTo(0) {
+      let forcedIndexOffset = (velocity > 0 ? 1 : -1)
+      resultPageIndex += forcedIndexOffset
     }
-    resultPageIndex += forcedIndexOffset
-    
     resultPageIndex = clamp(
       resultPageIndex,
       min: 0,
       max: indexedPageOrigins.count - 1
     )
-    
-    let targetPageOffset = indexedPageOrigins[resultPageIndex].origin
-    if isHorizontal {
-      newLastContentOffset.x = targetPageOffset
-    } else {
-      newLastContentOffset.y = targetPageOffset
-    }
-    lastContentOffset = newLastContentOffset
+
     currentPageIndex = resultPageIndex
-    return targetPageOffset
+    return indexedPageOrigins[resultPageIndex].origin
   }
-  
+
   private func pageIndex(forOffset offset: CGFloat) -> Int {
-    guard indexedPageOrigins.first(where: {
+    Int(round(intermediatePageIndex(forOffset: offset)))
+  }
+
+  private func intermediatePageIndex(forOffset offset: CGFloat) -> Float {
+    guard let rightBound = indexedPageOrigins.first(where: {
       $0.origin.isApproximatelyGreaterOrEqualThan(offset)
-    }) != nil else { return indexedPageOrigins.count - 1 }
-    
+    }) else { return Float(indexedPageOrigins.count - 1) }
+
     guard let leftBound = indexedPageOrigins.reversed().first(where: {
       $0.origin.isApproximatelyLessOrEqualThan(offset)
     }) else { return 0 }
-    
-    return leftBound.index
-  }
-}
 
-extension CGPoint {
-    fileprivate func forceIndexOffset(isHorizontal: Bool) -> CGFloat {
-      isHorizontal ? self.x : self.y
+    guard rightBound.index != leftBound.index,
+          !rightBound.origin.isApproximatelyEqualTo(leftBound.origin) else {
+      return Float(leftBound.index)
     }
+
+    let relativePart = (offset - leftBound.origin) / (rightBound.origin - leftBound.origin)
+    return Float(leftBound.index) + Float(relativePart)
+  }
 }
