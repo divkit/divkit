@@ -84,7 +84,7 @@
               "font_weight": "medium",
               "text_color": "#000000",
               "text_variable": "input_variable",
-              "hint_text": "enter link or JSON...",
+              "hint_text": "Supported JSON formats:\n- Card-only: \n    '{ \"states\": [ ... ] }' \n- Card with templates: \n    '{ \"card\": { ... }, \"templates\": { ... } }'",
               "hint_color": "#88000000",
               "highlight_color": "#1DFF9000",
               "line_height": 24,

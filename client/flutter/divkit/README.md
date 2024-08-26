@@ -25,6 +25,11 @@ JSON → DivData → DivKitView
 ## Playground app
 Since the Flutter client does not support full-fledged launch on the web, therefore, in order to poke the functionality, you need to run an example of the current library. Use [DivKit playground app](https://github.com/divkit/divkit/tree/main/client/flutter/divkit/example) to look through layout examples and supported functions.
 
+The main part of samples is stored in monorepositry... Before starting, call the following command from `client/flutter/divkit` to create a soft link to them: 
+```shell
+  ./tool/get_test_data.sh
+```
+
 ---
 ## Supported features
 Flutter client is in development, feel free to contribute and help community use DivKit on this platform.

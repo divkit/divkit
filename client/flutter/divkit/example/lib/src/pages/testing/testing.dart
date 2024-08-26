@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:divkit/divkit.dart';
 import 'package:example/src/pages/testing/data.dart';
@@ -24,15 +26,17 @@ Future<List<Item>> process(Box box) async {
         templates: json['templates'],
       );
       await data.build();
-      await data.preload();
-
+      // Expressions only work on mobile platforms!
+      if (Platform.isAndroid || Platform.isIOS) {
+        await data.preload();
+      }
       it.add(Item(
         name,
         data,
         tags.toSet(),
       ));
-    } catch (_) {
-      print(_);
+    } catch (e) {
+      print(e);
     }
   }
   return it..sort((a, b) => a.title.compareTo(b.title));
@@ -108,17 +112,24 @@ class _TestingPage extends State<TestingPage> {
                     MenuAnchor(
                       controller: menuController,
                       menuChildren: [
+                        InkWell(
+                          onTap: selectedTags.isNotEmpty
+                              ? () => setState(() => selectedTags = {})
+                              : null,
+                          child: AbsorbPointer(
+                            child: MenuItemButton(
+                              onPressed: selectedTags.isNotEmpty ? () {} : null,
+                              child: const Text('Reset'),
+                            ),
+                          ),
+                        ),
                         for (final tag in tags)
                           InkWell(
                             onTap: () => toggleTag(tag),
                             child: AbsorbPointer(
-                              child: MenuItemButton(
-                                onPressed: () {},
-                                leadingIcon: Icon(
-                                  selectedTags.contains(tag)
-                                      ? Icons.check_box
-                                      : Icons.check_box_outline_blank,
-                                ),
+                              child: CheckboxMenuButton(
+                                value: selectedTags.contains(tag),
+                                onChanged: (value) {},
                                 child: Text(tag),
                               ),
                             ),
@@ -150,9 +161,10 @@ class _TestingPage extends State<TestingPage> {
                           Expanded(
                             child: Text(
                               item.title,
-                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          const SizedBox(width: 8),
                           const Icon(Icons.chevron_right),
                         ],
                       ),
@@ -164,7 +176,7 @@ class _TestingPage extends State<TestingPage> {
           }
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Loading..'),
+              title: const Loading(),
               centerTitle: true,
             ),
             body: const Center(
@@ -173,9 +185,50 @@ class _TestingPage extends State<TestingPage> {
           );
         },
       );
+}
+
+class Loading extends StatefulWidget {
+  const Loading({super.key});
+
+  @override
+  State<Loading> createState() => _LoadingState();
+}
+
+class _LoadingState extends State<Loading> {
+  int _currentIndex = 0;
+  final List<String> _loadingStates = [
+    'Loading   ',
+    'Loading.  ',
+    'Loading.. ',
+    'Loading...'
+  ];
+
+  late Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(const Duration(milliseconds: 200), (Timer timer) {
+      setState(() {
+        _currentIndex++;
+        if (_currentIndex >= _loadingStates.length) {
+          _currentIndex = 0;
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _loadingStates[_currentIndex],
+      style: const TextStyle(fontSize: 24.0),
+    );
+  }
 
   @override
   void dispose() {
+    timer.cancel();
     super.dispose();
   }
 }

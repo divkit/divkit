@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:divkit/divkit.dart';
@@ -22,7 +23,10 @@ Future<List<DivKitData>> process(Box box) async {
     final json = jsonDecode(str);
     final data = DefaultDivKitData.fromJson(json);
     await data.build();
-    await data.preload();
+    // Expressions only work on mobile platforms!
+    if (Platform.isAndroid || Platform.isIOS) {
+      await data.preload();
+    }
     it.add(data);
   }
   return it;
@@ -131,9 +135,33 @@ class SamplesPage extends StatelessWidget {
                                 : null,
                             color: Colors.white,
                           ),
-                          child: DivKitView(
-                            showUnsupportedDivs: true,
-                            data: data[i],
+                          child: Stack(
+                            children: [
+                              DivKitView(
+                                showUnsupportedDivs: true,
+                                data: data[i],
+                              ),
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Text(
+                                      "#$i",
+                                      style: const TextStyle(
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Divider(),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         childCount: data.length,

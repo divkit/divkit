@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:divkit/divkit.dart';
 import 'package:example/src/configuration/playground_custom_handler.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,17 @@ class ShowPage extends ConsumerStatefulWidget {
 
 class _ShowPageState extends ConsumerState<ShowPage> {
   Future<DivKitData> load() async {
-    return (await DefaultDivKitData.fromJson(widget.data).build()).preload();
+    final json = widget.data;
+    final data = DefaultDivKitData.fromScheme(
+      card: json.containsKey('card') ? json['card'] : json,
+      templates: json['templates'],
+    );
+    await data.build();
+    // Expressions only work on mobile platforms!
+    if (Platform.isAndroid || Platform.isIOS) {
+      await data.preload();
+    }
+    return data;
   }
 
   @override
@@ -29,41 +41,34 @@ class _ShowPageState extends ConsumerState<ShowPage> {
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
-          child:
+          child: Row(
+            children: [
               Text("${mq.size.width.round()}x${mq.size.height.round() - 64}"),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FittedBox(
-              child: Row(
-                children: [
-                  ElevatedButton(
-                    child: const Text('reload'),
-                    onPressed: () {
-                      ref.read(reloadNProvider.notifier).state = reloadN + 1;
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    child: Text(isNightModeEnabled ? 'dark' : 'light'),
-                    onPressed: () {
-                      ref.read(nightModeProvider.notifier).state =
-                          !isNightModeEnabled;
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    child: Text(isRtlEnabled ? 'RTL' : 'LTR'),
-                    onPressed: () {
-                      ref.read(isRTLProvider.notifier).state = !isRtlEnabled;
-                    },
-                  ),
-                ],
+              const SizedBox(width: 32),
+              ElevatedButton(
+                child: const Text('reload'),
+                onPressed: () {
+                  ref.read(reloadNProvider.notifier).state = reloadN + 1;
+                },
               ),
-            ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                child: Text(isNightModeEnabled ? 'dark' : 'light'),
+                onPressed: () {
+                  ref.read(nightModeProvider.notifier).state =
+                      !isNightModeEnabled;
+                },
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                child: Text(isRtlEnabled ? 'RTL' : 'LTR'),
+                onPressed: () {
+                  ref.read(isRTLProvider.notifier).state = !isRtlEnabled;
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       body: FutureBuilder<DivKitData>(
         future: load(),

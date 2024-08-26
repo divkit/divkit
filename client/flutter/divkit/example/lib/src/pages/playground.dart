@@ -71,7 +71,7 @@ class _PlaygroundPage extends State<PlaygroundPage> {
             const Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                'Enter the link, JSON or scan QR-code to see your result!',
+                'Enter link or JSON or scan QR-code to see your result!',
                 style: TextStyle(fontSize: 18),
               ),
             ),
