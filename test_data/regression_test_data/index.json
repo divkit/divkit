@@ -2400,6 +2400,21 @@
       "file": "patch/tabs_transactional_success.json"
     },
     {
+      "title": "Apply patches on visibility action",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Should be lorem ipsum text"
+      ],
+      "expected_results": [
+        "Lorem ipsum text, showed with animation"
+      ],
+      "file": "patch/patch_with_visibility_actions.json"
+    },
+   
+    {
       "title": "State with variable binding",
       "tags": [
         "DivState"
