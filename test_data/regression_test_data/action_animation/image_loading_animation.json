@@ -20,7 +20,7 @@
         "type": "fixed",
         "value": 70
       },
-      "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/icons/big_image_circle.webp"
+      "image_url": "https://yastatic.net/s3/home/divkit/big_image_circle.webp"
     }
   },
   "card": {
@@ -47,7 +47,7 @@
               "items": [
                 {
                   "type": "tested_image",
-                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/icons/small_image_circle.jpeg",
+                  "image_url": "https://yastatic.net/s3/home/divkit/small_image_circle.jpeg",
                   "appearance_animation": {
                     "type": "fade",
                     "alpha": 0.0,

@@ -62,7 +62,7 @@
           "type": "lottie_card",
           "title": "Cycled",
           "lottie_params": {
-            "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif23.json",
+            "lottie_url": "https://yastatic.net/s3/home/divkit/DivGif23.json",
             "repeats": [
               {
                 "repeat_count": 0,
