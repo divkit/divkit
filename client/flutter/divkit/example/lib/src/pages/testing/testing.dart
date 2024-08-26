@@ -31,9 +31,7 @@ Future<List<Item>> process(Box box) async {
         data,
         tags.toSet(),
       ));
-    } catch (_) {
-      print(_);
-    }
+    } catch (_) {}
   }
   return it..sort((a, b) => a.title.compareTo(b.title));
 }
@@ -108,15 +106,16 @@ class _TestingPage extends State<TestingPage> {
                     MenuAnchor(
                       controller: menuController,
                       menuChildren: [
+                        MenuItemButton(
+                          onPressed: selectedTags.isNotEmpty
+                              ? () => setState(() => selectedTags = {})
+                              : null,
+                          child: const Text('Reset'),
+                        ),
                         for (final tag in tags) //
-                          MenuItemButton(
-                            closeOnActivate: false,
-                            onPressed: () => toggleTag(tag),
-                            leadingIcon: Icon(
-                              selectedTags.contains(tag)
-                                  ? Icons.check_box
-                                  : Icons.check_box_outline_blank,
-                            ),
+                          CheckboxMenuButton(
+                            value: selectedTags.contains(tag),
+                            onChanged: (value) => toggleTag(tag),
                             child: Text(tag),
                           ),
                       ],
@@ -132,7 +131,7 @@ class _TestingPage extends State<TestingPage> {
                   itemCount: data.length,
                   itemBuilder: (context, index) {
                     final item = data[index];
-                    return FilledButton.tonalIcon(
+                    return FilledButton.tonal(
                       onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => ScenarioPage(
@@ -141,9 +140,18 @@ class _TestingPage extends State<TestingPage> {
                           ),
                         ),
                       ),
-                      label: Text(item.title),
-                      iconAlignment: IconAlignment.end,
-                      icon: const Icon(Icons.chevron_right),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item.title,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.chevron_right),
+                        ],
+                      ),
                     );
                   },
                 ),
