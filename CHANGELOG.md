@@ -1,3 +1,13 @@
+## 30.15.0
+
+# Android Client:
+* Fix indicator disappearing after patch.
+
+# iOS Client:
+* Added fix of scrolling multiline text input while typing text to avoid active input to be under keyboard.
+* Fixed variable trigger invocation after calling appends from the client.
+
+
 ## 30.14.0
 
 # Android Client:
