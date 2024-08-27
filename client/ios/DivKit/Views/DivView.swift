@@ -202,7 +202,11 @@ public final class DivView: VisibleBoundsTrackingView {
   ///  - to: The new bounds rectangle.
   public func onVisibleBoundsChanged(to: CGRect) {
     blockProvider?.lastVisibleBounds = to
-    setNeedsLayout()
+    if window == nil {
+      forceLayout()
+    } else {
+      setNeedsLayout()
+    }
   }
 
   /// Use ``onVisibleBoundsChanged(to:)`` instead.
