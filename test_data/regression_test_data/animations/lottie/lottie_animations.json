@@ -70,26 +70,6 @@
       ],
       "orientation": "vertical"
     },
-    "lottie_image_card": {
-      "type": "lottie_card",
-      "items": [
-        {
-          "type": "card_title",
-          "$text": "lottie_image_text"
-        },
-        {
-          "type": "lottie_image",
-          "$id": "image_id",
-          "extensions": [
-            {
-              "id": "lottie",
-              "$params": "lottie_params"
-            }
-          ],
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Johnrogershousemay2020.webp"
-        }
-      ]
-    },
     "lottie_gif_card": {
       "type": "lottie_card",
       "items": [

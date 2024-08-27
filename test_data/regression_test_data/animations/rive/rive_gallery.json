@@ -124,13 +124,6 @@
               "type": "rive_animation_card",
               "rive_card_text": "RiveCustom 6",
               "rive_props": {
-                "url": "https://public.rive.app/community/runtime-files/3363-7062-harold.riv"
-              }
-            },
-            {
-              "type": "rive_animation_card",
-              "rive_card_text": "RiveCustom 7",
-              "rive_props": {
                 "url": "https://public.rive.app/community/runtime-files/1180-2271-logistics-man-boxes.riv"
               }
             }

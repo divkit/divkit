@@ -36,7 +36,8 @@
       "title": "Clear focus actions",
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "DivAction"
@@ -1703,6 +1704,7 @@
     {
       "title": "Lottie gallery",
       "platforms": [
+        "android",
         "ios",
         "web"
       ],
@@ -1714,7 +1716,9 @@
     {
       "title": "Lottie cycled animations",
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ],
       "tags": [
         "lottie"

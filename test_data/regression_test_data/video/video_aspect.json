@@ -6,33 +6,40 @@
                 "type": "match_parent",
                 "weight": 1
             },
-            "items": [{
-                "type": "text",
-                "$text": "text",
-                "font_size": 20
-            }, {
-                "type": "video",
-                "video_sources": [
-                    {
-                        "type": "video_source",
-                        "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
-                        "mime_type": "video/mp4"
+            "items": [
+                {
+                    "type": "text",
+                    "$text": "text",
+                    "font_size": 20
+                },
+                {
+                    "type": "video",
+                    "height": {
+                        "type": "fixed",
+                        "value": 50
+                    },
+                    "video_sources": [
+                        {
+                            "type": "video_source",
+                            "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                            "mime_type": "video/mp4"
+                        }
+                    ],
+                    "preload_required": true,
+                    "repeatable": true,
+                    "autostart": true,
+                    "muted": true,
+                    "background": [
+                        {
+                            "type": "solid",
+                            "color": "#000000"
+                        }
+                    ],
+                    "aspect": {
+                        "$ratio": "ratio"
                     }
-                ],
-                "preload_required": true,
-                "repeatable": true,
-                "autostart": true,
-                "muted": true,
-                "background": [
-                    {
-                        "type": "solid",
-                        "color": "#000000"
-                    }
-                ],
-                "aspect": {
-                    "$ratio": "ratio"
                 }
-            }]
+            ]
         }
     },
     "card": {

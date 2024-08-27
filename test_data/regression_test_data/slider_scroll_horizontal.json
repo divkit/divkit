@@ -131,6 +131,9 @@
                   "type": "fill_img",
                   "width": {
                     "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "match_parent"
                   }
                 }
               ]
