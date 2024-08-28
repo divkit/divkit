@@ -18,7 +18,7 @@ extension ScrollableContentPager: ScrollDelegate {
       : targetContentOffset.pointee.y
     if let resultOffset = targetPageOffset(
       forProposedOffset: proposedOffset,
-      isHorizontal: isHorizontal
+      velocity: velocity.projection(isHorizontal)
     ) {
       if isHorizontal {
         targetContentOffset.pointee.x = resultOffset
