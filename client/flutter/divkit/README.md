@@ -41,6 +41,7 @@ Supported components (may contain unavailable features for more info look at doc
 + state
 + input
 + gallery
++ pager
 + custom
 
 ---
@@ -86,7 +87,6 @@ Supported components (may contain unavailable features for more info look at doc
         data: data, // DivKitData
     )
     ```
-   Please ensure that there is Directionality widget in the tree.
    
    Optionally, you can pass customs handler, actions handler and other params to configure DivKitView behavior:
    ```dart
@@ -94,7 +94,7 @@ Supported components (may contain unavailable features for more info look at doc
       data: data,
       customHandler: MyCustomHandler(), // DivCustomHandler?
       actionHandler: MyCustomActionHandler(), // DivActionHandler?
-      variableStorage: MyOwnVariableStorage(), // DivVariableStorage?
+      variableStorage: MyVariableStorage(), // DivVariableStorage?
     )
    ```
 
