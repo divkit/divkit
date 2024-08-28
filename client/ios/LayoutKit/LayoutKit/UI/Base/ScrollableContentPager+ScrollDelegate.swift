@@ -9,19 +9,15 @@ extension ScrollableContentPager: ScrollDelegate {
   }
 
   public func onWillEndDragging(
-    _ scrollView: ScrollView,
+    _: ScrollView,
     withVelocity velocity: CGPoint,
     targetContentOffset: UnsafeMutablePointer<CGPoint>
   ) {
-    var translation: CGPoint?
-    if let uiScrollView = scrollView as? UIScrollView {
-      translation = uiScrollView.panGestureRecognizer.translation(in: uiScrollView.superview)
-    }
-    
-    let proposedOffset = isHorizontal ? targetContentOffset.pointee.x : targetContentOffset.pointee.y
+    let proposedOffset = isHorizontal
+      ? targetContentOffset.pointee.x
+      : targetContentOffset.pointee.y
     if let resultOffset = targetPageOffset(
       forProposedOffset: proposedOffset,
-      direction: translation ?? velocity,
       isHorizontal: isHorizontal
     ) {
       if isHorizontal {
