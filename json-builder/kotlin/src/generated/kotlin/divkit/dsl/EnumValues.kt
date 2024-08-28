@@ -40,6 +40,7 @@ object ExcludeEnumValue : EnumValue("exclude"),
 object NoneEnumValue : EnumValue("none"),
     Accessibility.Type,
     Gallery.Scrollbar,
+    Input.Autocapitalization,
     LineStyle,
     Tabs.TabTitleStyle.AnimationType,
     Text.Image.Accessibility.Type,
@@ -85,6 +86,7 @@ object SelectEnumValue : EnumValue("select"),
 object AutoEnumValue : EnumValue("auto"),
     Accessibility.Type,
     Gallery.Scrollbar,
+    Input.Autocapitalization,
     Text.Image.Accessibility.Type
 
 @Generated
@@ -316,6 +318,18 @@ object WormEnumValue : EnumValue("worm"),
 @Generated
 object SliderEnumValue : EnumValue("slider"),
     Indicator.Animation
+
+@Generated
+object WordsEnumValue : EnumValue("words"),
+    Input.Autocapitalization
+
+@Generated
+object SentencesEnumValue : EnumValue("sentences"),
+    Input.Autocapitalization
+
+@Generated
+object AllCharactersEnumValue : EnumValue("all_characters"),
+    Input.Autocapitalization
 
 @Generated
 object SingleLineTextEnumValue : EnumValue("single_line_text"),
@@ -686,6 +700,18 @@ val DivScope.worm: WormEnumValue
 @Generated
 val DivScope.slider: SliderEnumValue
     get() = SliderEnumValue
+
+@Generated
+val DivScope.words: WordsEnumValue
+    get() = WordsEnumValue
+
+@Generated
+val DivScope.sentences: SentencesEnumValue
+    get() = SentencesEnumValue
+
+@Generated
+val DivScope.all_characters: AllCharactersEnumValue
+    get() = AllCharactersEnumValue
 
 @Generated
 val DivScope.single_line_text: SingleLineTextEnumValue
