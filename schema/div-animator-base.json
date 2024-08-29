@@ -1,0 +1,58 @@
+{
+  "protocol_name": "div-base-animator",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "common.json#/id",
+      "$description": "translations.json#/div_animator_base_id"
+    },
+    "variable_name": {
+      "$ref": "div-variable-name.json",
+      "$description": "translations.json#/div_animator_base_variable_name"
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "long_type": true,
+      "$description": "translations.json#/div_animator_base_duration"
+    },
+    "start_delay": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_animator_base_start_delay"
+    },
+    "interpolator": {
+      "$ref": "div-animation-interpolator.json",
+      "default_value": "linear",
+      "$description": "translations.json#/div_animator_base_interpolator"
+    },
+    "direction": {
+      "$ref": "div-animation-direction.json",
+      "default_value": "normal",
+      "$description": "translations.json#/div_animator_base_direction"
+    },
+    "repeat_count": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "1",
+      "$description": "translations.json#/div_animator_base_repeat_count"
+    },
+    "end_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_animator_base_end_actions"
+    },
+    "cancel_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_animator_base_cancel_actions"
+    }
+  },
+  "required": [
+    "id",
+    "variable_name",
+    "duration"
+  ]
+}

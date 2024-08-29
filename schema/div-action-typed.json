@@ -1,6 +1,12 @@
 {
   "anyOf": [
     {
+      "$ref": "div-action-animator-start.json"
+    },
+    {
+      "$ref": "div-action-animator-stop.json"
+    },
+    {
       "$ref": "div-action-array-insert-value.json"
     },
     {

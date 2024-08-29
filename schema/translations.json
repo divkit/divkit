@@ -35,6 +35,26 @@
     "en": "It defines an action when clicking on an element.",
     "ru": "Определяет действие при нажатии на элемент."
   },
+  "div_action_animator_start": {
+    "en": "Starts specified animator",
+    "ru": "Запускает указанный аниматор."
+  },
+  "div_action_animator_start_animator_id": {
+    "en": "The identifier of the animator being started.",
+    "ru": "Идентификатор запускаемого аниматора"
+  },
+  "div_action_animator_start_start_value": {
+    "en": "Overrides value that will be set at the start of animation.",
+    "ru": "Переопределяет, какое значение будет установлено в переменную перед началом анимации."
+  },
+  "div_action_animator_start_end_value": {
+    "en": "Overrides value that will be set at the end of animation.",
+    "ru": "Переопределяет, какое значение будет установлено в переменную после завершения анимации."
+  },
+  "div_action_animator_stop": {
+    "en": "Stops specified animator",
+    "ru": "Останавливает указанный аниматор."
+  },
   "div_action_array_insert_value": {
     "en": "Adds a value to the array",
     "ru": "Добавляет значение в массив"
@@ -187,6 +207,58 @@
     "en": "Starting value of an animation.",
     "ru": "Стартовое значение анимации."
   },
+  "div_animator_base_cancel_actions": {
+    "en": "Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received",
+    "ru": "Действия, которые будут выполнены в случае отмены аниматора. Например, когда получена команда с типом `animator_stop`."
+  },
+  "div_animator_base_direction": {
+    "en": "Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.",
+    "ru": "Направление анимации. Описывает то, должна ли анимация воспроизводиться вперёд, назад или переменно вперёд и назад."
+  },
+  "div_animator_base_duration": {
+    "en": "Animation duration in milliseconds.",
+    "ru": "Продолжительность анимации в миллисекундах."
+  },
+  "div_animator_base_end_actions": {
+    "en": "Actions performed when the animator completes animation.",
+    "ru": "Действия, которые будут выполнены после завершения работы аниматора."
+  },
+  "div_animator_base_id": {
+    "en": "Animator identificator",
+    "ru": "Идентификатор аниматора."
+  },
+  "div_animator_base_interpolator": {
+    "en": "Interpolation function.",
+    "ru": "Функция интерполяции анимируемого значения."
+  },
+  "div_animator_base_repeat_count": {
+    "en": "The number of times the animation will repeat before it finishes. `0` enables infinite repeats.",
+    "ru": "Количество повторов анимации, которое будет выполнено до ее остановки. `0` включает бесконечные повторы."
+  },
+  "div_animator_base_start_delay": {
+    "en": "Animation start delay in milliseconds.",
+    "ru": "Задержка перед запуском анимации в миллисекундах."
+  },
+  "div_animator_base_variable_name": {
+    "en": "Name of the variable being animated.",
+    "ru": "Имя анимируемой переменной."
+  },
+  "div_animator_start_value": {
+    "en": "Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.",
+    "ru": "Значение переменной, которое она примет в начале анимации. Если свойство не указано, то будет использовано текущее значение переменной."
+  },
+  "div_animator_end_value": {
+    "en": "Value that will be set at the end of animation.",
+    "ru": "Значение переменной, которое она примет в конце анимации."
+  },
+  "div_color_animator": {
+    "en": "Color animator.",
+    "ru": "Аниматор цвета."
+  },
+  "div_number_animator": {
+    "en": "Number animator.",
+    "ru": "Аниматор числового значения."
+  },
   "div_appearance_set_transition": {
     "en": "A set of animations to be applied simultaneously.",
     "ru": "Набор анимаций, которые будут применяться одновременно."
@@ -247,8 +319,11 @@
     "en": "Vertical alignment of an element inside the parent element.",
     "ru": "Вертикальное выравнивание элемента внутри родительского."
   },
+  "div_base_animators": {
+    "en": "Declaration of animators that can be used to change the value of variables over time.",
+    "ru": "Объявление аниматоров, с помощью которых можно изменять значение переменных во времени."
+  },
   "div_base_alpha": {
-    "en": "Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.",
     "ru": "Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
   },
   "div_base_background": {

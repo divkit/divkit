@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-color-animator.json",
+      "$description": "translations.json#/div_color_animator"
+    },
+    {
+      "$ref": "div-number-animator.json",
+      "$description": "translations.json#/div_number_animator"
+    }
+  ]
+}

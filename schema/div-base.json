@@ -57,6 +57,14 @@
       "$ref": "div-alignment-horizontal.json",
       "$description": "translations.json#/div_base_alignment_horizontal"
     },
+    "animators": {
+      "type": "array",
+      "items": {
+        "$ref": "div-animator.json"
+      },
+      "$description": "translations.json#/div_base_animators",
+      "platforms": []
+    },
     "row_span": {
       "$ref": "common.json#/non_negative_integer",
       "$description": "translations.json#/div_base_row_span",
