@@ -7,6 +7,7 @@ import com.yandex.div.core.actions.DivActionTypedDictSetValueHandler
 import com.yandex.div.core.actions.DivActionTypedSetVariableHandler
 import com.yandex.div.core.actions.DivActionTypedHandler
 import com.yandex.div.core.actions.DivActionTypedFocusElementHandler
+import com.yandex.div.core.actions.DivActionTypedTimerHandler
 import com.yandex.yatagan.Binds
 import com.yandex.yatagan.IntoSet
 import com.yandex.yatagan.Module
@@ -48,5 +49,11 @@ internal interface DivActionTypedModule {
     @IntoSet
     fun provideSetVariableActionHandler(
         impl: DivActionTypedSetVariableHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
+    fun provideTimerActionHandler(
+        impl: DivActionTypedTimerHandler
     ): DivActionTypedHandler
 }

@@ -115,6 +115,18 @@
     "en": "The tab in which the URL must be opened.",
     "ru": "Вкладка, в которой должна открыться ссылка."
   },
+  "div_action_timer": {
+    "en": "Controls the timer.",
+    "ru": "Управляет таймером."
+  },
+  "div_action_timer_action": {
+    "en": "Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>",
+    "ru": "Указывает действие с таймером:<li>`start`- запускает таймер из остановленного положения;</li><li>`stop`- останавливает таймер, выполняет действие onEnd;</li><li>`pause`- ставит таймер на паузу, время сохраняется;</li><li>`resume`- продолжает таймер после паузы;</li><li>`cancel`- прерывает действие таймера, время сбрасывается;</li><li>`reset`- отменяет таймер, затем запускает заново.</li>"
+  },
+  "div_action_timer_id": {
+    "en": "Timer identifier.",
+    "ru": "Идентификатор таймера."
+  },
   "div_actionable_action": {
     "en": "One action when clicking on an element. Not used if the `actions` parameter is set.",
     "ru": "Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`."
