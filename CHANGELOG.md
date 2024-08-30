@@ -1,7 +1,8 @@
 ## 30.16.0
 
 # Android Client:
-* Fixed a bug when separators inside a `container` ignores margins.
+* Fixed visibility actions within patch layout.
+* Fixed a bug when separators inside a `container` ignore margins.
 
 # iOS Client:
 * Added test playgrounds with layout of objects from LayoutKit.
