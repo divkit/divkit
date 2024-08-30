@@ -1,3 +1,15 @@
+## 30.16.0
+
+# Android Client:
+* Fixed a bug when separators inside a `container` ignores margins.
+
+# iOS Client:
+* Added test playgrounds with layout of objects from LayoutKit.
+* Added support of autocapitalization type in `div-input` text fields.
+* Added filtering entered data in `div-input` using regexp or expressions.
+* Fixed a bug with scrolling through the last page.
+
+
 ## 30.15.0
 
 # Android Client:
