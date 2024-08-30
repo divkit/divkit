@@ -486,8 +486,6 @@ class Div2View private constructor(
             view.bindingContext?.expressionResolver?.let {
                 if (ViewCompat.isAttachedToWindow(view)) {
                     visibilityActionTracker.trackVisibilityActionsOf(this, it, view, div)
-                } else {
-                    visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
                 }
             }
         }
