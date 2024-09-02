@@ -147,6 +147,18 @@
     "en": "Timer identifier.",
     "ru": "Идентификатор таймера."
   },
+  "div_action_video": {
+    "en": "Controls given video.",
+    "ru": "Управляет видео."
+  },
+  "div_action_video_action": {
+    "en": "Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>",
+    "ru": "Определяет действие с видео: <li>`start` - начинает воспроизведение видео если видео готово к воспроизведению или планирует воспроизведение;</li><li>`pause` - останавливает воспроизведение видео.</li>"
+  },
+  "div_action_video_id": {
+    "en": "Video identifier.",
+    "ru": "Идентификатор видео."
+  },
   "div_actionable_action": {
     "en": "One action when clicking on an element. Not used if the `actions` parameter is set.",
     "ru": "Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`."

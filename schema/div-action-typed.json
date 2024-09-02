@@ -31,6 +31,9 @@
       "$ref": "div-action-set-variable.json"
     },
     {
+      "$ref": "div-action-video.json"
+    },
+    {
       "$ref": "div-action-timer.json"
     }
   ]
