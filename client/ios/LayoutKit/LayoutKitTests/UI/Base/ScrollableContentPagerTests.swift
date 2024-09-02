@@ -8,7 +8,6 @@ final class ScrollableContentPagerTests: XCTestCase {
 
   override func invokeTest() {
     for isHorizontal in [false, true] {
-      self.pager = ScrollableContentPager()
       self.isHorizontal = isHorizontal
       super.invokeTest()
     }
