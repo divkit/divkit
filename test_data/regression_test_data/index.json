@@ -2053,6 +2053,19 @@
       "file": "phone_input_mask.json"
     },
     {
+      "title": "Regex input filter",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "Entered text must be filtered by a regular expression from another input field"
+      ],
+      "file": "regex_input_filter.json"
+    },
+    {
       "title": "Regex input validator",
       "platforms": [
         "android",
@@ -2062,6 +2075,19 @@
         "DivInput"
       ],
       "file": "regex_input_validator.json"
+    },
+    {
+      "title": "Expression input filter",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "Entering in the input field should be filtered depending on whether the filter condition is enabled or disabled"
+      ],
+      "file": "expression_input_filter.json"
     },
     {
       "title": "Expression input validator",
