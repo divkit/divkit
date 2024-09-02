@@ -1071,6 +1071,19 @@ enum DivInputKeyboardType implements Preloadable {
   final String value;
 
   const DivInputKeyboardType(this.value);
+  bool get isSingleLineText => this == singleLineText;
+
+  bool get isMultiLineText => this == multiLineText;
+
+  bool get isPhone => this == phone;
+
+  bool get isNumber => this == number;
+
+  bool get isEmail => this == email;
+
+  bool get isUri => this == uri;
+
+  bool get isPassword => this == password;
 
   T map<T>({
     required T Function() singleLineText,

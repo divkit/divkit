@@ -816,6 +816,9 @@ enum DivPagerOrientation implements Preloadable {
   final String value;
 
   const DivPagerOrientation(this.value);
+  bool get isHorizontal => this == horizontal;
+
+  bool get isVertical => this == vertical;
 
   T map<T>({
     required T Function() horizontal,

@@ -74,10 +74,12 @@ class _ShowPageState extends ConsumerState<ShowPage> {
         future: load(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return DivKitView(
-              key: ObjectKey(reloadN),
-              data: snapshot.requireData,
-              customHandler: PlaygroundAppCustomHandler(),
+            return SingleChildScrollView(
+              child: DivKitView(
+                key: ObjectKey(reloadN),
+                data: snapshot.requireData,
+                customHandler: PlaygroundAppCustomHandler(),
+              ),
             );
           }
           return const Center(child: CircularProgressIndicator());

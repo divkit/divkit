@@ -168,6 +168,23 @@ enum DivTooltipPosition implements Preloadable {
   final String value;
 
   const DivTooltipPosition(this.value);
+  bool get isLeft => this == left;
+
+  bool get isTopLeft => this == topLeft;
+
+  bool get isTop => this == top;
+
+  bool get isTopRight => this == topRight;
+
+  bool get isRight => this == right;
+
+  bool get isBottomRight => this == bottomRight;
+
+  bool get isBottom => this == bottom;
+
+  bool get isBottomLeft => this == bottomLeft;
+
+  bool get isCenter => this == center;
 
   T map<T>({
     required T Function() left,

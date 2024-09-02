@@ -332,6 +332,38 @@ class Div extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 15;
 
+  bool get isDivContainer => _index == 0;
+
+  bool get isDivCustom => _index == 1;
+
+  bool get isDivGallery => _index == 2;
+
+  bool get isDivGifImage => _index == 3;
+
+  bool get isDivGrid => _index == 4;
+
+  bool get isDivImage => _index == 5;
+
+  bool get isDivIndicator => _index == 6;
+
+  bool get isDivInput => _index == 7;
+
+  bool get isDivPager => _index == 8;
+
+  bool get isDivSelect => _index == 9;
+
+  bool get isDivSeparator => _index == 10;
+
+  bool get isDivSlider => _index == 11;
+
+  bool get isDivState => _index == 12;
+
+  bool get isDivTabs => _index == 13;
+
+  bool get isDivText => _index == 14;
+
+  bool get isDivVideo => _index == 15;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

@@ -11,6 +11,13 @@ enum DivFontWeight implements Preloadable {
   final String value;
 
   const DivFontWeight(this.value);
+  bool get isLight => this == light;
+
+  bool get isMedium => this == medium;
+
+  bool get isRegular => this == regular;
+
+  bool get isBold => this == bold;
 
   T map<T>({
     required T Function() light,

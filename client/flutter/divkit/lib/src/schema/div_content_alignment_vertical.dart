@@ -14,6 +14,19 @@ enum DivContentAlignmentVertical implements Preloadable {
   final String value;
 
   const DivContentAlignmentVertical(this.value);
+  bool get isTop => this == top;
+
+  bool get isCenter => this == center;
+
+  bool get isBottom => this == bottom;
+
+  bool get isBaseline => this == baseline;
+
+  bool get isSpaceBetween => this == spaceBetween;
+
+  bool get isSpaceAround => this == spaceAround;
+
+  bool get isSpaceEvenly => this == spaceEvenly;
 
   T map<T>({
     required T Function() top,

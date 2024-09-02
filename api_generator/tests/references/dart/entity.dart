@@ -293,6 +293,44 @@ class Entity extends Preloadable with EquatableMixin {
   ) : value = obj,
       _index = 18;
 
+  bool get isEntityWithArray => _index == 0;
+
+  bool get isEntityWithArrayOfEnums => _index == 1;
+
+  bool get isEntityWithArrayOfExpressions => _index == 2;
+
+  bool get isEntityWithArrayOfNestedItems => _index == 3;
+
+  bool get isEntityWithArrayWithTransform => _index == 4;
+
+  bool get isEntityWithComplexProperty => _index == 5;
+
+  bool get isEntityWithComplexPropertyWithDefaultValue => _index == 6;
+
+  bool get isEntityWithEntityProperty => _index == 7;
+
+  bool get isEntityWithOptionalComplexProperty => _index == 8;
+
+  bool get isEntityWithOptionalProperty => _index == 9;
+
+  bool get isEntityWithOptionalStringEnumProperty => _index == 10;
+
+  bool get isEntityWithPropertyWithDefaultValue => _index == 11;
+
+  bool get isEntityWithRawArray => _index == 12;
+
+  bool get isEntityWithRequiredProperty => _index == 13;
+
+  bool get isEntityWithSimpleProperties => _index == 14;
+
+  bool get isEntityWithStringArrayProperty => _index == 15;
+
+  bool get isEntityWithStringEnumProperty => _index == 16;
+
+  bool get isEntityWithStringEnumPropertyWithDefaultValue => _index == 17;
+
+  bool get isEntityWithoutProperties => _index == 18;
+
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 
   static Entity? fromJson(Map<String, dynamic>? json,) {

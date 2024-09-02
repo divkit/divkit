@@ -72,19 +72,15 @@ class _DivGalleryWidgetState extends State<DivGalleryWidget> {
 
               return SingleChildScrollView(
                 scrollDirection: model.orientation,
-                child: isHorizontal
-                    ? provide(
-                        DivParentData.flex,
-                        child: Row(
-                          children: childrenWithSpacing,
-                        ),
-                      )
-                    : provide(
-                        DivParentData.flex,
-                        child: Column(
-                          children: childrenWithSpacing,
-                        ),
-                      ),
+                child: provide(
+                  isHorizontal ? DivParentData.row : DivParentData.column,
+                  child: Flex(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    direction: isHorizontal ? Axis.horizontal : Axis.vertical,
+                    mainAxisSize: MainAxisSize.min,
+                    children: childrenWithSpacing,
+                  ),
+                ),
               );
             }
 

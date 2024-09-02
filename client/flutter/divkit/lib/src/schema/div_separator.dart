@@ -899,6 +899,9 @@ enum DivSeparatorDelimiterStyleOrientation implements Preloadable {
   final String value;
 
   const DivSeparatorDelimiterStyleOrientation(this.value);
+  bool get isVertical => this == vertical;
+
+  bool get isHorizontal => this == horizontal;
 
   T map<T>({
     required T Function() vertical,

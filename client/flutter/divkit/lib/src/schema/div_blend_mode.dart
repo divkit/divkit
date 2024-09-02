@@ -13,6 +13,17 @@ enum DivBlendMode implements Preloadable {
   final String value;
 
   const DivBlendMode(this.value);
+  bool get isSourceIn => this == sourceIn;
+
+  bool get isSourceAtop => this == sourceAtop;
+
+  bool get isDarken => this == darken;
+
+  bool get isLighten => this == lighten;
+
+  bool get isMultiply => this == multiply;
+
+  bool get isScreen => this == screen;
 
   T map<T>({
     required T Function() sourceIn,

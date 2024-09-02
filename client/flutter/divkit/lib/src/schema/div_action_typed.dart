@@ -179,6 +179,22 @@ class DivActionTyped extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 7;
 
+  bool get isDivActionArrayInsertValue => _index == 0;
+
+  bool get isDivActionArrayRemoveValue => _index == 1;
+
+  bool get isDivActionArraySetValue => _index == 2;
+
+  bool get isDivActionClearFocus => _index == 3;
+
+  bool get isDivActionCopyToClipboard => _index == 4;
+
+  bool get isDivActionDictSetValue => _index == 5;
+
+  bool get isDivActionFocusElement => _index == 6;
+
+  bool get isDivActionSetVariable => _index == 7;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

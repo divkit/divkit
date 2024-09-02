@@ -179,6 +179,22 @@ class DivVariable extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 7;
 
+  bool get isArrayVariable => _index == 0;
+
+  bool get isBooleanVariable => _index == 1;
+
+  bool get isColorVariable => _index == 2;
+
+  bool get isDictVariable => _index == 3;
+
+  bool get isIntegerVariable => _index == 4;
+
+  bool get isNumberVariable => _index == 5;
+
+  bool get isStringVariable => _index == 6;
+
+  bool get isUrlVariable => _index == 7;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

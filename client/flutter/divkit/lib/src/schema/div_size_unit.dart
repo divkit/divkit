@@ -10,6 +10,11 @@ enum DivSizeUnit implements Preloadable {
   final String value;
 
   const DivSizeUnit(this.value);
+  bool get isDp => this == dp;
+
+  bool get isSp => this == sp;
+
+  bool get isPx => this == px;
 
   T map<T>({
     required T Function() dp,

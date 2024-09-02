@@ -152,6 +152,13 @@ enum DivSlideTransitionEdge implements Preloadable {
   final String value;
 
   const DivSlideTransitionEdge(this.value);
+  bool get isLeft => this == left;
+
+  bool get isTop => this == top;
+
+  bool get isRight => this == right;
+
+  bool get isBottom => this == bottom;
 
   T map<T>({
     required T Function() left,

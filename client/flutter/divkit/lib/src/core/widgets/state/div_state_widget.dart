@@ -54,11 +54,13 @@ class _DivStateWidgetState extends State<DivStateWidget> {
             if (snapshot.hasData) {
               final model = snapshot.requireData;
               return provide(
-                DivStateId(model.divId),
-                child: DivWidget(
-                  // The unique identifier of the state subtree
-                  key: ValueKey(model.path),
-                  model.state?.div,
+                DivParentData.none,
+                child: provide(
+                  DivStateId(model.divId),
+                  child: DivWidget(
+                    // The unique identifier of the state subtree
+                    key: ValueKey(model.path), model.state?.div,
+                  ),
                 ),
               );
             }

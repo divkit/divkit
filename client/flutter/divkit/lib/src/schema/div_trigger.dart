@@ -117,6 +117,9 @@ enum DivTriggerMode implements Preloadable {
   final String value;
 
   const DivTriggerMode(this.value);
+  bool get isOnCondition => this == onCondition;
+
+  bool get isOnVariable => this == onVariable;
 
   T map<T>({
     required T Function() onCondition,

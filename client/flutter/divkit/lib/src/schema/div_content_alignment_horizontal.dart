@@ -15,6 +15,21 @@ enum DivContentAlignmentHorizontal implements Preloadable {
   final String value;
 
   const DivContentAlignmentHorizontal(this.value);
+  bool get isLeft => this == left;
+
+  bool get isCenter => this == center;
+
+  bool get isRight => this == right;
+
+  bool get isStart => this == start;
+
+  bool get isEnd => this == end;
+
+  bool get isSpaceBetween => this == spaceBetween;
+
+  bool get isSpaceAround => this == spaceAround;
+
+  bool get isSpaceEvenly => this == spaceEvenly;
 
   T map<T>({
     required T Function() left,

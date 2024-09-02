@@ -67,6 +67,12 @@ enum EntityWithStringEnumPropertyWithDefaultValueValue implements Preloadable {
   final String value;
 
   const EntityWithStringEnumPropertyWithDefaultValueValue(this.value);
+  bool get isFirst => this == first;
+
+  bool get isSecond => this == second;
+
+  bool get isThird => this == third;
+
 
   T map<T>({
     required T Function() first,

@@ -19,4 +19,3 @@ export 'src/core/widgets/widgets.dart';
 export 'src/schema/schema.dart';
 export 'src/utils/converters.dart';
 export 'src/utils/parsing_utils.dart';
-export 'src/utils/size_converters.dart';

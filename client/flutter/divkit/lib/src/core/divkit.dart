@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/root/div_root_widget.dart';
+import 'package:divkit/src/utils/configuration.dart';
 import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:divkit/src/utils/trace.dart';
@@ -95,9 +96,14 @@ class DivKitView extends StatelessWidget {
   Widget build(BuildContext context) => Directionality(
         textDirection: textDirection ?? Directionality.of(context),
         child: provide(
-          DivScalingModel(textScale: textScale, viewScale: viewScale),
+          DivScalingModel(
+            textScale: textScale,
+            viewScale: viewScale,
+          ),
           child: provide(
-            ShowUnsupportedDivs(showUnsupportedDivs),
+            DivConfiguration(
+              showUnsupportedDivs: showUnsupportedDivs,
+            ),
             child: provide(
               cacheManager,
               child: FocusScope(
@@ -138,9 +144,6 @@ class _DivKitViewState extends State<_DivKitView> {
   DivRootContext? divRootContext;
 
   DivContext get divContext => divRootContext!;
-
-  Widget get loader =>
-      widget.loadingBuilder?.call(context) ?? const SizedBox.shrink();
 
   void updateContext() {
     if (widget.data.preloaded) {
@@ -192,6 +195,9 @@ class _DivKitViewState extends State<_DivKitView> {
       }
     }
   }
+
+  Widget get loader =>
+      widget.loadingBuilder?.call(context) ?? const SizedBox.shrink();
 
   @override
   Widget build(BuildContext context) => divRootContext != null

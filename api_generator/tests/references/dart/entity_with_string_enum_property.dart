@@ -66,6 +66,10 @@ enum EntityWithStringEnumPropertyProperty implements Preloadable {
   final String value;
 
   const EntityWithStringEnumPropertyProperty(this.value);
+  bool get isFirst => this == first;
+
+  bool get isSecond => this == second;
+
 
   T map<T>({
     required T Function() first,

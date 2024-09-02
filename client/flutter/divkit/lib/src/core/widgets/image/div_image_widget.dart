@@ -54,6 +54,7 @@ class _DivImageWidgetState extends State<DivImageWidget> {
   @override
   Widget build(BuildContext context) => DivBaseWidget(
         data: widget.data,
+        aspect: widget.data.aspect?.ratio,
         tapActionData: DivTapActionData(
           action: widget.data.action,
           actions: widget.data.actions,
@@ -120,8 +121,6 @@ class _DivImageWidgetState extends State<DivImageWidget> {
                 }
               }
 
-              final aspect = model.aspectRatio;
-
               final Widget blurredImage;
               final blurRadius = model.blurRadius;
               if (blurRadius != null) {
@@ -145,13 +144,6 @@ class _DivImageWidgetState extends State<DivImageWidget> {
                 );
               } else {
                 mirroredImage = blurredImage;
-              }
-
-              if (aspect != null) {
-                return AspectRatio(
-                  aspectRatio: aspect,
-                  child: mirroredImage,
-                );
               }
 
               return mirroredImage;

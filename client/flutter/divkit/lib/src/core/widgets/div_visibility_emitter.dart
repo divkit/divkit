@@ -22,6 +22,7 @@ class DivVisibilityEmitter extends StatelessWidget {
     final isVisible = divVisibility == DivVisibility.visible;
     return Visibility(
       visible: isVisible,
+      replacement: IgnorePointer(child: child),
       child: IgnorePointer(
         ignoring: !isVisible,
         child: _DivVisibilityActionEmitter(
@@ -98,9 +99,7 @@ class _DivVisibilityActionEmitterState
     }
 
     return VisibilityDetector(
-      key: ValueKey(
-        widget.id,
-      ),
+      key: ValueKey(widget.id),
       child: widget.child,
       onVisibilityChanged: (VisibilityInfo info) {
         divContext.visibilityActionManager.updateActionsStateIfNeed(

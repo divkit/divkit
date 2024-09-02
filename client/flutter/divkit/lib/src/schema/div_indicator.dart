@@ -857,6 +857,11 @@ enum DivIndicatorAnimation implements Preloadable {
   final String value;
 
   const DivIndicatorAnimation(this.value);
+  bool get isScale => this == scale;
+
+  bool get isWorm => this == worm;
+
+  bool get isSlider => this == slider;
 
   T map<T>({
     required T Function() scale,

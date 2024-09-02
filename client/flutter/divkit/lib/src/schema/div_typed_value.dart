@@ -179,6 +179,22 @@ class DivTypedValue extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 7;
 
+  bool get isArrayValue => _index == 0;
+
+  bool get isBooleanValue => _index == 1;
+
+  bool get isColorValue => _index == 2;
+
+  bool get isDictValue => _index == 3;
+
+  bool get isIntegerValue => _index == 4;
+
+  bool get isNumberValue => _index == 5;
+
+  bool get isStringValue => _index == 6;
+
+  bool get isUrlValue => _index == 7;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

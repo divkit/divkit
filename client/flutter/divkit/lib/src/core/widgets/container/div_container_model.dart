@@ -7,12 +7,10 @@ import 'package:flutter/widgets.dart';
 class DivContainerModel with EquatableMixin {
   final List<Widget> children;
   final ContentAlignment contentAlignment;
-  final double? aspectRatio;
 
   const DivContainerModel({
     required this.contentAlignment,
     this.children = const [],
-    this.aspectRatio,
   });
 
   static DivContainerModel? value(
@@ -29,7 +27,6 @@ class DivContainerModel with EquatableMixin {
 
       return DivContainerModel(
         contentAlignment: contentAlignment,
-        aspectRatio: data.aspect?.ratio.requireValue,
         children: data.items
                 ?.map(
                   (e) => DivWidget(e),
@@ -65,9 +62,6 @@ class DivContainerModel with EquatableMixin {
 
       return DivContainerModel(
         contentAlignment: contentAlignment,
-        aspectRatio: await data.aspect?.ratio.resolveValue(
-          context: context,
-        ),
         children: data.items
                 ?.map(
                   (e) => DivWidget(e),
@@ -82,6 +76,5 @@ class DivContainerModel with EquatableMixin {
   List<Object?> get props => [
         children,
         contentAlignment,
-        aspectRatio,
       ];
 }

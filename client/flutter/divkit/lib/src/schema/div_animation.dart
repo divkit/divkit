@@ -202,6 +202,17 @@ enum DivAnimationName implements Preloadable {
   final String value;
 
   const DivAnimationName(this.value);
+  bool get isFade => this == fade;
+
+  bool get isTranslate => this == translate;
+
+  bool get isScale => this == scale;
+
+  bool get isNative => this == native;
+
+  bool get isSet => this == set;
+
+  bool get isNoAnimation => this == noAnimation;
 
   T map<T>({
     required T Function() fade,

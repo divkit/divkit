@@ -161,6 +161,25 @@ enum DivAccessibilityType implements Preloadable {
   final String value;
 
   const DivAccessibilityType(this.value);
+  bool get isNone => this == none;
+
+  bool get isButton => this == button;
+
+  bool get isImage => this == image;
+
+  bool get isText => this == text;
+
+  bool get isEditText => this == editText;
+
+  bool get isHeader => this == header;
+
+  bool get isTabBar => this == tabBar;
+
+  bool get isList => this == list;
+
+  bool get isSelect => this == select;
+
+  bool get isAuto => this == auto;
 
   T map<T>({
     required T Function() none,
@@ -317,6 +336,11 @@ enum DivAccessibilityMode implements Preloadable {
   final String value;
 
   const DivAccessibilityMode(this.value);
+  bool get isDefault => this == default_;
+
+  bool get isMerge => this == merge;
+
+  bool get isExclude => this == exclude;
 
   T map<T>({
     required T Function() default_,

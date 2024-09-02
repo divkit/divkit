@@ -85,6 +85,12 @@ class DivInputMask extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 2;
 
+  bool get isDivCurrencyInputMask => _index == 0;
+
+  bool get isDivFixedLengthInputMask => _index == 1;
+
+  bool get isDivPhoneInputMask => _index == 2;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

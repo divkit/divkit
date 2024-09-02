@@ -10,7 +10,6 @@ class DivImageModel with EquatableMixin {
   final Color? color;
   final BlendMode? colorBlendMode;
   final AlignmentGeometry contentAlignment;
-  final double? aspectRatio;
   final double? blurRadius;
   final bool rtlMirror;
 
@@ -21,7 +20,6 @@ class DivImageModel with EquatableMixin {
     required this.rtlMirror,
     this.color,
     this.colorBlendMode,
-    this.aspectRatio,
     this.blurRadius,
   });
 
@@ -50,7 +48,6 @@ class DivImageModel with EquatableMixin {
         color: data.tintColor?.value!,
         colorBlendMode: data.tintMode.value!.asBlendMode,
         contentAlignment: alignment,
-        aspectRatio: data.aspect?.ratio.requireValue,
         blurRadius: filters.blurRadius == null
             ? null
             : (filters.blurRadius ?? 0) * viewScale,
@@ -107,9 +104,6 @@ class DivImageModel with EquatableMixin {
               context: context,
             ) ??
             Alignment.center,
-        aspectRatio: await data.aspect?.ratio.resolveValue(
-          context: context,
-        ),
         blurRadius: filters.blurRadius == null
             ? null
             : (filters.blurRadius ?? 0) * viewScale,
@@ -125,7 +119,6 @@ class DivImageModel with EquatableMixin {
         color,
         colorBlendMode,
         contentAlignment,
-        aspectRatio,
         blurRadius,
         rtlMirror,
       ];

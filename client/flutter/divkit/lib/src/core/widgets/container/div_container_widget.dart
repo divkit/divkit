@@ -45,6 +45,7 @@ class _DivContainerWidgetState extends State<DivContainerWidget> {
   @override
   Widget build(BuildContext context) => DivBaseWidget(
         data: widget.data,
+        aspect: widget.data.aspect?.ratio,
         tapActionData: DivTapActionData(
           action: widget.data.action,
           actions: widget.data.actions,
@@ -57,45 +58,37 @@ class _DivContainerWidgetState extends State<DivContainerWidget> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final model = snapshot.requireData;
-              final mainWidget = provide(
-                model.contentAlignment,
-                child: model.contentAlignment.map(
-                  flex: (data) => provide(
-                    DivParentData.flex,
-                    child: Flex(
-                      direction: data.direction,
-                      mainAxisAlignment: data.mainAxisAlignment,
-                      crossAxisAlignment: data.crossAxisAlignment,
-                      children: model.children,
-                    ),
+              final mainWidget = model.contentAlignment.map(
+                flex: (data) => provide(
+                  data.direction == Axis.vertical
+                      ? DivParentData.column
+                      : DivParentData.row,
+                  child: Flex(
+                    mainAxisSize: MainAxisSize.min,
+                    direction: data.direction,
+                    mainAxisAlignment: data.mainAxisAlignment,
+                    crossAxisAlignment: data.crossAxisAlignment,
+                    children: model.children,
                   ),
-                  wrap: (data) => provide(
-                    DivParentData.wrap,
-                    child: Wrap(
-                      direction: data.direction,
-                      alignment: data.wrapAlignment,
-                      runAlignment: data.runAlignment,
-                      children: model.children,
-                    ),
+                ),
+                wrap: (data) => provide(
+                  DivParentData.wrap,
+                  child: Wrap(
+                    direction: data.direction,
+                    alignment: data.wrapAlignment,
+                    runAlignment: data.runAlignment,
+                    children: model.children,
                   ),
-                  stack: (data) => provide(
-                    DivParentData.stack,
-                    child: Stack(
-                      alignment: data.contentAlignment ??
-                          AlignmentDirectional.topStart,
-                      children: model.children,
-                    ),
+                ),
+                stack: (data) => provide(
+                  DivParentData.stack,
+                  child: Stack(
+                    alignment:
+                        data.contentAlignment ?? AlignmentDirectional.topStart,
+                    children: model.children,
                   ),
                 ),
               );
-
-              final aspect = model.aspectRatio;
-              if (aspect != null) {
-                return AspectRatio(
-                  aspectRatio: aspect,
-                  child: mainWidget,
-                );
-              }
 
               return mainWidget;
             }

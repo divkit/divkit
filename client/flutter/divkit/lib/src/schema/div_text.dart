@@ -1823,6 +1823,13 @@ enum DivTextTruncate implements Preloadable {
   final String value;
 
   const DivTextTruncate(this.value);
+  bool get isNone => this == none;
+
+  bool get isStart => this == start;
+
+  bool get isEnd => this == end;
+
+  bool get isMiddle => this == middle;
 
   T map<T>({
     required T Function() none,

@@ -4,6 +4,15 @@ import 'package:divkit/src/core/protocol/div_logger.dart';
 import 'package:divkit/src/core/protocol/div_variable.dart';
 import 'package:flutter/services.dart';
 
+/// Print logs with information about expression calculations.
+bool debugPrintDivExpressionResolve = false;
+
+void _log(String message) {
+  if (debugPrintDivExpressionResolve) {
+    loggerUse(const DefaultDivLoggerContext('onResolve')).debug(message);
+  }
+}
+
 final exprResolver = DefaultDivExpressionResolver();
 
 abstract class DivExpressionResolver {
@@ -43,7 +52,7 @@ class DefaultDivExpressionResolver implements DivExpressionResolver {
           result = expr.parse!(result);
         }
 
-        logger.debug(
+        _log(
           "Expr ${expr.source} with args ${context.current}"
           "and result $result [${result.runtimeType}]",
         );

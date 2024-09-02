@@ -81,6 +81,13 @@ enum DivRadialGradientRelativeRadiusValue implements Preloadable {
   final String value;
 
   const DivRadialGradientRelativeRadiusValue(this.value);
+  bool get isNearestCorner => this == nearestCorner;
+
+  bool get isFarthestCorner => this == farthestCorner;
+
+  bool get isNearestSide => this == nearestSide;
+
+  bool get isFarthestSide => this == farthestSide;
 
   T map<T>({
     required T Function() nearestCorner,

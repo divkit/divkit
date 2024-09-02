@@ -55,6 +55,10 @@ class EnumWithDefaultType extends Preloadable with EquatableMixin {
   ) : value = obj,
       _index = 1;
 
+  bool get isWithDefault => _index == 0;
+
+  bool get isWithoutDefault => _index == 1;
+
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 
   static EnumWithDefaultType? fromJson(Map<String, dynamic>? json,) {

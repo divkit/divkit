@@ -1094,6 +1094,11 @@ enum DivContainerOrientation implements Preloadable {
   final String value;
 
   const DivContainerOrientation(this.value);
+  bool get isVertical => this == vertical;
+
+  bool get isHorizontal => this == horizontal;
+
+  bool get isOverlap => this == overlap;
 
   T map<T>({
     required T Function() vertical,
@@ -1179,6 +1184,9 @@ enum DivContainerLayoutMode implements Preloadable {
   final String value;
 
   const DivContainerLayoutMode(this.value);
+  bool get isNoWrap => this == noWrap;
+
+  bool get isWrap => this == wrap;
 
   T map<T>({
     required T Function() noWrap,

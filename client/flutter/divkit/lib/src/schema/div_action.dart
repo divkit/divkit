@@ -298,6 +298,9 @@ enum DivActionTarget implements Preloadable {
   final String value;
 
   const DivActionTarget(this.value);
+  bool get isSelf => this == self;
+
+  bool get isBlank => this == blank;
 
   T map<T>({
     required T Function() self,

@@ -67,6 +67,10 @@ class DivRadialGradientRadius extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 1;
 
+  bool get isDivFixedSize => _index == 0;
+
+  bool get isDivRadialGradientRelativeRadius => _index == 1;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

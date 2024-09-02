@@ -122,6 +122,16 @@ class DivBackground extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 4;
 
+  bool get isDivImageBackground => _index == 0;
+
+  bool get isDivLinearGradient => _index == 1;
+
+  bool get isDivNinePatchBackground => _index == 2;
+
+  bool get isDivRadialGradient => _index == 3;
+
+  bool get isDivSolidBackground => _index == 4;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

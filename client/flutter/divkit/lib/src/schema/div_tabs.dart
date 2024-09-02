@@ -1283,6 +1283,11 @@ enum DivTabsTabTitleStyleAnimationType implements Preloadable {
   final String value;
 
   const DivTabsTabTitleStyleAnimationType(this.value);
+  bool get isSlide => this == slide;
+
+  bool get isFade => this == fade;
+
+  bool get isNone => this == none;
 
   T map<T>({
     required T Function() slide,

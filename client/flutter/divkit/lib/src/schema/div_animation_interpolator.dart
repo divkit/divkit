@@ -13,6 +13,17 @@ enum DivAnimationInterpolator implements Preloadable {
   final String value;
 
   const DivAnimationInterpolator(this.value);
+  bool get isLinear => this == linear;
+
+  bool get isEase => this == ease;
+
+  bool get isEaseIn => this == easeIn;
+
+  bool get isEaseOut => this == easeOut;
+
+  bool get isEaseInOut => this == easeInOut;
+
+  bool get isSpring => this == spring;
 
   T map<T>({
     required T Function() linear,

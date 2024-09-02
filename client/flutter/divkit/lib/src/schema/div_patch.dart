@@ -155,6 +155,9 @@ enum DivPatchMode implements Preloadable {
   final String value;
 
   const DivPatchMode(this.value);
+  bool get isTransactional => this == transactional;
+
+  bool get isPartial => this == partial;
 
   T map<T>({
     required T Function() transactional,

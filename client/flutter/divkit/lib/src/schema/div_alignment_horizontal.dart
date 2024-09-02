@@ -12,6 +12,15 @@ enum DivAlignmentHorizontal implements Preloadable {
   final String value;
 
   const DivAlignmentHorizontal(this.value);
+  bool get isLeft => this == left;
+
+  bool get isCenter => this == center;
+
+  bool get isRight => this == right;
+
+  bool get isStart => this == start;
+
+  bool get isEnd => this == end;
 
   T map<T>({
     required T Function() left,

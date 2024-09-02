@@ -840,6 +840,11 @@ enum DivGalleryCrossContentAlignment implements Preloadable {
   final String value;
 
   const DivGalleryCrossContentAlignment(this.value);
+  bool get isStart => this == start;
+
+  bool get isCenter => this == center;
+
+  bool get isEnd => this == end;
 
   T map<T>({
     required T Function() start,
@@ -925,6 +930,9 @@ enum DivGalleryScrollMode implements Preloadable {
   final String value;
 
   const DivGalleryScrollMode(this.value);
+  bool get isPaging => this == paging;
+
+  bool get isDefault => this == default_;
 
   T map<T>({
     required T Function() paging,
@@ -1000,6 +1008,9 @@ enum DivGalleryOrientation implements Preloadable {
   final String value;
 
   const DivGalleryOrientation(this.value);
+  bool get isHorizontal => this == horizontal;
+
+  bool get isVertical => this == vertical;
 
   T map<T>({
     required T Function() horizontal,
@@ -1075,6 +1086,9 @@ enum DivGalleryScrollbar implements Preloadable {
   final String value;
 
   const DivGalleryScrollbar(this.value);
+  bool get isNone => this == none;
+
+  bool get isAuto => this == auto;
 
   T map<T>({
     required T Function() none,

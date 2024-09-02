@@ -292,6 +292,11 @@ class DartGenerator(Generator):
             result += f'      _index = {i};'
             result += EMPTY
 
+        # Checker declaration
+        for (i, n) in enumerate(sorted(entity_enumeration.entity_names)):
+            result += f'  bool get is{utils.capitalize_camel_case(n)} => _index == {i};'
+            result += EMPTY
+
         # Preload declaration
         result += '  Future<void> preload(Map<String, dynamic> context) => value.preload(context);'
 
@@ -355,6 +360,12 @@ class DartGenerator(Generator):
         result += '  final String value;'
         result += EMPTY
         result += f'  const {full_name}(this.value);'
+
+        # Checker declaration
+        for i in range(cases_len):
+            variant = allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))
+            result += f'  bool get is{utils.capitalize_camel_case(variant)} => this == {variant};'
+            result += EMPTY
 
         result += EMPTY
         result += '  T map<T>({'

@@ -1,15 +1,15 @@
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/base/div_base_model.dart';
 import 'package:divkit/src/core/widgets/div_visibility_emitter.dart';
-import 'package:divkit/src/utils/content_alignment_converters.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
-import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
 
 class DivBaseWidget extends StatefulWidget {
   final DivBase data;
 
   final DivTapActionData? tapActionData;
+
+  final Expression<double>? aspect;
 
   final Widget child;
 
@@ -18,6 +18,7 @@ class DivBaseWidget extends StatefulWidget {
     super.key,
     required this.child,
     this.tapActionData,
+    this.aspect,
   });
 
   @override
@@ -34,14 +35,14 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
   @override
   void initState() {
     super.initState();
-    value = DivBaseModel.value(context, widget.data);
+    value = DivBaseModel.value(context, widget.data, widget.aspect);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    stream ??= DivBaseModel.from(context, widget.data);
+    stream ??= DivBaseModel.from(context, widget.data, widget.aspect);
   }
 
   @override
@@ -49,8 +50,8 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
-      value = DivBaseModel.value(context, widget.data);
-      stream = DivBaseModel.from(context, widget.data);
+      value = DivBaseModel.value(context, widget.data, widget.aspect);
+      stream = DivBaseModel.from(context, widget.data, widget.aspect);
     }
   }
 
@@ -62,15 +63,17 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
           if (snapshot.hasData) {
             final model = snapshot.requireData;
             final focusNode = FocusScope.of(context).getById(model.divId);
-            final parent = watch<DivParentData>(context);
-            final contentAlignment = watch<ContentAlignment>(context);
 
-            return DivSizeWrapper(
-              parent: parent,
-              contentAlignment: contentAlignment,
+            if (model.isGone) {
+              return const SizedBox.shrink();
+            }
+
+            return DivLayout(
               height: model.height,
               width: model.width,
-              alignment: model.alignment,
+              margin: model.margin,
+              aspect: model.aspect,
+              alignment: model.alignment.asAlignment,
               child: DivVisibilityEmitter(
                 visibilityActions: model.visibilityActions,
                 divVisibility: model.divVisibility,
@@ -85,23 +88,17 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
                             builder: (_, __) => _DecoratedBox(
                               key: key,
                               padding: model.padding,
-                              margin: model.margin,
                               decoration: focusNode.hasFocus
                                   ? model.focusDecoration
                                   : model.decoration,
-                              child: RepaintBoundary(
-                                child: widget.child,
-                              ),
+                              child: widget.child,
                             ),
                           )
                         : _DecoratedBox(
                             key: key,
                             padding: model.padding,
-                            margin: model.margin,
                             decoration: model.decoration,
-                            child: RepaintBoundary(
-                              child: widget.child,
-                            ),
+                            child: widget.child,
                           ),
                   ),
                 ),
@@ -121,15 +118,98 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
   }
 }
 
+extension PassDivSizeImpl on DivSize {
+  Future<DivSizeValue> resolve({
+    required DivVariableContext context,
+    required double viewScale,
+  }) async =>
+      map(
+        divFixedSize: (fixed) async => DivFixed(
+          await fixed.resolveDimension(
+            context: context,
+            viewScale: viewScale,
+          ),
+        ),
+        divMatchParentSize: (flex) async => DivMatchParent(
+          (await flex.weight?.resolveValue(context: context))?.toInt(),
+        ),
+        divWrapContentSize: (wrapped) async {
+          final constrained = await wrapped.constrained?.resolveValue(
+                context: context,
+              ) ??
+              false;
+
+          if (!constrained) {
+            return DivWrapContent(
+              min: await wrapped.minSize?.resolveDimension(
+                context: context,
+                viewScale: viewScale,
+              ),
+              max: await wrapped.maxSize?.resolveDimension(
+                context: context,
+                viewScale: viewScale,
+              ),
+            );
+          }
+
+          return DivConstrained(
+            min: await wrapped.minSize?.resolveDimension(
+              context: context,
+              viewScale: viewScale,
+            ),
+            max: await wrapped.maxSize?.resolveDimension(
+              context: context,
+              viewScale: viewScale,
+            ),
+          );
+        },
+      );
+
+  DivSizeValue passValue({
+    required double viewScale,
+  }) =>
+      map(
+        divFixedSize: (fixed) => DivFixed(
+          fixed.valueDimension(
+            viewScale: viewScale,
+          ),
+        ),
+        divMatchParentSize: (flex) => DivMatchParent(
+          flex.weight?.requireValue.toInt(),
+        ),
+        divWrapContentSize: (wrapped) {
+          final constrained = wrapped.constrained?.requireValue ?? false;
+
+          if (!constrained) {
+            return DivWrapContent(
+              min: wrapped.minSize?.valueDimension(
+                viewScale: viewScale,
+              ),
+              max: wrapped.maxSize?.valueDimension(
+                viewScale: viewScale,
+              ),
+            );
+          }
+
+          return DivConstrained(
+            min: wrapped.minSize?.valueDimension(
+              viewScale: viewScale,
+            ),
+            max: wrapped.maxSize?.valueDimension(
+              viewScale: viewScale,
+            ),
+          );
+        },
+      );
+}
+
 class _DecoratedBox extends StatelessWidget {
   final DivDecoration? decoration;
   final Widget child;
   final EdgeInsetsGeometry? padding;
-  final EdgeInsetsGeometry? margin;
 
   const _DecoratedBox({
     required this.child,
-    this.margin,
     this.padding,
     this.decoration,
     super.key,
@@ -138,36 +218,33 @@ class _DecoratedBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundWidgets = decoration?.backgroundWidgets ?? <Widget>[];
-    return Container(
-      margin: margin,
-      child: CustomPaint(
-        painter: _OuterShadowPainter(
-          outerShadow: decoration?.outerShadow,
-          borderRadiusCustom: decoration?.customBorderRadius,
-        ),
-        child: ClipRRect(
-          borderRadius: decoration?.customBorderRadius.toBorderRadius() ??
-              BorderRadius.zero,
-          child: Stack(
-            fit: StackFit.passthrough,
-            children: [
-              ...backgroundWidgets
-                  .map(
-                    (widget) => Positioned.fill(
-                      child: widget,
-                    ),
-                  )
-                  .toList(),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: decoration?.customBorderRadius.toBorderRadius(),
-                  border: decoration?.boxDecoration.border,
-                ),
-                padding: padding,
-                child: child,
+    return CustomPaint(
+      painter: _OuterShadowPainter(
+        outerShadow: decoration?.outerShadow,
+        borderRadiusCustom: decoration?.customBorderRadius,
+      ),
+      child: ClipRRect(
+        borderRadius: decoration?.customBorderRadius.toBorderRadius() ??
+            BorderRadius.zero,
+        child: Stack(
+          fit: StackFit.passthrough,
+          children: [
+            ...backgroundWidgets
+                .map(
+                  (widget) => Positioned.fill(
+                    child: widget,
+                  ),
+                )
+                .toList(),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: decoration?.customBorderRadius.toBorderRadius(),
+                border: decoration?.boxDecoration.border,
               ),
-            ],
-          ),
+              padding: padding,
+              child: child,
+            ),
+          ],
         ),
       ),
     );

@@ -9,6 +9,9 @@ enum DivLineStyle implements Preloadable {
   final String value;
 
   const DivLineStyle(this.value);
+  bool get isNone => this == none;
+
+  bool get isSingle => this == single;
 
   T map<T>({
     required T Function() none,

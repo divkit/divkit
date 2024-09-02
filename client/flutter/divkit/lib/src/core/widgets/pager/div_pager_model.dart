@@ -43,8 +43,7 @@ class DivPagerModel with EquatableMixin {
     PageController controller,
     ValueGetter<int> currentPage,
   ) {
-    final variables =
-        DivKitProvider.watch<DivContext>(context)!.variableManager;
+    final variables = watch<DivContext>(context)!.variableManager;
     final id = data.id;
     if (id != null && variables.context.current[id] != currentPage()) {
       variables.putVariable(id, currentPage());
