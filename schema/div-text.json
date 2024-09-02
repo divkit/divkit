@@ -27,9 +27,10 @@
         },
         "alignment_vertical": {
           "$ref": "div-text-alignment-vertical.json",
-          "default_value": "baseline",
           "$description": "translations.json#/div_text_range_alignment_vertical",
-          "platforms": []
+          "platforms": [
+            "android"
+          ]
         },
         "font_size": {
           "$ref": "common.json#/non_negative_integer",
@@ -198,9 +199,11 @@
         },
         "alignment_vertical": {
           "$ref": "div-text-alignment-vertical.json",
-          "default_value": "baseline",
+          "default_value": "center",
           "$description": "translations.json#/div_text_image_alignment_vertical",
-          "platforms": []
+          "platforms": [
+            "android"
+          ]
         }
       },
       "required": [

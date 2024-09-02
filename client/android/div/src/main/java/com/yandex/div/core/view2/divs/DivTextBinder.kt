@@ -40,6 +40,7 @@ import com.yandex.div.core.view2.spannable.FontSizeSpan
 import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
 import com.yandex.div.core.view2.spannable.ShadowSpan
 import com.yandex.div.core.view2.spannable.ShadowSpan.ShadowParams
+import com.yandex.div.core.view2.spannable.VerticalAlignmentSpan
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.drawable.LinearGradientDrawable
@@ -74,7 +75,6 @@ import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
 import javax.inject.Inject
 import kotlin.math.min
-import kotlin.math.roundToInt
 
 private const val SOFT_HYPHEN = '\u00AD'
 private const val WORD_JOINER = "\u2060"
@@ -688,9 +688,16 @@ internal class DivTextBinder @Inject constructor(
         )
 
         val callback = { _: Any -> applyRichText(bindingContext, newDiv) }
+
+        addSubscription(newDiv.fontSize.observe(resolver, callback))
+        addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
+        addSubscription(newDiv.fontFamily?.observe(resolver, callback))
+        addSubscription(newDiv.lineHeight?.observe(resolver, callback))
+
         newDiv.ranges?.forEach { range ->
             addSubscription(range.start.observe(resolver, callback))
             addSubscription(range.end.observe(resolver, callback))
+            addSubscription(range.alignmentVertical?.observe(resolver, callback))
             addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
             addSubscription(range.fontWeight?.observe(resolver, callback))
@@ -705,6 +712,7 @@ internal class DivTextBinder @Inject constructor(
         newDiv.images?.forEach { image ->
             addSubscription(image.start.observe(resolver, callback))
             addSubscription(image.url.observe(resolver, callback))
+            addSubscription(image.alignmentVertical.observe(resolver, callback))
             addSubscription(image.tintColor?.observe(resolver, callback))
             addSubscription(image.width.value.observe(resolver, callback))
             addSubscription(image.width.unit.observe(resolver, callback))
@@ -1031,6 +1039,9 @@ internal class DivTextBinder @Inject constructor(
                 sb.insert(it.start.evaluate(resolver).toIntSafely(), "#")
             }
 
+            // You can uncomment the line below for debug purposes.
+            // sb.setSpan(LineMetricsSpan(), 0, sb.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+
             images.foldIndexed(Int.MIN_VALUE) { index, prevImageStart, image ->
                 additionalCharsBeforeImage?.takeIf { index > 0 }?.let { chars ->
                     chars[index] = chars[index - 1]
@@ -1053,8 +1064,8 @@ internal class DivTextBinder @Inject constructor(
                 val height = image.height.toPx(metrics, resolver)
                 val start = image.start.evaluate(resolver).toIntSafely() + index +
                         additionalCharsBeforeImage.getOrZero(index)
-                val fontSize = sb.getFontSizeAt(start)
-                val span = ImagePlaceholderSpan(width, height, lineHeight.unitToPx(metrics, fontSizeUnit), fontSize)
+                val alignment = image.alignmentVertical.evaluate(resolver).toTextVerticalAlignment()
+                val span = ImagePlaceholderSpan(width, height, lineHeight.unitToPx(metrics, fontSizeUnit), alignment)
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
 
@@ -1079,6 +1090,17 @@ internal class DivTextBinder @Inject constructor(
             val end = range.end.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
             if (start > end) return
 
+            range.alignmentVertical?.evaluate(resolver)?.let { alignment ->
+                val fontSize = range.fontSize?.evaluate(resolver) ?: fontSize
+                val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
+                setSpan(
+                    VerticalAlignmentSpan(
+                        fontSize = fontSize.unitToPx(metrics, fontSizeUnit),
+                        alignment = alignment.toTextVerticalAlignment(),
+                        layoutProvider = { textView.layout }
+                    ),
+                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            }
             range.fontSize?.evaluate(resolver)?.let { fontSize ->
                 val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
                 setSpan(
@@ -1114,10 +1136,28 @@ internal class DivTextBinder @Inject constructor(
                 }
             }
             range.fontWeight?.let {
-                setSpan(TypefaceSpan(typefaceResolver.getTypeface(fontFamily, it.evaluate(resolver), range.fontWeightValue?.evaluate(resolver))), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                setSpan(
+                    TypefaceSpan(
+                        typefaceResolver.getTypeface(
+                            fontFamily,
+                            it.evaluate(resolver),
+                            range.fontWeightValue?.evaluate(resolver)
+                        )
+                    ),
+                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
             }
             range.fontWeightValue?.let {
-                setSpan(TypefaceSpan(typefaceResolver.getTypeface(fontFamily, range.fontWeight?.evaluate(resolver), range.fontWeightValue?.evaluate(resolver))), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                setSpan(
+                    TypefaceSpan(
+                        typefaceResolver.getTypeface(
+                            fontFamily,
+                            range.fontWeight?.evaluate(resolver),
+                            range.fontWeightValue?.evaluate(resolver)
+                        )
+                    ),
+                    start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
             }
             range.actions?.let {
                 textView.movementMethod = LinkMovementMethod.getInstance()
@@ -1184,7 +1224,6 @@ internal class DivTextBinder @Inject constructor(
         ): BitmapImageSpan {
             val imageHeight = range.height.toPx(metrics, resolver)
             val start = range.start.evaluate(resolver).toIntSafely()
-            val fontSize = getFontSizeAt(start)
 
             val onClickActions = getActionsForPosition(start)
             val onClickAction = if (onClickActions == null) {
@@ -1206,30 +1245,19 @@ internal class DivTextBinder @Inject constructor(
             } ?: ""
 
             return BitmapImageSpan(
-                context,
-                bitmap,
-                lineHeight,
-                fontSize,
-                range.width.toPx(metrics, resolver),
-                imageHeight,
-                range.tintColor?.evaluate(resolver),
-                range.tintMode.evaluate(resolver).toPorterDuffMode(),
+                context = context,
+                bitmap = bitmap,
+                lineHeight = lineHeight,
+                alignment = range.alignmentVertical.evaluate(resolver).toTextVerticalAlignment(),
+                width = range.width.toPx(metrics, resolver),
+                height = imageHeight,
+                tintColor = range.tintColor?.evaluate(resolver),
+                tintMode = range.tintMode.evaluate(resolver).toPorterDuffMode(),
                 isSquare = false,
                 accessibilityDescription = range.accessibility?.description?.evaluate(resolver),
                 accessibilityType = type,
-                onClickAccessibilityAction = onClickAction,
-                anchorPoint = BitmapImageSpan.AnchorPoint.BASELINE
+                onClickAccessibilityAction = onClickAction
             )
-        }
-
-        private fun Spannable.getFontSizeAt(position: Int): Int {
-            val index = if (position == 0) 0 else position - 1
-            val fontSizeSpans = getSpans(index, index + 1, FontSizeSpan::class.java)
-            return if (fontSizeSpans != null && fontSizeSpans.isNotEmpty()) {
-                fontSizeSpans.last().fontSize
-            } else {
-                textView.textSize.roundToInt()
-            }
         }
 
         private inner class ImageCallback(private val index: Int) : DivIdLoggingImageDownloadCallback(divView) {

@@ -6,7 +6,7 @@ import android.text.style.LineHeightSpan
 import androidx.annotation.Px
 import kotlin.math.roundToInt
 
-private const val NOT_SET = -1
+private const val NOT_SET = Int.MAX_VALUE
 
 /**
  * Span with applying line height by text lines not paragraph.
