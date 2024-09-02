@@ -1,34 +1,24 @@
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/base/div_base_model.dart';
-import 'package:divkit/src/core/widgets/div_tap_action_emitter.dart';
-import 'package:divkit/src/generated_sources/div_action.dart';
-import 'package:divkit/src/generated_sources/div_animation.dart';
-import 'package:divkit/src/generated_sources/div_base.dart';
-import 'package:divkit/src/utils/div_focus_node.dart';
-import 'package:divkit/src/utils/size_converters.dart';
-import 'package:flutter/material.dart';
 import 'package:divkit/src/core/widgets/div_visibility_emitter.dart';
+import 'package:divkit/src/utils/content_alignment_converters.dart';
+import 'package:divkit/src/utils/div_focus_node.dart';
+import 'package:divkit/src/utils/provider.dart';
+import 'package:flutter/material.dart';
 
 class DivBaseWidget extends StatefulWidget {
   final DivBase data;
 
-  final List<DivAction> actions;
-  final List<DivAction> longtapActions;
-  final DivAnimation? actionAnimation;
+  final DivTapActionData? tapActionData;
 
   final Widget child;
 
-  DivBaseWidget({
+  const DivBaseWidget({
     required this.data,
-    this.actionAnimation,
     super.key,
-    DivAction? action,
-    List<DivAction>? actions,
-    List<DivAction>? longtapActions,
     required this.child,
-  })  : actions = action != null
-            ? ((actions ?? const []) + [action])
-            : (actions ?? const []),
-        longtapActions = longtapActions ?? [];
+    this.tapActionData,
+  });
 
   @override
   State<DivBaseWidget> createState() => _DivBaseWidgetState();
@@ -37,9 +27,15 @@ class DivBaseWidget extends StatefulWidget {
 class _DivBaseWidgetState extends State<DivBaseWidget> {
   final key = GlobalKey();
 
-  // ToDo: Optimize repeated calculations on the same context.
-  // The model itself is not long-lived, so you need to keep the stream in the state?
+  DivBaseModel? value;
+
   Stream<DivBaseModel>? stream;
+
+  @override
+  void initState() {
+    super.initState();
+    value = DivBaseModel.value(context, widget.data);
+  }
 
   @override
   void didChangeDependencies() {
@@ -53,21 +49,25 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
+      value = DivBaseModel.value(context, widget.data);
       stream = DivBaseModel.from(context, widget.data);
     }
   }
 
   @override
   Widget build(BuildContext context) => StreamBuilder<DivBaseModel>(
+        initialData: value,
         stream: stream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final model = snapshot.requireData;
-            final renderObject = context.findRenderObject();
             final focusNode = FocusScope.of(context).getById(model.divId);
+            final parent = watch<DivParentData>(context);
+            final contentAlignment = watch<ContentAlignment>(context);
 
             return DivSizeWrapper(
-              parentData: renderObject?.parentData,
+              parent: parent,
+              contentAlignment: contentAlignment,
               height: model.height,
               width: model.width,
               alignment: model.alignment,
@@ -78,9 +78,7 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
                 child: Opacity(
                   opacity: model.opacity,
                   child: DivTapActionEmitter(
-                    actions: widget.actions,
-                    actionAnimation: widget.actionAnimation,
-                    longtapActions: widget.longtapActions,
+                    data: widget.tapActionData,
                     child: focusNode != null
                         ? AnimatedBuilder(
                             animation: focusNode,
@@ -117,6 +115,7 @@ class _DivBaseWidgetState extends State<DivBaseWidget> {
 
   @override
   void dispose() {
+    value = null;
     stream = null;
     super.dispose();
   }

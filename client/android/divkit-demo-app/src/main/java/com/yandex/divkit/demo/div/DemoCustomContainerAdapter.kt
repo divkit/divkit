@@ -67,6 +67,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
                         val childDiv = div.items!![i]
                         getDivChildFactory(divView).bindChildView(
                             childDivView,
+                            i,
                             childDiv,
                             path,
                             divView,

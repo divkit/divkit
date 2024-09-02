@@ -123,7 +123,7 @@ open class DivLottieExtensionHandler(
                     lottieController.playAnimation()
 
                     params.isPlaying?.let { expression ->
-                        addSubscription(expression.observe(divView.expressionResolver) { isPlaying ->
+                        addSubscription(expression.observe(expressionResolver) { isPlaying ->
                             lottieController.playOrPauseAnimation(isPlaying)
                         })
                     }

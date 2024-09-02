@@ -15,10 +15,13 @@ import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
 import android.util.DisplayMetrics
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.getSpans
 import androidx.core.view.ViewCompat
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
+import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
@@ -1015,6 +1018,8 @@ internal class DivTextBinder @Inject constructor(
         }
 
         fun run() {
+            (textView as? DivLineHeightTextView)?.clearImageSpans()
+
             if (ranges.isNullOrEmpty() && images.isEmpty()) {
                 textObserver?.invoke(text)
                 return
@@ -1061,6 +1066,7 @@ internal class DivTextBinder @Inject constructor(
             textObserver?.invoke(sb)
 
             images.forEachIndexed { index, image ->
+
                 val reference = imageLoader.loadImage(image.url.evaluate(resolver).toString(), ImageCallback(index))
                 divView.addLoadReference(reference, textView)
             }
@@ -1146,6 +1152,23 @@ internal class DivTextBinder @Inject constructor(
             }
         }
 
+        private fun getActionsForPosition(start: Int): List<DivAction>? {
+            ranges ?: return null
+            val clickableSpans = ranges
+                .filter { it.actions != null }
+                .filter { it.start.evaluate(resolver) <= start && it.end.evaluate(resolver) > start }
+
+            if (clickableSpans.size > 1) {
+                divView.logWarning(Throwable("Two or more clickable ranges intersect."))
+            }
+
+            clickableSpans.getOrNull(0)?.let {
+                return it.actions
+            }
+
+            return null
+        }
+
         private fun DivLineHeightTextView.hasSuchSpan(sb: SpannableStringBuilder, backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
             if (textRoundedBgHelper == null) {
                 textRoundedBgHelper = DivTextRangesBackgroundHelper(this, resolver)
@@ -1162,6 +1185,26 @@ internal class DivTextBinder @Inject constructor(
             val imageHeight = range.height.toPx(metrics, resolver)
             val start = range.start.evaluate(resolver).toIntSafely()
             val fontSize = getFontSizeAt(start)
+
+            val onClickActions = getActionsForPosition(start)
+            val onClickAction = if (onClickActions == null) {
+                null
+            } else {
+                BitmapImageSpan.OnAccessibilityClickAction {
+                    val actionBinder = divView.div2Component.actionBinder
+                    actionBinder.handleTapClick(bindingContext, textView, onClickActions)
+                }
+            }
+
+            val type = when(range.accessibility?.type) {
+                null -> ""
+                DivText.Image.Accessibility.Type.NONE -> ""
+                DivText.Image.Accessibility.Type.BUTTON -> Button::class.qualifiedName
+                DivText.Image.Accessibility.Type.IMAGE -> ImageView::class.qualifiedName
+                DivText.Image.Accessibility.Type.TEXT -> TextView::class.qualifiedName
+                DivText.Image.Accessibility.Type.AUTO -> ImageView::class.qualifiedName
+            } ?: ""
+
             return BitmapImageSpan(
                 context,
                 bitmap,
@@ -1172,6 +1215,9 @@ internal class DivTextBinder @Inject constructor(
                 range.tintColor?.evaluate(resolver),
                 range.tintMode.evaluate(resolver).toPorterDuffMode(),
                 isSquare = false,
+                accessibilityDescription = range.accessibility?.description?.evaluate(resolver),
+                accessibilityType = type,
+                onClickAccessibilityAction = onClickAction,
                 anchorPoint = BitmapImageSpan.AnchorPoint.BASELINE
             )
         }
@@ -1196,6 +1242,7 @@ internal class DivTextBinder @Inject constructor(
                         additionalCharsBeforeImage.getOrZero(index)
                 sb.getSpans<ImagePlaceholderSpan>(start, start + 1).forEach { sb.removeSpan(it) }
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                (textView as? DivLineHeightTextView)?.addImageSpan(span)
                 textObserver?.invoke(sb)
             }
         }

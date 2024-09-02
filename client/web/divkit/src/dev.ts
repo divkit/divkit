@@ -2,24 +2,30 @@ import Root from './components/Root.svelte';
 import { SizeProvider } from './extensions/sizeProvider';
 import { Gesture } from './extensions/gesture';
 import { lottieExtensionBuilder } from './extensions/lottie';
+import { markdownExtensionBuilder } from './extensions/markdown';
 import type { DivExtensionClass } from '../typings/common';
 import Lottie from 'lottie-web/build/player/lottie';
+import markdownit from 'markdown-it';
 import { initComponents } from './devCustomComponents';
 
+import markdownCss from './devMarkdown.module.css';
+
+const md = markdownit();
+
 const json = {
-  "templates": {},
-  "card": {
-      "log_id": "snapshot_test_card",
-      "states": [
-          {
-              "state_id": 0,
-              "div": {
-                  "type": "text",
-                  "text": "Hello world"
-              }
-          }
-      ]
-  }
+    "templates": {},
+    "card": {
+        "log_id": "snapshot_test_card",
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "text",
+                    "text": "Hello world"
+                }
+            }
+        ]
+    }
 };
 
 window.root = new Root({
@@ -34,6 +40,9 @@ window.root = new Root({
             ['size_provider', SizeProvider],
             ['gesture', Gesture],
             ['lottie', lottieExtensionBuilder(Lottie.loadAnimation)],
+            ['markdown', markdownExtensionBuilder(str => md.render(str), {
+                cssClass: markdownCss['markdown-extension']
+            })],
         ]),
         customComponents: new Map([
             ['old_custom_card_1', {
@@ -68,7 +77,7 @@ window.root = new Root({
             },
             setValue(name, type, value, lifetime) {
                 try {
-                    localStorage.setItem('divkit:' + name, JSON.stringify({value, type, lifetime: Date.now() + lifetime * 1000}));
+                    localStorage.setItem('divkit:' + name, JSON.stringify({ value, type, lifetime: Date.now() + lifetime * 1000 }));
                 } catch (err) {
                     //
                 }

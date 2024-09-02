@@ -32,6 +32,7 @@
     import { correctTintMode } from '../../utils/correctTintMode';
     import { getCssFilter } from '../../utils/filters';
     import { prepareBase64 } from '../../utils/prepareBase64';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivImageData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -280,4 +281,8 @@
             {/if}
         {/key}
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

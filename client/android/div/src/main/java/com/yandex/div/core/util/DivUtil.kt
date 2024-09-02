@@ -11,7 +11,9 @@ import com.yandex.div.core.animation.EaseInOutInterpolator
 import com.yandex.div.core.animation.EaseInterpolator
 import com.yandex.div.core.animation.EaseOutInterpolator
 import com.yandex.div.core.animation.SpringInterpolator
+import com.yandex.div.core.expression.variables.toVariable
 import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.data.Variable
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -33,6 +35,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVideo
 import java.util.Collections.min
 
@@ -178,3 +181,9 @@ internal val Div.isBranch: Boolean
 
 internal val Div.isLeaf: Boolean
     get() = !isBranch
+
+internal fun List<DivVariable>.toVariables(): List<Variable> {
+    return map {
+        it.toVariable()
+    }
+}

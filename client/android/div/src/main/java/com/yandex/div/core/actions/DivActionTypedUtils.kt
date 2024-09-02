@@ -15,6 +15,13 @@ internal fun Div2View.logError(throwable: Throwable) {
         .logError(throwable)
 }
 
+internal fun Div2View.logWarning(throwable: Throwable) {
+    viewComponent
+        .errorCollectors
+        .getOrCreate(dataTag, divData)
+        .logWarning(throwable)
+}
+
 internal fun DivTypedValue.evaluate(expressionResolver: ExpressionResolver): Any {
     val newValue: Any = when (this) {
         is DivTypedValue.Integer -> value.value.evaluate(expressionResolver)

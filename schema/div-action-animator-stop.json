@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_animator_stop",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "animator_stop"
+      ]
+    },
+    "animator_id": {
+      "type": "string"
+    }
+  },
+  "platforms": [],
+  "required": [
+    "type",
+    "animator_id"
+  ]
+}

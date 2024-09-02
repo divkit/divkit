@@ -19,6 +19,8 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
+import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivPathUtils.findDivState
@@ -26,6 +28,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -89,6 +92,7 @@ import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
 import com.yandex.div2.DivTransform
+import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
 import kotlin.math.max
@@ -599,6 +603,39 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
     applyAlignment(div.alignmentHorizontal?.evaluate(resolver),
         div.alignmentVertical?.evaluate(resolver))
 }
+
+internal fun getOrCreateRuntime(
+    runtimeStore: RuntimeStore?,
+    path: String,
+    parentPath: String?,
+    variables: List<DivVariable>? = null
+): ExpressionsRuntime? {
+    return runtimeStore?.getOrCreateRuntime(
+        path = path,
+        parentPath = parentPath,
+        variables = variables?.toVariables()
+    )
+}
+
+internal fun getRuntimeFor(runtimeStore: RuntimeStore?, resolver: ExpressionResolver) =
+    runtimeStore?.getRuntimeWithOrNull(resolver)
+
+internal fun resolveRuntime(
+    runtimeStore: RuntimeStore?,
+    pathUnit: String,
+    parentPath: String,
+    variables: List<DivVariable>?,
+    resolver: ExpressionResolver,
+    parentRuntime: ExpressionsRuntime?,
+) = runtimeStore?.resolveRuntimeWith(
+        path = "$parentPath/$pathUnit",
+        parentPath = parentPath,
+        variables = variables?.toVariables(),
+        resolver = resolver,
+        parentRuntime = parentRuntime
+    )
+
+internal fun DivBase.getChildPathUnit(index: Int) = id ?: "child#$index"
 
 /**
  * Binds all descendants of [this] which are [DivStateLayout]s corresponding to DivStates in [div]

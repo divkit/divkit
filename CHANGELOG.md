@@ -1,3 +1,63 @@
+## 30.16.0
+
+# Android Client:
+* Fixed visibility actions within patch layout.
+* Fixed a bug when separators inside a `container` ignore margins.
+
+# iOS Client:
+* Added test playgrounds with layout of objects from LayoutKit.
+* Added support of autocapitalization type in `div-input` text fields.
+* Added filtering entered data in `div-input` using regexp or expressions.
+* Fixed a bug with scrolling through the last page.
+
+
+## 30.15.0
+
+# Android Client:
+* Fix indicator disappearing after patch.
+
+# iOS Client:
+* Added fix of scrolling multiline text input while typing text to avoid active input to be under keyboard.
+* Fixed variable trigger invocation after calling appends from the client.
+
+
+## 30.14.0
+
+# Android Client:
+* Added support for local `variables` field.
+* Fixed an issue when items built from prototypes couldn't receive variable updates.
+* Deprecated method `DivCustomContainerChildFactory#bindChildView`. Use a new method implementation with `childIndex` param instead. Otherwise, local variables inside custom containers wouldn't work.
+* Support toString() methods for dicts and arrays.
+
+# iOS Client:
+* Moved edits from the patch for the swipe_down fix.
+* Fixed a bug when scrolling from page to another page.
+* Fixed boolean type parsing in `set_stored_value` action.
+
+# Web Client:
+* Added `markdownExtensionBuilder` function, which accepts the markdown processing function and produces a `markdown` extension.
+* Added `getComponentProperty` extension API.
+
+
+## 30.13.0
+
+# Android Client:
+* Now `next_focus_ids.forward` supports accessibility order.
+* Now `div-gallery` in `paging` scroll mode will be centered like in other platforms.
+* Fixed visibility action tracking when `DivData` moved to another `Div2View`.
+* Fixed multiple state switching within pager items.
+
+# iOS Client:
+* Added variable triggers to div-base. They can be triggered by parent variables.
+* Reset local triggers in the elements after applying div-patch.
+
+# Web Client:
+* Updated the layout of the `grid`, in which elements are superimposed on each other to match the behavior of Android.
+* The logic of `transition_change` has been brought into line with other platforms: with this change, there is no need to contain the `transition_change` property in the final state. In addition, parameters from the previous state will be used, not from the new one.
+* Fixed the `auto_ellipsize` property in the presence of `max_lines` for the `text` component.
+* Performance optimizations.
+
+
 ## 30.12.0
 
 # Android Client:

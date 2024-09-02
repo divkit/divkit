@@ -1,5 +1,5 @@
 import 'package:divkit/src/utils/provider.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 
 final logger = DefaultDivLogger._();
@@ -10,7 +10,7 @@ DivLogger loggerUse(DivLoggerContext? context) => IntegratedDivLogger(
     );
 
 DivLogger loggerOf(BuildContext context) => loggerUse(
-      DivKitProvider.read<DivLoggerContext>(context),
+      read<DivLoggerContext>(context),
     );
 
 abstract class DivLoggerContext {

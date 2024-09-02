@@ -10,7 +10,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.internal.util.UiThreadHandler
-import com.yandex.div.internal.widget.EllipsizedTextView
+import com.yandex.div.internal.widget.TextViewWithAccessibleSpans
 import com.yandex.div2.DivText
 
 @Mockable
@@ -18,7 +18,7 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.divTextStyle
-) : EllipsizedTextView(context, attrs, defStyleAttr),
+): TextViewWithAccessibleSpans(context, attrs, defStyleAttr),
     DivHolderView<DivText> by DivHolderViewMixin(),
     DivAnimator {
 

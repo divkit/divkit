@@ -62,6 +62,8 @@ flutter:
     - assets/test_data/regression_test_data/container/
     - assets/test_data/regression_test_data/patch/
     - assets/test_data/regression_test_data/rebind/
+    - assets/test_data/regression_test_data/rebind/container/
+    - assets/test_data/regression_test_data/rebind/custom/
     - assets/test_data/regression_test_data/rebind/gallery/
     - assets/test_data/regression_test_data/rebind/grid/
     - assets/test_data/regression_test_data/rebind/pager/

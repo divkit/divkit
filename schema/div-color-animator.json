@@ -1,0 +1,30 @@
+{
+  "$description": "translations.json#/div_color_animator",
+  "allOf": [
+    {
+      "$ref": "div-animator-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "color_animator"
+          ]
+        },
+        "start_value": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_animator_start_value"
+        },
+        "end_value": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_animator_end_value"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "end_value"
+  ]
+}

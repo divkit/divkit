@@ -79,6 +79,8 @@ public final class DivInputTemplate: TemplateValue {
     }
   }
 
+  public typealias Autocapitalization = DivInput.Autocapitalization
+
   public typealias KeyboardType = DivInput.KeyboardType
 
   public static let type: String = "input"
@@ -87,11 +89,13 @@ public final class DivInputTemplate: TemplateValue {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let autocapitalization: Field<Expression<Autocapitalization>>? // default value: auto
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>?
   public let extensions: Field<[DivExtensionTemplate]>?
+  public let filters: Field<[DivInputFilterTemplate]>?
   public let focus: Field<DivFocusTemplate>?
   public let fontFamily: Field<Expression<String>>?
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
@@ -143,11 +147,13 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
+      autocapitalization: dictionary.getOptionalExpressionField("autocapitalization"),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
       disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
+      filters: dictionary.getOptionalArray("filters", templateToType: templateToType),
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
       fontFamily: dictionary.getOptionalExpressionField("font_family"),
       fontSize: dictionary.getOptionalExpressionField("font_size"),
@@ -200,11 +206,13 @@ public final class DivInputTemplate: TemplateValue {
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
+    autocapitalization: Field<Expression<Autocapitalization>>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
+    filters: Field<[DivInputFilterTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
     fontFamily: Field<Expression<String>>? = nil,
     fontSize: Field<Expression<Int>>? = nil,
@@ -254,11 +262,13 @@ public final class DivInputTemplate: TemplateValue {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
+    self.autocapitalization = autocapitalization
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
+    self.filters = filters
     self.focus = focus
     self.fontFamily = fontFamily
     self.fontSize = fontSize
@@ -309,11 +319,13 @@ public final class DivInputTemplate: TemplateValue {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let autocapitalizationValue = parent?.autocapitalization?.resolveOptionalValue(context: context) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let filtersValue = parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue
     let fontSizeValue = parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
@@ -362,11 +374,13 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
+      filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
@@ -424,11 +438,13 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      autocapitalization: autocapitalizationValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
+      filters: filtersValue.value,
       focus: focusValue.value,
       fontFamily: fontFamilyValue.value,
       fontSize: fontSizeValue.value,
@@ -484,11 +500,13 @@ public final class DivInputTemplate: TemplateValue {
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var autocapitalizationValue: DeserializationResult<Expression<DivInput.Autocapitalization>> = parent?.autocapitalization?.value() ?? .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
+    var filtersValue: DeserializationResult<[DivInputFilter]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
     var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
@@ -542,6 +560,8 @@ public final class DivInputTemplate: TemplateValue {
         alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+      case "autocapitalization":
+        autocapitalizationValue = deserialize(__dictValue).merged(with: autocapitalizationValue)
       case "background":
         backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
       case "border":
@@ -552,6 +572,8 @@ public final class DivInputTemplate: TemplateValue {
         disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "extensions":
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self).merged(with: extensionsValue)
+      case "filters":
+        filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputFilterTemplate.self).merged(with: filtersValue)
       case "focus":
         focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self).merged(with: focusValue)
       case "font_family":
@@ -646,6 +668,8 @@ public final class DivInputTemplate: TemplateValue {
         alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+      case parent?.autocapitalization?.link:
+        autocapitalizationValue = autocapitalizationValue.merged(with: { deserialize(__dictValue) })
       case parent?.background?.link:
         backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self) })
       case parent?.border?.link:
@@ -656,6 +680,8 @@ public final class DivInputTemplate: TemplateValue {
         disappearActionsValue = disappearActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self) })
       case parent?.extensions?.link:
         extensionsValue = extensionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self) })
+      case parent?.filters?.link:
+        filtersValue = filtersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivInputFilterTemplate.self) })
       case parent?.focus?.link:
         focusValue = focusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self) })
       case parent?.fontFamily?.link:
@@ -751,6 +777,7 @@ public final class DivInputTemplate: TemplateValue {
       borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       disappearActionsValue = disappearActionsValue.merged(with: { parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -776,11 +803,13 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
+      filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
       fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
@@ -838,11 +867,13 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      autocapitalization: autocapitalizationValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
+      filters: filtersValue.value,
       focus: focusValue.value,
       fontFamily: fontFamilyValue.value,
       fontSize: fontSizeValue.value,
@@ -903,11 +934,13 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
+      autocapitalization: autocapitalization ?? mergedParent.autocapitalization,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       disappearActions: disappearActions ?? mergedParent.disappearActions,
       extensions: extensions ?? mergedParent.extensions,
+      filters: filters ?? mergedParent.filters,
       focus: focus ?? mergedParent.focus,
       fontFamily: fontFamily ?? mergedParent.fontFamily,
       fontSize: fontSize ?? mergedParent.fontSize,
@@ -963,11 +996,13 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
+      autocapitalization: merged.autocapitalization,
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
       disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
+      filters: merged.filters?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
       fontFamily: merged.fontFamily,
       fontSize: merged.fontSize,

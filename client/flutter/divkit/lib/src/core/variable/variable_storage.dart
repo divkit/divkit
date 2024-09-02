@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/core/variable/variable.dart';
+import 'package:divkit/divkit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
 

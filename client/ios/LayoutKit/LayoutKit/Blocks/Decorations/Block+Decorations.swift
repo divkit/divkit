@@ -46,13 +46,7 @@ extension Block {
         || reuseId != nil
 
     if !forceWrapping, let block = self as? DecoratingBlock {
-      #if INTERNAL_BUILD
-      let newBoundary = block.makeNewBoundary(fromModifying: boundary)
-      #else
-      let newBoundary = boundary
-      #endif
-
-      guard (newBoundary != nil && newBoundary != block.boundary) || anythingToApplyExceptBoundary
+      guard (boundary != nil && boundary != block.boundary) || anythingToApplyExceptBoundary
       else {
         return self
       }
@@ -87,7 +81,7 @@ extension Block {
         doubleTapActions: doubleTapActions ?? block.doubleTapActions,
         longTapActions: longTapActions ?? block.longTapActions,
         analyticsURL: (analyticsURL ?? block.analyticsURL) as URL?,
-        boundary: newBoundary ?? block.boundary,
+        boundary: boundary ?? block.boundary,
         border: (border ?? block.border) as BlockBorder?,
         childAlpha: alpha.map { $0 * block.childAlpha },
         blurEffect: blurEffect ?? block.blurEffect,
@@ -268,37 +262,6 @@ extension DecoratingBlock {
       && boundary.allCornersAreApproximatelyEqualToZero()
       && border == nil
   }
-
-  #if INTERNAL_BUILD
-  fileprivate func makeNewBoundary(fromModifying newBoundary: BoundaryTrait?) -> BoundaryTrait? {
-    guard let newBoundary else {
-      return nil
-    }
-    switch (boundary, newBoundary) {
-    case let (.clipCorner(corners), .clipCorner):
-      assert(
-        corners.allCornersAreApproximatelyEqualToZero(),
-        "Applying one corner radius over another doesn't make sense"
-      )
-      return newBoundary
-    case (.clipCorner, .noClip):
-      assertionFailure("""
-        Changing from .clip to .noClip is suspicious move,
-        consider revising decorations order
-      """)
-      return boundary
-    case (.noClip, .clipCorner):
-      return newBoundary
-    case (.noClip, .noClip):
-      return nil // nothing to change
-    case (.noClip, .clipPath):
-      return newBoundary
-    case (.clipPath, _), (.clipCorner, _):
-      assertionFailure()
-      return newBoundary
-    }
-  }
-  #endif
 }
 
 extension BoundaryTrait? {

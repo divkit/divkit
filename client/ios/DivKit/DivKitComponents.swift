@@ -182,6 +182,7 @@ public final class DivKitComponents {
 
     triggersStorage = DivTriggersStorage(
       variablesStorage: variablesStorage,
+      stateUpdates: blockStateStorage.stateUpdates,
       actionHandler: actionHandler,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter

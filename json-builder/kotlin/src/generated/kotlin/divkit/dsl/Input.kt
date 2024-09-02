@@ -40,11 +40,13 @@ class Input internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            autocapitalization = additive.autocapitalization ?: properties.autocapitalization,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
+            filters = additive.filters ?: properties.filters,
             focus = additive.focus ?: properties.focus,
             fontFamily = additive.fontFamily ?: properties.fontFamily,
             fontSize = additive.fontSize ?: properties.fontSize,
@@ -82,6 +84,7 @@ class Input internal constructor(
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             validators = additive.validators ?: properties.validators,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -109,6 +112,11 @@ class Input internal constructor(
          */
         val alpha: Property<Double>?,
         /**
+         * Automatic text capitalization type.
+         * Default value: `auto`.
+         */
+        val autocapitalization: Property<Autocapitalization>?,
+        /**
          * Element background. It can contain multiple layers.
          */
         val background: Property<List<Background>>?,
@@ -128,6 +136,10 @@ class Input internal constructor(
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
          */
         val extensions: Property<List<Extension>>?,
+        /**
+         * Filtering that prevents the entry of text that does not meet specified conditions.
+         */
+        val filters: Property<List<InputFilter>>?,
         /**
          * Parameters when focusing on an element or losing focus.
          */
@@ -289,6 +301,10 @@ class Input internal constructor(
          */
         val validators: Property<List<InputValidator>>?,
         /**
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
          * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
          */
         val variables: Property<List<Variable>>?,
@@ -318,11 +334,13 @@ class Input internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("autocapitalization", autocapitalization)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
+            result.tryPutProperty("filters", filters)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("font_family", fontFamily)
             result.tryPutProperty("font_size", fontSize)
@@ -360,6 +378,7 @@ class Input internal constructor(
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("validators", validators)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -368,6 +387,14 @@ class Input internal constructor(
             return result
         }
     }
+
+    /**
+     * Automatic text capitalization type.
+     * 
+     * Possible values: [auto], [none], [words], [sentences], [all_characters].
+     */
+    @Generated
+    sealed interface Autocapitalization
 
     /**
      * Keyboard type.
@@ -420,11 +447,13 @@ class Input internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -462,6 +491,7 @@ class Input internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -475,11 +505,13 @@ fun DivScope.input(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
+    filters: List<InputFilter>? = null,
     focus: Focus? = null,
     fontFamily: String? = null,
     fontSize: Int? = null,
@@ -517,6 +549,7 @@ fun DivScope.input(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -528,11 +561,13 @@ fun DivScope.input(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        autocapitalization = valueOrNull(autocapitalization),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
+        filters = valueOrNull(filters),
         focus = valueOrNull(focus),
         fontFamily = valueOrNull(fontFamily),
         fontSize = valueOrNull(fontSize),
@@ -570,6 +605,7 @@ fun DivScope.input(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         validators = valueOrNull(validators),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -583,11 +619,13 @@ fun DivScope.input(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -625,6 +663,7 @@ fun DivScope.input(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -638,11 +677,13 @@ fun DivScope.inputProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
+    filters: List<InputFilter>? = null,
     focus: Focus? = null,
     fontFamily: String? = null,
     fontSize: Int? = null,
@@ -680,6 +721,7 @@ fun DivScope.inputProps(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -690,11 +732,13 @@ fun DivScope.inputProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    autocapitalization = valueOrNull(autocapitalization),
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
     disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
+    filters = valueOrNull(filters),
     focus = valueOrNull(focus),
     fontFamily = valueOrNull(fontFamily),
     fontSize = valueOrNull(fontSize),
@@ -732,6 +776,7 @@ fun DivScope.inputProps(
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
     validators = valueOrNull(validators),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -744,11 +789,13 @@ fun DivScope.inputProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -786,6 +833,7 @@ fun DivScope.inputProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -799,11 +847,13 @@ fun TemplateScope.inputRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
@@ -841,6 +891,7 @@ fun TemplateScope.inputRefs(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -851,11 +902,13 @@ fun TemplateScope.inputRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    autocapitalization = autocapitalization,
     background = background,
     border = border,
     columnSpan = columnSpan,
     disappearActions = disappearActions,
     extensions = extensions,
+    filters = filters,
     focus = focus,
     fontFamily = fontFamily,
     fontSize = fontSize,
@@ -893,6 +946,7 @@ fun TemplateScope.inputRefs(
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
     validators = validators,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -905,11 +959,13 @@ fun TemplateScope.inputRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -947,6 +1003,7 @@ fun TemplateScope.inputRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -960,11 +1017,13 @@ fun Input.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
+    filters: List<InputFilter>? = null,
     focus: Focus? = null,
     fontFamily: String? = null,
     fontSize: Int? = null,
@@ -1002,6 +1061,7 @@ fun Input.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1013,11 +1073,13 @@ fun Input.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        autocapitalization = valueOrNull(autocapitalization) ?: properties.autocapitalization,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
+        filters = valueOrNull(filters) ?: properties.filters,
         focus = valueOrNull(focus) ?: properties.focus,
         fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
         fontSize = valueOrNull(fontSize) ?: properties.fontSize,
@@ -1055,6 +1117,7 @@ fun Input.override(
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         validators = valueOrNull(validators) ?: properties.validators,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -1068,11 +1131,13 @@ fun Input.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1110,6 +1175,7 @@ fun Input.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1123,11 +1189,13 @@ fun Input.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
@@ -1165,6 +1233,7 @@ fun Input.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1176,11 +1245,13 @@ fun Input.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        autocapitalization = autocapitalization ?: properties.autocapitalization,
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
+        filters = filters ?: properties.filters,
         focus = focus ?: properties.focus,
         fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
@@ -1218,6 +1289,7 @@ fun Input.defer(
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         validators = validators ?: properties.validators,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -1230,6 +1302,7 @@ fun Input.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1259,6 +1332,7 @@ fun Input.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    autocapitalization: ExpressionProperty<Input.Autocapitalization>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
@@ -1287,11 +1361,13 @@ fun Input.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        autocapitalization = autocapitalization ?: properties.autocapitalization,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         disappearActions = properties.disappearActions,
         extensions = properties.extensions,
+        filters = properties.filters,
         focus = properties.focus,
         fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
@@ -1329,6 +1405,7 @@ fun Input.evaluate(
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
         validators = properties.validators,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -1342,11 +1419,13 @@ fun Input.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1384,6 +1463,7 @@ fun Input.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1397,11 +1477,13 @@ fun Component<Input>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
+    filters: List<InputFilter>? = null,
     focus: Focus? = null,
     fontFamily: String? = null,
     fontSize: Int? = null,
@@ -1439,6 +1521,7 @@ fun Component<Input>.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     validators: List<InputValidator>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1451,11 +1534,13 @@ fun Component<Input>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        autocapitalization = valueOrNull(autocapitalization),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
+        filters = valueOrNull(filters),
         focus = valueOrNull(focus),
         fontFamily = valueOrNull(fontFamily),
         fontSize = valueOrNull(fontSize),
@@ -1493,6 +1578,7 @@ fun Component<Input>.override(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         validators = valueOrNull(validators),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1506,11 +1592,13 @@ fun Component<Input>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
+ * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1548,6 +1636,7 @@ fun Component<Input>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1561,11 +1650,13 @@ fun Component<Input>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    filters: ReferenceProperty<List<InputFilter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
@@ -1603,6 +1694,7 @@ fun Component<Input>.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     validators: ReferenceProperty<List<InputValidator>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1615,11 +1707,13 @@ fun Component<Input>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        autocapitalization = autocapitalization,
         background = background,
         border = border,
         columnSpan = columnSpan,
         disappearActions = disappearActions,
         extensions = extensions,
+        filters = filters,
         focus = focus,
         fontFamily = fontFamily,
         fontSize = fontSize,
@@ -1657,6 +1751,7 @@ fun Component<Input>.defer(
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
         validators = validators,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -1669,6 +1764,7 @@ fun Component<Input>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autocapitalization Automatic text capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1698,6 +1794,7 @@ fun Component<Input>.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    autocapitalization: ExpressionProperty<Input.Autocapitalization>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
@@ -1727,11 +1824,13 @@ fun Component<Input>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        autocapitalization = autocapitalization,
         background = null,
         border = null,
         columnSpan = columnSpan,
         disappearActions = null,
         extensions = null,
+        filters = null,
         focus = null,
         fontFamily = fontFamily,
         fontSize = fontSize,
@@ -1769,6 +1868,7 @@ fun Component<Input>.evaluate(
         transitionOut = null,
         transitionTriggers = null,
         validators = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,
@@ -1785,6 +1885,9 @@ operator fun Component<Input>.plus(additive: Input.Properties): Component<Input>
 
 @Generated
 fun Input.asList() = listOf(this)
+
+@Generated
+fun Input.Autocapitalization.asList() = listOf(this)
 
 @Generated
 fun Input.KeyboardType.asList() = listOf(this)

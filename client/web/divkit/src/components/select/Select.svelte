@@ -21,6 +21,7 @@
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { makeStyle } from '../../utils/makeStyle';
     import Outer from '../utilities/Outer.svelte';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivSelectData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -239,4 +240,8 @@
             {/each}
         </select>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

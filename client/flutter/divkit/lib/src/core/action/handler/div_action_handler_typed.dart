@@ -1,11 +1,6 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/action/models/action.dart';
-import 'package:divkit/src/core/protocol/div_action.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
-import 'package:divkit/src/generated_sources/div_action_focus_element.dart';
-import 'package:divkit/src/generated_sources/div_action_set_variable.dart';
+import 'package:divkit/divkit.dart';
 
 class DefaultDivActionHandlerTyped implements DivActionHandler {
   final focusElementHandler = DivFocusElementHandlerTyped();
@@ -41,7 +36,7 @@ class DivFocusElementHandlerTyped {
     DivActionFocusElement action,
   ) async {
     final elementId = await action.elementId.resolveValue(
-      context: context.variableManager.context,
+      context: context.variables,
     );
 
     final node = context.getFocusNode(elementId);
@@ -58,7 +53,7 @@ class DivSetVariableHandlerTyped {
     DivContext context,
     DivActionSetVariable action,
   ) async {
-    final variableContext = context.variableManager.context;
+    final variableContext = context.variables;
 
     try {
       final value = await action.value.map(
@@ -90,7 +85,7 @@ class DivSetVariableHandlerTyped {
         ),
       );
       final variableName = await action.variableName.resolveValue(
-        context: context.variableManager.context,
+        context: context.variables,
       );
 
       context.variableManager.updateVariable(

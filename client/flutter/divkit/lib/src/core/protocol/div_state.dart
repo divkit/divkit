@@ -3,6 +3,12 @@ import 'dart:async';
 abstract class DivStateManager {
   const DivStateManager();
 
+  /// The current snapshot of the state.
+  Map<String, String?> get states;
+
+  /// Stream of state changes.
+  Stream<Map<String, String?>> get statesStream;
+
   /// Adds a state to the manager. Then it is available for updating.
   void registerState(String divId, [String? stateId]);
 

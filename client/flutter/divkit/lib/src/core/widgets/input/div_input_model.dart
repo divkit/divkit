@@ -1,12 +1,9 @@
-import 'package:divkit/src/core/action/models/action.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/generated_sources/div_input.dart';
-import 'package:divkit/src/utils/converters.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:divkit/src/utils/div_scaling_model.dart';
 
 class DivInputModel with EquatableMixin {
   final TextStyle textStyle;
@@ -35,25 +32,101 @@ class DivInputModel with EquatableMixin {
     this.onForwardFocus,
   });
 
+  static DivInputModel? value(
+    BuildContext buildContext,
+    DivInput data,
+    TextEditingController controller,
+  ) {
+    try {
+      final divScalingModel = read<DivScalingModel>(buildContext);
+      final viewScale = divScalingModel?.viewScale ?? 1;
+      final textScale = divScalingModel?.textScale ?? 1;
+
+      final variables = read<DivContext>(buildContext)!.variableManager;
+
+      controller.addListener(() {
+        if (variables.context.current[data.textVariable] != controller.text) {
+          variables.updateVariable(data.textVariable, controller.text);
+        }
+      });
+
+      final styleUnit = data.fontSizeUnit.requireValue.asPx;
+      final lineHeight = data.lineHeight?.requireValue;
+      final fontFamily = data.fontFamily?.requireValue;
+      final fontSize = data.fontSize.value!.toDouble() * textScale;
+
+      final style = TextStyle(
+        fontFamily: fontFamily,
+        fontSize: fontSize * styleUnit,
+        color: data.textColor.value!,
+        height: lineHeight != null ? lineHeight * viewScale / fontSize : null,
+        fontWeight: data.fontWeight.passValue(),
+      );
+
+      final hintStyle = style.copyWith(
+        color: data.hintColor.requireValue,
+      );
+
+      final keyboardType = data.keyboardType.requireValue;
+      if (variables.context.current[data.textVariable] != controller.text) {
+        controller.text = variables.context.current[data.textVariable] ?? '';
+      }
+
+      final newFocusNodeId = data.focus?.nextFocusIds?.forward?.requireValue;
+
+      final alignment = PassDivTextAlignment(
+        data.textAlignmentVertical,
+        data.textAlignmentHorizontal,
+      );
+
+      final obscureText = keyboardType == DivInputKeyboardType.password;
+
+      return DivInputModel(
+        textStyle: style,
+        hintStyle: hintStyle,
+        hintText: data.hintText?.requireValue,
+        maxLines: obscureText ? 1 : data.maxVisibleLines?.requireValue,
+        obscureText: obscureText,
+        keyboardType: keyboardType.map(
+          singleLineText: () => TextInputType.text,
+          multiLineText: () => TextInputType.multiline,
+          phone: () => TextInputType.phone,
+          number: () => TextInputType.number,
+          email: () => TextInputType.emailAddress,
+          uri: () => TextInputType.url,
+          password: () => null,
+        ),
+        onForwardFocus: newFocusNodeId != null
+            ? () => _onForwardFocus(buildContext, newFocusNodeId)
+            : null,
+        onBlurActions: data.focus?.valueOnBlurActions() ?? [],
+        onFocusActions: data.focus?.valueOnFocusActions() ?? [],
+        textAlign: alignment.valueTextAlign(),
+        textAlignVertical: alignment.valueTextAlignVertical(),
+      );
+    } catch (e, st) {
+      logger.warning(
+        'Expression cache is corrupted! Instant rendering is not available for div',
+        error: e,
+        stackTrace: st,
+      );
+      return null;
+    }
+  }
+
   static Stream<DivInputModel> from(
     BuildContext buildContext,
     DivInput data,
     TextEditingController controller,
   ) {
-    final variables =
-        DivKitProvider.watch<DivContext>(buildContext)!.variableManager;
+    final variables = watch<DivContext>(buildContext)!.variableManager;
 
-    final divScalingModel = DivKitProvider.watch<DivScalingModel>(buildContext);
+    final divScalingModel = watch<DivScalingModel>(buildContext);
     final viewScale = divScalingModel?.viewScale ?? 1;
     final textScale = divScalingModel?.textScale ?? 1;
 
-    controller.addListener(() {
-      if (variables.context.current[data.textVariable] != controller.text) {
-        variables.updateVariable(data.textVariable, controller.text);
-      }
-    });
-
     return variables.watch<DivInputModel>((context) async {
+      final fontFamily = await data.fontFamily?.resolveValue(context: context);
       final styleUnit = (await data.fontSizeUnit.resolveValue(
         context: context,
       ))
@@ -68,6 +141,7 @@ class DivInputModel with EquatableMixin {
           textScale;
 
       final style = TextStyle(
+        fontFamily: fontFamily,
         fontSize: fontSize * styleUnit,
         color: await data.textColor.resolveValue(
           context: context,
@@ -166,5 +240,6 @@ class DivInputModel with EquatableMixin {
         onFocusActions,
         textAlign,
         textAlignVertical,
+        obscureText,
       ];
 }

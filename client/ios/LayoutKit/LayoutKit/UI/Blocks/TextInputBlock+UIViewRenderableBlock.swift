@@ -14,7 +14,9 @@ extension TextInputBlock {
     let inputView = view as! TextInputBlockView
     inputView.setLayoutDirection(layoutDirection)
     inputView.setInputType(inputType)
+    inputView.setAutocapitalizationType(autocapitalizationType)
     inputView.setValidators(validators)
+    inputView.setFilters(filters)
     inputView.setTextAlignmentHorizontal(textAlignmentHorizontal)
     inputView.setTextAlignmentVertical(textAlignmentVertical)
     inputView.setText(
@@ -62,12 +64,14 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var typo: Typo?
   private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
   private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
+  private var filters: [TextInputFilter]?
   private var validators: [TextInputValidator]?
   private let disposePool = AutodisposePool()
   private var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
   private var textAlignmentHorizontal: TextInputBlock.TextAlignmentHorizontal = .start
   private var textAlignmentVertical: TextInputBlock.TextAlignmentVertical = .center
   private var isInputFocused = false
+  private var keyboardHeight: CGFloat?
   var paddings: EdgeInsets = .zero
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
@@ -181,6 +185,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
+  func setAutocapitalizationType(_ type: TextInputBlock.AutocapitalizationType) {
+    singleLineInput.autocapitalizationType = type.uiType
+    multiLineInput.autocapitalizationType = type.uiType
+  }
+
   func setTextAlignmentHorizontal(_ alignment: TextInputBlock.TextAlignmentHorizontal) {
     textAlignmentHorizontal = alignment
   }
@@ -273,6 +282,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.validators = validators
   }
 
+  func setFilters(_ filters: [TextInputFilter]?) {
+    self.filters = filters
+  }
+
   func setHint(_ value: NSAttributedString) {
     hintView.attributedText = value
     setNeedsLayout()
@@ -290,6 +303,12 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func updateSingleLineOffset() {
     guard !singleLineInput.isHidden else { return }
     singleLineInput.frame.origin = CGPoint(x: 0, y: singleLineOffsetY)
+  }
+
+  private func updateScrollOnMultilineChange() {
+    guard let keyboardHeight else { return }
+    scrollingWasDone = false
+    tryScrollToMultiLine(keyboardHeight)
   }
 
   private func updateHintViewOffset() {
@@ -393,6 +412,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       .userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
       let keyboardRectangle = keyboardFrame.cgRectValue
       let keyboardHeight = keyboardRectangle.height
+      self.keyboardHeight = keyboardHeight
       tryScrollToMultiLine(keyboardHeight)
       tryScrollToSingleLine(keyboardHeight)
     }
@@ -464,6 +484,7 @@ extension TextInputBlockView {
   func inputViewDidEndEditing(_: UIView) {
     stopListeningTap()
     scrollingWasDone = false
+    keyboardHeight = nil
     onBlur()
   }
 
@@ -525,6 +546,12 @@ extension TextInputBlockView {
       }
       return false
     }
+
+    if let filters, text != "" {
+      return filters.allSatisfy { filter in
+        filter(currentText + text)
+      }
+    }
     return true
   }
 }
@@ -537,6 +564,7 @@ extension TextInputBlockView: UITextViewDelegate {
   func textViewDidChange(_ textView: UITextView) {
     updateMultiLineOffset()
     inputViewDidChange(textView)
+    updateScrollOnMultilineChange()
   }
 
   func textViewDidEndEditing(_ textView: UITextView) {
@@ -725,6 +753,17 @@ extension TextInputBlock.TextAlignmentVertical {
       .center
     case .bottom:
       .bottom
+    }
+  }
+}
+
+extension TextInputBlock.AutocapitalizationType {
+  fileprivate var uiType: UITextAutocapitalizationType {
+    switch self {
+    case .none: .none
+    case .words: .words
+    case .sentences: .sentences
+    case .allCharacters: .allCharacters
     }
   }
 }

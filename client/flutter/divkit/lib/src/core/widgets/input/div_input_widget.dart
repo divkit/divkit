@@ -1,7 +1,5 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/input/div_input_model.dart';
-import 'package:divkit/src/generated_sources/div_input.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +17,30 @@ class DivInputWidget extends StatefulWidget {
 }
 
 class _DivInputWidget extends State<DivInputWidget> {
-  // ToDo: Optimize repeated calculations on the same context.
-  // The model itself is not long-lived, so you need to keep the stream in the state?
-  Stream<DivInputModel>? stream;
-
-  late final DivFocusNode focusNode = DivFocusNode(divId: widget.data.id);
-
   final key = GlobalKey();
 
-  final TextEditingController controller = TextEditingController();
+  late final focusNode = DivFocusNode(divId: widget.data.id);
+
+  final controller = TextEditingController();
+
+  double _getLineHeight(TextStyle line) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: '', style: line),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.height;
+  }
+
+  DivInputModel? value;
+
+  Stream<DivInputModel>? stream;
+
+  @override
+  void initState() {
+    super.initState();
+    value = DivInputModel.value(context, widget.data, controller);
+  }
 
   @override
   void didChangeDependencies() {
@@ -41,28 +54,21 @@ class _DivInputWidget extends State<DivInputWidget> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
+      value = DivInputModel.value(context, widget.data, controller);
       stream = DivInputModel.from(context, widget.data, controller);
     }
-  }
-
-  double _getLineHeight(TextStyle line) {
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: '', style: line),
-      maxLines: 1,
-      textDirection: TextDirection.ltr,
-    )..layout(minWidth: 0, maxWidth: double.infinity);
-    return textPainter.height;
   }
 
   @override
   Widget build(BuildContext context) => DivBaseWidget(
         data: widget.data,
         child: StreamBuilder<DivInputModel>(
+          initialData: value,
           stream: stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final model = snapshot.requireData;
-              final divContext = DivKitProvider.watch<DivContext>(context)!;
+              final divContext = watch<DivContext>(context)!;
 
               return Material(
                 type: MaterialType.transparency,
@@ -123,6 +129,7 @@ class _DivInputWidget extends State<DivInputWidget> {
   void dispose() {
     controller.dispose();
     focusNode.dispose();
+    value = null;
     stream = null;
     super.dispose();
   }

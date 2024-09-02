@@ -8,6 +8,9 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.divs.getChildPathUnit
+import com.yandex.div.core.view2.divs.getOrCreateRuntime
+import com.yandex.div.core.view2.divs.resolveRuntime
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
@@ -16,6 +19,7 @@ import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 
 internal class DivGalleryViewHolder(
+    private val parentContext: BindingContext,
     private val rootView: DivViewWrapper,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
@@ -24,6 +28,9 @@ internal class DivGalleryViewHolder(
 ) : RecyclerView.ViewHolder(rootView) {
 
     private var oldDiv: Div? = null
+    private val parentRuntime by lazy {
+        getOrCreateRuntime(parentContext.runtimeStore, path.fullPath, path.parentFullPath, null)
+    }
 
     fun bind(context: BindingContext, div: Div, position: Int) {
         if (rootView.tryRebindRecycleContainerChildren(context.divView, div)) {
@@ -42,7 +49,19 @@ internal class DivGalleryViewHolder(
 
         oldDiv = div
         rootView.setTag(R.id.div_gallery_item_index, position)
-        divBinder.bind(context, divView, div, path)
+        val id = div.value().getChildPathUnit(position)
+
+        resolveRuntime(
+            runtimeStore = context.runtimeStore,
+            pathUnit = id,
+            parentPath = path.fullPath,
+            variables = div.value().variables,
+            resolver = resolver,
+            parentRuntime = parentRuntime,
+        )
+
+        context.runtimeStore?.showWarningIfNeeded(div.value())
+        divBinder.bind(context, divView, div, path.appendDiv(id))
         divBinder.attachIndicators()
     }
 

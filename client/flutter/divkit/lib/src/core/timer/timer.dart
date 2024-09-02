@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:divkit/src/core/action/action_converter.dart';
-import 'package:divkit/src/core/protocol/div_context.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/utils/clockwork.dart';
 import 'package:divkit/src/utils/duration_helper.dart';
 import 'package:equatable/equatable.dart';
+
+export 'timer_converter.dart';
 
 class DivTimerModel with EquatableMixin {
   final String id;
@@ -36,7 +34,7 @@ class DivTimerModel with EquatableMixin {
 
   /// Asynchronous initialization.
   Future<void> init(DivContext divContext) async {
-    final context = divContext.variableManager.context;
+    final context = divContext.variables;
 
     final duration = await this.duration.resolveValue(context: context);
     final interval = await tickInterval?.resolveValue(context: context);
@@ -61,7 +59,7 @@ class DivTimerModel with EquatableMixin {
         }
       },
       onTick: (elapsed) async {
-        final context = divContext.variableManager.context;
+        final context = divContext.variables;
 
         if (valueVariable != null) {
           divContext.variableManager
@@ -72,7 +70,58 @@ class DivTimerModel with EquatableMixin {
         );
       },
       onEnd: (elapsed) {
-        final context = divContext.variableManager.context;
+        final context = divContext.variables;
+
+        if (valueVariable != null) {
+          divContext.variableManager
+              .updateVariable(valueVariable!, elapsed.inMilliseconds);
+        }
+        endActions?.forEach(
+          (a) async => (await a.resolve(context: context)).execute(divContext),
+        );
+      },
+    );
+
+    // Update clockwork trigger values by variable context update.
+    _sub = divContext.variableManager.listen(update);
+  }
+
+  void initSync(DivContext divContext) {
+    final duration = this.duration.value!;
+    final interval = tickInterval?.value!;
+
+    _clockwork = Clockwork(
+      duration: duration.ms,
+      interval: interval?.ms,
+      onStart: () {
+        if (valueVariable != null) {
+          divContext.variableManager.updateVariable(valueVariable!, 0);
+        }
+      },
+      onPause: (elapsed) {
+        if (valueVariable != null) {
+          divContext.variableManager
+              .updateVariable(valueVariable!, elapsed.inMilliseconds);
+        }
+      },
+      onReset: () {
+        if (valueVariable != null) {
+          divContext.variableManager.updateVariable(valueVariable!, 0);
+        }
+      },
+      onTick: (elapsed) async {
+        final context = divContext.variables;
+
+        if (valueVariable != null) {
+          divContext.variableManager
+              .updateVariable(valueVariable!, elapsed.inMilliseconds);
+        }
+        tickActions?.forEach(
+          (a) async => (await a.resolve(context: context)).execute(divContext),
+        );
+      },
+      onEnd: (elapsed) {
+        final context = divContext.variables;
 
         if (valueVariable != null) {
           divContext.variableManager

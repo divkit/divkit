@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithPropertyWithDefaultValue with EquatableMixin {
+class EntityWithPropertyWithDefaultValue extends Preloadable with EquatableMixin  {
   const EntityWithPropertyWithDefaultValue({
     this.iNum = const ValueExpression(0),
     this.nested,
@@ -36,7 +36,7 @@ class EntityWithPropertyWithDefaultValue with EquatableMixin {
       url: url ?? this.url,
     );
 
-  static EntityWithPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json) {
+  static EntityWithPropertyWithDefaultValue? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -50,9 +50,34 @@ class EntityWithPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
   }
+
+  static Future<EntityWithPropertyWithDefaultValue?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithPropertyWithDefaultValue(
+        iNum: (await safeParseIntExprAsync(json['iNum'], fallback: 0,))!,
+        nested: await safeParseObjAsync(EntityWithPropertyWithDefaultValueNested.fromJson(json['nested']),),
+        url: (await safeParseUriExprAsync(json['url']))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await iNum?.preload(context);
+    await nested?.preload(context);
+    await url?.preload(context);
+    } catch (e, st) {
+      return;
+    }
+  }
 }
 
-class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
+class EntityWithPropertyWithDefaultValueNested extends Preloadable with EquatableMixin  {
   const EntityWithPropertyWithDefaultValueNested({
     this.iNum = const ValueExpression(0),
     required this.nonOptional,
@@ -83,7 +108,7 @@ class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
       url: url ?? this.url,
     );
 
-  static EntityWithPropertyWithDefaultValueNested? fromJson(Map<String, dynamic>? json) {
+  static EntityWithPropertyWithDefaultValueNested? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -95,6 +120,31 @@ class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithPropertyWithDefaultValueNested?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithPropertyWithDefaultValueNested(
+        iNum: (await safeParseIntExprAsync(json['iNum'], fallback: 0,))!,
+        nonOptional: (await safeParseStrExprAsync(json['non_optional']?.toString(),))!,
+        url: (await safeParseUriExprAsync(json['url']))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await iNum?.preload(context);
+    await nonOptional.preload(context);
+    await url?.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

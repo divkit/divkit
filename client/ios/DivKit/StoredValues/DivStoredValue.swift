@@ -5,7 +5,8 @@ struct DivStoredValue {
     case string
     case number
     case integer
-    case bool
+    case boolean
+    case bool // invalid value, used for backward compatibility
     case color
     case url
   }

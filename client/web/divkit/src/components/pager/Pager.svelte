@@ -27,6 +27,7 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivPagerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -361,4 +362,8 @@
             </div>
         {/if}
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

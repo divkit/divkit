@@ -18,6 +18,7 @@
     import { makeStyle } from '../../utils/makeStyle';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { genClassName } from '../../utils/genClassName';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivVideoData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -260,4 +261,8 @@
             </video>
         {/if}
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

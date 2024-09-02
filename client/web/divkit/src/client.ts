@@ -85,3 +85,7 @@ export {
 export {
     lottieExtensionBuilder
 } from './extensions/lottie';
+
+export {
+    markdownExtensionBuilder
+} from './extensions/markdown';

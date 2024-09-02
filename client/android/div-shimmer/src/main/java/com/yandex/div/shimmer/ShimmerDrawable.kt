@@ -16,6 +16,7 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.SystemClock
 import android.view.animation.LinearInterpolator
 import kotlin.math.abs
@@ -46,9 +47,11 @@ class ShimmerDrawable(
         invalidateSelf()
     }
     private val shimmerPaint = Paint().apply {
-        xfermode = PorterDuffXfermode(
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            xfermode = PorterDuffXfermode(
                 PorterDuff.Mode.SRC_IN
-        )
+            )
+        }
         isAntiAlias = true
         updateShader()
     }
@@ -154,7 +157,6 @@ class ShimmerDrawable(
             addRoundRect(drawRect, pathRadii, Path.Direction.CW)
         }
         canvas.drawPath(customRoundRectPath, shimmerPaint)
-
     }
 
     override fun setAlpha(alpha: Int) {

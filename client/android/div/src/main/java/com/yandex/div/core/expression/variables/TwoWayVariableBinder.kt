@@ -5,7 +5,11 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.getOrCreateRuntime
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import javax.inject.Inject
@@ -47,14 +51,22 @@ internal abstract class TwoWayVariableBinder<T>(
         fun setViewStateChangeListener(valueUpdater: (T) -> Unit)
     }
 
-    fun bindVariable(divView: Div2View, variableName: String, callbacks: Callbacks<T>): Disposable {
+    fun bindVariable(
+        divView: Div2View,
+        runtimeStore: RuntimeStore?,
+        variableName: String,
+        callbacks: Callbacks<T>,
+        path: DivStatePath,
+    ): Disposable {
         val data = divView.divData ?: return Disposable.NULL
 
         var pendingValue: T? = null
         val tag = divView.dataTag
         var variable: Variable? = null
-        val variableController =
-            expressionsRuntimeProvider.getOrCreate(tag, data, divView).variableController
+        val variableController = (getOrCreateRuntime(
+            runtimeStore, path.fullPath, path.parentFullPath
+        ) ?: expressionsRuntimeProvider.getOrCreate(tag, data, divView)).variableController
+
         callbacks.setViewStateChangeListener { value ->
             if (pendingValue == value) return@setViewStateChangeListener
             pendingValue = value

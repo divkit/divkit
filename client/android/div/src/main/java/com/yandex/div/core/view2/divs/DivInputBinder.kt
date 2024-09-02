@@ -9,9 +9,11 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.expressionSubscriber
@@ -57,7 +59,7 @@ internal class DivInputBinder @Inject constructor(
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivInput, DivInputView> {
 
-    override fun bindView(context: BindingContext, view: DivInputView, div: DivInput) {
+    override fun bindView(context: BindingContext, view: DivInputView, div: DivInput, path: DivStatePath) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
@@ -89,7 +91,7 @@ internal class DivInputBinder @Inject constructor(
             observeSelectAllOnFocus(div, expressionResolver)
             observeIsEnabled(div, expressionResolver)
 
-            observeText(div, expressionResolver, context.divView)
+            observeText(div, expressionResolver, context.divView, path)
 
             focusTracker = context.divView.inputFocusTracker
             focusTracker?.requestFocusIfNeeded(view)
@@ -286,7 +288,8 @@ internal class DivInputBinder @Inject constructor(
     private fun DivInputView.observeText(
         div: DivInput,
         resolver: ExpressionResolver,
-        divView: Div2View
+        divView: Div2View,
+        path: DivStatePath,
     ) {
         removeAfterTextChangeListener()
 
@@ -352,7 +355,9 @@ internal class DivInputBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, primaryVariable, callbacks))
+        addSubscription(variableBinder.bindVariable(
+            divView, bindingContext?.runtimeStore, primaryVariable, callbacks, path)
+        )
 
         observeValidators(div, resolver, divView)
     }
@@ -367,12 +372,12 @@ internal class DivInputBinder @Inject constructor(
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         val revalidateExpressionValidator = { index: Int  ->
-            validators[index].validate(text.toString(), this, divView)
+            validators[index].validate(text.toString(), this, divView, resolver)
         }
 
         doAfterTextChanged { editable ->
             if (editable != null) {
-                validators.forEach { it.validate(text.toString(), this, divView) }
+                validators.forEach { it.validate(text.toString(), this, divView, resolver) }
             }
         }
 
@@ -391,7 +396,7 @@ internal class DivInputBinder @Inject constructor(
                     }
                 }
 
-                validators.forEach { it.validate(text.toString(), this, divView) }
+                validators.forEach { it.validate(text.toString(), this, divView, resolver) }
             }
         }
 
@@ -461,11 +466,12 @@ internal class DivInputBinder @Inject constructor(
     private fun ValidatorItemData.validate(
         newValue: String,
         view: DivInputView,
-        divView: Div2View
+        divView: Div2View,
+        resolver: ExpressionResolver,
     ) {
         val isValid = validator.validate(newValue)
 
-        divView.setVariable(variableName, isValid.toString())
+        VariableMutationHandler.setVariable(divView, variableName, isValid.toString(), resolver)
 
         attachAccessibility(divView, view, isValid)
     }

@@ -54,7 +54,7 @@
                     "content_alignment_horizontal": "center",
                     "content_alignment_vertical": "center",
                     "preload_required": 1,
-                    "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png"
+                    "image_url": "https://yastatic.net/s3/home/divkit/like_overlay.png"
                   }
                 },
                 {
@@ -76,7 +76,7 @@
                     "content_alignment_horizontal": "center",
                     "content_alignment_vertical": "center",
                     "preload_required": 1,
-                    "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png",
+                    "image_url": "https://yastatic.net/s3/home/divkit/like_overlay.png",
                     "transition_in": {
                       "type": "fade",
                       "alpha": 1.0,
@@ -127,7 +127,7 @@
                     "content_alignment_horizontal": "center",
                     "content_alignment_vertical": "center",
                     "preload_required": 1,
-                    "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png"
+                    "image_url": "https://yastatic.net/s3/home/divkit/like_overlay.png"
                   }
                 },
                 {
@@ -149,7 +149,7 @@
                     "content_alignment_horizontal": "center",
                     "content_alignment_vertical": "center",
                     "preload_required": 1,
-                    "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png",
+                    "image_url": "https://yastatic.net/s3/home/divkit/like_overlay.png",
                     "transition_in": {
                       "type": "fade",
                       "alpha": 1.0,
@@ -199,7 +199,7 @@
                     "content_alignment_horizontal": "center",
                     "content_alignment_vertical": "center",
                     "preload_required": 1,
-                    "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png"
+                    "image_url": "https://yastatic.net/s3/home/divkit/like_overlay.png"
                   }
                 },
                 {
@@ -221,7 +221,7 @@
                     "content_alignment_horizontal": "center",
                     "content_alignment_vertical": "center",
                     "preload_required": 1,
-                    "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png",
+                    "image_url": "https://yastatic.net/s3/home/divkit/like_overlay.png",
                     "transition_in": {
                       "type": "fade",
                       "alpha": 1.0,

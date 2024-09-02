@@ -2,11 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:divkit/src/core/patch/patch_converter.dart';
-import 'package:divkit/src/core/protocol/div_action.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
-import 'package:divkit/src/core/template/templates_resolver.dart';
-import 'package:divkit/src/generated_sources/div_patch.dart';
+import 'package:divkit/divkit.dart';
 
 class DefaultDivActionHandlerUrl implements DivActionHandler {
   static const handlers = [
@@ -14,6 +10,7 @@ class DefaultDivActionHandlerUrl implements DivActionHandler {
     DivSetStateHandlerUrl(),
     DivTimerHandlerUrl(),
     DivDownloadHandlerUrl(),
+    DivSwitchingElementHandlerUrl(),
   ];
 
   @override
@@ -197,8 +194,8 @@ class DivDownloadHandlerUrl implements DivActionHandler {
         final json = await fetchPatch(urlArg);
 
         if (json != null) {
-          final patch = DivPatch.fromJson(
-            TemplatesResolver(
+          final patch = await DivPatch.parse(
+            await TemplatesResolver(
               layout: json['patch']!,
               templates: json['templates'],
             ).merge(),
@@ -207,7 +204,7 @@ class DivDownloadHandlerUrl implements DivActionHandler {
           if (patch != null) {
             final success = await context.patchManager.applyPatch(
               await patch.resolve(
-                context: context.variableManager.context,
+                context: context.variables,
               ),
             );
 
@@ -234,5 +231,96 @@ class DivDownloadHandlerUrl implements DivActionHandler {
       }
     }
     return false;
+  }
+}
+
+class DivSwitchingElementHandlerUrl implements DivActionHandler {
+  const DivSwitchingElementHandlerUrl();
+
+  static const _scheme = 'div-action';
+  static const _id = 'id';
+  static const _item = 'item';
+
+  @override
+  bool canHandle(context, action) =>
+      _scheme == action.url?.scheme &&
+      SwitchingElementActionType.canHandle(action.url?.host);
+
+  @override
+  FutureOr<bool> handleAction(context, action) async {
+    final url = action.url;
+
+    if (url == null) return false;
+
+    final args = url.queryParameters;
+    final id = args[_id];
+
+    if (id == null) {
+      logger.error('The element id is not specified');
+      return false;
+    }
+
+    switch (SwitchingElementActionType.getByName(url.host)) {
+      case SwitchingElementActionType.setCurrentItem:
+        final item = args[_item];
+        if (item != null) {
+          context.variableManager.updateVariable(id, item);
+          return true;
+        }
+        logger.error('The element item is not specified');
+        return false;
+      case SwitchingElementActionType.setNextItem:
+        final currentPage = context.variableManager.context.current[id];
+        if (currentPage != null) {
+          context.variableManager.updateVariable(id, currentPage + 1);
+          return true;
+        }
+        logger.error('There is no current page');
+        return false;
+      case SwitchingElementActionType.setPreviousItem:
+        final currentPage = context.variableManager.context.current[id];
+        if (currentPage != null) {
+          context.variableManager.updateVariable(id, currentPage - 1);
+          return true;
+        }
+        logger.error('There is no current page');
+        return false;
+      default:
+        logger.error('Unknown type');
+        return false;
+    }
+  }
+}
+
+enum SwitchingElementActionType {
+  setCurrentItem('set_current_item'),
+  setNextItem('set_next_item'),
+  setPreviousItem('set_previous_item'),
+  unknown('');
+
+  const SwitchingElementActionType(this.type);
+
+  final String type;
+
+  static bool canHandle(String? name) {
+    if (name != null) {
+      for (final customName in SwitchingElementActionType.values) {
+        if (customName.type == name) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  static SwitchingElementActionType getByName(String? name) {
+    if (name != null) {
+      for (final customName in SwitchingElementActionType.values) {
+        if (customName.type == name) {
+          return customName;
+        }
+      }
+    }
+    return unknown;
   }
 }

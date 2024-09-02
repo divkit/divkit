@@ -35,6 +35,26 @@
     "en": "It defines an action when clicking on an element.",
     "ru": "Определяет действие при нажатии на элемент."
   },
+  "div_action_animator_start": {
+    "en": "Starts specified animator",
+    "ru": "Запускает указанный аниматор."
+  },
+  "div_action_animator_start_animator_id": {
+    "en": "The identifier of the animator being started.",
+    "ru": "Идентификатор запускаемого аниматора"
+  },
+  "div_action_animator_start_start_value": {
+    "en": "Overrides value that will be set at the start of animation.",
+    "ru": "Переопределяет, какое значение будет установлено в переменную перед началом анимации."
+  },
+  "div_action_animator_start_end_value": {
+    "en": "Overrides value that will be set at the end of animation.",
+    "ru": "Переопределяет, какое значение будет установлено в переменную после завершения анимации."
+  },
+  "div_action_animator_stop": {
+    "en": "Stops specified animator",
+    "ru": "Останавливает указанный аниматор."
+  },
   "div_action_array_insert_value": {
     "en": "Adds a value to the array",
     "ru": "Добавляет значение в массив"
@@ -115,6 +135,18 @@
     "en": "The tab in which the URL must be opened.",
     "ru": "Вкладка, в которой должна открыться ссылка."
   },
+  "div_action_timer": {
+    "en": "Controls the timer.",
+    "ru": "Управляет таймером."
+  },
+  "div_action_timer_action": {
+    "en": "Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>",
+    "ru": "Указывает действие с таймером:<li>`start`- запускает таймер из остановленного положения;</li><li>`stop`- останавливает таймер, выполняет действие onEnd;</li><li>`pause`- ставит таймер на паузу, время сохраняется;</li><li>`resume`- продолжает таймер после паузы;</li><li>`cancel`- прерывает действие таймера, время сбрасывается;</li><li>`reset`- отменяет таймер, затем запускает заново.</li>"
+  },
+  "div_action_timer_id": {
+    "en": "Timer identifier.",
+    "ru": "Идентификатор таймера."
+  },
   "div_actionable_action": {
     "en": "One action when clicking on an element. Not used if the `actions` parameter is set.",
     "ru": "Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`."
@@ -174,6 +206,58 @@
   "div_animation_start_value": {
     "en": "Starting value of an animation.",
     "ru": "Стартовое значение анимации."
+  },
+  "div_animator_base_cancel_actions": {
+    "en": "Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received",
+    "ru": "Действия, которые будут выполнены в случае отмены аниматора. Например, когда получена команда с типом `animator_stop`."
+  },
+  "div_animator_base_direction": {
+    "en": "Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.",
+    "ru": "Направление анимации. Описывает то, должна ли анимация воспроизводиться вперёд, назад или переменно вперёд и назад."
+  },
+  "div_animator_base_duration": {
+    "en": "Animation duration in milliseconds.",
+    "ru": "Продолжительность анимации в миллисекундах."
+  },
+  "div_animator_base_end_actions": {
+    "en": "Actions performed when the animator completes animation.",
+    "ru": "Действия, которые будут выполнены после завершения работы аниматора."
+  },
+  "div_animator_base_id": {
+    "en": "Animator identificator",
+    "ru": "Идентификатор аниматора."
+  },
+  "div_animator_base_interpolator": {
+    "en": "Interpolation function.",
+    "ru": "Функция интерполяции анимируемого значения."
+  },
+  "div_animator_base_repeat_count": {
+    "en": "The number of times the animation will repeat before it finishes. `0` enables infinite repeats.",
+    "ru": "Количество повторов анимации, которое будет выполнено до ее остановки. `0` включает бесконечные повторы."
+  },
+  "div_animator_base_start_delay": {
+    "en": "Animation start delay in milliseconds.",
+    "ru": "Задержка перед запуском анимации в миллисекундах."
+  },
+  "div_animator_base_variable_name": {
+    "en": "Name of the variable being animated.",
+    "ru": "Имя анимируемой переменной."
+  },
+  "div_animator_start_value": {
+    "en": "Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.",
+    "ru": "Значение переменной, которое она примет в начале анимации. Если свойство не указано, то будет использовано текущее значение переменной."
+  },
+  "div_animator_end_value": {
+    "en": "Value that will be set at the end of animation.",
+    "ru": "Значение переменной, которое она примет в конце анимации."
+  },
+  "div_color_animator": {
+    "en": "Color animator.",
+    "ru": "Аниматор цвета."
+  },
+  "div_number_animator": {
+    "en": "Number animator.",
+    "ru": "Аниматор числового значения."
   },
   "div_appearance_set_transition": {
     "en": "A set of animations to be applied simultaneously.",
@@ -235,8 +319,11 @@
     "en": "Vertical alignment of an element inside the parent element.",
     "ru": "Вертикальное выравнивание элемента внутри родительского."
   },
+  "div_base_animators": {
+    "en": "Declaration of animators that can be used to change the value of variables over time.",
+    "ru": "Объявление аниматоров, с помощью которых можно изменять значение переменных во времени."
+  },
   "div_base_alpha": {
-    "en": "Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.",
     "ru": "Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
   },
   "div_base_background": {
@@ -1014,6 +1101,30 @@
   "div_input": {
     "en": "Text input element.",
     "ru": "Элемент для ввода текста."
+  },
+  "div_input_autocapitalization": {
+    "en": "Automatic text capitalization type.",
+    "ru": "Тип автоматической капитализации текста."
+  },
+  "div_input_filters": {
+    "en": "Filtering that prevents the entry of text that does not meet specified conditions.",
+    "ru": "Фильтрация, которая не допускает ввод текста, не соответствующего заданным условиям."
+  },
+  "div_input_filters_expression": {
+    "en": "[Calculated expression](../../expressions) filter.",
+    "ru": "Фильтр на основе [вычисляемых выражений](../../expressions)."
+  },
+  "div_input_filters_expression_condition": {
+    "en": "[Calculated expression](../../expressions) used as a value validity condition.",
+    "ru": "[Вычисляемое выражение](../../expressions), которое используется как условие валидности значения."
+  },
+  "div_input_filters_regex": {
+    "en": "Regex filter.",
+    "ru": "Фильтр на основе регулярных выражений."
+  },
+  "div_input_filters_regex_pattern": {
+    "en": "A regular expression (pattern) that the input value must match.",
+    "ru": "Регулярное выражение (паттерн), которому должно соответствовать вводимое значение."
   },
   "div_input_highlight_color": {
     "en": "Text highlight color. If the value isn't set, the color set in the client will be used instead.",
@@ -1919,6 +2030,10 @@
     "en": "Image.",
     "ru": "Изображение."
   },
+  "div_text_image_alignment_vertical": {
+    "en": "Vertical text image alignment within a string.",
+    "ru": "Вертикальное выравнивание изображения внутри строки."
+  },
   "div_text_image_height": {
     "en": "Image height.",
     "ru": "Высота изображения."
@@ -1970,6 +2085,10 @@
   "div_text_range_actions": {
     "en": "Action when clicking on text.",
     "ru": "Действие при нажатии на текст."
+  },
+  "div_text_range_alignment_vertical": {
+    "en": "Vertical text range alignment within a string.",
+    "ru": "Вертикальное выравнивание текстового диапазона внутри строки."
   },
   "div_text_range_background": {
     "en": "Character range background.",

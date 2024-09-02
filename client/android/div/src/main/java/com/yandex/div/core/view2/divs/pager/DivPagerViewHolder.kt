@@ -10,6 +10,9 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.divs.getChildPathUnit
+import com.yandex.div.core.view2.divs.getOrCreateRuntime
+import com.yandex.div.core.view2.divs.resolveRuntime
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
@@ -17,7 +20,7 @@ import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 
 internal class DivPagerViewHolder(
-    bindingContext: BindingContext,
+    private val parentContext: BindingContext,
     private val frameLayout: ViewGroup,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
@@ -28,12 +31,15 @@ internal class DivPagerViewHolder(
     init {
         itemView.doOnEveryDetach { view ->
             val div = oldDiv ?: return@doOnEveryDetach
-            bindingContext.divView.div2Component.visibilityActionTracker
-                .startTrackingViewsHierarchy(bindingContext, view, div)
+            parentContext.divView.div2Component.visibilityActionTracker
+                .startTrackingViewsHierarchy(parentContext, view, div)
         }
     }
 
     private var oldDiv: Div? = null
+    private val parentRuntime by lazy {
+        getOrCreateRuntime(parentContext.runtimeStore, path.fullPath, path.parentFullPath, null)
+    }
 
     fun bind(bindingContext: BindingContext, div: Div, position: Int) {
         val resolver = bindingContext.expressionResolver
@@ -55,7 +61,19 @@ internal class DivPagerViewHolder(
             frameLayout.setTag(R.id.div_pager_item_clip_id, position)
         }
         oldDiv = div
-        divBinder.bind(bindingContext, divView, div, path)
+        val id = div.value().getChildPathUnit(position)
+
+        resolveRuntime(
+            runtimeStore = bindingContext.runtimeStore,
+            pathUnit = id,
+            parentPath = path.fullPath,
+            variables = div.value().variables,
+            resolver = resolver,
+            parentRuntime = parentRuntime,
+        )
+
+        divBinder.bind(bindingContext, divView, div, path.appendDiv(id))
+        bindingContext.runtimeStore?.showWarningIfNeeded(div.value())
     }
 
     private fun createChildView(bindingContext: BindingContext, div: Div): View {

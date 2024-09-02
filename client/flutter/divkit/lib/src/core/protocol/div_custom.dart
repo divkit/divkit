@@ -1,6 +1,6 @@
-import 'package:divkit/src/generated_sources/div_custom.dart';
-import 'package:flutter/material.dart';
 import 'package:divkit/src/core/protocol/div_context.dart';
+import 'package:divkit/src/schema/div_custom.dart';
+import 'package:flutter/material.dart';
 
 /// Handles specific div-custom. Creates Flutter Widget from custom model
 abstract class DivCustomHandler {

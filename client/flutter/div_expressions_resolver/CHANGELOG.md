@@ -1,3 +1,6 @@
+## 0.4.3
+* Support smooth migration to Native DivKit30
+
 ## 0.4.2
 * Fix duplicate FlutterError class name 
 

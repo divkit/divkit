@@ -1,10 +1,22 @@
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/core/visibility/models/visibility_action.dart';
-import 'package:divkit/src/core/action/action_converter.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart' as dto;
-import 'package:divkit/src/core/action/models/action.dart';
+import 'package:divkit/divkit.dart';
 
-extension PassDivVisibilityAction on dto.DivVisibilityAction {
+extension PassDivVisibilityAction on DivVisibilityAction {
+  DivVisibilityActionModel value() {
+    final action = DivActionModel(
+      enabled: isEnabled.value!,
+      url: url?.value!,
+      typedAction: typed,
+      payload: payload,
+      downloadCallbacks: downloadCallbacks?.value(),
+      logId: logId.value!,
+    );
+    return DivVisibilityActionModel(
+      divAction: action,
+      visibilityDuration: visibilityDuration.value!,
+      visibilityPercentage: visibilityPercentage.value!,
+    );
+  }
+
   Future<DivVisibilityActionModel> resolve({
     required DivVariableContext context,
   }) async {

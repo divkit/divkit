@@ -13,7 +13,6 @@
     import type { ComponentContext } from '../../types/componentContext';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
-    import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { gridCalcTemplates } from '../../utils/gridCalcTemplates';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
@@ -40,7 +39,6 @@
     let columnsMinWidth: number[] = [];
     let rowsMinHeight: number[] = [];
     let rowCount = 0;
-    let hasLayoutError = false;
     let contentVAlign: AlignmentVerticalMapped = 'start';
     let contentHAlign: AlignmentHorizontal = 'start';
 
@@ -114,19 +112,11 @@
         rowsWeight = [];
         columnsMinWidth = [];
         rowsMinHeight = [];
-        hasLayoutError = false;
 
         resultItems = items.map((item, index) => {
             const childInfo = $childStore[index];
-            const colSpan = Number(childInfo.columnSpan) || 1;
+            const colSpan = Math.min(columnCount, Number(childInfo.columnSpan) || 1);
             const rowSpan = Number(childInfo.rowSpan) || 1;
-
-            const gridArea = {
-                x,
-                y,
-                colSpan,
-                rowSpan
-            };
 
             const widthWeight =
                 childInfo.width?.type === 'match_parent' ?
@@ -145,14 +135,39 @@
                     Number(childInfo.height.value) / rowSpan :
                     0;
 
+            // eslint-disable-next-line no-constant-condition
+            while (true) {
+                let isFree = true;
+                OUTER: for (let i = x; i < x + colSpan; ++i) {
+                    for (let j = y; j < y + rowSpan; ++j) {
+                        if (used[i + '_' + j]) {
+                            isFree = false;
+                            break OUTER;
+                        }
+                    }
+                }
+
+                if (isFree) {
+                    break;
+                }
+
+                ++x;
+
+                if (x > columnCount - colSpan) {
+                    x = 0;
+                    ++y;
+                }
+            }
+
+            const gridArea = {
+                x,
+                y,
+                colSpan,
+                rowSpan
+            };
+
             for (let i = x; i < x + colSpan; ++i) {
                 for (let j = y; j < y + rowSpan; ++j) {
-                    if (used[i + '_' + j]) {
-                        hasLayoutError = true;
-                        componentContext.logError(wrapError(new Error(`No space for item at index ${index}`)));
-                        continue;
-                    }
-
                     used[i + '_' + j] = true;
 
                     if (!columnsWeight[i] || columnsWeight[i] < widthWeight) {
@@ -173,15 +188,6 @@
                 }
             }
 
-            do {
-                ++x;
-
-                if (x >= columnCount) {
-                    x = 0;
-                    ++y;
-                }
-            } while (used[x + '_' + y]);
-
             return {
                 componentContext: item,
                 layoutParams: {
@@ -190,7 +196,7 @@
             };
         });
 
-        rowCount = y;
+        rowCount = y + 1;
     }
 
     $: {
@@ -210,24 +216,20 @@
         'grid-template-columns': gridCalcTemplates(columnsWeight, columnsMinWidth, columnCount),
         'grid-template-rows': gridCalcTemplates(rowsWeight, rowsMinHeight, rowCount)
     };
-
-    $: hasError = hasLayoutError;
 </script>
 
-{#if !hasError}
-    <Outer
-        cls={genClassName('grid', css, mods)}
-        {componentContext}
-        {style}
-        {layoutParams}
-        parentOf={items.map(it => it.json)}
-        {replaceItems}
-    >
-        {#each resultItems as item}
-            <Unknown
-                componentContext={item.componentContext}
-                layoutParams={item.layoutParams}
-            />
-        {/each}
-    </Outer>
-{/if}
+<Outer
+    cls={genClassName('grid', css, mods)}
+    {componentContext}
+    {style}
+    {layoutParams}
+    parentOf={items.map(it => it.json)}
+    {replaceItems}
+>
+    {#each resultItems as item}
+        <Unknown
+            componentContext={item.componentContext}
+            layoutParams={item.layoutParams}
+        />
+    {/each}
+</Outer>

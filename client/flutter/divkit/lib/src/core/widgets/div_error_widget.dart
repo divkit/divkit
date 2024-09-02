@@ -1,5 +1,5 @@
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
-import 'package:divkit/src/generated_sources/div_base.dart';
+import 'package:divkit/divkit.dart';
+
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class DivErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      DivKitProvider.watch<ShowUnsupportedDivs>(context)?.enabled ?? false
+      watch<ShowUnsupportedDivs>(context)?.enabled ?? false
           ? DivBaseWidget(
               data: data,
               child: Placeholder(

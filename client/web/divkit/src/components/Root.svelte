@@ -378,7 +378,7 @@
         templateContext
     }: {
         type: 'mount' | 'update' | 'destroy';
-        node: HTMLElement;
+        node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
@@ -1180,7 +1180,7 @@
         }
     }
 
-    function getExtensionContext(): DivExtensionContext {
+    function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
             variables,
             processExpressions<T>(t: T) {
@@ -1190,7 +1190,10 @@
                 ) as T;
             },
             execAction,
-            logError
+            logError,
+            getComponentProperty<T>(property: string): T {
+                return componentContext.getJsonWithVars((componentContext.json as any)[property]) as T;
+            },
         };
     }
 
@@ -1321,7 +1324,6 @@
     setContext<RootCtxValue>(ROOT_CTX, {
         logStat,
         hasTemplate,
-        processTemplate,
         genId,
         genClass,
         execAction: execActionInternal,

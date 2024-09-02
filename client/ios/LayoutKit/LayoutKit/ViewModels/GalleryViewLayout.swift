@@ -93,6 +93,17 @@ extension GalleryViewModel {
     let frames = self.frames(fitting: nil)
     return contentSize(for: frames, fitting: nil)
   }
+
+  func intrinsicSize(width: CGFloat) -> CGSize {
+    switch direction {
+    case .horizontal:
+      return intrinsicSize
+    case .vertical:
+      let size = CGSize(width: width, height: .infinity)
+      let frames = self.frames(fitting: size)
+      return contentSize(for: frames, fitting: size)
+    }
+  }
 }
 
 extension GalleryViewModel {

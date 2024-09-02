@@ -36,7 +36,8 @@
       "title": "Clear focus actions",
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "DivAction"
@@ -514,6 +515,29 @@
       "file": "accessibility/descriptions.json"
     },
     {
+      "title": "Accessibility image range",
+      "tags": [
+        "Accessibility"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Turn on Screen reader",
+        "Set focus on text",
+        "Listen to Screen reader",
+        "Set focus on image in text",
+        "Listen to Screen reader",
+        "Click on image in text"
+      ],
+      "expected_results": [
+        "After setting focus to text you can hear the text itself.",
+        "After setting focus on image, you should here that this image is a button and you can click on it to trigger an action.",
+        "After click on image action triggered"
+      ],
+      "file": "accessibility/image_and_clickable_range.json"
+    },
+    {
       "title": "Accessibility types",
       "tags": [
         "Accessibility"
@@ -658,10 +682,6 @@
         "Menu with text 'Long tap on container' appears for container"
       ],
       "file": "button_actions.json"
-    },
-    {
-      "title": "Longtap actions",
-      "file": "pinch-to-zoom-longtap-actions.json"
     },
     {
       "title": "Div errors visualization",
@@ -1037,6 +1057,10 @@
     },
     {
       "title": "For the reverse animation of the action, a direct interpolator is used",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "tags": [
         "Animations"
       ],
@@ -1192,8 +1216,7 @@
         "DivPager"
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ],
       "steps": [
         "Check first item visibility logged",
@@ -1511,7 +1534,11 @@
     },
     {
       "title": "Local variables",
+      "automated": [
+        "android"
+      ],
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -1567,16 +1594,6 @@
         "First text has a system highlighting, you can copy it. Second text has no highlighting."
       ],
       "file": "selectable_text.json"
-    },
-    {
-      "title": "DivText",
-      "tags": [
-        "DivText"
-      ],
-      "automated": [
-        "android"
-      ],
-      "file": "div-text.json"
     },
     {
       "title": "Nested change bounds transitions",
@@ -1705,6 +1722,10 @@
     },
     {
       "title": "Actions logging",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "automated": [
         "web"
       ],
@@ -1722,46 +1743,6 @@
       "file": "logging.json"
     },
     {
-      "title": "Shortcuts",
-      "file": "shortcuts.json",
-      "automated": [
-        "android"
-      ]
-    },
-    {
-      "title": "Auto ellipsize",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "file": "auto-ellipsize.json",
-      "automated": [
-        "android"
-      ]
-    },
-    {
-      "title": "Expand cutout 1",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "automated": [
-        "android"
-      ],
-      "file": "expand-cutout-1.json"
-    },
-    {
-      "title": "Expand cutout 2",
-      "platforms": [
-        "android",
-        "ios"
-      ],
-      "automated": [
-        "android"
-      ],
-      "file": "expand-cutout-2.json"
-    },
-    {
       "title": "Lottie animations",
       "platforms": [
         "android",
@@ -1776,6 +1757,7 @@
     {
       "title": "Lottie gallery",
       "platforms": [
+        "android",
         "ios",
         "web"
       ],
@@ -1787,7 +1769,9 @@
     {
       "title": "Lottie cycled animations",
       "platforms": [
-        "android"
+        "android",
+        "ios",
+        "web"
       ],
       "tags": [
         "lottie"
@@ -1821,13 +1805,6 @@
       "file": "grid_layout.json"
     },
     {
-      "title": "Grid with weights",
-      "file": "grid-with-weights.json",
-      "automated": [
-        "android"
-      ]
-    },
-    {
       "title": "Image Shimmer Preview",
       "file": "image_shimmer_preview.json",
       "platforms": [
@@ -1841,6 +1818,10 @@
     {
       "title": "Custom container",
       "file": "custom-container.json",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "automated": [
         "android"
       ]
@@ -1848,6 +1829,10 @@
     {
       "title": "Custom card",
       "file": "custom-card.json",
+      "platforms": [
+        "android",
+        "web"
+      ],
       "automated": [
         "android"
       ]
@@ -1960,7 +1945,7 @@
         "Try to scroll again"
       ],
       "expected_results": [
-        "Current item always stick to the text"
+        "Current item always stick to the text."
       ],
       "file": "gallery/gallery-items-posing.json"
     },
@@ -2286,22 +2271,6 @@
       "file": "video/video_aspect.json"
     },
     {
-      "title": "Variables in default state id",
-      "tags": [
-        "DivState"
-      ],
-      "automated": [
-        "android"
-      ],
-      "steps": [
-        "Check default state"
-      ],
-      "expected_results": [
-        "OK - content in text"
-      ],
-      "file": "state/default_state_id.json"
-    },
-    {
       "title": "state_id_variable",
       "tags": [
         "DivState"
@@ -2580,6 +2549,21 @@
       "file": "patch/tabs_transactional_success.json"
     },
     {
+      "title": "Apply patches on visibility action",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Should be lorem ipsum text"
+      ],
+      "expected_results": [
+        "Lorem ipsum text, showed with animation"
+      ],
+      "file": "patch/patch_with_visibility_actions.json"
+    },
+   
+    {
       "title": "State with variable binding",
       "tags": [
         "DivState"
@@ -2623,6 +2607,19 @@
         "A keyboard appears and the number can be edited."
       ],
       "file": "input_inside_pager.json"
+    },
+    {
+      "title": "Input keyboard types",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "The keyboard type when clicking on an input field should differ depending on the select"
+      ],
+      "file": "input_keyboard_types.json"
     },
     {
       "title": "Slider vertical scroll interruption",

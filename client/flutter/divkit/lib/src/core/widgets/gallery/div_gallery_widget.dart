@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:divkit/src/core/widgets/base/div_base_widget.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/gallery/div_gallery_model.dart';
-import 'package:divkit/src/generated_sources/div_gallery.dart';
+import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/widgets.dart';
 
 class DivGalleryWidget extends StatefulWidget {
@@ -17,8 +17,14 @@ class DivGalleryWidget extends StatefulWidget {
 }
 
 class _DivGalleryWidgetState extends State<DivGalleryWidget> {
-  // ToDo: Optimize repeated calculations on the same context
+  DivGalleryModel? value;
   Stream<DivGalleryModel>? stream;
+
+  @override
+  void initState() {
+    super.initState();
+    value = DivGalleryModel.value(context, widget.data);
+  }
 
   @override
   void didChangeDependencies() {
@@ -32,6 +38,7 @@ class _DivGalleryWidgetState extends State<DivGalleryWidget> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.data != oldWidget.data) {
+      value = DivGalleryModel.value(context, widget.data);
       stream = DivGalleryModel.from(context, widget.data);
     }
   }
@@ -40,6 +47,7 @@ class _DivGalleryWidgetState extends State<DivGalleryWidget> {
   Widget build(BuildContext context) => DivBaseWidget(
         data: widget.data,
         child: StreamBuilder<DivGalleryModel>(
+          initialData: value,
           stream: stream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -65,11 +73,17 @@ class _DivGalleryWidgetState extends State<DivGalleryWidget> {
               return SingleChildScrollView(
                 scrollDirection: model.orientation,
                 child: isHorizontal
-                    ? Row(
-                        children: childrenWithSpacing,
+                    ? provide(
+                        DivParentData.flex,
+                        child: Row(
+                          children: childrenWithSpacing,
+                        ),
                       )
-                    : Column(
-                        children: childrenWithSpacing,
+                    : provide(
+                        DivParentData.flex,
+                        child: Column(
+                          children: childrenWithSpacing,
+                        ),
                       ),
               );
             }
@@ -81,6 +95,7 @@ class _DivGalleryWidgetState extends State<DivGalleryWidget> {
 
   @override
   void dispose() {
+    value = null;
     stream = null;
     super.dispose();
   }

@@ -1,6 +1,4 @@
-import 'package:divkit/src/core/patch/patch.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/generated_sources/generated_sources.dart';
+import 'package:divkit/divkit.dart';
 
 extension PassDivPatch on DivPatch {
   Future<DivPatchModel> resolve({
@@ -9,5 +7,10 @@ extension PassDivPatch on DivPatch {
       DivPatchModel(
         changes: changes,
         mode: await mode.resolveValue(context: context),
+      );
+
+  DivPatchModel value() => DivPatchModel(
+        changes: changes,
+        mode: mode.value!,
       );
 }

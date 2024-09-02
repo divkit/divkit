@@ -248,7 +248,7 @@ export type CustomActionCallback = (action: Action & { url: string }) => void;
 
 export type ComponentCallback = (details: {
     type: 'mount' | 'update' | 'destroy';
-    node: HTMLElement;
+    node: HTMLElement | null;
     json: DivBase;
     origJson: DivBase | undefined;
     templateContext: TemplateContext;
@@ -298,6 +298,7 @@ export interface DivExtensionContext {
     processExpressions<T>(t: T): T;
     execAction(action: Action | VisibilityAction | DisappearAction): void;
     logError(error: WrappedError): void;
+    getComponentProperty<T>(property: string): T;
 }
 
 export interface DivExtensionClass {
@@ -307,6 +308,8 @@ export interface DivExtensionClass {
 
 export interface DivExtension {
     mountView?(node: HTMLElement, context: DivExtensionContext): void;
+
+    updateView?(node: HTMLElement, context: DivExtensionContext): void;
 
     unmountView?(node: HTMLElement, context: DivExtensionContext): void;
 }

@@ -116,6 +116,52 @@ final class DivActionIntentTests: XCTestCase {
       XCTFail("Invalid intent")
     }
   }
+
+  func test_SetStoredValue_String() {
+    switch makeIntent(
+      "div-action://set_stored_value?name=var&value=value&type=string&lifetime=100"
+    ) {
+    case let .setStoredValue(value):
+      XCTAssertEqual("var", value.name)
+      XCTAssertEqual("value", value.value)
+      XCTAssertEqual(.string, value.type)
+      XCTAssertEqual(100, value.lifetimeInSec)
+    default:
+      XCTFail("Invalid intent")
+    }
+  }
+
+  func test_SetStoredValue_Boolean() {
+    switch makeIntent(
+      "div-action://set_stored_value?name=var&value=true&type=boolean&lifetime=100"
+    ) {
+    case let .setStoredValue(value):
+      XCTAssertEqual("var", value.name)
+      XCTAssertEqual("true", value.value)
+      XCTAssertEqual(.boolean, value.type)
+      XCTAssertEqual(100, value.lifetimeInSec)
+    default:
+      XCTFail("Invalid intent")
+    }
+  }
+
+  func test_SetStoredValue_WithoutValueReturnsNil() {
+    XCTAssertNil(
+      makeIntent("div-action://set_stored_value?name=var&type=string&lifetime=100")
+    )
+  }
+
+  func test_SetStoredValue_WithoutTypeReturnsNil() {
+    XCTAssertNil(
+      makeIntent("div-action://set_stored_value?name=var&value=value&lifetime=100")
+    )
+  }
+
+  func test_SetStoredValue_WithoutLifetimeReturnsNil() {
+    XCTAssertNil(
+      makeIntent("div-action://set_stored_value?name=var&value=value&type=string")
+    )
+  }
 }
 
 private func makeIntent(_ url: String) -> DivActionIntent? {

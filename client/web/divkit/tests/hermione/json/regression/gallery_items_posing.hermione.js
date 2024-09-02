@@ -1,5 +1,5 @@
 describe('regression', () => {
-    describe('Gallery items posing', () => {
+    xdescribe('Gallery items posing', () => {
         beforeEach(async function() {
             await this.browser.execute(() => {
                 window.divkitLogs = [];

@@ -28,12 +28,17 @@ internal class ExpressionResolverImpl(
     private val variableController: VariableController,
     private val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
+    private val onCreateCallback: OnCreateCallback
 ) : ExpressionResolver {
 
     private val evaluationsCache = mutableMapOf<String, Any>()
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
 
     private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
+
+    init {
+        onCreateCallback.onCreate(this, variableController)
+    }
 
     override fun <R, T : Any> get(
         expressionKey: String,
@@ -227,7 +232,8 @@ internal class ExpressionResolverImpl(
                     warningSender = evaluator.evaluationContext.warningSender
                 )
             ),
-            errorCollector = errorCollector
+            errorCollector = errorCollector,
+            onCreateCallback = onCreateCallback,
         )
     }
 
@@ -236,5 +242,14 @@ internal class ExpressionResolverImpl(
             errorCollector.logError(typeMismatch(index, element))
             null
         }
+    }
+
+    /**
+     * ExpressionResolverImpl may create new instance in 'plus' operator.
+     * To be able to registrate all created resolvers and their variables controllers
+     * as a new ExpressionRuntime we are using OnCreateCallback.
+     */
+    internal fun interface OnCreateCallback {
+        fun onCreate(resolver: ExpressionResolverImpl, variableController: VariableController)
     }
 }

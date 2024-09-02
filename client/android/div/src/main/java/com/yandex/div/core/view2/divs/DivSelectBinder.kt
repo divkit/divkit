@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivTypefaceResolver
@@ -22,7 +23,7 @@ internal class DivSelectBinder @Inject constructor(
     private val variableBinder: TwoWayStringVariableBinder,
     private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivSelect, DivSelectView> {
-    override fun bindView(context: BindingContext, view: DivSelectView, div: DivSelect) {
+    override fun bindView(context: BindingContext, view: DivSelectView, div: DivSelect, path: DivStatePath) {
         val oldDiv = view.div
         if (div === oldDiv) return
 
@@ -38,7 +39,7 @@ internal class DivSelectBinder @Inject constructor(
             focusTracker = context.divView.inputFocusTracker
 
             applyOptions(div, context)
-            observeVariable(div, context, errorCollector)
+            observeVariable(div, context, errorCollector, path)
 
             observeFontSize(div, expressionResolver)
             observeTypeface(div, expressionResolver)
@@ -83,12 +84,14 @@ internal class DivSelectBinder @Inject constructor(
     private fun DivSelectView.observeVariable(
         div: DivSelect,
         bindingContext: BindingContext,
-        errorCollector: ErrorCollector
+        errorCollector: ErrorCollector,
+        path: DivStatePath,
     ) {
         val resolver = bindingContext.expressionResolver
 
         val subscription = variableBinder.bindVariable(
             bindingContext.divView,
+            bindingContext.runtimeStore,
             div.valueVariable,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
                 override fun onVariableChanged(value: String?) {
@@ -115,7 +118,8 @@ internal class DivSelectBinder @Inject constructor(
                 override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
                     this@observeVariable.valueUpdater = valueUpdater
                 }
-            })
+            },
+            path = path)
 
         addSubscription(subscription)
     }

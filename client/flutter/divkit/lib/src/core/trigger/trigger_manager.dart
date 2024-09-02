@@ -1,11 +1,6 @@
 import 'dart:async';
-
-import 'package:divkit/src/core/action/action_converter.dart';
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
+import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/protocol/div_trigger.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:divkit/src/core/trigger/trigger.dart';
 
 class DefaultDivTriggerManager extends DivTriggerManager {
   final List<DivTriggerModel>? triggers;
@@ -19,9 +14,17 @@ class DefaultDivTriggerManager extends DivTriggerManager {
   Future<void> handleUpdate(DivVariableContext context) async {
     if (triggers != null) {
       for (final trigger in triggers!) {
-        final hasCorrectCondition = trigger.condition is ResolvableExpression &&
-            (trigger.condition as ResolvableExpression).variables != null &&
-            (trigger.condition as ResolvableExpression).variables!.isNotEmpty;
+        final condition = trigger.condition;
+
+        if (condition is ResolvableExpression &&
+            (condition as ResolvableExpression).variables == null) {
+          // So if we have no [variables], then  initially resolve expression.
+          await condition.resolveValue(context: context);
+        }
+
+        final hasCorrectCondition = condition is ResolvableExpression &&
+            ((condition as ResolvableExpression).variables?.isNotEmpty ??
+                false);
 
         if (hasCorrectCondition) {
           ResolvableExpression condition =

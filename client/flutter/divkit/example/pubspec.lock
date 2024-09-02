@@ -103,14 +103,14 @@ packages:
       path: "../../div_expressions_resolver"
       relative: true
     source: path
-    version: "0.4.2"
+    version: "0.4.3"
   divkit:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.3.0-pre+2"
+    version: "0.3.1-rc.1"
   equatable:
     dependency: "direct main"
     description:
@@ -590,5 +590,5 @@ packages:
     source: hosted
     version: "6.2.2"
 sdks:
-  dart: ">=2.19.0 <4.0.0"
+  dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.7.0"

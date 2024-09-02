@@ -1,24 +1,27 @@
 package com.yandex.div.core.expression
 
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.triggers.TriggersController
-import com.yandex.div.core.expression.variables.VariableControllerImpl
+import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.json.expressions.ExpressionResolver
 
 internal class ExpressionsRuntime(
     val expressionResolver: ExpressionResolver,
-    val variableController: VariableControllerImpl,
-    val triggersController: TriggersController,
+    val variableController: VariableController,
+    val triggersController: TriggersController? = null,
+    val runtimeStore: RuntimeStore,
 ) {
-    private var unsubscribed = true
     private val expressionResolverImpl get() = expressionResolver as? ExpressionResolverImpl
         ?: throw AssertionError("ExpressionRuntime must have ExpressionResolverImpl as expressionResolver.")
+    internal var unsubscribed = true
+
     fun clearBinding() {
-        triggersController.clearBinding()
+        triggersController?.clearBinding()
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
-        triggersController.onAttachedToWindow(view)
+        triggersController?.onAttachedToWindow(view)
     }
 
     fun updateSubscriptions() {
@@ -30,8 +33,10 @@ internal class ExpressionsRuntime(
     }
 
     internal fun cleanup() {
-        unsubscribed = true
-        variableController.cleanupSubscriptions()
-        triggersController.clearBinding()
+        if (!unsubscribed) {
+            unsubscribed = true
+            triggersController?.clearBinding()
+            variableController.cleanupSubscriptions()
+        }
     }
 }

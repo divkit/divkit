@@ -5,6 +5,17 @@
         "compat": {
             "ios": {
                 "version_added": "30.8.0"
+            },
+            "android": {
+                "version_added": "30.14.0"
+            }
+        }
+    }, {
+        "id": "base_component_variable_triggers",
+        "name": "Base component property <code>variable_triggers</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.13.0"
             }
         }
     }, {
@@ -21,15 +32,15 @@
     }, {
         "id": "base_component_reuse_id",
         "name": "Base component property <code>reuse_id</code>",
-        "status": {
-            "notes": "Web support is not planned, it works on other principles"
-        },
         "compat": {
             "android": {
                 "version_added": "30.11.0"
             },
             "ios": {
                 "version_added": "30.11.0"
+            },
+            "web": {
+                "notes": "Web support is not planned, it works on other principles"
             }
         }
     }]

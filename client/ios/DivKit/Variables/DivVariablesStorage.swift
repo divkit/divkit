@@ -138,7 +138,7 @@ public final class DivVariablesStorage {
     }
 
     let oldValues = localStorage.values
-    localStorage.replaceAll(variables, notifyObservers: false)
+    localStorage.replaceAll(variables, notifyObservers: true)
 
     let changedVariables = makeChangedVariables(old: oldValues, new: variables)
     if changedVariables.isEmpty {

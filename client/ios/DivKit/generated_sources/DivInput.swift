@@ -6,6 +6,15 @@ import VGSL
 
 public final class DivInput: DivBase {
   @frozen
+  public enum Autocapitalization: String, CaseIterable {
+    case auto = "auto"
+    case none = "none"
+    case words = "words"
+    case sentences = "sentences"
+    case allCharacters = "all_characters"
+  }
+
+  @frozen
   public enum KeyboardType: String, CaseIterable {
     case singleLineText = "single_line_text"
     case multiLineText = "multi_line_text"
@@ -35,11 +44,13 @@ public final class DivInput: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let autocapitalization: Expression<Autocapitalization> // default value: auto
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
+  public let filters: [DivInputFilter]?
   public let focus: DivFocus?
   public let fontFamily: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
@@ -94,6 +105,10 @@ public final class DivInput: DivBase {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
+  }
+
+  public func resolveAutocapitalization(_ resolver: ExpressionResolver) -> Autocapitalization {
+    resolver.resolveEnum(autocapitalization) ?? Autocapitalization.auto
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -216,11 +231,13 @@ public final class DivInput: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    autocapitalization: Expression<Autocapitalization>? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
     disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
+    filters: [DivInputFilter]? = nil,
     focus: DivFocus? = nil,
     fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
@@ -269,11 +286,13 @@ public final class DivInput: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.autocapitalization = autocapitalization ?? .value(.auto)
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
+    self.filters = filters
     self.focus = focus
     self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
@@ -332,117 +351,119 @@ extension DivInput: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.autocapitalization == rhs.autocapitalization,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
-      lhs.focus == rhs.focus,
+      lhs.extensions == rhs.extensions,
+      lhs.filters == rhs.filters,
+      lhs.focus == rhs.focus
+    else {
+      return false
+    }
+    guard
       lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize
+      lhs.fontSize == rhs.fontSize,
+      lhs.fontSizeUnit == rhs.fontSizeUnit
     else {
       return false
     }
     guard
-      lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.fontWeightValue == rhs.fontWeightValue
+      lhs.fontWeightValue == rhs.fontWeightValue,
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
       lhs.highlightColor == rhs.highlightColor,
-      lhs.hintColor == rhs.hintColor
+      lhs.hintColor == rhs.hintColor,
+      lhs.hintText == rhs.hintText
     else {
       return false
     }
     guard
-      lhs.hintText == rhs.hintText,
       lhs.id == rhs.id,
-      lhs.isEnabled == rhs.isEnabled
+      lhs.isEnabled == rhs.isEnabled,
+      lhs.keyboardType == rhs.keyboardType
     else {
       return false
     }
     guard
-      lhs.keyboardType == rhs.keyboardType,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.letterSpacing == rhs.letterSpacing,
+      lhs.lineHeight == rhs.lineHeight
     else {
       return false
     }
     guard
-      lhs.lineHeight == rhs.lineHeight,
       lhs.margins == rhs.margins,
-      lhs.mask == rhs.mask
+      lhs.mask == rhs.mask,
+      lhs.maxLength == rhs.maxLength
     else {
       return false
     }
     guard
-      lhs.maxLength == rhs.maxLength,
       lhs.maxVisibleLines == rhs.maxVisibleLines,
-      lhs.nativeInterface == rhs.nativeInterface
+      lhs.nativeInterface == rhs.nativeInterface,
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
-      lhs.paddings == rhs.paddings,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.rowSpan == rhs.rowSpan,
+      lhs.selectAllOnFocus == rhs.selectAllOnFocus
     else {
       return false
     }
     guard
-      lhs.selectAllOnFocus == rhs.selectAllOnFocus,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical
     else {
       return false
     }
     guard
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
       lhs.textColor == rhs.textColor,
-      lhs.textVariable == rhs.textVariable
+      lhs.textVariable == rhs.textVariable,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.validators == rhs.validators
     else {
       return false
     }
     guard
-      lhs.validators == rhs.validators,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variables == rhs.variables,
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
-      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
-    else {
-      return false
-    }
-    guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -460,11 +481,13 @@ extension DivInput: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["autocapitalization"] = autocapitalization.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
+    result["filters"] = filters?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()

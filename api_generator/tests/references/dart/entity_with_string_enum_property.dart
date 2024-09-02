@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithStringEnumProperty with EquatableMixin {
+class EntityWithStringEnumProperty extends Preloadable with EquatableMixin  {
   const EntityWithStringEnumProperty({
     required this.property,
   });
@@ -24,7 +24,7 @@ class EntityWithStringEnumProperty with EquatableMixin {
       property: property ?? this.property,
     );
 
-  static EntityWithStringEnumProperty? fromJson(Map<String, dynamic>? json) {
+  static EntityWithStringEnumProperty? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -36,9 +36,30 @@ class EntityWithStringEnumProperty with EquatableMixin {
       return null;
     }
   }
+
+  static Future<EntityWithStringEnumProperty?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithStringEnumProperty(
+        property: (await safeParseStrEnumExprAsync(json['property'], parse: EntityWithStringEnumPropertyProperty.fromJson,))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await property.preload(context);
+    } catch (e, st) {
+      return;
+    }
+  }
 }
 
-enum EntityWithStringEnumPropertyProperty {
+enum EntityWithStringEnumPropertyProperty implements Preloadable {
   first('first'),
   second('second');
 
@@ -71,8 +92,26 @@ enum EntityWithStringEnumPropertyProperty {
      }
   }
 
+  Future<void> preload(Map<String, dynamic> context) async {}
 
-  static EntityWithStringEnumPropertyProperty? fromJson(String? json) {
+  static EntityWithStringEnumPropertyProperty? fromJson(String? json,) {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'first':
+        return EntityWithStringEnumPropertyProperty.first;
+        case 'second':
+        return EntityWithStringEnumPropertyProperty.second;
+      }
+      return null;
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  static Future<EntityWithStringEnumPropertyProperty?> parse(String? json,) async {
     if (json == null) {
       return null;
     }

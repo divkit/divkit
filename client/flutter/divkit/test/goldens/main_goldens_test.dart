@@ -12,15 +12,12 @@ void main() async {
   for (final testDataPath in testDataPaths) {
     final tests = await loadTestData(testDataPath);
 
-    final totalTestsLength = [
-      ...tests.whereType<GoldenTestGroup>().map((e) => e.testCases).flattened,
-      ...tests.whereType<GoldenTestCase>(),
-    ].length;
-
     if (kDebugMode) {
       print('Running tests...');
-      print('Will skip ${skippedTests.length}/$totalTestsLength tests');
+      print('Will skip ${skippedTests.length} tests');
     }
+
+    print('All tests: ${tests.length}');
     await runTests(tests);
   }
 }

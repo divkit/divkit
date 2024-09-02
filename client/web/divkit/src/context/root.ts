@@ -1,9 +1,8 @@
 import type { Readable, Writable } from 'svelte/store';
-import type { WrappedError } from '../utils/wrapError';
 import type { Action, Direction, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VisibilityAction } from '../../typings/common';
 import type { DivBaseData, Tooltip } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
-import type { Variable, VariableType } from '../expressions/variable';
+import type { Variable } from '../expressions/variable';
 import type { TintMode } from '../types/image';
 import type { Customization } from '../../typings/common';
 import type { CustomComponentDescription } from '../../typings/custom';
@@ -25,10 +24,6 @@ export interface FocusableMethods {
 export interface RootCtxValue {
     logStat(type: string, action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
     hasTemplate(templateName: string): boolean;
-    processTemplate(json: MaybeMissing<DivBaseData>, templateContext: TemplateContext): {
-        json: MaybeMissing<DivBaseData>;
-        templateContext: TemplateContext;
-    };
     genId(key: string): string;
     genClass(key: string): string;
     execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
@@ -52,7 +47,7 @@ export interface RootCtxValue {
     getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined;
     getBuiltinProtocols(): Set<string>;
     getExtension(id: string, params: object | undefined): DivExtension | undefined;
-    getExtensionContext(): DivExtensionContext;
+    getExtensionContext(componentContext: ComponentContext): DivExtensionContext;
     registerTimeout(timeout: number): void;
     isPointerFocus: Readable<boolean>;
     typefaceProvider: TypefaceProvider;
@@ -69,7 +64,7 @@ export interface RootCtxValue {
         templateContext
     }: {
         type: 'mount' | 'update' | 'destroy';
-        node: HTMLElement;
+        node: HTMLElement | null;
         json: MaybeMissing<DivBaseData>;
         origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;

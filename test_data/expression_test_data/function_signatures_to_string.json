@@ -12,6 +12,7 @@
       ],
       "result_type": "string",
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -62,6 +63,7 @@
       ],
       "result_type": "string",
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -112,6 +114,7 @@
       ],
       "result_type": "string",
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

@@ -3,6 +3,8 @@ package com.yandex.div.core.state
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.state.DivStatePath.Companion.parse
 import java.lang.Math.min
+import java.util.Objects
+import kotlin.Comparator
 
 /**
  * Parsed path to switch states.
@@ -16,7 +18,9 @@ import java.lang.Math.min
  */
 data class DivStatePath @VisibleForTesting internal constructor(
     val topLevelStateId: Long,
-    private val states: MutableList<Pair<String, String>> = mutableListOf()
+    private val states: List<Pair<String, String>> = listOf(),
+    internal val fullPath: String = topLevelStateId.toString(),
+    internal val parentFullPath: String? = null,
 ) {
 
     val lastStateId: String?
@@ -43,7 +47,13 @@ data class DivStatePath @VisibleForTesting internal constructor(
 
     fun append(divId: String, stateId: String): DivStatePath {
         val newStates = states.toMutableList().apply { add(divId to stateId) }
-        return DivStatePath(topLevelStateId, newStates)
+        val newFullPath = "${fullPath}/$divId/$stateId"
+        return DivStatePath(topLevelStateId, newStates, newFullPath, fullPath)
+    }
+
+    fun appendDiv(divId: String): DivStatePath {
+        val newFullPath = "${fullPath}/$divId"
+        return DivStatePath(topLevelStateId, states, newFullPath, fullPath)
     }
 
     fun getStates(): List<Pair<String, String>> = states

@@ -9,6 +9,7 @@
     import Outer from '../utilities/Outer.svelte';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivCustomData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -27,7 +28,7 @@
     ) {
         desc = rootCtx.customComponents.get(componentContext.json.custom_type)!;
         if (typeof desc.template === 'function') {
-            const ctx = rootCtx.getExtensionContext();
+            const ctx = rootCtx.getExtensionContext(componentContext);
             const variables: Map<string, string | number | boolean | unknown[] | object> = new Map();
             for (const [key, varaible] of ctx.variables) {
                 variables.set(key, varaible.getValue());
@@ -70,7 +71,7 @@
 
     onMount(() => {
         if (customElem && 'divKitApiCallback' in customElem && typeof customElem.divKitApiCallback === 'function') {
-            const ctx = rootCtx.getExtensionContext();
+            const ctx = rootCtx.getExtensionContext(componentContext);
             customElem.divKitApiCallback(ctx);
         }
     });
@@ -104,4 +105,8 @@
             {/if}
         </svelte:element>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

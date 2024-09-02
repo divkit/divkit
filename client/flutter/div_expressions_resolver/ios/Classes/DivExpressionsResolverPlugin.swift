@@ -1,8 +1,10 @@
 import Flutter
+import DivKit
+#if canImport(VGSLUI)
+import VGSLUI
+#elseif canImport(CommonCorePublic)
 import CommonCorePublic
-import VGSL_Fundamentals_Tiny
-import UIKit
-import DivKit.Swift
+#endif
 import os
 
 private class ApiImplementation: NativeDivExpressionsResolver {
@@ -18,7 +20,7 @@ private class ApiImplementation: NativeDivExpressionsResolver {
         }
 
         var errorMessage = ""
-        var resolver = DivKit.ExpressionResolver(
+        let resolver = DivKit.ExpressionResolver(
             variables: resolverVariables,
             persistentValuesStorage: DivPersistentValuesStorage(),
             errorTracker: { errorMessage = $0.description }
@@ -37,13 +39,16 @@ private class ApiImplementation: NativeDivExpressionsResolver {
         completion(.success(()))
     }
 
-    func clearOut(_ output: String) -> String {
-        let pattern = "AnyHashable\\(([^)]+)\\)"
-        let regex = try! NSRegularExpression(pattern: pattern, options: [])
-        let range = NSRange(output.startIndex..<output.endIndex, in: output)
-
-        // This will replace each match with the captured group in the parentheses.
-        return regex.stringByReplacingMatches(in: output, options: [], range: range, withTemplate: "$1")
+    func clearOut(_ output: String?) -> String? {
+        if output != nil {
+            let pattern = "AnyHashable\\(([^)]+)\\)"
+            let regex = try! NSRegularExpression(pattern: pattern, options: [])
+            let range = NSRange(output!.startIndex..<output!.endIndex, in: output!)
+            
+            // This will replace each match with the captured group in the parentheses.
+            return regex.stringByReplacingMatches(in: output!, options: [], range: range, withTemplate: "$1")
+        }
+        return nil
     }
 
     func parseVariableValue(value: Any) -> DivVariableValue? {
@@ -127,7 +132,6 @@ private class ApiImplementation: NativeDivExpressionsResolver {
      }
 }
 
-@available(iOS 14.0, *)
 public class DivExpressionsResolverPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let messenger : FlutterBinaryMessenger = registrar.messenger()

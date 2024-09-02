@@ -14,4 +14,5 @@
     <string name="screen_record_failed" translatable="false">Screen recording error</string>
     <string name="loading_scenario" translatable="false">Loading scenario...</string>
     <string name="record_screen" translatable="false">Record screen</string>
+    <string name="scenario_name">Scenario name..</string>
 </resources>

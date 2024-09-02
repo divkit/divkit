@@ -35,6 +35,7 @@
     import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
     import { debounce } from '../../utils/debounce';
+    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivSliderData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -489,4 +490,8 @@
             </div>
         </div>
     </Outer>
+{:else if process.env.DEVTOOL}
+    <DevtoolHolder
+        {componentContext}
+    />
 {/if}

@@ -1,0 +1,467 @@
+{
+    "card": {
+        "timers": [
+            {
+                "tick_actions": [
+                    {
+                        "typed": {
+                            "variable_name": "gen_text_size_to_print",
+                            "value": {
+                                "value": "@{min(len(gen_text_to_print), sum(gen_text_size_to_print, 3))}",
+                                "type": "integer"
+                            },
+                            "type": "set_variable"
+                        },
+                        "log_id": "printing#tick#update_text_size_to_print"
+                    },
+                    {
+                        "typed": {
+                            "variable_name": "already_printed_gen_text",
+                            "value": {
+                                "value": "@{gen_text_before_printing}@{substring(gen_text_to_print, 0, gen_text_size_to_print)}",
+                                "type": "string"
+                            },
+                            "type": "set_variable"
+                        },
+                        "log_id": "printing#tick#update_already_printed_text"
+                    }
+                ],
+                "value_variable": "printing_timer_value",
+                "tick_interval": "@{printing_timer_interval}",
+                "id": "printing"
+            },
+            {
+                "tick_actions": [
+                    {
+                        "log_id": "get_patch#tick#download",
+                        "download_callbacks": {
+                            "on_fail_actions": [
+                                {
+                                    "typed": {
+                                        "variable_name": "get_patch_error_count",
+                                        "value": {
+                                            "value": "@{get_patch_error_count + 1}",
+                                            "type": "integer"
+                                        },
+                                        "type": "set_variable"
+                                    },
+                                    "log_id": "get_patch#download_fail#increase_error_count"
+                                }
+                            ]
+                        },
+                        "url": "div-action://download?url=@{encodeUri(patch_download_url)}"
+                    },
+                    {
+                        "typed": {
+                            "variable_name": "get_patch_request_count",
+                            "value": {
+                                "value": "@{get_patch_request_count + 1}",
+                                "type": "integer"
+                            },
+                            "type": "set_variable"
+                        },
+                        "log_id": "get_patch#try_download#increase_request_count"
+                    }
+                ],
+                "value_variable": "get_patch_timer_value",
+                "tick_interval": "@{get_patch_delta}",
+                "id": "get_patch"
+            }
+        ],
+        "states": [
+            {
+                "div": {
+                    "type": "main_card"
+                },
+                "state_id": 0
+            }
+        ],
+        "log_id": "main_card",
+        "variable_triggers": [
+            {
+                "actions": [
+                    {
+                        "typed": {
+                            "variable_name": "gen_text_size_to_print",
+                            "value": {
+                                "value": 0,
+                                "type": "integer"
+                            },
+                            "type": "set_variable"
+                        },
+                        "log_id": "final_gen_text#reset_gen_text_size_to_print"
+                    },
+                    {
+                        "typed": {
+                            "variable_name": "gen_text_before_printing",
+                            "value": {
+                                "value": "@{already_printed_gen_text}",
+                                "type": "string"
+                            },
+                            "type": "set_variable"
+                        },
+                        "log_id": "final_gen_text#update_text_before_printing"
+                    },
+                    {
+                        "typed": {
+                            "variable_name": "gen_text_to_print",
+                            "value": {
+                                "value": "@{substring(final_gen_text, len(already_printed_gen_text), len(final_gen_text))}",
+                                "type": "string"
+                            },
+                            "type": "set_variable"
+                        },
+                        "log_id": "final_gen_text#update_text_to_print"
+                    }
+                ],
+                "mode": "on_variable",
+                "condition": "@{len(final_gen_text) > 0}"
+            },
+            {
+                "actions": [
+                    {
+                        "log_id": "final_gen_text#set_printing_started_true",
+                        "url": "div-action://set_variable?name=printing_started&value=1"
+                    },
+                    {
+                        "log_id": "final_gen_text#printing_start",
+                        "url": "div-action://timer?id=printing&action=start"
+                    }
+                ],
+                "mode": "on_condition",
+                "condition": "@{len(final_gen_text) > len(already_printed_gen_text) && !printing_started}"
+            },
+            {
+                "actions": [
+                    {
+                        "log_id": "has_final_patch#set_get_patch_started_false",
+                        "url": "div-action://set_variable?name=get_patch_started&value=0"
+                    },
+                    {
+                        "log_id": "has_final_patch#get_patch_stop",
+                        "url": "div-action://timer?id=get_patch&action=stop"
+                    }
+                ],
+                "mode": "on_condition",
+                "condition": "@{has_final_patch}"
+            },
+            {
+                "actions": [
+                    {
+                        "log_id": "already_printed_gen_text#stop_printing",
+                        "url": "div-action://timer?id=printing&action=stop"
+                    },
+                    {
+                        "typed": {
+                            "variable_name": "final_button_visibility",
+                            "value": {
+                                "value": "visible",
+                                "type": "string"
+                            },
+                            "type": "set_variable"
+                        },
+                        "log_id": "already_printed_gen_text#show_final_button"
+                    }
+                ],
+                "mode": "on_condition",
+                "condition": "@{has_final_patch && len(already_printed_gen_text) >= len(final_gen_text) && len(already_printed_gen_text) > 0}"
+            },
+            {
+                "actions": [
+                    {
+                        "log_id": "get_patch_error_count#stop_get_patch",
+                        "url": "div-action://timer?id=get_patch&action=stop"
+                    }
+                ],
+                "mode": "on_variable",
+                "condition": "@{(get_patch_error_count >= max_get_patch_error_count || get_patch_request_count > max_get_patch_request_count) && get_patch_started}"
+            }
+        ],
+        "variables": [
+            {
+                "name": "text",
+                "value": "что это куда",
+                "type": "string"
+            },
+            {
+                "name": "fill.5",
+                "value": "#0d000000",
+                "type": "color"
+            },
+            {
+                "name": "background.primary",
+                "value": "#FFFFFF",
+                "type": "color"
+            },
+            {
+                "name": "textAndIcons.primary",
+                "value": "#FFFFFF",
+                "type": "color"
+            },
+            {
+                "name": "textAndIcons.secondary",
+                "value": "#000000",
+                "type": "color"
+            },
+            {
+                "name": "textAndIcons.tertiary",
+                "value": "#73000000",
+                "type": "color"
+            },
+            {
+                "name": "default_text",
+                "value": "Формулирую ответ...",
+                "type": "string"
+            },
+            {
+                "name": "final_gen_text",
+                "value": "",
+                "type": "string"
+            },
+            {
+                "name": "already_printed_gen_text",
+                "value": "ㅤ",
+                "type": "string"
+            },
+            {
+                "name": "gen_text_to_print",
+                "value": "",
+                "type": "string"
+            },
+            {
+                "name": "gen_text_before_printing",
+                "value": "\n",
+                "type": "string"
+            },
+            {
+                "name": "gen_text_size_to_print",
+                "value": 0,
+                "type": "integer"
+            },
+            {
+                "name": "printing_timer_interval",
+                "value": 33,
+                "type": "integer"
+            },
+            {
+                "name": "printing_timer_value",
+                "value": 0,
+                "type": "integer"
+            },
+            {
+                "name": "printing_started",
+                "value": 0,
+                "type": "boolean"
+            },
+            {
+                "name": "max_get_patch_error_count",
+                "value": 6,
+                "type": "integer"
+            },
+            {
+                "name": "max_get_patch_request_count",
+                "value": 10,
+                "type": "integer"
+            },
+            {
+                "name": "get_patch_error_count",
+                "value": 0,
+                "type": "integer"
+            },
+            {
+                "name": "get_patch_request_count",
+                "value": 0,
+                "type": "integer"
+            },
+            {
+                "name": "get_patch_delta",
+                "value": 1000,
+                "type": "integer"
+            },
+            {
+                "name": "get_patch_timer_value",
+                "value": 0,
+                "type": "integer"
+            },
+            {
+                "name": "get_patch_started",
+                "value": 0,
+                "type": "boolean"
+            },
+            {
+                "name": "has_final_patch",
+                "value": 0,
+                "type": "boolean"
+            },
+            {
+                "name": "patch_id",
+                "value": 1,
+                "type": "integer"
+            },
+            {
+                "name": "patch_download_url",
+                "value": "https://yastatic.net/s3/home/divkit/alice_patch0.json",
+                "type": "string"
+            },
+            {
+                "name": "final_button_visibility",
+                "value": "visible",
+                "type": "string"
+            }
+        ]
+    },
+    "templates": {
+        "placeholder": {
+            "visibility": "gone",
+            "type": "text",
+            "text": "empty"
+        },
+        "links_gallery": {
+            "type": "gallery",
+            "item_spacing": 8,
+            "height": {
+                "value": 60,
+                "type": "fixed"
+            },
+            "orientation": "horizontal"
+        },
+        "text_container": {
+            "content_alignment_horizontal": "center",
+            "type": "container",
+            "margins": {
+                "right": 20,
+                "left": 20
+            },
+            "orientation": "vertical"
+        },
+        "final_button_container": {
+            "items": [
+                {
+                    "$text": "final_button_text",
+                    "line_height": 18,
+                    "type": "text",
+                    "width": {
+                        "type": "wrap_content",
+                        "contrained": true
+                    },
+                    "margins": {
+                        "bottom": 2,
+                        "left": 12,
+                        "top": 2
+                    },
+                    "font_size": 14,
+                    "text_color": "@{textAndIcons.primary}",
+                    "font_weight": "medium"
+                }
+            ],
+            "height": {
+                "value": 52,
+                "type": "fixed"
+            },
+            "type": "container",
+            "border": {
+                "corner_radius": 16
+            },
+            "content_alignment_vertical": "center",
+            "content_alignment_horizontal": "center",
+            "margins": {
+                "right": 20,
+                "left": 20,
+                "top": 25
+            },
+            "background": [
+                {
+                    "type": "solid",
+                    "color": "@{fill.5}"
+                }
+            ],
+            "orientation": "horizontal",
+            "visibility": "@{final_button_visibility}"
+        },
+        "link_container": {
+            "height": {
+                "value": 60,
+                "type": "fixed"
+            },
+            "type": "container",
+            "border": {
+                "corner_radius": 16
+            },
+            "width": {
+                "value": 264,
+                "type": "fixed"
+            },
+            "background": [
+                {
+                    "type": "solid",
+                    "color": "@{fill.5}"
+                }
+            ],
+            "orientation": "horizontal"
+        },
+        "main_card": {
+            "type": "container",
+            "border": {
+                "corner_radius": 30
+            },
+            "visibility_actions": [
+                {
+                    "log_id": "main#visible#set_get_patch_started_true",
+                    "url": "div-action://set_variable?name=get_patch_started&value=1"
+                },
+                {
+                    "log_id": "main#visible#get_first_patch",
+                    "url": "div-action://timer?id=get_patch&action=start"
+                }
+            ],
+            "items": [
+                {
+                    "type": "text_container",
+                    "items": [
+                        {
+                            "type": "main_text",
+                            "text": "@{default_text}",
+                            "id": "text_internal"
+                        }
+                    ],
+                    "id": "text_container"
+                }
+            ],
+            "margins": {
+                "bottom": 16,
+                "top": 16,
+                "left": 16,
+                "right": 16
+            },
+            "background": [
+                {
+                    "type": "radial_gradient",
+                    "colors": [
+                        "#b435ff",
+                        "#6c33ff"
+                    ]
+                }
+            ],
+            "orientation": "vertical"
+        },
+        "main_text": {
+            "text_color": "@{textAndIcons.primary}",
+            "type": "text",
+            "font_size": 16,
+            "$text": "text_value",
+            "font_weight": "bold",
+            "line_height": 20.8,
+            "paddings": {
+                "left": 16,
+                "right": 16,
+                "top": 16,
+                "bottom": 16
+            }
+        },
+        "images_gallery": {
+            "type": "gallery",
+            "item_spacing": 6,
+            "orientation": "horizontal"
+        }
+    }
+}

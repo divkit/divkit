@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression.variables
 
-import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
@@ -11,7 +10,9 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.json.missingVariable
 
 @Mockable
-internal class VariableControllerImpl : VariableController {
+internal class VariableControllerImpl(
+    private val delegate: VariableController? = null,
+): VariableController {
     private val variables = mutableMapOf<String, Variable>()
     private val extraVariablesSources = mutableListOf<VariableSource>()
     private val onChangeObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
@@ -105,6 +106,10 @@ internal class VariableControllerImpl : VariableController {
             return it
         }
 
+        delegate?.getMutableVariable(name)?.let {
+            return it
+        }
+
         extraVariablesSources.forEach { source: VariableSource ->
             source.getMutableVariable(name)?.let {
                 return it
@@ -114,7 +119,7 @@ internal class VariableControllerImpl : VariableController {
         return null
     }
 
-    internal fun cleanupSubscriptions() {
+    override fun cleanupSubscriptions() {
         extraVariablesSources.forEach { variableSource ->
             variableSource.removeVariablesObserver(notifyVariableChangedCallback)
             variableSource.removeDeclarationObserver(declarationObserver)
@@ -122,7 +127,7 @@ internal class VariableControllerImpl : VariableController {
         onAnyVariableChangeObservers.clear()
     }
 
-    internal fun restoreSubscriptions() {
+    override fun restoreSubscriptions() {
         extraVariablesSources.forEach { variableSource ->
             variableSource.observeVariables(notifyVariableChangedCallback)
             variableSource.receiveVariablesUpdates(notifyVariableChangedCallback)
@@ -142,5 +147,8 @@ internal class VariableControllerImpl : VariableController {
 
     override fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit) {
         onAnyVariableChangeObservers.addObserver(callback)
+        delegate?.setOnAnyVariableChangeCallback {
+            if (variables[it.name] == null) callback.invoke(it)
+        }
     }
 }

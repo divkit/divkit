@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_input_filters_expression",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "expression"
+      ]
+    },
+    "condition": {
+      "$ref": "common.json#/boolean_int",
+      "$description": "translations.json#/div_input_filters_expression_condition"
+    }
+  },
+  "platforms": [
+    "ios"
+  ],
+  "required": [
+    "type",
+    "condition"
+  ]
+}

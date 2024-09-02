@@ -226,6 +226,9 @@ internal class DivContainerBinder @Inject constructor(
         val binder = divBinder.get()
         var shift = 0
         val subscriber = expressionSubscriber
+        val parentRuntime = getOrCreateRuntime(
+            bindingContext.runtimeStore, path.fullPath, path.parentFullPath, null
+        )
         items.forEachIndexed { index, item ->
             val childView = getChildAt(index + shift)
             val oldChildDiv = (childView as? DivHolderView<*>)?.div
@@ -242,8 +245,19 @@ internal class DivContainerBinder @Inject constructor(
             if (patchShift > NO_PATCH_SHIFT) {
                 shift += patchShift
             } else {
-                val childBindingContext = bindingContext.getFor(item.expressionResolver)
-                binder.bind(childBindingContext, childView, item.div, path)
+                val id = item.div.value().getChildPathUnit(index)
+
+                resolveRuntime(
+                    runtimeStore = bindingContext.runtimeStore,
+                    pathUnit = id,
+                    parentPath = path.fullPath,
+                    variables = item.div.value().variables,
+                    resolver = item.expressionResolver,
+                    parentRuntime = parentRuntime
+                )
+
+                val childContext = bindingContext.getFor(item.expressionResolver)
+                binder.bind(childContext, childView, item.div, path.appendDiv(id))
                 childView.bindChildAlignment(
                     newDiv,
                     oldDiv,

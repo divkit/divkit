@@ -12,3 +12,4 @@ linter:
     - prefer_expression_function_bodies
     - require_trailing_commas
     - prefer_const_constructors
+    - directives_ordering

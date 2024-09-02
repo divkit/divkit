@@ -7,11 +7,5 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':assertion')
-    implementation project(path: ':div-core')
-    implementation project(path: ':div-evaluable')
-    implementation project(path: ':logging')
-    implementation project(path: ':utils')
-
-    api libs.androidx.core
+    api project(path: ':div-data')
 }

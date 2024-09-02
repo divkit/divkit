@@ -3,6 +3,8 @@ import Foundation
 
 import VGSL
 
+public typealias TextInputFilter = (String) -> Bool
+
 public final class TextInputBlock: BlockWithTraits {
   public enum InputType: Equatable {
     public enum KeyboardType: Equatable {
@@ -36,6 +38,13 @@ public final class TextInputBlock: BlockWithTraits {
     public static let `default`: Self = .keyboard(.default)
   }
 
+  public enum AutocapitalizationType {
+    case none
+    case words
+    case sentences
+    case allCharacters
+  }
+
   public enum TextAlignmentHorizontal: Equatable {
     case left
     case center
@@ -58,6 +67,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let textTypo: Typo
   public let multiLineMode: Bool
   public let inputType: InputType
+  public let autocapitalizationType: AutocapitalizationType
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
@@ -69,6 +79,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let textAlignmentHorizontal: TextAlignmentHorizontal
   public let textAlignmentVertical: TextAlignmentVertical
   public weak var parentScrollView: ScrollView?
+  public let filters: [TextInputFilter]?
   public let validators: [TextInputValidator]?
   public let layoutDirection: UserInterfaceLayoutDirection
   public let paddings: EdgeInsets?
@@ -83,6 +94,7 @@ public final class TextInputBlock: BlockWithTraits {
     textTypo: Typo,
     multiLineMode: Bool = true,
     inputType: InputType = .default,
+    autocapitalizationType: AutocapitalizationType = .sentences,
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
@@ -92,6 +104,7 @@ public final class TextInputBlock: BlockWithTraits {
     onFocusActions: [UserInterfaceAction] = [],
     onBlurActions: [UserInterfaceAction] = [],
     parentScrollView: ScrollView? = nil,
+    filters: [TextInputFilter]? = nil,
     validators: [TextInputValidator]? = nil,
     layoutDirection: UserInterfaceLayoutDirection,
     textAlignmentHorizontal: TextAlignmentHorizontal = .start,
@@ -107,6 +120,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.textTypo = textTypo
     self.multiLineMode = multiLineMode
     self.inputType = inputType
+    self.autocapitalizationType = autocapitalizationType
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
@@ -116,6 +130,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.onFocusActions = onFocusActions
     self.onBlurActions = onBlurActions
     self.parentScrollView = parentScrollView
+    self.filters = filters
     self.validators = validators
     self.layoutDirection = layoutDirection
     self.textAlignmentHorizontal = textAlignmentHorizontal

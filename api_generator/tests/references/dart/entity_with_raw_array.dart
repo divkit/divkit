@@ -2,9 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_utils.dart';
+import 'package:divkit/src/utils/parsing_utils.dart';
 
-class EntityWithRawArray with EquatableMixin {
+class EntityWithRawArray extends Preloadable with EquatableMixin  {
   const EntityWithRawArray({
     required this.array,
   });
@@ -24,7 +24,7 @@ class EntityWithRawArray with EquatableMixin {
       array: array ?? this.array,
     );
 
-  static EntityWithRawArray? fromJson(Map<String, dynamic>? json) {
+  static EntityWithRawArray? fromJson(Map<String, dynamic>? json,) {
     if (json == null) {
       return null;
     }
@@ -34,6 +34,27 @@ class EntityWithRawArray with EquatableMixin {
       );
     } catch (e, st) {
       return null;
+    }
+  }
+
+  static Future<EntityWithRawArray?> parse(Map<String, dynamic>? json,) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return EntityWithRawArray(
+        array: (await safeParseListExprAsync(json['array'],))!,
+      );
+    } catch (e, st) {
+      return null;
+    }
+  }
+
+  Future<void> preload(Map<String, dynamic> context,) async {
+    try {
+    await array.preload(context);
+    } catch (e, st) {
+      return;
     }
   }
 }

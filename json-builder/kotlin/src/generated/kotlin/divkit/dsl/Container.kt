@@ -75,6 +75,7 @@ class Container internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
@@ -250,6 +251,10 @@ class Container internal constructor(
          */
         val transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>?,
         /**
+         * Triggers for changing variables within an element.
+         */
+        val variableTriggers: Property<List<Trigger>>?,
+        /**
          * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
          */
         val variables: Property<List<Variable>>?,
@@ -314,6 +319,7 @@ class Container internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
@@ -442,6 +448,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -489,6 +496,7 @@ fun DivScope.row(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -534,6 +542,7 @@ fun DivScope.row(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -581,6 +590,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -628,6 +638,7 @@ fun DivScope.row(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -673,6 +684,7 @@ fun DivScope.row(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -720,6 +732,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -767,6 +780,7 @@ fun DivScope.column(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -812,6 +826,7 @@ fun DivScope.column(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -859,6 +874,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -906,6 +922,7 @@ fun DivScope.column(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -951,6 +968,7 @@ fun DivScope.column(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -998,6 +1016,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1045,6 +1064,7 @@ fun DivScope.stack(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1090,6 +1110,7 @@ fun DivScope.stack(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -1137,6 +1158,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1184,6 +1206,7 @@ fun DivScope.stack(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1229,6 +1252,7 @@ fun DivScope.stack(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -1277,6 +1301,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1325,6 +1350,7 @@ fun DivScope.container(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1371,6 +1397,7 @@ fun DivScope.container(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -1420,6 +1447,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1468,6 +1496,7 @@ fun DivScope.containerProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1513,6 +1542,7 @@ fun DivScope.containerProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
@@ -1561,6 +1591,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1609,6 +1640,7 @@ fun TemplateScope.containerRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1654,6 +1686,7 @@ fun TemplateScope.containerRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    variableTriggers = variableTriggers,
     variables = variables,
     visibility = visibility,
     visibilityAction = visibilityAction,
@@ -1702,6 +1735,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1750,6 +1784,7 @@ fun Container.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -1796,6 +1831,7 @@ fun Container.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
@@ -1845,6 +1881,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -1893,6 +1930,7 @@ fun Container.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -1939,6 +1977,7 @@ fun Container.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
@@ -2017,6 +2056,7 @@ fun Container.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        variableTriggers = properties.variableTriggers,
         variables = properties.variables,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
@@ -2066,6 +2106,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -2114,6 +2155,7 @@ fun Component<Container>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
+    variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
@@ -2161,6 +2203,7 @@ fun Component<Container>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
@@ -2210,6 +2253,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
@@ -2258,6 +2302,7 @@ fun Component<Container>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
+    variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
@@ -2305,6 +2350,7 @@ fun Component<Container>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        variableTriggers = variableTriggers,
         variables = variables,
         visibility = visibility,
         visibilityAction = visibilityAction,
@@ -2384,6 +2430,7 @@ fun Component<Container>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        variableTriggers = null,
         variables = null,
         visibility = visibility,
         visibilityAction = null,

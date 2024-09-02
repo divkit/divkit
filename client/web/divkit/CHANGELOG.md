@@ -1,3 +1,17 @@
+## 30.14.0 (August 19, 2024)
+
+* Added `markdownExtensionBuilder` function, which accepts the markdown processing function and produces a `markdown` extension.
+* Added `getComponentProperty` extension API.
+
+
+## 30.13.0 (August 12, 2024)
+
+* Updated the layout of the `grid`, in which elements are superimposed on each other to match the behavior of Android.
+* The logic of `transition_change` has been brought into line with other platforms: with this change, there is no need to contain the `transition_change` property in the final state. In addition, parameters from the previous state will be used, not from the new one.
+* Fixed the `auto_ellipsize` property in the presence of `max_lines` for the `text` component.
+* Performance optimizations.
+
+
 ## 30.9.0 (July 15, 2024)
 
 * Performance optimizations.

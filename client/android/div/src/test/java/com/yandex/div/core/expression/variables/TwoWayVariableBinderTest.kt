@@ -1,12 +1,17 @@
 package com.yandex.div.core.expression.variables
 
+import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider
+import com.yandex.div.core.expression.local.ROOT_RUNTIME_PATH
+import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -34,7 +39,10 @@ class TwoWayVariableBinderTest {
     private val variableController = VariableControllerImpl().apply {
         declare(variable)
     }
-    private val expressionsRuntime = ExpressionsRuntime(mock(), variableController, mock())
+    private val path = DivStatePath(0)
+    private val store = RuntimeStore(mock(), mock())
+    private val expressionResolver = ExpressionResolverImpl(mock(), mock(), mock(), mock())
+    private val expressionsRuntime = ExpressionsRuntime(expressionResolver, variableController, mock(), store)
     private val expressionsRuntimeProvider = mock<ExpressionsRuntimeProvider> {
         on { getOrCreate(any(), any(), any()) } doReturn expressionsRuntime
     }
@@ -49,8 +57,9 @@ class TwoWayVariableBinderTest {
     }
 
     init {
+        store.putRuntime(expressionsRuntime, ROOT_RUNTIME_PATH)
         TwoWayStringVariableBinder(errorCollectors, expressionsRuntimeProvider)
-            .bindVariable(divView, VARIABLE_NAME, callbacks)
+            .bindVariable(divView, store, VARIABLE_NAME, callbacks, path)
     }
 
     @Test

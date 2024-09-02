@@ -23,7 +23,7 @@ let package = Package(
     .library(name: "DivKitExtensions", targets: ["DivKitExtensions"]),
     .library(name: "LayoutKit", targets: ["LayoutKit"]),
     .library(name: "LayoutKitInterface", targets: ["LayoutKitInterface"]),
-    .library(name: "Serialization", targets: ["Serialization"]),
+    .library(name: "Serialization", targets: ["Serialization"])
   ],
   dependencies: [
     vgsl.package,
@@ -75,6 +75,6 @@ let package = Package(
       ],
       path: "Serialization",
       swiftSettings: swiftSettings
-    ),
+    )
   ]
 )

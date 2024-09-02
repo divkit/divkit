@@ -1,12 +1,11 @@
-import 'package:divkit/src/core/protocol/div_context.dart';
+import 'package:collection/collection.dart';
+import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/widgets/text/utils/div_range_helper.dart';
 import 'package:divkit/src/core/widgets/text/utils/div_text_range_model.dart';
-import 'package:divkit/src/generated_sources/div_text.dart';
-import 'package:divkit/src/utils/converters.dart';
+import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:divkit/src/utils/div_scaling_model.dart';
-import 'package:divkit/src/core/widgets/text/utils/div_range_helper.dart';
 
 class DivTextModel with EquatableMixin {
   final TextStyle? style;
@@ -25,14 +24,103 @@ class DivTextModel with EquatableMixin {
     this.ranges = const [],
   });
 
+  static DivTextModel? value(
+    BuildContext context,
+    DivText data,
+  ) {
+    try {
+      final divScalingModel = read<DivScalingModel>(context);
+      final textScale = divScalingModel?.textScale ?? 1;
+      final viewScale = divScalingModel?.viewScale ?? 1;
+
+      final alignment = PassDivAlignment(
+        data.textAlignmentVertical,
+        data.textAlignmentHorizontal,
+      );
+
+      final autoEllipsize = data.autoEllipsize?.value ?? false;
+      final fontFamily = data.fontFamily?.requireValue;
+
+      final fontSize = data.fontSize.requireValue.toDouble() *
+          data.fontSizeUnit.requireValue.asPx *
+          textScale;
+
+      final lineHeight = data.lineHeight?.requireValue.toDouble();
+
+      final letterSpacing = data.letterSpacing.requireValue;
+      final underline = data.underline.requireValue;
+
+      final strike = data.strike.requireValue;
+      final shadow = data.textShadow?.valueShadow(viewScale: viewScale);
+
+      final fontWeightValue = data.fontWeightValue?.requireValue;
+      FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
+        (element) => element.value == fontWeightValue,
+      );
+      fontWeight ??= data.fontWeight.passValue();
+
+      final linesStyleList = [
+        underline,
+        strike,
+      ];
+
+      final style = TextStyle(
+        fontSize: fontSize,
+        fontFamily: fontFamily,
+        shadows: shadow != null ? [shadow] : null,
+        height: lineHeight != null
+            ? (lineHeight * data.fontSizeUnit.requireValue.asPx) *
+                viewScale /
+                fontSize
+            : null,
+        color: data.textColor.value!,
+        fontWeight: fontWeight,
+        letterSpacing: letterSpacing,
+        decoration: TextDecoration.combine(
+          [
+            underline.asUnderline,
+            strike.asLineThrough,
+          ],
+        ),
+        decorationColor: data.textColor.requireValue,
+        overflow: autoEllipsize ? TextOverflow.ellipsis : null,
+      );
+
+      final text = data.text.requireValue;
+
+      final rangesList = DivRangeHelper.getRangeItemsSync(
+        text,
+        data.ranges ?? [],
+        style,
+        linesStyleList,
+        viewScale,
+      );
+
+      return DivTextModel(
+        ranges: rangesList,
+        text: text,
+        style: style,
+        textBoxAlignment: alignment.valueAlignmentGeometry(),
+        textAlign: alignment.valueTextAlign(),
+        maxLines: data.maxLines?.requireValue,
+      );
+    } catch (e, st) {
+      logger.warning(
+        'Expression cache is corrupted! Instant rendering is not available for div',
+        error: e,
+        stackTrace: st,
+      );
+      return null;
+    }
+  }
+
   static Stream<DivTextModel> from(
     BuildContext context,
     DivText data,
   ) {
-    final variables =
-        DivKitProvider.watch<DivContext>(context)!.variableManager;
+    final variables = watch<DivContext>(context)!.variableManager;
 
-    final divScalingModel = DivKitProvider.watch<DivScalingModel>(context);
+    final divScalingModel = watch<DivScalingModel>(context);
     final textScale = divScalingModel?.textScale ?? 1;
     final viewScale = divScalingModel?.viewScale ?? 1;
 
@@ -47,6 +135,10 @@ class DivTextModel with EquatableMixin {
               context: context,
             ) ??
             false;
+
+        final fontFamily = (await data.fontFamily?.resolveValue(
+          context: context,
+        ));
 
         final fontSize = (await data.fontSize.resolveValue(
               context: context,
@@ -71,13 +163,33 @@ class DivTextModel with EquatableMixin {
           context: context,
         );
 
+        final letterSpacing = await data.letterSpacing.resolveValue(
+          context: context,
+        );
+
         final linesStyleList = [
           underline,
           strike,
         ];
 
+        final fontWeightValue = await data.fontWeightValue?.resolveValue(
+          context: context,
+        );
+        FontWeight? fontWeight = FontWeight.values.firstWhereOrNull(
+          (element) => element.value == fontWeightValue,
+        );
+        fontWeight ??= await data.fontWeight.resolve(context: context);
+
+        final shadow = await data.textShadow?.resolveShadow(
+          context: context,
+          viewScale: viewScale,
+        );
+
         final style = TextStyle(
+          fontFamily: fontFamily,
           fontSize: fontSize,
+          letterSpacing: letterSpacing,
+          shadows: shadow != null ? [shadow] : null,
           height: lineHeight != null
               ? (lineHeight *
                       (await data.fontSizeUnit.resolveValue(
@@ -90,9 +202,7 @@ class DivTextModel with EquatableMixin {
           color: await data.textColor.resolveValue(
             context: context,
           ),
-          fontWeight: await data.fontWeight.resolve(
-            context: context,
-          ),
+          fontWeight: fontWeight,
           decoration: TextDecoration.combine(
             [
               underline.asUnderline,
@@ -115,6 +225,7 @@ class DivTextModel with EquatableMixin {
           context,
           style,
           linesStyleList,
+          viewScale,
         );
 
         return DivTextModel(

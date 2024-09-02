@@ -53,7 +53,7 @@ extension DivBase {
     }
 
     block = block.addingEdgeInsets(
-      applyPaddings ? paddings.resolve(context): .zero,
+      applyPaddings ? paddings.resolve(context) : .zero,
       clipsToBounds: clipToBounds
     )
 
@@ -125,7 +125,7 @@ extension DivBase {
       )
     }
 
-    let clipToBounds = rotation == nil && shadow == nil
+    let clipToBounds = [nil, 0.0].contains(rotation) && shadow == nil
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
       .addActions(context: context, actionsHolder: actionsHolder, clipToBounds: clipToBounds)
       .addingEdgeInsets(externalInsets, clipsToBounds: false)

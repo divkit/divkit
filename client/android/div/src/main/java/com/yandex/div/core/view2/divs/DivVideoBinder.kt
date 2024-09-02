@@ -18,6 +18,7 @@ import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.player.DivVideoViewMapper
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
@@ -37,7 +38,7 @@ internal class DivVideoBinder @Inject constructor(
     private val videoViewMapper: DivVideoViewMapper,
     private val executorService: ExecutorService,
 ) : DivViewBinder<DivVideo, DivVideoView> {
-    override fun bindView(context: BindingContext, view: DivVideoView, div: DivVideo) {
+    override fun bindView(context: BindingContext, view: DivVideoView, div: DivVideo, path: DivStatePath) {
         val oldDiv = view.div
         val divView = context.divView
         val resolver = context.expressionResolver
@@ -120,13 +121,13 @@ internal class DivVideoBinder @Inject constructor(
         playerView.attach(player)
 
         if (div === oldDiv) {
-            view.observeElapsedTime(div, divView, player)
+            view.observeElapsedTime(div, divView, player, path)
             view.observeMuted(div, resolver, player)
             view.observeScale(div, resolver, playerView)
             return
         }
 
-        view.observeElapsedTime(div, divView, player)
+        view.observeElapsedTime(div, divView, player, path)
         view.observeMuted(div, resolver, player)
         view.observeScale(div, resolver, playerView)
 
@@ -144,7 +145,8 @@ internal class DivVideoBinder @Inject constructor(
     private fun DivVideoView.observeElapsedTime(
         div: DivVideo,
         divView: Div2View,
-        player: DivPlayer
+        player: DivPlayer,
+        path: DivStatePath,
     ) {
         val elapsedTimeVariable = div.elapsedTimeVariable ?: return
 
@@ -164,7 +166,9 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, elapsedTimeVariable, callbacks))
+        addSubscription(variableBinder.bindVariable(
+            divView, bindingContext?.runtimeStore, elapsedTimeVariable, callbacks, path)
+        )
     }
 
     private fun DivVideoView.observeMuted(
