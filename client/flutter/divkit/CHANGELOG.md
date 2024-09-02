@@ -1,4 +1,6 @@
-## 0.4.0-rc.1
+## 0.4.1-rc.1
+
+## 0.4.0
 
 * Use low-level divkit layout implementation: DivLayout
 * Optimize pre-calculation of states when switching
