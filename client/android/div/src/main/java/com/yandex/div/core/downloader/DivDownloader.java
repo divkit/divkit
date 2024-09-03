@@ -12,10 +12,8 @@ import com.yandex.div.core.view2.Div2View;
 public interface DivDownloader {
 
     DivDownloader STUB = (divView, downloadUrl, callback) -> {
-        return new LoadReference() {
-                @Override
-                public void cancel() { /* stub */ }
-            };
+        throw new AssertionError("To load patch you must provide implementation of " +
+          "DivDownloader to your DivConfiguration. ");
     };
 
     /**
