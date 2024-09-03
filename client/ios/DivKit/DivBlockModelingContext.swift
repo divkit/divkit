@@ -20,7 +20,7 @@ public struct DivBlockModelingContext {
   public let imageHolderFactory: DivImageHolderFactory
   let highPriorityImageHolderFactory: DivImageHolderFactory?
   let divCustomBlockFactory: DivCustomBlockFactory
-  let fontProvider: DivFontProvider
+  public let fontProvider: DivFontProvider
   let flagsInfo: DivFlagsInfo
   let extensionHandlers: [String: DivExtensionHandler]
   let layoutDirection: UserInterfaceLayoutDirection

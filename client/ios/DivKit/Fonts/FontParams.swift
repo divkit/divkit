@@ -1,6 +1,6 @@
 import VGSL
 
-struct FontParams: Hashable {
+public struct FontParams: Hashable {
   let family: String
   let weight: Int
   let size: Int
@@ -8,7 +8,7 @@ struct FontParams: Hashable {
   let featureSettings: String?
 }
 
-protocol FontParamsProvider {
+public protocol FontParamsProvider {
   func resolveFontFamily(_ expressionResolver: ExpressionResolver) -> String?
   func resolveFontWeight(_ expressionResolver: ExpressionResolver) -> DivFontWeight
   func resolveFontWeightValue(_ expressionResolver: ExpressionResolver) -> Int?
@@ -18,7 +18,7 @@ protocol FontParamsProvider {
 }
 
 extension FontParamsProvider {
-  func resolveFontParams(_ expressionResolver: ExpressionResolver) -> FontParams {
+  public func resolveFontParams(_ expressionResolver: ExpressionResolver) -> FontParams {
     FontParams(
       family: resolveFontFamily(expressionResolver) ?? "",
       weight: resolveFontWeightValue(expressionResolver)
@@ -29,13 +29,13 @@ extension FontParamsProvider {
     )
   }
 
-  func resolveFontFeatureSettings(_: ExpressionResolver) -> String? {
+  public func resolveFontFeatureSettings(_: ExpressionResolver) -> String? {
     nil
   }
 }
 
 extension DivFontProvider {
-  func font(_ params: FontParams) -> Font {
+  public func font(_ params: FontParams) -> Font {
     let font = font(
       family: params.family,
       weight: params.weight,

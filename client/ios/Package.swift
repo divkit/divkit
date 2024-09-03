@@ -27,6 +27,7 @@ let package = Package(
   ],
   dependencies: [
     vgsl.package,
+    .package(url: "https://github.com/apple/swift-markdown.git", from: "0.4.0"),
   ],
   targets: [
     .target(
@@ -47,6 +48,7 @@ let package = Package(
       name: "DivKitExtensions",
       dependencies: [
         "DivKit",
+        .product(name: "Markdown", package: "swift-markdown"),
       ],
       path: "DivKitExtensions",
       swiftSettings: swiftSettings

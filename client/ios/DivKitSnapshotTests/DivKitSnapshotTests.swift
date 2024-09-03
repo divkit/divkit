@@ -36,7 +36,7 @@ struct DivKitSnapshotTests {
     try await test.run(
       caseName: file.name.removingFileExtension,
       blocksState: defaultPagerViewState,
-      extensions: [labelImagePreviewExtension]
+      extensions: [labelImagePreviewExtension, MarkdownExtensionHandler()]
     )
   }
 
