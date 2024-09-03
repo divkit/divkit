@@ -43,6 +43,5 @@ schemas {
 tasks.withType(KotlinCompile).configureEach {
     compilerOptions {
         freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
-        freeCompilerArgs.add("-opt-in=com.yandex.div.data.DivModelInternalApi")
     }
 }
