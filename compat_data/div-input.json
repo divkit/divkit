@@ -49,5 +49,21 @@
                 "version_added": "30.7.0"
             }
         }
+    }, {
+        "id": "input_autocapitalization",
+        "name": "Input <code>autocapitalization</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.16.0"
+            }
+        }
+    }, {
+        "id": "input_filters",
+        "name": "Input <code>filters</code> property",
+        "compat": {
+            "ios": {
+                "version_added": "30.16.0"
+            }
+        }
     }]
 }
