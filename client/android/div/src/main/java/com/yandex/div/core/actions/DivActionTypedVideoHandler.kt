@@ -29,7 +29,7 @@ class DivActionTypedVideoHandler @Inject constructor()
         resolver: ExpressionResolver
     ) {
         val id = action.id.evaluate(resolver)
-        val videoAction = action.action.evaluate(resolver).name
+        val videoAction = DivActionVideo.Action.toString(action.action.evaluate(resolver))
         view.applyVideoCommand(id, videoAction, resolver)
     }
 }

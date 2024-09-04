@@ -28,7 +28,7 @@ class DivActionTypedTimerHandler @Inject constructor()
         resolver: ExpressionResolver
     ) {
         val id = action.id.evaluate(resolver)
-        val command = action.action.evaluate(resolver).name
+        val command = DivActionTimer.Action.toString(action.action.evaluate(resolver))
         view.applyTimerCommand(id, command)
     }
 

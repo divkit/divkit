@@ -1894,6 +1894,21 @@
       "file": "timers/common-timer.json"
     },
     {
+      "title": "Common timer with typed action",
+      "tags": [
+        "Timers",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "expected_results": [
+        "The timer calls tick_actions and changes the variable with the set interval.",
+        "After the duration expires, the timer stops and calls end_actions."
+      ],
+      "file": "timers/typed-common-timer.json"
+    },
+    {
       "title": "Endless timer",
       "tags": [
         "Timers"
@@ -2117,6 +2132,17 @@
         "DivVideo"
       ],
       "file": "video/video_with_controls.json"
+    },
+    {
+      "title": "Video with controls and typed actions",
+      "tags": [
+        "DivVideo",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "file": "video/typed_video_with_controls.json"
     },
     {
       "title": "Video volume control",
