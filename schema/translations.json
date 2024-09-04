@@ -43,13 +43,13 @@
     "en": "The identifier of the animator being started.",
     "ru": "Идентификатор запускаемого аниматора"
   },
-  "div_action_animator_start_start_value": {
-    "en": "Overrides value that will be set at the start of animation.",
-    "ru": "Переопределяет, какое значение будет установлено в переменную перед началом анимации."
-  },
   "div_action_animator_start_end_value": {
     "en": "Overrides value that will be set at the end of animation.",
     "ru": "Переопределяет, какое значение будет установлено в переменную после завершения анимации."
+  },
+  "div_action_animator_start_start_value": {
+    "en": "Overrides value that will be set at the start of animation.",
+    "ru": "Переопределяет, какое значение будет установлено в переменную перед началом анимации."
   },
   "div_action_animator_stop": {
     "en": "Stops specified animator",
@@ -127,7 +127,11 @@
     "en": "Context menu.",
     "ru": "Контекстное меню."
   },
-  "div_action_show_tooltip" : {
+  "div_action_set_variable": {
+    "en": "Assigns a value to the variable",
+    "ru": "Присваивает переменной значение"
+  },
+  "div_action_show_tooltip": {
     "en": "Shows tooltip.",
     "ru": "Показывает тултип."
   },
@@ -138,10 +142,6 @@
   "div_action_show_tooltip_multiple": {
     "en": "Defines whether tooltip can be shown again after being closed.",
     "ru": "Mожет ли тултип показаться ещё раз после закрытия."
-  },
-  "div_action_set_variable": {
-    "en": "Assigns a value to the variable",
-    "ru": "Присваивает переменной значение"
   },
   "div_action_target": {
     "en": "The tab in which the URL must be opened.",
@@ -267,21 +267,13 @@
     "en": "Name of the variable being animated.",
     "ru": "Имя анимируемой переменной."
   },
-  "div_animator_start_value": {
-    "en": "Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.",
-    "ru": "Значение переменной, которое она примет в начале анимации. Если свойство не указано, то будет использовано текущее значение переменной."
-  },
   "div_animator_end_value": {
     "en": "Value that will be set at the end of animation.",
     "ru": "Значение переменной, которое она примет в конце анимации."
   },
-  "div_color_animator": {
-    "en": "Color animator.",
-    "ru": "Аниматор цвета."
-  },
-  "div_number_animator": {
-    "en": "Number animator.",
-    "ru": "Аниматор числового значения."
+  "div_animator_start_value": {
+    "en": "Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.",
+    "ru": "Значение переменной, которое она примет в начале анимации. Если свойство не указано, то будет использовано текущее значение переменной."
   },
   "div_appearance_set_transition": {
     "en": "A set of animations to be applied simultaneously.",
@@ -343,13 +335,13 @@
     "en": "Vertical alignment of an element inside the parent element.",
     "ru": "Вертикальное выравнивание элемента внутри родительского."
   },
+  "div_base_alpha": {
+    "en": "Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.",
+    "ru": "Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
+  },
   "div_base_animators": {
     "en": "Declaration of animators that can be used to change the value of variables over time.",
     "ru": "Объявление аниматоров, с помощью которых можно изменять значение переменных во времени."
-  },
-  "div_base_alpha": {
-    "en": "Transparency of whole element: `0` — completely transparent, `1` — opaque.",
-    "ru": "Прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
   },
   "div_base_background": {
     "en": "Element background. It can contain multiple layers.",
@@ -550,6 +542,10 @@
   "div_collection_item_builder_prototypes_selector": {
     "en": "A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.",
     "ru": "Условие, которое используется для выбора прототипа для очередного элемента коллекции. В случае, если будет больше 1 истинного условия, будет выбран прототип, который находится раньше. Если не выполнено ни одно условие, элемент из `data` будет пропущен."
+  },
+  "div_color_animator": {
+    "en": "Color animator.",
+    "ru": "Аниматор цвета."
   },
   "div_container": {
     "en": "Container. It contains other elements and is responsible for their location. It is used to arrange elements vertically, horizontally, and with an overlay in a certain order, simulating the third dimension.",
@@ -1338,6 +1334,10 @@
   "div_nine_patch_background_insets": {
     "en": "Margins that break the image into parts using the same rules as the CSS `border-image-slice` property (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice).",
     "ru": "Отступы, разбивающие изображение на части по тем же правилам, как при использовании свойства CSS `border-image-slice` (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
+  },
+  "div_number_animator": {
+    "en": "Number animator.",
+    "ru": "Аниматор числового значения."
   },
   "div_page_size": {
     "en": "Page width (%).",
