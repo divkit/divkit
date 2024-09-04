@@ -1,6 +1,7 @@
 package com.yandex.div.core.actions
 
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -26,6 +27,7 @@ internal class DivActionTypedFocusElementHandler @Inject constructor() : DivActi
         val elementId = action.elementId.evaluate(resolver)
         val requestedView: View = view.findViewWithTag(elementId) ?: return
         requestedView.requestFocus()
+        requestedView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
         when (requestedView) {
             is DivInputView -> requestedView.openKeyboard()
         }
