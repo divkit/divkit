@@ -336,7 +336,8 @@
     "ru": "Объявление аниматоров, с помощью которых можно изменять значение переменных во времени."
   },
   "div_base_alpha": {
-    "ru": "Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
+    "en": "Transparency of whole element: `0` — completely transparent, `1` — opaque.",
+    "ru": "Прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
   },
   "div_base_background": {
     "en": "Element background. It can contain multiple layers.",
