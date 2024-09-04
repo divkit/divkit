@@ -31,10 +31,13 @@
       "$ref": "div-action-set-variable.json"
     },
     {
-      "$ref": "div-action-video.json"
+      "$ref": "div-action-show-tooltip.json"
     },
     {
       "$ref": "div-action-timer.json"
+    },
+    {
+      "$ref": "div-action-video.json"
     }
   ]
 }

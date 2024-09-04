@@ -127,6 +127,18 @@
     "en": "Context menu.",
     "ru": "Контекстное меню."
   },
+  "div_action_show_tooltip" : {
+    "en": "Shows tooltip.",
+    "ru": "Показывает тултип."
+  },
+  "div_action_show_tooltip_id": {
+    "en": "Tooltip identifier.",
+    "ru": "Идентификтор тултипа."
+  },
+  "div_action_show_tooltip_multiple": {
+    "en": "Defines whether tooltip can be shown again after being closed.",
+    "ru": "Mожет ли тултип показаться ещё раз после закрытия."
+  },
   "div_action_set_variable": {
     "en": "Assigns a value to the variable",
     "ru": "Присваивает переменной значение"

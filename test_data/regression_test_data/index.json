@@ -2232,6 +2232,26 @@
       "file": "state/state_variable.json"
     },
     {
+      "title": "Tooltips with typed actions",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Tooltips",
+        "Visibility_actions",
+        "TypedActions"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "typed-tooltips.json"
+    },
+    {
       "title": "Tooltips",
       "tags": [
         "Tooltips",
