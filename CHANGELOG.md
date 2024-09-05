@@ -1,3 +1,23 @@
+## 30.17.0
+
+# Android Client:
+* Bump OkHttp version to 4.12.0
+* Implemented support for field `accessibility` for images inside text. (from version 30.14)
+* Supported `alignment_vertical` for `ranges` and `images` elements.
+* Implemented support for methods for getting values from dict `getBoolean, getDict ...` You can use them in evaluable expressions like that `dict_var.getBoolean(path_to_var)`.
+* AGP version updated to 8.5.2 and Gradle version updated to 8.10.
+* Added new typed action `div-action-show-tooltip` that can be used instead of `div-actino://show_tooltip`.
+* Added new typed action `div-action-timer` that can be used instead of `div-action://timer`.
+* Added new typed action `div-action-video` that can be used instead of `div-action://video`.
+* Fixed black background behind the corners of shimmer extension on apis lower than Android 26.
+* Fix bug when image preview was skipped after bind with same image_url, but different preview.
+* Throw AssertationError on try to load patch without providing `DivDownloader` to `DivConfiguration`.
+
+# iOS Client:
+* Fixed bug with last small page.
+* Fixed bug with pager scrolling.
+
+
 ## 30.16.0
 
 # Android Client:
