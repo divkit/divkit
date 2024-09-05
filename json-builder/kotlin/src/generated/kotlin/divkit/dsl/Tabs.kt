@@ -40,6 +40,7 @@ class Tabs internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
@@ -94,10 +95,14 @@ class Tabs internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that can be used to change the value of variables over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Element background. It can contain multiple layers.
          */
@@ -265,6 +270,7 @@ class Tabs internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
@@ -568,7 +574,8 @@ class Tabs internal constructor(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -614,6 +621,7 @@ fun DivScope.tabs(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -657,6 +665,7 @@ fun DivScope.tabs(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
@@ -701,7 +710,8 @@ fun DivScope.tabs(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -747,6 +757,7 @@ fun DivScope.tabsProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -789,6 +800,7 @@ fun DivScope.tabsProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
@@ -832,7 +844,8 @@ fun DivScope.tabsProps(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -878,6 +891,7 @@ fun TemplateScope.tabsRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -920,6 +934,7 @@ fun TemplateScope.tabsRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     background = background,
     border = border,
     columnSpan = columnSpan,
@@ -963,7 +978,8 @@ fun TemplateScope.tabsRefs(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1009,6 +1025,7 @@ fun Tabs.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -1052,6 +1069,7 @@ fun Tabs.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
@@ -1096,7 +1114,8 @@ fun Tabs.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1142,6 +1161,7 @@ fun Tabs.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -1185,6 +1205,7 @@ fun Tabs.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
@@ -1228,7 +1249,7 @@ fun Tabs.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param hasSeparator A separating line between tabs and contents.
@@ -1262,6 +1283,7 @@ fun Tabs.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
@@ -1306,7 +1328,8 @@ fun Tabs.evaluate(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1352,6 +1375,7 @@ fun Component<Tabs>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -1396,6 +1420,7 @@ fun Component<Tabs>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
@@ -1440,7 +1465,8 @@ fun Component<Tabs>.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1486,6 +1512,7 @@ fun Component<Tabs>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -1530,6 +1557,7 @@ fun Component<Tabs>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         background = background,
         border = border,
         columnSpan = columnSpan,
@@ -1573,7 +1601,7 @@ fun Component<Tabs>.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param hasSeparator A separating line between tabs and contents.
@@ -1608,6 +1636,7 @@ fun Component<Tabs>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         background = null,
         border = null,
         columnSpan = columnSpan,

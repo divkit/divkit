@@ -40,6 +40,7 @@ class Gallery internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnCount = additive.columnCount ?: properties.columnCount,
@@ -94,10 +95,14 @@ class Gallery internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that can be used to change the value of variables over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Element background. It can contain multiple layers.
          */
@@ -264,6 +269,7 @@ class Gallery internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_count", columnCount)
@@ -342,7 +348,8 @@ class Gallery internal constructor(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -388,6 +395,7 @@ fun DivScope.gallery(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnCount: Int? = null,
@@ -431,6 +439,7 @@ fun DivScope.gallery(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnCount = valueOrNull(columnCount),
@@ -475,7 +484,8 @@ fun DivScope.gallery(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -521,6 +531,7 @@ fun DivScope.galleryProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnCount: Int? = null,
@@ -563,6 +574,7 @@ fun DivScope.galleryProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnCount = valueOrNull(columnCount),
@@ -606,7 +618,8 @@ fun DivScope.galleryProps(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -652,6 +665,7 @@ fun TemplateScope.galleryRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnCount: ReferenceProperty<Int>? = null,
@@ -694,6 +708,7 @@ fun TemplateScope.galleryRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     background = background,
     border = border,
     columnCount = columnCount,
@@ -737,7 +752,8 @@ fun TemplateScope.galleryRefs(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -783,6 +799,7 @@ fun Gallery.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnCount: Int? = null,
@@ -826,6 +843,7 @@ fun Gallery.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnCount = valueOrNull(columnCount) ?: properties.columnCount,
@@ -870,7 +888,8 @@ fun Gallery.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -916,6 +935,7 @@ fun Gallery.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnCount: ReferenceProperty<Int>? = null,
@@ -959,6 +979,7 @@ fun Gallery.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnCount = columnCount ?: properties.columnCount,
@@ -1002,7 +1023,7 @@ fun Gallery.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param columnCount Number of columns for block layout.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
@@ -1042,6 +1063,7 @@ fun Gallery.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         background = properties.background,
         border = properties.border,
         columnCount = columnCount ?: properties.columnCount,
@@ -1086,7 +1108,8 @@ fun Gallery.evaluate(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -1132,6 +1155,7 @@ fun Component<Gallery>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnCount: Int? = null,
@@ -1176,6 +1200,7 @@ fun Component<Gallery>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnCount = valueOrNull(columnCount),
@@ -1220,7 +1245,8 @@ fun Component<Gallery>.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -1266,6 +1292,7 @@ fun Component<Gallery>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnCount: ReferenceProperty<Int>? = null,
@@ -1310,6 +1337,7 @@ fun Component<Gallery>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         background = background,
         border = border,
         columnCount = columnCount,
@@ -1353,7 +1381,7 @@ fun Component<Gallery>.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param columnCount Number of columns for block layout.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
@@ -1394,6 +1422,7 @@ fun Component<Gallery>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         background = null,
         border = null,
         columnCount = columnCount,

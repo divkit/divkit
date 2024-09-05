@@ -44,6 +44,7 @@ class Text internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             autoEllipsize = additive.autoEllipsize ?: properties.autoEllipsize,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
@@ -130,10 +131,14 @@ class Text internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that can be used to change the value of variables over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Automatic text cropping to fit the container size.
          */
@@ -368,6 +373,7 @@ class Text internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("auto_ellipsize", autoEllipsize)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
@@ -520,7 +526,7 @@ class Text internal constructor(
             val accessibility: Property<Accessibility>?,
             /**
              * Vertical text image alignment within a string.
-             * Default value: `baseline`.
+             * Default value: `center`.
              */
             val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
@@ -668,7 +674,6 @@ class Text internal constructor(
             val actions: Property<List<Action>>?,
             /**
              * Vertical text range alignment within a string.
-             * Default value: `baseline`.
              */
             val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
@@ -778,7 +783,8 @@ class Text internal constructor(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -842,6 +848,7 @@ fun DivScope.text(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -904,6 +911,7 @@ fun DivScope.text(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         autoEllipsize = valueOrNull(autoEllipsize),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -967,7 +975,8 @@ fun DivScope.text(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1031,6 +1040,7 @@ fun DivScope.textProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1092,6 +1102,7 @@ fun DivScope.textProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     autoEllipsize = valueOrNull(autoEllipsize),
     background = valueOrNull(background),
     border = valueOrNull(border),
@@ -1154,7 +1165,8 @@ fun DivScope.textProps(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1218,6 +1230,7 @@ fun TemplateScope.textRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -1279,6 +1292,7 @@ fun TemplateScope.textRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     autoEllipsize = autoEllipsize,
     background = background,
     border = border,
@@ -1341,7 +1355,8 @@ fun TemplateScope.textRefs(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1405,6 +1420,7 @@ fun Text.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1467,6 +1483,7 @@ fun Text.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         autoEllipsize = valueOrNull(autoEllipsize) ?: properties.autoEllipsize,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
@@ -1530,7 +1547,8 @@ fun Text.override(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1594,6 +1612,7 @@ fun Text.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -1656,6 +1675,7 @@ fun Text.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         autoEllipsize = autoEllipsize ?: properties.autoEllipsize,
         background = background ?: properties.background,
         border = border ?: properties.border,
@@ -1715,7 +1735,7 @@ fun Text.defer(
  * @param text Text.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
@@ -1779,6 +1799,7 @@ fun Text.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         autoEllipsize = autoEllipsize ?: properties.autoEllipsize,
         background = properties.background,
         border = properties.border,
@@ -1842,7 +1863,8 @@ fun Text.evaluate(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1906,6 +1928,7 @@ fun Component<Text>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autoEllipsize: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1969,6 +1992,7 @@ fun Component<Text>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         autoEllipsize = valueOrNull(autoEllipsize),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -2032,7 +2056,8 @@ fun Component<Text>.override(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -2096,6 +2121,7 @@ fun Component<Text>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autoEllipsize: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -2159,6 +2185,7 @@ fun Component<Text>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         autoEllipsize = autoEllipsize,
         background = background,
         border = border,
@@ -2218,7 +2245,7 @@ fun Component<Text>.defer(
  * @param text Text.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
@@ -2283,6 +2310,7 @@ fun Component<Text>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         autoEllipsize = autoEllipsize,
         background = null,
         border = null,
