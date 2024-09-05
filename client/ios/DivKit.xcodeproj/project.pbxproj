@@ -272,6 +272,8 @@
 		8CF8BBEA2B32682700569777 /* DivBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF8BBE92B32682700569777 /* DivBuilders.swift */; };
 		8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD4C9D2B2C5B780092814C /* Theme.swift */; };
 		98133A0E2C5BD45800385C07 /* ViewSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98133A0D2C5BD45800385C07 /* ViewSizeTests.swift */; };
+		E91B558D2C89D78400DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */; };
+		E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */; };
 		E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */; };
 		E945FC46293E1CA80066C3EA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC45293E1CA80066C3EA /* Utils.swift */; };
 		E94B516328D0AC0300AFACEA /* interactive_snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */; };
@@ -596,6 +598,7 @@
 				8C01499A2873297D00BA5402 /* DivKit in Frameworks */,
 				76AD26822935F1B30088A360 /* RiveRuntime in Frameworks */,
 				8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */,
+				E91B558D2C89D78400DDFEBD /* DivKitMarkdownExtension in Frameworks */,
 				0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -622,6 +625,7 @@
 			files = (
 				43EA1B4F2B9F83D400350EC5 /* Testing in Frameworks */,
 				8C0E7371288AE219009BEB3C /* DivKit in Frameworks */,
+				E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */,
 				52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1367,6 +1371,7 @@
 				8CA382DE287C5CF000C99F4F /* DivKitExtensions */,
 				0A9A9A9F28CB1A9200D1D810 /* Lottie */,
 				76AD26812935F1B30088A360 /* RiveRuntime */,
+				E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */,
 			);
 			productName = DivKitPlayground;
 			productReference = 8C4409ED2864C4D200EF4175 /* DivKit Playground.app */;
@@ -1435,6 +1440,7 @@
 				8C0E7370288AE219009BEB3C /* DivKit */,
 				52184FD7296C68E400ECC0E9 /* DivKitExtensions */,
 				43EA1B4E2B9F83D400350EC5 /* Testing */,
+				E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */,
 			);
 			productName = DivKitSnapshotTests;
 			productReference = 8C9284C5288ACCBA00BEA1FA /* DivKitSnapshotTests.xctest */;
@@ -2753,6 +2759,14 @@
 		8CF3296F2875D64B003F799A /* LayoutKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LayoutKit;
+		};
+		E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DivKitMarkdownExtension;
+		};
+		E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DivKitMarkdownExtension;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

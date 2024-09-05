@@ -4,6 +4,7 @@ import XCTest
 
 @testable import DivKit
 import DivKitExtensions
+import DivKitMarkdownExtension
 @testable import LayoutKit
 import VGSL
 
