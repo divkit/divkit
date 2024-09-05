@@ -682,7 +682,7 @@ extension TextInputBlockView {
 
 extension UIView {
   fileprivate func allSuperviewsAreVisible() -> Bool {
-    var inspectedView = self as UIView?
+    var inspectedView: UIView? = self
     while let currentView = inspectedView {
       guard !currentView.isHidden, currentView.alpha > 0 else { return false }
       inspectedView = currentView.superview
