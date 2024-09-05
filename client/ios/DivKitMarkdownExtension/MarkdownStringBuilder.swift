@@ -12,8 +12,9 @@ struct MarkdownStringBuilder: MarkupVisitor {
     self.path = path
   }
 
-  mutating func attributedString(from document: Document) -> NSAttributedString {
-    visit(document)
+  mutating func attributedString(from string: String) -> NSAttributedString {
+    let document = Document(parsing: string)
+    return visit(document)
   }
 
   mutating func defaultVisit(_ markup: Markup) -> NSAttributedString {
