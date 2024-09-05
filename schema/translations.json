@@ -127,6 +127,18 @@
     "en": "Context menu.",
     "ru": "Контекстное меню."
   },
+  "div_action_set_state" : {
+    "en": "Switches the appearance of content in `div-state`.",
+    "ru": "Устанавливает новый внешний вид контента в `div-state`."
+  },
+  "div_action_set_state_state_id": {
+    "en": "The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>",
+    "ru": "Путь состояния внутри `state`, которое нужно активировать. Задается в формате `div_data_state_id/id/state_id`. Mожет быть иерархическим: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Состоит из:<li>`div_data_state_id` - числовое значение `state_id` объекта `state` в data;</li><li>`id` - значение `id` объекта `state`;</li><li>`state_id` - значение `state_id` объекта state в `state`.</li>"
+  },
+  "div_action_set_state_temporary": {
+    "en": "Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>",
+    "ru": "Указывает на изменение состояния:<li>`true` — изменение временное и при пересоздании элемента состояние изменится на исходное (значение по умолчанию);</li><li>`false` — изменение состояния является постоянным.</li>"
+  },
   "div_action_set_variable": {
     "en": "Assigns a value to the variable",
     "ru": "Присваивает переменной значение"

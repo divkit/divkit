@@ -28,6 +28,9 @@
       "$ref": "div-action-focus-element.json"
     },
     {
+      "$ref": "div-action-set-state.json"
+    },
+    {
       "$ref": "div-action-set-variable.json"
     },
     {
