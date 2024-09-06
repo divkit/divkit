@@ -933,6 +933,20 @@
       "file": "animations/mute_notification.json"
     },
     {
+      "title": "Div with corner radius and shadow set is clipped during transition animation",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on yellow rectangle",
+        "Repeat if necessary"
+      ],
+      "expected_results": [
+        "Blue circle still a circle while transition is in progress"
+      ],
+      "file": "animations/transient_div_with_clip_and_shadow.json"
+    },
+    {
       "title": "State transition any change",
       "file": "animations/transition/state_transition_any_change.json"
     },

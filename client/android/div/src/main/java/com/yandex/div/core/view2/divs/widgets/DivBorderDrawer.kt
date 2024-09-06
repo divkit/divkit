@@ -208,7 +208,7 @@ internal class DivBorderDrawer(
 
     private fun shouldUseCanvasClipping(): Boolean {
         return needClipping && (hasCustomShadow ||
-            (!hasShadow && (hasDifferentCornerRadii || hasBorder || view.isInTransientHierarchy())))
+            (!hasShadow && (hasDifferentCornerRadii || hasBorder) || view.isInTransientHierarchy()))
     }
 
     private fun clampCornerRadius(cornerRadius: Float, width: Float, height: Float) : Float {

@@ -11,6 +11,7 @@
 * Added new typed action `div-action-video` that can be used instead of `div-action://video`.
 * Fixed black background behind the corners of shimmer extension on apis lower than Android 26.
 * Fix bug when image preview was skipped after bind with same image_url, but different preview.
+* Fixed corner clipping while transitions is in progress.
 * Throw AssertationError on try to load patch without providing `DivDownloader` to `DivConfiguration`.
 
 # iOS Client:
