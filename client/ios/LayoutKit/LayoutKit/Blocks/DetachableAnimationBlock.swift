@@ -16,7 +16,7 @@ public struct ChangeBoundsTransition: Equatable {
   }
 }
 
-public final class DetachableAnimationBlock: WrapperBlock, LayoutCachingDefaultImpl {
+public final class DetachableAnimationBlock: WrapperBlock, LayoutCachingDefaultImpl, Identifiable {
   public let child: Block
   public let id: String
   public let animationIn: [TransitioningAnimation]?
@@ -74,7 +74,9 @@ extension DetachableAnimationBlock: CustomDebugStringConvertible {
 
 extension DetachableAnimationBlock: ElementStateUpdating {
   public func updated(withStates _: BlocksState) throws -> Self {
-    Self(
+    guard animationIn != nil else { return self }
+
+    return Self(
       child: child,
       id: id,
       animationIn: nil,

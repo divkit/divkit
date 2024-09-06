@@ -34,12 +34,20 @@ extension DetachableAnimationBlock {
 final class DetachableAnimationBlockView: BlockView {
   private var childView: BlockView? {
     didSet {
-      if let childView {
+      guard childView !== oldValue else { return }
+
+      switch (oldValue, childView) {
+      case (.none, .none):
+        break
+      case let (.some(oldValue), .some(childView)):
         addSubview(childView)
-        animatedView = nil
-      } else {
         animatedView = oldValue
-        oldValue?.removeFromSuperview()
+        oldValue.removeFromSuperview()
+      case let (.some(oldValue), .none):
+        animatedView = oldValue
+        oldValue.removeFromSuperview()
+      case let (.none, .some(childView)):
+        addSubview(childView)
       }
     }
   }
@@ -53,15 +61,6 @@ final class DetachableAnimationBlockView: BlockView {
   private var child: Block?
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
-
-  init() {
-    super.init(frame: .zero)
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
 
   func configure(
     child: Block,
@@ -103,13 +102,16 @@ final class DetachableAnimationBlockView: BlockView {
   public func changeBoundsWithAnimation(
     in container: UIView,
     startFrame: CGRect
-  ) {
+  ) async {
     guard let childView,
           let animationChange else {
       return
     }
+
     let finishFrame = convertFrame(to: container)
+
     self.childView = nil
+
     let blockSize = CGSize(
       width: startFrame.width,
       height: child?.intrinsicContentHeight(forWidth: startFrame.width) ?? .zero
@@ -121,30 +123,35 @@ final class DetachableAnimationBlockView: BlockView {
     animationContainer.frame = startFrame
     animationContainer.clipsToBounds = true
     animationContainer.addSubview(childView)
+
     container.addSubview(animationContainer)
     container.layoutIfNeeded()
 
-    UIView.animate(
-      withDuration: animationChange.duration.value,
-      delay: animationChange.delay.value,
-      options: [animationChange.timingFunction.cast()],
-      animations: {
-        animationContainer.frame = finishFrame
-        childView.frame.size = CGSize(
-          width: finishFrame.width,
-          height: self.child?.intrinsicContentHeight(forWidth: finishFrame.width) ?? .zero
-        )
-        childView.layoutIfNeeded()
-        container.layoutIfNeeded()
-      },
-      completion: { [weak self] _ in
-        guard animationContainer.superview == container else {
-          return
+    await withCheckedContinuation { continuation in
+
+      UIView.animate(
+        withDuration: animationChange.duration.value,
+        delay: animationChange.delay.value,
+        options: [animationChange.timingFunction.cast()],
+        animations: {
+          animationContainer.frame = finishFrame
+          childView.frame.size = CGSize(
+            width: finishFrame.width,
+            height: self.child?.intrinsicContentHeight(forWidth: finishFrame.width) ?? .zero
+          )
+          childView.layoutIfNeeded()
+          container.layoutIfNeeded()
+        },
+        completion: { [weak self] _ in
+          if animationContainer.superview == container {
+            animationContainer.removeFromSuperview()
+            self?.childView = childView
+          }
+
+          continuation.resume()
         }
-        animationContainer.removeFromSuperview()
-        self?.childView = childView
-      }
-    )
+      )
+    }
   }
 
   public func removeWithAnimation(in container: UIView) {
@@ -160,7 +167,7 @@ final class DetachableAnimationBlockView: BlockView {
     })
   }
 
-  public func addWithAnimation(in container: UIView) {
+  public func addWithAnimation(in container: UIView) async {
     guard let childView,
           let animationIn else {
       return
@@ -172,29 +179,35 @@ final class DetachableAnimationBlockView: BlockView {
     self.childView = nil
 
     let minDelay = animationIn.sortedChronologically().first?.delay.value ?? 0
-    let item = DispatchWorkItem { [weak self] in
-      container.addSubview(childView)
-      childView.setInitialParamsAndAnimate(
-        animations: animationIn.withDelay(-minDelay),
-        completion: { [weak self] in
-          self?.queuedAnimation = nil
-          guard childView.superview == container else {
-            return
-          }
-          childView.frame = originalFrame
-          self?.childView = childView
-        }
-      )
-    }
 
-    if minDelay > 0 {
-      queuedAnimation = item
-      DispatchQueue.main.asyncAfter(
-        deadline: .now() + minDelay,
-        execute: item
-      )
-    } else {
-      item.perform()
+    await withCheckedContinuation { continuation in
+
+      let item = DispatchWorkItem { [weak self] in
+        container.addSubview(childView)
+        childView.setInitialParamsAndAnimate(
+          animations: animationIn.withDelay(-minDelay),
+          completion: { [weak self] in
+
+            self?.queuedAnimation = nil
+            if childView.superview == container {
+              childView.frame = originalFrame
+              self?.childView = childView
+            }
+
+            continuation.resume()
+          }
+        )
+      }
+
+      if minDelay > 0 {
+        queuedAnimation = item
+        DispatchQueue.main.asyncAfter(
+          deadline: .now() + minDelay,
+          execute: item
+        )
+      } else {
+        item.perform()
+      }
     }
   }
 

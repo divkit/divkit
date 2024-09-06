@@ -111,15 +111,6 @@ private final class StateBlockView: BlockView {
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
-  init() {
-    super.init(frame: .zero)
-  }
-
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   func configure(
     child: Block,
     ids: Set<BlockViewID>,
@@ -158,19 +149,29 @@ private final class StateBlockView: BlockView {
     )
 
     let viewsToAdd = subviewStorage.getViewsToAdd()
+
     if viewsToAdd.isEmpty, viewsToTransition.isEmpty {
       setNeedsLayout()
     } else {
       forceLayout()
 
-      for view in viewsToAdd {
-        view.addWithAnimation(in: self)
+      Task {
+        await changeBoundsWithAnimation(viewsToTransition)
+        await addWithAnimations(viewsToAdd)
       }
+    }
+  }
 
-      for (id, frame) in viewsToTransition {
-        if let view = subviewStorage.getView(id) {
-          view.changeBoundsWithAnimation(in: self, startFrame: frame)
-        }
+  private func addWithAnimations(_ views: [DetachableAnimationBlockView]) async {
+    for view in views {
+      await view.addWithAnimation(in: self)
+    }
+  }
+
+  private func changeBoundsWithAnimation(_ views: [SubviewStorage.FrameWithID]) async {
+    for (id, frame) in views {
+      if let view = subviewStorage.getView(id) {
+        await view.changeBoundsWithAnimation(in: self, startFrame: frame)
       }
     }
   }
