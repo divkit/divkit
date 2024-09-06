@@ -7,6 +7,7 @@ import com.yandex.div.core.actions.DivActionTypedDictSetValueHandler
 import com.yandex.div.core.actions.DivActionTypedSetVariableHandler
 import com.yandex.div.core.actions.DivActionTypedHandler
 import com.yandex.div.core.actions.DivActionTypedFocusElementHandler
+import com.yandex.div.core.actions.DivActionTypedHideTooltipHandler
 import com.yandex.div.core.actions.DivActionTypedSetStateHandler
 import com.yandex.div.core.actions.DivActionTypedTimerHandler
 import com.yandex.div.core.actions.DivActionTypedVideoHandler
@@ -46,6 +47,12 @@ internal interface DivActionTypedModule {
     @IntoSet
     fun provideFocusElementActionHandler(
         impl: DivActionTypedFocusElementHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
+    fun provideHideTooltipActionHandler(
+        impl: DivActionTypedHideTooltipHandler
     ): DivActionTypedHandler
 
     @Binds

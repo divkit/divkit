@@ -311,7 +311,10 @@
                         },
                         "action": {
                           "log_id": "hide_tooltip_typed",
-                          "url": "div-action://hide_tooltip?id=tooltip_typed"
+                          "typed": {
+                            "type": "hide_tooltip",
+                            "id": "tooltip_typed"
+                          }
                         },
                         "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
                         "tint_color": "#000000",
@@ -385,14 +388,24 @@
                     "visibility_actions": [
                       {
                         "log_id": "hide_id_typed",
-                        "url": "div-action://hide_tooltip?id=tooltip_with_visibility_typed",
+                        "typed": {
+                          "type": "hide_tooltip",
+                          "id": "tooltip_with_visibility_typed"
+                        },
                         "log_limit": 0,
                         "visibility_duration": 3000,
                         "visibility_percentage": 100
                       },
                       {
                         "log_id": "set_variable_id_typed",
-                        "url": "div-action://set_variable?name=visibility_called&value=true",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "visibility_called",
+                          "value": {
+                            "type": "string",
+                            "value": "true"
+                          }
+                        },
                         "log_limit": 0,
                         "visibility_duration": 0,
                         "visibility_percentage": 100
@@ -404,7 +417,14 @@
                         "log_limit": 0,
                         "disappear_duration": 0,
                         "visibility_percentage": 20,
-                        "url": "div-action://set_variable?name=disappear_called&value=true"
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "disappear_called",
+                          "value": {
+                            "type": "string",
+                            "value": "true"
+                          }
+                        }
                       }
                     ]
                   }

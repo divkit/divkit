@@ -9,7 +9,7 @@
       ]
     },
     "id": {
-      "$description": "translations.json#/div_action_show_tooltip_id",
+      "$description": "translations.json#/div_action_tooltip_id",
       "type": "string"
     },
     "multiple": {

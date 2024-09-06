@@ -127,6 +127,14 @@
     "en": "Context menu.",
     "ru": "Контекстное меню."
   },
+  "div_action_hide_tooltip" : {
+    "en": "Hides tooltip.",
+    "ru": "Скрывает тултип."
+  },
+  "div_action_tooltip_id": {
+    "en": "Tooltip identifier.",
+    "ru": "Идентификатор тултипа."
+  },
   "div_action_set_state" : {
     "en": "Switches the appearance of content in `div-state`.",
     "ru": "Устанавливает новый внешний вид контента в `div-state`."
@@ -146,10 +154,6 @@
   "div_action_show_tooltip": {
     "en": "Shows tooltip.",
     "ru": "Показывает тултип."
-  },
-  "div_action_show_tooltip_id": {
-    "en": "Tooltip identifier.",
-    "ru": "Идентификтор тултипа."
   },
   "div_action_show_tooltip_multiple": {
     "en": "Defines whether tooltip can be shown again after being closed.",
