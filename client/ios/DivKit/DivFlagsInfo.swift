@@ -9,11 +9,19 @@ public struct DivFlagsInfo {
   /// Enable experimental image loading optimization
   public let imageLoadingOptimizationEnabled: Bool
 
+  /// Experimental tint/blur effect renderer
+  public let imageBlurPreferMetal: Bool
+  public let imageTintPreferMetal: Bool
+
   /// Creates an instance of `DivFlagsInfo`.
   public init(
-    imageLoadingOptimizationEnabled: Bool = true
+    imageLoadingOptimizationEnabled: Bool = true,
+    imageBlurPreferMetal: Bool = true,
+    imageTintPreferMetal: Bool = true
   ) {
     self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
+    self.imageBlurPreferMetal = imageBlurPreferMetal
+    self.imageTintPreferMetal = imageTintPreferMetal
   }
 
   /// The default instance of `DivFlagsInfo`.

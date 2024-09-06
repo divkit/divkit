@@ -13,6 +13,8 @@ public final class ImageBlock: ImageBaseBlock {
   public let effects: [ImageEffect]
   public let accessibilityElement: AccessibilityElement?
   public let appearanceAnimation: TransitioningAnimation?
+  public let blurUsingMetal: Bool?
+  public let tintUsingMetal: Bool?
 
   public init(
     imageHolder: ImageHolder,
@@ -23,7 +25,9 @@ public final class ImageBlock: ImageBaseBlock {
     tintMode: TintMode,
     effects: [ImageEffect] = [],
     accessibilityElement: AccessibilityElement? = nil,
-    appearanceAnimation: TransitioningAnimation? = nil
+    appearanceAnimation: TransitioningAnimation? = nil,
+    blurUsingMetal: Bool? = nil,
+    tintUsingMetal: Bool? = nil
   ) {
     self.imageHolder = imageHolder
     self.widthTrait = widthTrait
@@ -34,6 +38,8 @@ public final class ImageBlock: ImageBaseBlock {
     self.effects = effects
     self.accessibilityElement = accessibilityElement
     self.appearanceAnimation = appearanceAnimation
+    self.blurUsingMetal = blurUsingMetal
+    self.tintUsingMetal = tintUsingMetal
   }
 
   public convenience init(
@@ -45,7 +51,9 @@ public final class ImageBlock: ImageBaseBlock {
     tintMode: TintMode = .sourceIn,
     effects: [ImageEffect] = [],
     accessibilityElement: AccessibilityElement? = nil,
-    appearanceAnimation: TransitioningAnimation? = nil
+    appearanceAnimation: TransitioningAnimation? = nil,
+    blurUsingMetal: Bool? = nil,
+    tintUsingMetal: Bool? = nil
   ) {
     self.init(
       imageHolder: imageHolder,
@@ -56,7 +64,9 @@ public final class ImageBlock: ImageBaseBlock {
       tintMode: tintMode,
       effects: effects,
       accessibilityElement: accessibilityElement,
-      appearanceAnimation: appearanceAnimation
+      appearanceAnimation: appearanceAnimation,
+      blurUsingMetal: blurUsingMetal,
+      tintUsingMetal: tintUsingMetal
     )
   }
 
@@ -68,7 +78,9 @@ public final class ImageBlock: ImageBaseBlock {
     tintMode: TintMode = .sourceIn,
     effects: [ImageEffect] = [],
     accessibilityElement: AccessibilityElement? = nil,
-    appearanceAnimation: TransitioningAnimation? = nil
+    appearanceAnimation: TransitioningAnimation? = nil,
+    blurUsingMetal: Bool? = nil,
+    tintUsingMetal: Bool? = nil
   ) {
     self.init(
       imageHolder: imageHolder,
@@ -79,7 +91,9 @@ public final class ImageBlock: ImageBaseBlock {
       tintMode: tintMode,
       effects: effects,
       accessibilityElement: accessibilityElement,
-      appearanceAnimation: appearanceAnimation
+      appearanceAnimation: appearanceAnimation,
+      blurUsingMetal: blurUsingMetal,
+      tintUsingMetal: tintUsingMetal
     )
   }
 
