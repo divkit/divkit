@@ -1,0 +1,64 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`stringifyWithLoc > loc 1`] = `
+[
+  [
+    {
+      "a": 1,
+    },
+    {
+      "end": {
+        "column": 7,
+        "line": 0,
+        "offset": 7,
+      },
+      "start": {
+        "column": 0,
+        "line": 0,
+        "offset": 0,
+      },
+    },
+  ],
+]
+`;
+
+exports[`stringifyWithLoc > loc nested 1`] = `
+[
+  [
+    {
+      "b": 2,
+    },
+    {
+      "end": {
+        "column": 12,
+        "line": 0,
+        "offset": 12,
+      },
+      "start": {
+        "column": 5,
+        "line": 0,
+        "offset": 5,
+      },
+    },
+  ],
+  [
+    {
+      "a": {
+        "b": 2,
+      },
+    },
+    {
+      "end": {
+        "column": 13,
+        "line": 0,
+        "offset": 13,
+      },
+      "start": {
+        "column": 0,
+        "line": 0,
+        "offset": 0,
+      },
+    },
+  ],
+]
+`;
