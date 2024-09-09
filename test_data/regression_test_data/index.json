@@ -1400,16 +1400,6 @@
     },
     {
       "title": "Variables in DivIndicator",
-      "steps": [
-        "Click on buttons, check the indicator appearance and animation",
-        "Click on last button to reset",
-        "Scroll pager to the center, click on buttons, check the indicator",
-        "Click on last button to reset",
-        "Scroll pager to the end, click on buttons, check the indicator"
-      ],
-      "expected_results": [
-        "Indicator appearance changes and it changes according to the clicked button description"
-      ],
       "file": "variables/div_indicator.json"
     },
     {

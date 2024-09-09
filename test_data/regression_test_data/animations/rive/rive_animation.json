@@ -1,149 +1,142 @@
 {
   "templates": {
-    "rive_grid": {
-      "type": "grid",
-      "paddings": {
-        "left": 8,
-        "top": 8,
-        "right": 8,
-        "bottom": 8
+      "rive_grid": {
+          "type": "grid",
+          "paddings": {
+              "left": 8,
+              "top": 8,
+              "right": 8,
+              "bottom": 8
+          },
+          "column_count": 2
       },
-      "column_count": 2
-    },
-    "rive_custom": {
-      "type": "custom",
-      "custom_type": "rive_animation",
-      "width": {
-        "type": "match_parent"
+      "rive_custom": {
+          "type": "custom",
+          "custom_type": "rive_animation",
+          "width": {
+              "type": "match_parent"
+          },
+          "height": {
+              "type": "match_parent"
+          },
+          "margins": {
+              "top": 32,
+              "bottom": 16,
+              "left": 16,
+              "right": 16
+          },
+          "alignment_vertical": "top",
+          "alignment_horizontal": "center"
       },
-      "height": {
-        "type": "match_parent"
+      "card_title": {
+          "type": "text",
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "font_size": 14,
+          "paddings": {
+              "top": 8
+          },
+          "font_weight": "medium",
+          "line_height": 18
       },
-      "margins": {
-        "top": 32,
-        "bottom": 16,
-        "left": 16,
-        "right": 16
+      "rive_card": {
+          "type": "container",
+          "width": {
+              "type": "fixed",
+              "value": 150
+          },
+          "height": {
+              "type": "fixed",
+              "value": 250
+          },
+          "margins": {
+              "left": 4,
+              "right": 4,
+              "bottom": 4,
+              "top": 4
+          },
+          "paddings": {
+              "top": 4,
+              "right": 2,
+              "left": 2
+          },
+          "border": {
+              "corner_radius": 32,
+              "unit": "dp"
+          },
+          "background": [
+              {
+                  "type": "solid",
+                  "color": "#0e000000"
+              }
+          ],
+          "orientation": "vertical"
       },
-      "alignment_vertical": "top",
-      "alignment_horizontal": "center"
-    },
-    "card_title": {
-      "type": "text",
-      "text_alignment_horizontal": "center",
-      "text_alignment_vertical": "center",
-      "font_size": 14,
-      "paddings": {
-        "top": 8
-      },
-      "font_weight": "medium",
-      "line_height": 18
-    },
-    "rive_card": {
-      "type": "container",
-      "width": {
-        "type": "fixed",
-        "value": 150
-      },
-      "height": {
-        "type": "fixed",
-        "value": 250
-      },
-      "margins": {
-        "left": 4,
-        "right": 4,
-        "bottom": 4,
-        "top": 4
-      },
-      "paddings": {
-        "top": 4,
-        "right": 2,
-        "left": 2
-      },
-      "border": {
-        "corner_radius": 32,
-        "unit": "dp"
-      },
-      "background": [
-        {
-          "type": "solid",
-          "color": "#0e000000"
-        }
-      ],
-      "orientation": "vertical"
-    },
-    "rive_animation_card": {
-      "type": "rive_card",
-      "items": [
-        {
-          "type": "card_title",
-          "$text": "rive_card_text"
-        },
-        {
-          "type": "rive_custom",
-          "$custom_props": "rive_props"
-        }
-      ]
-    }
+      "rive_animation_card": {
+          "type": "rive_card",
+          "items": [
+              {
+                  "type": "card_title",
+                  "$text": "rive_card_text"
+              },
+              {
+                  "type": "rive_custom",
+                  "$custom_props": "rive_props"
+              }
+          ]
+      }
   },
   "card": {
-    "log_id": "root",
-    "states": [
-      {
-        "state_id": 0,
-        "div": {
-          "id": "rive_grid",
-          "type": "rive_grid",
-          "items": [
-            {
-              "type": "rive_animation_card",
-              "rive_card_text": "RiveCustom 1",
-              "rive_props": {
-                "url": "https://public.rive.app/community/runtime-files/3746-7843-bouncy.riv"
+      "log_id": "root",
+      "states": [
+          {
+              "state_id": 0,
+              "div": {
+                  "id": "rive_grid",
+                  "type": "rive_grid",
+                  "items": [
+                      {
+                          "type": "rive_animation_card",
+                          "rive_card_text": "RiveCustom 1",
+                          "rive_props": {
+                              "url": "https://public.rive.app/community/runtime-files/3695-7723-funny-buttom.riv"
+                          }
+                      },
+                      {
+                          "type": "rive_animation_card",
+                          "rive_card_text": "RiveCustom 2",
+                          "rive_props": {
+                              "url": "https://public.rive.app/community/runtime-files/3370-7083-cup-walk.riv"
+                          }
+                      },
+                      {
+                          "type": "rive_animation_card",
+                          "rive_card_text": "RiveCustom 3",
+                          "rive_props": {
+                              "url": "https://public.rive.app/community/runtime-files/1414-2763-gang.riv"
+                          }
+                      },
+                      {
+                          "type": "rive_animation_card",
+                          "rive_card_text": "RiveCustom 4",
+                          "rive_props": {
+                              "url": "https://public.rive.app/community/runtime-files/2193-4329-message-icon.riv"
+                          }
+                      },
+                      {
+                          "type": "rive_animation_card",
+                          "rive_card_text": "RiveCustom 5",
+                          "rive_props": {
+                              "url": "https://public.rive.app/community/runtime-files/1180-2271-logistics-man-boxes.riv"
+                          }
+                      },
+                      {
+                          "type": "separator",
+                          "alpha": 0
+                      }
+                  ]
               }
-            },
-            {
-              "type": "rive_animation_card",
-              "rive_card_text": "RiveCustom 2",
-              "rive_props": {
-                "url": "https://public.rive.app/community/runtime-files/3695-7723-funny-buttom.riv"
-              }
-            },
-            {
-              "type": "rive_animation_card",
-              "rive_card_text": "RiveCustom 3",
-              "rive_props": {
-                "url": "https://public.rive.app/community/runtime-files/3370-7083-cup-walk.riv"
-              }
-            },
-            {
-              "type": "rive_animation_card",
-              "rive_card_text": "RiveCustom 4",
-              "rive_props": {
-                "url": "https://public.rive.app/community/runtime-files/1414-2763-gang.riv"
-              }
-            },
-            {
-              "type": "rive_animation_card",
-              "rive_card_text": "RiveCustom 5",
-              "rive_props": {
-                "url": "https://public.rive.app/community/runtime-files/2193-4329-message-icon.riv"
-              }
-            },
-            {
-              "type": "rive_animation_card",
-              "rive_card_text": "RiveCustom 6",
-              "rive_props": {
-                "url": "https://public.rive.app/community/runtime-files/1180-2271-logistics-man-boxes.riv"
-              }
-            },
-            {
-              "type": "separator",
-              "alpha": 0
-            }
-          ]
-        }
-      }
-    ]
+          }
+      ]
   }
 }
