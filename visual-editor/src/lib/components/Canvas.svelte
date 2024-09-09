@@ -16,6 +16,7 @@
     import { APP_CTX, type AppContext } from '../ctx/appContext';
     import Text from './controls/Text.svelte';
     import ErrorsDialog from './ErrorsDialog.svelte';
+    import { encodeBackground } from '../utils/encodeBackground';
 
     const { l10n, l10nString, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { cardLocales, state, setShowErrors, showErrors } = getContext<AppContext>(APP_CTX);
@@ -174,7 +175,7 @@
             >
                 <div
                     class="canvas__button-icon canvas__button-icon_inversed"
-                    style:background-image="url({$previewThemeStore === 'light' ? lightThemeIcon : darkThemeIcon})"
+                    style:background-image="url({encodeBackground($previewThemeStore === 'light' ? lightThemeIcon : darkThemeIcon)})"
                 ></div>
             </CanvasButton>
         {/if}
@@ -196,7 +197,7 @@
             <div
                 class="canvas__button-icon canvas__button-icon_inversed"
                 class:canvas__button-icon_disabled={!$currentUndoStore}
-                style:background-image="url({undoIcon})"
+                style:background-image="url({encodeBackground(undoIcon)})"
             ></div>
         </CanvasButton>
 
@@ -208,7 +209,7 @@
             <div
                 class="canvas__button-icon canvas__button-icon_inversed"
                 class:canvas__button-icon_disabled={!$currentRedoStore}
-                style:background-image="url({redoIcon})"
+                style:background-image="url({encodeBackground(redoIcon)})"
             ></div>
         </CanvasButton>
 
@@ -222,13 +223,13 @@
                 <div
                     class="canvas__button-icon"
                     class:canvas__button-icon_disabled={!$rendererErrorsOnly.length}
-                    style:background-image="url({$themeStore === 'dark' ? errorsIcon : errorsLightIcon})"
+                    style:background-image="url({encodeBackground($themeStore === 'dark' ? errorsIcon : errorsLightIcon)})"
                 ></div>
                 <div class="canvas__button-counter">{$rendererWarningsOnly.length}</div>
                 <div
                     class="canvas__button-icon"
                     class:canvas__button-icon_disabled={!$rendererWarningsOnly.length}
-                    style:background-image="url({warningsIcon})"
+                    style:background-image="url({encodeBackground(warningsIcon)})"
                 ></div>
             </div>
         </CanvasButton>

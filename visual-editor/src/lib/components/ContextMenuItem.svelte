@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
     import { APP_CTX, type AppContext, type MenuItem } from '../ctx/appContext';
+    import { encodeBackground } from '../utils/encodeBackground';
 
     export let item: MenuItem;
     export let selected = false;
@@ -38,7 +39,7 @@
     {#if item.icon}
         <span
             class="menu-item__icon"
-            style:background-image="url({item.icon})"
+            style:background-image="url({encodeBackground(item.icon)})"
         ></span>
     {/if}
 

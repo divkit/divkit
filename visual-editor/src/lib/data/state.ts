@@ -755,7 +755,7 @@ export class State {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     componentIcon(type: string, json?: any): string {
-        if (this.userTemplates.has(type)) {
+        if (this.userTemplates.has(type) && !(type in namedTemplates)) {
             return templateIcon;
         }
 

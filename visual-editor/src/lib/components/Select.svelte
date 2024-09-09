@@ -2,6 +2,7 @@
     import { createEventDispatcher, tick } from 'svelte';
     import { fly } from 'svelte/transition';
     import { popupClose, submit, suggestDown, suggestFirst, suggestLast, suggestUp } from '../utils/keybinder/shortcuts';
+    import { encodeBackground } from '../utils/encodeBackground';
 
     interface Item {
         value: string;
@@ -134,7 +135,7 @@
             <div class="select__icon-wrapper">
                 <div
                     class="select__icon"
-                    style:background-image="url({icon})"
+                    style:background-image="url({encodeBackground(icon)})"
                 />
             </div>
         {/if}
@@ -165,7 +166,7 @@
                             <div class="select__icon-wrapper">
                                 <div
                                     class="select__icon"
-                                    style:background-image="url({item.icon})"
+                                    style:background-image="url({encodeBackground(item.icon)})"
                                 />
                             </div>
                         {/if}

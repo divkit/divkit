@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
+    import { encodeBackground } from '../../utils/encodeBackground';
 
     export let list: {
         text: string;
@@ -43,7 +44,7 @@
             <div
                 class="checkbox-group__item-icon"
                 class:checkbox-group__item-icon_both-themes={Boolean(item.icon)}
-                style:background-image="url({item.icon || ($themeStore === 'light' ? item.iconLight : item.iconDark)})"
+                style:background-image="url({encodeBackground(item.icon || ($themeStore === 'light' ? item.iconLight : item.iconDark) || '')})"
             ></div>
         </div>
     {/each}

@@ -7,6 +7,7 @@
     import { AddLeafCommand } from '../data/commands/addLeaf';
     import { findLeaf } from '../utils/tree';
     import { APP_CTX, type AppContext } from '../ctx/appContext';
+  import { encodeBackground } from '../utils/encodeBackground';
 
     const { l10nString, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state, rendererApi } = getContext<AppContext>(APP_CTX);
@@ -75,7 +76,7 @@
                     >
                         <div
                             class="new-component__icon-inner"
-                            style:background-image="url({state.componentIcon(item.type)})"
+                            style:background-image="url({encodeBackground(state.componentIcon(item.type))})"
                         ></div>
                     </div>
                     <div class="new-component__text">
@@ -107,7 +108,7 @@
                     >
                         <div
                             class="new-component__icon-inner"
-                            style:background-image="url({state.componentIcon(item.type)})"
+                            style:background-image="url({encodeBackground(state.componentIcon(item.type))})"
                         ></div>
                     </div>
                     <div class="new-component__text">
@@ -140,7 +141,7 @@
                         >
                             <div
                                 class="new-component__icon-inner"
-                                style:background-image="url({state.componentIcon(item)})"
+                                style:background-image="url({encodeBackground(state.componentIcon(item))})"
                             ></div>
                         </div>
                         <div class="new-component__text">

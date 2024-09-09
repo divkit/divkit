@@ -1,3 +1,7 @@
+## 0.4.2
+
+* Release bugfixes
+
 ## 0.4.1
 
 * Release bugfixes

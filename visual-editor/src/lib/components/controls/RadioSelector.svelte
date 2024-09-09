@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
+    import { encodeBackground } from '../../utils/encodeBackground';
 
     export let options: {
         text: string;
@@ -55,7 +56,7 @@
             <div
                 class="radio-selector__item-icon"
                 class:radio-selector__item-icon_both-themes={Boolean(option.icon)}
-                style:background-image="url({option.icon || ($themeStore === 'light' ? option.iconLight : option.iconDark)})"
+                style:background-image="url({encodeBackground(option.icon || ($themeStore === 'light' ? option.iconLight : option.iconDark) || '')})"
             ></div>
         </div>
     {/each}

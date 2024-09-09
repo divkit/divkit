@@ -12,6 +12,7 @@
     import { namedTemplates } from '../data/templates';
     import { Truthy } from '../utils/truthy';
     import { APP_CTX, type AppContext } from '../ctx/appContext';
+    import { encodeBackground } from '../utils/encodeBackground';
 
     export let leaf: TreeLeaf;
     export let level = 0;
@@ -221,7 +222,7 @@
     <div class="tree-leaf__type-icon-outer">
         <div
             class="tree-leaf__type-icon"
-            style:background-image="url({state.componentIcon(leaf.props.json.type, leaf.props.json)})"
+            style:background-image="url({encodeBackground(state.componentIcon(leaf.props.json.type, leaf.props.json))})"
         ></div>
     </div>
     {getText(leaf)}

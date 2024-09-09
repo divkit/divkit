@@ -8,8 +8,5 @@ export default defineConfig({
     plugins: [
         svelte()
     ],
-    base: isProduction ? process.env.PROD_BASE : undefined,
-    build: {
-        assetsInlineLimit: 0
-    }
+    base: isProduction ? process.env.PROD_BASE : undefined
 });
