@@ -31,11 +31,11 @@ export type SchemaModule = Schema & {
     default: Schema;
 }
 
-const jsons = import.meta.glob('../../../../../../public/schema//*.json', {
+const jsons = import.meta.glob('../../../../schema//*.json', {
     eager: true
 });
 export const schema = Object.keys(jsons).reduce((acc, item) => {
-    acc[item.replace('../../../../../../public/schema/', '').replace(/\.json$/, '')] = jsons[item] as SchemaModule;
+    acc[item.replace('../../../../schema/', '').replace(/\.json$/, '')] = jsons[item] as SchemaModule;
     return acc;
 }, {} as Record<string, SchemaModule>);
 

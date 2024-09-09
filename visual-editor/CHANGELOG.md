@@ -1,3 +1,7 @@
+## 0.4.1
+
+* Release bugfixes
+
 ## 0.4.0
 
 * The mode configuration parameter has been removed! Instead, there are now customActions
