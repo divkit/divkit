@@ -13,7 +13,7 @@ void main() {
 
   debugPrintDivKitViewLifecycle = true;
   debugPrintDivExpressionResolve = true;
-  debugPrintDivPerformLayout = true;
+  debugPrintDivPerformLayout = false;
 
   runApp(const ProviderScope(child: PlaygroundApp()));
 }

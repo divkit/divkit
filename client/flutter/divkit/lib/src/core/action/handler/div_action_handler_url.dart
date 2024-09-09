@@ -230,6 +230,8 @@ class DivDownloadHandlerUrl implements DivActionHandler {
         await a.execute(context);
       }
     }
+
+    logger.debug('Patch failed: ${action.url}');
     return false;
   }
 }

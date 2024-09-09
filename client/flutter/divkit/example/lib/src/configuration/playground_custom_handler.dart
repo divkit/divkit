@@ -4,28 +4,33 @@ import 'package:divkit/divkit.dart';
 import 'package:flutter/material.dart';
 
 class PlaygroundAppCustomHandler implements DivCustomHandler {
-  late final factories = {
+  static const factories = {
+    'proxy_box_custom': _createProxyBoxCustom,
     'new_custom_card_1': _createCustomCard,
     'new_custom_card_2': _createCustomCard,
     'new_custom_container_1': _createCustomContainer,
     'refresh_indicator': _createRefreshIndicator,
   };
 
+  // Check the availability of the mapper for the type
+  @override
+  bool isCustomTypeSupported(String type) => factories.containsKey(type);
+
+  // Apply a mapper to the input data and div-context.
   @override
   Widget createCustom(
     DivCustom div,
     DivContext divContext,
   ) {
-    final child = factories[div.customType]?.call(div, divContext) ??
-        (throw Exception(
-            'Unsupported DivCustom with custom_type: ${div.customType}'));
+    final child = factories[div.customType]?.call(div, divContext);
+    if (child == null) {
+      throw Exception(
+          'Unsupported DivCustom with custom_type: ${div.customType}');
+    }
     return child;
   }
 
-  @override
-  bool isCustomTypeSupported(String type) => factories.containsKey(type);
-
-  Widget _createCustomCard(
+  static Widget _createCustomCard(
     DivCustom div,
     DivContext divContext,
   ) {
@@ -61,21 +66,18 @@ class PlaygroundAppCustomHandler implements DivCustomHandler {
     );
   }
 
-  Widget _createCustomContainer(
-    DivCustom div,
-    DivContext divContext,
-  ) {
+  static Widget _createCustomContainer(DivCustom div, DivContext divContext) {
     return Column(
       children: _createItems(div.items ?? []),
     );
   }
 
-  List<Widget> _createItems(List<Div> items) {
+  static List<Widget> _createItems(List<Div> items) {
     return items.map((item) => DivWidget(item)).toList();
   }
 
   /// An example of using variables and actions inside a custom
-  Widget _createRefreshIndicator(DivCustom div, DivContext context) {
+  static Widget _createRefreshIndicator(DivCustom div, DivContext context) {
     final props = div.customProps;
     final actions = props?['actions'] as List;
     final actionList = <Future<DivActionModel>>[];
@@ -107,6 +109,10 @@ class PlaygroundAppCustomHandler implements DivCustomHandler {
             [],
       ),
     );
+  }
+
+  static Widget _createProxyBoxCustom(DivCustom div, DivContext context) {
+    return DivWidget(div.items!.first);
   }
 }
 

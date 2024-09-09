@@ -1,5 +1,7 @@
 ## 0.4.1-rc.1
 
+* Fix patches are not applied to items of custom
+
 ## 0.4.0
 
 * Use low-level divkit layout implementation: DivLayout

@@ -8,7 +8,6 @@ abstract class DivCustomHandler {
 
   /// Returns TRUE if custom widget can be handled.
   /// [type] — DivCustom.customType, custom alias to handle.
-  /// [context] — DivContext to use variables, actions, timers and access stateManager
   bool isCustomTypeSupported(String type);
 
   /// Returns Widget to use for div-custom.
