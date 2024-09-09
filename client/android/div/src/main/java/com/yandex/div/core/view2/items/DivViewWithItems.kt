@@ -144,6 +144,10 @@ internal sealed class DivViewWithItems {
 
         override val itemCount: Int
             get() = view.viewPager.adapter?.count ?: 0
+
+        override fun scrollToTheEnd() {
+            view.viewPager.setCurrentItem(itemCount - 1, true)
+        }
     }
 
     companion object {
