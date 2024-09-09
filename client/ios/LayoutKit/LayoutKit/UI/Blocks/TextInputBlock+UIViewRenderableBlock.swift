@@ -37,6 +37,7 @@ extension TextInputBlock {
     inputView.setPath(path)
     inputView.setObserver(observer)
     inputView.setIsEnabled(isEnabled)
+    inputView.setMaxLength(maxLength)
     inputView.paddings = paddings ?? .zero
   }
 
@@ -72,6 +73,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var textAlignmentVertical: TextInputBlock.TextAlignmentVertical = .center
   private var isInputFocused = false
   private var keyboardHeight: CGFloat?
+  private var maxLength: Int?
+
   var paddings: EdgeInsets = .zero
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
@@ -291,6 +294,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   func setHint(_ value: NSAttributedString) {
     hintView.attributedText = value
     setNeedsLayout()
+  }
+
+  func setMaxLength(_ value: Int?) {
+      maxLength = value
   }
 
   private func updateHintVisibility() {
@@ -556,6 +563,12 @@ extension TextInputBlockView {
         filter(currentText + text)
       }
     }
+
+    if let maxLength, text != "" {
+        let updatedText = currentText.replacingCharactersInRange(range, withString: text)
+        return updatedText.result.count <= maxLength
+    }
+
     return true
   }
 }

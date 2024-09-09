@@ -1583,6 +1583,20 @@
       "file": "single_line_input.json"
     },
     {
+      "title": "Text input max_length",
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Enter text with more than 10 characters"
+      ],
+      "expected_results": [
+        "text in the field should not be longer than 10 characters"
+      ],
+      "file": "input_max_length.json"
+    },
+    {
       "title": "Select",
       "tags": [
         "DivSelect"
