@@ -109,6 +109,8 @@ final class DetachableAnimationBlockView: BlockView {
     }
 
     let finishFrame = convertFrame(to: container)
+    
+    guard finishFrame != startFrame else { return }
 
     self.childView = nil
 

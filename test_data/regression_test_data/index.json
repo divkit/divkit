@@ -1920,6 +1920,24 @@
       "file": "timers/countdown-timer.json"
     },
     {
+      "title": "Change bounds transition allows input focus",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+              "android": "The bug is caused by the peculiarities of animation implementation on iOS",
+              "web": "The bug is caused by the peculiarities of animation implementation on iOS"
+      },
+      "tags": [
+        "DivInput",
+        "Animations"
+      ],
+      "expected_results": [
+        "Text can be entered into the input field, focus does not disappear. The check is related to the implementation features of change_bounds on iOS"
+      ],
+      "file": "change_bounds_transition_input.json"
+    },
+    {
       "title": "Blur in DivImage",
       "tags": [
         "DivImage"
