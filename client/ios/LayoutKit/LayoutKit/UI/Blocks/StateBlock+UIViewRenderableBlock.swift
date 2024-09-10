@@ -22,7 +22,8 @@ extension StateBlock {
       ids: Set(ids.map { BlockViewID(rawValue: $0) }),
       observer: observer,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate
+      renderingDelegate: renderingDelegate,
+      parentBlock: self
     )
   }
 }
@@ -109,6 +110,8 @@ private final class StateBlockView: BlockView {
   private var childView: BlockView?
   private var stateId: String?
 
+  private var parentBlock: StateBlock?
+
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
   func configure(
@@ -116,8 +119,18 @@ private final class StateBlockView: BlockView {
     ids: Set<BlockViewID>,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?
+    renderingDelegate: RenderingDelegate?,
+    parentBlock: StateBlock
   ) {
+    defer {
+      self.parentBlock = parentBlock
+    }
+
+    if let oldParentChild = self.parentBlock?.child,
+       child.self.equals(oldParentChild) {
+      return // The child block hasn't changed, stop configuring
+    }
+
     // remove views with unfinished animations
     for subview in subviews {
       if subview !== childView {

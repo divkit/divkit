@@ -47,7 +47,11 @@ public final class SliderBlock: BlockWithTraits {
   }
 
   public func equals(_ other: Block) -> Bool {
-    (other as? SliderBlock)?.sliderModel == sliderModel
+    guard let otherSlider = (other as? SliderBlock) else { return false }
+
+    return otherSlider.sliderModel == sliderModel &&
+      widthTrait == otherSlider.widthTrait &&
+      heightTrait == otherSlider.heightTrait
   }
 
   public func getImageHolders() -> [ImageHolder] {
