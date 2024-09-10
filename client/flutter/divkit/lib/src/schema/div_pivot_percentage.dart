@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Location of the coordinate of the rotation axis as a percentage relative to the element size.
 class DivPivotPercentage extends Preloadable with EquatableMixin {
   const DivPivotPercentage({
     required this.value,
@@ -10,6 +11,7 @@ class DivPivotPercentage extends Preloadable with EquatableMixin {
 
   static const type = "pivot-percentage";
 
+  /// Coordinate value as a percentage.
   final Expression<double> value;
 
   @override

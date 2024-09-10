@@ -4,14 +4,17 @@ import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Callbacks that are called after [data loading](https://divkit.tech/docs/en/concepts/interaction#loading-data).
 class DivDownloadCallbacks extends Preloadable with EquatableMixin {
   const DivDownloadCallbacks({
     this.onFailActions,
     this.onSuccessActions,
   });
 
+  /// Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
   final List<DivAction>? onFailActions;
 
+  /// Actions in case of successful loading.
   final List<DivAction>? onSuccessActions;
 
   @override

@@ -6,6 +6,7 @@ import 'package:divkit/src/schema/div_sight_action.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Actions performed when an element is no longer visible.
 class DivDisappearAction extends Preloadable
     with EquatableMixin
     implements DivSightAction {
@@ -22,32 +23,43 @@ class DivDisappearAction extends Preloadable
     this.visibilityPercentage = const ValueExpression(0),
   });
 
+  /// Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
   // constraint: number >= 0; default value: 800
   final Expression<int> disappearDuration;
 
+  /// Callbacks that are called after [data loading](https://divkit.tech/docs/en/concepts/interaction#loading-data).
   @override
   final DivDownloadCallbacks? downloadCallbacks;
+
+  /// The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
   // default value: true
   @override
   final Expression<bool> isEnabled;
 
+  /// Logging ID.
   @override
   final Expression<String> logId;
+
+  /// Limit on the number of loggings. If `0`, the limit is removed.
   // constraint: number >= 0; default value: 1
   @override
   final Expression<int> logLimit;
 
+  /// Additional parameters, passed to the host application.
   @override
   final Map<String, dynamic>? payload;
 
+  /// Referer URL for logging.
   @override
   final Expression<Uri>? referer;
-
   @override
   final DivActionTyped? typed;
 
+  /// URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](https://divkit.tech/docs/en/concepts/interaction).
   @override
   final Expression<Uri>? url;
+
+  /// Percentage of the visible part of an element that triggers `disappear-action`.
   // constraint: number >= 0 && number < 100; default value: 0
   final Expression<int> visibilityPercentage;
 

@@ -1,6 +1,7 @@
 ## 0.4.1-rc.1
 
 * Fix patches are not applied to items of custom
+* Provide documentation for generated schema
 
 ## 0.4.0
 

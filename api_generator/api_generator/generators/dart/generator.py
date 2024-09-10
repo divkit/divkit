@@ -79,6 +79,7 @@ class DartGenerator(Generator):
 
         # Class header declaration
         full_name = get_full_name(entity)
+        result += f'/// {entity.doc}' if len(entity.doc) != 0 else ''
         result += f'class {full_name} extends Preloadable with EquatableMixin {conformance} {{'
 
         # Constructor declaration
@@ -97,13 +98,14 @@ class DartGenerator(Generator):
 
         # Instance props declaration
         for instance_prop in entity.instance_properties:
+            documentation = f'  /// {instance_prop.doc}\n' if len(instance_prop.doc) != 0 else ''
+            comment = f'  {instance_prop.comment}\n' if len(instance_prop.comment) != 0 else ''
             override = '  @override\n' if instance_prop.name in needs_override_names else ''
             property_type = cast(DartPropertyType, instance_prop.property_type)
             prop_type = property_type.declaration()
             type_decl = f'Expression<{prop_type}>' if instance_prop.supports_expressions else prop_type
             option = '?' if instance_prop.optional and not instance_prop.has_default else ''
-            comment = f'{" " + instance_prop.comment}' + '\n'
-            result += f'{comment}{override}  final {type_decl}{option} {utils.lower_camel_case(instance_prop.name)};'
+            result += f'{documentation}{comment}{override}  final {type_decl}{option} {utils.lower_camel_case(instance_prop.name)};'
 
         # Equatable declaration
         if len(entity.instance_properties) != 0:

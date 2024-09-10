@@ -13,12 +13,16 @@ class DivVideoSource extends Preloadable with EquatableMixin {
 
   static const type = "video_source";
 
+  /// Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
   final Expression<int>? bitrate;
 
+  /// MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
   final Expression<String> mimeType;
 
+  /// Media file resolution.
   final DivVideoSourceResolution? resolution;
 
+  /// Link to the media file available for playback or download.
   final Expression<Uri> url;
 
   @override
@@ -105,6 +109,7 @@ class DivVideoSource extends Preloadable with EquatableMixin {
   }
 }
 
+/// Media file resolution.
 class DivVideoSourceResolution extends Preloadable with EquatableMixin {
   const DivVideoSourceResolution({
     required this.height,
@@ -112,8 +117,12 @@ class DivVideoSourceResolution extends Preloadable with EquatableMixin {
   });
 
   static const type = "resolution";
+
+  /// Media file frame height.
   // constraint: number > 0
   final Expression<int> height;
+
+  /// Media file frame width.
   // constraint: number > 0
   final Expression<int> width;
 

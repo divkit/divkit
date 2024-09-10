@@ -3,13 +3,13 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Requests focus for an element. May require a user action on the web.
 class DivActionFocusElement extends Preloadable with EquatableMixin {
   const DivActionFocusElement({
     required this.elementId,
   });
 
   static const type = "focus_element";
-
   final Expression<String> elementId;
 
   @override

@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// [Calculated expression](https://divkit.tech/docs/en/concepts/expressions) validator.
 class DivInputValidatorExpression extends Preloadable with EquatableMixin {
   const DivInputValidatorExpression({
     this.allowEmpty = const ValueExpression(false),
@@ -12,13 +13,18 @@ class DivInputValidatorExpression extends Preloadable with EquatableMixin {
   });
 
   static const type = "expression";
+
+  /// Determines whether the empty field value is valid.
   // default value: false
   final Expression<bool> allowEmpty;
 
+  /// [Calculated expression](https://divkit.tech/docs/en/concepts/expressions) used as a value validity condition.
   final Expression<bool> condition;
 
+  /// ID of the text element containing the error message. The message will also be used for providing access.
   final Expression<String> labelId;
 
+  /// The name of the variable that stores the calculation results.
   final String variable;
 
   @override

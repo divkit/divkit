@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_download_callbacks.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// It defines an action when clicking on an element.
 class DivAction extends Preloadable with EquatableMixin {
   const DivAction({
     this.downloadCallbacks,
@@ -19,24 +20,33 @@ class DivAction extends Preloadable with EquatableMixin {
     this.url,
   });
 
+  /// Callbacks that are called after [data loading](https://divkit.tech/docs/en/concepts/interaction#loading-data).
   final DivDownloadCallbacks? downloadCallbacks;
+
+  /// The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
   // default value: true
   final Expression<bool> isEnabled;
 
+  /// Logging ID.
   final Expression<String> logId;
 
+  /// URL for logging.
   final Expression<Uri>? logUrl;
 
+  /// Context menu.
   final List<DivActionMenuItem>? menuItems;
 
+  /// Additional parameters, passed to the host application.
   final Map<String, dynamic>? payload;
 
+  /// Referer URL for logging.
   final Expression<Uri>? referer;
 
+  /// The tab in which the URL must be opened.
   final Expression<DivActionTarget>? target;
-
   final DivActionTyped? typed;
 
+  /// URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](https://divkit.tech/docs/en/concepts/interaction).
   final Expression<Uri>? url;
 
   @override
@@ -197,10 +207,13 @@ class DivActionMenuItem extends Preloadable with EquatableMixin {
     required this.text,
   });
 
+  /// One action when clicking on a menu item. Not used if the `actions` parameter is set.
   final DivAction? action;
 
+  /// Multiple actions when clicking on a menu item.
   final List<DivAction>? actions;
 
+  /// Menu item title.
   final Expression<String> text;
 
   @override

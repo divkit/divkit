@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_accessibility.dart';
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_background.dart';
 import 'package:divkit/src/schema/div_base.dart';
@@ -14,6 +15,7 @@ import 'package:divkit/src/schema/div_edge_insets.dart';
 import 'package:divkit/src/schema/div_extension.dart';
 import 'package:divkit/src/schema/div_focus.dart';
 import 'package:divkit/src/schema/div_font_weight.dart';
+import 'package:divkit/src/schema/div_input_filter.dart';
 import 'package:divkit/src/schema/div_input_mask.dart';
 import 'package:divkit/src/schema/div_input_validator.dart';
 import 'package:divkit/src/schema/div_layout_provider.dart';
@@ -31,17 +33,22 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Text input element.
 class DivInput extends Preloadable with EquatableMixin implements DivBase {
   const DivInput({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
     this.alignmentVertical,
     this.alpha = const ValueExpression(1.0),
+    this.animators,
+    this.autocapitalization =
+        const ValueExpression(DivInputAutocapitalization.auto),
     this.background,
     this.border = const DivBorder(),
     this.columnSpan,
     this.disappearActions,
     this.extensions,
+    this.filters,
     this.focus,
     this.fontFamily,
     this.fontSize = const ValueExpression(12),
@@ -96,136 +103,226 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
 
   static const type = "input";
 
+  /// Accessibility settings.
   @override
   final DivAccessibility accessibility;
 
+  /// Horizontal alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentHorizontal>? alignmentHorizontal;
 
+  /// Vertical alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentVertical>? alignmentVertical;
+
+  /// Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   @override
   final Expression<double> alpha;
 
+  /// Declaration of animators that can be used to change the value of variables over time.
+  @override
+  final List<DivAnimator>? animators;
+
+  /// Automatic text capitalization type.
+  // default value: DivInputAutocapitalization.auto
+  final Expression<DivInputAutocapitalization> autocapitalization;
+
+  /// Element background. It can contain multiple layers.
   @override
   final List<DivBackground>? background;
 
+  /// Element stroke.
   @override
   final DivBorder border;
+
+  /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? columnSpan;
 
+  /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
 
+  /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
   final List<DivExtension>? extensions;
 
+  /// Filtering that prevents the entry of text that does not meet specified conditions.
+  final List<DivInputFilter>? filters;
+
+  /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
 
+  /// Font family:
+  /// • `text` — a standard text font;
+  /// • `display` — a family of fonts with a large font size.
   final Expression<String>? fontFamily;
+
+  /// Font size.
   // constraint: number >= 0; default value: 12
   final Expression<int> fontSize;
+
+  /// Unit of measurement:
+  /// • `px` — a physical pixel.
+  /// • `dp` — a logical pixel that doesn't depend on screen density.
+  /// • `sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.
   // default value: DivSizeUnit.sp
   final Expression<DivSizeUnit> fontSizeUnit;
+
+  /// Style.
   // default value: DivFontWeight.regular
   final Expression<DivFontWeight> fontWeight;
+
+  /// Style. Numeric value.
   // constraint: number > 0
   final Expression<int>? fontWeightValue;
+
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Text highlight color. If the value isn't set, the color set in the client will be used instead.
   final Expression<Color>? highlightColor;
+
+  /// Text color.
   // default value: const Color(0x73000000)
   final Expression<Color> hintColor;
 
+  /// Tooltip text.
   final Expression<String>? hintText;
 
+  /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
+
+  /// Indicates if the text editing is enabled.
   // default value: true
   final Expression<bool> isEnabled;
+
+  /// Keyboard type.
   // default value: DivInputKeyboardType.multiLineText
   final Expression<DivInputKeyboardType> keyboardType;
 
+  /// Provides element real size values after a layout cycle.
   @override
   final DivLayoutProvider? layoutProvider;
+
+  /// Spacing between characters.
   // default value: 0
   final Expression<double> letterSpacing;
+
+  /// Line spacing of the text. Units specified in `font_size_unit`.
   // constraint: number >= 0
   final Expression<int>? lineHeight;
 
+  /// External margins from the element stroke.
   @override
   final DivEdgeInsets margins;
 
+  /// Mask for entering text based on the specified template.
   final DivInputMask? mask;
+
+  /// Maximum number of characters that can be entered in the input field.
   // constraint: number > 0
   final Expression<int>? maxLength;
+
+  /// Maximum number of lines to be displayed in the input field.
   // constraint: number > 0
   final Expression<int>? maxVisibleLines;
 
+  /// Text input line used in the native interface.
   final DivInputNativeInterface? nativeInterface;
 
+  /// Internal margins from the element stroke.
   @override
   final DivEdgeInsets paddings;
 
+  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
   @override
   final Expression<String>? reuseId;
+
+  /// Merges cells in a string of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
+
+  /// Highlighting input text when focused.
   // default value: false
   final Expression<bool> selectAllOnFocus;
 
+  /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
   final List<DivAction>? selectedActions;
+
+  /// Horizontal text alignment.
   // default value: DivAlignmentHorizontal.start
   final Expression<DivAlignmentHorizontal> textAlignmentHorizontal;
+
+  /// Vertical text alignment.
   // default value: DivAlignmentVertical.center
   final Expression<DivAlignmentVertical> textAlignmentVertical;
+
+  /// Text color.
   // default value: const Color(0xFF000000)
   final Expression<Color> textColor;
 
+  /// Name of text storage variable.
   final String textVariable;
 
+  /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
 
+  /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
   final DivTransform transform;
 
+  /// Change animation. It is played when the position or size of an element changes in the new layout.
   @override
   final DivChangeTransition? transitionChange;
 
+  /// Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](https://divkit.tech/docs/en/concepts/interaction#animation/transition-animation).
   @override
   final DivAppearanceTransition? transitionIn;
 
+  /// Disappearance animation. It is played when an element disappears in the new layout.
   @override
   final DivAppearanceTransition? transitionOut;
+
+  /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
 
+  /// Validator that checks that the field value meets the specified conditions.
   final List<DivInputValidator>? validators;
 
+  /// Triggers for changing variables within an element.
   @override
   final List<DivTrigger>? variableTriggers;
 
+  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
   @override
   final List<DivVariable>? variables;
+
+  /// Element visibility.
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
 
+  /// Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
   @override
   final DivVisibilityAction? visibilityAction;
 
+  /// Actions when an element appears on the screen.
   @override
   final List<DivVisibilityAction>? visibilityActions;
+
+  /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   @override
   final DivSize width;
@@ -236,11 +333,14 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
         alignmentHorizontal,
         alignmentVertical,
         alpha,
+        animators,
+        autocapitalization,
         background,
         border,
         columnSpan,
         disappearActions,
         extensions,
+        filters,
         focus,
         fontFamily,
         fontSize,
@@ -291,11 +391,14 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
+    List<DivAnimator>? Function()? animators,
+    Expression<DivInputAutocapitalization>? autocapitalization,
     List<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<int>? Function()? columnSpan,
     List<DivDisappearAction>? Function()? disappearActions,
     List<DivExtension>? Function()? extensions,
+    List<DivInputFilter>? Function()? filters,
     DivFocus? Function()? focus,
     Expression<String>? Function()? fontFamily,
     Expression<int>? fontSize,
@@ -349,6 +452,8 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
             ? alignmentVertical.call()
             : this.alignmentVertical,
         alpha: alpha ?? this.alpha,
+        animators: animators != null ? animators.call() : this.animators,
+        autocapitalization: autocapitalization ?? this.autocapitalization,
         background: background != null ? background.call() : this.background,
         border: border ?? this.border,
         columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
@@ -356,6 +461,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
             ? disappearActions.call()
             : this.disappearActions,
         extensions: extensions != null ? extensions.call() : this.extensions,
+        filters: filters != null ? filters.call() : this.filters,
         focus: focus != null ? focus.call() : this.focus,
         fontFamily: fontFamily != null ? fontFamily.call() : this.fontFamily,
         fontSize: fontSize ?? this.fontSize,
@@ -451,6 +557,19 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         )!,
+        animators: safeParseObj(
+          safeListMap(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
+        autocapitalization: safeParseStrEnumExpr(
+          json['autocapitalization'],
+          parse: DivInputAutocapitalization.fromJson,
+          fallback: DivInputAutocapitalization.auto,
+        )!,
         background: safeParseObj(
           safeListMap(
             json['background'],
@@ -479,6 +598,14 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
             json['extensions'],
             (v) => safeParseObj(
               DivExtension.fromJson(v),
+            )!,
+          ),
+        ),
+        filters: safeParseObj(
+          safeListMap(
+            json['filters'],
+            (v) => safeParseObj(
+              DivInputFilter.fromJson(v),
             )!,
           ),
         ),
@@ -704,6 +831,19 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         ))!,
+        animators: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
+        autocapitalization: (await safeParseStrEnumExprAsync(
+          json['autocapitalization'],
+          parse: DivInputAutocapitalization.fromJson,
+          fallback: DivInputAutocapitalization.auto,
+        ))!,
         background: await safeParseObjAsync(
           await safeListMapAsync(
             json['background'],
@@ -732,6 +872,14 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
             json['extensions'],
             (v) => safeParseObj(
               DivExtension.fromJson(v),
+            )!,
+          ),
+        ),
+        filters: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['filters'],
+            (v) => safeParseObj(
+              DivInputFilter.fromJson(v),
             )!,
           ),
         ),
@@ -942,11 +1090,14 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
       await alignmentHorizontal?.preload(context);
       await alignmentVertical?.preload(context);
       await alpha.preload(context);
+      await safeFuturesWait(animators, (v) => v.preload(context));
+      await autocapitalization.preload(context);
       await safeFuturesWait(background, (v) => v.preload(context));
       await border.preload(context);
       await columnSpan?.preload(context);
       await safeFuturesWait(disappearActions, (v) => v.preload(context));
       await safeFuturesWait(extensions, (v) => v.preload(context));
+      await safeFuturesWait(filters, (v) => v.preload(context));
       await focus?.preload(context);
       await fontFamily?.preload(context);
       await fontSize.preload(context);
@@ -994,11 +1145,13 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   }
 }
 
+/// Text input line used in the native interface.
 class DivInputNativeInterface extends Preloadable with EquatableMixin {
   const DivInputNativeInterface({
     required this.color,
   });
 
+  /// Text input line color.
   final Expression<Color> color;
 
   @override
@@ -1055,6 +1208,123 @@ class DivInputNativeInterface extends Preloadable with EquatableMixin {
       await color.preload(context);
     } catch (e) {
       return;
+    }
+  }
+}
+
+enum DivInputAutocapitalization implements Preloadable {
+  auto('auto'),
+  none('none'),
+  words('words'),
+  sentences('sentences'),
+  allCharacters('all_characters');
+
+  final String value;
+
+  const DivInputAutocapitalization(this.value);
+  bool get isAuto => this == auto;
+
+  bool get isNone => this == none;
+
+  bool get isWords => this == words;
+
+  bool get isSentences => this == sentences;
+
+  bool get isAllCharacters => this == allCharacters;
+
+  T map<T>({
+    required T Function() auto,
+    required T Function() none,
+    required T Function() words,
+    required T Function() sentences,
+    required T Function() allCharacters,
+  }) {
+    switch (this) {
+      case DivInputAutocapitalization.auto:
+        return auto();
+      case DivInputAutocapitalization.none:
+        return none();
+      case DivInputAutocapitalization.words:
+        return words();
+      case DivInputAutocapitalization.sentences:
+        return sentences();
+      case DivInputAutocapitalization.allCharacters:
+        return allCharacters();
+    }
+  }
+
+  T maybeMap<T>({
+    T Function()? auto,
+    T Function()? none,
+    T Function()? words,
+    T Function()? sentences,
+    T Function()? allCharacters,
+    required T Function() orElse,
+  }) {
+    switch (this) {
+      case DivInputAutocapitalization.auto:
+        return auto?.call() ?? orElse();
+      case DivInputAutocapitalization.none:
+        return none?.call() ?? orElse();
+      case DivInputAutocapitalization.words:
+        return words?.call() ?? orElse();
+      case DivInputAutocapitalization.sentences:
+        return sentences?.call() ?? orElse();
+      case DivInputAutocapitalization.allCharacters:
+        return allCharacters?.call() ?? orElse();
+    }
+  }
+
+  @override
+  Future<void> preload(Map<String, dynamic> context) async {}
+
+  static DivInputAutocapitalization? fromJson(
+    String? json,
+  ) {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'auto':
+          return DivInputAutocapitalization.auto;
+        case 'none':
+          return DivInputAutocapitalization.none;
+        case 'words':
+          return DivInputAutocapitalization.words;
+        case 'sentences':
+          return DivInputAutocapitalization.sentences;
+        case 'all_characters':
+          return DivInputAutocapitalization.allCharacters;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<DivInputAutocapitalization?> parse(
+    String? json,
+  ) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'auto':
+          return DivInputAutocapitalization.auto;
+        case 'none':
+          return DivInputAutocapitalization.none;
+        case 'words':
+          return DivInputAutocapitalization.words;
+        case 'sentences':
+          return DivInputAutocapitalization.sentences;
+        case 'all_characters':
+          return DivInputAutocapitalization.allCharacters;
+      }
+      return null;
+    } catch (e) {
+      return null;
     }
   }
 }

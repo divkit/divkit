@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Removes focus from an element.
 class DivActionClearFocus extends Preloadable with EquatableMixin {
   const DivActionClearFocus();
 

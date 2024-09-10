@@ -4,13 +4,14 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithArrayOfEnums extends Preloadable with EquatableMixin  {
   const EntityWithArrayOfEnums({
     required this.items,
   });
 
   static const type = "entity_with_array_of_enums";
-  // at least 1 elements
+   // at least 1 elements
   final List<EntityWithArrayOfEnumsItem> items;
 
   @override

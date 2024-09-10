@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Sets corner rounding.
 class DivCornersRadius extends Preloadable with EquatableMixin {
   const DivCornersRadius({
     this.bottomLeft,
@@ -11,12 +12,19 @@ class DivCornersRadius extends Preloadable with EquatableMixin {
     this.topRight,
   });
 
+  /// Rounding radius of a lower left corner. If not specified, then `corner_radius` is used.
   // constraint: number >= 0
   final Expression<int>? bottomLeft;
+
+  /// Rounding radius of a lower right corner. If not specified, then `corner_radius` is used.
   // constraint: number >= 0
   final Expression<int>? bottomRight;
+
+  /// Rounding radius of an upper left corner. If not specified, then `corner_radius` is used.
   // constraint: number >= 0
   final Expression<int>? topLeft;
+
+  /// Rounding radius of an upper right corner. If not specified, then `corner_radius` is used.
   // constraint: number >= 0
   final Expression<int>? topRight;
 

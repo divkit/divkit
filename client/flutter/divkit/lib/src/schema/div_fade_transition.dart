@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_transition_base.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Transparency animation.
 class DivFadeTransition extends Preloadable
     with EquatableMixin
     implements DivTransitionBase {
@@ -17,14 +18,22 @@ class DivFadeTransition extends Preloadable
   });
 
   static const type = "fade";
+
+  /// Value of the alpha channel which the element starts appearing from or at which it finishes disappearing.
   // constraint: number >= 0.0 && number <= 1.0; default value: 0.0
   final Expression<double> alpha;
+
+  /// Animation duration in milliseconds.
   // constraint: number >= 0; default value: 200
   @override
   final Expression<int> duration;
+
+  /// Transition speed nature.
   // default value: DivAnimationInterpolator.easeInOut
   @override
   final Expression<DivAnimationInterpolator> interpolator;
+
+  /// Delay in milliseconds before animation starts.
   // constraint: number >= 0; default value: 0
   @override
   final Expression<int> startDelay;

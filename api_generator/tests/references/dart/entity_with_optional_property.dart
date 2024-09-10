@@ -4,13 +4,13 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithOptionalProperty extends Preloadable with EquatableMixin  {
   const EntityWithOptionalProperty({
     this.property,
   });
 
   static const type = "entity_with_optional_property";
-
   final Expression<String>? property;
 
   @override

@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Solid background color.
 class DivSolidBackground extends Preloadable with EquatableMixin {
   const DivSolidBackground({
     required this.color,
@@ -10,6 +11,7 @@ class DivSolidBackground extends Preloadable with EquatableMixin {
 
   static const type = "solid";
 
+  /// Color.
   final Expression<Color> color;
 
   @override

@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_accessibility.dart';
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_aspect.dart';
 import 'package:divkit/src/schema/div_background.dart';
@@ -30,12 +31,14 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Video.
 class DivVideo extends Preloadable with EquatableMixin implements DivBase {
   const DivVideo({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
     this.alignmentVertical,
     this.alpha = const ValueExpression(1.0),
+    this.animators,
     this.aspect,
     this.autostart = const ValueExpression(false),
     this.background,
@@ -85,122 +88,184 @@ class DivVideo extends Preloadable with EquatableMixin implements DivBase {
 
   static const type = "video";
 
+  /// Accessibility settings.
   @override
   final DivAccessibility accessibility;
 
+  /// Horizontal alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentHorizontal>? alignmentHorizontal;
 
+  /// Vertical alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentVertical>? alignmentVertical;
+
+  /// Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   @override
   final Expression<double> alpha;
 
+  /// Declaration of animators that can be used to change the value of variables over time.
+  @override
+  final List<DivAnimator>? animators;
+
+  /// Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
   final DivAspect? aspect;
+
+  /// This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
   // default value: false
   final Expression<bool> autostart;
 
+  /// Element background. It can contain multiple layers.
   @override
   final List<DivBackground>? background;
 
+  /// Element stroke.
   @override
   final DivBorder border;
 
+  /// Actions performed during video loading.
   final List<DivAction>? bufferingActions;
+
+  /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? columnSpan;
 
+  /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
 
+  /// Time interval from the video beginning to the current position in milliseconds.
   final String? elapsedTimeVariable;
 
+  /// Actions performed after the video ends.
   final List<DivAction>? endActions;
 
+  /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
   final List<DivExtension>? extensions;
 
+  /// Actions performed when playback can't be continued due to a player error.
   final List<DivAction>? fatalActions;
 
+  /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
+
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
 
+  /// Provides element real size values after a layout cycle.
   @override
   final DivLayoutProvider? layoutProvider;
 
+  /// External margins from the element stroke.
   @override
   final DivEdgeInsets margins;
+
+  /// This option mutes video.
   // default value: false
   final Expression<bool> muted;
 
+  /// Internal margins from the element stroke.
   @override
   final DivEdgeInsets paddings;
 
+  /// Actions performed when playback is paused.
   final List<DivAction>? pauseActions;
 
+  /// Additional information that can be used in the player.
   final Map<String, dynamic>? playerSettingsPayload;
+
+  /// Enables video preloading.
   // default value: false
   final Expression<bool> preloadRequired;
 
+  /// Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
   final Expression<String>? preview;
+
+  /// This option turns on video repeat.
   // default value: false
   final Expression<bool> repeatable;
 
+  /// Actions performed when video playback resumes.
   final List<DivAction>? resumeActions;
 
+  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
   @override
   final Expression<String>? reuseId;
+
+  /// Merges cells in a string of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
+
+  /// Video scaling:
+  /// • 'fit' places the entire video into the element (free space is filled with background);
+  /// • 'fill` scales the video to the element size and cuts off anything that's extra.
   // default value: DivVideoScale.fit
   final Expression<DivVideoScale> scale;
 
+  /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
   final List<DivAction>? selectedActions;
 
+  /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
 
+  /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
   final DivTransform transform;
 
+  /// Change animation. It is played when the position or size of an element changes in the new layout.
   @override
   final DivChangeTransition? transitionChange;
 
+  /// Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](https://divkit.tech/docs/en/concepts/interaction#animation/transition-animation).
   @override
   final DivAppearanceTransition? transitionIn;
 
+  /// Disappearance animation. It is played when an element disappears in the new layout.
   @override
   final DivAppearanceTransition? transitionOut;
+
+  /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
 
+  /// Triggers for changing variables within an element.
   @override
   final List<DivTrigger>? variableTriggers;
 
+  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
   @override
   final List<DivVariable>? variables;
   // at least 1 elements
   final List<DivVideoSource> videoSources;
+
+  /// Element visibility.
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
 
+  /// Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
   @override
   final DivVisibilityAction? visibilityAction;
 
+  /// Actions when an element appears on the screen.
   @override
   final List<DivVisibilityAction>? visibilityActions;
+
+  /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   @override
   final DivSize width;
@@ -211,6 +276,7 @@ class DivVideo extends Preloadable with EquatableMixin implements DivBase {
         alignmentHorizontal,
         alignmentVertical,
         alpha,
+        animators,
         aspect,
         autostart,
         background,
@@ -259,6 +325,7 @@ class DivVideo extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
+    List<DivAnimator>? Function()? animators,
     DivAspect? Function()? aspect,
     Expression<bool>? autostart,
     List<DivBackground>? Function()? background,
@@ -310,6 +377,7 @@ class DivVideo extends Preloadable with EquatableMixin implements DivBase {
             ? alignmentVertical.call()
             : this.alignmentVertical,
         alpha: alpha ?? this.alpha,
+        animators: animators != null ? animators.call() : this.animators,
         aspect: aspect != null ? aspect.call() : this.aspect,
         autostart: autostart ?? this.autostart,
         background: background != null ? background.call() : this.background,
@@ -404,6 +472,14 @@ class DivVideo extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         )!,
+        animators: safeParseObj(
+          safeListMap(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         aspect: safeParseObj(
           DivAspect.fromJson(json['aspect']),
         ),
@@ -651,6 +727,14 @@ class DivVideo extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         ))!,
+        animators: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         aspect: await safeParseObjAsync(
           DivAspect.fromJson(json['aspect']),
         ),
@@ -883,6 +967,7 @@ class DivVideo extends Preloadable with EquatableMixin implements DivBase {
       await alignmentHorizontal?.preload(context);
       await alignmentVertical?.preload(context);
       await alpha.preload(context);
+      await safeFuturesWait(animators, (v) => v.preload(context));
       await aspect?.preload(context);
       await autostart.preload(context);
       await safeFuturesWait(background, (v) => v.preload(context));

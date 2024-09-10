@@ -4,13 +4,13 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithStringEnumProperty extends Preloadable with EquatableMixin  {
   const EntityWithStringEnumProperty({
     required this.property,
   });
 
   static const type = "entity_with_string_enum_property";
-
   final Expression<EntityWithStringEnumPropertyProperty> property;
 
   @override

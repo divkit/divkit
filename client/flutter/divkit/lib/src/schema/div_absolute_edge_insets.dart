@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Sets margins without regard to screen properties.
 class DivAbsoluteEdgeInsets extends Preloadable with EquatableMixin {
   const DivAbsoluteEdgeInsets({
     this.bottom = const ValueExpression(0),
@@ -11,12 +12,19 @@ class DivAbsoluteEdgeInsets extends Preloadable with EquatableMixin {
     this.top = const ValueExpression(0),
   });
 
+  /// Bottom margin.
   // constraint: number >= 0; default value: 0
   final Expression<int> bottom;
+
+  /// Left margin.
   // constraint: number >= 0; default value: 0
   final Expression<int> left;
+
+  /// Right margin.
   // constraint: number >= 0; default value: 0
   final Expression<int> right;
+
+  /// Top margin.
   // constraint: number >= 0; default value: 0
   final Expression<int> top;
 

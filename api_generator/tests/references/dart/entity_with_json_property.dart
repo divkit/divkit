@@ -4,13 +4,14 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithJsonProperty extends Preloadable with EquatableMixin  {
   const EntityWithJsonProperty({
     this.jsonProperty = None,
   });
 
   static const type = "entity_with_json_property";
-  // default value: None
+   // default value: None
   final Map<String, dynamic> jsonProperty;
 
   @override

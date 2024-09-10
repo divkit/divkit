@@ -3,12 +3,15 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Element size adjusts to a parent element.
 class DivMatchParentSize extends Preloadable with EquatableMixin {
   const DivMatchParentSize({
     this.weight,
   });
 
   static const type = "match_parent";
+
+  /// Weight when distributing free space between elements with the size type `match_parent` inside an element. If the weight isn't specified, the elements will divide the place equally.
   // constraint: number > 0
   final Expression<double>? weight;
 

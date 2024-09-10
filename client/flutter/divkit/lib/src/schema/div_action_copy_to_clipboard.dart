@@ -4,13 +4,13 @@ import 'package:divkit/src/schema/div_action_copy_to_clipboard_content.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Copies data to the clipboard.
 class DivActionCopyToClipboard extends Preloadable with EquatableMixin {
   const DivActionCopyToClipboard({
     required this.content,
   });
 
   static const type = "copy_to_clipboard";
-
   final DivActionCopyToClipboardContent content;
 
   @override

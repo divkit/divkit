@@ -4,13 +4,13 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithComplexProperty extends Preloadable with EquatableMixin  {
   const EntityWithComplexProperty({
     required this.property,
   });
 
   static const type = "entity_with_complex_property";
-
   final EntityWithComplexPropertyProperty property;
 
   @override
@@ -59,11 +59,11 @@ class EntityWithComplexProperty extends Preloadable with EquatableMixin  {
   }
 }
 
+
 class EntityWithComplexPropertyProperty extends Preloadable with EquatableMixin  {
   const EntityWithComplexPropertyProperty({
     required this.value,
   });
-
 
   final Expression<Uri> value;
 

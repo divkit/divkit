@@ -9,7 +9,6 @@ class BooleanValue extends Preloadable with EquatableMixin {
   });
 
   static const type = "boolean";
-
   final Expression<bool> value;
 
   @override

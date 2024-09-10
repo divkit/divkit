@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_pivot_percentage.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Transformation of the element.
 class DivTransform extends Preloadable with EquatableMixin {
   const DivTransform({
     this.pivotX = const DivPivot.divPivotPercentage(
@@ -24,11 +25,15 @@ class DivTransform extends Preloadable with EquatableMixin {
     this.rotation,
   });
 
+  /// X coordinate of the rotation axis.
   // default value: const DivPivot.divPivotPercentage(const DivPivotPercentage(value: ValueExpression(50,),),)
   final DivPivot pivotX;
+
+  /// Y coordinate of the rotation axis.
   // default value: const DivPivot.divPivotPercentage(const DivPivotPercentage(value: ValueExpression(50,),),)
   final DivPivot pivotY;
 
+  /// Degrees of the element rotation. Positive values used for clockwise rotation.
   final Expression<double>? rotation;
 
   @override

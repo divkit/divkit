@@ -4,13 +4,14 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithStringEnumPropertyWithDefaultValue extends Preloadable with EquatableMixin  {
   const EntityWithStringEnumPropertyWithDefaultValue({
     this.value = const ValueExpression(EntityWithStringEnumPropertyWithDefaultValueValue.second),
   });
 
   static const type = "entity_with_string_enum_property_with_default_value";
-  // default value: EntityWithStringEnumPropertyWithDefaultValueValue.second
+   // default value: EntityWithStringEnumPropertyWithDefaultValueValue.second
   final Expression<EntityWithStringEnumPropertyWithDefaultValueValue> value;
 
   @override

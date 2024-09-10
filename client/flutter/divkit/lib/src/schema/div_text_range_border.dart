@@ -4,15 +4,18 @@ import 'package:divkit/src/schema/div_stroke.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Character range border.
 class DivTextRangeBorder extends Preloadable with EquatableMixin {
   const DivTextRangeBorder({
     this.cornerRadius,
     this.stroke,
   });
 
+  /// One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
   // constraint: number >= 0
   final Expression<int>? cornerRadius;
 
+  /// Stroke style.
   final DivStroke? stroke;
 
   @override

@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// A Boolean variable in binary format.
 class BooleanVariable extends Preloadable with EquatableMixin {
   const BooleanVariable({
     required this.name,
@@ -11,8 +12,10 @@ class BooleanVariable extends Preloadable with EquatableMixin {
 
   static const type = "boolean";
 
+  /// Variable name.
   final String name;
 
+  /// Value.
   final bool value;
 
   @override

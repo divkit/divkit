@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithPropertyWithDefaultValue extends Preloadable with EquatableMixin  {
   const EntityWithPropertyWithDefaultValue({
     this.iNum = const ValueExpression(0),
@@ -12,11 +13,11 @@ class EntityWithPropertyWithDefaultValue extends Preloadable with EquatableMixin
   });
 
   static const type = "entity_with_property_with_default_value";
-  // constraint: number >= 0; default value: 0
+   // constraint: number >= 0; default value: 0
   final Expression<int> iNum;
-
+  /// non_optional is used to suppress auto-generation of default value for object with all-optional fields.
   final EntityWithPropertyWithDefaultValueNested? nested;
-  // valid schemes: [https]; default value: const Uri.parse("https://yandex.ru")
+   // valid schemes: [https]; default value: const Uri.parse("https://yandex.ru")
   final Expression<Uri> url;
 
   @override
@@ -77,6 +78,7 @@ class EntityWithPropertyWithDefaultValue extends Preloadable with EquatableMixin
   }
 }
 
+/// non_optional is used to suppress auto-generation of default value for object with all-optional fields.
 class EntityWithPropertyWithDefaultValueNested extends Preloadable with EquatableMixin  {
   const EntityWithPropertyWithDefaultValueNested({
     this.iNum = const ValueExpression(0),
@@ -84,11 +86,10 @@ class EntityWithPropertyWithDefaultValueNested extends Preloadable with Equatabl
     this.url = const ValueExpression(const Uri.parse("https://yandex.ru")),
   });
 
-  // constraint: number >= 0; default value: 0
+   // constraint: number >= 0; default value: 0
   final Expression<int> iNum;
-
   final Expression<String> nonOptional;
-  // valid schemes: [https]; default value: const Uri.parse("https://yandex.ru")
+   // valid schemes: [https]; default value: const Uri.parse("https://yandex.ru")
   final Expression<Uri> url;
 
   @override

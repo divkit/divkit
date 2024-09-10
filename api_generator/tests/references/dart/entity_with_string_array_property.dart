@@ -4,13 +4,14 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithStringArrayProperty extends Preloadable with EquatableMixin  {
   const EntityWithStringArrayProperty({
     required this.array,
   });
 
   static const type = "entity_with_string_array_property";
-  // at least 1 elements
+   // at least 1 elements
   final Expression<List<String>> array;
 
   @override

@@ -10,11 +10,14 @@ class DivInputValidatorBase extends Preloadable with EquatableMixin {
     this.variable,
   });
 
+  /// Determines whether the empty field value is valid.
   // default value: false
   final Expression<bool> allowEmpty;
 
+  /// ID of the text element containing the error message. The message will also be used for providing access.
   final Expression<String>? labelId;
 
+  /// The name of the variable that stores the calculation results.
   final String? variable;
 
   @override

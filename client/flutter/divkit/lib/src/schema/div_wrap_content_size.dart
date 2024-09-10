@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_size_unit.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// The size of an element adjusts to its contents.
 class DivWrapContentSize extends Preloadable with EquatableMixin {
   const DivWrapContentSize({
     this.constrained,
@@ -13,10 +14,13 @@ class DivWrapContentSize extends Preloadable with EquatableMixin {
 
   static const type = "wrap_content";
 
+  /// The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.
   final Expression<bool>? constrained;
 
+  /// Maximum size of an element.
   final DivWrapContentSizeConstraintSize? maxSize;
 
+  /// Minimum size of an element.
   final DivWrapContentSizeConstraintSize? minSize;
 
   @override
@@ -104,6 +108,10 @@ class DivWrapContentSizeConstraintSize extends Preloadable with EquatableMixin {
     required this.value,
   });
 
+  /// Unit of measurement:
+  /// • `px` — a physical pixel.
+  /// • `dp` — a logical pixel that doesn't depend on screen density.
+  /// • `sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.
   // default value: DivSizeUnit.dp
   final Expression<DivSizeUnit> unit;
   // constraint: number >= 0

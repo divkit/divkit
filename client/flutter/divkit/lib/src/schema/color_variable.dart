@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Variable — HEX color as a string.
 class ColorVariable extends Preloadable with EquatableMixin {
   const ColorVariable({
     required this.name,
@@ -11,8 +12,10 @@ class ColorVariable extends Preloadable with EquatableMixin {
 
   static const type = "color";
 
+  /// Variable name.
   final String name;
 
+  /// Value.
   final Color value;
 
   @override

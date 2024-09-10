@@ -6,6 +6,7 @@ import 'package:divkit/src/schema/div_sight_action.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Actions performed when an element becomes visible.
 class DivVisibilityAction extends Preloadable
     with EquatableMixin
     implements DivSightAction {
@@ -22,31 +23,43 @@ class DivVisibilityAction extends Preloadable
     this.visibilityPercentage = const ValueExpression(50),
   });
 
+  /// Callbacks that are called after [data loading](https://divkit.tech/docs/en/concepts/interaction#loading-data).
   @override
   final DivDownloadCallbacks? downloadCallbacks;
+
+  /// The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
   // default value: true
   @override
   final Expression<bool> isEnabled;
 
+  /// Logging ID.
   @override
   final Expression<String> logId;
+
+  /// Limit on the number of loggings. If `0`, the limit is removed.
   // constraint: number >= 0; default value: 1
   @override
   final Expression<int> logLimit;
 
+  /// Additional parameters, passed to the host application.
   @override
   final Map<String, dynamic>? payload;
 
+  /// Referer URL for logging.
   @override
   final Expression<Uri>? referer;
-
   @override
   final DivActionTyped? typed;
 
+  /// URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](https://divkit.tech/docs/en/concepts/interaction).
   @override
   final Expression<Uri>? url;
+
+  /// Time in milliseconds during which an element must be visible to trigger `visibility-action`.
   // constraint: number >= 0; default value: 800
   final Expression<int> visibilityDuration;
+
+  /// Percentage of the visible part of an element that triggers `visibility-action`.
   // constraint: number > 0 && number <= 100; default value: 50
   final Expression<int> visibilityPercentage;
 

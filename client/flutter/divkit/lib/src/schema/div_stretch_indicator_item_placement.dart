@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Element size adjusts to a parent element.
 class DivStretchIndicatorItemPlacement extends Preloadable with EquatableMixin {
   const DivStretchIndicatorItemPlacement({
     this.itemSpacing = const DivFixedSize(
@@ -15,8 +16,12 @@ class DivStretchIndicatorItemPlacement extends Preloadable with EquatableMixin {
   });
 
   static const type = "stretch";
+
+  /// Spacing between indicator centers.
   // default value: const DivFixedSize(value: ValueExpression(5,),)
   final DivFixedSize itemSpacing;
+
+  /// Maximum number of visible indicators.
   // constraint: number > 0; default value: 10
   final Expression<int> maxVisibleItems;
 

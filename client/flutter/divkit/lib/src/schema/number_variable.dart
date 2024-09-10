@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// A floating-point variable.
 class NumberVariable extends Preloadable with EquatableMixin {
   const NumberVariable({
     required this.name,
@@ -11,8 +12,10 @@ class NumberVariable extends Preloadable with EquatableMixin {
 
   static const type = "number";
 
+  /// Variable name.
   final String name;
 
+  /// Value.
   final double value;
 
   @override

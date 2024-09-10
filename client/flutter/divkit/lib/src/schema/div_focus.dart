@@ -6,6 +6,7 @@ import 'package:divkit/src/schema/div_border.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Element behavior when focusing or losing focus.
 class DivFocus extends Preloadable with EquatableMixin {
   const DivFocus({
     this.background,
@@ -15,14 +16,19 @@ class DivFocus extends Preloadable with EquatableMixin {
     this.onFocus,
   });
 
+  /// Background of an element when it is in focus. It can contain multiple layers.
   final List<DivBackground>? background;
 
+  /// Border of an element when it's in focus.
   final DivBorder border;
 
+  /// IDs of elements that will be next to get focus.
   final DivFocusNextFocusIds? nextFocusIds;
 
+  /// Actions when an element loses focus.
   final List<DivAction>? onBlur;
 
+  /// Actions when an element gets focus.
   final List<DivAction>? onFocus;
 
   @override
@@ -156,6 +162,7 @@ class DivFocus extends Preloadable with EquatableMixin {
   }
 }
 
+/// IDs of elements that will be next to get focus.
 class DivFocusNextFocusIds extends Preloadable with EquatableMixin {
   const DivFocusNextFocusIds({
     this.down,
@@ -166,13 +173,9 @@ class DivFocusNextFocusIds extends Preloadable with EquatableMixin {
   });
 
   final Expression<String>? down;
-
   final Expression<String>? forward;
-
   final Expression<String>? left;
-
   final Expression<String>? right;
-
   final Expression<String>? up;
 
   @override

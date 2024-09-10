@@ -9,7 +9,6 @@ class ContentText extends Preloadable with EquatableMixin {
   });
 
   static const type = "text";
-
   final Expression<String> value;
 
   @override

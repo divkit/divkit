@@ -4,12 +4,15 @@ import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// A set of animations to be applied simultaneously.
 class DivAppearanceSetTransition extends Preloadable with EquatableMixin {
   const DivAppearanceSetTransition({
     required this.items,
   });
 
   static const type = "set";
+
+  /// An array of animations.
   // at least 1 elements
   final List<DivAppearanceTransition> items;
 

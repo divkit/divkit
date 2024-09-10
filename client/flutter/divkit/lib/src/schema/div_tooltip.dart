@@ -6,6 +6,7 @@ import 'package:divkit/src/schema/div_point.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Tooltip.
 class DivTooltip extends Preloadable with EquatableMixin {
   const DivTooltip({
     this.animationIn,
@@ -17,18 +18,26 @@ class DivTooltip extends Preloadable with EquatableMixin {
     required this.position,
   });
 
+  /// Tooltip appearance animation. By default, the tooltip will be appearing gradually with an offset from the anchor point by 10 dp.
   final DivAnimation? animationIn;
 
+  /// Tooltip disappearance animation. By default, the tooltip will disappear gradually with an offset from the anchor point by 10 dp.
   final DivAnimation? animationOut;
 
+  /// An element that will be shown in a tooltip. If there are tooltips inside an element, they won't be shown.
   final Div div;
+
+  /// Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
   // constraint: number >= 0; default value: 5000
   final Expression<int> duration;
 
+  /// Tooltip ID. It is used to avoid re-showing. It must be unique for all element tooltips.
   final String id;
 
+  /// Shift relative to an anchor point.
   final DivPoint? offset;
 
+  /// The position of a tooltip relative to an element it belongs to.
   final Expression<DivTooltipPosition> position;
 
   @override

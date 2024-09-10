@@ -6,6 +6,7 @@ import 'package:divkit/src/schema/div_infinity_count.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Element animation parameters.
 class DivAnimation extends Preloadable with EquatableMixin {
   const DivAnimation({
     this.duration = const ValueExpression(300),
@@ -20,21 +21,37 @@ class DivAnimation extends Preloadable with EquatableMixin {
     this.startValue,
   });
 
+  /// Animation duration in milliseconds.
   // constraint: number >= 0; default value: 300
   final Expression<int> duration;
 
+  /// Final value of an animation.
   final Expression<double>? endValue;
+
+  /// Animation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:
+  /// • `linear` — cubic-bezier(0, 0, 1, 1);
+  /// • `ease` — cubic-bezier(0.25, 0.1, 0.25, 1);
+  /// • `ease_in` — cubic-bezier(0.42, 0, 1, 1);
+  /// • `ease_out` — cubic-bezier(0, 0, 0.58, 1);
+  /// • `ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).
   // default value: DivAnimationInterpolator.spring
   final Expression<DivAnimationInterpolator> interpolator;
 
+  /// Animation elements.
   final List<DivAnimation>? items;
 
+  /// Animation type.
   final Expression<DivAnimationName> name;
+
+  /// Number of animation repetitions.
   // default value: const DivCount.divInfinityCount(DivInfinityCount(),)
   final DivCount repeat;
+
+  /// Delay in milliseconds before animation starts.
   // constraint: number >= 0; default value: 0
   final Expression<int> startDelay;
 
+  /// Starting value of an animation.
   final Expression<double>? startValue;
 
   @override

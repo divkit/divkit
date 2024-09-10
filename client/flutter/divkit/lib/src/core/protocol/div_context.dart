@@ -204,8 +204,10 @@ class DivRootContext extends DivContext {
       final loggerContext = DefaultDivLoggerContext(source.logId);
 
       _log(loggerContext, 'Sync init #${divContext.hashCode}');
-      _log(loggerContext,
-          'Instant rendering is enabled! #${divContext.hashCode}');
+      _log(
+        loggerContext,
+        'Instant rendering is enabled! #${divContext.hashCode}',
+      );
 
       // Main initialization
       divContext

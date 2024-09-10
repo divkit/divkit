@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Location of the central point of the gradient relative to the element borders.
 class DivRadialGradientRelativeCenter extends Preloadable with EquatableMixin {
   const DivRadialGradientRelativeCenter({
     required this.value,
@@ -10,6 +11,7 @@ class DivRadialGradientRelativeCenter extends Preloadable with EquatableMixin {
 
   static const type = "relative";
 
+  /// Coordinate value in the range "0...1".
   final Expression<double> value;
 
   @override

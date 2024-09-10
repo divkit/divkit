@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_input_mask_base.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Mask for entering text with a fixed number of characters.
 class DivFixedLengthInputMask extends Preloadable
     with EquatableMixin
     implements DivInputMaskBase {
@@ -15,13 +16,19 @@ class DivFixedLengthInputMask extends Preloadable
   });
 
   static const type = "fixed_length";
+
+  /// If this option is enabled, the text field contains the mask before being filled in.
   // default value: false
   final Expression<bool> alwaysVisible;
 
+  /// String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
   final Expression<String> pattern;
+
+  /// Template decoding is a description of the characters that will be replaced with user input.
   // at least 1 elements
   final List<DivFixedLengthInputMaskPatternElement> patternElements;
 
+  /// Name of the variable to store the unprocessed value.
   @override
   final String rawTextVariable;
 
@@ -124,6 +131,7 @@ class DivFixedLengthInputMask extends Preloadable
   }
 }
 
+/// Template decoding is a description of the characters that will be replaced with user input.
 class DivFixedLengthInputMaskPatternElement extends Preloadable
     with EquatableMixin {
   const DivFixedLengthInputMaskPatternElement({
@@ -132,11 +140,15 @@ class DivFixedLengthInputMaskPatternElement extends Preloadable
     this.regex,
   });
 
+  /// A character in the template that will be replaced with a user-defined character.
   // at least 1 char
   final Expression<String> key;
+
+  /// The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
   // at least 1 char; default value: "_"
   final Expression<String> placeholder;
 
+  /// Regular expression for validating character inputs. For example, when a mask is digit-only.
   final Expression<String>? regex;
 
   @override

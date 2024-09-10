@@ -3,12 +3,15 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Fixed number of repetitions.
 class DivFixedCount extends Preloadable with EquatableMixin {
   const DivFixedCount({
     required this.value,
   });
 
   static const type = "fixed";
+
+  /// Number of repetitions.
   // constraint: number >= 0
   final Expression<int> value;
 

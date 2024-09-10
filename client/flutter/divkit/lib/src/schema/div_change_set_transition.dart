@@ -4,12 +4,15 @@ import 'package:divkit/src/schema/div_change_transition.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Animations.
 class DivChangeSetTransition extends Preloadable with EquatableMixin {
   const DivChangeSetTransition({
     required this.items,
   });
 
   static const type = "set";
+
+  /// List of animations.
   // at least 1 elements
   final List<DivChangeTransition> items;
 

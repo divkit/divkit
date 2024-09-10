@@ -9,7 +9,6 @@ class IntegerValue extends Preloadable with EquatableMixin {
   });
 
   static const type = "integer";
-
   final Expression<int> value;
 
   @override

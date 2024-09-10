@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_percentage_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Page width (%).
 class DivPageSize extends Preloadable with EquatableMixin {
   const DivPageSize({
     required this.pageWidth,
@@ -11,6 +12,7 @@ class DivPageSize extends Preloadable with EquatableMixin {
 
   static const type = "percentage";
 
+  /// Page width as a percentage of the parent element width.
   final DivPercentageSize pageWidth;
 
   @override

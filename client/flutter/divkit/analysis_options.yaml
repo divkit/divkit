@@ -2,7 +2,6 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - lib/src/generated_sources/**
     - test/**
 
 linter:

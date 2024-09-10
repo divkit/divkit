@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_input_mask_base.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Mask for entering currency in the specified regional format.
 class DivCurrencyInputMask extends Preloadable
     with EquatableMixin
     implements DivInputMaskBase {
@@ -14,8 +15,10 @@ class DivCurrencyInputMask extends Preloadable
 
   static const type = "currency";
 
+  /// Language tag that the currency format should match, as per [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag). If the language is not set, it is defined automatically.
   final Expression<String>? locale;
 
+  /// Name of the variable to store the unprocessed value.
   @override
   final String rawTextVariable;
 

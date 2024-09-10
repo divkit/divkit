@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Variable — URL as a string.
 class UrlVariable extends Preloadable with EquatableMixin {
   const UrlVariable({
     required this.name,
@@ -11,8 +12,10 @@ class UrlVariable extends Preloadable with EquatableMixin {
 
   static const type = "url";
 
+  /// Variable name.
   final String name;
 
+  /// Value.
   final Uri value;
 
   @override

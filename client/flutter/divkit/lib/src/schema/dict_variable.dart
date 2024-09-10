@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// An arbitrary object in JSON format.
 class DictVariable extends Preloadable with EquatableMixin {
   const DictVariable({
     required this.name,
@@ -11,8 +12,10 @@ class DictVariable extends Preloadable with EquatableMixin {
 
   static const type = "dict";
 
+  /// Variable name.
   final String name;
 
+  /// Value.
   final Map<String, dynamic> value;
 
   @override

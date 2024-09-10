@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_stroke.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Circle.
 class DivCircleShape extends Preloadable with EquatableMixin {
   const DivCircleShape({
     this.backgroundColor,
@@ -18,10 +19,14 @@ class DivCircleShape extends Preloadable with EquatableMixin {
 
   static const type = "circle";
 
+  /// Fill color.
   final Expression<Color>? backgroundColor;
+
+  /// Radius.
   // default value: const DivFixedSize(value: ValueExpression(10,),)
   final DivFixedSize radius;
 
+  /// Stroke style.
   final DivStroke? stroke;
 
   @override

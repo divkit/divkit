@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Regex validator.
 class DivInputValidatorRegex extends Preloadable with EquatableMixin {
   const DivInputValidatorRegex({
     this.allowEmpty = const ValueExpression(false),
@@ -12,13 +13,18 @@ class DivInputValidatorRegex extends Preloadable with EquatableMixin {
   });
 
   static const type = "regex";
+
+  /// Determines whether the empty field value is valid.
   // default value: false
   final Expression<bool> allowEmpty;
 
+  /// ID of the text element containing the error message. The message will also be used for providing access.
   final Expression<String> labelId;
 
+  /// A regular expression (pattern) that the field value must match.
   final Expression<String> pattern;
 
+  /// The name of the variable that stores the calculation results.
   final String variable;
 
   @override

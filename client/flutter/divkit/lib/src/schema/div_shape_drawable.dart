@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_stroke.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Drawable of a simple geometric shape.
 class DivShapeDrawable extends Preloadable with EquatableMixin {
   const DivShapeDrawable({
     required this.color,
@@ -14,10 +15,13 @@ class DivShapeDrawable extends Preloadable with EquatableMixin {
 
   static const type = "shape_drawable";
 
+  /// Fill color.
   final Expression<Color> color;
 
+  /// Shape.
   final DivShape shape;
 
+  /// Stroke style.
   final DivStroke? stroke;
 
   @override

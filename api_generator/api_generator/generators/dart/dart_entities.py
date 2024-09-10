@@ -66,6 +66,15 @@ def update_property_type_base(property_type: PropertyType):
 
 
 class DartEntity(Entity):
+    @property
+    def doc(self) -> str:
+        doc = self.description_doc()
+        if doc is not None:
+            fix_links = doc.replace('../../', 'https://divkit.tech/docs/en/concepts/')
+            fix_lists = fix_links.replace('<li>', '\n• ').replace('</li>', '')
+            return fix_lists.replace('\n', '\n/// ')
+        return ''
+
     def update_base(self):
         for prop in self.properties:
             prop.__class__ = DartProperty
@@ -115,6 +124,15 @@ pass
 
 
 class DartProperty(Property):
+    @property
+    def doc(self) -> str:
+        doc = self.description_doc()
+        if doc is not None:
+            fix_links = doc.replace('../../', 'https://divkit.tech/docs/en/concepts/')
+            fix_lists = fix_links.replace('<li>', '\n• ').replace('</li>', '')
+            return fix_lists.replace('\n', '\n/// ')
+        return ''
+
     def update_base(self):
         update_property_type_base(self.property_type)
 
