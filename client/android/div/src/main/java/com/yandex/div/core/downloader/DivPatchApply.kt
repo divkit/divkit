@@ -14,6 +14,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivCustom
 import com.yandex.div2.DivData
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGrid
@@ -52,6 +53,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
             is Div.Pager -> applyPatch(value, resolver)
             is Div.State -> applyPatch(value, resolver)
             is Div.Tabs -> applyPatch(value, resolver)
+            is Div.Custom -> applyPatch(value, resolver)
             else -> this
         })
     }
@@ -92,6 +94,10 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
 
     private fun applyPatch(div: DivState, resolver: ExpressionResolver) = Div.State(
         div.copy(states = applyPatchForListStates(div.states, resolver))
+    )
+
+    private fun applyPatch(div: DivCustom, resolver: ExpressionResolver) = Div.Custom(
+        div.copy(items = applyPatchForListOfDivs(div.items, resolver))
     )
 
     private fun applyPatchForListStates(states: List<DivState.State>,
