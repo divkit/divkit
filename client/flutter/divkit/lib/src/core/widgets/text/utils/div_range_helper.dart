@@ -11,6 +11,7 @@ class DivRangeHelper {
     TextStyle style,
     List<DivLineStyle> linesStyleList,
     double viewScale,
+    DivFontProvider fontProvider,
   ) async {
     final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
     for (var range in divTextRange) {
@@ -20,6 +21,7 @@ class DivRangeHelper {
         context,
         linesStyleList,
         viewScale,
+        fontProvider,
       );
       inputMap.addEntries([mapEntry]);
     }
@@ -47,6 +49,7 @@ class DivRangeHelper {
     TextStyle style,
     List<DivLineStyle> linesStyleList,
     double viewScale,
+    DivFontProvider fontProvider,
   ) {
     final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
     for (var range in divTextRange) {
@@ -55,6 +58,7 @@ class DivRangeHelper {
         style,
         linesStyleList,
         viewScale,
+        fontProvider,
       );
       inputMap.addEntries([mapEntry]);
     }
@@ -83,6 +87,7 @@ class DivRangeHelper {
     DivVariableContext context,
     List<DivLineStyle> linesStyleList,
     double viewScale,
+    DivFontProvider fontProvider,
   ) async {
     final start = await divTextRange.start.resolveValue(
       context: context,
@@ -122,6 +127,8 @@ class DivRangeHelper {
       context: context,
     );
 
+    final fontAsset = fontProvider.resolve(fontFamily);
+
     final fontSize = await divTextRange.fontSize?.resolveValue(
       context: context,
     );
@@ -157,9 +164,11 @@ class DivRangeHelper {
       }
     }
     style = TextStyle(
+      package: fontAsset.package,
+      fontFamily: fontAsset.fontFamily,
+      fontFamilyFallback: fontAsset.fontFamilyFallback,
       color: textColor,
       shadows: shadow != null ? [shadow] : null,
-      fontFamily: fontFamily,
       fontSize: fontSize?.toDouble(),
       fontWeight: fontWeight,
       backgroundColor: background,
@@ -191,6 +200,7 @@ class DivRangeHelper {
     TextStyle style,
     List<DivLineStyle> linesStyleList,
     double viewScale,
+    DivFontProvider fontProvider,
   ) {
     final start = divTextRange.start.value!;
     final end = divTextRange.end.value!;
@@ -211,6 +221,8 @@ class DivRangeHelper {
     );
 
     final fontFamily = divTextRange.fontFamily?.value!;
+
+    final fontAsset = fontProvider.resolve(fontFamily);
 
     final fontSize = divTextRange.fontSize?.value!;
 
@@ -234,9 +246,11 @@ class DivRangeHelper {
       }
     }
     style = TextStyle(
+      package: fontAsset.package,
+      fontFamily: fontAsset.fontFamily,
+      fontFamilyFallback: fontAsset.fontFamilyFallback,
       color: textColor,
       shadows: shadow != null ? [shadow] : null,
-      fontFamily: fontFamily,
       fontSize: fontSize?.toDouble(),
       fontWeight: fontWeight,
       backgroundColor: background,

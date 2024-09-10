@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:divkit/divkit.dart';
 import 'package:example/src/configuration/playground_custom_handler.dart';
+import 'package:example/src/configuration/playground_font_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -79,6 +80,7 @@ class _ShowPageState extends ConsumerState<ShowPage> {
                 key: ObjectKey(reloadN),
                 data: snapshot.requireData,
                 customHandler: PlaygroundAppCustomHandler(),
+                fontProvider: PlaygroundDivFontProvider(),
               ),
             );
           }

@@ -71,3 +71,8 @@ flutter:
     - assets/test_data/regression_test_data/state/
     - assets/test_data/regression_test_data/timers/
     - assets/test_data/regression_test_data/visibility_actions/
+
+  fonts:
+    - family: ProtestGuerrilla
+      fonts:
+        - asset: assets/fonts/ProtestGuerrilla/ProtestGuerrilla-Regular.ttf

@@ -33,6 +33,9 @@ class DivKitView extends StatelessWidget {
   /// Handler for div-custom.
   final DivCustomHandler? customHandler;
 
+  /// Provider of text font resource.
+  final DivFontProvider? fontProvider;
+
   /// LTR or RTL mode. If null used auto.
   final TextDirection? textDirection;
 
@@ -48,11 +51,11 @@ class DivKitView extends StatelessWidget {
   @experimental
   final bool showUnsupportedDivs;
 
-  /// Can be used for scaling ui
+  /// Can be used for scaling ui.
   @experimental
   final double viewScale;
 
-  /// Can be used for scaling text
+  /// Can be used for scaling text.
   @experimental
   final double textScale;
 
@@ -83,6 +86,7 @@ class DivKitView extends StatelessWidget {
     this.variableStorage,
     this.actionHandler,
     this.customHandler,
+    this.fontProvider,
     this.cacheManager,
     this.brightness,
     this.textDirection,
@@ -105,14 +109,17 @@ class DivKitView extends StatelessWidget {
               showUnsupportedDivs: showUnsupportedDivs,
             ),
             child: provide(
-              cacheManager,
-              child: FocusScope(
-                child: _DivKitView(
-                  data: data,
-                  loadingBuilder: loadingBuilder,
-                  variableStorage: variableStorage,
-                  actionHandler: actionHandler,
-                  customHandler: customHandler,
+              fontProvider ?? DivFontProvider.direct(),
+              child: provide(
+                cacheManager,
+                child: FocusScope(
+                  child: _DivKitView(
+                    data: data,
+                    loadingBuilder: loadingBuilder,
+                    variableStorage: variableStorage,
+                    actionHandler: actionHandler,
+                    customHandler: customHandler,
+                  ),
                 ),
               ),
             ),

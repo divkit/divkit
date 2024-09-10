@@ -55,8 +55,13 @@ class DivInputModel with EquatableMixin {
       final fontFamily = data.fontFamily?.requireValue;
       final fontSize = data.fontSize.value!.toDouble() * textScale;
 
+      final fontProvider = read<DivFontProvider>(buildContext)!;
+      final fontAsset = fontProvider.resolve(fontFamily);
+
       final style = TextStyle(
-        fontFamily: fontFamily,
+        package: fontAsset.package,
+        fontFamily: fontAsset.fontFamily,
+        fontFamilyFallback: fontAsset.fontFamilyFallback,
         fontSize: fontSize * styleUnit,
         color: data.textColor.value!,
         height: lineHeight != null ? lineHeight * viewScale / fontSize : null,
@@ -125,6 +130,8 @@ class DivInputModel with EquatableMixin {
     final viewScale = divScalingModel?.viewScale ?? 1;
     final textScale = divScalingModel?.textScale ?? 1;
 
+    final fontProvider = watch<DivFontProvider>(buildContext)!;
+
     return variables.watch<DivInputModel>((context) async {
       final fontFamily = await data.fontFamily?.resolveValue(context: context);
       final styleUnit = (await data.fontSizeUnit.resolveValue(
@@ -140,8 +147,12 @@ class DivInputModel with EquatableMixin {
               .toDouble() *
           textScale;
 
+      final fontAsset = fontProvider.resolve(fontFamily);
+
       final style = TextStyle(
-        fontFamily: fontFamily,
+        package: fontAsset.package,
+        fontFamily: fontAsset.fontFamily,
+        fontFamilyFallback: fontAsset.fontFamilyFallback,
         fontSize: fontSize * styleUnit,
         color: await data.textColor.resolveValue(
           context: context,

@@ -29,9 +29,9 @@ class DivTextModel with EquatableMixin {
     DivText data,
   ) {
     try {
-      final divScalingModel = read<DivScalingModel>(context);
-      final textScale = divScalingModel?.textScale ?? 1;
-      final viewScale = divScalingModel?.viewScale ?? 1;
+      final scalingModel = read<DivScalingModel>(context);
+      final textScale = scalingModel?.textScale ?? 1;
+      final viewScale = scalingModel?.viewScale ?? 1;
 
       final alignment = PassDivAlignment(
         data.textAlignmentVertical,
@@ -64,9 +64,14 @@ class DivTextModel with EquatableMixin {
         strike,
       ];
 
+      final fontProvider = read<DivFontProvider>(context)!;
+      final fontAsset = fontProvider.resolve(fontFamily);
+
       final style = TextStyle(
         fontSize: fontSize,
-        fontFamily: fontFamily,
+        package: fontAsset.package,
+        fontFamilyFallback: fontAsset.fontFamilyFallback,
+        fontFamily: fontAsset.fontFamily,
         shadows: shadow != null ? [shadow] : null,
         height: lineHeight != null
             ? (lineHeight * data.fontSizeUnit.requireValue.asPx) *
@@ -94,6 +99,7 @@ class DivTextModel with EquatableMixin {
         style,
         linesStyleList,
         viewScale,
+        fontProvider,
       );
 
       return DivTextModel(
@@ -118,11 +124,14 @@ class DivTextModel with EquatableMixin {
     BuildContext context,
     DivText data,
   ) {
-    final variables = watch<DivContext>(context)!.variableManager;
+    final divContext = watch<DivContext>(context)!;
+    final variables = divContext.variableManager;
 
     final divScalingModel = watch<DivScalingModel>(context);
     final textScale = divScalingModel?.textScale ?? 1;
     final viewScale = divScalingModel?.viewScale ?? 1;
+
+    final fontProvider = watch<DivFontProvider>(context)!;
 
     return variables.watch<DivTextModel>(
       (context) async {
@@ -185,8 +194,11 @@ class DivTextModel with EquatableMixin {
           viewScale: viewScale,
         );
 
+        final fontAsset = fontProvider.resolve(fontFamily);
         final style = TextStyle(
-          fontFamily: fontFamily,
+          package: fontAsset.package,
+          fontFamily: fontAsset.fontFamily,
+          fontFamilyFallback: fontAsset.fontFamilyFallback,
           fontSize: fontSize,
           letterSpacing: letterSpacing,
           shadows: shadow != null ? [shadow] : null,
@@ -220,13 +232,13 @@ class DivTextModel with EquatableMixin {
         );
 
         final rangesList = await DivRangeHelper.getRangeItems(
-          text,
-          data.ranges ?? [],
-          context,
-          style,
-          linesStyleList,
-          viewScale,
-        );
+            text,
+            data.ranges ?? [],
+            context,
+            style,
+            linesStyleList,
+            viewScale,
+            fontProvider);
 
         return DivTextModel(
           ranges: rangesList,
