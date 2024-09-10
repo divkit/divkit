@@ -11,6 +11,13 @@ enum DivTransitionSelector implements Preloadable {
   final String value;
 
   const DivTransitionSelector(this.value);
+  bool get isNone => this == none;
+
+  bool get isDataChange => this == dataChange;
+
+  bool get isStateChange => this == stateChange;
+
+  bool get isAnyChange => this == anyChange;
 
   T map<T>({
     required T Function() none,

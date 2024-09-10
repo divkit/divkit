@@ -76,7 +76,8 @@ extension DivInput: DivBlockModeling {
       textAlignmentHorizontal: resolveTextAlignmentHorizontal(expressionResolver).textAlignment,
       textAlignmentVertical: resolveTextAlignmentVertical(expressionResolver).textAlignment,
       paddings: paddings?.resolve(context),
-      isEnabled: resolveIsEnabled(expressionResolver)
+      isEnabled: resolveIsEnabled(expressionResolver),
+      maxLength: resolveMaxLength(expressionResolver)
     )
   }
 

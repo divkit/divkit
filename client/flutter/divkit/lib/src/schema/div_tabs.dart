@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_accessibility.dart';
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_background.dart';
 import 'package:divkit/src/schema/div_base.dart';
@@ -32,12 +33,14 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Tabs. Height of the first tab is determined by its contents, and height of the remaining [depends on the platform](https://divkit.tech/docs/en/concepts/location#tabs).
 class DivTabs extends Preloadable with EquatableMixin implements DivBase {
   const DivTabs({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
     this.alignmentVertical,
     this.alpha = const ValueExpression(1.0),
+    this.animators,
     this.background,
     this.border = const DivBorder(),
     this.columnSpan,
@@ -109,114 +112,180 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
 
   static const type = "tabs";
 
+  /// Accessibility settings.
   @override
   final DivAccessibility accessibility;
 
+  /// Horizontal alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentHorizontal>? alignmentHorizontal;
 
+  /// Vertical alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentVertical>? alignmentVertical;
+
+  /// Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   @override
   final Expression<double> alpha;
 
+  /// Declaration of animators that can be used to change the value of variables over time.
+  @override
+  final List<DivAnimator>? animators;
+
+  /// Element background. It can contain multiple layers.
   @override
   final List<DivBackground>? background;
 
+  /// Element stroke.
   @override
   final DivBorder border;
+
+  /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? columnSpan;
 
+  /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
+
+  /// Updating height when changing the active element. In the browser, the value is always `true`.
   // default value: false
   final Expression<bool> dynamicHeight;
 
+  /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
   final List<DivExtension>? extensions;
 
+  /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
+
+  /// A separating line between tabs and contents.
   // default value: false
   final Expression<bool> hasSeparator;
+
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
+
+  /// Tabs. Transition between tabs can be implemented using:
+  /// • `div-action://set_current_item?id=&item=` — set the current tab with an ordinal number `item` inside an element, with the specified `id`;
+  /// • `div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next tab inside an element, with the specified `id`;
+  /// • `div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous tab inside an element, with the specified `id`.</p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:
+  /// • `clamp` — transition will stop at the border element;
+  /// • `ring` — go to the beginning or end, depending on the current element.</p><p>By default, `clamp`.
   // at least 1 elements
   final List<DivTabsItem> items;
 
+  /// Provides element real size values after a layout cycle.
   @override
   final DivLayoutProvider? layoutProvider;
 
+  /// External margins from the element stroke.
   @override
   final DivEdgeInsets margins;
 
+  /// Internal margins from the element stroke.
   @override
   final DivEdgeInsets paddings;
+
+  /// If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
   // default value: false
   final Expression<bool> restrictParentScroll;
 
+  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
   @override
   final Expression<String>? reuseId;
+
+  /// Merges cells in a string of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
 
+  /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
   final List<DivAction>? selectedActions;
+
+  /// Ordinal number of the tab that will be opened by default.
   // constraint: number >= 0; default value: 0
   final Expression<int> selectedTab;
+
+  /// Separator color.
   // default value: const Color(0x14000000)
   final Expression<Color> separatorColor;
+
+  /// Indents from the separating line. Not used if `has_separator = false`.
   // default value: const DivEdgeInsets(bottom: ValueExpression(0,), left: ValueExpression(12,), right: ValueExpression(12,), top: ValueExpression(0,),)
   final DivEdgeInsets separatorPaddings;
+
+  /// Switching tabs by scrolling through the contents.
   // default value: true
   final Expression<bool> switchTabsByContentSwipeEnabled;
 
+  /// Style of delimiters between tab titles.
   final DivTabsTabTitleDelimiter? tabTitleDelimiter;
 
+  /// Design style of tab titles.
   final DivTabsTabTitleStyle tabTitleStyle;
+
+  /// Indents in the tab name.
   // default value: const DivEdgeInsets(bottom: ValueExpression(8,), left: ValueExpression(12,), right: ValueExpression(12,), top: ValueExpression(0,),)
   final DivEdgeInsets titlePaddings;
 
+  /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
 
+  /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
   final DivTransform transform;
 
+  /// Change animation. It is played when the position or size of an element changes in the new layout.
   @override
   final DivChangeTransition? transitionChange;
 
+  /// Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](https://divkit.tech/docs/en/concepts/interaction#animation/transition-animation).
   @override
   final DivAppearanceTransition? transitionIn;
 
+  /// Disappearance animation. It is played when an element disappears in the new layout.
   @override
   final DivAppearanceTransition? transitionOut;
+
+  /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
 
+  /// Triggers for changing variables within an element.
   @override
   final List<DivTrigger>? variableTriggers;
 
+  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
   @override
   final List<DivVariable>? variables;
+
+  /// Element visibility.
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
 
+  /// Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
   @override
   final DivVisibilityAction? visibilityAction;
 
+  /// Actions when an element appears on the screen.
   @override
   final List<DivVisibilityAction>? visibilityActions;
+
+  /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   @override
   final DivSize width;
@@ -227,6 +296,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
         alignmentHorizontal,
         alignmentVertical,
         alpha,
+        animators,
         background,
         border,
         columnSpan,
@@ -271,6 +341,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
+    List<DivAnimator>? Function()? animators,
     List<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<int>? Function()? columnSpan,
@@ -318,6 +389,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
             ? alignmentVertical.call()
             : this.alignmentVertical,
         alpha: alpha ?? this.alpha,
+        animators: animators != null ? animators.call() : this.animators,
         background: background != null ? background.call() : this.background,
         border: border ?? this.border,
         columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
@@ -402,6 +474,14 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         )!,
+        animators: safeParseObj(
+          safeListMap(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         background: safeParseObj(
           safeListMap(
             json['background'],
@@ -641,6 +721,14 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         ))!,
+        animators: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         background: await safeParseObjAsync(
           await safeListMapAsync(
             json['background'],
@@ -865,6 +953,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
       await alignmentHorizontal?.preload(context);
       await alignmentVertical?.preload(context);
       await alpha.preload(context);
+      await safeFuturesWait(animators, (v) => v.preload(context));
       await safeFuturesWait(background, (v) => v.preload(context));
       await border.preload(context);
       await columnSpan?.preload(context);
@@ -907,6 +996,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
   }
 }
 
+/// Design style of tab titles.
 class DivTabsTabTitleStyle extends Preloadable with EquatableMixin {
   const DivTabsTabTitleStyle({
     this.activeBackgroundColor = const ValueExpression(Color(0xFFFFDC60)),
@@ -943,40 +1033,72 @@ class DivTabsTabTitleStyle extends Preloadable with EquatableMixin {
     ),
   });
 
+  /// Background color of the active tab title.
   // default value: const Color(0xFFFFDC60)
   final Expression<Color> activeBackgroundColor;
 
+  /// Active tab title style.
   final Expression<DivFontWeight>? activeFontWeight;
+
+  /// Color of the active tab title text.
   // default value: const Color(0xCC000000)
   final Expression<Color> activeTextColor;
+
+  /// Duration of active title change animation.
   // constraint: number >= 0; default value: 300
   final Expression<int> animationDuration;
+
+  /// Active title change animation.
   // default value: DivTabsTabTitleStyleAnimationType.slide
   final Expression<DivTabsTabTitleStyleAnimationType> animationType;
+
+  /// Title corner rounding radius. If the parameter isn't specified, the rounding is maximum (half of the smallest size). Not used if the `corners_radius` parameter is set.
   // constraint: number >= 0
   final Expression<int>? cornerRadius;
 
+  /// Rounding radii of corners of multiple titles. Empty values are replaced by `corner_radius`.
   final DivCornersRadius? cornersRadius;
 
+  /// Font family:
+  /// • `text` — a standard text font;
+  /// • `display` — a family of fonts with a large font size.
   final Expression<String>? fontFamily;
+
+  /// Title font size.
   // constraint: number >= 0; default value: 12
   final Expression<int> fontSize;
+
+  /// Units of title font size measurement.
   // default value: DivSizeUnit.sp
   final Expression<DivSizeUnit> fontSizeUnit;
+
+  /// Style. Use `active_font_weight` and `inactive_font_weight` instead.
   // default value: DivFontWeight.regular
   final Expression<DivFontWeight> fontWeight;
 
+  /// Background color of the inactive tab title.
   final Expression<Color>? inactiveBackgroundColor;
 
+  /// Inactive tab title style.
   final Expression<DivFontWeight>? inactiveFontWeight;
+
+  /// Color of the inactive tab title text.
   // default value: const Color(0x80000000)
   final Expression<Color> inactiveTextColor;
+
+  /// Spacing between neighbouring tab titles.
   // constraint: number >= 0; default value: 0
   final Expression<int> itemSpacing;
+
+  /// Spacing between title characters.
   // default value: 0
   final Expression<double> letterSpacing;
+
+  /// Line spacing of the text.
   // constraint: number >= 0
   final Expression<int>? lineHeight;
+
+  /// Indents around the tab title.
   // default value: const DivEdgeInsets(bottom: ValueExpression(6,), left: ValueExpression(8,), right: ValueExpression(8,), top: ValueExpression(6,),)
   final DivEdgeInsets paddings;
 
@@ -1283,6 +1405,11 @@ enum DivTabsTabTitleStyleAnimationType implements Preloadable {
   final String value;
 
   const DivTabsTabTitleStyleAnimationType(this.value);
+  bool get isSlide => this == slide;
+
+  bool get isFade => this == fade;
+
+  bool get isNone => this == none;
 
   T map<T>({
     required T Function() slide,
@@ -1361,6 +1488,7 @@ enum DivTabsTabTitleStyleAnimationType implements Preloadable {
   }
 }
 
+/// Style of delimiters between tab titles.
 class DivTabsTabTitleDelimiter extends Preloadable with EquatableMixin {
   const DivTabsTabTitleDelimiter({
     this.height = const DivFixedSize(
@@ -1376,10 +1504,14 @@ class DivTabsTabTitleDelimiter extends Preloadable with EquatableMixin {
     ),
   });
 
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivFixedSize(value: ValueExpression(12,),)
   final DivFixedSize height;
 
+  /// Direct URL to an image.
   final Expression<Uri> imageUrl;
+
+  /// Element width.
   // default value: const DivFixedSize(value: ValueExpression(12,),)
   final DivFixedSize width;
 
@@ -1477,6 +1609,7 @@ class DivTabsTabTitleDelimiter extends Preloadable with EquatableMixin {
   }
 }
 
+/// Tab.
 class DivTabsItem extends Preloadable with EquatableMixin {
   const DivTabsItem({
     required this.div,
@@ -1484,10 +1617,13 @@ class DivTabsItem extends Preloadable with EquatableMixin {
     this.titleClickAction,
   });
 
+  /// Tab contents.
   final Div div;
 
+  /// Tab title.
   final Expression<String> title;
 
+  /// Action when clicking on the active tab title.
   final DivAction? titleClickAction;
 
   @override

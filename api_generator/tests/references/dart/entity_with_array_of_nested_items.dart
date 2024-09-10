@@ -5,13 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'entity.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithArrayOfNestedItems extends Preloadable with EquatableMixin  {
   const EntityWithArrayOfNestedItems({
     required this.items,
   });
 
   static const type = "entity_with_array_of_nested_items";
-  // at least 1 elements
+   // at least 1 elements
   final List<EntityWithArrayOfNestedItemsItem> items;
 
   @override
@@ -60,15 +61,14 @@ class EntityWithArrayOfNestedItems extends Preloadable with EquatableMixin  {
   }
 }
 
+
 class EntityWithArrayOfNestedItemsItem extends Preloadable with EquatableMixin  {
   const EntityWithArrayOfNestedItemsItem({
     required this.entity,
     required this.property,
   });
 
-
   final Entity entity;
-
   final Expression<String> property;
 
   @override

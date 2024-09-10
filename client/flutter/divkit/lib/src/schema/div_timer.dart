@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Timer.
 class DivTimer extends Preloadable with EquatableMixin {
   const DivTimer({
     this.duration = const ValueExpression(0),
@@ -14,17 +15,24 @@ class DivTimer extends Preloadable with EquatableMixin {
     this.valueVariable,
   });
 
+  /// Timer duration in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).
   // constraint: number >= 0; default value: 0
   final Expression<int> duration;
 
+  /// Actions performed when the timer ends: when the timer has counted to the `duration` value or the `div-action://timer?action=stop&id=<id>` command has been received.
   final List<DivAction>? endActions;
 
+  /// Timer ID. Must be unique. Used when calling actions for the selected timer, for example: start, stop.
   final String id;
 
+  /// Actions that are performed on each count of the timer.
   final List<DivAction>? tickActions;
+
+  /// Duration of time intervals in milliseconds between counts. If the parameter is not specified, the timer counts down from `0` to `duration` without calling `tick_actions`.
   // constraint: number > 0
   final Expression<int>? tickInterval;
 
+  /// Name of the variable where the current timer value is stored. Updated on each count or when the timer commands are called (start, stop, and so on), except the cancel command.
   final String? valueVariable;
 
   @override

@@ -3,14 +3,17 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Extension that affects an element.
 class DivExtension extends Preloadable with EquatableMixin {
   const DivExtension({
     required this.id,
     this.params,
   });
 
+  /// Extension ID.
   final String id;
 
+  /// Additional extension parameters.
   final Map<String, dynamic>? params;
 
   @override

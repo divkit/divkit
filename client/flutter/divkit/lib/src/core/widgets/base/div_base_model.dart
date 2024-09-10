@@ -6,9 +6,11 @@ import 'package:flutter/widgets.dart';
 
 class DivBaseModel with EquatableMixin {
   final double opacity;
+  final bool isGone;
   final DivAlignment alignment;
-  final PassDivSize width;
-  final PassDivSize height;
+  final DivSizeValue width;
+  final DivSizeValue height;
+  final double? aspect;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final DivDecoration? decoration;
@@ -23,18 +25,21 @@ class DivBaseModel with EquatableMixin {
     required this.alignment,
     required this.focusDecoration,
     required this.divVisibility,
+    required this.isGone,
     this.opacity = 1.0,
     this.visibilityActions = const [],
     this.padding,
     this.margin,
+    this.aspect,
     this.decoration,
     this.divId,
   });
 
   static DivBaseModel? value(
     BuildContext context,
-    DivBase data,
-  ) {
+    DivBase data, [
+    Expression<double>? aspect,
+  ]) {
     final divScalingModel = read<DivScalingModel>(context);
     final viewScale = divScalingModel?.viewScale ?? 1;
 
@@ -56,17 +61,16 @@ class DivBaseModel with EquatableMixin {
       }
 
       return DivBaseModel(
+        isGone: data.visibility.requireValue.isGone,
         opacity: data.valueOpacity().clamp(0.0, 1.0),
         alignment: PassDivAlignment(
           data.alignmentVertical,
           data.alignmentHorizontal,
         ).valueAlignment(),
         width: data.valueWidth(
-          extension: margin.horizontal,
           viewScale: viewScale,
         ),
         height: data.valueHeight(
-          extension: margin.vertical,
           viewScale: viewScale,
         ),
         visibilityActions: visibilityActionsList,
@@ -74,6 +78,7 @@ class DivBaseModel with EquatableMixin {
           viewScale: viewScale,
         ),
         margin: margin,
+        aspect: aspect?.requireValue,
         decoration: data.valueBoxDecoration(
           viewScale: viewScale,
         ),
@@ -95,8 +100,9 @@ class DivBaseModel with EquatableMixin {
 
   static Stream<DivBaseModel> from(
     BuildContext context,
-    DivBase data,
-  ) {
+    DivBase data, [
+    Expression<double>? aspect,
+  ]) {
     final variables = watch<DivContext>(context)!.variableManager;
     final divScalingModel = watch<DivScalingModel>(context);
     final viewScale = divScalingModel?.viewScale ?? 1;
@@ -125,6 +131,7 @@ class DivBaseModel with EquatableMixin {
         }
 
         return DivBaseModel(
+          isGone: (await data.visibility.resolveValue(context: context)).isGone,
           opacity: (await data.resolveOpacity(
             context: context,
           ))
@@ -137,12 +144,10 @@ class DivBaseModel with EquatableMixin {
           ),
           width: await data.resolveWidth(
             context: context,
-            extension: margin.horizontal,
             viewScale: viewScale,
           ),
           height: await data.resolveHeight(
             context: context,
-            extension: margin.vertical,
             viewScale: viewScale,
           ),
           visibilityActions: visibilityActionsList,
@@ -151,6 +156,9 @@ class DivBaseModel with EquatableMixin {
             viewScale: viewScale,
           ),
           margin: margin,
+          aspect: await aspect?.resolveValue(
+            context: context,
+          ),
           decoration: await data.resolveBoxDecoration(
             context: context,
             viewScale: viewScale,
@@ -174,6 +182,7 @@ class DivBaseModel with EquatableMixin {
         alignment,
         width,
         height,
+        aspect,
         padding,
         margin,
         decoration,
@@ -335,78 +344,50 @@ extension PassDivBase on DivBase {
   Future<double> resolveOpacity({
     required DivVariableContext context,
   }) async {
-    final opacity = (await visibility.resolveValue(context: context)).asOpacity;
-    if (opacity != 1) {
+    final visibility = (await this.visibility.resolveValue(context: context));
+    if (!visibility.isVisible) {
       return 0;
     }
     return await alpha.resolveValue(context: context);
   }
 
   double valueOpacity() {
-    final opacity = visibility.value!.asOpacity;
-    if (opacity != 1) {
+    final visibility = this.visibility.requireValue;
+    if (!visibility.isVisible) {
       return 0;
     }
-    return alpha.value!;
+    return alpha.requireValue;
   }
 
-  Future<PassDivSize> resolveWidth({
+  Future<DivSizeValue> resolveWidth({
     required DivVariableContext context,
     required double viewScale,
-    double extension = 0,
-  }) async {
-    if ((await visibility.resolveValue(context: context)).isGone) {
-      return const FixedDivSize(0);
-    } else {
-      return await width.resolve(
+  }) async =>
+      await width.resolve(
         context: context,
-        extension: extension,
         viewScale: viewScale,
       );
-    }
-  }
 
-  PassDivSize valueWidth({
+  DivSizeValue valueWidth({
     required double viewScale,
-    double extension = 0,
-  }) {
-    if (visibility.value!.isGone) {
-      return const FixedDivSize(0);
-    } else {
-      return width.passValue(
-        extension: extension,
+  }) =>
+      width.passValue(
         viewScale: viewScale,
       );
-    }
-  }
 
-  Future<PassDivSize> resolveHeight({
+  Future<DivSizeValue> resolveHeight({
     required DivVariableContext context,
     required double viewScale,
-    double extension = 0,
-  }) async {
-    if ((await visibility.resolveValue(context: context)).isGone) {
-      return const FixedDivSize(0);
-    } else {
-      return await height.resolve(
+  }) async =>
+      await height.resolve(
         context: context,
-        extension: extension,
         viewScale: viewScale,
       );
-    }
-  }
 
-  PassDivSize valueHeight({
+  DivSizeValue valueHeight({
     required double viewScale,
-    double extension = 0,
-  }) {
-    if (visibility.value!.isGone) {
-      return const FixedDivSize(0);
-    } else {
-      return height.passValue(
-        extension: extension,
+  }) =>
+      height.passValue(
         viewScale: viewScale,
       );
-    }
-  }
 }

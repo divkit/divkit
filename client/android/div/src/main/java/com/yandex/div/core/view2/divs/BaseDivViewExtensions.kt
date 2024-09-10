@@ -38,6 +38,7 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.reuse.InputFocusTracker
+import com.yandex.div.core.view2.spannable.TextVerticalAlignment
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.FixedLineHeightView
 import com.yandex.div.core.widget.FixedLineHeightView.Companion.UNDEFINED_LINE_HEIGHT
@@ -91,6 +92,7 @@ import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
+import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTransform
 import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibilityAction
@@ -501,6 +503,16 @@ internal fun DivAlignmentVertical.toVerticalAlignment(): ScalingDrawable.Alignme
         DivAlignmentVertical.CENTER -> ScalingDrawable.AlignmentVertical.CENTER
         DivAlignmentVertical.BOTTOM -> ScalingDrawable.AlignmentVertical.BOTTOM
         else -> ScalingDrawable.AlignmentVertical.TOP
+    }
+}
+
+internal fun DivTextAlignmentVertical.toTextVerticalAlignment(): TextVerticalAlignment {
+    return when (this) {
+        DivTextAlignmentVertical.TOP -> TextVerticalAlignment.TOP
+        DivTextAlignmentVertical.CENTER -> TextVerticalAlignment.CENTER
+        DivTextAlignmentVertical.BASELINE -> TextVerticalAlignment.BASELINE
+        DivTextAlignmentVertical.BOTTOM -> TextVerticalAlignment.BOTTOM
+        else -> TextVerticalAlignment.BASELINE
     }
 }
 

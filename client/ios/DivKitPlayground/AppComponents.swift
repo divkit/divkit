@@ -2,6 +2,7 @@ import Foundation
 
 import DivKit
 import DivKitExtensions
+import DivKitMarkdownExtension
 import LayoutKit
 import VGSL
 
@@ -34,6 +35,7 @@ enum AppComponents {
         ShimmerImagePreviewExtension(),
         VideoDurationExtensionHandler(),
         GestureExtensionHandler(),
+        MarkdownExtensionHandler(),
       ],
       flagsInfo: DivFlagsInfo(imageLoadingOptimizationEnabled: true),
       fontProvider: fontProvider,

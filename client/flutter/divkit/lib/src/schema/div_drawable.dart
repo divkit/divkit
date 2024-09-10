@@ -46,6 +46,8 @@ class DivDrawable extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 0;
 
+  bool get isDivShapeDrawable => _index == 0;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

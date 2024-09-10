@@ -9,7 +9,6 @@ class ContentUrl extends Preloadable with EquatableMixin {
   });
 
   static const type = "url";
-
   final Expression<Uri> value;
 
   @override

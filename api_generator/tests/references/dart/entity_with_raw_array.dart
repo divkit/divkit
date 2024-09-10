@@ -4,13 +4,13 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithRawArray extends Preloadable with EquatableMixin  {
   const EntityWithRawArray({
     required this.array,
   });
 
   static const type = "entity_with_raw_array";
-
   final Expression<List<dynamic>> array;
 
   @override

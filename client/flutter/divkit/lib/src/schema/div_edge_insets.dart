@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_size_unit.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// It sets margins.
 class DivEdgeInsets extends Preloadable with EquatableMixin {
   const DivEdgeInsets({
     this.bottom = const ValueExpression(0),
@@ -15,16 +16,27 @@ class DivEdgeInsets extends Preloadable with EquatableMixin {
     this.unit = const ValueExpression(DivSizeUnit.dp),
   });
 
+  /// Bottom margin.
   // constraint: number >= 0; default value: 0
   final Expression<int> bottom;
+
+  /// End margin. Margin position depends on the interface orientation. Has higher priority than the left and right margins.
   // constraint: number >= 0
   final Expression<int>? end;
+
+  /// Left margin.
   // constraint: number >= 0; default value: 0
   final Expression<int> left;
+
+  /// Right margin.
   // constraint: number >= 0; default value: 0
   final Expression<int> right;
+
+  /// Start margin. Margin position depends on the interface orientation. Has higher priority than the left and right margins.
   // constraint: number >= 0
   final Expression<int>? start;
+
+  /// Top margin.
   // constraint: number >= 0; default value: 0
   final Expression<int> top;
   // default value: DivSizeUnit.dp

@@ -32,13 +32,16 @@ class DivRootModel with EquatableMixin {
     final variables = watch<DivContext>(context)!.variableManager;
     final state = watch<DivContext>(context)!.stateManager;
     return state.watch<DivRootModel>((states) async {
-      // To avoid errors in the first frame due to outdated variable
-      // context data, needs to preload all the variables used in div.
-      await data.preload(variables.context.current);
-      return DivRootModel(
+      final model = DivRootModel(
         stateId: states['root']!,
         states: data.states,
       );
+
+      // To avoid errors in the first frame due to outdated variable
+      // context data, needs to preload all the variables used in state.
+      await model.state.preload(variables.context.current);
+
+      return model;
     }).distinct();
   }
 

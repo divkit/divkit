@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// An integer variable.
 class IntegerVariable extends Preloadable with EquatableMixin {
   const IntegerVariable({
     required this.name,
@@ -11,8 +12,10 @@ class IntegerVariable extends Preloadable with EquatableMixin {
 
   static const type = "integer";
 
+  /// Variable name.
   final String name;
 
+  /// Value.
   final int value;
 
   @override

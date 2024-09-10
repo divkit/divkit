@@ -6,7 +6,6 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.widget.addTextChangedListener
 import com.yandex.div.core.widget.FixedLineHeightHelper
 import com.yandex.div.core.widget.FixedLineHeightView
 
@@ -16,7 +15,10 @@ internal open class SuperLineHeightEditText @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AppCompatEditText(context, attrs, defStyleAttr), FixedLineHeightView {
 
-    private var verticallyScrolling = true
+    private var horizontalScrollingEnabled = false
+    private var isTextFitting = true
+    private var isDisallowInterceptTouchEvent = false
+    private val interceptTouchEventNeeded get() = !horizontalScrollingEnabled && !isTextFitting
 
     private inline val visibleLineCount get() = when {
         lineCount == 0 -> 1
@@ -30,10 +32,63 @@ internal open class SuperLineHeightEditText @JvmOverloads constructor(
 
     private var currentLineCount = 0
 
-    init {
+    override fun setTextSize(unit: Int, size: Float) {
+        super.setTextSize(unit, size)
+        fixedLineHeightHelper.onFontSizeChanged()
+    }
+
+    override fun onTextChanged(
+        text: CharSequence?,
+        start: Int,
+        lengthBefore: Int,
+        lengthAfter: Int
+    ) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter)
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            addTextChangedListener { remeasureWrapContentConstrained() }
+            remeasureWrapContentConstrained()
         }
+        updateFittingText()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        fixedLineHeightHelper.measureWithFixedLineHeight(heightMeasureSpec, visibleLineCount) {
+            super.setMeasuredDimension(measuredWidthAndState, it)
+        }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        updateFittingText(h)
+    }
+
+    override fun getCompoundPaddingTop() = super.getCompoundPaddingTop() + fixedLineHeightHelper.extraPaddingTop
+
+    override fun getCompoundPaddingBottom() =
+        super.getCompoundPaddingBottom() + fixedLineHeightHelper.extraPaddingBottom
+
+    override fun setHorizontallyScrolling(whether: Boolean) {
+        horizontalScrollingEnabled = whether
+        super.setHorizontallyScrolling(whether)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (!interceptTouchEventNeeded) {
+            if (isDisallowInterceptTouchEvent) {
+                requestDisallowInterceptTouchEvent(false)
+            }
+            return super.onTouchEvent(event)
+        }
+
+        when (event.action and MotionEvent.ACTION_MASK) {
+            MotionEvent.ACTION_DOWN -> requestDisallowInterceptTouchEvent(true)
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                requestDisallowInterceptTouchEvent(false)
+            }
+        }
+        return super.onTouchEvent(event)
     }
 
     private fun remeasureWrapContentConstrained() {
@@ -48,38 +103,15 @@ internal open class SuperLineHeightEditText @JvmOverloads constructor(
         }
     }
 
-    override fun setTextSize(unit: Int, size: Float) {
-        super.setTextSize(unit, size)
-        fixedLineHeightHelper.onFontSizeChanged()
+    private fun updateFittingText(h: Int = height) {
+        if (layout == null || h == 0) return
+        val availableSize = h - compoundPaddingTop - compoundPaddingBottom
+        val targetSize = textHeight(layout.lineCount)
+        isTextFitting = availableSize >= targetSize
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        fixedLineHeightHelper.measureWithFixedLineHeight(heightMeasureSpec, visibleLineCount) {
-            super.setMeasuredDimension(measuredWidthAndState, it)
-        }
-    }
-
-    override fun getCompoundPaddingTop() = super.getCompoundPaddingTop() + fixedLineHeightHelper.extraPaddingTop
-
-    override fun getCompoundPaddingBottom() =
-        super.getCompoundPaddingBottom() + fixedLineHeightHelper.extraPaddingBottom
-
-    override fun setHorizontallyScrolling(whether: Boolean) {
-        verticallyScrolling = !whether
-        super.setHorizontallyScrolling(whether)
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (!verticallyScrolling) {
-            return super.onTouchEvent(event)
-        }
-
-        when (event.action and MotionEvent.ACTION_MASK) {
-            MotionEvent.ACTION_DOWN -> parent.requestDisallowInterceptTouchEvent(true)
-            MotionEvent.ACTION_UP -> parent.requestDisallowInterceptTouchEvent(false)
-        }
-        return super.onTouchEvent(event)
+    private fun requestDisallowInterceptTouchEvent(enabled: Boolean) {
+        isDisallowInterceptTouchEvent = enabled
+        parent.requestDisallowInterceptTouchEvent(enabled)
     }
 }

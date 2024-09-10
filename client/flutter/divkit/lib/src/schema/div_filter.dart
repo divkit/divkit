@@ -65,6 +65,10 @@ class DivFilter extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 1;
 
+  bool get isDivBlur => _index == 0;
+
+  bool get isDivFilterRtlMirror => _index == 1;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

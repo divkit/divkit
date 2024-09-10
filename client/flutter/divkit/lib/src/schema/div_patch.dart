@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Edits the element.
 class DivPatch extends Preloadable with EquatableMixin {
   const DivPatch({
     required this.changes,
@@ -13,13 +14,20 @@ class DivPatch extends Preloadable with EquatableMixin {
     this.onFailedActions,
   });
 
+  /// Element changes.
   // at least 1 elements
   final List<DivPatchChange> changes;
+
+  /// Procedure for applying changes:
+  /// • `transactional` — if an error occurs during application of at least one element, the changes aren't applied.
+  /// • `partial` — all possible changes are applied. If there are errors, they are reported.
   // default value: DivPatchMode.partial
   final Expression<DivPatchMode> mode;
 
+  /// Actions after applying patch.
   final List<DivAction>? onAppliedActions;
 
+  /// Actions after an error applying patch in transactional mode.
   final List<DivAction>? onFailedActions;
 
   @override
@@ -155,6 +163,9 @@ enum DivPatchMode implements Preloadable {
   final String value;
 
   const DivPatchMode(this.value);
+  bool get isTransactional => this == transactional;
+
+  bool get isPartial => this == partial;
 
   T map<T>({
     required T Function() transactional,
@@ -229,8 +240,10 @@ class DivPatchChange extends Preloadable with EquatableMixin {
     this.items,
   });
 
+  /// ID of an element to be replaced or removed.
   final String id;
 
+  /// Elements to be inserted. If the parameter isn't specified, the element will be removed.
   final List<Div>? items;
 
   @override

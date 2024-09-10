@@ -9,7 +9,6 @@ class StringValue extends Preloadable with EquatableMixin {
   });
 
   static const type = "string";
-
   final Expression<String> value;
 
   @override

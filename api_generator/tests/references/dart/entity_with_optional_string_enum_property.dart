@@ -4,13 +4,13 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithOptionalStringEnumProperty extends Preloadable with EquatableMixin  {
   const EntityWithOptionalStringEnumProperty({
     this.property,
   });
 
   static const type = "entity_with_optional_string_enum_property";
-
   final Expression<EntityWithOptionalStringEnumPropertyProperty>? property;
 
   @override
@@ -66,6 +66,10 @@ enum EntityWithOptionalStringEnumPropertyProperty implements Preloadable {
   final String value;
 
   const EntityWithOptionalStringEnumPropertyProperty(this.value);
+  bool get isFirst => this == first;
+
+  bool get isSecond => this == second;
+
 
   T map<T>({
     required T Function() first,

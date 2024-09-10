@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Infinite number of repetitions.
 class DivInfinityCount extends Preloadable with EquatableMixin {
   const DivInfinityCount();
 

@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// A trigger that causes an action when activated.
 class DivTrigger extends Preloadable with EquatableMixin {
   const DivTrigger({
     required this.actions,
@@ -11,10 +12,16 @@ class DivTrigger extends Preloadable with EquatableMixin {
     this.mode = const ValueExpression(DivTriggerMode.onCondition),
   });
 
+  /// Action when a trigger is activated.
   // at least 1 elements
   final List<DivAction> actions;
 
+  /// Condition for activating a trigger. For example, `liked && subscribed`.
   final Expression<bool> condition;
+
+  /// Trigger activation mode:
+  /// • `on_condition` — a trigger is activated when the condition changes from `false` to `true`;
+  /// • `on_variable` — a trigger is activated when the condition is met and the variable value changes.
   // default value: DivTriggerMode.onCondition
   final Expression<DivTriggerMode> mode;
 
@@ -117,6 +124,9 @@ enum DivTriggerMode implements Preloadable {
   final String value;
 
   const DivTriggerMode(this.value);
+  bool get isOnCondition => this == onCondition;
+
+  bool get isOnVariable => this == onVariable;
 
   T map<T>({
     required T Function() onCondition,

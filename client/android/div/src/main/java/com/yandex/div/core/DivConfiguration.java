@@ -52,7 +52,7 @@ public class DivConfiguration {
     @NonNull
     private final Div2ImageStubProvider mDiv2ImageStubProvider;
     @NonNull
-    private final DivVisibilityChangeListener mDivVisibilityChangeListener;
+    private final List<DivVisibilityChangeListener> mDivVisibilityChangeListeners;
     @NonNull
     private final DivCustomViewFactory mDivCustomViewFactory;
     @NonNull
@@ -110,7 +110,7 @@ public class DivConfiguration {
             @NonNull DivStateChangeListener divStateChangeListener,
             @NonNull DivStateCache divStateCache,
             @NonNull Div2ImageStubProvider div2ImageStubProvider,
-            @NonNull DivVisibilityChangeListener divVisibilityChangeListener,
+            @NonNull List<DivVisibilityChangeListener> divVisibilityChangeListeners,
             @NonNull DivCustomViewFactory divCustomViewFactory,
             @NonNull DivCustomViewAdapter divCustomViewAdapter,
             @NonNull DivCustomContainerViewAdapter divCustomContainerViewAdapter,
@@ -148,7 +148,7 @@ public class DivConfiguration {
         mDivStateChangeListener = divStateChangeListener;
         mDivStateCache = divStateCache;
         mDiv2ImageStubProvider = div2ImageStubProvider;
-        mDivVisibilityChangeListener = divVisibilityChangeListener;
+        mDivVisibilityChangeListeners = divVisibilityChangeListeners;
         mDivCustomViewFactory = divCustomViewFactory;
         mDivCustomViewAdapter = divCustomViewAdapter;
         mDivCustomContainerViewAdapter = divCustomContainerViewAdapter;
@@ -222,10 +222,20 @@ public class DivConfiguration {
         return mDiv2ImageStubProvider;
     }
 
-    @Provides
+    @kotlin.Deprecated(message = "Use #getDivVisibilityChangeListeners instead")
     @NonNull
     public DivVisibilityChangeListener getDivVisibilityChangeListener() {
-        return mDivVisibilityChangeListener;
+        if (mDivVisibilityChangeListeners.isEmpty()) {
+            return DivVisibilityChangeListener.STUB;
+        } else {
+            return mDivVisibilityChangeListeners.get(0);
+        }
+    }
+
+    @Provides
+    @NonNull
+    public List<? extends DivVisibilityChangeListener> getDivVisibilityChangeListeners() {
+        return mDivVisibilityChangeListeners;
     }
 
     @Provides
@@ -420,8 +430,8 @@ public class DivConfiguration {
         private DivStateCache mDivStateCache;
         @Nullable
         private Div2ImageStubProvider mDiv2ImageStubProvider;
-        @Nullable
-        private DivVisibilityChangeListener mDivVisibilityChangeListener;
+        @NonNull
+        private final List<DivVisibilityChangeListener> mDivVisibilityChangeListeners = new ArrayList<>();
         @Nullable
         private DivCustomViewFactory mDivCustomViewFactory;
         @Nullable
@@ -526,7 +536,7 @@ public class DivConfiguration {
 
         @NonNull
         public Builder divVisibilityChangeListener(@NonNull DivVisibilityChangeListener listener) {
-            mDivVisibilityChangeListener = listener;
+            mDivVisibilityChangeListeners.add(listener);
             return this;
         }
 
@@ -735,8 +745,7 @@ public class DivConfiguration {
                     mDivStateChangeListener == null ? DivStateChangeListener.STUB : mDivStateChangeListener,
                     mDivStateCache == null ? new InMemoryDivStateCache() : mDivStateCache,
                     mDiv2ImageStubProvider == null ? Div2ImageStubProvider.STUB : mDiv2ImageStubProvider,
-                    mDivVisibilityChangeListener == null ?
-                            DivVisibilityChangeListener.STUB : mDivVisibilityChangeListener,
+                    mDivVisibilityChangeListeners,
                     mDivCustomViewFactory == null ? DivCustomViewFactory.STUB : mDivCustomViewFactory,
                     mDivCustomViewAdapter == null ? DivCustomViewAdapter.STUB : mDivCustomViewAdapter,
                     mDivCustomContainerViewAdapter == null ? DivCustomContainerViewAdapter.STUB

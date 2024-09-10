@@ -44,6 +44,7 @@ class Indicator internal constructor(
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
             animation = additive.animation ?: properties.animation,
+            animators = additive.animators ?: properties.animators,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
@@ -111,7 +112,7 @@ class Indicator internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
@@ -120,6 +121,10 @@ class Indicator internal constructor(
          * Default value: `scale`.
          */
         val animation: Property<Animation>?,
+        /**
+         * Declaration of animators that can be used to change the value of variables over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Element background. It can contain multiple layers.
          */
@@ -279,6 +284,7 @@ class Indicator internal constructor(
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
             result.tryPutProperty("animation", animation)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
@@ -333,8 +339,9 @@ class Indicator internal constructor(
  * @param activeShape Active indicator shape.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -381,6 +388,7 @@ fun DivScope.indicator(
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animation: Indicator.Animation? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -425,6 +433,7 @@ fun DivScope.indicator(
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
         animation = valueOrNull(animation),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
@@ -469,8 +478,9 @@ fun DivScope.indicator(
  * @param activeShape Active indicator shape.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -517,6 +527,7 @@ fun DivScope.indicatorProps(
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animation: Indicator.Animation? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -560,6 +571,7 @@ fun DivScope.indicatorProps(
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
     animation = valueOrNull(animation),
+    animators = valueOrNull(animators),
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
@@ -603,8 +615,9 @@ fun DivScope.indicatorProps(
  * @param activeShape Active indicator shape.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -651,6 +664,7 @@ fun TemplateScope.indicatorRefs(
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animation: ReferenceProperty<Indicator.Animation>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -694,6 +708,7 @@ fun TemplateScope.indicatorRefs(
     alignmentVertical = alignmentVertical,
     alpha = alpha,
     animation = animation,
+    animators = animators,
     background = background,
     border = border,
     columnSpan = columnSpan,
@@ -737,8 +752,9 @@ fun TemplateScope.indicatorRefs(
  * @param activeShape Active indicator shape.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -785,6 +801,7 @@ fun Indicator.override(
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animation: Indicator.Animation? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -829,6 +846,7 @@ fun Indicator.override(
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
         animation = valueOrNull(animation) ?: properties.animation,
+        animators = valueOrNull(animators) ?: properties.animators,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
@@ -873,8 +891,9 @@ fun Indicator.override(
  * @param activeShape Active indicator shape.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -921,6 +940,7 @@ fun Indicator.defer(
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animation: ReferenceProperty<Indicator.Animation>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -965,6 +985,7 @@ fun Indicator.defer(
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         animation = animation ?: properties.animation,
+        animators = animators ?: properties.animators,
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
@@ -1007,7 +1028,7 @@ fun Indicator.defer(
  * @param activeItemSize A size multiplier for an active indicator.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
@@ -1041,6 +1062,7 @@ fun Indicator.evaluate(
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         animation = animation ?: properties.animation,
+        animators = properties.animators,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
@@ -1085,8 +1107,9 @@ fun Indicator.evaluate(
  * @param activeShape Active indicator shape.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1133,6 +1156,7 @@ fun Component<Indicator>.override(
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
     animation: Indicator.Animation? = null,
+    animators: List<Animator>? = null,
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
@@ -1178,6 +1202,7 @@ fun Component<Indicator>.override(
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
         animation = valueOrNull(animation),
+        animators = valueOrNull(animators),
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
@@ -1222,8 +1247,9 @@ fun Component<Indicator>.override(
  * @param activeShape Active indicator shape.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1270,6 +1296,7 @@ fun Component<Indicator>.defer(
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
     animation: ReferenceProperty<Indicator.Animation>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
@@ -1315,6 +1342,7 @@ fun Component<Indicator>.defer(
         alignmentVertical = alignmentVertical,
         alpha = alpha,
         animation = animation,
+        animators = animators,
         background = background,
         border = border,
         columnSpan = columnSpan,
@@ -1357,7 +1385,7 @@ fun Component<Indicator>.defer(
  * @param activeItemSize A size multiplier for an active indicator.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
@@ -1392,6 +1420,7 @@ fun Component<Indicator>.evaluate(
         alignmentVertical = alignmentVertical,
         alpha = alpha,
         animation = animation,
+        animators = null,
         background = null,
         border = null,
         columnSpan = columnSpan,

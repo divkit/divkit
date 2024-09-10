@@ -28,10 +28,22 @@
       "$ref": "div-action-focus-element.json"
     },
     {
+      "$ref": "div-action-hide-tooltip.json"
+    },
+    {
+      "$ref": "div-action-set-state.json"
+    },
+    {
       "$ref": "div-action-set-variable.json"
     },
     {
+      "$ref": "div-action-show-tooltip.json"
+    },
+    {
       "$ref": "div-action-timer.json"
+    },
+    {
+      "$ref": "div-action-video.json"
     }
   ]
 }

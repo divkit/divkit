@@ -1,4 +1,7 @@
 import com.yandex.div.gradle.FileExtensions
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply from: "$projectDir/version.gradle"
 
@@ -40,7 +43,7 @@ allprojects {
         mavenCentral()
     }
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy {
             eachDependency { details ->
                 if (details.requested.group == "com.christophsturm" &&  details.requested.name == "filepeek") {
@@ -50,8 +53,8 @@ allprojects {
         }
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-        kotlinOptions {
+    tasks.withType(KotlinCompile).configureEach {
+        compilerOptions {
             freeCompilerArgs = [
                     "-Xjvm-default=all",
                     "-opt-in=com.yandex.div.data.DivModelInternalApi",
@@ -59,43 +62,43 @@ allprojects {
                     "-opt-in=com.yandex.div.core.annotations.InternalApi",
                     "-opt-in=com.yandex.div.core.annotations.ExperimentalApi"
             ]
-            languageVersion = "1.5"
-            apiVersion = "1.5"
-            jvmTarget = "1.8"
+            languageVersion = KotlinVersion.KOTLIN_1_5
+            apiVersion = KotlinVersion.KOTLIN_1_5
+            jvmTarget = JvmTarget.JVM_1_8
         }
     }
 }
 
 subprojects {
-    tasks.withType(Test) {
+    tasks.withType(Test).configureEach {
         // Do not use parallel forks, because profit from parallel execution is eaten by Robolectric initialization in every test process
         maxParallelForks = 1
         maxHeapSize = "4g"
     }
 
-    configurations.all {
+    configurations.configureEach {
         exclude group: "com.intellij", module: "annotations"
     }
 
     afterEvaluate {
         if (plugins.hasPlugin("jacoco")) {
-            project.tasks.named("jacocoTestReport") { task ->
+            project.tasks.named("jacocoTestReport").get().configure { task ->
                 unitTests.dependsOn(task)
             }
         }
 
-        project.tasks.withType(PublishToMavenRepository) { task ->
+        project.tasks.withType(PublishToMavenRepository).configureEach { task ->
             task.finalizedBy(reportBuildNumber)
         }
 
-        project.tasks.withType(PublishToMavenLocal) { task ->
+        project.tasks.withType(PublishToMavenLocal).configureEach { task ->
             task.finalizedBy(reportVersion)
         }
     }
 }
 
 wrapper {
-    gradleVersion "8.3"
+    gradleVersion "8.10"
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
@@ -118,37 +121,37 @@ apiValidation {
     ]
 }
 
-task reportVersion {
+tasks.register('reportVersion') {
     doLast {
         println "DivKit version ${divkitVersion.releaseLibraryVersion}"
     }
 }
 
-task reportBuildNumber {
+tasks.register('reportBuildNumber') {
     doLast {
         println "buildNumber ${divkitVersion.releaseLibraryVersion}"
     }
 }
 
-task assembleDemoDebug {
+tasks.register('assembleDemoDebug') {
     dependsOn ":divkit-demo-app:assembleDebug"
 }
 
-task assembleDemoDebugBundle {
+tasks.register('assembleDemoDebugBundle') {
     dependsOn ":divkit-demo-app:bundleDebug"
 }
 
-task assembleDemoRelease {
+tasks.register('assembleDemoRelease') {
     dependsOn ":divkit-demo-app:assembleRelease"
 }
 
-task assembleDemoReleaseBundle {
+tasks.register('assembleDemoReleaseBundle') {
     dependsOn ":divkit-demo-app:bundleRelease"
 }
 
-task unitTests
+tasks.register('unitTests')
 
-task finalVerification {
+tasks.register('finalVerification') {
     dependsOn unitTests
 }
 

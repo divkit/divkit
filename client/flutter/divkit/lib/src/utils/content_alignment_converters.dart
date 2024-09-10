@@ -79,22 +79,10 @@ abstract class ContentAlignment {
   const ContentAlignment();
 
   T map<T>({
-    required T Function(FlexContentAlignment) flex,
-    required T Function(WrapContentAlignment) wrap,
-    required T Function(StackContentAlignment) stack,
-  }) {
-    final value = this;
-    if (value is FlexContentAlignment) {
-      return flex(value);
-    }
-    if (value is WrapContentAlignment) {
-      return wrap(value);
-    }
-    if (value is StackContentAlignment) {
-      return stack(value);
-    }
-    throw Exception("Unsupported ContentAlignment type");
-  }
+    required T Function(FlexContentAlignment data) flex,
+    required T Function(WrapContentAlignment data) wrap,
+    required T Function(StackContentAlignment data) stack,
+  });
 }
 
 class FlexContentAlignment extends ContentAlignment with EquatableMixin {
@@ -108,6 +96,14 @@ class FlexContentAlignment extends ContentAlignment with EquatableMixin {
     required this.crossAxisAlignment,
     required this.mainAxisAlignment,
   });
+
+  @override
+  T map<T>({
+    required T Function(FlexContentAlignment data) flex,
+    required T Function(WrapContentAlignment data) wrap,
+    required T Function(StackContentAlignment data) stack,
+  }) =>
+      flex(this);
 
   @override
   List<Object?> get props => [direction, crossAxisAlignment, mainAxisAlignment];
@@ -126,6 +122,14 @@ class WrapContentAlignment extends ContentAlignment with EquatableMixin {
   });
 
   @override
+  T map<T>({
+    required T Function(FlexContentAlignment data) flex,
+    required T Function(WrapContentAlignment data) wrap,
+    required T Function(StackContentAlignment data) stack,
+  }) =>
+      wrap(this);
+
+  @override
   List<Object?> get props => [direction, wrapAlignment, runAlignment];
 }
 
@@ -135,6 +139,14 @@ class StackContentAlignment extends ContentAlignment with EquatableMixin {
   const StackContentAlignment({
     required this.contentAlignment,
   });
+
+  @override
+  T map<T>({
+    required T Function(FlexContentAlignment data) flex,
+    required T Function(WrapContentAlignment data) wrap,
+    required T Function(StackContentAlignment data) stack,
+  }) =>
+      stack(this);
 
   @override
   List<Object?> get props => [contentAlignment];
@@ -163,7 +175,6 @@ class PassDivContentAlignment {
 
     final divVertical = await safeVertical.resolveValue(context: context);
     final divHorizontal = await safeHorizontal.resolveValue(context: context);
-
     final isWrap = await layoutMode.resolveValue(context: context) ==
         DivContainerLayoutMode.wrap;
 

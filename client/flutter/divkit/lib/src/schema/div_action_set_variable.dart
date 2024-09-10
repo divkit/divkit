@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_typed_value.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Assigns a value to the variable
 class DivActionSetVariable extends Preloadable with EquatableMixin {
   const DivActionSetVariable({
     required this.value,
@@ -11,9 +12,7 @@ class DivActionSetVariable extends Preloadable with EquatableMixin {
   });
 
   static const type = "set_variable";
-
   final DivTypedValue value;
-
   final Expression<String> variableName;
 
   @override

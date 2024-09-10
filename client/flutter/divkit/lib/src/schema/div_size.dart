@@ -84,6 +84,12 @@ class DivSize extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 2;
 
+  bool get isDivFixedSize => _index == 0;
+
+  bool get isDivMatchParentSize => _index == 1;
+
+  bool get isDivWrapContentSize => _index == 2;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

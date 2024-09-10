@@ -10,6 +10,11 @@ enum DivVideoScale implements Preloadable {
   final String value;
 
   const DivVideoScale(this.value);
+  bool get isFill => this == fill;
+
+  bool get isNoScale => this == noScale;
+
+  bool get isFit => this == fit;
 
   T map<T>({
     required T Function() fill,

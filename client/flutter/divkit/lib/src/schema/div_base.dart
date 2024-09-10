@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_accessibility.dart';
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_background.dart';
 import 'package:divkit/src/schema/div_border.dart';
@@ -32,6 +33,8 @@ abstract class DivBase extends Preloadable {
 
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   Expression<double> get alpha;
+
+  List<DivAnimator>? get animators;
 
   List<DivBackground>? get background;
 

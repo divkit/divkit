@@ -6,6 +6,7 @@ import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
 import 'package:divkit/src/schema/div_animation.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_aspect.dart';
 import 'package:divkit/src/schema/div_background.dart';
@@ -34,6 +35,7 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Container. It contains other elements and is responsible for their location. It is used to arrange elements vertically, horizontally, and with an overlay in a certain order, simulating the third dimension.
 class DivContainer extends Preloadable with EquatableMixin implements DivBase {
   const DivContainer({
     this.accessibility = const DivAccessibility(),
@@ -56,6 +58,7 @@ class DivContainer extends Preloadable with EquatableMixin implements DivBase {
     this.alignmentHorizontal,
     this.alignmentVertical,
     this.alpha = const ValueExpression(1.0),
+    this.animators,
     this.aspect,
     this.background,
     this.border = const DivBorder(),
@@ -104,122 +107,187 @@ class DivContainer extends Preloadable with EquatableMixin implements DivBase {
 
   static const type = "container";
 
+  /// Accessibility settings.
   @override
   final DivAccessibility accessibility;
 
+  /// One action when clicking on an element. Not used if the `actions` parameter is set.
   final DivAction? action;
+
+  /// Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
   // default value: const DivAnimation(duration: ValueExpression(100,), endValue: ValueExpression(0.6,), name: ValueExpression(DivAnimationName.fade,), startValue: ValueExpression(1,),)
   final DivAnimation actionAnimation;
 
+  /// Multiple actions when clicking on an element.
   final List<DivAction>? actions;
 
+  /// Horizontal alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentHorizontal>? alignmentHorizontal;
 
+  /// Vertical alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentVertical>? alignmentVertical;
+
+  /// Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   @override
   final Expression<double> alpha;
 
+  /// Declaration of animators that can be used to change the value of variables over time.
+  @override
+  final List<DivAnimator>? animators;
+
+  /// Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value.
+  /// On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
   final DivAspect? aspect;
 
+  /// Element background. It can contain multiple layers.
   @override
   final List<DivBackground>? background;
 
+  /// Element stroke.
   @override
   final DivBorder border;
+
+  /// Enables the bounding of child elements by the parent's borders.
   // default value: true
   final Expression<bool> clipToBounds;
+
+  /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? columnSpan;
+
+  /// Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
   // default value: DivContentAlignmentHorizontal.start
   final Expression<DivContentAlignmentHorizontal> contentAlignmentHorizontal;
+
+  /// Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
   // default value: DivContentAlignmentVertical.top
   final Expression<DivContentAlignmentVertical> contentAlignmentVertical;
 
+  /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
 
+  /// Action when double-clicking on an element.
   final List<DivAction>? doubletapActions;
 
+  /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
   final List<DivExtension>? extensions;
 
+  /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
+
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
 
+  /// Sets collection elements dynamically using `data` and `prototypes`.
   final DivCollectionItemBuilder? itemBuilder;
 
+  /// Nested elements.
   final List<Div>? items;
+
+  /// Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:
+  /// • A separate line is allocated for each element along the main axis with the size value set to `match_parent`.
+  /// • Elements along the cross axis with the size value `match_parent` are ignored.
   // default value: DivContainerLayoutMode.noWrap
   final Expression<DivContainerLayoutMode> layoutMode;
 
+  /// Provides element real size values after a layout cycle.
   @override
   final DivLayoutProvider? layoutProvider;
 
+  /// Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
   final DivContainerSeparator? lineSeparator;
 
+  /// Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
   final List<DivAction>? longtapActions;
 
+  /// External margins from the element stroke.
   @override
   final DivEdgeInsets margins;
+
+  /// Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
   // default value: DivContainerOrientation.vertical
   final Expression<DivContainerOrientation> orientation;
 
+  /// Internal margins from the element stroke.
   @override
   final DivEdgeInsets paddings;
 
+  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
   @override
   final Expression<String>? reuseId;
+
+  /// Merges cells in a string of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
 
+  /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
   final List<DivAction>? selectedActions;
 
+  /// Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
   final DivContainerSeparator? separator;
 
+  /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
 
+  /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
   final DivTransform transform;
 
+  /// Change animation. It is played when the position or size of an element changes in the new layout.
   @override
   final DivChangeTransition? transitionChange;
 
+  /// Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](https://divkit.tech/docs/en/concepts/interaction#animation/transition-animation).
   @override
   final DivAppearanceTransition? transitionIn;
 
+  /// Disappearance animation. It is played when an element disappears in the new layout.
   @override
   final DivAppearanceTransition? transitionOut;
+
+  /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
 
+  /// Triggers for changing variables within an element.
   @override
   final List<DivTrigger>? variableTriggers;
 
+  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
   @override
   final List<DivVariable>? variables;
+
+  /// Element visibility.
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
 
+  /// Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
   @override
   final DivVisibilityAction? visibilityAction;
 
+  /// Actions when an element appears on the screen.
   @override
   final List<DivVisibilityAction>? visibilityActions;
+
+  /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   @override
   final DivSize width;
@@ -233,6 +301,7 @@ class DivContainer extends Preloadable with EquatableMixin implements DivBase {
         alignmentHorizontal,
         alignmentVertical,
         alpha,
+        animators,
         aspect,
         background,
         border,
@@ -281,6 +350,7 @@ class DivContainer extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
+    List<DivAnimator>? Function()? animators,
     DivAspect? Function()? aspect,
     List<DivBackground>? Function()? background,
     DivBorder? border,
@@ -332,6 +402,7 @@ class DivContainer extends Preloadable with EquatableMixin implements DivBase {
             ? alignmentVertical.call()
             : this.alignmentVertical,
         alpha: alpha ?? this.alpha,
+        animators: animators != null ? animators.call() : this.animators,
         aspect: aspect != null ? aspect.call() : this.aspect,
         background: background != null ? background.call() : this.background,
         border: border ?? this.border,
@@ -450,6 +521,14 @@ class DivContainer extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         )!,
+        animators: safeParseObj(
+          safeListMap(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         aspect: safeParseObj(
           DivAspect.fromJson(json['aspect']),
         ),
@@ -704,6 +783,14 @@ class DivContainer extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         ))!,
+        animators: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         aspect: await safeParseObjAsync(
           DivAspect.fromJson(json['aspect']),
         ),
@@ -918,6 +1005,7 @@ class DivContainer extends Preloadable with EquatableMixin implements DivBase {
       await alignmentHorizontal?.preload(context);
       await alignmentVertical?.preload(context);
       await alpha.preload(context);
+      await safeFuturesWait(animators, (v) => v.preload(context));
       await aspect?.preload(context);
       await safeFuturesWait(background, (v) => v.preload(context));
       await border.preload(context);
@@ -970,14 +1058,22 @@ class DivContainerSeparator extends Preloadable with EquatableMixin {
     required this.style,
   });
 
+  /// External margins from the element stroke.
   final DivEdgeInsets margins;
+
+  /// Enables displaying the separator after the last item.
   // default value: false
   final Expression<bool> showAtEnd;
+
+  /// Enables displaying the separator before the first item.
   // default value: false
   final Expression<bool> showAtStart;
+
+  /// Enables displaying the separator between items.
   // default value: true
   final Expression<bool> showBetween;
 
+  /// Separator style.
   final DivDrawable style;
 
   @override
@@ -1094,6 +1190,11 @@ enum DivContainerOrientation implements Preloadable {
   final String value;
 
   const DivContainerOrientation(this.value);
+  bool get isVertical => this == vertical;
+
+  bool get isHorizontal => this == horizontal;
+
+  bool get isOverlap => this == overlap;
 
   T map<T>({
     required T Function() vertical,
@@ -1179,6 +1280,9 @@ enum DivContainerLayoutMode implements Preloadable {
   final String value;
 
   const DivContainerLayoutMode(this.value);
+  bool get isNoWrap => this == noWrap;
+
+  bool get isWrap => this == wrap;
 
   T map<T>({
     required T Function() noWrap,

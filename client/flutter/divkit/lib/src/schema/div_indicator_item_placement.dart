@@ -69,6 +69,10 @@ class DivIndicatorItemPlacement extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 1;
 
+  bool get isDivDefaultIndicatorItemPlacement => _index == 0;
+
+  bool get isDivStretchIndicatorItemPlacement => _index == 1;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

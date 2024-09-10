@@ -101,7 +101,8 @@
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_input_max_length",
           "platforms": [
-            "android",
+            "android",    
+            "ios",
             "web"
           ]
         },

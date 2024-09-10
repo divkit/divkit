@@ -9,7 +9,6 @@ class ColorValue extends Preloadable with EquatableMixin {
   });
 
   static const type = "color";
-
   final Expression<Color> value;
 
   @override

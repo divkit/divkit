@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// A string variable.
 class StringVariable extends Preloadable with EquatableMixin {
   const StringVariable({
     required this.name,
@@ -11,8 +12,10 @@ class StringVariable extends Preloadable with EquatableMixin {
 
   static const type = "string";
 
+  /// Variable name.
   final String name;
 
+  /// Value.
   final String value;
 
   @override

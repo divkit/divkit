@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_size_unit.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Element dimension value.
 class DivDimension extends Preloadable with EquatableMixin {
   const DivDimension({
     this.unit = const ValueExpression(DivSizeUnit.dp),
@@ -13,6 +14,7 @@ class DivDimension extends Preloadable with EquatableMixin {
   // default value: DivSizeUnit.dp
   final Expression<DivSizeUnit> unit;
 
+  /// Value.
   final Expression<double> value;
 
   @override

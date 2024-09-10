@@ -4,6 +4,7 @@ import XCTest
 
 @testable import DivKit
 import DivKitExtensions
+import DivKitMarkdownExtension
 @testable import LayoutKit
 import VGSL
 
@@ -36,7 +37,7 @@ struct DivKitSnapshotTests {
     try await test.run(
       caseName: file.name.removingFileExtension,
       blocksState: defaultPagerViewState,
-      extensions: [labelImagePreviewExtension]
+      extensions: [labelImagePreviewExtension, MarkdownExtensionHandler()]
     )
   }
 

@@ -10,6 +10,11 @@ enum DivVisibility implements Preloadable {
   final String value;
 
   const DivVisibility(this.value);
+  bool get isVisible => this == visible;
+
+  bool get isInvisible => this == invisible;
+
+  bool get isGone => this == gone;
 
   T map<T>({
     required T Function() visible,

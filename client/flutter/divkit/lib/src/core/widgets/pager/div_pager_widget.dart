@@ -25,12 +25,12 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
 
   @override
   void initState() {
+    super.initState();
     value = DivPagerModel.value(context, widget.data);
     currentPage = widget.data.defaultItem.value ?? 0;
     controller = PageController(
       initialPage: currentPage,
     );
-    super.initState();
   }
 
   @override
@@ -70,11 +70,14 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
             if (snapshot.hasData) {
               final model = snapshot.requireData;
 
-              return PageView(
-                scrollDirection: model.orientation,
-                controller: controller,
-                onPageChanged: (value) => onPageChanged(value),
-                children: model.children,
+              return provide(
+                DivParentData.pager,
+                child: PageView(
+                  scrollDirection: model.orientation,
+                  controller: controller,
+                  onPageChanged: (value) => onPageChanged(value),
+                  children: model.children,
+                ),
               );
             }
 
@@ -87,7 +90,7 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
     currentPage = value;
     final id = widget.data.id;
     if (id != null) {
-      final divContext = DivKitProvider.watch<DivContext>(context)!;
+      final divContext = watch<DivContext>(context)!;
       divContext.variableManager.updateVariable(id, currentPage);
     }
   }
@@ -95,6 +98,7 @@ class _DivPagerWidgetState extends State<DivPagerWidget> {
   @override
   void dispose() {
     controller.dispose();
+    value = null;
     stream = null;
     super.dispose();
   }

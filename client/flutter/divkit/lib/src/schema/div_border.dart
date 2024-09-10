@@ -6,6 +6,7 @@ import 'package:divkit/src/schema/div_stroke.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Stroke around the element.
 class DivBorder extends Preloadable with EquatableMixin {
   const DivBorder({
     this.cornerRadius,
@@ -15,15 +16,21 @@ class DivBorder extends Preloadable with EquatableMixin {
     this.stroke,
   });
 
+  /// One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
   // constraint: number >= 0
   final Expression<int>? cornerRadius;
 
+  /// Multiple radii of element and stroke corner rounding.
   final DivCornersRadius? cornersRadius;
+
+  /// Adding shadow.
   // default value: false
   final Expression<bool> hasShadow;
 
+  /// Parameters of the shadow applied to the element stroke.
   final DivShadow? shadow;
 
+  /// Stroke style.
   final DivStroke? stroke;
 
   @override

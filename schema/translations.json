@@ -43,13 +43,13 @@
     "en": "The identifier of the animator being started.",
     "ru": "Идентификатор запускаемого аниматора"
   },
-  "div_action_animator_start_start_value": {
-    "en": "Overrides value that will be set at the start of animation.",
-    "ru": "Переопределяет, какое значение будет установлено в переменную перед началом анимации."
-  },
   "div_action_animator_start_end_value": {
     "en": "Overrides value that will be set at the end of animation.",
     "ru": "Переопределяет, какое значение будет установлено в переменную после завершения анимации."
+  },
+  "div_action_animator_start_start_value": {
+    "en": "Overrides value that will be set at the start of animation.",
+    "ru": "Переопределяет, какое значение будет установлено в переменную перед началом анимации."
   },
   "div_action_animator_stop": {
     "en": "Stops specified animator",
@@ -127,9 +127,37 @@
     "en": "Context menu.",
     "ru": "Контекстное меню."
   },
+  "div_action_hide_tooltip" : {
+    "en": "Hides tooltip.",
+    "ru": "Скрывает тултип."
+  },
+  "div_action_tooltip_id": {
+    "en": "Tooltip identifier.",
+    "ru": "Идентификатор тултипа."
+  },
+  "div_action_set_state" : {
+    "en": "Switches the appearance of content in `div-state`.",
+    "ru": "Устанавливает новый внешний вид контента в `div-state`."
+  },
+  "div_action_set_state_state_id": {
+    "en": "The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>",
+    "ru": "Путь состояния внутри `state`, которое нужно активировать. Задается в формате `div_data_state_id/id/state_id`. Mожет быть иерархическим: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Состоит из:<li>`div_data_state_id` - числовое значение `state_id` объекта `state` в data;</li><li>`id` - значение `id` объекта `state`;</li><li>`state_id` - значение `state_id` объекта state в `state`.</li>"
+  },
+  "div_action_set_state_temporary": {
+    "en": "Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>",
+    "ru": "Указывает на изменение состояния:<li>`true` — изменение временное и при пересоздании элемента состояние изменится на исходное (значение по умолчанию);</li><li>`false` — изменение состояния является постоянным.</li>"
+  },
   "div_action_set_variable": {
     "en": "Assigns a value to the variable",
     "ru": "Присваивает переменной значение"
+  },
+  "div_action_show_tooltip": {
+    "en": "Shows tooltip.",
+    "ru": "Показывает тултип."
+  },
+  "div_action_show_tooltip_multiple": {
+    "en": "Defines whether tooltip can be shown again after being closed.",
+    "ru": "Mожет ли тултип показаться ещё раз после закрытия."
   },
   "div_action_target": {
     "en": "The tab in which the URL must be opened.",
@@ -146,6 +174,18 @@
   "div_action_timer_id": {
     "en": "Timer identifier.",
     "ru": "Идентификатор таймера."
+  },
+  "div_action_video": {
+    "en": "Controls given video.",
+    "ru": "Управляет видео."
+  },
+  "div_action_video_action": {
+    "en": "Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>",
+    "ru": "Определяет действие с видео: <li>`start` - начинает воспроизведение видео если видео готово к воспроизведению или планирует воспроизведение;</li><li>`pause` - останавливает воспроизведение видео.</li>"
+  },
+  "div_action_video_id": {
+    "en": "Video identifier.",
+    "ru": "Идентификатор видео."
   },
   "div_actionable_action": {
     "en": "One action when clicking on an element. Not used if the `actions` parameter is set.",
@@ -243,21 +283,13 @@
     "en": "Name of the variable being animated.",
     "ru": "Имя анимируемой переменной."
   },
-  "div_animator_start_value": {
-    "en": "Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.",
-    "ru": "Значение переменной, которое она примет в начале анимации. Если свойство не указано, то будет использовано текущее значение переменной."
-  },
   "div_animator_end_value": {
     "en": "Value that will be set at the end of animation.",
     "ru": "Значение переменной, которое она примет в конце анимации."
   },
-  "div_color_animator": {
-    "en": "Color animator.",
-    "ru": "Аниматор цвета."
-  },
-  "div_number_animator": {
-    "en": "Number animator.",
-    "ru": "Аниматор числового значения."
+  "div_animator_start_value": {
+    "en": "Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.",
+    "ru": "Значение переменной, которое она примет в начале анимации. Если свойство не указано, то будет использовано текущее значение переменной."
   },
   "div_appearance_set_transition": {
     "en": "A set of animations to be applied simultaneously.",
@@ -319,12 +351,13 @@
     "en": "Vertical alignment of an element inside the parent element.",
     "ru": "Вертикальное выравнивание элемента внутри родительского."
   },
+  "div_base_alpha": {
+    "en": "Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.",
+    "ru": "Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
+  },
   "div_base_animators": {
     "en": "Declaration of animators that can be used to change the value of variables over time.",
     "ru": "Объявление аниматоров, с помощью которых можно изменять значение переменных во времени."
-  },
-  "div_base_alpha": {
-    "ru": "Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
   },
   "div_base_background": {
     "en": "Element background. It can contain multiple layers.",
@@ -525,6 +558,10 @@
   "div_collection_item_builder_prototypes_selector": {
     "en": "A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.",
     "ru": "Условие, которое используется для выбора прототипа для очередного элемента коллекции. В случае, если будет больше 1 истинного условия, будет выбран прототип, который находится раньше. Если не выполнено ни одно условие, элемент из `data` будет пропущен."
+  },
+  "div_color_animator": {
+    "en": "Color animator.",
+    "ru": "Аниматор цвета."
   },
   "div_container": {
     "en": "Container. It contains other elements and is responsible for their location. It is used to arrange elements vertically, horizontally, and with an overlay in a certain order, simulating the third dimension.",
@@ -1313,6 +1350,10 @@
   "div_nine_patch_background_insets": {
     "en": "Margins that break the image into parts using the same rules as the CSS `border-image-slice` property (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice).",
     "ru": "Отступы, разбивающие изображение на части по тем же правилам, как при использовании свойства CSS `border-image-slice` (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
+  },
+  "div_number_animator": {
+    "en": "Number animator.",
+    "ru": "Аниматор числового значения."
   },
   "div_page_size": {
     "en": "Page width (%).",

@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_transition_base.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Scale animation.
 class DivScaleTransition extends Preloadable
     with EquatableMixin
     implements DivTransitionBase {
@@ -19,18 +20,30 @@ class DivScaleTransition extends Preloadable
   });
 
   static const type = "scale";
+
+  /// Animation duration in milliseconds.
   // constraint: number >= 0; default value: 200
   @override
   final Expression<int> duration;
+
+  /// Transition speed nature.
   // default value: DivAnimationInterpolator.easeInOut
   @override
   final Expression<DivAnimationInterpolator> interpolator;
+
+  /// Relative coordinate `X` of the point that won't change its position in case of scaling.
   // constraint: number >= 0.0 && number <= 1.0; default value: 0.5
   final Expression<double> pivotX;
+
+  /// Relative coordinate `Y` of the point that won't change its position in case of scaling.
   // constraint: number >= 0.0 && number <= 1.0; default value: 0.5
   final Expression<double> pivotY;
+
+  /// Value of the scale  from which the element starts appearing or at which it finishes disappearing.
   // constraint: number >= 0.0; default value: 0.0
   final Expression<double> scale;
+
+  /// Delay in milliseconds before animation starts.
   // constraint: number >= 0; default value: 0
   @override
   final Expression<int> startDelay;

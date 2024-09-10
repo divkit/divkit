@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:text=""
+    android:hint="Enter link or JSON"
+    style="@style/AppTheme.NoActionBar.Demo"/>

@@ -4,13 +4,14 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithRequiredProperty extends Preloadable with EquatableMixin  {
   const EntityWithRequiredProperty({
     required this.property,
   });
 
   static const type = "entity_with_required_property";
-  // at least 1 char
+   // at least 1 char
   final Expression<String> property;
 
   @override

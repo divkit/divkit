@@ -845,6 +845,12 @@ final skippedTests = [
     'Native calls are not supported, can be fixed after dart expression resolver',
   ),
 
+  const _SkipTest(
+    'example/assets/test_data/snapshot_test_data/div-text/text_image_vertical_alignment.json',
+    _Reason.unknown,
+    'Not supported by platform now',
+  ),
+
 // # div-transform
 
   ...[

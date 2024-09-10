@@ -9,7 +9,6 @@ class NumberValue extends Preloadable with EquatableMixin {
   });
 
   static const type = "number";
-
   final Expression<double> value;
 
   @override

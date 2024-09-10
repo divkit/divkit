@@ -961,6 +961,20 @@
       "file": "animations/mute_notification.json"
     },
     {
+      "title": "Div with corner radius and shadow set is clipped during transition animation",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on yellow rectangle",
+        "Repeat if necessary"
+      ],
+      "expected_results": [
+        "Blue circle still a circle while transition is in progress"
+      ],
+      "file": "animations/transient_div_with_clip_and_shadow.json"
+    },
+    {
       "title": "State transition any change",
       "file": "animations/transition/state_transition_any_change.json"
     },
@@ -1439,16 +1453,6 @@
     },
     {
       "title": "Variables in DivIndicator",
-      "steps": [
-        "Click on buttons, check the indicator appearance and animation",
-        "Click on last button to reset",
-        "Scroll pager to the center, click on buttons, check the indicator",
-        "Click on last button to reset",
-        "Scroll pager to the end, click on buttons, check the indicator"
-      ],
-      "expected_results": [
-        "Indicator appearance changes and it changes according to the clicked button description"
-      ],
       "file": "variables/div_indicator.json"
     },
     {
@@ -1644,6 +1648,20 @@
       "automated": [
         "android"
       ]
+    },
+    {
+      "title": "Text input max_length",
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Enter text with more than 10 characters"
+      ],
+      "expected_results": [
+        "text in the field should not be longer than 10 characters"
+      ],
+      "file": "input_max_length.json"
     },
     {
       "title": "Select",
@@ -1964,6 +1982,21 @@
       "file": "timers/common-timer.json"
     },
     {
+      "title": "Common timer with typed action",
+      "tags": [
+        "Timers",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "expected_results": [
+        "The timer calls tick_actions and changes the variable with the set interval.",
+        "After the duration expires, the timer stops and calls end_actions."
+      ],
+      "file": "timers/typed-common-timer.json"
+    },
+    {
       "title": "Endless timer",
       "tags": [
         "Timers"
@@ -1989,6 +2022,24 @@
         "The timer changes the value of the variable only at the end of the work."
       ],
       "file": "timers/countdown-timer.json"
+    },
+    {
+      "title": "Change bounds transition allows input focus",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+              "android": "The bug is caused by the peculiarities of animation implementation on iOS",
+              "web": "The bug is caused by the peculiarities of animation implementation on iOS"
+      },
+      "tags": [
+        "DivInput",
+        "Animations"
+      ],
+      "expected_results": [
+        "Text can be entered into the input field, focus does not disappear. The check is related to the implementation features of change_bounds on iOS"
+      ],
+      "file": "change_bounds_transition_input.json"
     },
     {
       "title": "Blur in DivImage",
@@ -2150,6 +2201,19 @@
       "file": "phone_input_mask.json"
     },
     {
+      "title": "Regex input filter",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "Entered text must be filtered by a regular expression from another input field"
+      ],
+      "file": "regex_input_filter.json"
+    },
+    {
       "title": "Regex input validator",
       "platforms": [
         "android",
@@ -2162,6 +2226,19 @@
         "DivInput"
       ],
       "file": "regex_input_validator.json"
+    },
+    {
+      "title": "Expression input filter",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "expected_results": [
+        "Entering in the input field should be filtered depending on whether the filter condition is enabled or disabled"
+      ],
+      "file": "expression_input_filter.json"
     },
     {
       "title": "Expression input validator",
@@ -2197,6 +2274,17 @@
         "DivVideo"
       ],
       "file": "video/video_with_controls.json"
+    },
+    {
+      "title": "Video with controls and typed actions",
+      "tags": [
+        "DivVideo",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "file": "video/typed_video_with_controls.json"
     },
     {
       "title": "Video volume control",
@@ -2287,6 +2375,26 @@
         "All buttons should change variable value, also buttons with the 'by variable' text should perform the same as `by action` buttons"
       ],
       "file": "state/state_variable.json"
+    },
+    {
+      "title": "Tooltips with typed actions",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Tooltips",
+        "Visibility_actions",
+        "TypedActions"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "typed-tooltips.json"
     },
     {
       "title": "Tooltips",

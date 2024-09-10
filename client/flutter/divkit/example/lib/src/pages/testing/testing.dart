@@ -35,9 +35,7 @@ Future<List<Item>> process(Box box) async {
         data,
         tags.toSet(),
       ));
-    } catch (e) {
-      print(e);
-    }
+    } catch (_) {}
   }
   return it..sort((a, b) => a.title.compareTo(b.title));
 }

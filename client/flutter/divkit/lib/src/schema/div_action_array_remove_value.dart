@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Deletes a value from the array
 class DivActionArrayRemoveValue extends Preloadable with EquatableMixin {
   const DivActionArrayRemoveValue({
     required this.index,
@@ -10,9 +11,7 @@ class DivActionArrayRemoveValue extends Preloadable with EquatableMixin {
   });
 
   static const type = "array_remove_value";
-
   final Expression<int> index;
-
   final Expression<String> variableName;
 
   @override

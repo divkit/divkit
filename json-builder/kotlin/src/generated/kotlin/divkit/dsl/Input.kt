@@ -40,6 +40,7 @@ class Input internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             autocapitalization = additive.autocapitalization ?: properties.autocapitalization,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
@@ -107,10 +108,14 @@ class Input internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that can be used to change the value of variables over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Automatic text capitalization type.
          * Default value: `auto`.
@@ -334,6 +339,7 @@ class Input internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("autocapitalization", autocapitalization)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
@@ -446,7 +452,8 @@ class Input internal constructor(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -505,6 +512,7 @@ fun DivScope.input(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -561,6 +569,7 @@ fun DivScope.input(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         autocapitalization = valueOrNull(autocapitalization),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -618,7 +627,8 @@ fun DivScope.input(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -677,6 +687,7 @@ fun DivScope.inputProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -732,6 +743,7 @@ fun DivScope.inputProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     autocapitalization = valueOrNull(autocapitalization),
     background = valueOrNull(background),
     border = valueOrNull(border),
@@ -788,7 +800,8 @@ fun DivScope.inputProps(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -847,6 +860,7 @@ fun TemplateScope.inputRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -902,6 +916,7 @@ fun TemplateScope.inputRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     autocapitalization = autocapitalization,
     background = background,
     border = border,
@@ -958,7 +973,8 @@ fun TemplateScope.inputRefs(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1017,6 +1033,7 @@ fun Input.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1073,6 +1090,7 @@ fun Input.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         autocapitalization = valueOrNull(autocapitalization) ?: properties.autocapitalization,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
@@ -1130,7 +1148,8 @@ fun Input.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1189,6 +1208,7 @@ fun Input.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -1245,6 +1265,7 @@ fun Input.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         autocapitalization = autocapitalization ?: properties.autocapitalization,
         background = background ?: properties.background,
         border = border ?: properties.border,
@@ -1301,7 +1322,7 @@ fun Input.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param autocapitalization Automatic text capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -1361,6 +1382,7 @@ fun Input.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         autocapitalization = autocapitalization ?: properties.autocapitalization,
         background = properties.background,
         border = properties.border,
@@ -1418,7 +1440,8 @@ fun Input.evaluate(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1477,6 +1500,7 @@ fun Component<Input>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     autocapitalization: Input.Autocapitalization? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1534,6 +1558,7 @@ fun Component<Input>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         autocapitalization = valueOrNull(autocapitalization),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -1591,7 +1616,8 @@ fun Component<Input>.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autocapitalization Automatic text capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1650,6 +1676,7 @@ fun Component<Input>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     autocapitalization: ReferenceProperty<Input.Autocapitalization>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -1707,6 +1734,7 @@ fun Component<Input>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         autocapitalization = autocapitalization,
         background = background,
         border = border,
@@ -1763,7 +1791,7 @@ fun Component<Input>.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param autocapitalization Automatic text capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -1824,6 +1852,7 @@ fun Component<Input>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         autocapitalization = autocapitalization,
         background = null,
         border = null,

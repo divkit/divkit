@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Element size adjusts to a parent element.
 class DivDefaultIndicatorItemPlacement extends Preloadable with EquatableMixin {
   const DivDefaultIndicatorItemPlacement({
     this.spaceBetweenCenters = const DivFixedSize(
@@ -14,6 +15,8 @@ class DivDefaultIndicatorItemPlacement extends Preloadable with EquatableMixin {
   });
 
   static const type = "default";
+
+  /// Spacing between indicator centers.
   // default value: const DivFixedSize(value: ValueExpression(15,),)
   final DivFixedSize spaceBetweenCenters;
 

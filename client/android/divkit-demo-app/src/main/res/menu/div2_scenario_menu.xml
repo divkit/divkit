@@ -19,5 +19,10 @@
         android:orderInCategory="300"
         app:showAsAction="never"
         android:title="@string/load_patch" />
+    <item
+        android:id="@+id/div2_load_div_json"
+        android:orderInCategory="400"
+        app:showAsAction="never"
+        android:title="@string/load_div_json" />
 
 </menu>

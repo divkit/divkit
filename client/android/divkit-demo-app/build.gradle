@@ -134,9 +134,9 @@ screenshotTests {
     referencesDir = "src/screenshotTest/screenshots"
 }
 
-android.applicationVariants.all { variant ->
+android.applicationVariants.configureEach { variant ->
 
-    variant.outputs.all {
+    variant.outputs.configureEach {
         boolean isPerf = variant.baseName.contains("perf")
 
         if (!isPerf) {

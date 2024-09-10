@@ -11,6 +11,13 @@ enum DivAlignmentVertical implements Preloadable {
   final String value;
 
   const DivAlignmentVertical(this.value);
+  bool get isTop => this == top;
+
+  bool get isCenter => this == center;
+
+  bool get isBottom => this == bottom;
+
+  bool get isBaseline => this == baseline;
 
   T map<T>({
     required T Function() top,

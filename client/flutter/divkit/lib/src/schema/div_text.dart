@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
 import 'package:divkit/src/schema/div_animation.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_background.dart';
 import 'package:divkit/src/schema/div_base.dart';
@@ -23,6 +24,7 @@ import 'package:divkit/src/schema/div_match_parent_size.dart';
 import 'package:divkit/src/schema/div_shadow.dart';
 import 'package:divkit/src/schema/div_size.dart';
 import 'package:divkit/src/schema/div_size_unit.dart';
+import 'package:divkit/src/schema/div_text_alignment_vertical.dart';
 import 'package:divkit/src/schema/div_text_gradient.dart';
 import 'package:divkit/src/schema/div_text_range_background.dart';
 import 'package:divkit/src/schema/div_text_range_border.dart';
@@ -37,6 +39,7 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Text.
 class DivText extends Preloadable with EquatableMixin implements DivBase {
   const DivText({
     this.accessibility = const DivAccessibility(),
@@ -59,6 +62,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
     this.alignmentHorizontal,
     this.alignmentVertical,
     this.alpha = const ValueExpression(1.0),
+    this.animators,
     this.autoEllipsize,
     this.background,
     this.border = const DivBorder(),
@@ -122,152 +126,239 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
 
   static const type = "text";
 
+  /// Accessibility settings.
   @override
   final DivAccessibility accessibility;
 
+  /// One action when clicking on an element. Not used if the `actions` parameter is set.
   final DivAction? action;
+
+  /// Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
   // default value: const DivAnimation(duration: ValueExpression(100,), endValue: ValueExpression(0.6,), name: ValueExpression(DivAnimationName.fade,), startValue: ValueExpression(1,),)
   final DivAnimation actionAnimation;
 
+  /// Multiple actions when clicking on an element.
   final List<DivAction>? actions;
 
+  /// Horizontal alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentHorizontal>? alignmentHorizontal;
 
+  /// Vertical alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentVertical>? alignmentVertical;
+
+  /// Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   @override
   final Expression<double> alpha;
 
+  /// Declaration of animators that can be used to change the value of variables over time.
+  @override
+  final List<DivAnimator>? animators;
+
+  /// Automatic text cropping to fit the container size.
   final Expression<bool>? autoEllipsize;
 
+  /// Element background. It can contain multiple layers.
   @override
   final List<DivBackground>? background;
 
+  /// Element stroke.
   @override
   final DivBorder border;
+
+  /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? columnSpan;
 
+  /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
 
+  /// Action when double-clicking on an element.
   final List<DivAction>? doubletapActions;
 
+  /// Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
   final DivTextEllipsis? ellipsis;
 
+  /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
   final List<DivExtension>? extensions;
 
+  /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
 
+  /// Text color when focusing on the element.
   final Expression<Color>? focusedTextColor;
 
+  /// Font family:
+  /// • `text` — a standard text font;
+  /// • `display` — a family of fonts with a large font size.
   final Expression<String>? fontFamily;
 
+  /// List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
   final Expression<String>? fontFeatureSettings;
+
+  /// Font size.
   // constraint: number >= 0; default value: 12
   final Expression<int> fontSize;
   // default value: DivSizeUnit.sp
   final Expression<DivSizeUnit> fontSizeUnit;
+
+  /// Style.
   // default value: DivFontWeight.regular
   final Expression<DivFontWeight> fontWeight;
+
+  /// Style. Numeric value.
   // constraint: number > 0
   final Expression<int>? fontWeightValue;
+
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
 
+  /// Images embedded in text.
   final List<DivTextImage>? images;
 
+  /// Provides element real size values after a layout cycle.
   @override
   final DivLayoutProvider? layoutProvider;
+
+  /// Spacing between characters.
   // default value: 0
   final Expression<double> letterSpacing;
+
+  /// Line spacing of the text.
   // constraint: number >= 0
   final Expression<int>? lineHeight;
 
+  /// Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
   final List<DivAction>? longtapActions;
 
+  /// External margins from the element stroke.
   @override
   final DivEdgeInsets margins;
+
+  /// Maximum number of lines not to be cropped when breaking the limits.
   // constraint: number >= 0
   final Expression<int>? maxLines;
+
+  /// Minimum number of cropped lines when breaking the limits.
   // constraint: number >= 0
   final Expression<int>? minHiddenLines;
 
+  /// Internal margins from the element stroke.
   @override
   final DivEdgeInsets paddings;
 
+  /// A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
   final List<DivTextRange>? ranges;
 
+  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
   @override
   final Expression<String>? reuseId;
+
+  /// Merges cells in a string of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
+
+  /// Ability to select and copy text.
   // default value: false
   final Expression<bool> selectable;
 
+  /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
   final List<DivAction>? selectedActions;
+
+  /// Strikethrough.
   // default value: DivLineStyle.none
   final Expression<DivLineStyle> strike;
 
+  /// Text.
   final Expression<String> text;
+
+  /// Horizontal text alignment.
   // default value: DivAlignmentHorizontal.start
   final Expression<DivAlignmentHorizontal> textAlignmentHorizontal;
+
+  /// Vertical text alignment.
   // default value: DivAlignmentVertical.top
   final Expression<DivAlignmentVertical> textAlignmentVertical;
+
+  /// Text color. Not used if the `text_gradient` parameter is set.
   // default value: const Color(0xFF000000)
   final Expression<Color> textColor;
 
+  /// Gradient text color.
   final DivTextGradient? textGradient;
 
+  /// Parameters of the shadow applied to the text.
   final DivShadow? textShadow;
 
+  /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
 
+  /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
   final DivTransform transform;
 
+  /// Change animation. It is played when the position or size of an element changes in the new layout.
   @override
   final DivChangeTransition? transitionChange;
 
+  /// Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](https://divkit.tech/docs/en/concepts/interaction#animation/transition-animation).
   @override
   final DivAppearanceTransition? transitionIn;
 
+  /// Disappearance animation. It is played when an element disappears in the new layout.
   @override
   final DivAppearanceTransition? transitionOut;
+
+  /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
+
+  /// Text cropping method. Use `ellipsis` instead.
   // default value: DivTextTruncate.end
   final Expression<DivTextTruncate> truncate;
+
+  /// Underline.
   // default value: DivLineStyle.none
   final Expression<DivLineStyle> underline;
 
+  /// Triggers for changing variables within an element.
   @override
   final List<DivTrigger>? variableTriggers;
 
+  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
   @override
   final List<DivVariable>? variables;
+
+  /// Element visibility.
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
 
+  /// Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
   @override
   final DivVisibilityAction? visibilityAction;
 
+  /// Actions when an element appears on the screen.
   @override
   final List<DivVisibilityAction>? visibilityActions;
+
+  /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   @override
   final DivSize width;
@@ -281,6 +372,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         alignmentHorizontal,
         alignmentVertical,
         alpha,
+        animators,
         autoEllipsize,
         background,
         border,
@@ -344,6 +436,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
+    List<DivAnimator>? Function()? animators,
     Expression<bool>? Function()? autoEllipsize,
     List<DivBackground>? Function()? background,
     DivBorder? border,
@@ -410,6 +503,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
             ? alignmentVertical.call()
             : this.alignmentVertical,
         alpha: alpha ?? this.alpha,
+        animators: animators != null ? animators.call() : this.animators,
         autoEllipsize:
             autoEllipsize != null ? autoEllipsize.call() : this.autoEllipsize,
         background: background != null ? background.call() : this.background,
@@ -551,6 +645,14 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         )!,
+        animators: safeParseObj(
+          safeListMap(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         autoEllipsize: safeParseBoolExpr(
           json['auto_ellipsize'],
         ),
@@ -864,6 +966,14 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         ))!,
+        animators: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         autoEllipsize: await safeParseBoolExprAsync(
           json['auto_ellipsize'],
         ),
@@ -1137,6 +1247,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
       await alignmentHorizontal?.preload(context);
       await alignmentVertical?.preload(context);
       await alpha.preload(context);
+      await safeFuturesWait(animators, (v) => v.preload(context));
       await autoEllipsize?.preload(context);
       await safeFuturesWait(background, (v) => v.preload(context));
       await border.preload(context);
@@ -1195,9 +1306,11 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
   }
 }
 
+/// Additional parameters of the character range.
 class DivTextRange extends Preloadable with EquatableMixin {
   const DivTextRange({
     this.actions,
+    this.alignmentVertical,
     this.background,
     this.border,
     required this.end,
@@ -1217,45 +1330,79 @@ class DivTextRange extends Preloadable with EquatableMixin {
     this.underline,
   });
 
+  /// Action when clicking on text.
   final List<DivAction>? actions;
 
+  /// Vertical text range alignment within a string.
+  final Expression<DivTextAlignmentVertical>? alignmentVertical;
+
+  /// Character range background.
   final DivTextRangeBackground? background;
 
+  /// Character range border.
   final DivTextRangeBorder? border;
+
+  /// Ordinal number of the last character to be included in the range.
   // constraint: number > 0
   final Expression<int> end;
 
+  /// Font family:
+  /// • `text` — a standard text font;
+  /// • `display` — a family of fonts with a large font size.
   final Expression<String>? fontFamily;
 
+  /// List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
   final Expression<String>? fontFeatureSettings;
+
+  /// Font size.
   // constraint: number >= 0
   final Expression<int>? fontSize;
+
+  /// Unit of measurement:
+  /// • `px` — a physical pixel.
+  /// • `dp` — a logical pixel that doesn't depend on screen density.
+  /// • `sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.
   // default value: DivSizeUnit.sp
   final Expression<DivSizeUnit> fontSizeUnit;
 
+  /// Style.
   final Expression<DivFontWeight>? fontWeight;
+
+  /// Style. Numeric value.
   // constraint: number > 0
   final Expression<int>? fontWeightValue;
 
+  /// Spacing between characters.
   final Expression<double>? letterSpacing;
+
+  /// Line spacing of the text. Units specified in `font_size_unit`.
   // constraint: number >= 0
   final Expression<int>? lineHeight;
+
+  /// Ordinal number of a character which the range begins from. The first character has a number `0`.
   // constraint: number >= 0
   final Expression<int> start;
 
+  /// Strikethrough.
   final Expression<DivLineStyle>? strike;
 
+  /// Text color.
   final Expression<Color>? textColor;
 
+  /// Parameters of the shadow applied to the character range.
   final DivShadow? textShadow;
+
+  /// Top margin of the character range. Units specified in `font_size_unit`.
   // constraint: number >= 0
   final Expression<int>? topOffset;
 
+  /// Underline.
   final Expression<DivLineStyle>? underline;
 
   @override
   List<Object?> get props => [
         actions,
+        alignmentVertical,
         background,
         border,
         end,
@@ -1277,6 +1424,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
 
   DivTextRange copyWith({
     List<DivAction>? Function()? actions,
+    Expression<DivTextAlignmentVertical>? Function()? alignmentVertical,
     DivTextRangeBackground? Function()? background,
     DivTextRangeBorder? Function()? border,
     Expression<int>? end,
@@ -1297,6 +1445,9 @@ class DivTextRange extends Preloadable with EquatableMixin {
   }) =>
       DivTextRange(
         actions: actions != null ? actions.call() : this.actions,
+        alignmentVertical: alignmentVertical != null
+            ? alignmentVertical.call()
+            : this.alignmentVertical,
         background: background != null ? background.call() : this.background,
         border: border != null ? border.call() : this.border,
         end: end ?? this.end,
@@ -1336,6 +1487,10 @@ class DivTextRange extends Preloadable with EquatableMixin {
               DivAction.fromJson(v),
             )!,
           ),
+        ),
+        alignmentVertical: safeParseStrEnumExpr(
+          json['alignment_vertical'],
+          parse: DivTextAlignmentVertical.fromJson,
         ),
         background: safeParseObj(
           DivTextRangeBackground.fromJson(json['background']),
@@ -1415,6 +1570,10 @@ class DivTextRange extends Preloadable with EquatableMixin {
             )!,
           ),
         ),
+        alignmentVertical: await safeParseStrEnumExprAsync(
+          json['alignment_vertical'],
+          parse: DivTextAlignmentVertical.fromJson,
+        ),
         background: await safeParseObjAsync(
           DivTextRangeBackground.fromJson(json['background']),
         ),
@@ -1483,6 +1642,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
   ) async {
     try {
       await safeFuturesWait(actions, (v) => v.preload(context));
+      await alignmentVertical?.preload(context);
       await background?.preload(context);
       await border?.preload(context);
       await end.preload(context);
@@ -1506,8 +1666,12 @@ class DivTextRange extends Preloadable with EquatableMixin {
   }
 }
 
+/// Image.
 class DivTextImage extends Preloadable with EquatableMixin {
   const DivTextImage({
+    this.accessibility = const DivTextImageAccessibility(),
+    this.alignmentVertical =
+        const ValueExpression(DivTextAlignmentVertical.center),
     this.height = const DivFixedSize(
       value: ValueExpression(
         20,
@@ -1525,23 +1689,42 @@ class DivTextImage extends Preloadable with EquatableMixin {
     ),
   });
 
+  final DivTextImageAccessibility accessibility;
+
+  /// Vertical text image alignment within a string.
+  // default value: DivTextAlignmentVertical.center
+  final Expression<DivTextAlignmentVertical> alignmentVertical;
+
+  /// Image height.
   // default value: const DivFixedSize(value: ValueExpression(20,),)
   final DivFixedSize height;
+
+  /// Background image must be loaded before the display.
   // default value: false
   final Expression<bool> preloadRequired;
+
+  /// A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
   // constraint: number >= 0
   final Expression<int> start;
 
+  /// New color of a contour image.
   final Expression<Color>? tintColor;
+
+  /// Blend mode of the color specified in `tint_color`.
   // default value: DivBlendMode.sourceIn
   final Expression<DivBlendMode> tintMode;
 
+  /// Image URL.
   final Expression<Uri> url;
+
+  /// Image width.
   // default value: const DivFixedSize(value: ValueExpression(20,),)
   final DivFixedSize width;
 
   @override
   List<Object?> get props => [
+        accessibility,
+        alignmentVertical,
         height,
         preloadRequired,
         start,
@@ -1552,6 +1735,8 @@ class DivTextImage extends Preloadable with EquatableMixin {
       ];
 
   DivTextImage copyWith({
+    DivTextImageAccessibility? accessibility,
+    Expression<DivTextAlignmentVertical>? alignmentVertical,
     DivFixedSize? height,
     Expression<bool>? preloadRequired,
     Expression<int>? start,
@@ -1561,6 +1746,8 @@ class DivTextImage extends Preloadable with EquatableMixin {
     DivFixedSize? width,
   }) =>
       DivTextImage(
+        accessibility: accessibility ?? this.accessibility,
+        alignmentVertical: alignmentVertical ?? this.alignmentVertical,
         height: height ?? this.height,
         preloadRequired: preloadRequired ?? this.preloadRequired,
         start: start ?? this.start,
@@ -1578,6 +1765,15 @@ class DivTextImage extends Preloadable with EquatableMixin {
     }
     try {
       return DivTextImage(
+        accessibility: safeParseObj(
+          DivTextImageAccessibility.fromJson(json['accessibility']),
+          fallback: const DivTextImageAccessibility(),
+        )!,
+        alignmentVertical: safeParseStrEnumExpr(
+          json['alignment_vertical'],
+          parse: DivTextAlignmentVertical.fromJson,
+          fallback: DivTextAlignmentVertical.center,
+        )!,
         height: safeParseObj(
           DivFixedSize.fromJson(json['height']),
           fallback: const DivFixedSize(
@@ -1624,6 +1820,15 @@ class DivTextImage extends Preloadable with EquatableMixin {
     }
     try {
       return DivTextImage(
+        accessibility: (await safeParseObjAsync(
+          DivTextImageAccessibility.fromJson(json['accessibility']),
+          fallback: const DivTextImageAccessibility(),
+        ))!,
+        alignmentVertical: (await safeParseStrEnumExprAsync(
+          json['alignment_vertical'],
+          parse: DivTextAlignmentVertical.fromJson,
+          fallback: DivTextAlignmentVertical.center,
+        ))!,
         height: (await safeParseObjAsync(
           DivFixedSize.fromJson(json['height']),
           fallback: const DivFixedSize(
@@ -1667,6 +1872,8 @@ class DivTextImage extends Preloadable with EquatableMixin {
     Map<String, dynamic> context,
   ) async {
     try {
+      await accessibility.preload(context);
+      await alignmentVertical.preload(context);
       await height.preload(context);
       await preloadRequired.preload(context);
       await start.preload(context);
@@ -1680,6 +1887,210 @@ class DivTextImage extends Preloadable with EquatableMixin {
   }
 }
 
+class DivTextImageAccessibility extends Preloadable with EquatableMixin {
+  const DivTextImageAccessibility({
+    this.description,
+    this.type = DivTextImageAccessibilityType.auto,
+  });
+
+  /// Element description. It is used as the main description for screen reading applications.
+  final Expression<String>? description;
+
+  /// Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
+  // default value: DivTextImageAccessibilityType.auto
+  final DivTextImageAccessibilityType type;
+
+  @override
+  List<Object?> get props => [
+        description,
+        type,
+      ];
+
+  DivTextImageAccessibility copyWith({
+    Expression<String>? Function()? description,
+    DivTextImageAccessibilityType? type,
+  }) =>
+      DivTextImageAccessibility(
+        description:
+            description != null ? description.call() : this.description,
+        type: type ?? this.type,
+      );
+
+  static DivTextImageAccessibility? fromJson(
+    Map<String, dynamic>? json,
+  ) {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return DivTextImageAccessibility(
+        description: safeParseStrExpr(
+          json['description']?.toString(),
+        ),
+        type: safeParseStrEnum(
+          json['type'],
+          parse: DivTextImageAccessibilityType.fromJson,
+          fallback: DivTextImageAccessibilityType.auto,
+        )!,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<DivTextImageAccessibility?> parse(
+    Map<String, dynamic>? json,
+  ) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      return DivTextImageAccessibility(
+        description: await safeParseStrExprAsync(
+          json['description']?.toString(),
+        ),
+        type: (await safeParseStrEnumAsync(
+          json['type'],
+          parse: DivTextImageAccessibilityType.fromJson,
+          fallback: DivTextImageAccessibilityType.auto,
+        ))!,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> preload(
+    Map<String, dynamic> context,
+  ) async {
+    try {
+      await description?.preload(context);
+      await type.preload(context);
+    } catch (e) {
+      return;
+    }
+  }
+}
+
+enum DivTextImageAccessibilityType implements Preloadable {
+  none('none'),
+  button('button'),
+  image('image'),
+  text('text'),
+  auto('auto');
+
+  final String value;
+
+  const DivTextImageAccessibilityType(this.value);
+  bool get isNone => this == none;
+
+  bool get isButton => this == button;
+
+  bool get isImage => this == image;
+
+  bool get isText => this == text;
+
+  bool get isAuto => this == auto;
+
+  T map<T>({
+    required T Function() none,
+    required T Function() button,
+    required T Function() image,
+    required T Function() text,
+    required T Function() auto,
+  }) {
+    switch (this) {
+      case DivTextImageAccessibilityType.none:
+        return none();
+      case DivTextImageAccessibilityType.button:
+        return button();
+      case DivTextImageAccessibilityType.image:
+        return image();
+      case DivTextImageAccessibilityType.text:
+        return text();
+      case DivTextImageAccessibilityType.auto:
+        return auto();
+    }
+  }
+
+  T maybeMap<T>({
+    T Function()? none,
+    T Function()? button,
+    T Function()? image,
+    T Function()? text,
+    T Function()? auto,
+    required T Function() orElse,
+  }) {
+    switch (this) {
+      case DivTextImageAccessibilityType.none:
+        return none?.call() ?? orElse();
+      case DivTextImageAccessibilityType.button:
+        return button?.call() ?? orElse();
+      case DivTextImageAccessibilityType.image:
+        return image?.call() ?? orElse();
+      case DivTextImageAccessibilityType.text:
+        return text?.call() ?? orElse();
+      case DivTextImageAccessibilityType.auto:
+        return auto?.call() ?? orElse();
+    }
+  }
+
+  @override
+  Future<void> preload(Map<String, dynamic> context) async {}
+
+  static DivTextImageAccessibilityType? fromJson(
+    String? json,
+  ) {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'none':
+          return DivTextImageAccessibilityType.none;
+        case 'button':
+          return DivTextImageAccessibilityType.button;
+        case 'image':
+          return DivTextImageAccessibilityType.image;
+        case 'text':
+          return DivTextImageAccessibilityType.text;
+        case 'auto':
+          return DivTextImageAccessibilityType.auto;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<DivTextImageAccessibilityType?> parse(
+    String? json,
+  ) async {
+    if (json == null) {
+      return null;
+    }
+    try {
+      switch (json) {
+        case 'none':
+          return DivTextImageAccessibilityType.none;
+        case 'button':
+          return DivTextImageAccessibilityType.button;
+        case 'image':
+          return DivTextImageAccessibilityType.image;
+        case 'text':
+          return DivTextImageAccessibilityType.text;
+        case 'auto':
+          return DivTextImageAccessibilityType.auto;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+}
+
+/// Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
 class DivTextEllipsis extends Preloadable with EquatableMixin {
   const DivTextEllipsis({
     this.actions,
@@ -1688,12 +2099,16 @@ class DivTextEllipsis extends Preloadable with EquatableMixin {
     required this.text,
   });
 
+  /// Actions when clicking on a crop marker.
   final List<DivAction>? actions;
 
+  /// Images embedded in a crop marker.
   final List<DivTextImage>? images;
 
+  /// Character ranges inside a crop marker with different text styles.
   final List<DivTextRange>? ranges;
 
+  /// Marker text.
   final Expression<String> text;
 
   @override
@@ -1823,6 +2238,13 @@ enum DivTextTruncate implements Preloadable {
   final String value;
 
   const DivTextTruncate(this.value);
+  bool get isNone => this == none;
+
+  bool get isStart => this == start;
+
+  bool get isEnd => this == end;
+
+  bool get isMiddle => this == middle;
 
   T map<T>({
     required T Function() none,

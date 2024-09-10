@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// An arbitrary array in JSON format.
 class ArrayVariable extends Preloadable with EquatableMixin {
   const ArrayVariable({
     required this.name,
@@ -11,8 +12,10 @@ class ArrayVariable extends Preloadable with EquatableMixin {
 
   static const type = "array";
 
+  /// Variable name.
   final String name;
 
+  /// Value.
   final List<dynamic> value;
 
   @override

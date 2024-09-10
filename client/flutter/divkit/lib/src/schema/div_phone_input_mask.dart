@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_input_mask_base.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Mask for entering phone numbers with dynamic regional format identification.
 class DivPhoneInputMask extends Preloadable
     with EquatableMixin
     implements DivInputMaskBase {
@@ -13,6 +14,7 @@ class DivPhoneInputMask extends Preloadable
 
   static const type = "phone";
 
+  /// Name of the variable to store the unprocessed value.
   @override
   final String rawTextVariable;
 

@@ -9,6 +9,15 @@ import 'package:divkit/src/core/variable/variable_manager.dart';
 import 'package:divkit/src/utils/div_focus_node.dart';
 import 'package:flutter/widgets.dart';
 
+/// Print logs with information about DivKitView lifecycle.
+bool debugPrintDivKitViewLifecycle = false;
+
+void _log(DivLoggerContext? loggerContext, String message) {
+  if (debugPrintDivKitViewLifecycle) {
+    loggerUse(loggerContext).debug(message);
+  }
+}
+
 abstract class DivContext {
   const DivContext();
 
@@ -47,7 +56,7 @@ abstract class DivContext {
 }
 
 class DivRootContext extends DivContext {
-  BuildContext? _buildContext;
+  final BuildContext? _buildContext;
 
   @override
   BuildContext get buildContext => _buildContext!;
@@ -140,7 +149,7 @@ class DivRootContext extends DivContext {
       final divContext = DivRootContext(context);
       final loggerContext = DefaultDivLoggerContext(source.logId);
 
-      loggerUse(loggerContext).debug('Init [Async] ${divContext.hashCode}');
+      _log(loggerContext, 'Async init #${divContext.hashCode}');
 
       // Main initialization
       divContext
@@ -171,7 +180,7 @@ class DivRootContext extends DivContext {
               .toList(growable: false),
         );
 
-      loggerUse(loggerContext).debug('Prepared ${divContext.hashCode}');
+      _log(loggerContext, 'Prepared #${divContext.hashCode}');
       return divContext;
     }
 
@@ -194,8 +203,11 @@ class DivRootContext extends DivContext {
       final divContext = DivRootContext(context);
       final loggerContext = DefaultDivLoggerContext(source.logId);
 
-      loggerUse(loggerContext).debug('Init [Sync] ${divContext.hashCode}');
-      loggerUse(loggerContext).debug('Instant rendering is enabled!');
+      _log(loggerContext, 'Sync init #${divContext.hashCode}');
+      _log(
+        loggerContext,
+        'Instant rendering is enabled! #${divContext.hashCode}',
+      );
 
       // Main initialization
       divContext
@@ -226,7 +238,7 @@ class DivRootContext extends DivContext {
               .toList(growable: false),
         );
 
-      loggerUse(loggerContext).debug('Prepared ${divContext.hashCode}');
+      _log(loggerContext, 'Prepared #${divContext.hashCode}');
       return divContext;
     }
 
@@ -242,7 +254,7 @@ class DivRootContext extends DivContext {
   }
 
   Future<void> dispose() async {
-    loggerUse(_loggerContext).debug("Dispose $hashCode");
+    _log(_loggerContext, "Dispose #$hashCode");
 
     _stateManager?.dispose();
     _visibilityActionManager?.dispose();

@@ -9,7 +9,6 @@ class ArrayValue extends Preloadable with EquatableMixin {
   });
 
   static const type = "array";
-
   final Expression<List<dynamic>> value;
 
   @override

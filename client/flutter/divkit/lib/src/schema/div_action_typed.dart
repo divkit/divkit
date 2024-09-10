@@ -1,5 +1,7 @@
 // Generated code. Do not modify.
 
+import 'package:divkit/src/schema/div_action_animator_start.dart';
+import 'package:divkit/src/schema/div_action_animator_stop.dart';
 import 'package:divkit/src/schema/div_action_array_insert_value.dart';
 import 'package:divkit/src/schema/div_action_array_remove_value.dart';
 import 'package:divkit/src/schema/div_action_array_set_value.dart';
@@ -7,7 +9,12 @@ import 'package:divkit/src/schema/div_action_clear_focus.dart';
 import 'package:divkit/src/schema/div_action_copy_to_clipboard.dart';
 import 'package:divkit/src/schema/div_action_dict_set_value.dart';
 import 'package:divkit/src/schema/div_action_focus_element.dart';
+import 'package:divkit/src/schema/div_action_hide_tooltip.dart';
+import 'package:divkit/src/schema/div_action_set_state.dart';
 import 'package:divkit/src/schema/div_action_set_variable.dart';
+import 'package:divkit/src/schema/div_action_show_tooltip.dart';
+import 'package:divkit/src/schema/div_action_timer.dart';
+import 'package:divkit/src/schema/div_action_video.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
@@ -19,6 +26,8 @@ class DivActionTyped extends Preloadable with EquatableMixin {
   List<Object?> get props => [value];
 
   T map<T>({
+    required T Function(DivActionAnimatorStart) divActionAnimatorStart,
+    required T Function(DivActionAnimatorStop) divActionAnimatorStop,
     required T Function(DivActionArrayInsertValue) divActionArrayInsertValue,
     required T Function(DivActionArrayRemoveValue) divActionArrayRemoveValue,
     required T Function(DivActionArraySetValue) divActionArraySetValue,
@@ -26,40 +35,73 @@ class DivActionTyped extends Preloadable with EquatableMixin {
     required T Function(DivActionCopyToClipboard) divActionCopyToClipboard,
     required T Function(DivActionDictSetValue) divActionDictSetValue,
     required T Function(DivActionFocusElement) divActionFocusElement,
+    required T Function(DivActionHideTooltip) divActionHideTooltip,
+    required T Function(DivActionSetState) divActionSetState,
     required T Function(DivActionSetVariable) divActionSetVariable,
+    required T Function(DivActionShowTooltip) divActionShowTooltip,
+    required T Function(DivActionTimer) divActionTimer,
+    required T Function(DivActionVideo) divActionVideo,
   }) {
     switch (_index) {
       case 0:
+        return divActionAnimatorStart(
+          value as DivActionAnimatorStart,
+        );
+      case 1:
+        return divActionAnimatorStop(
+          value as DivActionAnimatorStop,
+        );
+      case 2:
         return divActionArrayInsertValue(
           value as DivActionArrayInsertValue,
         );
-      case 1:
+      case 3:
         return divActionArrayRemoveValue(
           value as DivActionArrayRemoveValue,
         );
-      case 2:
+      case 4:
         return divActionArraySetValue(
           value as DivActionArraySetValue,
         );
-      case 3:
+      case 5:
         return divActionClearFocus(
           value as DivActionClearFocus,
         );
-      case 4:
+      case 6:
         return divActionCopyToClipboard(
           value as DivActionCopyToClipboard,
         );
-      case 5:
+      case 7:
         return divActionDictSetValue(
           value as DivActionDictSetValue,
         );
-      case 6:
+      case 8:
         return divActionFocusElement(
           value as DivActionFocusElement,
         );
-      case 7:
+      case 9:
+        return divActionHideTooltip(
+          value as DivActionHideTooltip,
+        );
+      case 10:
+        return divActionSetState(
+          value as DivActionSetState,
+        );
+      case 11:
         return divActionSetVariable(
           value as DivActionSetVariable,
+        );
+      case 12:
+        return divActionShowTooltip(
+          value as DivActionShowTooltip,
+        );
+      case 13:
+        return divActionTimer(
+          value as DivActionTimer,
+        );
+      case 14:
+        return divActionVideo(
+          value as DivActionVideo,
         );
     }
     throw Exception(
@@ -68,6 +110,8 @@ class DivActionTyped extends Preloadable with EquatableMixin {
   }
 
   T maybeMap<T>({
+    T Function(DivActionAnimatorStart)? divActionAnimatorStart,
+    T Function(DivActionAnimatorStop)? divActionAnimatorStop,
     T Function(DivActionArrayInsertValue)? divActionArrayInsertValue,
     T Function(DivActionArrayRemoveValue)? divActionArrayRemoveValue,
     T Function(DivActionArraySetValue)? divActionArraySetValue,
@@ -75,63 +119,117 @@ class DivActionTyped extends Preloadable with EquatableMixin {
     T Function(DivActionCopyToClipboard)? divActionCopyToClipboard,
     T Function(DivActionDictSetValue)? divActionDictSetValue,
     T Function(DivActionFocusElement)? divActionFocusElement,
+    T Function(DivActionHideTooltip)? divActionHideTooltip,
+    T Function(DivActionSetState)? divActionSetState,
     T Function(DivActionSetVariable)? divActionSetVariable,
+    T Function(DivActionShowTooltip)? divActionShowTooltip,
+    T Function(DivActionTimer)? divActionTimer,
+    T Function(DivActionVideo)? divActionVideo,
     required T Function() orElse,
   }) {
     switch (_index) {
       case 0:
+        if (divActionAnimatorStart != null) {
+          return divActionAnimatorStart(
+            value as DivActionAnimatorStart,
+          );
+        }
+        break;
+      case 1:
+        if (divActionAnimatorStop != null) {
+          return divActionAnimatorStop(
+            value as DivActionAnimatorStop,
+          );
+        }
+        break;
+      case 2:
         if (divActionArrayInsertValue != null) {
           return divActionArrayInsertValue(
             value as DivActionArrayInsertValue,
           );
         }
         break;
-      case 1:
+      case 3:
         if (divActionArrayRemoveValue != null) {
           return divActionArrayRemoveValue(
             value as DivActionArrayRemoveValue,
           );
         }
         break;
-      case 2:
+      case 4:
         if (divActionArraySetValue != null) {
           return divActionArraySetValue(
             value as DivActionArraySetValue,
           );
         }
         break;
-      case 3:
+      case 5:
         if (divActionClearFocus != null) {
           return divActionClearFocus(
             value as DivActionClearFocus,
           );
         }
         break;
-      case 4:
+      case 6:
         if (divActionCopyToClipboard != null) {
           return divActionCopyToClipboard(
             value as DivActionCopyToClipboard,
           );
         }
         break;
-      case 5:
+      case 7:
         if (divActionDictSetValue != null) {
           return divActionDictSetValue(
             value as DivActionDictSetValue,
           );
         }
         break;
-      case 6:
+      case 8:
         if (divActionFocusElement != null) {
           return divActionFocusElement(
             value as DivActionFocusElement,
           );
         }
         break;
-      case 7:
+      case 9:
+        if (divActionHideTooltip != null) {
+          return divActionHideTooltip(
+            value as DivActionHideTooltip,
+          );
+        }
+        break;
+      case 10:
+        if (divActionSetState != null) {
+          return divActionSetState(
+            value as DivActionSetState,
+          );
+        }
+        break;
+      case 11:
         if (divActionSetVariable != null) {
           return divActionSetVariable(
             value as DivActionSetVariable,
+          );
+        }
+        break;
+      case 12:
+        if (divActionShowTooltip != null) {
+          return divActionShowTooltip(
+            value as DivActionShowTooltip,
+          );
+        }
+        break;
+      case 13:
+        if (divActionTimer != null) {
+          return divActionTimer(
+            value as DivActionTimer,
+          );
+        }
+        break;
+      case 14:
+        if (divActionVideo != null) {
+          return divActionVideo(
+            value as DivActionVideo,
           );
         }
         break;
@@ -139,45 +237,110 @@ class DivActionTyped extends Preloadable with EquatableMixin {
     return orElse();
   }
 
+  const DivActionTyped.divActionAnimatorStart(
+    DivActionAnimatorStart obj,
+  )   : value = obj,
+        _index = 0;
+
+  const DivActionTyped.divActionAnimatorStop(
+    DivActionAnimatorStop obj,
+  )   : value = obj,
+        _index = 1;
+
   const DivActionTyped.divActionArrayInsertValue(
     DivActionArrayInsertValue obj,
   )   : value = obj,
-        _index = 0;
+        _index = 2;
 
   const DivActionTyped.divActionArrayRemoveValue(
     DivActionArrayRemoveValue obj,
   )   : value = obj,
-        _index = 1;
+        _index = 3;
 
   const DivActionTyped.divActionArraySetValue(
     DivActionArraySetValue obj,
   )   : value = obj,
-        _index = 2;
+        _index = 4;
 
   const DivActionTyped.divActionClearFocus(
     DivActionClearFocus obj,
   )   : value = obj,
-        _index = 3;
+        _index = 5;
 
   const DivActionTyped.divActionCopyToClipboard(
     DivActionCopyToClipboard obj,
   )   : value = obj,
-        _index = 4;
+        _index = 6;
 
   const DivActionTyped.divActionDictSetValue(
     DivActionDictSetValue obj,
   )   : value = obj,
-        _index = 5;
+        _index = 7;
 
   const DivActionTyped.divActionFocusElement(
     DivActionFocusElement obj,
   )   : value = obj,
-        _index = 6;
+        _index = 8;
+
+  const DivActionTyped.divActionHideTooltip(
+    DivActionHideTooltip obj,
+  )   : value = obj,
+        _index = 9;
+
+  const DivActionTyped.divActionSetState(
+    DivActionSetState obj,
+  )   : value = obj,
+        _index = 10;
 
   const DivActionTyped.divActionSetVariable(
     DivActionSetVariable obj,
   )   : value = obj,
-        _index = 7;
+        _index = 11;
+
+  const DivActionTyped.divActionShowTooltip(
+    DivActionShowTooltip obj,
+  )   : value = obj,
+        _index = 12;
+
+  const DivActionTyped.divActionTimer(
+    DivActionTimer obj,
+  )   : value = obj,
+        _index = 13;
+
+  const DivActionTyped.divActionVideo(
+    DivActionVideo obj,
+  )   : value = obj,
+        _index = 14;
+
+  bool get isDivActionAnimatorStart => _index == 0;
+
+  bool get isDivActionAnimatorStop => _index == 1;
+
+  bool get isDivActionArrayInsertValue => _index == 2;
+
+  bool get isDivActionArrayRemoveValue => _index == 3;
+
+  bool get isDivActionArraySetValue => _index == 4;
+
+  bool get isDivActionClearFocus => _index == 5;
+
+  bool get isDivActionCopyToClipboard => _index == 6;
+
+  bool get isDivActionDictSetValue => _index == 7;
+
+  bool get isDivActionFocusElement => _index == 8;
+
+  bool get isDivActionHideTooltip => _index == 9;
+
+  bool get isDivActionSetState => _index == 10;
+
+  bool get isDivActionSetVariable => _index == 11;
+
+  bool get isDivActionShowTooltip => _index == 12;
+
+  bool get isDivActionTimer => _index == 13;
+
+  bool get isDivActionVideo => _index == 14;
 
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
@@ -190,6 +353,14 @@ class DivActionTyped extends Preloadable with EquatableMixin {
     }
     try {
       switch (json['type']) {
+        case DivActionAnimatorStart.type:
+          return DivActionTyped.divActionAnimatorStart(
+            DivActionAnimatorStart.fromJson(json)!,
+          );
+        case DivActionAnimatorStop.type:
+          return DivActionTyped.divActionAnimatorStop(
+            DivActionAnimatorStop.fromJson(json)!,
+          );
         case DivActionArrayInsertValue.type:
           return DivActionTyped.divActionArrayInsertValue(
             DivActionArrayInsertValue.fromJson(json)!,
@@ -218,9 +389,29 @@ class DivActionTyped extends Preloadable with EquatableMixin {
           return DivActionTyped.divActionFocusElement(
             DivActionFocusElement.fromJson(json)!,
           );
+        case DivActionHideTooltip.type:
+          return DivActionTyped.divActionHideTooltip(
+            DivActionHideTooltip.fromJson(json)!,
+          );
+        case DivActionSetState.type:
+          return DivActionTyped.divActionSetState(
+            DivActionSetState.fromJson(json)!,
+          );
         case DivActionSetVariable.type:
           return DivActionTyped.divActionSetVariable(
             DivActionSetVariable.fromJson(json)!,
+          );
+        case DivActionShowTooltip.type:
+          return DivActionTyped.divActionShowTooltip(
+            DivActionShowTooltip.fromJson(json)!,
+          );
+        case DivActionTimer.type:
+          return DivActionTyped.divActionTimer(
+            DivActionTimer.fromJson(json)!,
+          );
+        case DivActionVideo.type:
+          return DivActionTyped.divActionVideo(
+            DivActionVideo.fromJson(json)!,
           );
       }
       return null;
@@ -237,6 +428,14 @@ class DivActionTyped extends Preloadable with EquatableMixin {
     }
     try {
       switch (json['type']) {
+        case DivActionAnimatorStart.type:
+          return DivActionTyped.divActionAnimatorStart(
+            (await DivActionAnimatorStart.parse(json))!,
+          );
+        case DivActionAnimatorStop.type:
+          return DivActionTyped.divActionAnimatorStop(
+            (await DivActionAnimatorStop.parse(json))!,
+          );
         case DivActionArrayInsertValue.type:
           return DivActionTyped.divActionArrayInsertValue(
             (await DivActionArrayInsertValue.parse(json))!,
@@ -265,9 +464,29 @@ class DivActionTyped extends Preloadable with EquatableMixin {
           return DivActionTyped.divActionFocusElement(
             (await DivActionFocusElement.parse(json))!,
           );
+        case DivActionHideTooltip.type:
+          return DivActionTyped.divActionHideTooltip(
+            (await DivActionHideTooltip.parse(json))!,
+          );
+        case DivActionSetState.type:
+          return DivActionTyped.divActionSetState(
+            (await DivActionSetState.parse(json))!,
+          );
         case DivActionSetVariable.type:
           return DivActionTyped.divActionSetVariable(
             (await DivActionSetVariable.parse(json))!,
+          );
+        case DivActionShowTooltip.type:
+          return DivActionTyped.divActionShowTooltip(
+            (await DivActionShowTooltip.parse(json))!,
+          );
+        case DivActionTimer.type:
+          return DivActionTyped.divActionTimer(
+            (await DivActionTimer.parse(json))!,
+          );
+        case DivActionVideo.type:
+          return DivActionTyped.divActionVideo(
+            (await DivActionVideo.parse(json))!,
           );
       }
       return null;

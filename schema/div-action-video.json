@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_video",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "video"
+      ]
+    },
+    "id": {
+      "$description": "translations.json#/div_action_video_id",
+      "type": "string"
+    },
+    "action": {
+      "$description": "translations.json#/div_action_video_action",
+      "type": "string",
+      "enum": [
+        "start",
+        "pause"
+      ]
+    }
+  },
+  "platforms": [
+    "android"
+  ],
+  "required": [
+    "type",
+    "id",
+    "action"
+  ]
+}

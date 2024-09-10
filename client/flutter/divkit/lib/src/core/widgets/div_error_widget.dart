@@ -1,14 +1,8 @@
 import 'package:divkit/divkit.dart';
+import 'package:divkit/src/utils/configuration.dart';
 
 import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
-
-/// Configuration model.
-class ShowUnsupportedDivs {
-  final bool enabled;
-
-  const ShowUnsupportedDivs(this.enabled);
-}
 
 class DivErrorWidget extends StatelessWidget {
   static const errorColor = Color(0xFFFF0000);
@@ -24,7 +18,7 @@ class DivErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      watch<ShowUnsupportedDivs>(context)?.enabled ?? false
+      watch<DivConfiguration>(context)?.showUnsupportedDivs ?? false
           ? DivBaseWidget(
               data: data,
               child: Placeholder(

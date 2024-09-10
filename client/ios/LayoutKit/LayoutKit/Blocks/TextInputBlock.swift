@@ -84,6 +84,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let layoutDirection: UserInterfaceLayoutDirection
   public let paddings: EdgeInsets?
   public let isEnabled: Bool
+  public let maxLength: Int?
 
   public init(
     widthTrait: LayoutTrait = .resizable,
@@ -110,7 +111,8 @@ public final class TextInputBlock: BlockWithTraits {
     textAlignmentHorizontal: TextAlignmentHorizontal = .start,
     textAlignmentVertical: TextAlignmentVertical = .center,
     paddings: EdgeInsets? = nil,
-    isEnabled: Bool = true
+    isEnabled: Bool = true,
+    maxLength: Int? = nil
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -137,6 +139,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.textAlignmentVertical = textAlignmentVertical
     self.paddings = paddings
     self.isEnabled = isEnabled
+    self.maxLength = maxLength
   }
 
   public var intrinsicContentWidth: CGFloat {

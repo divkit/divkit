@@ -40,6 +40,7 @@ class Video internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            animators = additive.animators ?: properties.animators,
             aspect = additive.aspect ?: properties.aspect,
             autostart = additive.autostart ?: properties.autostart,
             background = additive.background ?: properties.background,
@@ -98,10 +99,14 @@ class Video internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Declaration of animators that can be used to change the value of variables over time.
+         */
+        val animators: Property<List<Animator>>?,
         /**
          * Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
          */
@@ -279,6 +284,7 @@ class Video internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("animators", animators)
             result.tryPutProperty("aspect", aspect)
             result.tryPutProperty("autostart", autostart)
             result.tryPutProperty("background", background)
@@ -329,7 +335,8 @@ class Video internal constructor(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -378,6 +385,7 @@ fun DivScope.video(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
@@ -425,6 +433,7 @@ fun DivScope.video(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         aspect = valueOrNull(aspect),
         autostart = valueOrNull(autostart),
         background = valueOrNull(background),
@@ -473,7 +482,8 @@ fun DivScope.video(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -522,6 +532,7 @@ fun DivScope.videoProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
@@ -568,6 +579,7 @@ fun DivScope.videoProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    animators = valueOrNull(animators),
     aspect = valueOrNull(aspect),
     autostart = valueOrNull(autostart),
     background = valueOrNull(background),
@@ -615,7 +627,8 @@ fun DivScope.videoProps(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -664,6 +677,7 @@ fun TemplateScope.videoRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -710,6 +724,7 @@ fun TemplateScope.videoRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    animators = animators,
     aspect = aspect,
     autostart = autostart,
     background = background,
@@ -757,7 +772,8 @@ fun TemplateScope.videoRefs(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -806,6 +822,7 @@ fun Video.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
@@ -853,6 +870,7 @@ fun Video.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        animators = valueOrNull(animators) ?: properties.animators,
         aspect = valueOrNull(aspect) ?: properties.aspect,
         autostart = valueOrNull(autostart) ?: properties.autostart,
         background = valueOrNull(background) ?: properties.background,
@@ -901,7 +919,8 @@ fun Video.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -950,6 +969,7 @@ fun Video.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -997,6 +1017,7 @@ fun Video.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = animators ?: properties.animators,
         aspect = aspect ?: properties.aspect,
         autostart = autostart ?: properties.autostart,
         background = background ?: properties.background,
@@ -1044,7 +1065,7 @@ fun Video.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param muted This option mutes video.
@@ -1078,6 +1099,7 @@ fun Video.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        animators = properties.animators,
         aspect = properties.aspect,
         autostart = autostart ?: properties.autostart,
         background = properties.background,
@@ -1126,7 +1148,8 @@ fun Video.evaluate(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -1175,6 +1198,7 @@ fun Component<Video>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    animators: List<Animator>? = null,
     aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
@@ -1223,6 +1247,7 @@ fun Component<Video>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        animators = valueOrNull(animators),
         aspect = valueOrNull(aspect),
         autostart = valueOrNull(autostart),
         background = valueOrNull(background),
@@ -1271,7 +1296,8 @@ fun Component<Video>.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
@@ -1320,6 +1346,7 @@ fun Component<Video>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    animators: ReferenceProperty<List<Animator>>? = null,
     aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
@@ -1368,6 +1395,7 @@ fun Component<Video>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = animators,
         aspect = aspect,
         autostart = autostart,
         background = background,
@@ -1415,7 +1443,7 @@ fun Component<Video>.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param muted This option mutes video.
@@ -1450,6 +1478,7 @@ fun Component<Video>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        animators = null,
         aspect = null,
         autostart = autostart,
         background = null,

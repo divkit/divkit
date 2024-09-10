@@ -65,6 +65,10 @@ class DivCount extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 1;
 
+  bool get isDivFixedCount => _index == 0;
+
+  bool get isDivInfinityCount => _index == 1;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

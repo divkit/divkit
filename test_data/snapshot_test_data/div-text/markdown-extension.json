@@ -1,7 +1,8 @@
 {
   "description": "Markdown extension and text params",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "unsupported_platforms": {
     "web": "The markdown library is not part of the DivKit library"

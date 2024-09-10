@@ -5,13 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'entity.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithArray extends Preloadable with EquatableMixin  {
   const EntityWithArray({
     required this.array,
   });
 
   static const type = "entity_with_array";
-  // at least 1 elements
+   // at least 1 elements
   final List<Entity> array;
 
   @override

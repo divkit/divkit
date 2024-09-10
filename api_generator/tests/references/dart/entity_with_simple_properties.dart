@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+/// Entity with simple properties.
 class EntityWithSimpleProperties extends Preloadable with EquatableMixin  {
   const EntityWithSimpleProperties({
     this.boolean,
@@ -18,23 +19,25 @@ class EntityWithSimpleProperties extends Preloadable with EquatableMixin  {
   });
 
   static const type = "entity_with_simple_properties";
-
+  /// Boolean property.
   final Expression<bool>? boolean;
-
+  /// Boolean value in numeric format.
   final Expression<bool>? booleanInt;
-
+  /// Color.
   final Expression<Color>? color;
-
+  /// Floating point number.
   final Expression<double>? dNum;
-  // default value: 0
+  /// ID. Can't contain expressions.
+   // default value: 0
   final int id;
-  // default value: 0
+  /// Integer.
+   // default value: 0
   final Expression<int> integer;
-  // constraint: number > 0
+  /// Positive integer.
+   // constraint: number > 0
   final Expression<int>? positiveInteger;
-
+  /// String.
   final Expression<String>? string;
-
   final Expression<Uri>? url;
 
   @override

@@ -66,6 +66,10 @@ class DivInputValidator extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 1;
 
+  bool get isDivInputValidatorExpression => _index == 0;
+
+  bool get isDivInputValidatorRegex => _index == 1;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

@@ -11,9 +11,14 @@ class DivCollectionItemBuilder extends Preloadable with EquatableMixin {
     required this.prototypes,
   });
 
+  /// Data that will be used to create collection elements.
   final Expression<List<dynamic>> data;
+
+  /// Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
   // default value: "it"
   final String dataElementName;
+
+  /// Array of `div` elements from which the collection elements will be created.
   // at least 1 elements
   final List<DivCollectionItemBuilderPrototype> prototypes;
 
@@ -114,9 +119,13 @@ class DivCollectionItemBuilderPrototype extends Preloadable
     this.selector = const ValueExpression(true),
   });
 
+  /// `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
   final Div div;
 
+  /// `id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`
   final Expression<String>? id;
+
+  /// A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
   // default value: true
   final Expression<bool> selector;
 

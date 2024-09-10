@@ -8,6 +8,7 @@ import 'package:divkit/src/schema/div_variable.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Root structure.
 class DivData extends Preloadable with EquatableMixin {
   const DivData({
     required this.logId,
@@ -19,16 +20,24 @@ class DivData extends Preloadable with EquatableMixin {
     this.variables,
   });
 
+  /// Logging ID.
   final String logId;
+
+  /// A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).
   // at least 1 elements
   final List<DivDataState> states;
 
+  /// List of timers.
   final List<DivTimer>? timers;
+
+  /// Events that trigger transition animations.
   // default value: DivTransitionSelector.none
   final Expression<DivTransitionSelector> transitionAnimationSelector;
 
+  /// Triggers for changing variables.
   final List<DivTrigger>? variableTriggers;
 
+  /// Declaration of variables that can be used in an element.
   final List<DivVariable>? variables;
 
   @override
@@ -191,8 +200,10 @@ class DivDataState extends Preloadable with EquatableMixin {
     required this.stateId,
   });
 
+  /// Contents.
   final Div div;
 
+  /// State ID.
   final int stateId;
 
   @override

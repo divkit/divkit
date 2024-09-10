@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_accessibility.dart';
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_background.dart';
 import 'package:divkit/src/schema/div_base.dart';
@@ -31,12 +32,14 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Slider for selecting a value in the range.
 class DivSlider extends Preloadable with EquatableMixin implements DivBase {
   const DivSlider({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
     this.alignmentVertical,
     this.alpha = const ValueExpression(1.0),
+    this.animators,
     this.background,
     this.border = const DivBorder(),
     this.columnSpan,
@@ -85,120 +88,177 @@ class DivSlider extends Preloadable with EquatableMixin implements DivBase {
 
   static const type = "slider";
 
+  /// Accessibility settings.
   @override
   final DivAccessibility accessibility;
 
+  /// Horizontal alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentHorizontal>? alignmentHorizontal;
 
+  /// Vertical alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentVertical>? alignmentVertical;
+
+  /// Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   @override
   final Expression<double> alpha;
 
+  /// Declaration of animators that can be used to change the value of variables over time.
+  @override
+  final List<DivAnimator>? animators;
+
+  /// Element background. It can contain multiple layers.
   @override
   final List<DivBackground>? background;
 
+  /// Element stroke.
   @override
   final DivBorder border;
+
+  /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? columnSpan;
 
+  /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
 
+  /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
   final List<DivExtension>? extensions;
 
+  /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
+
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
 
+  /// Provides element real size values after a layout cycle.
   @override
   final DivLayoutProvider? layoutProvider;
 
+  /// External margins from the element stroke.
   @override
   final DivEdgeInsets margins;
+
+  /// Maximum value. It must be greater than the minimum value.
   // default value: 100
   final Expression<int> maxValue;
+
+  /// Minimum value.
   // default value: 0
   final Expression<int> minValue;
 
+  /// Internal margins from the element stroke.
   @override
   final DivEdgeInsets paddings;
 
+  /// Section style.
   final List<DivSliderRange>? ranges;
 
+  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
   @override
   final Expression<String>? reuseId;
+
+  /// Merges cells in a string of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
 
+  /// Accessibility settings for the second pointer.
   final DivAccessibility secondaryValueAccessibility;
 
+  /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
   final List<DivAction>? selectedActions;
 
+  /// Style of the second pointer.
   final DivDrawable? thumbSecondaryStyle;
 
+  /// Text style in the second pointer.
   final DivSliderTextStyle? thumbSecondaryTextStyle;
 
+  /// Name of the variable to store the second pointer's current value.
   final String? thumbSecondaryValueVariable;
 
+  /// Style of the first pointer.
   final DivDrawable thumbStyle;
 
+  /// Text style in the first pointer.
   final DivSliderTextStyle? thumbTextStyle;
 
+  /// Name of the variable to store the pointer's current value.
   final String? thumbValueVariable;
 
+  /// Style of active serifs.
   final DivDrawable? tickMarkActiveStyle;
 
+  /// Style of inactive serifs.
   final DivDrawable? tickMarkInactiveStyle;
 
+  /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
 
+  /// Style of the active part of a scale.
   final DivDrawable trackActiveStyle;
 
+  /// Style of the inactive part of a scale.
   final DivDrawable trackInactiveStyle;
 
+  /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
   final DivTransform transform;
 
+  /// Change animation. It is played when the position or size of an element changes in the new layout.
   @override
   final DivChangeTransition? transitionChange;
 
+  /// Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](https://divkit.tech/docs/en/concepts/interaction#animation/transition-animation).
   @override
   final DivAppearanceTransition? transitionIn;
 
+  /// Disappearance animation. It is played when an element disappears in the new layout.
   @override
   final DivAppearanceTransition? transitionOut;
+
+  /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
 
+  /// Triggers for changing variables within an element.
   @override
   final List<DivTrigger>? variableTriggers;
 
+  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
   @override
   final List<DivVariable>? variables;
+
+  /// Element visibility.
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
 
+  /// Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
   @override
   final DivVisibilityAction? visibilityAction;
 
+  /// Actions when an element appears on the screen.
   @override
   final List<DivVisibilityAction>? visibilityActions;
+
+  /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   @override
   final DivSize width;
@@ -209,6 +269,7 @@ class DivSlider extends Preloadable with EquatableMixin implements DivBase {
         alignmentHorizontal,
         alignmentVertical,
         alpha,
+        animators,
         background,
         border,
         columnSpan,
@@ -256,6 +317,7 @@ class DivSlider extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
+    List<DivAnimator>? Function()? animators,
     List<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<int>? Function()? columnSpan,
@@ -306,6 +368,7 @@ class DivSlider extends Preloadable with EquatableMixin implements DivBase {
             ? alignmentVertical.call()
             : this.alignmentVertical,
         alpha: alpha ?? this.alpha,
+        animators: animators != null ? animators.call() : this.animators,
         background: background != null ? background.call() : this.background,
         border: border ?? this.border,
         columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
@@ -405,6 +468,14 @@ class DivSlider extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         )!,
+        animators: safeParseObj(
+          safeListMap(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         background: safeParseObj(
           safeListMap(
             json['background'],
@@ -621,6 +692,14 @@ class DivSlider extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         ))!,
+        animators: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         background: await safeParseObjAsync(
           await safeListMapAsync(
             json['background'],
@@ -822,6 +901,7 @@ class DivSlider extends Preloadable with EquatableMixin implements DivBase {
       await alignmentHorizontal?.preload(context);
       await alignmentVertical?.preload(context);
       await alpha.preload(context);
+      await safeFuturesWait(animators, (v) => v.preload(context));
       await safeFuturesWait(background, (v) => v.preload(context));
       await border.preload(context);
       await columnSpan?.preload(context);
@@ -875,16 +955,24 @@ class DivSliderTextStyle extends Preloadable with EquatableMixin {
     this.textColor = const ValueExpression(Color(0xFF000000)),
   });
 
+  /// Font size.
   // constraint: number >= 0
   final Expression<int> fontSize;
   // default value: DivSizeUnit.sp
   final Expression<DivSizeUnit> fontSizeUnit;
+
+  /// Style.
   // default value: DivFontWeight.regular
   final Expression<DivFontWeight> fontWeight;
+
+  /// Style. Numeric value.
   // constraint: number > 0
   final Expression<int>? fontWeightValue;
 
+  /// Shift relative to the center.
   final DivPoint? offset;
+
+  /// Text color.
   // default value: const Color(0xFF000000)
   final Expression<Color> textColor;
 
@@ -1017,14 +1105,19 @@ class DivSliderRange extends Preloadable with EquatableMixin {
     this.trackInactiveStyle,
   });
 
+  /// End of section.
   final Expression<int>? end;
 
+  /// Section margins. Only uses horizontal margins.
   final DivEdgeInsets margins;
 
+  /// Start of section.
   final Expression<int>? start;
 
+  /// Style of the active part of a scale.
   final DivDrawable? trackActiveStyle;
 
+  /// Style of the inactive part of a scale.
   final DivDrawable? trackInactiveStyle;
 
   @override

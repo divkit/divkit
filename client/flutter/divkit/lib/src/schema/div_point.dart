@@ -4,14 +4,17 @@ import 'package:divkit/src/schema/div_dimension.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// A point with fixed coordinates.
 class DivPoint extends Preloadable with EquatableMixin {
   const DivPoint({
     required this.x,
     required this.y,
   });
 
+  /// `X` coordinate.
   final DivDimension x;
 
+  /// `Y` coordinate.
   final DivDimension y;
 
   @override

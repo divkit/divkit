@@ -74,6 +74,7 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
       _updateSingle(
         div.maybeMap(
           divContainer: (v) => Div.divContainer(_updateContainer(v, patch)),
+          divCustom: (v) => Div.divCustom(_updateCustom(v, patch)),
           divGallery: (v) => Div.divGallery(_updateGallery(v, patch)),
           divGrid: (v) => Div.divGrid(_updateGrid(v, patch)),
           divPager: (v) => Div.divPager(_updatePager(v, patch)),
@@ -87,6 +88,16 @@ class DefaultDivPatchManager with EquatableMixin implements DivPatchManager {
 
   DivContainer _updateContainer(DivContainer div, DivPatchModel patch) =>
       div.copyWith(
+        items: () =>
+            div.items
+                ?.map((e) => _updateMultiple(e, patch))
+                .whereNotNull()
+                .expand((e) => e)
+                .toList() ??
+            [],
+      );
+
+  DivCustom _updateCustom(DivCustom div, DivPatchModel patch) => div.copyWith(
         items: () =>
             div.items
                 ?.map((e) => _updateMultiple(e, patch))

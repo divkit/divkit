@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Relative radius of the gradient transition.
 class DivRadialGradientRelativeRadius extends Preloadable with EquatableMixin {
   const DivRadialGradientRelativeRadius({
     required this.value,
@@ -10,6 +11,7 @@ class DivRadialGradientRelativeRadius extends Preloadable with EquatableMixin {
 
   static const type = "relative";
 
+  /// Type of the relative radius of the gradient transition.
   final Expression<DivRadialGradientRelativeRadiusValue> value;
 
   @override
@@ -81,6 +83,13 @@ enum DivRadialGradientRelativeRadiusValue implements Preloadable {
   final String value;
 
   const DivRadialGradientRelativeRadiusValue(this.value);
+  bool get isNearestCorner => this == nearestCorner;
+
+  bool get isFarthestCorner => this == farthestCorner;
+
+  bool get isNearestSide => this == nearestSide;
+
+  bool get isFarthestSide => this == farthestSide;
 
   T map<T>({
     required T Function() nearestCorner,

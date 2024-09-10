@@ -3,12 +3,15 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Element size (%).
 class DivPercentageSize extends Preloadable with EquatableMixin {
   const DivPercentageSize({
     required this.value,
   });
 
   static const type = "percentage";
+
+  /// Element size value.
   // constraint: number > 0
   final Expression<double> value;
 

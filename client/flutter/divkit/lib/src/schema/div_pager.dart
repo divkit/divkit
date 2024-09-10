@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_accessibility.dart';
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_background.dart';
 import 'package:divkit/src/schema/div_base.dart';
@@ -32,12 +33,14 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Pager. It contains a horizontal set of cards that can be scrolled page by page. It shows the main page and the beginning of the next one.
 class DivPager extends Preloadable with EquatableMixin implements DivBase {
   const DivPager({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
     this.alignmentVertical,
     this.alpha = const ValueExpression(1.0),
+    this.animators,
     this.background,
     this.border = const DivBorder(),
     this.columnSpan,
@@ -85,110 +88,172 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
 
   static const type = "pager";
 
+  /// Accessibility settings.
   @override
   final DivAccessibility accessibility;
 
+  /// Horizontal alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentHorizontal>? alignmentHorizontal;
 
+  /// Vertical alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentVertical>? alignmentVertical;
+
+  /// Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   @override
   final Expression<double> alpha;
 
+  /// Declaration of animators that can be used to change the value of variables over time.
+  @override
+  final List<DivAnimator>? animators;
+
+  /// Element background. It can contain multiple layers.
   @override
   final List<DivBackground>? background;
 
+  /// Element stroke.
   @override
   final DivBorder border;
+
+  /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? columnSpan;
+
+  /// Ordinal number of the pager element that will be opened by default.
   // constraint: number >= 0; default value: 0
   final Expression<int> defaultItem;
 
+  /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
 
+  /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
   final List<DivExtension>? extensions;
 
+  /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
+
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
+
+  /// Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
   // default value: false
   final Expression<bool> infiniteScroll;
 
+  /// Sets collection elements dynamically using `data` and `prototypes`.
   final DivCollectionItemBuilder? itemBuilder;
+
+  /// Spacing between elements.
   // default value: const DivFixedSize(value: ValueExpression(0,),)
   final DivFixedSize itemSpacing;
 
+  /// Pager elements. Page-by-page transition options can be implemented using:
+  /// • `div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;
+  /// • `div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;
+  /// • `div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:
+  /// • `clamp` — transition will stop at the border element;
+  /// • `ring` — go to the beginning or end, depending on the current element.</p><p>By default, `clamp`.
   final List<Div>? items;
 
+  /// Type of calculation of the main page width:
+  /// • `fixed` — from the fixed width of the next page `neighbour_page_width`;
+  /// • `percentage` — from the percentage value `page_width`.
   final DivPagerLayoutMode layoutMode;
 
+  /// Provides element real size values after a layout cycle.
   @override
   final DivLayoutProvider? layoutProvider;
 
+  /// External margins from the element stroke.
   @override
   final DivEdgeInsets margins;
+
+  /// Pager orientation.
   // default value: DivPagerOrientation.horizontal
   final Expression<DivPagerOrientation> orientation;
 
+  /// Internal margins from the element stroke.
   @override
   final DivEdgeInsets paddings;
 
+  /// Page transformation during movement.
   final DivPageTransformation? pageTransformation;
+
+  /// If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
   // default value: false
   final Expression<bool> restrictParentScroll;
 
+  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
   @override
   final Expression<String>? reuseId;
+
+  /// Merges cells in a string of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
 
+  /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
   final List<DivAction>? selectedActions;
 
+  /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
 
+  /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
   final DivTransform transform;
 
+  /// Change animation. It is played when the position or size of an element changes in the new layout.
   @override
   final DivChangeTransition? transitionChange;
 
+  /// Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](https://divkit.tech/docs/en/concepts/interaction#animation/transition-animation).
   @override
   final DivAppearanceTransition? transitionIn;
 
+  /// Disappearance animation. It is played when an element disappears in the new layout.
   @override
   final DivAppearanceTransition? transitionOut;
+
+  /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
 
+  /// Triggers for changing variables within an element.
   @override
   final List<DivTrigger>? variableTriggers;
 
+  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
   @override
   final List<DivVariable>? variables;
+
+  /// Element visibility.
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
 
+  /// Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
   @override
   final DivVisibilityAction? visibilityAction;
 
+  /// Actions when an element appears on the screen.
   @override
   final List<DivVisibilityAction>? visibilityActions;
+
+  /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   @override
   final DivSize width;
@@ -199,6 +264,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
         alignmentHorizontal,
         alignmentVertical,
         alpha,
+        animators,
         background,
         border,
         columnSpan,
@@ -241,6 +307,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
+    List<DivAnimator>? Function()? animators,
     List<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<int>? Function()? columnSpan,
@@ -286,6 +353,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
             ? alignmentVertical.call()
             : this.alignmentVertical,
         alpha: alpha ?? this.alpha,
+        animators: animators != null ? animators.call() : this.animators,
         background: background != null ? background.call() : this.background,
         border: border ?? this.border,
         columnSpan: columnSpan != null ? columnSpan.call() : this.columnSpan,
@@ -368,6 +436,14 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         )!,
+        animators: safeParseObj(
+          safeListMap(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         background: safeParseObj(
           safeListMap(
             json['background'],
@@ -576,6 +652,14 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         ))!,
+        animators: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         background: await safeParseObjAsync(
           await safeListMapAsync(
             json['background'],
@@ -769,6 +853,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
       await alignmentHorizontal?.preload(context);
       await alignmentVertical?.preload(context);
       await alpha.preload(context);
+      await safeFuturesWait(animators, (v) => v.preload(context));
       await safeFuturesWait(background, (v) => v.preload(context));
       await border.preload(context);
       await columnSpan?.preload(context);
@@ -816,6 +901,9 @@ enum DivPagerOrientation implements Preloadable {
   final String value;
 
   const DivPagerOrientation(this.value);
+  bool get isHorizontal => this == horizontal;
+
+  bool get isVertical => this == vertical;
 
   T map<T>({
     required T Function() horizontal,

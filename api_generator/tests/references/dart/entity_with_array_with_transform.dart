@@ -4,13 +4,14 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithArrayWithTransform extends Preloadable with EquatableMixin  {
   const EntityWithArrayWithTransform({
     required this.array,
   });
 
   static const type = "entity_with_array_with_transform";
-  // at least 1 elements
+   // at least 1 elements
   final Expression<List<Color>> array;
 
   @override

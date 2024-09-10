@@ -3,12 +3,15 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Gaussian image blur.
 class DivBlur extends Preloadable with EquatableMixin {
   const DivBlur({
     required this.radius,
   });
 
   static const type = "blur";
+
+  /// Blur radius. Defines how many pixels blend into each other. Specified in: `dp`.
   // constraint: number >= 0
   final Expression<int> radius;
 

@@ -10,6 +10,11 @@ enum DivTransitionTrigger implements Preloadable {
   final String value;
 
   const DivTransitionTrigger(this.value);
+  bool get isDataChange => this == dataChange;
+
+  bool get isStateChange => this == stateChange;
+
+  bool get isVisibilityChange => this == visibilityChange;
 
   T map<T>({
     required T Function() dataChange,

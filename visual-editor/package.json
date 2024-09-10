@@ -1,0 +1,61 @@
+{
+  "name": "@divkitframework/visual-editor",
+  "version": "0.4.2",
+  "description": "Visual editor for DivKit",
+  "keywords": [
+      "server-driven-ui",
+      "web",
+      "divkit",
+      "editor",
+      "visual editor"
+  ],
+  "author": "",
+  "repository": "github:divkit/divkit",
+  "license": "Apache-2.0",
+  "type": "module",
+  "module": "dist/divkit-editor.js",
+  "typings": "dist/divkit-editor.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build-lib": "vite build --config vite-lib.config.ts && terser dist/divkit-editor.js -o dist/divkit-editor.js && terser dist/editor.js -o dist/editor.js && terser dist/lottieApi.js -o dist/lottieApi.js",
+    "build-typings": "rollup --config rollup-typings.config.ts --configPlugin typescript",
+    "preview": "vite preview",
+    "check:ts": "tsc --noEmit",
+    "check:eslint": "eslint --quiet .",
+    "check:svelte": "svelte-check --threshold error",
+    "test:unit": "vitest",
+    "prepublishOnly": "cp ../LICENSE ./ && npm run build-lib && npm run build-typings"
+  },
+  "devDependencies": {
+    "@codemirror/lang-json": "6.0.1",
+    "@codemirror/lint": "6.2.1",
+    "@codemirror/state": "6.4.1",
+    "@codemirror/theme-one-dark": "6.1.2",
+    "@codemirror/view": "6.27.0",
+    "@divkitframework/divkit": "30.15.0",
+    "@rollup/plugin-typescript": "11.1.6",
+    "@sveltejs/vite-plugin-svelte": "3.1.1",
+    "@tsconfig/svelte": "5.0.4",
+    "@typescript-eslint/eslint-plugin": "7.12.0",
+    "@typescript-eslint/parser": "7.12.0",
+    "codemirror": "6.0.1",
+    "eslint": "8.57.0",
+    "eslint-plugin-ascii": "1.0.0",
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-mocha": "10.4.3",
+    "eslint-plugin-svelte": "2.39.0",
+    "lottie-web": "5.11.0",
+    "rollup-plugin-dts": "6.1.1",
+    "svelte": "4.2.17",
+    "svelte-check": "3.8.0",
+    "terser": "5.17.7",
+    "tslib": "^2.5.0",
+    "typescript": "5.4.5",
+    "vite": "5.2.12",
+    "vitest": "2.0.2"
+  }
+}

@@ -103,6 +103,14 @@ class DivAppearanceTransition extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 3;
 
+  bool get isDivAppearanceSetTransition => _index == 0;
+
+  bool get isDivFadeTransition => _index == 1;
+
+  bool get isDivScaleTransition => _index == 2;
+
+  bool get isDivSlideTransition => _index == 3;
+
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
 

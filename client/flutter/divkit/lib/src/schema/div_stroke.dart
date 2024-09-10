@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_size_unit.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Stroke.
 class DivStroke extends Preloadable with EquatableMixin {
   const DivStroke({
     required this.color,
@@ -11,9 +12,12 @@ class DivStroke extends Preloadable with EquatableMixin {
     this.width = const ValueExpression(1),
   });
 
+  /// Stroke color.
   final Expression<Color> color;
   // default value: DivSizeUnit.dp
   final Expression<DivSizeUnit> unit;
+
+  /// Stroke width.
   // constraint: number >= 0; default value: 1
   final Expression<double> width;
 

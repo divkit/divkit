@@ -24,10 +24,16 @@ public final class DivBlockStateStorage {
     public let state: ElementState
   }
 
+  private enum FocusedElement: Equatable {
+    case none
+    case pathFocused(UIElementPath)
+    case idFocused(IdAndCardId)
+  }
+
   public private(set) var states: BlocksState
   private var statesById: [IdAndCardId: ElementState] = [:]
-  private var focusedElement: UIElementPath?
-  private var focusedElementById: IdAndCardId?
+
+  private var focusedElement: FocusedElement = .none
   private let lock = AllocatedUnfairLock()
   private let stateUpdatesPipe = SignalPipe<ChangeEvent>()
 
@@ -81,65 +87,69 @@ public final class DivBlockStateStorage {
 
   public func setFocused(isFocused: Bool, element: IdAndCardId) {
     lock.withLock {
-      if isFocused {
-        focusedElement = nil
-        focusedElementById = element
-      } else if self.isFocusedInternal(element: element) {
-        focusedElement = nil
-        focusedElementById = nil
-      }
+      focusedElement = isFocused ? .idFocused(element) : removeFocus(from: element)
     }
   }
 
   public func setFocused(isFocused: Bool, path: UIElementPath) {
     lock.withLock {
-      if isFocused {
-        focusedElement = path
-        focusedElementById = nil
-      } else if self.isFocusedInternal(path: path) {
-        focusedElement = nil
-        focusedElementById = nil
-      }
+      focusedElement = isFocused ? .pathFocused(path) : .none
     }
   }
 
   public func clearFocus() {
     lock.withLock {
-      focusedElement = nil
-      focusedElementById = nil
+      focusedElement = .none
     }
   }
 
   public func isFocused(element: IdAndCardId) -> Bool {
     lock.withLock {
-      isFocusedInternal(element: element)
+      isFocusedInternal(checkedElement: .idFocused(element))
     }
   }
 
   public func isFocused(path: UIElementPath) -> Bool {
     lock.withLock {
-      isFocusedInternal(path: path)
+      isFocusedInternal(checkedElement: .pathFocused(path))
     }
   }
 
-  private func isFocusedInternal(element: IdAndCardId) -> Bool {
-    getFocusedElement() == element
+  private func isFocusedInternal(checkedElement: FocusedElement) -> Bool {
+    switch (focusedElement, checkedElement) {
+    case (.none, _), (_, .none):
+      false
+    case let (.pathFocused(focusedPath), .pathFocused(checkedPath)):
+      focusedPath == checkedPath
+    case let (.idFocused(focusedId), .idFocused(checkedId)):
+      focusedId == checkedId
+    case let (.pathFocused(focusedPath), .idFocused(checkedId)):
+      IdAndCardId(path: focusedPath) == checkedId
+    case let (.idFocused(focusedId), .pathFocused(checkedPath)):
+      focusedId == IdAndCardId(path: checkedPath)
+    }
   }
 
-  private func isFocusedInternal(path: UIElementPath) -> Bool {
-    focusedElement == path || focusedElementById == IdAndCardId(path: path)
+  private func removeFocus(from element: IdAndCardId) -> FocusedElement {
+    isFocusedInternal(checkedElement: FocusedElement.idFocused(element)) ? .none : focusedElement
   }
 
   public func getFocusedElement() -> IdAndCardId? {
-    focusedElementById ?? focusedElement.map(IdAndCardId.init)
+    switch focusedElement {
+    case .none:
+      nil
+    case let .pathFocused(focusedPath):
+      IdAndCardId(path: focusedPath)
+    case let .idFocused(focusedId):
+      focusedId
+    }
   }
 
   public func reset() {
     lock.withLock {
       states = [:]
       statesById = [:]
-      focusedElement = nil
-      focusedElementById = nil
+      focusedElement = .none
     }
   }
 
@@ -148,8 +158,7 @@ public final class DivBlockStateStorage {
       states = states.filter { $0.key.root != cardId.rawValue }
       statesById = statesById.filter { $0.key.cardId != cardId }
       if getFocusedElement()?.cardId == cardId {
-        focusedElement = nil
-        focusedElementById = nil
+        focusedElement = .none
       }
     }
   }

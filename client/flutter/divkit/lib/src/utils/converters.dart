@@ -80,15 +80,15 @@ class DivAlignment with EquatableMixin {
       );
     } else if (safeVertical != null) {
       return safeVertical.map(
-        start: () => Alignment.topCenter,
-        center: () => Alignment.center,
-        end: () => Alignment.bottomCenter,
+        start: () => Alignment.topLeft,
+        center: () => Alignment.centerLeft,
+        end: () => Alignment.bottomLeft,
       );
     } else if (safeHorizontal != null) {
       return safeHorizontal.map(
-        start: () => Alignment.centerLeft,
-        center: () => Alignment.center,
-        end: () => Alignment.centerRight,
+        start: () => Alignment.topLeft,
+        center: () => Alignment.topCenter,
+        end: () => Alignment.topRight,
       );
     }
     return null;
@@ -841,21 +841,6 @@ extension DivSizeUnitMultiplier on DivSizeUnit {
         // Since we still support a wide range of Flutter versions, we cannot migrate to the new View API yet.
         // ignore: deprecated_member_use
         return 1 / window.devicePixelRatio;
-    }
-  }
-}
-
-extension PassDivVisibility on DivVisibility {
-  bool get isGone => this == DivVisibility.gone;
-
-  double? get asOpacity {
-    switch (this) {
-      case DivVisibility.visible:
-        return 1;
-      case DivVisibility.invisible:
-        return 0;
-      case DivVisibility.gone:
-        return null;
     }
   }
 }

@@ -37,6 +37,7 @@ extension TextInputBlock {
     inputView.setPath(path)
     inputView.setObserver(observer)
     inputView.setIsEnabled(isEnabled)
+    inputView.setMaxLength(maxLength)
     inputView.paddings = paddings ?? .zero
   }
 
@@ -72,6 +73,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var textAlignmentVertical: TextInputBlock.TextAlignmentVertical = .center
   private var isInputFocused = false
   private var keyboardHeight: CGFloat?
+  private var maxLength: Int?
+
   var paddings: EdgeInsets = .zero
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
@@ -223,7 +226,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   func setIsFocused(_ isFocused: Bool) {
     isInputFocused = isFocused
     if isFocused {
-      focusTextInput()
+      if allSuperviewsAreVisible() {
+        focusTextInput()
+      }
     } else {
       clearFocus()
     }
@@ -289,6 +294,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   func setHint(_ value: NSAttributedString) {
     hintView.attributedText = value
     setNeedsLayout()
+  }
+
+  func setMaxLength(_ value: Int?) {
+      maxLength = value
   }
 
   private func updateHintVisibility() {
@@ -381,8 +390,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     if window != nil {
       startKeyboardTracking()
       if isInputFocused {
-        // The didMoveToWindow method in UIView is not a direct replacement for the viewDidAppear method in UIViewController.
-        // This causes the focusTextInput method to be called too early, before the view is actually in the view hierarchy.
+        // The didMoveToWindow method in UIView is not a direct replacement for the viewDidAppear
+        // method in UIViewController.
+        // This causes the focusTextInput method to be called too early, before the view is actually
+        // in the view hierarchy.
         // As a result, the keyboard does not appear as expected.
         DispatchQueue.main.async {
           self.focusTextInput()
@@ -552,6 +563,12 @@ extension TextInputBlockView {
         filter(currentText + text)
       }
     }
+
+    if let maxLength, text != "" {
+        let updatedText = currentText.replacingCharactersInRange(range, withString: text)
+        return updatedText.result.count <= maxLength
+    }
+
     return true
   }
 }
@@ -673,6 +690,17 @@ extension TextInputBlockView {
     } else {
       singleLineCusorOffset
     }
+  }
+}
+
+extension UIView {
+  fileprivate func allSuperviewsAreVisible() -> Bool {
+    var inspectedView: UIView? = self
+    while let currentView = inspectedView {
+      guard !currentView.isHidden, currentView.alpha > 0 else { return false }
+      inspectedView = currentView.superview
+    }
+    return true
   }
 }
 

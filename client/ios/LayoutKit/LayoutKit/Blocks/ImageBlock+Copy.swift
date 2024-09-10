@@ -10,7 +10,9 @@ extension ImageBlock {
       tintColor: tintColor,
       tintMode: tintMode,
       effects: effects,
-      accessibilityElement: accessibilityElement
+      accessibilityElement: accessibilityElement,
+      blurUsingMetal: blurUsingMetal,
+      tintUsingMetal: tintUsingMetal
     )
   }
 }

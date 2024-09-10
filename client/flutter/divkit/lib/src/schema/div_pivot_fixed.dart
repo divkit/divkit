@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_size_unit.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Fixed coordinates of the rotation axis.
 class DivPivotFixed extends Preloadable with EquatableMixin {
   const DivPivotFixed({
     this.unit = const ValueExpression(DivSizeUnit.dp),
@@ -11,9 +12,12 @@ class DivPivotFixed extends Preloadable with EquatableMixin {
   });
 
   static const type = "pivot-fixed";
+
+  /// Measurement unit. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: DivSizeUnit.dp
   final Expression<DivSizeUnit> unit;
 
+  /// Coordinate value.
   final Expression<int>? value;
 
   @override

@@ -22,7 +22,7 @@ import javax.inject.Inject
 @Mockable
 internal class DivVisibilityActionDispatcher @Inject constructor(
     private val logger: Div2Logger,
-    private val visibilityListener: DivVisibilityChangeListener,
+    private val visibilityListeners: List<DivVisibilityChangeListener>,
     private val divActionHandler: DivActionHandler,
     private val divActionBeaconSender: DivActionBeaconSender
 ) {
@@ -90,7 +90,9 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
     }
 
     fun dispatchVisibleViewsChanged(visibleViews: Map<View, Div>) {
-        visibilityListener.onViewsVisibilityChanged(visibleViews)
+        visibilityListeners.forEach {
+            it.onViewsVisibilityChanged(visibleViews)
+        }
     }
 
     fun reset(tags: List<DivDataTag>) {

@@ -62,8 +62,7 @@ internal class DivImageBinder @Inject constructor(
         view.bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
         view.bindImageScale(div, oldDiv, expressionResolver)
         view.bindContentAlignment(div, oldDiv, expressionResolver)
-        view.bindPreview(context, div, oldDiv, errorCollector)
-        view.bindImage(context, div, oldDiv, errorCollector)
+        view.bindPreviewAndImage(context, div, oldDiv, errorCollector)
         view.bindTint(div, oldDiv, expressionResolver)
         view.bindFilters(context, div, oldDiv)
     }
@@ -187,27 +186,11 @@ internal class DivImageBinder @Inject constructor(
 
     //region Preview
 
-    private fun DivImageView.bindPreview(
+    private fun DivImageView.observePreview(
         bindingContext: BindingContext,
         newDiv: DivImage,
-        oldDiv: DivImage?,
         errorCollector: ErrorCollector
     ) {
-        if (isImageLoaded) {
-            return
-        }
-
-        if (newDiv.preview.equalsToConstant(oldDiv?.preview)
-            && newDiv.placeholderColor.equalsToConstant(oldDiv?.placeholderColor)) {
-            return
-        }
-
-        // Do not apply preview at this point. It will be done just before the start of image loading.
-
-        if (newDiv.preview.isConstantOrNull() && newDiv.placeholderColor.isConstant()) {
-            return
-        }
-
         addSubscription(
             newDiv.preview?.observe(bindingContext.expressionResolver) { newPreview ->
                 if (isImageLoaded || newPreview == preview) {
@@ -264,39 +247,54 @@ internal class DivImageBinder @Inject constructor(
     //endregion
 
     //region Image
-
-    private fun DivImageView.bindImage(
-        bindingContext: BindingContext,
+    private fun DivImageView.bindPreviewAndImage(
+        context: BindingContext,
         newDiv: DivImage,
         oldDiv: DivImage?,
         errorCollector: ErrorCollector
     ) {
-        if (newDiv.imageUrl.equalsToConstant(oldDiv?.imageUrl)) {
-            return
+        val view = this
+        val imageUrlChanged = !newDiv.imageUrl.equalsToConstant(oldDiv?.imageUrl)
+        val previewAndPlaceholderChanged = !(newDiv.preview.equalsToConstant(oldDiv?.preview)
+                && newDiv.placeholderColor.equalsToConstant(oldDiv?.placeholderColor))
+        val previewAndPlaceholderAreConstant = newDiv.preview.isConstantOrNull() &&
+                newDiv.placeholderColor.isConstant()
+
+        val needPreviewUpdate = !isImageLoaded && previewAndPlaceholderChanged
+        val needObservePreview = needPreviewUpdate && !previewAndPlaceholderAreConstant
+        if (needObservePreview) {
+            view.observePreview(context, newDiv, errorCollector)
         }
 
-        applyImage(bindingContext, newDiv, errorCollector)
-
-        if (newDiv.imageUrl.isConstantOrNull()) {
-            return
+        val needObserveImageUrl = imageUrlChanged && !newDiv.imageUrl.isConstantOrNull()
+        if (needObserveImageUrl) {
+            addSubscription(
+                newDiv.imageUrl.observe(context.expressionResolver) {
+                    applyImage(context, newDiv, errorCollector)
+                }
+            )
         }
 
-        addSubscription(
-            newDiv.imageUrl.observe(bindingContext.expressionResolver) {
-                applyImage(bindingContext, newDiv, errorCollector)
-            }
-        )
+        val applyImageWorkSkipped = !applyImage(context, newDiv, errorCollector)
+        if (applyImageWorkSkipped && needPreviewUpdate) {
+            view.applyPreview(
+                context,
+                newDiv,
+                isHighPriorityShow(context.expressionResolver, view, newDiv),
+                errorCollector,
+            )
+        }
     }
 
     private fun DivImageView.applyImage(
         bindingContext: BindingContext,
         div: DivImage,
         errorCollector: ErrorCollector
-    ) {
+    ): Boolean {
         val resolver = bindingContext.expressionResolver
         val imageUrl = div.imageUrl.evaluate(resolver)
         if (imageUrl == this.imageUrl) {
-            return
+            return false
         }
 
         // Called before resetImageLoaded() to ignore high priority preview if image was previously loaded.
@@ -346,6 +344,7 @@ internal class DivImageBinder @Inject constructor(
 
         bindingContext.divView.addLoadReference(reference, this)
         loadReference = reference
+        return true
     }
 
     /**

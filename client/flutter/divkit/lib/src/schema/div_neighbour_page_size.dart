@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Fixed width value of the visible part of a neighbouring page.
 class DivNeighbourPageSize extends Preloadable with EquatableMixin {
   const DivNeighbourPageSize({
     required this.neighbourPageWidth,
@@ -11,6 +12,7 @@ class DivNeighbourPageSize extends Preloadable with EquatableMixin {
 
   static const type = "fixed";
 
+  /// Width of the visible part of a neighbouring page.
   final DivFixedSize neighbourPageWidth;
 
   @override

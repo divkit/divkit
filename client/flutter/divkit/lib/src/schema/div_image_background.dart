@@ -7,6 +7,7 @@ import 'package:divkit/src/schema/div_image_scale.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Background image.
 class DivImageBackground extends Preloadable with EquatableMixin {
   const DivImageBackground({
     this.alpha = const ValueExpression(1.0),
@@ -21,18 +22,30 @@ class DivImageBackground extends Preloadable with EquatableMixin {
   });
 
   static const type = "image";
+
+  /// Image transparency.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   final Expression<double> alpha;
+
+  /// Horizontal image alignment.
   // default value: DivAlignmentHorizontal.center
   final Expression<DivAlignmentHorizontal> contentAlignmentHorizontal;
+
+  /// Vertical image alignment.
   // default value: DivAlignmentVertical.center
   final Expression<DivAlignmentVertical> contentAlignmentVertical;
 
+  /// Image filters.
   final List<DivFilter>? filters;
 
+  /// Image URL.
   final Expression<Uri> imageUrl;
+
+  /// Background image must be loaded before the display.
   // default value: false
   final Expression<bool> preloadRequired;
+
+  /// Image scaling.
   // default value: DivImageScale.fill
   final Expression<DivImageScale> scale;
 

@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_accessibility.dart';
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_alignment_horizontal.dart';
 import 'package:divkit/src/schema/div_alignment_vertical.dart';
+import 'package:divkit/src/schema/div_animator.dart';
 import 'package:divkit/src/schema/div_appearance_transition.dart';
 import 'package:divkit/src/schema/div_background.dart';
 import 'package:divkit/src/schema/div_base.dart';
@@ -29,12 +30,14 @@ import 'package:divkit/src/schema/div_wrap_content_size.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Gallery. It contains a horizontal or vertical set of cards that can be scrolled.
 class DivGallery extends Preloadable with EquatableMixin implements DivBase {
   const DivGallery({
     this.accessibility = const DivAccessibility(),
     this.alignmentHorizontal,
     this.alignmentVertical,
     this.alpha = const ValueExpression(1.0),
+    this.animators,
     this.background,
     this.border = const DivBorder(),
     this.columnCount,
@@ -81,114 +84,190 @@ class DivGallery extends Preloadable with EquatableMixin implements DivBase {
 
   static const type = "gallery";
 
+  /// Accessibility settings.
   @override
   final DivAccessibility accessibility;
 
+  /// Horizontal alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentHorizontal>? alignmentHorizontal;
 
+  /// Vertical alignment of an element inside the parent element.
   @override
   final Expression<DivAlignmentVertical>? alignmentVertical;
+
+  /// Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   @override
   final Expression<double> alpha;
 
+  /// Declaration of animators that can be used to change the value of variables over time.
+  @override
+  final List<DivAnimator>? animators;
+
+  /// Element background. It can contain multiple layers.
   @override
   final List<DivBackground>? background;
 
+  /// Element stroke.
   @override
   final DivBorder border;
+
+  /// Number of columns for block layout.
   // constraint: number > 0
   final Expression<int>? columnCount;
+
+  /// Merges cells in a column of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? columnSpan;
+
+  /// Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:
+  /// • `start` — alignment to the top of the card;
+  /// • `center` — to the center;
+  /// • `end` — to the bottom.</p><p>In vertical galleries:
+  /// • `start` — alignment to the left of the card;
+  /// • `center` — to the center;
+  /// • `end` — to the right.
   // default value: DivGalleryCrossContentAlignment.start
   final Expression<DivGalleryCrossContentAlignment> crossContentAlignment;
+
+  /// Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
   // constraint: number >= 0
   final Expression<int>? crossSpacing;
+
+  /// Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:
+  /// • `default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;
+  /// • `paging` — the scroll position is set to the center of the element.
   // constraint: number >= 0; default value: 0
   final Expression<int> defaultItem;
 
+  /// Actions when an element disappears from the screen.
   @override
   final List<DivDisappearAction>? disappearActions;
 
+  /// Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](https://divkit.tech/docs/en/concepts/extensions).
   @override
   final List<DivExtension>? extensions;
 
+  /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
+
+  /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
   final DivSize height;
 
+  /// Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
   @override
   final String? id;
 
+  /// Sets collection elements dynamically using `data` and `prototypes`.
   final DivCollectionItemBuilder? itemBuilder;
+
+  /// Spacing between elements.
   // constraint: number >= 0; default value: 8
   final Expression<int> itemSpacing;
 
+  /// Gallery elements. Scrolling to elements can be implemented using:
+  /// • `div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;
+  /// • `div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;
+  /// • `div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:
+  /// • `clamp` — transition will stop at the border element;
+  /// • `ring` — go to the beginning or end, depending on the current element.</p><p>By default, `clamp`.
   final List<Div>? items;
 
+  /// Provides element real size values after a layout cycle.
   @override
   final DivLayoutProvider? layoutProvider;
 
+  /// External margins from the element stroke.
   @override
   final DivEdgeInsets margins;
+
+  /// Gallery orientation.
   // default value: DivGalleryOrientation.horizontal
   final Expression<DivGalleryOrientation> orientation;
 
+  /// Internal margins from the element stroke.
   @override
   final DivEdgeInsets paddings;
+
+  /// If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
   // default value: false
   final Expression<bool> restrictParentScroll;
 
+  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
   @override
   final Expression<String>? reuseId;
+
+  /// Merges cells in a string of the [grid](div-grid.md) element.
   // constraint: number >= 0
   @override
   final Expression<int>? rowSpan;
+
+  /// Scroll type: `default` — continuous, `paging` — page-by-page.
   // default value: DivGalleryScrollMode.default_
   final Expression<DivGalleryScrollMode> scrollMode;
+
+  /// Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings.
+  /// • `none` — the scrollbar is hidden.
+  /// • `auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.
   // default value: DivGalleryScrollbar.none
   final Expression<DivGalleryScrollbar> scrollbar;
 
+  /// List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
   @override
   final List<DivAction>? selectedActions;
 
+  /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
 
+  /// Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
   @override
   final DivTransform transform;
 
+  /// Change animation. It is played when the position or size of an element changes in the new layout.
   @override
   final DivChangeTransition? transitionChange;
 
+  /// Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](https://divkit.tech/docs/en/concepts/interaction#animation/transition-animation).
   @override
   final DivAppearanceTransition? transitionIn;
 
+  /// Disappearance animation. It is played when an element disappears in the new layout.
   @override
   final DivAppearanceTransition? transitionOut;
+
+  /// Animation starting triggers. Default value: `[state_change, visibility_change]`.
   // at least 1 elements
   @override
   final List<DivTransitionTrigger>? transitionTriggers;
 
+  /// Triggers for changing variables within an element.
   @override
   final List<DivTrigger>? variableTriggers;
 
+  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
   @override
   final List<DivVariable>? variables;
+
+  /// Element visibility.
   // default value: DivVisibility.visible
   @override
   final Expression<DivVisibility> visibility;
 
+  /// Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
   @override
   final DivVisibilityAction? visibilityAction;
 
+  /// Actions when an element appears on the screen.
   @override
   final List<DivVisibilityAction>? visibilityActions;
+
+  /// Element width.
   // default value: const DivSize.divMatchParentSize(DivMatchParentSize(),)
   @override
   final DivSize width;
@@ -199,6 +278,7 @@ class DivGallery extends Preloadable with EquatableMixin implements DivBase {
         alignmentHorizontal,
         alignmentVertical,
         alpha,
+        animators,
         background,
         border,
         columnCount,
@@ -243,6 +323,7 @@ class DivGallery extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivAlignmentHorizontal>? Function()? alignmentHorizontal,
     Expression<DivAlignmentVertical>? Function()? alignmentVertical,
     Expression<double>? alpha,
+    List<DivAnimator>? Function()? animators,
     List<DivBackground>? Function()? background,
     DivBorder? border,
     Expression<int>? Function()? columnCount,
@@ -290,6 +371,7 @@ class DivGallery extends Preloadable with EquatableMixin implements DivBase {
             ? alignmentVertical.call()
             : this.alignmentVertical,
         alpha: alpha ?? this.alpha,
+        animators: animators != null ? animators.call() : this.animators,
         background: background != null ? background.call() : this.background,
         border: border ?? this.border,
         columnCount:
@@ -375,6 +457,14 @@ class DivGallery extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         )!,
+        animators: safeParseObj(
+          safeListMap(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         background: safeParseObj(
           safeListMap(
             json['background'],
@@ -590,6 +680,14 @@ class DivGallery extends Preloadable with EquatableMixin implements DivBase {
           json['alpha'],
           fallback: 1.0,
         ))!,
+        animators: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['animators'],
+            (v) => safeParseObj(
+              DivAnimator.fromJson(v),
+            )!,
+          ),
+        ),
         background: await safeParseObjAsync(
           await safeListMapAsync(
             json['background'],
@@ -790,6 +888,7 @@ class DivGallery extends Preloadable with EquatableMixin implements DivBase {
       await alignmentHorizontal?.preload(context);
       await alignmentVertical?.preload(context);
       await alpha.preload(context);
+      await safeFuturesWait(animators, (v) => v.preload(context));
       await safeFuturesWait(background, (v) => v.preload(context));
       await border.preload(context);
       await columnCount?.preload(context);
@@ -840,6 +939,11 @@ enum DivGalleryCrossContentAlignment implements Preloadable {
   final String value;
 
   const DivGalleryCrossContentAlignment(this.value);
+  bool get isStart => this == start;
+
+  bool get isCenter => this == center;
+
+  bool get isEnd => this == end;
 
   T map<T>({
     required T Function() start,
@@ -925,6 +1029,9 @@ enum DivGalleryScrollMode implements Preloadable {
   final String value;
 
   const DivGalleryScrollMode(this.value);
+  bool get isPaging => this == paging;
+
+  bool get isDefault => this == default_;
 
   T map<T>({
     required T Function() paging,
@@ -1000,6 +1107,9 @@ enum DivGalleryOrientation implements Preloadable {
   final String value;
 
   const DivGalleryOrientation(this.value);
+  bool get isHorizontal => this == horizontal;
+
+  bool get isVertical => this == vertical;
 
   T map<T>({
     required T Function() horizontal,
@@ -1075,6 +1185,9 @@ enum DivGalleryScrollbar implements Preloadable {
   final String value;
 
   const DivGalleryScrollbar(this.value);
+  bool get isNone => this == none;
+
+  bool get isAuto => this == auto;
 
   T map<T>({
     required T Function() none,

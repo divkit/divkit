@@ -3,11 +3,13 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
 class DivAspect extends Preloadable with EquatableMixin {
   const DivAspect({
     required this.ratio,
   });
 
+  /// `height = width / ratio`.
   // constraint: number > 0
   final Expression<double> ratio;
 

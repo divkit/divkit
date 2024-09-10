@@ -6,6 +6,7 @@ import 'package:divkit/src/schema/div_transition_base.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Slide animation.
 class DivSlideTransition extends Preloadable
     with EquatableMixin
     implements DivTransitionBase {
@@ -20,15 +21,26 @@ class DivSlideTransition extends Preloadable
 
   static const type = "slide";
 
+  /// A fixed value of an offset which the element starts appearing from or at which it finishes disappearing. If no value is specified, the distance to the selected edge of a parent element is used.
   final DivDimension? distance;
+
+  /// Animation duration in milliseconds.
   // constraint: number >= 0; default value: 200
   @override
   final Expression<int> duration;
+
+  /// Edge of a parent element for one of the action types:
+  /// • where the element will move from when appearing;
+  /// • where the element will move to when disappearing.
   // default value: DivSlideTransitionEdge.bottom
   final Expression<DivSlideTransitionEdge> edge;
+
+  /// Transition speed nature.
   // default value: DivAnimationInterpolator.easeInOut
   @override
   final Expression<DivAnimationInterpolator> interpolator;
+
+  /// Delay in milliseconds before animation starts.
   // constraint: number >= 0; default value: 0
   @override
   final Expression<int> startDelay;
@@ -152,6 +164,13 @@ enum DivSlideTransitionEdge implements Preloadable {
   final String value;
 
   const DivSlideTransitionEdge(this.value);
+  bool get isLeft => this == left;
+
+  bool get isTop => this == top;
+
+  bool get isRight => this == right;
+
+  bool get isBottom => this == bottom;
 
   T map<T>({
     required T Function() left,

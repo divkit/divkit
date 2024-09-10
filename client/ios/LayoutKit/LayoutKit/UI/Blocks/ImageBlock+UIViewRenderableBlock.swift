@@ -14,9 +14,9 @@ extension ImageBlock {
   ) {
     let remoteImageViewContainer = view as! RemoteImageViewContainer
     var contentView = remoteImageViewContainer.contentView
-    if !effects.isEmpty || tintMode != .sourceIn, !contentView
-      .isKind(of: MetalImageView.self) {
-      contentView = MetalImageView()
+    let targetType = suitableTypeOfImageView()
+    if !contentView.isKind(of: targetType) {
+      contentView = targetType.init()
     }
     contentView.appearanceAnimation = appearanceAnimation?.cast()
     contentView.imageContentMode = contentMode
@@ -36,6 +36,31 @@ extension ImageBlock {
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
     view is RemoteImageViewContainer
+  }
+
+  private func suitableTypeOfImageView() -> any RemoteImageViewContentProtocol.Type {
+    if tintMode != .sourceIn {
+      return MetalImageView.self
+    }
+    let blurEffectUsingMetal = blurUsingMetal ?? true
+    let tintEffectUsingMetal = tintUsingMetal ?? true
+    let (hasBlur, hasTint) = usedEffects()
+    let useMetal = (blurEffectUsingMetal && hasBlur || tintEffectUsingMetal && hasTint)
+    return useMetal ? MetalImageView.self : RemoteImageView.self
+  }
+
+  private func usedEffects() -> (blur: Bool, tint: Bool) {
+    var hasBlur = false
+    var hasTint = false
+    for effect in effects {
+      switch effect {
+      case .blur:
+        hasBlur = true
+      case .tint:
+        hasTint = true  
+      }
+    }
+    return (blur: hasBlur, tint: hasTint)
   }
 }
 

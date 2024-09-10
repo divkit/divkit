@@ -9,7 +9,6 @@ class DictValue extends Preloadable with EquatableMixin {
   });
 
   static const type = "dict";
-
   final Map<String, dynamic> value;
 
   @override

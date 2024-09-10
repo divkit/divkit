@@ -5,6 +5,7 @@ import 'package:divkit/src/schema/div_stroke.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// A rectangle with rounded corners.
 class DivRoundedRectangleShape extends Preloadable with EquatableMixin {
   const DivRoundedRectangleShape({
     this.backgroundColor,
@@ -28,14 +29,22 @@ class DivRoundedRectangleShape extends Preloadable with EquatableMixin {
 
   static const type = "rounded_rectangle";
 
+  /// Fill color.
   final Expression<Color>? backgroundColor;
+
+  /// Corner rounding radius.
   // default value: const DivFixedSize(value: ValueExpression(5,),)
   final DivFixedSize cornerRadius;
+
+  /// Height.
   // default value: const DivFixedSize(value: ValueExpression(10,),)
   final DivFixedSize itemHeight;
+
+  /// Width.
   // default value: const DivFixedSize(value: ValueExpression(10,),)
   final DivFixedSize itemWidth;
 
+  /// Stroke style.
   final DivStroke? stroke;
 
   @override

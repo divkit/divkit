@@ -3,6 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Linear gradient.
 class DivLinearGradient extends Preloadable with EquatableMixin {
   const DivLinearGradient({
     this.angle = const ValueExpression(0),
@@ -10,8 +11,12 @@ class DivLinearGradient extends Preloadable with EquatableMixin {
   });
 
   static const type = "gradient";
+
+  /// Angle of gradient direction.
   // constraint: number >= 0 && number <= 360; default value: 0
   final Expression<int> angle;
+
+  /// Colors. Gradient points are located at an equal distance from each other.
   // at least 2 elements
   final Expression<List<Color>> colors;
 

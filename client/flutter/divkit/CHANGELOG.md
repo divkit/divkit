@@ -1,10 +1,25 @@
-## 0.3.1-rc.1
+## 0.4.1-rc.1
 
+* Fix patches are not applied to items of custom
+* Provide documentation for generated schema
+
+## 0.4.0
+
+* Use low-level divkit layout implementation: DivLayout
+* Optimize pre-calculation of states when switching
 * Fix sticky switching of states
 * Fix inner objects in templates breaks rendering
 * Add support div-text features: font_family, letter_spacing font_weight_value, text_shadow
 * Add scenario list to testing page
 * Add handling url in playground editor
+* Added feature logging management
+
+
+## Migration 0.3 → 0.4
+
+* No changes in the public API!
+* Due to the change in the layout system, we cannot guarantee full compliance with the rendering
+  of the previous version, now we use a lower-level, rather than a composition of standard components.
 
 ## 0.3.0
 

@@ -21,12 +21,14 @@ let package = Package(
   products: [
     .library(name: "DivKit", targets: ["DivKit"]),
     .library(name: "DivKitExtensions", targets: ["DivKitExtensions"]),
+    .library(name: "DivKitMarkdownExtension", targets: ["DivKitMarkdownExtension"]),
     .library(name: "LayoutKit", targets: ["LayoutKit"]),
     .library(name: "LayoutKitInterface", targets: ["LayoutKitInterface"]),
-    .library(name: "Serialization", targets: ["Serialization"])
+    .library(name: "Serialization", targets: ["Serialization"]),
   ],
   dependencies: [
     vgsl.package,
+    .package(url: "https://github.com/apple/swift-markdown.git", from: "0.4.0"),
   ],
   targets: [
     .target(
@@ -49,6 +51,17 @@ let package = Package(
         "DivKit",
       ],
       path: "DivKitExtensions",
+      swiftSettings: swiftSettings
+    ),
+    .target(
+      name: "DivKitMarkdownExtension",
+      dependencies: [
+        "DivKit",
+        "LayoutKit",
+        .product(name: "VGSL", package: vgsl.packageName),
+        .product(name: "Markdown", package: "swift-markdown"),
+      ],
+      path: "DivKitMarkdownExtension",
       swiftSettings: swiftSettings
     ),
     .target(
@@ -75,6 +88,6 @@ let package = Package(
       ],
       path: "Serialization",
       swiftSettings: swiftSettings
-    )
+    ),
   ]
 )

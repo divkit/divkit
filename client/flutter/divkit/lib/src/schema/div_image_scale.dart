@@ -11,6 +11,13 @@ enum DivImageScale implements Preloadable {
   final String value;
 
   const DivImageScale(this.value);
+  bool get isFill => this == fill;
+
+  bool get isNoScale => this == noScale;
+
+  bool get isFit => this == fit;
+
+  bool get isStretch => this == stretch;
 
   T map<T>({
     required T Function() fill,

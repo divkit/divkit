@@ -78,10 +78,7 @@ class DivStateModel with EquatableMixin {
 
     final state = watch<DivContext>(context)!.stateManager;
     return state.watch<DivStateModel>((states) async {
-      // To avoid errors in the first frame due to outdated variable
-      // context data, needs to preload all the variables used in div.
-      await data.preload(variables.context.current);
-      return DivStateModel(
+      final model = DivStateModel(
         divId: divId,
         stateId: states[divId],
         defaultStateId: await data.defaultStateId?.resolveValue(
@@ -89,6 +86,12 @@ class DivStateModel with EquatableMixin {
         ),
         states: data.states,
       );
+
+      // To avoid errors in the first frame due to outdated variable
+      // context data, needs to preload all the variables used in state.
+      await model.state?.preload(variables.context.current);
+
+      return model;
     }).distinct();
   }
 

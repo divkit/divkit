@@ -7,7 +7,11 @@ import com.yandex.div.core.actions.DivActionTypedDictSetValueHandler
 import com.yandex.div.core.actions.DivActionTypedSetVariableHandler
 import com.yandex.div.core.actions.DivActionTypedHandler
 import com.yandex.div.core.actions.DivActionTypedFocusElementHandler
+import com.yandex.div.core.actions.DivActionTypedHideTooltipHandler
+import com.yandex.div.core.actions.DivActionTypedSetStateHandler
 import com.yandex.div.core.actions.DivActionTypedTimerHandler
+import com.yandex.div.core.actions.DivActionTypedVideoHandler
+import com.yandex.div.core.actions.DivActionTypedShowTooltipHandler
 import com.yandex.yatagan.Binds
 import com.yandex.yatagan.IntoSet
 import com.yandex.yatagan.Module
@@ -47,13 +51,37 @@ internal interface DivActionTypedModule {
 
     @Binds
     @IntoSet
+    fun provideHideTooltipActionHandler(
+        impl: DivActionTypedHideTooltipHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
+    fun provideSetStateActionHandler(
+        impl: DivActionTypedSetStateHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
     fun provideSetVariableActionHandler(
         impl: DivActionTypedSetVariableHandler
     ): DivActionTypedHandler
 
     @Binds
     @IntoSet
+    fun provideShowTooltipActionHandler(
+        impl: DivActionTypedShowTooltipHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
     fun provideTimerActionHandler(
         impl: DivActionTypedTimerHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
+    fun provideVideoActionHandler(
+        impl: DivActionTypedVideoHandler
     ): DivActionTypedHandler
 }

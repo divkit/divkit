@@ -4,6 +4,7 @@ import 'package:divkit/src/schema/div_point.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
+/// Element shadow.
 class DivShadow extends Preloadable with EquatableMixin {
   const DivShadow({
     this.alpha = const ValueExpression(0.19),
@@ -12,13 +13,19 @@ class DivShadow extends Preloadable with EquatableMixin {
     required this.offset,
   });
 
+  /// Shadow transparency.
   // constraint: number >= 0.0 && number <= 1.0; default value: 0.19
   final Expression<double> alpha;
+
+  /// Blur intensity.
   // constraint: number >= 0; default value: 2
   final Expression<int> blur;
+
+  /// Shadow color.
   // default value: const Color(0xFF000000)
   final Expression<Color> color;
 
+  /// Shadow offset.
   final DivPoint offset;
 
   @override

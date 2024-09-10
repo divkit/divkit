@@ -4,13 +4,14 @@ import 'package:equatable/equatable.dart';
 
 import 'package:divkit/src/utils/parsing_utils.dart';
 
+
 class EntityWithComplexPropertyWithDefaultValue extends Preloadable with EquatableMixin  {
   const EntityWithComplexPropertyWithDefaultValue({
     this.property = const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),),
   });
 
   static const type = "entity_with_complex_property_with_default_value";
-  // default value: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),)
+   // default value: const EntityWithComplexPropertyWithDefaultValueProperty(value: ValueExpression("Default text",),)
   final EntityWithComplexPropertyWithDefaultValueProperty property;
 
   @override
@@ -59,11 +60,11 @@ class EntityWithComplexPropertyWithDefaultValue extends Preloadable with Equatab
   }
 }
 
+
 class EntityWithComplexPropertyWithDefaultValueProperty extends Preloadable with EquatableMixin  {
   const EntityWithComplexPropertyWithDefaultValueProperty({
     required this.value,
   });
-
 
   final Expression<String> value;
 

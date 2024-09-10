@@ -21,7 +21,7 @@ buildscript {
 }
 
 wrapper {
-    gradleVersion "8.3"
+    gradleVersion "8.10"
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }

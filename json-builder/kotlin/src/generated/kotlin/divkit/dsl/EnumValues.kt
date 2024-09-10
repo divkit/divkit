@@ -98,6 +98,36 @@ object BlankEnumValue : EnumValue("_blank"),
     Action.Target
 
 @Generated
+object StartEnumValue : EnumValue("start"),
+    ActionTimer.Action,
+    ActionVideo.Action,
+    AlignmentHorizontal,
+    ContentAlignmentHorizontal,
+    Gallery.CrossContentAlignment,
+    Text.Truncate
+
+@Generated
+object StopEnumValue : EnumValue("stop"),
+    ActionTimer.Action
+
+@Generated
+object PauseEnumValue : EnumValue("pause"),
+    ActionTimer.Action,
+    ActionVideo.Action
+
+@Generated
+object ResumeEnumValue : EnumValue("resume"),
+    ActionTimer.Action
+
+@Generated
+object CancelEnumValue : EnumValue("cancel"),
+    ActionTimer.Action
+
+@Generated
+object ResetEnumValue : EnumValue("reset"),
+    ActionTimer.Action
+
+@Generated
 object LeftEnumValue : EnumValue("left"),
     AlignmentHorizontal,
     ContentAlignmentHorizontal,
@@ -120,13 +150,6 @@ object RightEnumValue : EnumValue("right"),
     ContentAlignmentHorizontal,
     SlideTransition.Edge,
     Tooltip.Position
-
-@Generated
-object StartEnumValue : EnumValue("start"),
-    AlignmentHorizontal,
-    ContentAlignmentHorizontal,
-    Gallery.CrossContentAlignment,
-    Text.Truncate
 
 @Generated
 object EndEnumValue : EnumValue("end"),
@@ -182,6 +205,22 @@ object SetEnumValue : EnumValue("set"),
 @Generated
 object NoAnimationEnumValue : EnumValue("no_animation"),
     Animation.Name
+
+@Generated
+object NormalEnumValue : EnumValue("normal"),
+    AnimationDirection
+
+@Generated
+object ReverseEnumValue : EnumValue("reverse"),
+    AnimationDirection
+
+@Generated
+object AlternateEnumValue : EnumValue("alternate"),
+    AnimationDirection
+
+@Generated
+object AlternateReverseEnumValue : EnumValue("alternate_reverse"),
+    AnimationDirection
 
 @Generated
 object LinearEnumValue : EnumValue("linear"),
@@ -522,6 +561,30 @@ val DivScope.blank: BlankEnumValue
     get() = BlankEnumValue
 
 @Generated
+val DivScope.start: StartEnumValue
+    get() = StartEnumValue
+
+@Generated
+val DivScope.stop: StopEnumValue
+    get() = StopEnumValue
+
+@Generated
+val DivScope.pause: PauseEnumValue
+    get() = PauseEnumValue
+
+@Generated
+val DivScope.resume: ResumeEnumValue
+    get() = ResumeEnumValue
+
+@Generated
+val DivScope.cancel: CancelEnumValue
+    get() = CancelEnumValue
+
+@Generated
+val DivScope.reset: ResetEnumValue
+    get() = ResetEnumValue
+
+@Generated
 val DivScope.left: LeftEnumValue
     get() = LeftEnumValue
 
@@ -532,10 +595,6 @@ val DivScope.center: CenterEnumValue
 @Generated
 val DivScope.right: RightEnumValue
     get() = RightEnumValue
-
-@Generated
-val DivScope.start: StartEnumValue
-    get() = StartEnumValue
 
 @Generated
 val DivScope.end: EndEnumValue
@@ -576,6 +635,22 @@ val DivScope.set: SetEnumValue
 @Generated
 val DivScope.no_animation: NoAnimationEnumValue
     get() = NoAnimationEnumValue
+
+@Generated
+val DivScope.normal: NormalEnumValue
+    get() = NormalEnumValue
+
+@Generated
+val DivScope.reverse: ReverseEnumValue
+    get() = ReverseEnumValue
+
+@Generated
+val DivScope.alternate: AlternateEnumValue
+    get() = AlternateEnumValue
+
+@Generated
+val DivScope.alternate_reverse: AlternateReverseEnumValue
+    get() = AlternateReverseEnumValue
 
 @Generated
 val DivScope.linear: LinearEnumValue
