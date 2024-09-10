@@ -383,6 +383,10 @@
     "en": "Parameters when focusing on an element or losing focus.",
     "ru": "Параметры при фокусировке на элементе или потере фокуса."
   },
+  "div_base_functions": {
+    "en": "Custom functions.",
+    "ru": "Пользовательские функции."
+  },
   "div_base_height": {
     "en": "Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).",
     "ru": "Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout)."
@@ -763,6 +767,10 @@
     "en": "Top margin.",
     "ru": "Верхний отступ."
   },
+  "div_evaluable_type": {
+    "en": "The type used in function arguments and return values.",
+    "ru": "Тип, используемый в аргументах и возвращаемых значениях функций."
+  },
   "div_extension": {
     "en": "Extension that affects an element.",
     "ru": "Расширение, которое влияет на элемент."
@@ -858,6 +866,34 @@
   "div_font_weight_value": {
     "en": "Style. Numeric value.",
     "ru": "Начертание. Числовое значение."
+  },
+  "div_function": {
+    "en": "Custom function.",
+    "ru": "Функция, определяемая пользователем."
+  },
+  "div_function_name": {
+    "en": "Function name.",
+    "ru": "Наименование функции."
+  },
+  "div_function_body": {
+    "en": "Function body. Evaluated as an expression with the passed arguments. Does not capture external variables",
+    "ru": "Тело функции. Вычисляется как выражение с подставлением передаваемых аргументов. Не захватывает внешние переменные."
+  },
+  "div_function_return_type": {
+    "en": "Return type.",
+    "ru": "Тип возвращаемого значения."
+  },
+  "div_function_argument": {
+    "en": "Function argument.",
+    "ru": "Аргумент функции."
+  },
+  "div_function_argument_name": {
+    "en": "Function argument name.",
+    "ru": "Наименование аргумента функции."
+  },
+  "div_function_argument_type": {
+    "en": "Function argument type.",
+    "ru": "Тип аргумента функции."
   },
   "div_gallery": {
     "en": "Gallery. It contains a horizontal or vertical set of cards that can be scrolled.",

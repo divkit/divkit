@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_function_argument",
+  "properties": {
+    "name": {
+      "type": "string",
+      "$description": "translations.json#/div_function_argument_name",
+      "supports_expressions": false
+    },
+    "type": {
+      "$ref": "div-evaluable-type.json",
+      "$description": "translations.json#/div_function_argument_type",
+      "supports_expressions": false
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ]
+}

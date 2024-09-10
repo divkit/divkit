@@ -926,7 +926,7 @@ class KotlinPropertyType(PropertyType):
             regex = self.regex
             if regex is not None:
                 escaped_pattern = regex.pattern.replace('\\', '\\\\')
-                expressions.append(f'it: String -> it.doesMatch("{escaped_pattern}")')
+                expressions.append(f'it.doesMatch("{escaped_pattern}")')
             if not expressions:
                 return ''
             return f'{{ it: String -> {" && ".join(expressions)} }}'

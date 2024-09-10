@@ -1,0 +1,15 @@
+{
+  "type": "string",
+  "$description": "translations.json#/div_evaluable_type",
+  "enum": [
+    "string",
+    "integer",
+    "number",
+    "boolean",
+    "datetime",
+    "color",
+    "url",
+    "dict",
+    "array"
+  ]
+}

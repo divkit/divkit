@@ -211,6 +211,14 @@
       "$description": "translations.json#/div_base_visibility",
       "default_value": "visible"
     },
+    "functions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-function.json"
+      },
+      "$description": "translations.json#/div_base_functions",
+      "platforms": []
+    },
     "variables": {
       "type": "array",
       "items": {
