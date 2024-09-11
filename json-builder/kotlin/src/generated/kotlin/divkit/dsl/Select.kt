@@ -52,6 +52,7 @@ class Select internal constructor(
             fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
             fontWeight = additive.fontWeight ?: properties.fontWeight,
             fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             hintColor = additive.hintColor ?: properties.hintColor,
             hintText = additive.hintText ?: properties.hintText,
@@ -96,7 +97,7 @@ class Select internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
+         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
@@ -151,6 +152,10 @@ class Select internal constructor(
          * Style. Numeric value.
          */
         val fontWeightValue: Property<Int>?,
+        /**
+         * Custom functions.
+         */
+        val functions: Property<List<Function>>?,
         /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
@@ -282,6 +287,7 @@ class Select internal constructor(
             result.tryPutProperty("font_size_unit", fontSizeUnit)
             result.tryPutProperty("font_weight", fontWeight)
             result.tryPutProperty("font_weight_value", fontWeightValue)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("hint_color", hintColor)
             result.tryPutProperty("hint_text", hintText)
@@ -361,7 +367,7 @@ class Select internal constructor(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -374,6 +380,7 @@ class Select internal constructor(
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -420,6 +427,7 @@ fun DivScope.select(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -465,6 +473,7 @@ fun DivScope.select(
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
@@ -499,7 +508,7 @@ fun DivScope.select(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -512,6 +521,7 @@ fun DivScope.select(
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -558,6 +568,7 @@ fun DivScope.selectProps(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -602,6 +613,7 @@ fun DivScope.selectProps(
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
     fontWeightValue = valueOrNull(fontWeightValue),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     hintColor = valueOrNull(hintColor),
     hintText = valueOrNull(hintText),
@@ -635,7 +647,7 @@ fun DivScope.selectProps(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -648,6 +660,7 @@ fun DivScope.selectProps(
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -694,6 +707,7 @@ fun TemplateScope.selectRefs(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -738,6 +752,7 @@ fun TemplateScope.selectRefs(
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
     fontWeightValue = fontWeightValue,
+    functions = functions,
     height = height,
     hintColor = hintColor,
     hintText = hintText,
@@ -771,7 +786,7 @@ fun TemplateScope.selectRefs(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -784,6 +799,7 @@ fun TemplateScope.selectRefs(
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -830,6 +846,7 @@ fun Select.override(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -875,6 +892,7 @@ fun Select.override(
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
         hintText = valueOrNull(hintText) ?: properties.hintText,
@@ -909,7 +927,7 @@ fun Select.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -922,6 +940,7 @@ fun Select.override(
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -968,6 +987,7 @@ fun Select.defer(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -1013,6 +1033,7 @@ fun Select.defer(
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
@@ -1046,7 +1067,7 @@ fun Select.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1100,6 +1121,7 @@ fun Select.evaluate(
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = properties.functions,
         height = properties.height,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
@@ -1134,7 +1156,7 @@ fun Select.evaluate(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1147,6 +1169,7 @@ fun Select.evaluate(
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -1193,6 +1216,7 @@ fun Component<Select>.override(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -1239,6 +1263,7 @@ fun Component<Select>.override(
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
@@ -1273,7 +1298,7 @@ fun Component<Select>.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1286,6 +1311,7 @@ fun Component<Select>.override(
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param hintColor Hint color.
  * @param hintText Hint text.
@@ -1332,6 +1358,7 @@ fun Component<Select>.defer(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -1378,6 +1405,7 @@ fun Component<Select>.defer(
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
+        functions = functions,
         height = height,
         hintColor = hintColor,
         hintText = hintText,
@@ -1411,7 +1439,7 @@ fun Component<Select>.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1466,6 +1494,7 @@ fun Component<Select>.evaluate(
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
+        functions = null,
         height = null,
         hintColor = hintColor,
         hintText = hintText,

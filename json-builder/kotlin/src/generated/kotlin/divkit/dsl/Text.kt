@@ -61,6 +61,7 @@ class Text internal constructor(
             fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
             fontWeight = additive.fontWeight ?: properties.fontWeight,
             fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             images = additive.images ?: properties.images,
@@ -131,7 +132,7 @@ class Text internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
+         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
@@ -205,6 +206,10 @@ class Text internal constructor(
          * Style. Numeric value.
          */
         val fontWeightValue: Property<Int>?,
+        /**
+         * Custom functions.
+         */
+        val functions: Property<List<Function>>?,
         /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
@@ -390,6 +395,7 @@ class Text internal constructor(
             result.tryPutProperty("font_size_unit", fontSizeUnit)
             result.tryPutProperty("font_weight", fontWeight)
             result.tryPutProperty("font_weight_value", fontWeightValue)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("images", images)
@@ -783,7 +789,7 @@ class Text internal constructor(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
@@ -800,6 +806,7 @@ class Text internal constructor(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
@@ -865,6 +872,7 @@ fun DivScope.text(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
@@ -928,6 +936,7 @@ fun DivScope.text(
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         images = valueOrNull(images),
@@ -975,7 +984,7 @@ fun DivScope.text(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
@@ -992,6 +1001,7 @@ fun DivScope.text(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
@@ -1057,6 +1067,7 @@ fun DivScope.textProps(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
@@ -1119,6 +1130,7 @@ fun DivScope.textProps(
     fontSizeUnit = valueOrNull(fontSizeUnit),
     fontWeight = valueOrNull(fontWeight),
     fontWeightValue = valueOrNull(fontWeightValue),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     id = valueOrNull(id),
     images = valueOrNull(images),
@@ -1165,7 +1177,7 @@ fun DivScope.textProps(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
@@ -1182,6 +1194,7 @@ fun DivScope.textProps(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
@@ -1247,6 +1260,7 @@ fun TemplateScope.textRefs(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
@@ -1309,6 +1323,7 @@ fun TemplateScope.textRefs(
     fontSizeUnit = fontSizeUnit,
     fontWeight = fontWeight,
     fontWeightValue = fontWeightValue,
+    functions = functions,
     height = height,
     id = id,
     images = images,
@@ -1355,7 +1370,7 @@ fun TemplateScope.textRefs(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
@@ -1372,6 +1387,7 @@ fun TemplateScope.textRefs(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
@@ -1437,6 +1453,7 @@ fun Text.override(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
@@ -1500,6 +1517,7 @@ fun Text.override(
         fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
         fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         images = valueOrNull(images) ?: properties.images,
@@ -1547,7 +1565,7 @@ fun Text.override(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
@@ -1564,6 +1582,7 @@ fun Text.override(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
@@ -1629,6 +1648,7 @@ fun Text.defer(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
@@ -1692,6 +1712,7 @@ fun Text.defer(
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
         images = images ?: properties.images,
@@ -1735,7 +1756,7 @@ fun Text.defer(
  * @param text Text.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
@@ -1816,6 +1837,7 @@ fun Text.evaluate(
         fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
         fontWeight = fontWeight ?: properties.fontWeight,
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
+        functions = properties.functions,
         height = properties.height,
         id = properties.id,
         images = properties.images,
@@ -1863,7 +1885,7 @@ fun Text.evaluate(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
@@ -1880,6 +1902,7 @@ fun Text.evaluate(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
@@ -1945,6 +1968,7 @@ fun Component<Text>.override(
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     fontWeightValue: Int? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     images: List<Text.Image>? = null,
@@ -2009,6 +2033,7 @@ fun Component<Text>.override(
         fontSizeUnit = valueOrNull(fontSizeUnit),
         fontWeight = valueOrNull(fontWeight),
         fontWeightValue = valueOrNull(fontWeightValue),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         images = valueOrNull(images),
@@ -2056,7 +2081,7 @@ fun Component<Text>.override(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
@@ -2073,6 +2098,7 @@ fun Component<Text>.override(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
@@ -2138,6 +2164,7 @@ fun Component<Text>.defer(
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
     fontWeightValue: ReferenceProperty<Int>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     images: ReferenceProperty<List<Text.Image>>? = null,
@@ -2202,6 +2229,7 @@ fun Component<Text>.defer(
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
+        functions = functions,
         height = height,
         id = id,
         images = images,
@@ -2245,7 +2273,7 @@ fun Component<Text>.defer(
  * @param text Text.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
@@ -2327,6 +2355,7 @@ fun Component<Text>.evaluate(
         fontSizeUnit = fontSizeUnit,
         fontWeight = fontWeight,
         fontWeightValue = fontWeightValue,
+        functions = null,
         height = null,
         id = null,
         images = null,

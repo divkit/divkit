@@ -312,6 +312,43 @@ object SpaceEvenlyEnumValue : EnumValue("space-evenly"),
     ContentAlignmentVertical
 
 @Generated
+object StringEnumValue : EnumValue("string"),
+    EvaluableType
+
+@Generated
+object IntegerEnumValue : EnumValue("integer"),
+    EvaluableType
+
+@Generated
+object NumberEnumValue : EnumValue("number"),
+    EvaluableType,
+    Input.KeyboardType
+
+@Generated
+object BooleanEnumValue : EnumValue("boolean"),
+    EvaluableType
+
+@Generated
+object DatetimeEnumValue : EnumValue("datetime"),
+    EvaluableType
+
+@Generated
+object ColorEnumValue : EnumValue("color"),
+    EvaluableType
+
+@Generated
+object UrlEnumValue : EnumValue("url"),
+    EvaluableType
+
+@Generated
+object DictEnumValue : EnumValue("dict"),
+    EvaluableType
+
+@Generated
+object ArrayEnumValue : EnumValue("array"),
+    EvaluableType
+
+@Generated
 object LightEnumValue : EnumValue("light"),
     FontWeight
 
@@ -380,10 +417,6 @@ object MultiLineTextEnumValue : EnumValue("multi_line_text"),
 
 @Generated
 object PhoneEnumValue : EnumValue("phone"),
-    Input.KeyboardType
-
-@Generated
-object NumberEnumValue : EnumValue("number"),
     Input.KeyboardType
 
 @Generated
@@ -733,6 +766,42 @@ val DivScope.space_evenly: SpaceEvenlyEnumValue
     get() = SpaceEvenlyEnumValue
 
 @Generated
+val DivScope.string: StringEnumValue
+    get() = StringEnumValue
+
+@Generated
+val DivScope.integer: IntegerEnumValue
+    get() = IntegerEnumValue
+
+@Generated
+val DivScope.number: NumberEnumValue
+    get() = NumberEnumValue
+
+@Generated
+val DivScope.boolean: BooleanEnumValue
+    get() = BooleanEnumValue
+
+@Generated
+val DivScope.datetime: DatetimeEnumValue
+    get() = DatetimeEnumValue
+
+@Generated
+val DivScope.color: ColorEnumValue
+    get() = ColorEnumValue
+
+@Generated
+val DivScope.url: UrlEnumValue
+    get() = UrlEnumValue
+
+@Generated
+val DivScope.dict: DictEnumValue
+    get() = DictEnumValue
+
+@Generated
+val DivScope.array: ArrayEnumValue
+    get() = ArrayEnumValue
+
+@Generated
 val DivScope.light: LightEnumValue
     get() = LightEnumValue
 
@@ -799,10 +868,6 @@ val DivScope.multi_line_text: MultiLineTextEnumValue
 @Generated
 val DivScope.phone: PhoneEnumValue
     get() = PhoneEnumValue
-
-@Generated
-val DivScope.number: NumberEnumValue
-    get() = NumberEnumValue
 
 @Generated
 val DivScope.email: EmailEnumValue

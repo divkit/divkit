@@ -57,6 +57,7 @@ class Image internal constructor(
             extensions = additive.extensions ?: properties.extensions,
             filters = additive.filters ?: properties.filters,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             highPriorityPreviewShow = additive.highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
             id = additive.id ?: properties.id,
@@ -119,7 +120,7 @@ class Image internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
+         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
@@ -177,6 +178,10 @@ class Image internal constructor(
          * Parameters when focusing on an element or losing focus.
          */
         val focus: Property<Focus>?,
+        /**
+         * Custom functions.
+         */
+        val functions: Property<List<Function>>?,
         /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
@@ -322,6 +327,7 @@ class Image internal constructor(
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("filters", filters)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("high_priority_preview_show", highPriorityPreviewShow)
             result.tryPutProperty("id", id)
@@ -363,7 +369,7 @@ class Image internal constructor(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
@@ -377,6 +383,7 @@ class Image internal constructor(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -430,6 +437,7 @@ fun DivScope.image(
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
     id: String? = null,
@@ -481,6 +489,7 @@ fun DivScope.image(
         extensions = valueOrNull(extensions),
         filters = valueOrNull(filters),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
         id = valueOrNull(id),
@@ -520,7 +529,7 @@ fun DivScope.image(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
@@ -534,6 +543,7 @@ fun DivScope.image(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -587,6 +597,7 @@ fun DivScope.imageProps(
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
     id: String? = null,
@@ -637,6 +648,7 @@ fun DivScope.imageProps(
     extensions = valueOrNull(extensions),
     filters = valueOrNull(filters),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
     id = valueOrNull(id),
@@ -675,7 +687,7 @@ fun DivScope.imageProps(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
@@ -689,6 +701,7 @@ fun DivScope.imageProps(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -742,6 +755,7 @@ fun TemplateScope.imageRefs(
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
     id: ReferenceProperty<String>? = null,
@@ -792,6 +806,7 @@ fun TemplateScope.imageRefs(
     extensions = extensions,
     filters = filters,
     focus = focus,
+    functions = functions,
     height = height,
     highPriorityPreviewShow = highPriorityPreviewShow,
     id = id,
@@ -830,7 +845,7 @@ fun TemplateScope.imageRefs(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
@@ -844,6 +859,7 @@ fun TemplateScope.imageRefs(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -897,6 +913,7 @@ fun Image.override(
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
     id: String? = null,
@@ -948,6 +965,7 @@ fun Image.override(
         extensions = valueOrNull(extensions) ?: properties.extensions,
         filters = valueOrNull(filters) ?: properties.filters,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow) ?: properties.highPriorityPreviewShow,
         id = valueOrNull(id) ?: properties.id,
@@ -987,7 +1005,7 @@ fun Image.override(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
@@ -1001,6 +1019,7 @@ fun Image.override(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -1054,6 +1073,7 @@ fun Image.defer(
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
     id: ReferenceProperty<String>? = null,
@@ -1105,6 +1125,7 @@ fun Image.defer(
         extensions = extensions ?: properties.extensions,
         filters = filters ?: properties.filters,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         highPriorityPreviewShow = highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
         id = id ?: properties.id,
@@ -1140,7 +1161,7 @@ fun Image.defer(
  * @param imageUrl Direct URL to an image.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
@@ -1198,6 +1219,7 @@ fun Image.evaluate(
         extensions = properties.extensions,
         filters = properties.filters,
         focus = properties.focus,
+        functions = properties.functions,
         height = properties.height,
         highPriorityPreviewShow = highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
         id = properties.id,
@@ -1237,7 +1259,7 @@ fun Image.evaluate(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
@@ -1251,6 +1273,7 @@ fun Image.evaluate(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -1304,6 +1327,7 @@ fun Component<Image>.override(
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
     id: String? = null,
@@ -1356,6 +1380,7 @@ fun Component<Image>.override(
         extensions = valueOrNull(extensions),
         filters = valueOrNull(filters),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
         id = valueOrNull(id),
@@ -1395,7 +1420,7 @@ fun Component<Image>.override(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
@@ -1409,6 +1434,7 @@ fun Component<Image>.override(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
@@ -1462,6 +1488,7 @@ fun Component<Image>.defer(
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
     id: ReferenceProperty<String>? = null,
@@ -1514,6 +1541,7 @@ fun Component<Image>.defer(
         extensions = extensions,
         filters = filters,
         focus = focus,
+        functions = functions,
         height = height,
         highPriorityPreviewShow = highPriorityPreviewShow,
         id = id,
@@ -1549,7 +1577,7 @@ fun Component<Image>.defer(
  * @param imageUrl Direct URL to an image.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
@@ -1608,6 +1636,7 @@ fun Component<Image>.evaluate(
         extensions = null,
         filters = null,
         focus = null,
+        functions = null,
         height = null,
         highPriorityPreviewShow = highPriorityPreviewShow,
         id = null,
