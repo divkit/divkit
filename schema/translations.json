@@ -107,6 +107,10 @@
     "en": "Requests focus for an element. May require a user action on the web.",
     "ru": "Запрашивает фокус для элемента. В вебе может требовать действие пользователя."
   },
+  "div_action_hide_tooltip": {
+    "en": "Hides tooltip.",
+    "ru": "Скрывает тултип."
+  },
   "div_action_log_url": {
     "en": "URL for logging.",
     "ru": "Ссылка для логирования."
@@ -127,15 +131,7 @@
     "en": "Context menu.",
     "ru": "Контекстное меню."
   },
-  "div_action_hide_tooltip" : {
-    "en": "Hides tooltip.",
-    "ru": "Скрывает тултип."
-  },
-  "div_action_tooltip_id": {
-    "en": "Tooltip identifier.",
-    "ru": "Идентификатор тултипа."
-  },
-  "div_action_set_state" : {
+  "div_action_set_state": {
     "en": "Switches the appearance of content in `div-state`.",
     "ru": "Устанавливает новый внешний вид контента в `div-state`."
   },
@@ -174,6 +170,10 @@
   "div_action_timer_id": {
     "en": "Timer identifier.",
     "ru": "Идентификатор таймера."
+  },
+  "div_action_tooltip_id": {
+    "en": "Tooltip identifier.",
+    "ru": "Идентификтор тултипа."
   },
   "div_action_video": {
     "en": "Controls given video.",
@@ -871,18 +871,6 @@
     "en": "Custom function.",
     "ru": "Функция, определяемая пользователем."
   },
-  "div_function_name": {
-    "en": "Function name.",
-    "ru": "Наименование функции."
-  },
-  "div_function_body": {
-    "en": "Function body. Evaluated as an expression with the passed arguments. Does not capture external variables",
-    "ru": "Тело функции. Вычисляется как выражение с подставлением передаваемых аргументов. Не захватывает внешние переменные."
-  },
-  "div_function_return_type": {
-    "en": "Return type.",
-    "ru": "Тип возвращаемого значения."
-  },
   "div_function_argument": {
     "en": "Function argument.",
     "ru": "Аргумент функции."
@@ -894,6 +882,18 @@
   "div_function_argument_type": {
     "en": "Function argument type.",
     "ru": "Тип аргумента функции."
+  },
+  "div_function_body": {
+    "en": "Function body. Evaluated as an expression with the passed arguments. Does not capture external variables",
+    "ru": "Тело функции. Вычисляется как выражение с подставлением передаваемых аргументов. Не захватывает внешние переменные."
+  },
+  "div_function_name": {
+    "en": "Function name.",
+    "ru": "Наименование функции."
+  },
+  "div_function_return_type": {
+    "en": "Return type.",
+    "ru": "Тип возвращаемого значения."
   },
   "div_gallery": {
     "en": "Gallery. It contains a horizontal or vertical set of cards that can be scrolled.",
