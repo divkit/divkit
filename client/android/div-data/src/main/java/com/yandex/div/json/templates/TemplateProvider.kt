@@ -1,11 +1,11 @@
 package com.yandex.div.json.templates
 
-import com.yandex.div.json.JsonTemplate
+import com.yandex.div.data.EntityTemplate
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.templateNotFound
 import org.json.JSONObject
 
-interface TemplateProvider<out T : JsonTemplate<*>> {
+interface TemplateProvider<out T : EntityTemplate<*>> {
 
     operator fun get(templateId: String): T?
 
@@ -18,11 +18,11 @@ interface TemplateProvider<out T : JsonTemplate<*>> {
     }
 
     companion object {
-        fun <T : JsonTemplate<*>> empty() = object : TemplateProvider<T> {
+        fun <T : EntityTemplate<*>> empty() = object : TemplateProvider<T> {
             override fun get(templateId: String): T? = null
         }
 
-        fun <T : JsonTemplate<*>> wrap(map: Map<String, T>) = object : TemplateProvider<T> {
+        fun <T : EntityTemplate<*>> wrap(map: Map<String, T>) = object : TemplateProvider<T> {
             override fun get(templateId: String): T? {
                 return map[templateId]
             }

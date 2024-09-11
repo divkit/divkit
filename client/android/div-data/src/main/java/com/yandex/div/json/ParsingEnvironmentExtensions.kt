@@ -1,5 +1,6 @@
 package com.yandex.div.json
 
+import com.yandex.div.data.EntityTemplate
 import com.yandex.div.json.templates.TemplateProvider
 
 fun ParsingEnvironment.withLogger(logger: ParsingErrorLogger): ParsingEnvironmentWrapper {
@@ -11,7 +12,7 @@ class ParsingEnvironmentWrapper(
     override val logger: ParsingErrorLogger
 ) : ParsingEnvironment {
 
-    override val templates: TemplateProvider<JsonTemplate<*>>
+    override val templates: TemplateProvider<EntityTemplate<*>>
         get() = _templates
 
     val requestedKeys: Set<String>
@@ -21,15 +22,15 @@ class ParsingEnvironmentWrapper(
 }
 
 private class KeyWatchingTemplateProvider(
-    private val base: TemplateProvider<JsonTemplate<*>>
-): TemplateProvider<JsonTemplate<*>> {
+    private val base: TemplateProvider<EntityTemplate<*>>
+): TemplateProvider<EntityTemplate<*>> {
 
     val requestedKeys: Set<String>
         get() = _requestedKeys
 
     private val _requestedKeys = linkedSetOf<String>()
 
-    override fun get(templateId: String): JsonTemplate<*>? {
+    override fun get(templateId: String): EntityTemplate<*>? {
         _requestedKeys.add(templateId)
         return base[templateId]
     }
