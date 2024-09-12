@@ -83,14 +83,14 @@ internal class DivVisibilityActionTracker @Inject constructor(
     ) {
         if (visibilityActions.isEmpty()) return
 
-        val originalDivData = scope.divData
+        val originalDataTag = scope.dataTag
         if (view != null) {
             if (enqueuedVisibilityActions.containsKey(view)) return
 
             view.doOnHierarchyLayout(
                 action = {
                     // Prevent visibility tracking when data has changed
-                    if (scope.divData === originalDivData) {
+                    if (scope.dataTag == originalDataTag) {
                         isEnabledObserver.observe(view, scope, resolver, div, visibilityActions)
                         trackVisibilityActions(scope, resolver, view, div, visibilityActions.filter {
                             it.isEnabled.evaluate(resolver)
@@ -107,7 +107,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
             // Canceling tracking
             isEnabledObserver.cancelObserving(visibilityActions)
             visibilityActions.forEach { action ->
-                shouldTrackVisibilityAction(scope, resolver, view, action, 0)
+                shouldTrackVisibilityAction(scope, resolver, null, action, 0)
             }
         }
     }
