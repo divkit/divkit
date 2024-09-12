@@ -60,6 +60,7 @@ public final class DivContainer: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let aspect: DivAspect?
   public let background: [DivBackground]?
   public let border: DivBorder?
@@ -71,6 +72,7 @@ public final class DivContainer: DivBase {
   public let doubletapActions: [DivAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let itemBuilder: DivCollectionItemBuilder?
@@ -167,6 +169,7 @@ public final class DivContainer: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     alignmentVertical: Expression<DivAlignmentVertical>?,
     alpha: Expression<Double>?,
+    animators: [DivAnimator]?,
     aspect: DivAspect?,
     background: [DivBackground]?,
     border: DivBorder?,
@@ -178,6 +181,7 @@ public final class DivContainer: DivBase {
     doubletapActions: [DivAction]?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
+    functions: [DivFunction]?,
     height: DivSize?,
     id: String?,
     itemBuilder: DivCollectionItemBuilder?,
@@ -213,6 +217,7 @@ public final class DivContainer: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.aspect = aspect
     self.background = background
     self.border = border
@@ -224,6 +229,7 @@ public final class DivContainer: DivBase {
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.itemBuilder = itemBuilder
@@ -273,90 +279,96 @@ extension DivContainer: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.aspect == rhs.aspect,
-      lhs.background == rhs.background
+      lhs.animators == rhs.animators,
+      lhs.aspect == rhs.aspect
     else {
       return false
     }
     guard
+      lhs.background == rhs.background,
       lhs.border == rhs.border,
-      lhs.clipToBounds == rhs.clipToBounds,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.clipToBounds == rhs.clipToBounds
     else {
       return false
     }
     guard
+      lhs.columnSpan == rhs.columnSpan,
       lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
-      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
+      lhs.focus == rhs.focus,
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height
+    else {
+      return false
+    }
+    guard
       lhs.id == rhs.id,
-      lhs.itemBuilder == rhs.itemBuilder
+      lhs.itemBuilder == rhs.itemBuilder,
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
-      lhs.items == rhs.items,
       lhs.layoutMode == rhs.layoutMode,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.lineSeparator == rhs.lineSeparator
     else {
       return false
     }
     guard
-      lhs.lineSeparator == rhs.lineSeparator,
       lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.margins == rhs.margins,
+      lhs.orientation == rhs.orientation
     else {
       return false
     }
     guard
-      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId
+      lhs.reuseId == rhs.reuseId,
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
-      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.separator == rhs.separator
+      lhs.separator == rhs.separator,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
-      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.visibility == rhs.visibility,
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
-      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -378,6 +390,7 @@ extension DivContainer: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
@@ -389,6 +402,7 @@ extension DivContainer: Serializable {
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["item_builder"] = itemBuilder?.toDictionary()

@@ -32,6 +32,7 @@ public final class DivState: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
@@ -40,6 +41,7 @@ public final class DivState: DivBase {
   public let divId: String?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let layoutProvider: DivLayoutProvider?
@@ -120,6 +122,7 @@ public final class DivState: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     alignmentVertical: Expression<DivAlignmentVertical>?,
     alpha: Expression<Double>?,
+    animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
     columnSpan: Expression<Int>?,
@@ -128,6 +131,7 @@ public final class DivState: DivBase {
     divId: String?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
+    functions: [DivFunction]?,
     height: DivSize?,
     id: String?,
     layoutProvider: DivLayoutProvider?,
@@ -156,6 +160,7 @@ public final class DivState: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
@@ -164,6 +169,7 @@ public final class DivState: DivBase {
     self.divId = divId
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.layoutProvider = layoutProvider
@@ -202,76 +208,82 @@ extension DivState: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.animators == rhs.animators,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.defaultStateId == rhs.defaultStateId,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.defaultStateId == rhs.defaultStateId
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.divId == rhs.divId,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
+      lhs.focus == rhs.focus,
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height
+    else {
+      return false
+    }
+    guard
       lhs.id == rhs.id,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
-      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId
+      lhs.reuseId == rhs.reuseId,
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
-      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.stateIdVariable == rhs.stateIdVariable
+      lhs.stateIdVariable == rhs.stateIdVariable,
+      lhs.states == rhs.states
     else {
       return false
     }
     guard
-      lhs.states == rhs.states,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.transform == rhs.transform,
+      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector
     else {
       return false
     }
     guard
-      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -289,6 +301,7 @@ extension DivState: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
@@ -297,6 +310,7 @@ extension DivState: Serializable {
     result["div_id"] = divId
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["layout_provider"] = layoutProvider?.toDictionary()

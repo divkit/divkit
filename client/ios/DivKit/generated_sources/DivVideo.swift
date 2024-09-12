@@ -10,6 +10,7 @@ public final class DivVideo: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let aspect: DivAspect?
   public let autostart: Expression<Bool> // default value: false
   public let background: [DivBackground]?
@@ -22,6 +23,7 @@ public final class DivVideo: DivBase {
   public let extensions: [DivExtension]?
   public let fatalActions: [DivAction]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let layoutProvider: DivLayoutProvider?
@@ -124,6 +126,7 @@ public final class DivVideo: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    animators: [DivAnimator]? = nil,
     aspect: DivAspect? = nil,
     autostart: Expression<Bool>? = nil,
     background: [DivBackground]? = nil,
@@ -136,6 +139,7 @@ public final class DivVideo: DivBase {
     extensions: [DivExtension]? = nil,
     fatalActions: [DivAction]? = nil,
     focus: DivFocus? = nil,
+    functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     id: String? = nil,
     layoutProvider: DivLayoutProvider? = nil,
@@ -170,6 +174,7 @@ public final class DivVideo: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.aspect = aspect
     self.autostart = autostart ?? .value(false)
     self.background = background
@@ -182,6 +187,7 @@ public final class DivVideo: DivBase {
     self.extensions = extensions
     self.fatalActions = fatalActions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.layoutProvider = layoutProvider
@@ -227,97 +233,103 @@ extension DivVideo: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.aspect == rhs.aspect,
-      lhs.autostart == rhs.autostart
+      lhs.animators == rhs.animators,
+      lhs.aspect == rhs.aspect
     else {
       return false
     }
     guard
+      lhs.autostart == rhs.autostart,
       lhs.background == rhs.background,
-      lhs.border == rhs.border,
-      lhs.bufferingActions == rhs.bufferingActions
+      lhs.border == rhs.border
     else {
       return false
     }
     guard
+      lhs.bufferingActions == rhs.bufferingActions,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.elapsedTimeVariable == rhs.elapsedTimeVariable
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.elapsedTimeVariable == rhs.elapsedTimeVariable,
       lhs.endActions == rhs.endActions,
-      lhs.extensions == rhs.extensions,
-      lhs.fatalActions == rhs.fatalActions
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.fatalActions == rhs.fatalActions,
       lhs.focus == rhs.focus,
+      lhs.functions == rhs.functions
+    else {
+      return false
+    }
+    guard
       lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.id == rhs.id,
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
-      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.muted == rhs.muted
+      lhs.muted == rhs.muted,
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
-      lhs.paddings == rhs.paddings,
       lhs.pauseActions == rhs.pauseActions,
-      lhs.preloadRequired == rhs.preloadRequired
+      lhs.preloadRequired == rhs.preloadRequired,
+      lhs.preview == rhs.preview
     else {
       return false
     }
     guard
-      lhs.preview == rhs.preview,
       lhs.repeatable == rhs.repeatable,
-      lhs.resumeActions == rhs.resumeActions
+      lhs.resumeActions == rhs.resumeActions,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale
+      lhs.scale == rhs.scale,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.transform == rhs.transform,
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
-      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionOut == rhs.transitionOut,
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
-      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variables == rhs.variables,
+      lhs.videoSources == rhs.videoSources
     else {
       return false
     }
     guard
-      lhs.videoSources == rhs.videoSources,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -335,6 +347,7 @@ extension DivVideo: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["aspect"] = aspect?.toDictionary()
     result["autostart"] = autostart.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
@@ -347,6 +360,7 @@ extension DivVideo: Serializable {
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["fatal_actions"] = fatalActions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["layout_provider"] = layoutProvider?.toDictionary()

@@ -141,6 +141,9 @@ public final class DivActionHandler {
       focusElementActionHandler.handle(action, context: context)
     case let .divActionSetVariable(action):
       setVariableActionHandler.handle(action, context: context)
+    case .divActionAnimatorStart, .divActionAnimatorStop, .divActionTimer, .divActionVideo,
+        .divActionShowTooltip, .divActionSetState, .divActionHideTooltip:
+      break
     case .none:
       isHandled = false
     }

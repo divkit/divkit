@@ -14,6 +14,7 @@ public final class DivImageTemplate: TemplateValue {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: Field<[DivAnimatorTemplate]>?
   public let appearanceAnimation: Field<DivFadeTransitionTemplate>?
   public let aspect: Field<DivAspectTemplate>?
   public let background: Field<[DivBackgroundTemplate]>?
@@ -26,6 +27,7 @@ public final class DivImageTemplate: TemplateValue {
   public let extensions: Field<[DivExtensionTemplate]>?
   public let filters: Field<[DivFilterTemplate]>?
   public let focus: Field<DivFocusTemplate>?
+  public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let highPriorityPreviewShow: Field<Expression<Bool>>? // default value: false
   public let id: Field<String>?
@@ -66,6 +68,7 @@ public final class DivImageTemplate: TemplateValue {
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
+      animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       appearanceAnimation: dictionary.getOptionalField("appearance_animation", templateToType: templateToType),
       aspect: dictionary.getOptionalField("aspect", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
@@ -78,6 +81,7 @@ public final class DivImageTemplate: TemplateValue {
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
       filters: dictionary.getOptionalArray("filters", templateToType: templateToType),
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
+      functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       highPriorityPreviewShow: dictionary.getOptionalExpressionField("high_priority_preview_show"),
       id: dictionary.getOptionalField("id"),
@@ -119,6 +123,7 @@ public final class DivImageTemplate: TemplateValue {
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
+    animators: Field<[DivAnimatorTemplate]>? = nil,
     appearanceAnimation: Field<DivFadeTransitionTemplate>? = nil,
     aspect: Field<DivAspectTemplate>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
@@ -131,6 +136,7 @@ public final class DivImageTemplate: TemplateValue {
     extensions: Field<[DivExtensionTemplate]>? = nil,
     filters: Field<[DivFilterTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
+    functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     highPriorityPreviewShow: Field<Expression<Bool>>? = nil,
     id: Field<String>? = nil,
@@ -169,6 +175,7 @@ public final class DivImageTemplate: TemplateValue {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
+    self.animators = animators
     self.appearanceAnimation = appearanceAnimation
     self.aspect = aspect
     self.background = background
@@ -181,6 +188,7 @@ public final class DivImageTemplate: TemplateValue {
     self.extensions = extensions
     self.filters = filters
     self.focus = focus
+    self.functions = functions
     self.height = height
     self.highPriorityPreviewShow = highPriorityPreviewShow
     self.id = id
@@ -220,6 +228,7 @@ public final class DivImageTemplate: TemplateValue {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let animatorsValue = parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let appearanceAnimationValue = parent?.appearanceAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let aspectValue = parent?.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -232,6 +241,7 @@ public final class DivImageTemplate: TemplateValue {
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let filtersValue = parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let functionsValue = parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let highPriorityPreviewShowValue = parent?.highPriorityPreviewShow?.resolveOptionalValue(context: context) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
@@ -269,6 +279,7 @@ public final class DivImageTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       appearanceAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "appearance_animation", error: $0) },
       aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
@@ -281,6 +292,7 @@ public final class DivImageTemplate: TemplateValue {
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       highPriorityPreviewShowValue.errorsOrWarnings?.map { .nestedObjectError(field: "high_priority_preview_show", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -327,6 +339,7 @@ public final class DivImageTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       appearanceAnimation: appearanceAnimationValue.value,
       aspect: aspectValue.value,
       background: backgroundValue.value,
@@ -339,6 +352,7 @@ public final class DivImageTemplate: TemplateValue {
       extensions: extensionsValue.value,
       filters: filtersValue.value,
       focus: focusValue.value,
+      functions: functionsValue.value,
       height: heightValue.value,
       highPriorityPreviewShow: highPriorityPreviewShowValue.value,
       id: idValue.value,
@@ -383,6 +397,7 @@ public final class DivImageTemplate: TemplateValue {
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var appearanceAnimationValue: DeserializationResult<DivFadeTransition> = .noValue
     var aspectValue: DeserializationResult<DivAspect> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
@@ -395,6 +410,7 @@ public final class DivImageTemplate: TemplateValue {
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var filtersValue: DeserializationResult<[DivFilter]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
+    var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var highPriorityPreviewShowValue: DeserializationResult<Expression<Bool>> = parent?.highPriorityPreviewShow?.value() ?? .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
@@ -440,6 +456,8 @@ public final class DivImageTemplate: TemplateValue {
         alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+      case "animators":
+        animatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self).merged(with: animatorsValue)
       case "appearance_animation":
         appearanceAnimationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFadeTransitionTemplate.self).merged(with: appearanceAnimationValue)
       case "aspect":
@@ -464,6 +482,8 @@ public final class DivImageTemplate: TemplateValue {
         filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self).merged(with: filtersValue)
       case "focus":
         focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self).merged(with: focusValue)
+      case "functions":
+        functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).merged(with: functionsValue)
       case "height":
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "high_priority_preview_show":
@@ -536,6 +556,8 @@ public final class DivImageTemplate: TemplateValue {
         alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+      case parent?.animators?.link:
+        animatorsValue = animatorsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self) })
       case parent?.appearanceAnimation?.link:
         appearanceAnimationValue = appearanceAnimationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFadeTransitionTemplate.self) })
       case parent?.aspect?.link:
@@ -560,6 +582,8 @@ public final class DivImageTemplate: TemplateValue {
         filtersValue = filtersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self) })
       case parent?.focus?.link:
         focusValue = focusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self) })
+      case parent?.functions?.link:
+        functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
       case parent?.height?.link:
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.highPriorityPreviewShow?.link:
@@ -626,6 +650,7 @@ public final class DivImageTemplate: TemplateValue {
       actionValue = actionValue.merged(with: { parent.action?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       actionAnimationValue = actionAnimationValue.merged(with: { parent.actionAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       actionsValue = actionsValue.merged(with: { parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      animatorsValue = animatorsValue.merged(with: { parent.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       appearanceAnimationValue = appearanceAnimationValue.merged(with: { parent.appearanceAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       aspectValue = aspectValue.merged(with: { parent.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -635,6 +660,7 @@ public final class DivImageTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -660,6 +686,7 @@ public final class DivImageTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       appearanceAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "appearance_animation", error: $0) },
       aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
@@ -672,6 +699,7 @@ public final class DivImageTemplate: TemplateValue {
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       highPriorityPreviewShowValue.errorsOrWarnings?.map { .nestedObjectError(field: "high_priority_preview_show", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -718,6 +746,7 @@ public final class DivImageTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       appearanceAnimation: appearanceAnimationValue.value,
       aspect: aspectValue.value,
       background: backgroundValue.value,
@@ -730,6 +759,7 @@ public final class DivImageTemplate: TemplateValue {
       extensions: extensionsValue.value,
       filters: filtersValue.value,
       focus: focusValue.value,
+      functions: functionsValue.value,
       height: heightValue.value,
       highPriorityPreviewShow: highPriorityPreviewShowValue.value,
       id: idValue.value,
@@ -779,6 +809,7 @@ public final class DivImageTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
+      animators: animators ?? mergedParent.animators,
       appearanceAnimation: appearanceAnimation ?? mergedParent.appearanceAnimation,
       aspect: aspect ?? mergedParent.aspect,
       background: background ?? mergedParent.background,
@@ -791,6 +822,7 @@ public final class DivImageTemplate: TemplateValue {
       extensions: extensions ?? mergedParent.extensions,
       filters: filters ?? mergedParent.filters,
       focus: focus ?? mergedParent.focus,
+      functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
       highPriorityPreviewShow: highPriorityPreviewShow ?? mergedParent.highPriorityPreviewShow,
       id: id ?? mergedParent.id,
@@ -835,6 +867,7 @@ public final class DivImageTemplate: TemplateValue {
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
+      animators: merged.animators?.tryResolveParent(templates: templates),
       appearanceAnimation: merged.appearanceAnimation?.tryResolveParent(templates: templates),
       aspect: merged.aspect?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
@@ -847,6 +880,7 @@ public final class DivImageTemplate: TemplateValue {
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       filters: merged.filters?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
+      functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       highPriorityPreviewShow: merged.highPriorityPreviewShow,
       id: merged.id,

@@ -16,6 +16,7 @@ public final class DivPager: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
@@ -23,6 +24,7 @@ public final class DivPager: DivBase {
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let infiniteScroll: Expression<Bool> // default value: false
@@ -116,6 +118,7 @@ public final class DivPager: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     alignmentVertical: Expression<DivAlignmentVertical>?,
     alpha: Expression<Double>?,
+    animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
     columnSpan: Expression<Int>?,
@@ -123,6 +126,7 @@ public final class DivPager: DivBase {
     disappearActions: [DivDisappearAction]?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
+    functions: [DivFunction]?,
     height: DivSize?,
     id: String?,
     infiniteScroll: Expression<Bool>?,
@@ -156,6 +160,7 @@ public final class DivPager: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
@@ -163,6 +168,7 @@ public final class DivPager: DivBase {
     self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.infiniteScroll = infiniteScroll ?? .value(false)
@@ -206,83 +212,89 @@ extension DivPager: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.animators == rhs.animators,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.defaultItem == rhs.defaultItem,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.defaultItem == rhs.defaultItem
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
-      lhs.id == rhs.id,
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height,
+      lhs.id == rhs.id
+    else {
+      return false
+    }
+    guard
       lhs.infiniteScroll == rhs.infiniteScroll,
-      lhs.itemBuilder == rhs.itemBuilder
+      lhs.itemBuilder == rhs.itemBuilder,
+      lhs.itemSpacing == rhs.itemSpacing
     else {
       return false
     }
     guard
-      lhs.itemSpacing == rhs.itemSpacing,
       lhs.items == rhs.items,
-      lhs.layoutMode == rhs.layoutMode
+      lhs.layoutMode == rhs.layoutMode,
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
-      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.orientation == rhs.orientation,
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
-      lhs.paddings == rhs.paddings,
       lhs.pageTransformation == rhs.pageTransformation,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectedActions == rhs.selectedActions,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
-      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.visibility == rhs.visibility,
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
-      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -301,6 +313,7 @@ extension DivPager: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
@@ -308,6 +321,7 @@ extension DivPager: Serializable {
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["infinite_scroll"] = infiniteScroll.toValidSerializationValue()

@@ -35,6 +35,7 @@ public final class DivGallery: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnCount: Expression<Int>? // constraint: number > 0
@@ -45,6 +46,7 @@ public final class DivGallery: DivBase {
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let itemBuilder: DivCollectionItemBuilder?
@@ -166,6 +168,7 @@ public final class DivGallery: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     alignmentVertical: Expression<DivAlignmentVertical>?,
     alpha: Expression<Double>?,
+    animators: [DivAnimator]?,
     background: [DivBackground]?,
     border: DivBorder?,
     columnCount: Expression<Int>?,
@@ -176,6 +179,7 @@ public final class DivGallery: DivBase {
     disappearActions: [DivDisappearAction]?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
+    functions: [DivFunction]?,
     height: DivSize?,
     id: String?,
     itemBuilder: DivCollectionItemBuilder?,
@@ -208,6 +212,7 @@ public final class DivGallery: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnCount = columnCount
@@ -218,6 +223,7 @@ public final class DivGallery: DivBase {
     self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.itemBuilder = itemBuilder
@@ -260,90 +266,96 @@ extension DivGallery: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.animators == rhs.animators,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnCount == rhs.columnCount,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.crossContentAlignment == rhs.crossContentAlignment
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.crossContentAlignment == rhs.crossContentAlignment,
       lhs.crossSpacing == rhs.crossSpacing,
-      lhs.defaultItem == rhs.defaultItem,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.defaultItem == rhs.defaultItem
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
-      lhs.id == rhs.id,
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height,
+      lhs.id == rhs.id
+    else {
+      return false
+    }
+    guard
       lhs.itemBuilder == rhs.itemBuilder,
-      lhs.itemSpacing == rhs.itemSpacing
+      lhs.itemSpacing == rhs.itemSpacing,
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
-      lhs.items == rhs.items,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.margins == rhs.margins
+      lhs.margins == rhs.margins,
+      lhs.orientation == rhs.orientation
     else {
       return false
     }
     guard
-      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scrollMode == rhs.scrollMode
+      lhs.scrollMode == rhs.scrollMode,
+      lhs.scrollbar == rhs.scrollbar
     else {
       return false
     }
     guard
-      lhs.scrollbar == rhs.scrollbar,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -361,6 +373,7 @@ extension DivGallery: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_count"] = columnCount?.toValidSerializationValue()
@@ -371,6 +384,7 @@ extension DivGallery: Serializable {
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["item_builder"] = itemBuilder?.toDictionary()

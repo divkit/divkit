@@ -5,19 +5,19 @@ import Serialization
 import VGSL
 
 public final class DivLayoutProviderTemplate: TemplateValue {
-  public let heightVariableName: Field<Expression<String>>?
-  public let widthVariableName: Field<Expression<String>>?
+  public let heightVariableName: Field<String>?
+  public let widthVariableName: Field<String>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      heightVariableName: dictionary.getOptionalExpressionField("height_variable_name"),
-      widthVariableName: dictionary.getOptionalExpressionField("width_variable_name")
+      heightVariableName: dictionary.getOptionalField("height_variable_name"),
+      widthVariableName: dictionary.getOptionalField("width_variable_name")
     )
   }
 
   init(
-    heightVariableName: Field<Expression<String>>? = nil,
-    widthVariableName: Field<Expression<String>>? = nil
+    heightVariableName: Field<String>? = nil,
+    widthVariableName: Field<String>? = nil
   ) {
     self.heightVariableName = heightVariableName
     self.widthVariableName = widthVariableName
@@ -41,8 +41,8 @@ public final class DivLayoutProviderTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var heightVariableNameValue: DeserializationResult<Expression<String>> = parent?.heightVariableName?.value() ?? .noValue
-    var widthVariableNameValue: DeserializationResult<Expression<String>> = parent?.widthVariableName?.value() ?? .noValue
+    var heightVariableNameValue: DeserializationResult<String> = parent?.heightVariableName?.value() ?? .noValue
+    var widthVariableNameValue: DeserializationResult<String> = parent?.widthVariableName?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "height_variable_name":

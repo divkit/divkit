@@ -13,6 +13,7 @@ public final class DivGifImage: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let aspect: DivAspect?
   public let background: [DivBackground]?
   public let border: DivBorder?
@@ -23,6 +24,7 @@ public final class DivGifImage: DivBase {
   public let doubletapActions: [DivAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let gifUrl: Expression<URL>
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
@@ -126,6 +128,7 @@ public final class DivGifImage: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    animators: [DivAnimator]? = nil,
     aspect: DivAspect? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
@@ -136,6 +139,7 @@ public final class DivGifImage: DivBase {
     doubletapActions: [DivAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
+    functions: [DivFunction]? = nil,
     gifUrl: Expression<URL>,
     height: DivSize? = nil,
     id: String? = nil,
@@ -170,6 +174,7 @@ public final class DivGifImage: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.aspect = aspect
     self.background = background
     self.border = border
@@ -180,6 +185,7 @@ public final class DivGifImage: DivBase {
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.gifUrl = gifUrl
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
@@ -228,89 +234,91 @@ extension DivGifImage: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.aspect == rhs.aspect,
-      lhs.background == rhs.background
+      lhs.animators == rhs.animators,
+      lhs.aspect == rhs.aspect
     else {
       return false
     }
     guard
+      lhs.background == rhs.background,
       lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
       lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.doubletapActions == rhs.doubletapActions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.doubletapActions == rhs.doubletapActions,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.gifUrl == rhs.gifUrl
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
-      lhs.height == rhs.height,
+      lhs.functions == rhs.functions,
+      lhs.gifUrl == rhs.gifUrl,
+      lhs.height == rhs.height
+    else {
+      return false
+    }
+    guard
       lhs.id == rhs.id,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
-      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.paddings == rhs.paddings,
+      lhs.placeholderColor == rhs.placeholderColor
     else {
       return false
     }
     guard
-      lhs.placeholderColor == rhs.placeholderColor,
       lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview
+      lhs.preview == rhs.preview,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale
+      lhs.scale == rhs.scale,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.transform == rhs.transform,
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
-      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionOut == rhs.transitionOut,
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
-      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variables == rhs.variables,
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
-      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
-    else {
-      return false
-    }
-    guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -331,6 +339,7 @@ extension DivGifImage: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
@@ -341,6 +350,7 @@ extension DivGifImage: Serializable {
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["gif_url"] = gifUrl.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["id"] = id
