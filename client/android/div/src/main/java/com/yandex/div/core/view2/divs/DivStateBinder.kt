@@ -183,7 +183,7 @@ internal class DivStateBinder @Inject constructor(
 
         // applying div patch
         if (childDivId != null) {
-            val patchView = divPatchManager.createViewsForId(context, childDivId)?.let { views ->
+            val patchView = divPatchManager.buildViewsForId(context, childDivId)?.let { views ->
                 if (views.size > 1) {
                     KLog.e(TAG) { "Unable to patch state because there is more than 1 div in the patch" }
                     null

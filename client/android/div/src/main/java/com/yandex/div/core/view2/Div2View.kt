@@ -29,6 +29,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.downloader.DivDataChangedObserver
+import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.local.RuntimeStore
@@ -59,6 +60,7 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.logging.bind.BindingEventReporterProvider
 import com.yandex.div.core.view2.logging.bind.ForceRebindReporter
 import com.yandex.div.core.view2.logging.bind.SimpleRebindReporter
+import com.yandex.div.core.view2.logging.patch.PatchEventReporter
 import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
 import com.yandex.div.core.view2.reuse.ComplexRebindReporter
 import com.yandex.div.core.view2.reuse.RebindTask
@@ -68,6 +70,7 @@ import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
@@ -397,25 +400,72 @@ class Div2View private constructor(
     fun applyPatch(patch: DivPatch): Boolean = synchronized(monitor) {
         val oldData: DivData = divData ?: return false
         val newDivData = div2Component.patchManager.createPatchedDivData(oldData, dataTag, patch, expressionResolver)
-        val state = newDivData?.stateToBind
         val reporter = patchReporterProvider.get(patch)
 
-        if (state != null) {
-            bindOnAttachRunnable?.cancel()
-            rebind(oldData, false, reporter)
-            divData = newDivData
-            div2Component.divBinder.setDataWithoutBinding(bindingContext, getChildAt(0), state.div)
+        if (newDivData != null && tryApplyPatch(patch, oldData, newDivData, reporter)) {
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
             div2Component.divBinder.attachIndicators()
             reporter.onPatchSuccess()
-            div2Component.actionBinder.handleActions(this, expressionResolver, patch.onAppliedActions, DivActionReason.PATCH)
+            div2Component.actionBinder
+                .handleActions(this, expressionResolver, patch.onAppliedActions, DivActionReason.PATCH)
             return true
         }
-        div2Component.actionBinder.handleActions(this, expressionResolver, patch.onFailedActions, DivActionReason.PATCH)
+
+        div2Component.actionBinder
+            .handleActions(this, expressionResolver, patch.onFailedActions, DivActionReason.PATCH)
         reporter.onPatchNoState()
         return false
+    }
+
+    private fun tryApplyPatch(
+        patch: DivPatch,
+        oldData: DivData,
+        newDivData: DivData,
+        reporter: PatchEventReporter,
+    ): Boolean {
+        val state = newDivData.stateToBind ?: return false
+
+        bindOnAttachRunnable?.cancel()
+        val oldRootDiv = oldData.state()?.div
+        val rootChanges = patch.changes.find { it.id == oldRootDiv?.value()?.id } ?: run {
+            rebind(oldData, false, reporter)
+            divData = newDivData
+            div2Component.divBinder.setDataWithoutBinding(bindingContext, getChildAt(0), state.div)
+            return true
+        }
+
+        val items = rootChanges.items
+        val newRootDiv = when {
+            items.isNullOrEmpty() -> {
+                KLog.e(DivPatchApply.TAG) { "Unable to patch root div because there is no div in patch." }
+                return false
+            }
+            items.size > 1 -> {
+                KLog.e(DivPatchApply.TAG) { "More than 1 div in patch for root div. The first was applied." }
+                items[0]
+            }
+            else -> items[0]
+        }
+
+        val bindingReporter = bindingReporterProvider.get(newDivData, oldData)
+        val isDataReplaceable = DivComparator.areDivsReplaceable(
+            oldRootDiv,
+            newRootDiv,
+            expressionResolver,
+            expressionResolver,
+            bindingReporter
+        )
+        return when {
+            !isDataReplaceable && complexRebindEnabled && view.getChildAt(0) is ViewGroup &&
+                complexRebind(newDivData, oldData, bindingReporter) -> true
+            isDataReplaceable -> {
+                rebind(newDivData, false, reporter)
+                true
+            }
+            else -> updateNow(newDivData, dataTag, reporter)
+        }
     }
 
     private fun updateNow(data: DivData, tag: DivDataTag, reporter: ForceRebindReporter): Boolean {
@@ -1143,12 +1193,8 @@ class Div2View private constructor(
             this.rebindTask = it
         }
 
-        val state = newData.stateToBind ?: let {
-            reporter.onComplexRebindFatalNoState()
-            return false
-        }
         val viewToRebind = (view.getChildAt(0) as ViewGroup).apply {
-            bindLayoutParams(state.div.value(), expressionResolver)
+            bindLayoutParams(stateToBind.div.value(), expressionResolver)
         }
 
         div2Component.stateManager.updateState(dataTag, stateToBind.stateId, false)

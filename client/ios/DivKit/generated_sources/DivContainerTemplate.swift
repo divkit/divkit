@@ -160,6 +160,7 @@ public final class DivContainerTemplate: TemplateValue {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: Field<[DivAnimatorTemplate]>?
   public let aspect: Field<DivAspectTemplate>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
@@ -171,6 +172,7 @@ public final class DivContainerTemplate: TemplateValue {
   public let doubletapActions: Field<[DivActionTemplate]>?
   public let extensions: Field<[DivExtensionTemplate]>?
   public let focus: Field<DivFocusTemplate>?
+  public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
   public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
@@ -209,6 +211,7 @@ public final class DivContainerTemplate: TemplateValue {
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
+      animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       aspect: dictionary.getOptionalField("aspect", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
@@ -220,6 +223,7 @@ public final class DivContainerTemplate: TemplateValue {
       doubletapActions: dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
+      functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
@@ -259,6 +263,7 @@ public final class DivContainerTemplate: TemplateValue {
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
+    animators: Field<[DivAnimatorTemplate]>? = nil,
     aspect: Field<DivAspectTemplate>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
@@ -270,6 +275,7 @@ public final class DivContainerTemplate: TemplateValue {
     doubletapActions: Field<[DivActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
+    functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
@@ -306,6 +312,7 @@ public final class DivContainerTemplate: TemplateValue {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
+    self.animators = animators
     self.aspect = aspect
     self.background = background
     self.border = border
@@ -317,6 +324,7 @@ public final class DivContainerTemplate: TemplateValue {
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height
     self.id = id
     self.itemBuilder = itemBuilder
@@ -354,6 +362,7 @@ public final class DivContainerTemplate: TemplateValue {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let animatorsValue = parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let aspectValue = parent?.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -365,6 +374,7 @@ public final class DivContainerTemplate: TemplateValue {
     let doubletapActionsValue = parent?.doubletapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let functionsValue = parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let itemBuilderValue = parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -400,6 +410,7 @@ public final class DivContainerTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
@@ -411,6 +422,7 @@ public final class DivContainerTemplate: TemplateValue {
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
@@ -447,6 +459,7 @@ public final class DivContainerTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       aspect: aspectValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
@@ -458,6 +471,7 @@ public final class DivContainerTemplate: TemplateValue {
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
+      functions: functionsValue.value,
       height: heightValue.value,
       id: idValue.value,
       itemBuilder: itemBuilderValue.value,
@@ -500,6 +514,7 @@ public final class DivContainerTemplate: TemplateValue {
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var aspectValue: DeserializationResult<DivAspect> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
@@ -511,6 +526,7 @@ public final class DivContainerTemplate: TemplateValue {
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
+    var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
@@ -554,6 +570,8 @@ public final class DivContainerTemplate: TemplateValue {
         alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+      case "animators":
+        animatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self).merged(with: animatorsValue)
       case "aspect":
         aspectValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAspectTemplate.self).merged(with: aspectValue)
       case "background":
@@ -576,6 +594,8 @@ public final class DivContainerTemplate: TemplateValue {
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self).merged(with: extensionsValue)
       case "focus":
         focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self).merged(with: focusValue)
+      case "functions":
+        functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).merged(with: functionsValue)
       case "height":
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
@@ -644,6 +664,8 @@ public final class DivContainerTemplate: TemplateValue {
         alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+      case parent?.animators?.link:
+        animatorsValue = animatorsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self) })
       case parent?.aspect?.link:
         aspectValue = aspectValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAspectTemplate.self) })
       case parent?.background?.link:
@@ -666,6 +688,8 @@ public final class DivContainerTemplate: TemplateValue {
         extensionsValue = extensionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self) })
       case parent?.focus?.link:
         focusValue = focusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self) })
+      case parent?.functions?.link:
+        functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
       case parent?.height?.link:
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.id?.link:
@@ -728,6 +752,7 @@ public final class DivContainerTemplate: TemplateValue {
       actionValue = actionValue.merged(with: { parent.action?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       actionAnimationValue = actionAnimationValue.merged(with: { parent.actionAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       actionsValue = actionsValue.merged(with: { parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      animatorsValue = animatorsValue.merged(with: { parent.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       aspectValue = aspectValue.merged(with: { parent.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -735,6 +760,7 @@ public final class DivContainerTemplate: TemplateValue {
       doubletapActionsValue = doubletapActionsValue.merged(with: { parent.doubletapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemBuilderValue = itemBuilderValue.merged(with: { parent.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -764,6 +790,7 @@ public final class DivContainerTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
@@ -775,6 +802,7 @@ public final class DivContainerTemplate: TemplateValue {
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
@@ -811,6 +839,7 @@ public final class DivContainerTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       aspect: aspectValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
@@ -822,6 +851,7 @@ public final class DivContainerTemplate: TemplateValue {
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
+      functions: functionsValue.value,
       height: heightValue.value,
       id: idValue.value,
       itemBuilder: itemBuilderValue.value,
@@ -869,6 +899,7 @@ public final class DivContainerTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
+      animators: animators ?? mergedParent.animators,
       aspect: aspect ?? mergedParent.aspect,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
@@ -880,6 +911,7 @@ public final class DivContainerTemplate: TemplateValue {
       doubletapActions: doubletapActions ?? mergedParent.doubletapActions,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
+      functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
@@ -922,6 +954,7 @@ public final class DivContainerTemplate: TemplateValue {
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
+      animators: merged.animators?.tryResolveParent(templates: templates),
       aspect: merged.aspect?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
@@ -933,6 +966,7 @@ public final class DivContainerTemplate: TemplateValue {
       doubletapActions: merged.doubletapActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
+      functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),

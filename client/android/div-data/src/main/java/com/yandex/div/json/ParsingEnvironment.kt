@@ -1,9 +1,9 @@
 package com.yandex.div.json
 
-import com.yandex.div.json.templates.TemplateProvider
+import com.yandex.div.serialization.ParsingContext
 
-interface ParsingEnvironment {
-
-    val templates: TemplateProvider<JsonTemplate<*>>
-    val logger: ParsingErrorLogger
-}
+@Deprecated(
+    message = "Use ParsingContext instead.",
+    replaceWith = ReplaceWith("ParsingContext", "com.yandex.div.serialization.ParsingContext")
+)
+interface ParsingEnvironment : ParsingContext

@@ -1,7 +1,8 @@
-## 0.4.1-rc.1
+## 0.4.1-rc.2
 
 * Fix patches are not applied to items of custom
 * Provide documentation for generated schema
+* Add custom font family provider
 
 ## 0.4.0
 

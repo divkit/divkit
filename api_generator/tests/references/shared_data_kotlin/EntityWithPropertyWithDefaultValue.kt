@@ -25,6 +25,13 @@ class EntityWithPropertyWithDefaultValue(
         return hash
     }
 
+    fun equals(other: EntityWithPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
+            (nested?.equals(other.nested, resolver, otherResolver) ?: (other.nested == null)) &&
+            url.evaluate(resolver) == other.url.evaluate(otherResolver)
+    }
+
     fun copy(
         int: Expression<Long> = this.int,
         nested: Nested? = this.nested,
@@ -65,6 +72,13 @@ class EntityWithPropertyWithDefaultValue(
                 url.hashCode()
             _hash = hash
             return hash
+        }
+
+        fun equals(other: Nested?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
+                nonOptional.evaluate(resolver) == other.nonOptional.evaluate(otherResolver) &&
+                url.evaluate(resolver) == other.url.evaluate(otherResolver)
         }
 
         fun copy(

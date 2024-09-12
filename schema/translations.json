@@ -87,6 +87,10 @@
     "en": "Referer URL for logging.",
     "ru": "Referer-ссылка для логирования."
   },
+  "div_action_base_scope_id": {
+    "en": "Div identifier denotes the scope in which this action will be performed.",
+    "ru": "Идентификатор дива, в области видимости которого будет выполняться данное действие."
+  },
   "div_action_base_url": {
     "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).",
     "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction)."
@@ -106,6 +110,10 @@
   "div_action_focus_element": {
     "en": "Requests focus for an element. May require a user action on the web.",
     "ru": "Запрашивает фокус для элемента. В вебе может требовать действие пользователя."
+  },
+  "div_action_hide_tooltip": {
+    "en": "Hides tooltip.",
+    "ru": "Скрывает тултип."
   },
   "div_action_log_url": {
     "en": "URL for logging.",
@@ -127,15 +135,7 @@
     "en": "Context menu.",
     "ru": "Контекстное меню."
   },
-  "div_action_hide_tooltip" : {
-    "en": "Hides tooltip.",
-    "ru": "Скрывает тултип."
-  },
-  "div_action_tooltip_id": {
-    "en": "Tooltip identifier.",
-    "ru": "Идентификатор тултипа."
-  },
-  "div_action_set_state" : {
+  "div_action_set_state": {
     "en": "Switches the appearance of content in `div-state`.",
     "ru": "Устанавливает новый внешний вид контента в `div-state`."
   },
@@ -174,6 +174,10 @@
   "div_action_timer_id": {
     "en": "Timer identifier.",
     "ru": "Идентификатор таймера."
+  },
+  "div_action_tooltip_id": {
+    "en": "Tooltip identifier.",
+    "ru": "Идентификтор тултипа."
   },
   "div_action_video": {
     "en": "Controls given video.",
@@ -382,6 +386,10 @@
   "div_base_focus": {
     "en": "Parameters when focusing on an element or losing focus.",
     "ru": "Параметры при фокусировке на элементе или потере фокуса."
+  },
+  "div_base_functions": {
+    "en": "Custom functions.",
+    "ru": "Пользовательские функции."
   },
   "div_base_height": {
     "en": "Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).",
@@ -763,6 +771,10 @@
     "en": "Top margin.",
     "ru": "Верхний отступ."
   },
+  "div_evaluable_type": {
+    "en": "The type used in function arguments and return values.",
+    "ru": "Тип, используемый в аргументах и возвращаемых значениях функций."
+  },
   "div_extension": {
     "en": "Extension that affects an element.",
     "ru": "Расширение, которое влияет на элемент."
@@ -858,6 +870,34 @@
   "div_font_weight_value": {
     "en": "Style. Numeric value.",
     "ru": "Начертание. Числовое значение."
+  },
+  "div_function": {
+    "en": "Custom function.",
+    "ru": "Функция, определяемая пользователем."
+  },
+  "div_function_argument": {
+    "en": "Function argument.",
+    "ru": "Аргумент функции."
+  },
+  "div_function_argument_name": {
+    "en": "Function argument name.",
+    "ru": "Наименование аргумента функции."
+  },
+  "div_function_argument_type": {
+    "en": "Function argument type.",
+    "ru": "Тип аргумента функции."
+  },
+  "div_function_body": {
+    "en": "Function body. Evaluated as an expression with the passed arguments. Does not capture external variables",
+    "ru": "Тело функции. Вычисляется как выражение с подставлением передаваемых аргументов. Не захватывает внешние переменные."
+  },
+  "div_function_name": {
+    "en": "Function name.",
+    "ru": "Наименование функции."
+  },
+  "div_function_return_type": {
+    "en": "Return type.",
+    "ru": "Тип возвращаемого значения."
   },
   "div_gallery": {
     "en": "Gallery. It contains a horizontal or vertical set of cards that can be scrolled.",

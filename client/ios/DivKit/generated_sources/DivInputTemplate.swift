@@ -89,6 +89,7 @@ public final class DivInputTemplate: TemplateValue {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: Field<[DivAnimatorTemplate]>?
   public let autocapitalization: Field<Expression<Autocapitalization>>? // default value: auto
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
@@ -102,6 +103,7 @@ public final class DivInputTemplate: TemplateValue {
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
   public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
+  public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let highlightColor: Field<Expression<Color>>?
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
@@ -147,6 +149,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
+      animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       autocapitalization: dictionary.getOptionalExpressionField("autocapitalization"),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
@@ -160,6 +163,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
       fontWeight: dictionary.getOptionalExpressionField("font_weight"),
       fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
+      functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       highlightColor: dictionary.getOptionalExpressionField("highlight_color", transform: Color.color(withHexString:)),
       hintColor: dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:)),
@@ -206,6 +210,7 @@ public final class DivInputTemplate: TemplateValue {
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
+    animators: Field<[DivAnimatorTemplate]>? = nil,
     autocapitalization: Field<Expression<Autocapitalization>>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
@@ -219,6 +224,7 @@ public final class DivInputTemplate: TemplateValue {
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
     fontWeightValue: Field<Expression<Int>>? = nil,
+    functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     highlightColor: Field<Expression<Color>>? = nil,
     hintColor: Field<Expression<Color>>? = nil,
@@ -262,6 +268,7 @@ public final class DivInputTemplate: TemplateValue {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
+    self.animators = animators
     self.autocapitalization = autocapitalization
     self.background = background
     self.border = border
@@ -275,6 +282,7 @@ public final class DivInputTemplate: TemplateValue {
     self.fontSizeUnit = fontSizeUnit
     self.fontWeight = fontWeight
     self.fontWeightValue = fontWeightValue
+    self.functions = functions
     self.height = height
     self.highlightColor = highlightColor
     self.hintColor = hintColor
@@ -319,6 +327,7 @@ public final class DivInputTemplate: TemplateValue {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let animatorsValue = parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let autocapitalizationValue = parent?.autocapitalization?.resolveOptionalValue(context: context) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -332,6 +341,7 @@ public final class DivInputTemplate: TemplateValue {
     let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue
     let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue
     let fontWeightValueValue = parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue
+    let functionsValue = parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let highlightColorValue = parent?.highlightColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let hintColorValue = parent?.hintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
@@ -374,6 +384,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
@@ -387,6 +398,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       highlightColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "highlight_color", error: $0) },
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
@@ -438,6 +450,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       autocapitalization: autocapitalizationValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
@@ -451,6 +464,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeUnit: fontSizeUnitValue.value,
       fontWeight: fontWeightValue.value,
       fontWeightValue: fontWeightValueValue.value,
+      functions: functionsValue.value,
       height: heightValue.value,
       highlightColor: highlightColorValue.value,
       hintColor: hintColorValue.value,
@@ -500,6 +514,7 @@ public final class DivInputTemplate: TemplateValue {
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var autocapitalizationValue: DeserializationResult<Expression<DivInput.Autocapitalization>> = parent?.autocapitalization?.value() ?? .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
@@ -513,6 +528,7 @@ public final class DivInputTemplate: TemplateValue {
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
     var fontWeightValueValue: DeserializationResult<Expression<Int>> = parent?.fontWeightValue?.value() ?? .noValue
+    var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var highlightColorValue: DeserializationResult<Expression<Color>> = parent?.highlightColor?.value() ?? .noValue
     var hintColorValue: DeserializationResult<Expression<Color>> = parent?.hintColor?.value() ?? .noValue
@@ -560,6 +576,8 @@ public final class DivInputTemplate: TemplateValue {
         alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+      case "animators":
+        animatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self).merged(with: animatorsValue)
       case "autocapitalization":
         autocapitalizationValue = deserialize(__dictValue).merged(with: autocapitalizationValue)
       case "background":
@@ -586,6 +604,8 @@ public final class DivInputTemplate: TemplateValue {
         fontWeightValue = deserialize(__dictValue).merged(with: fontWeightValue)
       case "font_weight_value":
         fontWeightValueValue = deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator).merged(with: fontWeightValueValue)
+      case "functions":
+        functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).merged(with: functionsValue)
       case "height":
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "highlight_color":
@@ -668,6 +688,8 @@ public final class DivInputTemplate: TemplateValue {
         alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+      case parent?.animators?.link:
+        animatorsValue = animatorsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self) })
       case parent?.autocapitalization?.link:
         autocapitalizationValue = autocapitalizationValue.merged(with: { deserialize(__dictValue) })
       case parent?.background?.link:
@@ -694,6 +716,8 @@ public final class DivInputTemplate: TemplateValue {
         fontWeightValue = fontWeightValue.merged(with: { deserialize(__dictValue) })
       case parent?.fontWeightValue?.link:
         fontWeightValueValue = fontWeightValueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator) })
+      case parent?.functions?.link:
+        functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
       case parent?.height?.link:
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.highlightColor?.link:
@@ -773,12 +797,14 @@ public final class DivInputTemplate: TemplateValue {
     }
     if let parent = parent {
       accessibilityValue = accessibilityValue.merged(with: { parent.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      animatorsValue = animatorsValue.merged(with: { parent.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       disappearActionsValue = disappearActionsValue.merged(with: { parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -803,6 +829,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
@@ -816,6 +843,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       highlightColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "highlight_color", error: $0) },
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
@@ -867,6 +895,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       autocapitalization: autocapitalizationValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
@@ -880,6 +909,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeUnit: fontSizeUnitValue.value,
       fontWeight: fontWeightValue.value,
       fontWeightValue: fontWeightValueValue.value,
+      functions: functionsValue.value,
       height: heightValue.value,
       highlightColor: highlightColorValue.value,
       hintColor: hintColorValue.value,
@@ -934,6 +964,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
+      animators: animators ?? mergedParent.animators,
       autocapitalization: autocapitalization ?? mergedParent.autocapitalization,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
@@ -947,6 +978,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeUnit: fontSizeUnit ?? mergedParent.fontSizeUnit,
       fontWeight: fontWeight ?? mergedParent.fontWeight,
       fontWeightValue: fontWeightValue ?? mergedParent.fontWeightValue,
+      functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
       highlightColor: highlightColor ?? mergedParent.highlightColor,
       hintColor: hintColor ?? mergedParent.hintColor,
@@ -996,6 +1028,7 @@ public final class DivInputTemplate: TemplateValue {
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
+      animators: merged.animators?.tryResolveParent(templates: templates),
       autocapitalization: merged.autocapitalization,
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
@@ -1009,6 +1042,7 @@ public final class DivInputTemplate: TemplateValue {
       fontSizeUnit: merged.fontSizeUnit,
       fontWeight: merged.fontWeight,
       fontWeightValue: merged.fontWeightValue,
+      functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       highlightColor: merged.highlightColor,
       hintColor: merged.hintColor,

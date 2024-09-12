@@ -21,6 +21,11 @@ class EntityWithArray(
         return hash
     }
 
+    fun equals(other: EntityWithArray?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return array.compareWith(other.array) { a, b -> a.equals(b, resolver, otherResolver) }
+    }
+
     fun copy(
         array: List<Entity> = this.array,
     ) = EntityWithArray(

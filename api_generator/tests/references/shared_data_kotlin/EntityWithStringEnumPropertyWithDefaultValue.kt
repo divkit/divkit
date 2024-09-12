@@ -21,6 +21,11 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         return hash
     }
 
+    fun equals(other: EntityWithStringEnumPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return value.evaluate(resolver) == other.value.evaluate(otherResolver)
+    }
+
     fun copy(
         value: Expression<Value> = this.value,
     ) = EntityWithStringEnumPropertyWithDefaultValue(

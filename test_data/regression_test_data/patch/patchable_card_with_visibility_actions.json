@@ -1,0 +1,230 @@
+{
+  "templates": {
+    "placeholder": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 1
+      },
+      "height": {
+        "type": "fixed",
+        "value": 1
+      },
+      "text": "",
+      "visibility": "gone"
+    },
+    "label": {
+      "type": "text",
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#EEE8D5"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#073642"
+    }
+  },
+  "card": {
+    "log_id": "card_with_patch",
+    "variables": [
+      {
+        "name": "patch_url",
+        "type": "string",
+        "value": "https://yastatic.net/s3/home/divkit/patch_with_visibility_actions2.json"
+      },
+      {
+        "name": "patch_request_count",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "patch_request_error_count",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "patch_download_status",
+        "type": "string",
+        "value": "Starting patch download..."
+      },
+      {
+        "name": "is_patch_download_in_progress",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "name": "display_text",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "typed_text_length",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "is_typing_in_progress",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "name": "is_typing_in_progress",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "variable_triggers": [
+      {
+        "mode": "on_variable",
+        "condition": "@{patch_request_error_count > 3}",
+        "actions": [
+          {
+            "log_id": "stop_patch_download_on_failure",
+            "url": "div-action://timer?id=patch_download_dispatcher&action=stop"
+          },
+          {
+            "log_id": "change_patch_download_status_on_failure",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "patch_download_status",
+              "value": {
+                "type": "string",
+                "value": "Download failed. Try again later."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "mode": "on_condition",
+        "condition": "@{is_typing_in_progress && (typed_text_length >= len(display_text))}",
+        "actions": [
+          {
+            "log_id": "stop_typewriter",
+            "url": "div-action://timer?id=typewriter&action=stop"
+          },
+          {
+            "log_id": "set_typing_is_not_in_progress",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "is_typing_in_progress",
+              "value": {
+                "type": "boolean",
+                "value": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "timers": [
+      {
+        "id": "patch_download_dispatcher",
+        "tick_interval": 1000,
+        "tick_actions": [
+          {
+            "log_id": "patch_download_dispatcher/download_patch",
+            "url": "div-action://download?url=@{encodeUri(patch_url)}",
+            "download_callbacks": {
+              "on_success_actions": [
+                {
+                  "log_id": "patch_download_dispatcher/stop_patch_download_on_success",
+                  "url": "div-action://timer?id=patch_download_dispatcher&action=stop"
+                }
+              ],
+              "on_fail_actions": [
+                {
+                  "log_id": "patch_download_dispatcher/increase_request_error_count",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "patch_request_error_count",
+                    "value": {
+                      "type": "integer",
+                      "value": "@{patch_request_error_count + 1}"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "log_id": "patch_download_dispatcher/increase_request_count",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "patch_request_count",
+              "value": {
+                "type": "integer",
+                "value": "@{patch_request_count + 1}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "typewriter",
+        "tick_interval": 16,
+        "tick_actions": [
+          {
+            "log_id": "typewriter/set_typed_text_length",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "typed_text_length",
+              "value": {
+                "type": "integer",
+                "value": "@{typed_text_length + 1}"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FDF6E3"
+            }
+          ],
+          "items": [
+            {
+              "type": "label",
+              "id": "download_status_label",
+              "text": "@{patch_download_status}",
+              "visibility_actions": [
+                {
+                  "log_id": "start_patch_download",
+                  "visibility_duration": 200,
+                  "url": "div-action://timer?id=patch_download_dispatcher&action=start"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

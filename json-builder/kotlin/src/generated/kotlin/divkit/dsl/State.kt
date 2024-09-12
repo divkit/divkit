@@ -49,6 +49,7 @@ class State internal constructor(
             divId = additive.divId ?: properties.divId,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
@@ -89,7 +90,7 @@ class State internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
+         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
@@ -130,6 +131,10 @@ class State internal constructor(
          * Parameters when focusing on an element or losing focus.
          */
         val focus: Property<Focus>?,
+        /**
+         * Custom functions.
+         */
+        val functions: Property<List<Function>>?,
         /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
@@ -244,6 +249,7 @@ class State internal constructor(
             result.tryPutProperty("div_id", divId)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("layout_provider", layoutProvider)
@@ -338,7 +344,7 @@ class State internal constructor(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -348,6 +354,7 @@ class State internal constructor(
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides element real size values after a layout cycle.
@@ -388,6 +395,7 @@ fun DivScope.state(
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -426,6 +434,7 @@ fun DivScope.state(
         divId = valueOrNull(divId),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
@@ -456,7 +465,7 @@ fun DivScope.state(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -466,6 +475,7 @@ fun DivScope.state(
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides element real size values after a layout cycle.
@@ -506,6 +516,7 @@ fun DivScope.stateProps(
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -543,6 +554,7 @@ fun DivScope.stateProps(
     divId = valueOrNull(divId),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     id = valueOrNull(id),
     layoutProvider = valueOrNull(layoutProvider),
@@ -572,7 +584,7 @@ fun DivScope.stateProps(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -582,6 +594,7 @@ fun DivScope.stateProps(
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides element real size values after a layout cycle.
@@ -622,6 +635,7 @@ fun TemplateScope.stateRefs(
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -659,6 +673,7 @@ fun TemplateScope.stateRefs(
     divId = divId,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     layoutProvider = layoutProvider,
@@ -688,7 +703,7 @@ fun TemplateScope.stateRefs(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -698,6 +713,7 @@ fun TemplateScope.stateRefs(
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides element real size values after a layout cycle.
@@ -738,6 +754,7 @@ fun State.override(
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -776,6 +793,7 @@ fun State.override(
         divId = valueOrNull(divId) ?: properties.divId,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
@@ -806,7 +824,7 @@ fun State.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -816,6 +834,7 @@ fun State.override(
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides element real size values after a layout cycle.
@@ -856,6 +875,7 @@ fun State.defer(
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -894,6 +914,7 @@ fun State.defer(
         divId = divId ?: properties.divId,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
@@ -923,7 +944,7 @@ fun State.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
@@ -958,6 +979,7 @@ fun State.evaluate(
         divId = properties.divId,
         extensions = properties.extensions,
         focus = properties.focus,
+        functions = properties.functions,
         height = properties.height,
         id = properties.id,
         layoutProvider = properties.layoutProvider,
@@ -988,7 +1010,7 @@ fun State.evaluate(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -998,6 +1020,7 @@ fun State.evaluate(
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides element real size values after a layout cycle.
@@ -1038,6 +1061,7 @@ fun Component<State>.override(
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     layoutProvider: LayoutProvider? = null,
@@ -1077,6 +1101,7 @@ fun Component<State>.override(
         divId = valueOrNull(divId),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         layoutProvider = valueOrNull(layoutProvider),
@@ -1107,7 +1132,7 @@ fun Component<State>.override(
  * @param accessibility Accessibility settings.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1117,6 +1142,7 @@ fun Component<State>.override(
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param layoutProvider Provides element real size values after a layout cycle.
@@ -1157,6 +1183,7 @@ fun Component<State>.defer(
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
@@ -1196,6 +1223,7 @@ fun Component<State>.defer(
         divId = divId,
         extensions = extensions,
         focus = focus,
+        functions = functions,
         height = height,
         id = id,
         layoutProvider = layoutProvider,
@@ -1225,7 +1253,7 @@ fun Component<State>.defer(
 /**
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
@@ -1261,6 +1289,7 @@ fun Component<State>.evaluate(
         divId = null,
         extensions = null,
         focus = null,
+        functions = null,
         height = null,
         id = null,
         layoutProvider = null,

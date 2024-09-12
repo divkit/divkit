@@ -91,12 +91,14 @@ public final class DivSlider: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let layoutProvider: DivLayoutProvider?
@@ -185,12 +187,14 @@ public final class DivSlider: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    animators: [DivAnimator]? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
     disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
+    functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     id: String? = nil,
     layoutProvider: DivLayoutProvider? = nil,
@@ -230,12 +234,14 @@ public final class DivSlider: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.layoutProvider = layoutProvider
@@ -285,97 +291,103 @@ extension DivSlider: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.animators == rhs.animators,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
+      lhs.functions == rhs.functions
+    else {
+      return false
+    }
+    guard
       lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.id == rhs.id,
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
-      lhs.layoutProvider == rhs.layoutProvider,
       lhs.margins == rhs.margins,
-      lhs.maxValue == rhs.maxValue
+      lhs.maxValue == rhs.maxValue,
+      lhs.minValue == rhs.minValue
     else {
       return false
     }
     guard
-      lhs.minValue == rhs.minValue,
       lhs.paddings == rhs.paddings,
-      lhs.ranges == rhs.ranges
+      lhs.ranges == rhs.ranges,
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
-      lhs.reuseId == rhs.reuseId,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility
+      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle,
-      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle
+      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle,
+      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable
     else {
       return false
     }
     guard
-      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable,
       lhs.thumbStyle == rhs.thumbStyle,
-      lhs.thumbTextStyle == rhs.thumbTextStyle
+      lhs.thumbTextStyle == rhs.thumbTextStyle,
+      lhs.thumbValueVariable == rhs.thumbValueVariable
     else {
       return false
     }
     guard
-      lhs.thumbValueVariable == rhs.thumbValueVariable,
       lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle,
-      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle
+      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.trackActiveStyle == rhs.trackActiveStyle,
-      lhs.trackInactiveStyle == rhs.trackInactiveStyle
+      lhs.trackInactiveStyle == rhs.trackInactiveStyle,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.variableTriggers == rhs.variableTriggers,
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
-      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -393,12 +405,14 @@ extension DivSlider: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["layout_provider"] = layoutProvider?.toDictionary()

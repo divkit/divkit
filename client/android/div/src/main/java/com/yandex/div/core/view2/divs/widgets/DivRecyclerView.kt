@@ -8,12 +8,15 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.view2.divs.gallery.DivGridLayoutManager
 import com.yandex.div.core.view2.divs.gallery.PagerSnapStartHelper
+import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div2.DivGallery
@@ -48,12 +51,50 @@ internal class DivRecyclerView @JvmOverloads constructor(
     var scrollMode = ScrollMode.DEFAULT
     var pagerSnapStartHelper: PagerSnapStartHelper? = null
     private var needFling = false
+    private var beforeScrollFocusPosition = NO_POSITION
 
     override fun fling(velocityX: Int, velocityY: Int): Boolean {
         val flingPerformed = super.fling(velocityX, velocityY)
 
         if (scrollMode == ScrollMode.PAGING) needFling = !flingPerformed
         return flingPerformed
+    }
+
+    override fun onScrollStateChanged(state: Int) {
+        when (state) {
+            SCROLL_STATE_SETTLING -> {
+                val focusedChild = focusedChild ?: run {
+                    beforeScrollFocusPosition = NO_POSITION
+                    return
+                }
+
+                beforeScrollFocusPosition = getChildAdapterPosition(focusedChild)
+            }
+        }
+        super.onScrollStateChanged(state)
+    }
+
+    override fun onScrolled(dx: Int, dy: Int) {
+        // if there was no focus before scroll we should not set extra focus
+        if (beforeScrollFocusPosition == NO_POSITION) return
+
+        val orientation = when (val layoutManager = layoutManager) {
+            is LinearLayoutManager -> layoutManager.orientation
+            is DivGridLayoutManager -> layoutManager.orientation
+            else -> HORIZONTAL
+        }
+
+        val nextPosition = when {
+            orientation == VERTICAL && dy > 0 -> beforeScrollFocusPosition + 1
+            orientation == VERTICAL && dy <= 0 -> beforeScrollFocusPosition - 1
+            dx > 0 -> beforeScrollFocusPosition + 1
+            else -> beforeScrollFocusPosition - 1
+        }
+
+        (findViewHolderForAdapterPosition(nextPosition)?.itemView as? DivViewWrapper)
+            ?.child?.requestFocus()
+
+        super.onScrolled(dx, dy)
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {

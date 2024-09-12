@@ -6,6 +6,8 @@ import VGSL
 
 @frozen
 public enum DivActionTyped {
+  case divActionAnimatorStart(DivActionAnimatorStart)
+  case divActionAnimatorStop(DivActionAnimatorStop)
   case divActionArrayInsertValue(DivActionArrayInsertValue)
   case divActionArrayRemoveValue(DivActionArrayRemoveValue)
   case divActionArraySetValue(DivActionArraySetValue)
@@ -13,10 +15,19 @@ public enum DivActionTyped {
   case divActionCopyToClipboard(DivActionCopyToClipboard)
   case divActionDictSetValue(DivActionDictSetValue)
   case divActionFocusElement(DivActionFocusElement)
+  case divActionHideTooltip(DivActionHideTooltip)
+  case divActionSetState(DivActionSetState)
   case divActionSetVariable(DivActionSetVariable)
+  case divActionShowTooltip(DivActionShowTooltip)
+  case divActionTimer(DivActionTimer)
+  case divActionVideo(DivActionVideo)
 
   public var value: Serializable {
     switch self {
+    case let .divActionAnimatorStart(value):
+      return value
+    case let .divActionAnimatorStop(value):
+      return value
     case let .divActionArrayInsertValue(value):
       return value
     case let .divActionArrayRemoveValue(value):
@@ -31,7 +42,17 @@ public enum DivActionTyped {
       return value
     case let .divActionFocusElement(value):
       return value
+    case let .divActionHideTooltip(value):
+      return value
+    case let .divActionSetState(value):
+      return value
     case let .divActionSetVariable(value):
+      return value
+    case let .divActionShowTooltip(value):
+      return value
+    case let .divActionTimer(value):
+      return value
+    case let .divActionVideo(value):
       return value
     }
   }
@@ -41,6 +62,10 @@ public enum DivActionTyped {
 extension DivActionTyped: Equatable {
   public static func ==(lhs: DivActionTyped, rhs: DivActionTyped) -> Bool {
     switch (lhs, rhs) {
+    case let (.divActionAnimatorStart(l), .divActionAnimatorStart(r)):
+      return l == r
+    case let (.divActionAnimatorStop(l), .divActionAnimatorStop(r)):
+      return l == r
     case let (.divActionArrayInsertValue(l), .divActionArrayInsertValue(r)):
       return l == r
     case let (.divActionArrayRemoveValue(l), .divActionArrayRemoveValue(r)):
@@ -55,7 +80,17 @@ extension DivActionTyped: Equatable {
       return l == r
     case let (.divActionFocusElement(l), .divActionFocusElement(r)):
       return l == r
+    case let (.divActionHideTooltip(l), .divActionHideTooltip(r)):
+      return l == r
+    case let (.divActionSetState(l), .divActionSetState(r)):
+      return l == r
     case let (.divActionSetVariable(l), .divActionSetVariable(r)):
+      return l == r
+    case let (.divActionShowTooltip(l), .divActionShowTooltip(r)):
+      return l == r
+    case let (.divActionTimer(l), .divActionTimer(r)):
+      return l == r
+    case let (.divActionVideo(l), .divActionVideo(r)):
       return l == r
     default:
       return false

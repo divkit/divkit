@@ -6,6 +6,8 @@ import VGSL
 
 @frozen
 public enum DivActionTypedTemplate: TemplateValue {
+  case divActionAnimatorStartTemplate(DivActionAnimatorStartTemplate)
+  case divActionAnimatorStopTemplate(DivActionAnimatorStopTemplate)
   case divActionArrayInsertValueTemplate(DivActionArrayInsertValueTemplate)
   case divActionArrayRemoveValueTemplate(DivActionArrayRemoveValueTemplate)
   case divActionArraySetValueTemplate(DivActionArraySetValueTemplate)
@@ -13,10 +15,19 @@ public enum DivActionTypedTemplate: TemplateValue {
   case divActionCopyToClipboardTemplate(DivActionCopyToClipboardTemplate)
   case divActionDictSetValueTemplate(DivActionDictSetValueTemplate)
   case divActionFocusElementTemplate(DivActionFocusElementTemplate)
+  case divActionHideTooltipTemplate(DivActionHideTooltipTemplate)
+  case divActionSetStateTemplate(DivActionSetStateTemplate)
   case divActionSetVariableTemplate(DivActionSetVariableTemplate)
+  case divActionShowTooltipTemplate(DivActionShowTooltipTemplate)
+  case divActionTimerTemplate(DivActionTimerTemplate)
+  case divActionVideoTemplate(DivActionVideoTemplate)
 
   public var value: Any {
     switch self {
+    case let .divActionAnimatorStartTemplate(value):
+      return value
+    case let .divActionAnimatorStopTemplate(value):
+      return value
     case let .divActionArrayInsertValueTemplate(value):
       return value
     case let .divActionArrayRemoveValueTemplate(value):
@@ -31,13 +42,27 @@ public enum DivActionTypedTemplate: TemplateValue {
       return value
     case let .divActionFocusElementTemplate(value):
       return value
+    case let .divActionHideTooltipTemplate(value):
+      return value
+    case let .divActionSetStateTemplate(value):
+      return value
     case let .divActionSetVariableTemplate(value):
+      return value
+    case let .divActionShowTooltipTemplate(value):
+      return value
+    case let .divActionTimerTemplate(value):
+      return value
+    case let .divActionVideoTemplate(value):
       return value
     }
   }
 
   public func resolveParent(templates: [TemplateName: Any]) throws -> DivActionTypedTemplate {
     switch self {
+    case let .divActionAnimatorStartTemplate(value):
+      return .divActionAnimatorStartTemplate(try value.resolveParent(templates: templates))
+    case let .divActionAnimatorStopTemplate(value):
+      return .divActionAnimatorStopTemplate(try value.resolveParent(templates: templates))
     case let .divActionArrayInsertValueTemplate(value):
       return .divActionArrayInsertValueTemplate(try value.resolveParent(templates: templates))
     case let .divActionArrayRemoveValueTemplate(value):
@@ -52,8 +77,18 @@ public enum DivActionTypedTemplate: TemplateValue {
       return .divActionDictSetValueTemplate(try value.resolveParent(templates: templates))
     case let .divActionFocusElementTemplate(value):
       return .divActionFocusElementTemplate(try value.resolveParent(templates: templates))
+    case let .divActionHideTooltipTemplate(value):
+      return .divActionHideTooltipTemplate(try value.resolveParent(templates: templates))
+    case let .divActionSetStateTemplate(value):
+      return .divActionSetStateTemplate(try value.resolveParent(templates: templates))
     case let .divActionSetVariableTemplate(value):
       return .divActionSetVariableTemplate(try value.resolveParent(templates: templates))
+    case let .divActionShowTooltipTemplate(value):
+      return .divActionShowTooltipTemplate(try value.resolveParent(templates: templates))
+    case let .divActionTimerTemplate(value):
+      return .divActionTimerTemplate(try value.resolveParent(templates: templates))
+    case let .divActionVideoTemplate(value):
+      return .divActionVideoTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -67,6 +102,22 @@ public enum DivActionTypedTemplate: TemplateValue {
     }
 
     switch parent {
+    case let .divActionAnimatorStartTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionAnimatorStart(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStart(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divActionAnimatorStopTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionAnimatorStop(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStop(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case let .divActionArrayInsertValueTemplate(value):
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
@@ -123,11 +174,51 @@ public enum DivActionTypedTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divActionHideTooltipTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionHideTooltip(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionHideTooltip(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divActionSetStateTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionSetState(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetState(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case let .divActionSetVariableTemplate(value):
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divActionSetVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divActionShowTooltipTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionShowTooltip(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionShowTooltip(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divActionTimerTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionTimer(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionTimer(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divActionVideoTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionVideo(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionVideo(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -140,6 +231,22 @@ public enum DivActionTypedTemplate: TemplateValue {
     }
 
     switch type {
+    case DivActionAnimatorStart.type:
+      let result = DivActionAnimatorStartTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionAnimatorStart(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStart(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case DivActionAnimatorStop.type:
+      let result = DivActionAnimatorStopTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionAnimatorStop(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStop(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case DivActionArrayInsertValue.type:
       let result = DivActionArrayInsertValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
@@ -196,11 +303,51 @@ public enum DivActionTypedTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivActionHideTooltip.type:
+      let result = DivActionHideTooltipTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionHideTooltip(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionHideTooltip(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case DivActionSetState.type:
+      let result = DivActionSetStateTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionSetState(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetState(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case DivActionSetVariable.type:
       let result = DivActionSetVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divActionSetVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetVariable(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case DivActionShowTooltip.type:
+      let result = DivActionShowTooltipTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionShowTooltip(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionShowTooltip(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case DivActionTimer.type:
+      let result = DivActionTimerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionTimer(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionTimer(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case DivActionVideo.type:
+      let result = DivActionVideoTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionVideo(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionVideo(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -215,6 +362,10 @@ extension DivActionTypedTemplate {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
+    case DivActionAnimatorStartTemplate.type:
+      self = .divActionAnimatorStartTemplate(try DivActionAnimatorStartTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionAnimatorStopTemplate.type:
+      self = .divActionAnimatorStopTemplate(try DivActionAnimatorStopTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionArrayInsertValueTemplate.type:
       self = .divActionArrayInsertValueTemplate(try DivActionArrayInsertValueTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionArrayRemoveValueTemplate.type:
@@ -229,8 +380,18 @@ extension DivActionTypedTemplate {
       self = .divActionDictSetValueTemplate(try DivActionDictSetValueTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionFocusElementTemplate.type:
       self = .divActionFocusElementTemplate(try DivActionFocusElementTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionHideTooltipTemplate.type:
+      self = .divActionHideTooltipTemplate(try DivActionHideTooltipTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionSetStateTemplate.type:
+      self = .divActionSetStateTemplate(try DivActionSetStateTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionSetVariableTemplate.type:
       self = .divActionSetVariableTemplate(try DivActionSetVariableTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionShowTooltipTemplate.type:
+      self = .divActionShowTooltipTemplate(try DivActionShowTooltipTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionTimerTemplate.type:
+      self = .divActionTimerTemplate(try DivActionTimerTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionVideoTemplate.type:
+      self = .divActionVideoTemplate(try DivActionVideoTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-action-typed_template", representation: dictionary)
     }

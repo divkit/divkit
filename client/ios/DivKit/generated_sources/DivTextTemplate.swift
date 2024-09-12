@@ -134,6 +134,82 @@ public final class DivTextTemplate: TemplateValue {
   }
 
   public final class ImageTemplate: TemplateValue {
+    public final class AccessibilityTemplate: TemplateValue {
+      public typealias Kind = DivText.Image.Accessibility.Kind
+
+      public let description: Field<Expression<String>>?
+      public let type: Field<Kind>? // default value: auto
+
+      public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
+        self.init(
+          description: dictionary.getOptionalExpressionField("description"),
+          type: dictionary.getOptionalField("type")
+        )
+      }
+
+      init(
+        description: Field<Expression<String>>? = nil,
+        type: Field<Kind>? = nil
+      ) {
+        self.description = description
+        self.type = type
+      }
+
+      private static func resolveOnlyLinks(context: TemplatesContext, parent: AccessibilityTemplate?) -> DeserializationResult<DivText.Image.Accessibility> {
+        let descriptionValue = parent?.description?.resolveOptionalValue(context: context) ?? .noValue
+        let typeValue = parent?.type?.resolveOptionalValue(context: context) ?? .noValue
+        let errors = mergeErrors(
+          descriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "description", error: $0) },
+          typeValue.errorsOrWarnings?.map { .nestedObjectError(field: "type", error: $0) }
+        )
+        let result = DivText.Image.Accessibility(
+          description: descriptionValue.value,
+          type: typeValue.value
+        )
+        return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      }
+
+      public static func resolveValue(context: TemplatesContext, parent: AccessibilityTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.Image.Accessibility> {
+        if useOnlyLinks {
+          return resolveOnlyLinks(context: context, parent: parent)
+        }
+        var descriptionValue: DeserializationResult<Expression<String>> = parent?.description?.value() ?? .noValue
+        var typeValue: DeserializationResult<DivText.Image.Accessibility.Kind> = parent?.type?.value() ?? .noValue
+        context.templateData.forEach { key, __dictValue in
+          switch key {
+          case "description":
+            descriptionValue = deserialize(__dictValue).merged(with: descriptionValue)
+          case "type":
+            typeValue = deserialize(__dictValue).merged(with: typeValue)
+          case parent?.description?.link:
+            descriptionValue = descriptionValue.merged(with: { deserialize(__dictValue) })
+          case parent?.type?.link:
+            typeValue = typeValue.merged(with: { deserialize(__dictValue) })
+          default: break
+          }
+        }
+        let errors = mergeErrors(
+          descriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "description", error: $0) },
+          typeValue.errorsOrWarnings?.map { .nestedObjectError(field: "type", error: $0) }
+        )
+        let result = DivText.Image.Accessibility(
+          description: descriptionValue.value,
+          type: typeValue.value
+        )
+        return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      }
+
+      private func mergedWithParent(templates: [TemplateName: Any]) throws -> AccessibilityTemplate {
+        return self
+      }
+
+      public func resolveParent(templates: [TemplateName: Any]) throws -> AccessibilityTemplate {
+        return try mergedWithParent(templates: templates)
+      }
+    }
+
+    public let accessibility: Field<AccessibilityTemplate>?
+    public let alignmentVertical: Field<Expression<DivTextAlignmentVertical>>? // default value: center
     public let height: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(20))
     public let preloadRequired: Field<Expression<Bool>>? // default value: false
     public let start: Field<Expression<Int>>? // constraint: number >= 0
@@ -144,6 +220,8 @@ public final class DivTextTemplate: TemplateValue {
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
+        accessibility: dictionary.getOptionalField("accessibility", templateToType: templateToType),
+        alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
         height: dictionary.getOptionalField("height", templateToType: templateToType),
         preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
         start: dictionary.getOptionalExpressionField("start"),
@@ -155,6 +233,8 @@ public final class DivTextTemplate: TemplateValue {
     }
 
     init(
+      accessibility: Field<AccessibilityTemplate>? = nil,
+      alignmentVertical: Field<Expression<DivTextAlignmentVertical>>? = nil,
       height: Field<DivFixedSizeTemplate>? = nil,
       preloadRequired: Field<Expression<Bool>>? = nil,
       start: Field<Expression<Int>>? = nil,
@@ -163,6 +243,8 @@ public final class DivTextTemplate: TemplateValue {
       url: Field<Expression<URL>>? = nil,
       width: Field<DivFixedSizeTemplate>? = nil
     ) {
+      self.accessibility = accessibility
+      self.alignmentVertical = alignmentVertical
       self.height = height
       self.preloadRequired = preloadRequired
       self.start = start
@@ -173,6 +255,8 @@ public final class DivTextTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ImageTemplate?) -> DeserializationResult<DivText.Image> {
+      let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+      let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
       let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue
       let startValue = parent?.start?.resolveValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
@@ -181,6 +265,8 @@ public final class DivTextTemplate: TemplateValue {
       let urlValue = parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
       let widthValue = parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
+        accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
+        alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
         preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
@@ -202,6 +288,8 @@ public final class DivTextTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivText.Image(
+        accessibility: accessibilityValue.value,
+        alignmentVertical: alignmentVerticalValue.value,
         height: heightValue.value,
         preloadRequired: preloadRequiredValue.value,
         start: startNonNil,
@@ -217,6 +305,8 @@ public final class DivTextTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
+      var accessibilityValue: DeserializationResult<DivText.Image.Accessibility> = .noValue
+      var alignmentVerticalValue: DeserializationResult<Expression<DivTextAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
       var heightValue: DeserializationResult<DivFixedSize> = .noValue
       var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?.value() ?? .noValue
       var startValue: DeserializationResult<Expression<Int>> = parent?.start?.value() ?? .noValue
@@ -226,6 +316,10 @@ public final class DivTextTemplate: TemplateValue {
       var widthValue: DeserializationResult<DivFixedSize> = .noValue
       context.templateData.forEach { key, __dictValue in
         switch key {
+        case "accessibility":
+          accessibilityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.AccessibilityTemplate.self).merged(with: accessibilityValue)
+        case "alignment_vertical":
+          alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
         case "height":
           heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: heightValue)
         case "preload_required":
@@ -240,6 +334,10 @@ public final class DivTextTemplate: TemplateValue {
           urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
         case "width":
           widthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: widthValue)
+        case parent?.accessibility?.link:
+          accessibilityValue = accessibilityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.AccessibilityTemplate.self) })
+        case parent?.alignmentVertical?.link:
+          alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
         case parent?.height?.link:
           heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
         case parent?.preloadRequired?.link:
@@ -258,10 +356,13 @@ public final class DivTextTemplate: TemplateValue {
         }
       }
       if let parent = parent {
+        accessibilityValue = accessibilityValue.merged(with: { parent.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) })
         heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
         widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       }
       var errors = mergeErrors(
+        accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
+        alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
         preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
@@ -283,6 +384,8 @@ public final class DivTextTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivText.Image(
+        accessibility: accessibilityValue.value,
+        alignmentVertical: alignmentVerticalValue.value,
         height: heightValue.value,
         preloadRequired: preloadRequiredValue.value,
         start: startNonNil,
@@ -302,6 +405,8 @@ public final class DivTextTemplate: TemplateValue {
       let merged = try mergedWithParent(templates: templates)
 
       return ImageTemplate(
+        accessibility: merged.accessibility?.tryResolveParent(templates: templates),
+        alignmentVertical: merged.alignmentVertical,
         height: merged.height?.tryResolveParent(templates: templates),
         preloadRequired: merged.preloadRequired,
         start: merged.start,
@@ -315,6 +420,7 @@ public final class DivTextTemplate: TemplateValue {
 
   public final class RangeTemplate: TemplateValue {
     public let actions: Field<[DivActionTemplate]>?
+    public let alignmentVertical: Field<Expression<DivTextAlignmentVertical>>?
     public let background: Field<DivTextRangeBackgroundTemplate>?
     public let border: Field<DivTextRangeBorderTemplate>?
     public let end: Field<Expression<Int>>? // constraint: number > 0
@@ -336,6 +442,7 @@ public final class DivTextTemplate: TemplateValue {
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
         actions: dictionary.getOptionalArray("actions", templateToType: templateToType),
+        alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
         background: dictionary.getOptionalField("background", templateToType: templateToType),
         border: dictionary.getOptionalField("border", templateToType: templateToType),
         end: dictionary.getOptionalExpressionField("end"),
@@ -358,6 +465,7 @@ public final class DivTextTemplate: TemplateValue {
 
     init(
       actions: Field<[DivActionTemplate]>? = nil,
+      alignmentVertical: Field<Expression<DivTextAlignmentVertical>>? = nil,
       background: Field<DivTextRangeBackgroundTemplate>? = nil,
       border: Field<DivTextRangeBorderTemplate>? = nil,
       end: Field<Expression<Int>>? = nil,
@@ -377,6 +485,7 @@ public final class DivTextTemplate: TemplateValue {
       underline: Field<Expression<DivLineStyle>>? = nil
     ) {
       self.actions = actions
+      self.alignmentVertical = alignmentVertical
       self.background = background
       self.border = border
       self.end = end
@@ -398,6 +507,7 @@ public final class DivTextTemplate: TemplateValue {
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: RangeTemplate?) -> DeserializationResult<DivText.Range> {
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+      let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
       let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let endValue = parent?.end?.resolveValue(context: context, validator: ResolvedValue.endValidator) ?? .noValue
@@ -417,6 +527,7 @@ public final class DivTextTemplate: TemplateValue {
       let underlineValue = parent?.underline?.resolveOptionalValue(context: context) ?? .noValue
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+        alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
         borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
         endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
@@ -449,6 +560,7 @@ public final class DivTextTemplate: TemplateValue {
       }
       let result = DivText.Range(
         actions: actionsValue.value,
+        alignmentVertical: alignmentVerticalValue.value,
         background: backgroundValue.value,
         border: borderValue.value,
         end: endNonNil,
@@ -475,6 +587,7 @@ public final class DivTextTemplate: TemplateValue {
         return resolveOnlyLinks(context: context, parent: parent)
       }
       var actionsValue: DeserializationResult<[DivAction]> = .noValue
+      var alignmentVerticalValue: DeserializationResult<Expression<DivTextAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
       var backgroundValue: DeserializationResult<DivTextRangeBackground> = .noValue
       var borderValue: DeserializationResult<DivTextRangeBorder> = .noValue
       var endValue: DeserializationResult<Expression<Int>> = parent?.end?.value() ?? .noValue
@@ -496,6 +609,8 @@ public final class DivTextTemplate: TemplateValue {
         switch key {
         case "actions":
           actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: actionsValue)
+        case "alignment_vertical":
+          alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
         case "background":
           backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextRangeBackgroundTemplate.self).merged(with: backgroundValue)
         case "border":
@@ -532,6 +647,8 @@ public final class DivTextTemplate: TemplateValue {
           underlineValue = deserialize(__dictValue).merged(with: underlineValue)
         case parent?.actions?.link:
           actionsValue = actionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+        case parent?.alignmentVertical?.link:
+          alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
         case parent?.background?.link:
           backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextRangeBackgroundTemplate.self) })
         case parent?.border?.link:
@@ -577,6 +694,7 @@ public final class DivTextTemplate: TemplateValue {
       }
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+        alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
         borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
         endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
@@ -609,6 +727,7 @@ public final class DivTextTemplate: TemplateValue {
       }
       let result = DivText.Range(
         actions: actionsValue.value,
+        alignmentVertical: alignmentVerticalValue.value,
         background: backgroundValue.value,
         border: borderValue.value,
         end: endNonNil,
@@ -639,6 +758,7 @@ public final class DivTextTemplate: TemplateValue {
 
       return RangeTemplate(
         actions: merged.actions?.tryResolveParent(templates: templates),
+        alignmentVertical: merged.alignmentVertical,
         background: merged.background?.tryResolveParent(templates: templates),
         border: merged.border?.tryResolveParent(templates: templates),
         end: merged.end,
@@ -669,6 +789,7 @@ public final class DivTextTemplate: TemplateValue {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: Field<[DivAnimatorTemplate]>?
   public let autoEllipsize: Field<Expression<Bool>>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
@@ -685,6 +806,7 @@ public final class DivTextTemplate: TemplateValue {
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
   public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
+  public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
   public let images: Field<[ImageTemplate]>?
@@ -732,6 +854,7 @@ public final class DivTextTemplate: TemplateValue {
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
+      animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       autoEllipsize: dictionary.getOptionalExpressionField("auto_ellipsize"),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
@@ -748,6 +871,7 @@ public final class DivTextTemplate: TemplateValue {
       fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
       fontWeight: dictionary.getOptionalExpressionField("font_weight"),
       fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
+      functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
       images: dictionary.getOptionalArray("images", templateToType: templateToType),
@@ -796,6 +920,7 @@ public final class DivTextTemplate: TemplateValue {
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
+    animators: Field<[DivAnimatorTemplate]>? = nil,
     autoEllipsize: Field<Expression<Bool>>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
@@ -812,6 +937,7 @@ public final class DivTextTemplate: TemplateValue {
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
     fontWeightValue: Field<Expression<Int>>? = nil,
+    functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     images: Field<[ImageTemplate]>? = nil,
@@ -857,6 +983,7 @@ public final class DivTextTemplate: TemplateValue {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
+    self.animators = animators
     self.autoEllipsize = autoEllipsize
     self.background = background
     self.border = border
@@ -873,6 +1000,7 @@ public final class DivTextTemplate: TemplateValue {
     self.fontSizeUnit = fontSizeUnit
     self.fontWeight = fontWeight
     self.fontWeightValue = fontWeightValue
+    self.functions = functions
     self.height = height
     self.id = id
     self.images = images
@@ -919,6 +1047,7 @@ public final class DivTextTemplate: TemplateValue {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let animatorsValue = parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let autoEllipsizeValue = parent?.autoEllipsize?.resolveOptionalValue(context: context) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -935,6 +1064,7 @@ public final class DivTextTemplate: TemplateValue {
     let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue
     let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue
     let fontWeightValueValue = parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue
+    let functionsValue = parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let imagesValue = parent?.images?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -979,6 +1109,7 @@ public final class DivTextTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       autoEllipsizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "auto_ellipsize", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
@@ -995,6 +1126,7 @@ public final class DivTextTemplate: TemplateValue {
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
@@ -1048,6 +1180,7 @@ public final class DivTextTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       autoEllipsize: autoEllipsizeValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
@@ -1064,6 +1197,7 @@ public final class DivTextTemplate: TemplateValue {
       fontSizeUnit: fontSizeUnitValue.value,
       fontWeight: fontWeightValue.value,
       fontWeightValue: fontWeightValueValue.value,
+      functions: functionsValue.value,
       height: heightValue.value,
       id: idValue.value,
       images: imagesValue.value,
@@ -1115,6 +1249,7 @@ public final class DivTextTemplate: TemplateValue {
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var autoEllipsizeValue: DeserializationResult<Expression<Bool>> = parent?.autoEllipsize?.value() ?? .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
@@ -1131,6 +1266,7 @@ public final class DivTextTemplate: TemplateValue {
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
     var fontWeightValueValue: DeserializationResult<Expression<Int>> = parent?.fontWeightValue?.value() ?? .noValue
+    var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var imagesValue: DeserializationResult<[DivText.Image]> = .noValue
@@ -1183,6 +1319,8 @@ public final class DivTextTemplate: TemplateValue {
         alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+      case "animators":
+        animatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self).merged(with: animatorsValue)
       case "auto_ellipsize":
         autoEllipsizeValue = deserialize(__dictValue).merged(with: autoEllipsizeValue)
       case "background":
@@ -1215,6 +1353,8 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValue = deserialize(__dictValue).merged(with: fontWeightValue)
       case "font_weight_value":
         fontWeightValueValue = deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator).merged(with: fontWeightValueValue)
+      case "functions":
+        functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).merged(with: functionsValue)
       case "height":
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
@@ -1301,6 +1441,8 @@ public final class DivTextTemplate: TemplateValue {
         alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+      case parent?.animators?.link:
+        animatorsValue = animatorsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self) })
       case parent?.autoEllipsize?.link:
         autoEllipsizeValue = autoEllipsizeValue.merged(with: { deserialize(__dictValue) })
       case parent?.background?.link:
@@ -1333,6 +1475,8 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValue = fontWeightValue.merged(with: { deserialize(__dictValue) })
       case parent?.fontWeightValue?.link:
         fontWeightValueValue = fontWeightValueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.fontWeightValueValidator) })
+      case parent?.functions?.link:
+        functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
       case parent?.height?.link:
         heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
       case parent?.id?.link:
@@ -1413,6 +1557,7 @@ public final class DivTextTemplate: TemplateValue {
       actionValue = actionValue.merged(with: { parent.action?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       actionAnimationValue = actionAnimationValue.merged(with: { parent.actionAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       actionsValue = actionsValue.merged(with: { parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      animatorsValue = animatorsValue.merged(with: { parent.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       disappearActionsValue = disappearActionsValue.merged(with: { parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -1420,6 +1565,7 @@ public final class DivTextTemplate: TemplateValue {
       ellipsisValue = ellipsisValue.merged(with: { parent.ellipsis?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       imagesValue = imagesValue.merged(with: { parent.images?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -1449,6 +1595,7 @@ public final class DivTextTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       autoEllipsizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "auto_ellipsize", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
@@ -1465,6 +1612,7 @@ public final class DivTextTemplate: TemplateValue {
       fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
       fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
@@ -1518,6 +1666,7 @@ public final class DivTextTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       autoEllipsize: autoEllipsizeValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
@@ -1534,6 +1683,7 @@ public final class DivTextTemplate: TemplateValue {
       fontSizeUnit: fontSizeUnitValue.value,
       fontWeight: fontWeightValue.value,
       fontWeightValue: fontWeightValueValue.value,
+      functions: functionsValue.value,
       height: heightValue.value,
       id: idValue.value,
       images: imagesValue.value,
@@ -1590,6 +1740,7 @@ public final class DivTextTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
+      animators: animators ?? mergedParent.animators,
       autoEllipsize: autoEllipsize ?? mergedParent.autoEllipsize,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
@@ -1606,6 +1757,7 @@ public final class DivTextTemplate: TemplateValue {
       fontSizeUnit: fontSizeUnit ?? mergedParent.fontSizeUnit,
       fontWeight: fontWeight ?? mergedParent.fontWeight,
       fontWeightValue: fontWeightValue ?? mergedParent.fontWeightValue,
+      functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       images: images ?? mergedParent.images,
@@ -1657,6 +1809,7 @@ public final class DivTextTemplate: TemplateValue {
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
+      animators: merged.animators?.tryResolveParent(templates: templates),
       autoEllipsize: merged.autoEllipsize,
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
@@ -1673,6 +1826,7 @@ public final class DivTextTemplate: TemplateValue {
       fontSizeUnit: merged.fontSizeUnit,
       fontWeight: merged.fontWeight,
       fontWeightValue: merged.fontWeightValue,
+      functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       images: merged.images?.tryResolveParent(templates: templates),

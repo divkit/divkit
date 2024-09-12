@@ -44,6 +44,11 @@ class EntityWithArrayOfExpressions(
         return hash
     }
 
+    fun equals(other: EntityWithArrayOfExpressions?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return items.evaluate(resolver).compareWith(other.items.evaluate(otherResolver)) { a, b -> a == b }
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpressionList(key = "items", value = items)

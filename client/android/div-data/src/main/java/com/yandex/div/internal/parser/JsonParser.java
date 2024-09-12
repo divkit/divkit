@@ -708,6 +708,15 @@ public class JsonParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function2<ParsingEnvironment, JSONObject, T> creator,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingEnvironment env) {
+        return readList(jsonObject, key, creator, alwaysValidList(), alwaysValid(), logger, env);
+    }
+    @NonNull
+    public static <T> List<T> readList(
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final Function2<ParsingEnvironment, JSONObject, T> creator,
             @NonNull final ListValidator<T> validator,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final ParsingEnvironment env) {

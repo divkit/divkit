@@ -21,6 +21,11 @@ class EntityWithRequiredProperty(
         return hash
     }
 
+    fun equals(other: EntityWithRequiredProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return property.evaluate(resolver) == other.property.evaluate(otherResolver)
+    }
+
     fun copy(
         property: Expression<String> = this.property,
     ) = EntityWithRequiredProperty(

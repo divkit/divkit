@@ -21,12 +21,14 @@ public final class DivIndicator: DivBase {
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let animation: Expression<Animation> // default value: scale
+  public let animators: [DivAnimator]?
   public let background: [DivBackground]?
   public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
+  public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let inactiveItemColor: Expression<Color> // default value: #33919cb5
@@ -131,12 +133,14 @@ public final class DivIndicator: DivBase {
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
     animation: Expression<Animation>? = nil,
+    animators: [DivAnimator]? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
     disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
+    functions: [DivFunction]? = nil,
     height: DivSize? = nil,
     id: String? = nil,
     inactiveItemColor: Expression<Color>? = nil,
@@ -174,12 +178,14 @@ public final class DivIndicator: DivBase {
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
     self.animation = animation ?? .value(.scale)
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.inactiveItemColor = inactiveItemColor ?? .value(Color.colorWithARGBHexCode(0x33919CB5))
@@ -231,82 +237,88 @@ extension DivIndicator: Equatable {
     guard
       lhs.alpha == rhs.alpha,
       lhs.animation == rhs.animation,
-      lhs.background == rhs.background
+      lhs.animators == rhs.animators
     else {
       return false
     }
     guard
+      lhs.background == rhs.background,
       lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.disappearActions == rhs.disappearActions
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
-      lhs.id == rhs.id,
+      lhs.functions == rhs.functions,
+      lhs.height == rhs.height,
+      lhs.id == rhs.id
+    else {
+      return false
+    }
+    guard
       lhs.inactiveItemColor == rhs.inactiveItemColor,
-      lhs.inactiveMinimumShape == rhs.inactiveMinimumShape
+      lhs.inactiveMinimumShape == rhs.inactiveMinimumShape,
+      lhs.inactiveShape == rhs.inactiveShape
     else {
       return false
     }
     guard
-      lhs.inactiveShape == rhs.inactiveShape,
       lhs.itemsPlacement == rhs.itemsPlacement,
-      lhs.layoutProvider == rhs.layoutProvider
+      lhs.layoutProvider == rhs.layoutProvider,
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
-      lhs.margins == rhs.margins,
       lhs.minimumItemSize == rhs.minimumItemSize,
-      lhs.paddings == rhs.paddings
+      lhs.paddings == rhs.paddings,
+      lhs.pagerId == rhs.pagerId
     else {
       return false
     }
     guard
-      lhs.pagerId == rhs.pagerId,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.rowSpan == rhs.rowSpan,
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
-      lhs.selectedActions == rhs.selectedActions,
       lhs.shape == rhs.shape,
-      lhs.spaceBetweenCenters == rhs.spaceBetweenCenters
+      lhs.spaceBetweenCenters == rhs.spaceBetweenCenters,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
-      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transitionChange == rhs.transitionChange,
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
-      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
-      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.visibility == rhs.visibility,
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
-      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -329,12 +341,14 @@ extension DivIndicator: Serializable {
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["animation"] = animation.toValidSerializationValue()
+    result["animators"] = animators?.map { $0.toDictionary() }
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
+    result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
     result["inactive_item_color"] = inactiveItemColor.toValidSerializationValue()

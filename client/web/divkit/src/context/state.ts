@@ -43,7 +43,8 @@ export interface StateCtxValue {
         componentContext: ComponentContext,
         transitions: MaybeMissing<AppearanceTransition>,
         node: HTMLElement,
-        direction: 'in' | 'out'
+        direction: 'in' | 'out',
+        bbox?: DOMRect | undefined
     ): Promise<void>;
 
     registerChild(id: string): void;

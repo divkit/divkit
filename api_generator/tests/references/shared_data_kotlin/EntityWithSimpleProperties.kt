@@ -37,6 +37,19 @@ class EntityWithSimpleProperties(
         return hash
     }
 
+    fun equals(other: EntityWithSimpleProperties?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return boolean?.evaluate(resolver) == other.boolean?.evaluate(otherResolver) &&
+            booleanInt?.evaluate(resolver) == other.booleanInt?.evaluate(otherResolver) &&
+            color?.evaluate(resolver) == other.color?.evaluate(otherResolver) &&
+            double?.evaluate(resolver) == other.double?.evaluate(otherResolver) &&
+            id == other.id &&
+            integer.evaluate(resolver) == other.integer.evaluate(otherResolver) &&
+            positiveInteger?.evaluate(resolver) == other.positiveInteger?.evaluate(otherResolver) &&
+            string?.evaluate(resolver) == other.string?.evaluate(otherResolver) &&
+            url?.evaluate(resolver) == other.url?.evaluate(otherResolver)
+    }
+
     fun copy(
         boolean: Expression<Boolean>? = this.boolean,
         booleanInt: Expression<Boolean>? = this.booleanInt,

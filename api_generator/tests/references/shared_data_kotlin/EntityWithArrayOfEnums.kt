@@ -31,6 +31,11 @@ class EntityWithArrayOfEnums(
         return hash
     }
 
+    fun equals(other: EntityWithArrayOfEnums?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return items.compareWith(other.items) { a, b -> a == b }
+    }
+
     fun copy(
         items: List<Item> = this.items,
     ) = EntityWithArrayOfEnums(

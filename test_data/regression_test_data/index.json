@@ -2642,7 +2642,7 @@
       "file": "patch/tabs_transactional_success.json"
     },
     {
-      "title": "Apply patches on visibility action",
+      "title": "Track visibility action from patch",
       "tags": [
         "patch"
       ],
@@ -2650,10 +2650,31 @@
         "Wait 10 seconds",
         "Should be lorem ipsum text"
       ],
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ],
+      "priority": "blocker",
       "expected_results": [
         "Lorem ipsum text, showed with animation"
       ],
-      "file": "patch/patch_with_visibility_actions.json"
+      "file": "patch/patchable_card_with_visibility_actions.json"
+    },
+
+    {
+      "title": "Patch root div",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "Second element is gallery"
+      ],
+      "file": "patch/root.json"
     },
    
     {

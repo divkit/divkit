@@ -715,6 +715,11 @@
             hasVisibilityChangeTrigger &&
             transition
         ) {
+            let bbox: DOMRect | undefined;
+            if (nextVisibility === 'gone') {
+                bbox = currentNode.getBoundingClientRect();
+            }
+
             await tick();
 
             if (direction === 'in') {
@@ -728,7 +733,8 @@
                 componentContext,
                 transition,
                 currentNode,
-                direction
+                direction,
+                bbox
             ).then(() => {
                 if (direction === 'in') {
                     visibilityChangingInProgress = false;

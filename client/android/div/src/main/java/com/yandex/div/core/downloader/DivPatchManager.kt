@@ -8,6 +8,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import javax.inject.Inject
@@ -24,18 +25,26 @@ internal class DivPatchManager @Inject constructor(
         return divPatchCache.putPatch(tag, patch)
     }
 
-    fun createViewsForId(context: BindingContext, id: String): List<View>? {
+    fun buildViewsForId(context: BindingContext, id: String): List<View>? {
         val patchDivs = divPatchCache.getPatchDivListById(context.divView.dataTag, id) ?: return null
-        val listViews = mutableListOf<View>()
-        patchDivs.forEach {
-            val view = divViewCreator.get().buildView(
-                it,
+        return patchDivs.map { div ->
+            divViewCreator.get().buildView(
+                div,
                 context,
                 DivStatePath.fromState(context.divView.currentStateId)
             )
-            listViews.add(view)
         }
-        return listViews
+    }
+
+    fun createViewsForId(context: BindingContext, id: String): Map<Div, View>? {
+        val patched = divPatchCache.getPatchDivListById(context.divView.dataTag, id) ?: return null
+        return patched.associateWith { div ->
+            divViewCreator.get().createView(
+                div,
+                context,
+                DivStatePath.fromState(context.divView.currentStateId)
+            )
+        }
     }
 
     fun createPatchedDivData(oldDivData: DivData, divDataTag: DivDataTag, patch: DivPatch,

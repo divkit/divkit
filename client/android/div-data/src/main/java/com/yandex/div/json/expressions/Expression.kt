@@ -158,7 +158,9 @@ abstract class Expression<T : Any> {
                 lastValidValue = newValue
                 return newValue
             } catch (e: ParsingException) {
-                logError(e, resolver)
+                if (!e.message.isNullOrEmpty()) {
+                    logError(e, resolver)
+                }
                 lastValidValue?.let {
                     return it
                 }

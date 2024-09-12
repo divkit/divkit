@@ -77,14 +77,15 @@ internal class DivPagerBinder @Inject constructor(
         val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
         view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
         val adapter = DivPagerAdapter(
-                div.buildItems(resolver),
-                context,
-                divBinder.get(),
-                pageTranslations,
-                viewCreator,
-                path,
-                a11yEnabled,
-            )
+            div.buildItems(resolver),
+            context,
+            divBinder.get(),
+            pageTranslations,
+            viewCreator,
+            path,
+            a11yEnabled,
+            view
+        )
         view.viewPager.adapter = adapter
         view.bindInfiniteScroll(div, resolver)
         view.pagerOnItemsCountChange?.onItemsUpdated()
@@ -287,6 +288,9 @@ internal class DivPagerBinder @Inject constructor(
         val builder = div.itemBuilder ?: return
         bindItemBuilder(builder, context.expressionResolver) {
             (viewPager.adapter as DivPagerAdapter?)?.setItems(builder.build(context.expressionResolver))
+            pageTransformer?.onItemsCountChanged()
+            pagerOnItemsCountChange?.onItemsUpdated()
+            getRecyclerView()?.scrollToPosition(currentItem)
         }
     }
 }

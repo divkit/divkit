@@ -48,6 +48,14 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
        return hash
     }
 
+    fun equals(other: EnumWithDefaultType?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return when(this) {
+            is WithDefaultCase -> this.value.equals(other.value() as? WithDefault, resolver, otherResolver)
+            is WithoutDefaultCase -> this.value.equals(other.value() as? WithoutDefault, resolver, otherResolver)
+        }
+    }
+
     fun value(): Any {
         return when (this) {
             is WithDefaultCase -> value

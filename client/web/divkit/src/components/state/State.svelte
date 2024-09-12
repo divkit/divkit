@@ -146,6 +146,7 @@
         parentComponentContext: ComponentContext;
         transitions: AppearanceTransition;
         node: HTMLElement;
+        bbox?: DOMRect;
         resolvePromise?: (val?: void) => void;
     }
     interface ChildWithTransitionChange {
@@ -172,7 +173,7 @@
         transitions = componentContext.getJsonWithVars(transitions) as AppearanceTransition;
 
         const transitionsList: AnyTransition[] = flattenTransition(transitions);
-        const bbox = node.getBoundingClientRect();
+        const startBbox = child.bbox || node.getBoundingClientRect();
         const jsonCopy = {
             ...json,
             margins: undefined,
@@ -184,14 +185,14 @@
             componentContextCopy: parentComponentContext.produceChildContext(jsonCopy, {
                 fake: true
             }),
-            elementBbox: bbox,
+            elementBbox: startBbox,
             rootBbox,
             transitions: transitionsList,
             alpha: json.alpha,
-            width: bbox.width,
-            height: bbox.height,
-            offsetTop: bbox.top - rootBbox.top,
-            offsetLeft: bbox.left - rootBbox.left,
+            width: startBbox.width,
+            height: startBbox.height,
+            offsetTop: startBbox.top - rootBbox.top,
+            offsetLeft: startBbox.left - rootBbox.left,
             direction,
             resolvePromise: child.resolvePromise,
             node: child.node
@@ -378,12 +379,14 @@
         unregisterInstance(id: string) {
             childStateMap?.delete(id);
         },
+        // eslint-disable-next-line max-params
         runVisibilityTransition(
             json: DivBaseData,
             parentComponentContext: ComponentContext,
             transitions: AppearanceTransition,
             node: HTMLElement,
-            direction: 'in' | 'out'
+            direction: 'in' | 'out',
+            bbox: DOMRect | undefined
         ) {
             if (!animationRoot) {
                 return Promise.resolve();
@@ -396,7 +399,8 @@
                     json,
                     parentComponentContext,
                     transitions,
-                    node
+                    node,
+                    bbox
                 },
                 direction
             );

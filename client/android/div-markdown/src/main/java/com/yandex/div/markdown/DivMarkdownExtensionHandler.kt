@@ -35,10 +35,12 @@ public class DivMarkdownExtensionHandler(
     context: Context,
     markwonPlugins: List<MarkwonPlugin> = emptyList(),
 ) : DivExtensionHandler {
-    private val markwon: Markwon = Markwon.builder(context)
-        .usePlugins(markwonPlugins)
-        .usePlugin(CorePlugin.create())
-        .build()
+    private val markwon: Markwon by lazy(LazyThreadSafetyMode.NONE) {
+        Markwon.builder(context)
+            .usePlugins(markwonPlugins)
+            .usePlugin(CorePlugin.create())
+            .build()
+    }
 
     override fun matches(div: DivBase): Boolean {
         return div.extensions?.any { it.id == EXTENSION_ID } ?: false
@@ -48,7 +50,7 @@ public class DivMarkdownExtensionHandler(
         divView: Div2View,
         expressionResolver: ExpressionResolver,
         view: View,
-        div: DivBase
+        div: DivBase,
     ) {
         if (view is TextView && view is ExpressionSubscriber && div is DivText) {
             view.subscribeOnText(div, expressionResolver)
@@ -59,7 +61,7 @@ public class DivMarkdownExtensionHandler(
         divView: Div2View,
         expressionResolver: ExpressionResolver,
         view: View,
-        div: DivBase
+        div: DivBase,
     ): Unit = Unit
 
     private fun <T> T.subscribeOnText(

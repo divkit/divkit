@@ -56,6 +56,7 @@ class Container internal constructor(
             doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
+            functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
             itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
@@ -117,7 +118,7 @@ class Container internal constructor(
          */
         val alignmentVertical: Property<AlignmentVertical>?,
         /**
-         * Transparency of whole element: `0` — completely transparent, `1` — opaque.
+         * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
@@ -173,6 +174,10 @@ class Container internal constructor(
          * Parameters when focusing on an element or losing focus.
          */
         val focus: Property<Focus>?,
+        /**
+         * Custom functions.
+         */
+        val functions: Property<List<Function>>?,
         /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `{"type": "wrap_content"}`.
@@ -305,6 +310,7 @@ class Container internal constructor(
             result.tryPutProperty("doubletap_actions", doubletapActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
             result.tryPutProperty("item_builder", itemBuilder)
@@ -421,7 +427,7 @@ class Container internal constructor(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -435,6 +441,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -485,6 +492,7 @@ fun DivScope.row(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -531,6 +539,7 @@ fun DivScope.row(
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     itemBuilder = itemBuilder,
@@ -566,7 +575,7 @@ fun DivScope.row(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -580,6 +589,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -630,6 +640,7 @@ fun DivScope.row(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -676,6 +687,7 @@ fun DivScope.row(
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     itemBuilder = itemBuilder,
@@ -711,7 +723,7 @@ fun DivScope.row(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -725,6 +737,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -775,6 +788,7 @@ fun DivScope.column(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -821,6 +835,7 @@ fun DivScope.column(
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     itemBuilder = itemBuilder,
@@ -856,7 +871,7 @@ fun DivScope.column(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -870,6 +885,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -920,6 +936,7 @@ fun DivScope.column(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -966,6 +983,7 @@ fun DivScope.column(
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     itemBuilder = itemBuilder,
@@ -1001,7 +1019,7 @@ fun DivScope.column(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -1015,6 +1033,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -1065,6 +1084,7 @@ fun DivScope.stack(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -1111,6 +1131,7 @@ fun DivScope.stack(
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     itemBuilder = itemBuilder,
@@ -1146,7 +1167,7 @@ fun DivScope.stack(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -1160,6 +1181,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -1210,6 +1232,7 @@ fun DivScope.stack(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -1256,6 +1279,7 @@ fun DivScope.stack(
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     itemBuilder = itemBuilder,
@@ -1292,7 +1316,7 @@ fun DivScope.stack(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -1306,6 +1330,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -1356,6 +1381,7 @@ fun DivScope.container(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -1404,6 +1430,7 @@ fun DivScope.container(
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         itemBuilder = valueOrNull(itemBuilder),
@@ -1441,7 +1468,7 @@ fun DivScope.container(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -1455,6 +1482,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -1505,6 +1533,7 @@ fun DivScope.containerProps(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -1552,6 +1581,7 @@ fun DivScope.containerProps(
     doubletapActions = valueOrNull(doubletapActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
+    functions = valueOrNull(functions),
     height = valueOrNull(height),
     id = valueOrNull(id),
     itemBuilder = valueOrNull(itemBuilder),
@@ -1588,7 +1618,7 @@ fun DivScope.containerProps(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -1602,6 +1632,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -1652,6 +1683,7 @@ fun TemplateScope.containerRefs(
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
@@ -1699,6 +1731,7 @@ fun TemplateScope.containerRefs(
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
+    functions = functions,
     height = height,
     id = id,
     itemBuilder = itemBuilder,
@@ -1735,7 +1768,7 @@ fun TemplateScope.containerRefs(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -1749,6 +1782,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -1799,6 +1833,7 @@ fun Container.override(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -1847,6 +1882,7 @@ fun Container.override(
         doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
+        functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
         itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
@@ -1884,7 +1920,7 @@ fun Container.override(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -1898,6 +1934,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -1948,6 +1985,7 @@ fun Container.defer(
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
@@ -1996,6 +2034,7 @@ fun Container.defer(
         doubletapActions = doubletapActions ?: properties.doubletapActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
+        functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
         itemBuilder = itemBuilder ?: properties.itemBuilder,
@@ -2029,7 +2068,7 @@ fun Container.defer(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -2076,6 +2115,7 @@ fun Container.evaluate(
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         focus = properties.focus,
+        functions = properties.functions,
         height = properties.height,
         id = properties.id,
         itemBuilder = properties.itemBuilder,
@@ -2113,7 +2153,7 @@ fun Container.evaluate(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -2127,6 +2167,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -2177,6 +2218,7 @@ fun Component<Container>.override(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
     itemBuilder: CollectionItemBuilder? = null,
@@ -2226,6 +2268,7 @@ fun Component<Container>.override(
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
         itemBuilder = valueOrNull(itemBuilder),
@@ -2263,7 +2306,7 @@ fun Component<Container>.override(
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animators Declaration of animators that can be used to change the value of variables over time.
  * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
@@ -2277,6 +2320,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param functions Custom functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
@@ -2327,6 +2371,7 @@ fun Component<Container>.defer(
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
@@ -2376,6 +2421,7 @@ fun Component<Container>.defer(
         doubletapActions = doubletapActions,
         extensions = extensions,
         focus = focus,
+        functions = functions,
         height = height,
         id = id,
         itemBuilder = itemBuilder,
@@ -2409,7 +2455,7 @@ fun Component<Container>.defer(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Transparency of whole element: `0` — completely transparent, `1` — opaque.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param clipToBounds Enables the bounding of child elements by the parent's borders.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
@@ -2457,6 +2503,7 @@ fun Component<Container>.evaluate(
         doubletapActions = null,
         extensions = null,
         focus = null,
+        functions = null,
         height = null,
         id = null,
         itemBuilder = null,

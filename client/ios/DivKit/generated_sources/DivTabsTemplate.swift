@@ -566,6 +566,7 @@ public final class DivTabsTemplate: TemplateValue {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let animators: Field<[DivAnimatorTemplate]>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
@@ -573,6 +574,7 @@ public final class DivTabsTemplate: TemplateValue {
   public let dynamicHeight: Field<Expression<Bool>>? // default value: false
   public let extensions: Field<[DivExtensionTemplate]>?
   public let focus: Field<DivFocusTemplate>?
+  public let functions: Field<[DivFunctionTemplate]>?
   public let hasSeparator: Field<Expression<Bool>>? // default value: false
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
@@ -611,6 +613,7 @@ public final class DivTabsTemplate: TemplateValue {
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
+      animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       background: dictionary.getOptionalArray("background", templateToType: templateToType),
       border: dictionary.getOptionalField("border", templateToType: templateToType),
       columnSpan: dictionary.getOptionalExpressionField("column_span"),
@@ -618,6 +621,7 @@ public final class DivTabsTemplate: TemplateValue {
       dynamicHeight: dictionary.getOptionalExpressionField("dynamic_height"),
       extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
       focus: dictionary.getOptionalField("focus", templateToType: templateToType),
+      functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       hasSeparator: dictionary.getOptionalExpressionField("has_separator"),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
@@ -657,6 +661,7 @@ public final class DivTabsTemplate: TemplateValue {
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
+    animators: Field<[DivAnimatorTemplate]>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
@@ -664,6 +669,7 @@ public final class DivTabsTemplate: TemplateValue {
     dynamicHeight: Field<Expression<Bool>>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
+    functions: Field<[DivFunctionTemplate]>? = nil,
     hasSeparator: Field<Expression<Bool>>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
@@ -700,6 +706,7 @@ public final class DivTabsTemplate: TemplateValue {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
+    self.animators = animators
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
@@ -707,6 +714,7 @@ public final class DivTabsTemplate: TemplateValue {
     self.dynamicHeight = dynamicHeight
     self.extensions = extensions
     self.focus = focus
+    self.functions = functions
     self.hasSeparator = hasSeparator
     self.height = height
     self.id = id
@@ -744,6 +752,7 @@ public final class DivTabsTemplate: TemplateValue {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let animatorsValue = parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
@@ -751,6 +760,7 @@ public final class DivTabsTemplate: TemplateValue {
     let dynamicHeightValue = parent?.dynamicHeight?.resolveOptionalValue(context: context) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let functionsValue = parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let hasSeparatorValue = parent?.hasSeparator?.resolveOptionalValue(context: context) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
@@ -786,6 +796,7 @@ public final class DivTabsTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
@@ -793,6 +804,7 @@ public final class DivTabsTemplate: TemplateValue {
       dynamicHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "dynamic_height", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       hasSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "has_separator", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -837,6 +849,7 @@ public final class DivTabsTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
@@ -844,6 +857,7 @@ public final class DivTabsTemplate: TemplateValue {
       dynamicHeight: dynamicHeightValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
+      functions: functionsValue.value,
       hasSeparator: hasSeparatorValue.value,
       height: heightValue.value,
       id: idValue.value,
@@ -886,6 +900,7 @@ public final class DivTabsTemplate: TemplateValue {
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
@@ -893,6 +908,7 @@ public final class DivTabsTemplate: TemplateValue {
     var dynamicHeightValue: DeserializationResult<Expression<Bool>> = parent?.dynamicHeight?.value() ?? .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
+    var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var hasSeparatorValue: DeserializationResult<Expression<Bool>> = parent?.hasSeparator?.value() ?? .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
@@ -933,6 +949,8 @@ public final class DivTabsTemplate: TemplateValue {
         alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+      case "animators":
+        animatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self).merged(with: animatorsValue)
       case "background":
         backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
       case "border":
@@ -947,6 +965,8 @@ public final class DivTabsTemplate: TemplateValue {
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self).merged(with: extensionsValue)
       case "focus":
         focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self).merged(with: focusValue)
+      case "functions":
+        functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).merged(with: functionsValue)
       case "has_separator":
         hasSeparatorValue = deserialize(__dictValue).merged(with: hasSeparatorValue)
       case "height":
@@ -1015,6 +1035,8 @@ public final class DivTabsTemplate: TemplateValue {
         alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+      case parent?.animators?.link:
+        animatorsValue = animatorsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self) })
       case parent?.background?.link:
         backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self) })
       case parent?.border?.link:
@@ -1029,6 +1051,8 @@ public final class DivTabsTemplate: TemplateValue {
         extensionsValue = extensionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self) })
       case parent?.focus?.link:
         focusValue = focusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self) })
+      case parent?.functions?.link:
+        functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
       case parent?.hasSeparator?.link:
         hasSeparatorValue = hasSeparatorValue.merged(with: { deserialize(__dictValue) })
       case parent?.height?.link:
@@ -1094,11 +1118,13 @@ public final class DivTabsTemplate: TemplateValue {
     }
     if let parent = parent {
       accessibilityValue = accessibilityValue.merged(with: { parent.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      animatorsValue = animatorsValue.merged(with: { parent.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       disappearActionsValue = disappearActionsValue.merged(with: { parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       itemsValue = itemsValue.merged(with: { parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) })
       layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
@@ -1125,6 +1151,7 @@ public final class DivTabsTemplate: TemplateValue {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
@@ -1132,6 +1159,7 @@ public final class DivTabsTemplate: TemplateValue {
       dynamicHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "dynamic_height", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
+      functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       hasSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "has_separator", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -1176,6 +1204,7 @@ public final class DivTabsTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      animators: animatorsValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
@@ -1183,6 +1212,7 @@ public final class DivTabsTemplate: TemplateValue {
       dynamicHeight: dynamicHeightValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
+      functions: functionsValue.value,
       hasSeparator: hasSeparatorValue.value,
       height: heightValue.value,
       id: idValue.value,
@@ -1230,6 +1260,7 @@ public final class DivTabsTemplate: TemplateValue {
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
+      animators: animators ?? mergedParent.animators,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
@@ -1237,6 +1268,7 @@ public final class DivTabsTemplate: TemplateValue {
       dynamicHeight: dynamicHeight ?? mergedParent.dynamicHeight,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
+      functions: functions ?? mergedParent.functions,
       hasSeparator: hasSeparator ?? mergedParent.hasSeparator,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
@@ -1279,6 +1311,7 @@ public final class DivTabsTemplate: TemplateValue {
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
+      animators: merged.animators?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
@@ -1286,6 +1319,7 @@ public final class DivTabsTemplate: TemplateValue {
       dynamicHeight: merged.dynamicHeight,
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
+      functions: merged.functions?.tryResolveParent(templates: templates),
       hasSeparator: merged.hasSeparator,
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,

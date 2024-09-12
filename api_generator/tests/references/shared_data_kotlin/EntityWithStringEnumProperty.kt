@@ -21,6 +21,11 @@ class EntityWithStringEnumProperty(
         return hash
     }
 
+    fun equals(other: EntityWithStringEnumProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return property.evaluate(resolver) == other.property.evaluate(otherResolver)
+    }
+
     fun copy(
         property: Expression<Property> = this.property,
     ) = EntityWithStringEnumProperty(

@@ -5,20 +5,12 @@ import Serialization
 import VGSL
 
 public final class DivLayoutProvider {
-  public let heightVariableName: Expression<String>?
-  public let widthVariableName: Expression<String>?
-
-  public func resolveHeightVariableName(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(heightVariableName)
-  }
-
-  public func resolveWidthVariableName(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(widthVariableName)
-  }
+  public let heightVariableName: String?
+  public let widthVariableName: String?
 
   init(
-    heightVariableName: Expression<String>? = nil,
-    widthVariableName: Expression<String>? = nil
+    heightVariableName: String? = nil,
+    widthVariableName: String? = nil
   ) {
     self.heightVariableName = heightVariableName
     self.widthVariableName = widthVariableName
@@ -42,8 +34,8 @@ extension DivLayoutProvider: Equatable {
 extension DivLayoutProvider: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
-    result["height_variable_name"] = heightVariableName?.toValidSerializationValue()
-    result["width_variable_name"] = widthVariableName?.toValidSerializationValue()
+    result["height_variable_name"] = heightVariableName
+    result["width_variable_name"] = widthVariableName
     return result
   }
 }
