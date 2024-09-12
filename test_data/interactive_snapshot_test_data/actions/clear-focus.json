@@ -148,32 +148,6 @@
                     }
                   ]
                 }
-              },
-              {
-                "type": "button",
-                "text": "Focus input",
-                "id": "button_1",
-                "alignment_horizontal": "center",
-                "width": {
-                  "type": "wrap_content"
-                },
-                "actions": [
-                  {
-                    "log_id": "focus_1",
-                    "typed": {
-                      "type": "focus_element",
-                      "element_id": "input"
-                    }
-                  },
-                  {
-                    "log_id": "Start timer",
-                    "url": "div-action://timer?id=clear_focus&action=start"
-                  },
-                  {
-                    "url": "div-action://set_variable?name=timer_label&value=started",
-                    "log_id": "timer started"
-                  }
-                ]
               }
             ]
           }
@@ -182,9 +156,6 @@
     }
   },
   "steps": [
-    {
-      "expected_screenshot": "step0.png"
-    },
     {
       "div_actions": [
         {
@@ -203,11 +174,11 @@
           "log_id": "timer started"
         }
       ],
-      "expected_screenshot": "step1.png"
+      "expected_screenshot": "step0.png"
     },
     {
       "delay": 3000,
-      "expected_screenshot": "step2.png"
+      "expected_screenshot": "step1.png"
     }
   ]
 }

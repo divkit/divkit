@@ -1,0 +1,57 @@
+{
+  "description": "Div background blur",
+  "platforms": [
+    "android"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "blur",
+        "type": "integer",
+        "value": 4
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text",
+              "text": "It is a dark time for the Rebellion.",
+              "font_size": 12,
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "font_weight": "bold",
+              "text_color": "#ff0000",
+              "height": {
+                "type": "wrap_content"
+              },
+              "background": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "filters": [
+                    {
+                      "type": "blur",
+                      "radius": "@{blur}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Current blur radius: @{blur}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

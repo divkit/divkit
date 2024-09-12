@@ -214,58 +214,8 @@
                 }
               },
               {
-                "type": "pretty_input",
-                "variable": "mask",
-                "keyboard_type": "single_line_text",
-                "hint": "mask"
-              },
-              {
-                "type": "container",
-                "orientation": "horizontal",
-                "items": [
-                  {
-                    "type": "pretty_input",
-                    "variable": "key_1",
-                    "keyboard_type": "single_line_text",
-                    "hint": "key"
-                  },
-                  {
-                    "type": "pretty_input",
-                    "variable": "filter_1",
-                    "keyboard_type": "single_line_text",
-                    "hint": "filter"
-                  },
-                  {
-                    "type": "pretty_input",
-                    "variable": "placeholder_1",
-                    "keyboard_type": "single_line_text",
-                    "hint": "placeholder"
-                  }
-                ]
-              },
-              {
-                "type": "container",
-                "orientation": "horizontal",
-                "items": [
-                  {
-                    "type": "pretty_input",
-                    "variable": "key_2",
-                    "keyboard_type": "single_line_text",
-                    "hint": "key"
-                  },
-                  {
-                    "type": "pretty_input",
-                    "variable": "filter_2",
-                    "keyboard_type": "single_line_text",
-                    "hint": "filter"
-                  },
-                  {
-                    "type": "pretty_input",
-                    "variable": "placeholder_2",
-                    "keyboard_type": "single_line_text",
-                    "hint": "placeholder"
-                  }
-                ]
+                "type": "text",
+                "text": "mask: @{mask}"
               },
               {
                 "type": "state",
@@ -275,35 +225,15 @@
                   {
                     "state_id": "false",
                     "div": {
-                      "type": "button",
-                      "text": "Show placeholders",
-                      "actions": [
-                        {
-                          "log_id": "show_placeholders",
-                          "url": "div-action://set_variable?name=always_visible&value=true"
-                        },
-                        {
-                          "log_id": "show_placeholders_button_state",
-                          "url": "div-action://set_state?state_id=0/always_visible_button/true"
-                        }
-                      ]
+                      "type": "text",
+                      "text": "Show placeholders: @{always_visible}"
                     }
                   },
                   {
                     "state_id": "true",
                     "div": {
-                      "type": "button",
-                      "text": "Hide placeholders",
-                      "actions": [
-                        {
-                          "log_id": "hide_placeholders",
-                          "url": "div-action://set_variable?name=always_visible&value=false"
-                        },
-                        {
-                          "log_id": "hide_placeholders_button_state",
-                          "url": "div-action://set_state?state_id=0/always_visible_button/false"
-                        }
-                      ]
+                      "type": "text",
+                      "text": "Show placeholders: @{always_visible}"
                     }
                   }
                 ]
@@ -333,7 +263,8 @@
           "url": "div-action://set_variable?name=raw_input&value=Test",
           "log_id": "changing_text"
         }
-      ]
+      ],
+      "expected_screenshot": "step2.png"
     },
     {
       "div_actions": [
@@ -345,7 +276,8 @@
           "log_id": "show_placeholders_button_state",
           "url": "div-action://set_state?state_id=0/always_visible_button/true"
         }
-      ]
+      ],
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
@@ -359,6 +291,15 @@
         }
       ],
       "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=ALotSymbolsToOverflow",
+          "log_id": "changing_text"
+        }
+      ],
+      "expected_screenshot": "step5.png"
     }
   ]
 }

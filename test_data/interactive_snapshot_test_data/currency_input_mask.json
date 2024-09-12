@@ -50,7 +50,7 @@
         {
           "name": "raw_input",
           "type": "string",
-          "value": "12345"
+          "value": "234"
         },
         {
           "name": "locale",
@@ -98,9 +98,8 @@
                 }
               },
               {
-                "type": "pretty_input",
-                "text_variable": "locale",
-                "hint_text": "Currency locale"
+                "type": "text",
+                "text": "@{locale}"
               }
             ]
           }
@@ -115,20 +114,11 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=raw_input&value=234",
-          "log_id": "set smaller number"
-        }
-      ],
-      "expected_screenshot": "step1.png"
-    },
-    {
-      "div_actions": [
-        {
           "url": "div-action://set_variable?name=raw_input&value=5",
           "log_id": "set smallest number"
         }
       ],
-      "expected_screenshot": "step2.png"
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
@@ -137,7 +127,7 @@
           "log_id": "set biggest number"
         }
       ],
-      "expected_screenshot": "step3.png"
+      "expected_screenshot": "step2.png"
     },
     {
       "div_actions": [
@@ -146,7 +136,7 @@
           "log_id": "set different locale: ru-RU"
         }
       ],
-      "expected_screenshot": "step4.png"
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
@@ -155,7 +145,7 @@
           "log_id": "set smaller number"
         }
       ],
-      "expected_screenshot": "step5.png"
+      "expected_screenshot": "step4.png"
     },
     {
       "div_actions": [
@@ -164,7 +154,7 @@
           "log_id": "set smallest number"
         }
       ],
-      "expected_screenshot": "step6.png"
+      "expected_screenshot": "step5.png"
     }
   ]
 }

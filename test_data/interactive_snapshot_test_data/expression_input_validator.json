@@ -189,45 +189,8 @@
                 "visibility": "@{value_are_too_small_variable ? 'invisible' : 'visible'}"
               },
               {
-                "type": "state",
-                "id": "allow_empty_button",
-                "default_state_id": "false",
-                "states": [
-                  {
-                    "state_id": "false",
-                    "div": {
-                      "type": "button",
-                      "text": "Allow empty",
-                      "actions": [
-                        {
-                          "log_id": "allow_empty_true",
-                          "url": "div-action://set_variable?name=allow_empty&value=true"
-                        },
-                        {
-                          "log_id": "allow_empty_true_button_state",
-                          "url": "div-action://set_state?state_id=0/allow_empty_button/true"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "state_id": "true",
-                    "div": {
-                      "type": "button",
-                      "text": "Disallow empty",
-                      "actions": [
-                        {
-                          "log_id": "allow_empty_false",
-                          "url": "div-action://set_variable?name=allow_empty&value=false"
-                        },
-                        {
-                          "log_id": "allow_empty_false_button_state",
-                          "url": "div-action://set_state?state_id=0/allow_empty_button/false"
-                        }
-                      ]
-                    }
-                  }
-                ]
+                "type": "text",
+                "text": "allow empty: @{allow_empty}"
               }
             ]
           }
