@@ -87,6 +87,10 @@
     "en": "Referer URL for logging.",
     "ru": "Referer-ссылка для логирования."
   },
+  "div_action_base_scope_id": {
+    "en": "Div identifier denotes the scope in which this action will be performed.",
+    "ru": "Идентификатор дива, в области видимости которого будет выполняться данное действие."
+  },
   "div_action_base_url": {
     "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).",
     "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction)."
