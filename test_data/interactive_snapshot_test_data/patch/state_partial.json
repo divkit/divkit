@@ -67,11 +67,7 @@
               {
                 "type": "text",
                 "text": "Toggle state: @{state_id}",
-                "text_size": 24,
-                "action": {
-                  "log_id": "toggle",
-                  "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
-                }
+                "text_size": 24
               },
               {
                 "type": "state",
@@ -136,22 +132,15 @@
       "expected_screenshot": "step0.png"
     },
     {
-      "div_actions": [{
-        "log_id": "toggle",
-        "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
-      }],
+      "delay": 7000,
       "expected_screenshot": "step1.png"
     },
     {
-      "delay": 7000,
-      "expected_screenshot": "step2.png"
-    },
-    {
       "div_actions": [{
         "log_id": "toggle",
         "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
       }],
-      "expected_screenshot": "step3.png"
+      "expected_screenshot": "step2.png"
     }
   ]
 }

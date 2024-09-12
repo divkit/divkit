@@ -262,7 +262,8 @@
           "log_id": "show_tooltip",
           "url": "div-action://show_tooltip?id=tooltip&multiple=true"
         }
-      ]
+      ],
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [

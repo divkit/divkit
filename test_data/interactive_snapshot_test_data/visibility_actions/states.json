@@ -82,12 +82,7 @@
               {
                 "type": "button",
                 "text": "State 2",
-                "actions": [
-                  {
-                    "log_id": "state2",
-                    "url": "div-action://set_state?state_id=0/states/state2"
-                  }
-                ]
+                "actions": []
               }
             ]
           }

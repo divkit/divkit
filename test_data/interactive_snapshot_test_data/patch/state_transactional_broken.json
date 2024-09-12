@@ -1,5 +1,5 @@
 {
-  "description": "Patch state transitional success",
+  "description": "Patch state transitional broken",
   "platforms": [
     "android"
   ],
@@ -67,17 +67,13 @@
               {
                 "type": "text",
                 "text": "Toggle state: @{state_id}",
-                "text_size": 24,
-                "action": {
-                  "log_id": "toggle",
-                  "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
-                }
+                "text_size": 24
               },
               {
                 "type": "state",
                 "visibility_action": {
                   "log_id": "visibility",
-                  "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fstate-patch-transactional-success.json",
+                  "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fstate-patch-transactional-broken.json",
                   "visibility_duration": 3000
                 },
                 "width": {
@@ -136,26 +132,17 @@
       "expected_screenshot": "step0.png"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "toggle",
-          "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
-        }
-      ],
+      "delay": 7000,
       "expected_screenshot": "step1.png"
     },
     {
-      "delay": 7000,
-      "expected_screenshot": "step2.png"
-    },
-    {
       "div_actions": [
         {
           "log_id": "toggle",
           "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
         }
       ],
-      "expected_screenshot": "step3.png"
+      "expected_screenshot": "step2.png"
     }
   ]
 }

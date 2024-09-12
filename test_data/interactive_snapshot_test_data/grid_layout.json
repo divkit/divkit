@@ -136,64 +136,6 @@
                     "background_color": "#ffe066"
                   }
                 ]
-              },
-              {
-                "type": "state",
-                "id": "button",
-                "states": [
-                  {
-                    "state_id": "state0",
-                    "div": {
-                      "type": "button",
-                      "width": {
-                        "type": "match_parent"
-                      },
-                      "alignment_vertical": "bottom",
-                      "text": "Test button",
-                      "id": "button",
-                      "actions": [
-                        {
-                          "log_id": "update_row_span_left",
-                          "url": "div-action://set_variable?name=row_span_left&value=1"
-                        },
-                        {
-                          "log_id": "update_row_span_right",
-                          "url": "div-action://set_variable?name=row_span_right&value=2"
-                        },
-                        {
-                          "log_id": "update_button",
-                          "url": "div-action://set_state?state_id=0/button/state1"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "state_id": "state1",
-                    "div": {
-                      "type": "button",
-                      "width": {
-                        "type": "match_parent"
-                      },
-                      "alignment_vertical": "bottom",
-                      "text": "Test button",
-                      "id": "button_1",
-                      "actions": [
-                        {
-                          "log_id": "update_row_span_left",
-                          "url": "div-action://set_variable?name=row_span_left&value=2"
-                        },
-                        {
-                          "log_id": "update_row_span_right",
-                          "url": "div-action://set_variable?name=row_span_right&value=1"
-                        },
-                        {
-                          "log_id": "update_button",
-                          "url": "div-action://set_state?state_id=0/button/state0"
-                        }
-                      ]
-                    }
-                  }
-                ]
               }
             ]
           }

@@ -81,7 +81,7 @@
         "type": "container",
         "width": {
           "type": "fixed",
-          "value": 150
+          "value": 100
         },
         "height": {
           "type": "wrap_content"
@@ -218,30 +218,6 @@
                   {
                     "type": "gallery_item_content",
                     "header_text": "4"
-                  },
-                  {
-                    "type": "gallery_item_content",
-                    "header_text": "5"
-                  },
-                  {
-                    "type": "gallery_item_content",
-                    "header_text": "6"
-                  },
-                  {
-                    "type": "gallery_item_content",
-                    "header_text": "7"
-                  },
-                  {
-                    "type": "gallery_item_content",
-                    "header_text": "8"
-                  },
-                  {
-                    "type": "gallery_item_content",
-                    "header_text": "9"
-                  },
-                  {
-                    "type": "gallery_item_content",
-                    "header_text": "10"
                   }
                 ]
               },
@@ -255,231 +231,6 @@
                   "type": "fixed",
                   "value": 8
                 }
-              },
-              {
-                "type": "presets_holder",
-                "items": [
-                  {
-                    "type": "presets_header",
-                    "text": "Orientation"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "horizontal",
-                    "action": {
-                      "url": "div-action://set_variable?name=orientation&value=horizontal",
-                      "log_id": "orientation=horizontal"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "vertical",
-                    "action": {
-                      "url": "div-action://set_variable?name=orientation&value=vertical",
-                      "log_id": "orientation=vertical"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Column count"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "1",
-                    "action": {
-                      "url": "div-action://set_variable?name=column_count&value=1",
-                      "log_id": "column_count=1"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "2",
-                    "action": {
-                      "url": "div-action://set_variable?name=column_count&value=2",
-                      "log_id": "column_count=2"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Item spacing"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "5 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=item_spacing&value=5",
-                      "log_id": "item_spacing=5"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "25 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=item_spacing&value=25",
-                      "log_id": "item_spacing=25"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Cross item spacing"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "5 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=cross_spacing&value=5",
-                      "log_id": "cross_spacing=5"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "25 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=cross_spacing&value=25",
-                      "log_id": "cross_spacing=25"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Restrict parent scroll"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "false",
-                    "action": {
-                      "url": "div-action://set_variable?name=restrict_parent_scroll&value=false",
-                      "log_id": "restrict_parent_scroll=false"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "true",
-                    "action": {
-                      "url": "div-action://set_variable?name=restrict_parent_scroll&value=true",
-                      "log_id": "restrict_parent_scroll=true"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Item color"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "pink",
-                    "action": {
-                      "url": "div-action://set_variable?name=item_color&value=%2380ff0000",
-                      "log_id": "item_color=#80ff0000"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "green",
-                    "action": {
-                      "url": "div-action://set_variable?name=item_color&value=%239614e000",
-                      "log_id": "item_color=#9614e000"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Paddings left"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "10 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.left&value=10",
-                      "log_id": "paddings.left=10"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "50 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.left&value=50",
-                      "log_id": "paddings.left=50"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Paddings right"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "10 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.right&value=10",
-                      "log_id": "paddings.right=10"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "50 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.right&value=50",
-                      "log_id": "paddings.right=50"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Paddings top"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "10 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.top&value=10",
-                      "log_id": "paddings.top=10"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "50 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.top&value=50",
-                      "log_id": "paddings.top=50"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Paddings bottom"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "10 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.bottom&value=10",
-                      "log_id": "paddings.bottom=10"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "50 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.bottom&value=50",
-                      "log_id": "paddings.bottom=50"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Item text style"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "Item text",
-                    "action": {
-                      "url": "div-action://set_variable?name=item_text&value=Item text",
-                      "log_id": "item_text=Item text"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "ITEM TEXT",
-                    "action": {
-                      "url": "div-action://set_variable?name=item_text&value=ITEM TEXT",
-                      "log_id": "item_text=ITEM TEXT"
-                    }
-                  }
-                ]
               }
             ]
           }
@@ -497,7 +248,8 @@
           "url": "div-action://set_variable?name=orientation&value=horizontal",
           "log_id": "orientation=horizontal"
         }
-      ]
+      ],
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
@@ -505,7 +257,8 @@
           "url": "div-action://set_variable?name=orientation&value=vertical",
           "log_id": "orientation=vertical"
         }
-      ]
+      ],
+      "expected_screenshot": "step2.png"
     },
     {
       "div_actions": [
@@ -513,7 +266,8 @@
           "url": "div-action://set_variable?name=column_count&value=1",
           "log_id": "column_count=1"
         }
-      ]
+      ],
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
@@ -521,7 +275,8 @@
           "url": "div-action://set_variable?name=column_count&value=2",
           "log_id": "column_count=2"
         }
-      ]
+      ],
+      "expected_screenshot": "step4.png"
     },
     {
       "div_actions": [
@@ -529,7 +284,8 @@
           "url": "div-action://set_variable?name=item_spacing&value=5",
           "log_id": "item_spacing=5"
         }
-      ]
+      ],
+      "expected_screenshot": "step5.png"
     },
     {
       "div_actions": [
@@ -537,7 +293,8 @@
           "url": "div-action://set_variable?name=item_spacing&value=25",
           "log_id": "item_spacing=25"
         }
-      ]
+      ],
+      "expected_screenshot": "step6.png"
     },
     {
       "div_actions": [
@@ -545,7 +302,8 @@
           "url": "div-action://set_variable?name=cross_spacing&value=5",
           "log_id": "cross_spacing=5"
         }
-      ]
+      ],
+      "expected_screenshot": "step7.png"
     },
     {
       "div_actions": [
@@ -553,7 +311,8 @@
           "url": "div-action://set_variable?name=cross_spacing&value=25",
           "log_id": "cross_spacing=25"
         }
-      ]
+      ],
+      "expected_screenshot": "step8.png"
     },
     {
       "div_actions": [
@@ -561,7 +320,8 @@
           "url": "div-action://set_variable?name=restrict_parent_scroll&value=false",
           "log_id": "restrict_parent_scroll=false"
         }
-      ]
+      ],
+      "expected_screenshot": "step9.png"
     },
     {
       "div_actions": [
@@ -569,7 +329,8 @@
           "url": "div-action://set_variable?name=restrict_parent_scroll&value=true",
           "log_id": "restrict_parent_scroll=true"
         }
-      ]
+      ],
+      "expected_screenshot": "step10.png"
     },
     {
       "div_actions": [
@@ -577,7 +338,8 @@
           "url": "div-action://set_variable?name=item_color&value=%2380ff0000",
           "log_id": "item_color=#80ff0000"
         }
-      ]
+      ],
+      "expected_screenshot": "step11.png"
     },
     {
       "div_actions": [
@@ -585,7 +347,8 @@
           "url": "div-action://set_variable?name=item_color&value=%239614e000",
           "log_id": "item_color=#9614e000"
         }
-      ]
+      ],
+      "expected_screenshot": "step12.png"
     },
     {
       "div_actions": [
@@ -593,7 +356,8 @@
           "url": "div-action://set_variable?name=paddings.left&value=10",
           "log_id": "paddings.left=10"
         }
-      ]
+      ],
+      "expected_screenshot": "step13.png"
     },
     {
       "div_actions": [
@@ -601,7 +365,8 @@
           "url": "div-action://set_variable?name=paddings.left&value=50",
           "log_id": "paddings.left=50"
         }
-      ]
+      ],
+      "expected_screenshot": "step14.png"
     },
     {
       "div_actions": [
@@ -609,7 +374,8 @@
           "url": "div-action://set_variable?name=paddings.right&value=10",
           "log_id": "paddings.right=10"
         }
-      ]
+      ],
+      "expected_screenshot": "step15.png"
     },
     {
       "div_actions": [
@@ -617,7 +383,8 @@
           "url": "div-action://set_variable?name=paddings.right&value=50",
           "log_id": "paddings.right=50"
         }
-      ]
+      ],
+      "expected_screenshot": "step16.png"
     },
     {
       "div_actions": [
@@ -625,7 +392,8 @@
           "url": "div-action://set_variable?name=paddings.top&value=10",
           "log_id": "paddings.top=10"
         }
-      ]
+      ],
+      "expected_screenshot": "step17.png"
     },
     {
       "div_actions": [
@@ -633,7 +401,8 @@
           "url": "div-action://set_variable?name=paddings.top&value=50",
           "log_id": "paddings.top=50"
         }
-      ]
+      ],
+      "expected_screenshot": "step18.png"
     },
     {
       "div_actions": [
@@ -641,7 +410,8 @@
           "url": "div-action://set_variable?name=paddings.bottom&value=10",
           "log_id": "paddings.bottom=10"
         }
-      ]
+      ],
+      "expected_screenshot": "step19.png"
     },
     {
       "div_actions": [
@@ -649,7 +419,8 @@
           "url": "div-action://set_variable?name=paddings.bottom&value=50",
           "log_id": "paddings.bottom=50"
         }
-      ]
+      ],
+      "expected_screenshot": "step20.png"
     },
     {
       "div_actions": [
@@ -657,7 +428,8 @@
           "url": "div-action://set_variable?name=item_text&value=Item text",
           "log_id": "item_text=Item text"
         }
-      ]
+      ],
+      "expected_screenshot": "step21.png"
     },
     {
       "div_actions": [
@@ -665,7 +437,8 @@
           "url": "div-action://set_variable?name=item_text&value=ITEM TEXT",
           "log_id": "item_text=ITEM TEXT"
         }
-      ]
+      ],
+      "expected_screenshot": "step22.png"
     }
   ]
 }

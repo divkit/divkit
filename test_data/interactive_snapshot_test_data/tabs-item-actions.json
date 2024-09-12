@@ -174,57 +174,6 @@
                   }
                 ],
                 "type": "tabs"
-              },
-              {
-                "items": [
-                  {
-                    "actions": [
-                      {
-                        "log_id": "prev",
-                        "url": "div-action://set_current_item?id=my_tabs&item=0"
-                      }
-                    ],
-                    "text": "<<",
-                    "text_alignment_horizontal": "center",
-                    "type": "button"
-                  },
-                  {
-                    "actions": [
-                      {
-                        "log_id": "prev",
-                        "url": "div-action://set_previous_item?id=my_tabs"
-                      }
-                    ],
-                    "text": "<",
-                    "text_alignment_horizontal": "center",
-                    "type": "button"
-                  },
-                  {
-                    "actions": [
-                      {
-                        "log_id": "next",
-                        "url": "div-action://set_next_item?id=my_tabs"
-                      }
-                    ],
-                    "text": ">",
-                    "text_alignment_horizontal": "center",
-                    "type": "button"
-                  },
-                  {
-                    "actions": [
-                      {
-                        "log_id": "next",
-                        "url": "div-action://set_current_item?id=my_tabs&item=9"
-                      }
-                    ],
-                    "text": ">>",
-                    "text_alignment_horizontal": "center",
-                    "type": "button"
-                  }
-                ],
-                "orientation": "horizontal",
-                "content_alignment_horizontal": "center",
-                "type": "container"
               }
             ],
             "orientation": "vertical",
@@ -250,7 +199,8 @@
           "log_id": "next",
           "url": "div-action://set_next_item?id=my_tabs"
         }
-      ]
+      ],
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
@@ -265,9 +215,19 @@
       "div_actions": [
         {
           "log_id": "set_item_2",
-          "url": "div-action://set_current_item?id=my_tabs&item=2"
+          "url": "div-action://scroll_to_end?id=my_tabs"
         }
-      ]
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_item_2",
+          "url": "div-action://scroll_to_start?id=my_tabs"
+        }
+      ],
+      "expected_screenshot": "step0.png"
     }
   ]
 }

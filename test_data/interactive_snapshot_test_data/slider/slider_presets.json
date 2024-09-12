@@ -926,72 +926,41 @@
         {
           "url": "div-action://set_variable?name=first_thumb_value&value=5",
           "log_id": "first_thumb_value"
-        }
-      ]
-    },
-    {
-      "div_actions": [
+        },
         {
           "url": "div-action://set_variable?name=second_thumb_value&value=5",
           "log_id": "second_thumb_value"
-        }
-      ]
-    },
-    {
-      "div_actions": [
+        },
         {
           "url": "div-action://set_variable?name=third_thumb_value&value=2",
           "log_id": "third_thumb_value"
-        }
-      ]
-    },
-    {
-      "div_actions": [
+        },
         {
           "url": "div-action://set_variable?name=fourth_thumb_value&value=5",
           "log_id": "fourth_thumb_value"
-        }
-      ]
-    },
-    {
-      "div_actions": [
+        },
         {
           "url": "div-action://set_variable?name=fifth_thumb_value&value=5",
           "log_id": "fifth_thumb_value"
-        }
-      ]
-    },
-    {
-      "div_actions": [
+        },
         {
           "url": "div-action://set_variable?name=sixth_thumb_value&value=5",
           "log_id": "sixth_thumb_value"
-        }
-      ]
-    },
-    {
-      "div_actions": [
+        },
         {
           "log_id": "change_secondary_thumb",
           "url": "div-action://set_variable?name=invert_secondary_thumb&value=true"
-        }
-      ]
-    },
-    {
-      "div_actions": [
+        },
         {
           "log_id": "change_tick_marks",
           "url": "div-action://set_variable?name=invert_tick_marks&value=true"
-        }
-      ]
-    },
-    {
-      "div_actions": [
+        },
         {
           "log_id": "change_tick_marks",
           "url": "div-action://set_variable?name=max_value&value=5"
         }
-      ]
+      ],
+      "expected_screenshot": "step1.png"
     }
   ]
 }

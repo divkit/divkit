@@ -191,25 +191,37 @@
       "div_actions": [
         {
           "url": "div-action://set_variable?name=raw_input&value=_",
-          "log_id": "changing_text"
+          "log_id": "change_text_to__"
         }
-      ]
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=raw_input&value=aabb",
+          "log_id": "change_text_to_invalid"
+        }
+      ],
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
         {
           "url": "div-action://set_variable?name=raw_input&value=1",
-          "log_id": "changing_text"
+          "log_id": "change_text_to_1"
         }
-      ]
+      ],
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
         {
           "url": "div-action://set_variable?name=raw_input&value=78005553535",
-          "log_id": "changing_text"
+          "log_id": "change_text_to_valid"
         }
-      ]
+      ],
+      "expected_screenshot": "step4.png"
     }
   ]
 }

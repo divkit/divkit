@@ -93,36 +93,6 @@
                                         "url": "div-action://set_state?state_id=0/states/state2"
                                     }
                                 ]
-                            },
-                            {
-                                "type": "button",
-                                "text": "Set state 2 by variable",
-                                "actions": [
-                                    {
-                                        "log_id": "state2",
-                                        "url": "div-action://set_variable?name=state_id_var&value=state2"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "button",
-                                "text": "Set state 3 by action",
-                                "actions": [
-                                    {
-                                        "log_id": "state3",
-                                        "url": "div-action://set_state?state_id=0/states/state3"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "button",
-                                "text": "Set state 3 by variable",
-                                "actions": [
-                                    {
-                                        "log_id": "state3",
-                                        "url": "div-action://set_variable?name=state_id_var&value=state3"
-                                    }
-                                ]
                             }
                         ]
                     }
@@ -140,23 +110,6 @@
                     "log_id": "state3",
                     "url": "div-action://set_state?state_id=0/states/state3"
                 }
-            ]
-        },
-        {
-            "div_actions": [
-                {
-                    "log_id": "state2",
-                    "url": "div-action://set_state?state_id=0/states/state2"
-                }
-            ],
-            "expected_screenshot": "step0.png"
-        },
-        {
-            "div_actions": [
-                {
-                    "log_id": "state3",
-                    "url": "div-action://set_variable?name=state_id_var&value=state3"
-                }
             ],
             "expected_screenshot": "step1.png"
         },
@@ -164,7 +117,7 @@
             "div_actions": [
                 {
                     "log_id": "state2",
-                    "url": "div-action://set_variable?name=state_id_var&value=state2"
+                    "url": "div-action://set_state?state_id=0/states/state2"
                 }
             ],
             "expected_screenshot": "step0.png"

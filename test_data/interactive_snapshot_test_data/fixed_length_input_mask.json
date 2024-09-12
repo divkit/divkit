@@ -261,7 +261,7 @@
       "div_actions": [
         {
           "url": "div-action://set_variable?name=raw_input&value=Test",
-          "log_id": "changing_text"
+          "log_id": "changing_text_to_capitalized"
         }
       ],
       "expected_screenshot": "step2.png"
@@ -296,7 +296,7 @@
       "div_actions": [
         {
           "url": "div-action://set_variable?name=raw_input&value=ALotSymbolsToOverflow",
-          "log_id": "changing_text"
+          "log_id": "changing_text_to_overflow"
         }
       ],
       "expected_screenshot": "step5.png"

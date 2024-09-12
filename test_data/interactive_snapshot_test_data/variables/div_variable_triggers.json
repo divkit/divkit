@@ -139,16 +139,7 @@
                         "div": {
                           "type": "button",
                           "text": "Left",
-                          "actions": [
-                            {
-                              "log_id": "switch_left",
-                              "url": "div-action://set_variable?name=left_switched&value=1"
-                            },
-                            {
-                              "log_id": "switch_left_to_on",
-                              "url": "div-action://set_state?state_id=0/left_button/on"
-                            }
-                          ]
+                          "actions": []
                         }
                       },
                       {
@@ -162,16 +153,7 @@
                               "color": "#f1dff2"
                             }
                           ],
-                          "actions": [
-                            {
-                              "log_id": "switch_left",
-                              "url": "div-action://set_variable?name=left_switched&value=0"
-                            },
-                            {
-                              "log_id": "switch_left_to_off",
-                              "url": "div-action://set_state?state_id=0/left_button/off"
-                            }
-                          ]
+                          "actions": []
                         }
                       }
                     ]
@@ -185,16 +167,7 @@
                         "div": {
                           "type": "button",
                           "text": "Right",
-                          "actions": [
-                            {
-                              "log_id": "switch_right",
-                              "url": "div-action://set_variable?name=right_switched&value=1"
-                            },
-                            {
-                              "log_id": "switch_right_to_on",
-                              "url": "div-action://set_state?state_id=0/right_button/on"
-                            }
-                          ]
+                          "actions": []
                         }
                       },
                       {
@@ -208,16 +181,7 @@
                               "color": "#f1dff2"
                             }
                           ],
-                          "actions": [
-                            {
-                              "log_id": "switch_left",
-                              "url": "div-action://set_variable?name=right_switched&value=0"
-                            },
-                            {
-                              "log_id": "switch_right_to_off",
-                              "url": "div-action://set_state?state_id=0/right_button/off"
-                            }
-                          ]
+                          "actions": []
                         }
                       }
                     ]
@@ -245,7 +209,8 @@
           "url": "div-action://set_state?state_id=0/left_button/on"
         }
       ],
-      "delay": 100
+      "delay": 100,
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
@@ -266,7 +231,8 @@
           "url": "div-action://set_state?state_id=0/right_button/on"
         }
       ],
-      "delay": 100
+      "delay": 100,
+      "expected_screenshot": "step2.png"
     },
     {
       "div_actions": [
@@ -279,7 +245,8 @@
           "url": "div-action://set_state?state_id=0/left_button/on"
         }
       ],
-      "delay": 100
+      "delay": 100,
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
@@ -300,7 +267,8 @@
           "url": "div-action://set_state?state_id=0/right_button/off"
         }
       ],
-      "delay": 100
+      "delay": 100,
+      "expected_screenshot": "step4.png"
     }
   ]
 }

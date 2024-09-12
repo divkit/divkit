@@ -46,18 +46,18 @@
       }
     },
     "card": {
-      "log_id": "alerts_gallery",
+      "log_id": "alerts_gallerty",
       "states": [
         {
           "state_id": 0,
           "div": {
-            "type": "gallery",
-            "orientation": "vertical",
+            "type": "grid",
             "visibility_action": {
               "log_id": "visibility",
               "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fpartial-patch.json",
               "visibility_duration": 2000
             },
+            "column_count": 2,
             "width": {
               "type": "match_parent"
             },

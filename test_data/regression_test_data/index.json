@@ -114,7 +114,6 @@
     {
       "title": "Tab swipe",
       "automated": [
-        "android",
         "web"
       ],
       "tags": [
@@ -134,7 +133,6 @@
     {
       "title": "Tab swipe restricted",
       "automated": [
-        "android",
         "web"
       ],
       "tags": [
@@ -1802,17 +1800,13 @@
     {
       "title": "States default state",
       "automated": [
-        "android",
         "web"
       ],
       "file": "states_default_state.json"
     },
     {
       "title": "Tabs item actions",
-      "file": "tabs-item-actions.json",
-      "automated": [
-        "android"
-      ]
+      "file": "tabs-item-actions.json"
     },
     {
       "title": "Grid layout",
@@ -1972,9 +1966,6 @@
       "tags": [
         "Timers"
       ],
-      "automated": [
-        "android"
-      ],
       "expected_results": [
         "The timer calls tick_actions and changes the variable with the set interval.",
         "After the duration expires, the timer stops and calls end_actions."
@@ -2001,9 +1992,6 @@
       "tags": [
         "Timers"
       ],
-      "automated": [
-        "android"
-      ],
       "expected_results": [
         "The timer calls tick_actions and changes the variable with the set interval.",
         "The timer is endless and can be stopped only by an action."
@@ -2014,9 +2002,6 @@
       "title": "Countdown timer",
       "tags": [
         "Timers"
-      ],
-      "automated": [
-        "android"
       ],
       "expected_results": [
         "The timer changes the value of the variable only at the end of the work."

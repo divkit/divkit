@@ -205,24 +205,7 @@
                                                 "start": 2,
                                                 "end": 9,
                                                 "text_color": "#80000000",
-                                                "actions": [
-                                                  {
-                                                    "log_id": "0",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "1",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "2",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "3",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
-                                                  }
-                                                ]
+                                                "actions": []
                                               }
                                             ]
                                           }
@@ -234,24 +217,7 @@
                                           "type": "text_14_18_regular",
                                           "text_14_18_regular__text": "The cat is similar in anatomy to the other felid species: it has a strong flexible body, quick reflexes, sharp teeth and retractable claws adapted to killing small prey. Its night vision and sense of smell are well developed.",
                                           "text_14_18_regular__text_color": "#333333",
-                                          "actions": [
-                                            {
-                                              "log_id": "0",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
-                                            },
-                                            {
-                                              "log_id": "1",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
-                                            },
-                                            {
-                                              "log_id": "2",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
-                                            },
-                                            {
-                                              "log_id": "3",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
-                                            }
-                                          ]
+                                          "actions": []
                                         }
                                       }
                                     ]
@@ -286,24 +252,7 @@
                                                 "start": 2,
                                                 "end": 9,
                                                 "text_color": "#80000000",
-                                                "actions": [
-                                                  {
-                                                    "log_id": "0",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "1",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "2",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "3",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
-                                                  }
-                                                ]
+                                                "actions": []
                                               }
                                             ]
                                           }
@@ -315,24 +264,7 @@
                                           "type": "text_14_18_regular",
                                           "text_14_18_regular__text": "Cat communication includes vocalizations like meowing, purring, trilling, hissing, growling and grunting as well as cat-specific body language.",
                                           "text_14_18_regular__text_color": "#333333",
-                                          "actions": [
-                                            {
-                                              "log_id": "0",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
-                                            },
-                                            {
-                                              "log_id": "1",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
-                                            },
-                                            {
-                                              "log_id": "2",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
-                                            },
-                                            {
-                                              "log_id": "3",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
-                                            }
-                                          ]
+                                          "actions": []
                                         }
                                       }
                                     ]
@@ -367,24 +299,7 @@
                                                 "start": 2,
                                                 "end": 9,
                                                 "text_color": "#80000000",
-                                                "actions": [
-                                                  {
-                                                    "log_id": "0",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "1",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "2",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "3",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
-                                                  }
-                                                ]
+                                                "actions": []
                                               }
                                             ]
                                           }
@@ -396,24 +311,7 @@
                                           "type": "text_14_18_regular",
                                           "text_14_18_regular__text": "It was long thought that cat domestication began in ancient Egypt, where cats were venerated from around 3100 BC, but recent advances in archaeology and genetics have shown that their domestication occurred in Western Asia around 7500 BC.",
                                           "text_14_18_regular__text_color": "#333333",
-                                          "actions": [
-                                            {
-                                              "log_id": "0",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
-                                            },
-                                            {
-                                              "log_id": "1",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
-                                            },
-                                            {
-                                              "log_id": "2",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
-                                            },
-                                            {
-                                              "log_id": "3",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
-                                            }
-                                          ]
+                                          "actions": []
                                         }
                                       }
                                     ]
@@ -448,24 +346,7 @@
                                                 "start": 2,
                                                 "end": 9,
                                                 "text_color": "#80000000",
-                                                "actions": [
-                                                  {
-                                                    "log_id": "0",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "1",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "2",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
-                                                  },
-                                                  {
-                                                    "log_id": "3",
-                                                    "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
-                                                  }
-                                                ]
+                                                "actions": []
                                               }
                                             ]
                                           }
@@ -477,24 +358,7 @@
                                           "type": "text_14_18_regular",
                                           "text_14_18_regular__text": "Vizslas are very energetic, gentle-mannered, loyal, caring, and very affectionate. They quickly form close bonds with their owners, children, and even strangers.",
                                           "text_14_18_regular__text_color": "#333333",
-                                          "actions": [
-                                            {
-                                              "log_id": "0",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
-                                            },
-                                            {
-                                              "log_id": "1",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
-                                            },
-                                            {
-                                              "log_id": "2",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
-                                            },
-                                            {
-                                              "log_id": "3",
-                                              "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
-                                            }
-                                          ]
+                                          "actions": []
                                         }
                                       }
                                     ]
@@ -522,29 +386,11 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_current_item?id=gallery&item=0",
-          "log_id": "first item"
-        }
-      ],
-      "expected_screenshot": "step1.png"
-    },
-    {
-      "div_actions": [
-        {
           "url": "div-action://set_current_item?id=gallery&item=1",
           "log_id": "second item"
         }
       ],
-      "expected_screenshot": "step2.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_current_item?id=gallery&item=2",
-          "log_id": "third item"
-        }
-      ],
-      "expected_screenshot": "step3.png"
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
@@ -565,43 +411,16 @@
           "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
         }
       ],
-      "expected_screenshot": "step4.png"
+      "expected_screenshot": "step2.png"
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_current_item?id=gallery&item=3",
-          "log_id": "fourth item"
+          "url": "div-action://set_current_item?id=gallery&item=0",
+          "log_id": "first item opened"
         }
       ],
-      "expected_screenshot": "step5.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_current_item?id=gallery&item=4",
-          "log_id": "unxistent item"
-        }
-      ],
-      "expected_screenshot": "step6.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_current_item?id=gallery&item=2",
-          "log_id": "third item"
-        }
-      ],
-      "expected_screenshot": "step7.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_current_item?id=gallery&item=1",
-          "log_id": "second item"
-        }
-      ],
-      "expected_screenshot": "step8.png"
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
@@ -622,16 +441,16 @@
           "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
         }
       ],
-      "expected_screenshot": "step9.png"
+      "expected_screenshot": "step0.png"
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_current_item?id=gallery&item=0",
-          "log_id": "first item"
+          "url": "div-action://set_current_item?id=gallery&item=1",
+          "log_id": "second item closed"
         }
       ],
-      "expected_screenshot": "step10.png"
+      "expected_screenshot": "step1.png"
     }
   ]
 }

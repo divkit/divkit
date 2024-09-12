@@ -206,35 +206,15 @@
                   {
                     "state_id": "false",
                     "div": {
-                      "type": "button",
-                      "text": "Allow empty",
-                      "actions": [
-                        {
-                          "log_id": "allow_empty_true",
-                          "url": "div-action://set_variable?name=allow_empty&value=true"
-                        },
-                        {
-                          "log_id": "allow_empty_true_button_state",
-                          "url": "div-action://set_state?state_id=0/allow_empty_button/true"
-                        }
-                      ]
+                      "type": "text",
+                      "text": "Allow empty"
                     }
                   },
                   {
                     "state_id": "true",
                     "div": {
-                      "type": "button",
-                      "text": "Disallow empty",
-                      "actions": [
-                        {
-                          "log_id": "allow_empty_false",
-                          "url": "div-action://set_variable?name=allow_empty&value=false"
-                        },
-                        {
-                          "log_id": "allow_empty_false_button_state",
-                          "url": "div-action://set_state?state_id=0/allow_empty_button/false"
-                        }
-                      ]
+                      "type": "text",
+                      "text": "Disallow empty"
                     }
                   }
                 ]
@@ -253,7 +233,7 @@
       "div_actions": [
         {
           "url": "div-action://set_variable?name=input&value=12345678",
-          "log_id": "change text"
+          "log_id": "change text to digits"
         }
       ],
       "expected_screenshot": "step1.png"
@@ -271,10 +251,28 @@
       "div_actions": [
         {
           "url": "div-action://set_variable?name=input&value=aAbBcCdD",
-          "log_id": "change text"
+          "log_id": "change text to letters"
         }
       ],
       "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input&value=",
+          "log_id": "change text to blank"
+        }
+      ],
+      "expected_screenshot": "step4.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=allow_empty&value=1",
+          "log_id": "allow empty"
+        }
+      ],
+      "expected_screenshot": "step5.png"
     }
   ]
 }

@@ -288,195 +288,6 @@
                   "type": "fixed",
                   "value": 8
                 }
-              },
-              {
-                "type": "presets_holder",
-                "items": [
-                  {
-                    "type": "presets_header",
-                    "text": "Orientation"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "horizontal",
-                    "action": {
-                      "url": "div-action://set_variable?name=orientation&value=horizontal",
-                      "log_id": "orientation=horizontal"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "vertical",
-                    "action": {
-                      "url": "div-action://set_variable?name=orientation&value=vertical",
-                      "log_id": "orientation=vertical"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Neighbour fixed width"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "50 dp",
-                    "actions": [
-                      {
-                        "url": "div-action://set_state?state_id=0/pager_container/fixed",
-                        "log_id": "state=fixed"
-                      },
-                      {
-                        "url": "div-action://set_variable?name=fixed_width&value=50",
-                        "log_id": "fixed_width=50"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "20 dp",
-                    "actions": [
-                      {
-                        "url": "div-action://set_state?state_id=0/pager_container/fixed",
-                        "log_id": "state=fixed"
-                      },
-                      {
-                        "url": "div-action://set_variable?name=fixed_width&value=20",
-                        "log_id": "fixed_width=20"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Percentage width"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "75",
-                    "actions": [
-                      {
-                        "url": "div-action://set_state?state_id=0/pager_container/percentage",
-                        "log_id": "state=percentage"
-                      },
-                      {
-                        "url": "div-action://set_variable?name=percentage_width&value=75",
-                        "log_id": "percentage_width=75"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "95",
-                    "actions": [
-                      {
-                        "url": "div-action://set_state?state_id=0/pager_container/percentage",
-                        "log_id": "state=percentage"
-                      },
-                      {
-                        "url": "div-action://set_variable?name=percentage_width&value=95",
-                        "log_id": "percentage_width=95"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Paddings left"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "10 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.left&value=10",
-                      "log_id": "paddings.left=10"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "50 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.left&value=50",
-                      "log_id": "paddings.left=50"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Paddings right"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "10 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.right&value=10",
-                      "log_id": "paddings.right=10"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "50 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.right&value=50",
-                      "log_id": "paddings.right=50"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Paddings top"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "0 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.top&value=0",
-                      "log_id": "paddings.top=0"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "20 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.top&value=20",
-                      "log_id": "paddings.top=20"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Paddings bottom"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "0 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.bottom&value=0",
-                      "log_id": "paddings.bottom=0"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "20 dp",
-                    "action": {
-                      "url": "div-action://set_variable?name=paddings.bottom&value=20",
-                      "log_id": "paddings.bottom=20"
-                    }
-                  },
-                  {
-                    "type": "presets_header",
-                    "text": "Item text style"
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "Item",
-                    "action": {
-                      "url": "div-action://set_variable?name=item_text&value=Item",
-                      "log_id": "item_text=Item"
-                    }
-                  },
-                  {
-                    "type": "presets_button",
-                    "text": "ITEM",
-                    "action": {
-                      "url": "div-action://set_variable?name=item_text&value=ITEM",
-                      "log_id": "item_text=ITEM"
-                    }
-                  }
-                ]
               }
             ]
           }
@@ -494,7 +305,8 @@
           "url": "div-action://set_variable?name=orientation&value=horizontal",
           "log_id": "orientation=horizontal"
         }
-      ]
+      ],
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
@@ -502,7 +314,17 @@
           "url": "div-action://set_variable?name=orientation&value=vertical",
           "log_id": "orientation=vertical"
         }
-      ]
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=orientation&value=horizontal",
+          "log_id": "orientation=horizontal back"
+        }
+      ],
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
@@ -515,7 +337,8 @@
           "log_id": "fixed_width=50"
         }
       ],
-      "delay": 100
+      "delay": 100,
+      "expected_screenshot": "step4.png"
     },
     {
       "div_actions": [
@@ -528,7 +351,8 @@
           "log_id": "fixed_width=20"
         }
       ],
-      "delay": 100
+      "delay": 100,
+      "expected_screenshot": "step5.png"
     },
     {
       "div_actions": [
@@ -541,7 +365,8 @@
           "log_id": "percentage_width=75"
         }
       ],
-      "delay": 100
+      "delay": 100,
+      "expected_screenshot": "step6.png"
     },
     {
       "div_actions": [
@@ -554,7 +379,8 @@
           "log_id": "percentage_width=95"
         }
       ],
-      "delay": 100
+      "delay": 100,
+      "expected_screenshot": "step7.png"
     },
     {
       "div_actions": [
@@ -562,7 +388,8 @@
           "url": "div-action://set_variable?name=paddings.left&value=10",
           "log_id": "paddings.left=10"
         }
-      ]
+      ],
+      "expected_screenshot": "step8.png"
     },
     {
       "div_actions": [
@@ -570,7 +397,8 @@
           "url": "div-action://set_variable?name=paddings.left&value=50",
           "log_id": "paddings.left=50"
         }
-      ]
+      ],
+      "expected_screenshot": "step9.png"
     },
     {
       "div_actions": [
@@ -578,7 +406,8 @@
           "url": "div-action://set_variable?name=paddings.right&value=10",
           "log_id": "paddings.right=10"
         }
-      ]
+      ],
+      "expected_screenshot": "step10.png"
     },
     {
       "div_actions": [
@@ -586,7 +415,8 @@
           "url": "div-action://set_variable?name=paddings.right&value=50",
           "log_id": "paddings.right=50"
         }
-      ]
+      ],
+      "expected_screenshot": "step11.png"
     },
     {
       "div_actions": [
@@ -594,7 +424,8 @@
           "url": "div-action://set_variable?name=paddings.top&value=0",
           "log_id": "paddings.top=0"
         }
-      ]
+      ],
+      "expected_screenshot": "step12.png"
     },
     {
       "div_actions": [
@@ -602,7 +433,8 @@
           "url": "div-action://set_variable?name=paddings.top&value=20",
           "log_id": "paddings.top=20"
         }
-      ]
+      ],
+      "expected_screenshot": "step13.png"
     },
     {
       "div_actions": [
@@ -610,7 +442,8 @@
           "url": "div-action://set_variable?name=paddings.bottom&value=0",
           "log_id": "paddings.bottom=0"
         }
-      ]
+      ],
+      "expected_screenshot": "step14.png"
     },
     {
       "div_actions": [
@@ -618,7 +451,8 @@
           "url": "div-action://set_variable?name=paddings.bottom&value=20",
           "log_id": "paddings.bottom=20"
         }
-      ]
+      ],
+      "expected_screenshot": "step15.png"
     },
     {
       "div_actions": [
@@ -626,7 +460,8 @@
           "url": "div-action://set_variable?name=item_text&value=Item",
           "log_id": "item_text=Item"
         }
-      ]
+      ],
+      "expected_screenshot": "step16.png"
     },
     {
       "div_actions": [
@@ -634,7 +469,8 @@
           "url": "div-action://set_variable?name=item_text&value=ITEM",
           "log_id": "item_text=ITEM"
         }
-      ]
+      ],
+      "expected_screenshot": "step17.png"
     }
   ]
 }
