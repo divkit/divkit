@@ -38,6 +38,13 @@ class EntityWithPropertyWithDefaultValue(
         return hash
     }
 
+    fun equals(other: EntityWithPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
+            (nested?.equals(other.nested, resolver, otherResolver) ?: (other.nested == null)) &&
+            url.evaluate(resolver) == other.url.evaluate(otherResolver)
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpression(key = "int", value = int)
@@ -101,6 +108,13 @@ class EntityWithPropertyWithDefaultValue(
                 url.hashCode()
             _hash = hash
             return hash
+        }
+
+        fun equals(other: Nested?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
+                nonOptional.evaluate(resolver) == other.nonOptional.evaluate(otherResolver) &&
+                url.evaluate(resolver) == other.url.evaluate(otherResolver)
         }
 
         override fun writeToJSON(): JSONObject {

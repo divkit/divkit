@@ -44,6 +44,11 @@ class EntityWithArrayOfNestedItems(
         return hash
     }
 
+    fun equals(other: EntityWithArrayOfNestedItems?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return items.compareWith(other.items) { a, b -> a.equals(b, resolver, otherResolver) }
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "items", value = items)
@@ -93,6 +98,12 @@ class EntityWithArrayOfNestedItems(
                 property.hashCode()
             _hash = hash
             return hash
+        }
+
+        fun equals(other: Item?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return entity.equals(other.entity, resolver, otherResolver) &&
+                property.evaluate(resolver) == other.property.evaluate(otherResolver)
         }
 
         override fun writeToJSON(): JSONObject {

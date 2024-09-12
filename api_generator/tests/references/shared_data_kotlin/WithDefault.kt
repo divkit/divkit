@@ -17,6 +17,10 @@ class WithDefault() : Hashable {
         return hash
     }
 
+    fun equals(other: WithDefault?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        return other != null
+    }
+
     fun copy() = WithDefault()
 
     companion object {

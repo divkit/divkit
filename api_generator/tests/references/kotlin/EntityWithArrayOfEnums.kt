@@ -44,6 +44,11 @@ class EntityWithArrayOfEnums(
         return hash
     }
 
+    fun equals(other: EntityWithArrayOfEnums?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return items.compareWith(other.items) { a, b -> a == b }
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "items", value = items, converter = { v: Item -> Item.toString(v) })

@@ -30,6 +30,10 @@ class WithDefault() : JSONSerializable, Hashable {
         return hash
     }
 
+    fun equals(other: WithDefault?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        return other != null
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "type", value = TYPE)

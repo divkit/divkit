@@ -34,6 +34,11 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         return hash
     }
 
+    fun equals(other: EntityWithStringEnumPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return value.evaluate(resolver) == other.value.evaluate(otherResolver)
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "type", value = TYPE)

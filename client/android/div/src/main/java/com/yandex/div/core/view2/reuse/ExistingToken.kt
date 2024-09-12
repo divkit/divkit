@@ -89,7 +89,7 @@ internal class ExistingToken(
         val tokens = mutableListOf<ExistingToken>()
         val pager = (view as? DivPagerView)?.viewPager ?: return emptyList()
         val adapter = (pager.adapter as? DivPagerAdapter) ?: return emptyList()
-        val activeHashes = adapter.visibleItems.map { it.div.hash() }
+        val activeHashes = adapter.itemsToShow.map { it.div.hash() }
 
         buildItems(resolver).forEachIndexed { index, newItem ->
             if (newItem.div.hash() in activeHashes) {

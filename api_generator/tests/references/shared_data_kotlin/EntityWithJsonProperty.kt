@@ -21,6 +21,11 @@ class EntityWithJsonProperty(
         return hash
     }
 
+    fun equals(other: EntityWithJsonProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return jsonProperty == other.jsonProperty
+    }
+
     fun copy(
         jsonProperty: JSONObject = this.jsonProperty,
     ) = EntityWithJsonProperty(

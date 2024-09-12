@@ -87,10 +87,8 @@ internal class PageChangeCallback(
     private fun trackVisibleChildren() {
         recyclerView.children.forEach { child ->
             val childPosition = recyclerView.getChildAdapterPosition(child)
-            if (childPosition == RecyclerView.NO_POSITION) {
-                KAssert.fail { "Requesting child position during layout" }
-                return
-            }
+            if (childPosition == RecyclerView.NO_POSITION) return
+
             val item = items[childPosition]
             divView.div2Component.visibilityActionTracker
                 .startTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), child, item.div)

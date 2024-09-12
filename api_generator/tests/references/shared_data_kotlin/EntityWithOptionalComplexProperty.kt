@@ -21,6 +21,11 @@ class EntityWithOptionalComplexProperty(
         return hash
     }
 
+    fun equals(other: EntityWithOptionalComplexProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return (property?.equals(other.property, resolver, otherResolver) ?: (other.property == null))
+    }
+
     fun copy(
         property: Property? = this.property,
     ) = EntityWithOptionalComplexProperty(
@@ -47,6 +52,11 @@ class EntityWithOptionalComplexProperty(
                 value.hashCode()
             _hash = hash
             return hash
+        }
+
+        fun equals(other: Property?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
         fun copy(

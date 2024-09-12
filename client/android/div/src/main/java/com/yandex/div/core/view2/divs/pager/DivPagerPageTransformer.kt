@@ -111,7 +111,7 @@ internal class DivPagerPageTransformer(
     }
 
     private fun View.applyOffset(position: Float) {
-        val pagePosition = recyclerView?.layoutManager?.getPosition(this) ?: return
+        val pagePosition = recyclerView?.getChildAdapterPosition(this) ?: return
         val scrollOffset = evaluateRecyclerOffset()
 
         /**
@@ -133,7 +133,7 @@ internal class DivPagerPageTransformer(
     }
 
     private fun View.applyOverlapOffset(position: Float) {
-        val pagePosition = recyclerView?.layoutManager?.getPosition(this) ?: return
+        val pagePosition = recyclerView?.getChildAdapterPosition(this) ?: return
         val scrollOffset = evaluateRecyclerOffset()
 
         var offset = (scrollOffset) / onScreenPages

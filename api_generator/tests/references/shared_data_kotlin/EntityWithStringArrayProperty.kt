@@ -21,6 +21,11 @@ class EntityWithStringArrayProperty(
         return hash
     }
 
+    fun equals(other: EntityWithStringArrayProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return array.evaluate(resolver).compareWith(other.array.evaluate(otherResolver)) { a, b -> a == b }
+    }
+
     fun copy(
         array: ExpressionList<String> = this.array,
     ) = EntityWithStringArrayProperty(

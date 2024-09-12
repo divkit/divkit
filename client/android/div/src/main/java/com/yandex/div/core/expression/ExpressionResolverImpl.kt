@@ -17,6 +17,7 @@ import com.yandex.div.internal.parser.ValueValidator
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.ParsingExceptionReason
+import com.yandex.div.json.SILENT_PARSING_EXCEPTION
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.invalidValue
 import com.yandex.div.json.missingVariable
@@ -36,6 +37,8 @@ internal class ExpressionResolverImpl(
 
     private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
 
+    var suppressMissingVariableException: Boolean = false
+
     init {
         onCreateCallback.onCreate(this, variableController)
     }
@@ -53,6 +56,9 @@ internal class ExpressionResolverImpl(
             tryResolve(expressionKey, rawExpression, evaluable, converter, validator, fieldType)
         } catch (e: ParsingException) {
             if (e.reason == ParsingExceptionReason.MISSING_VARIABLE) {
+                if (suppressMissingVariableException) {
+                    throw SILENT_PARSING_EXCEPTION
+                }
                 throw e
             }
             logger.logError(e)

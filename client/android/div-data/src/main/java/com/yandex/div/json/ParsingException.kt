@@ -243,3 +243,8 @@ fun invalidCondition(message: String, input: String): ParsingException {
         jsonSummary = input
     )
 }
+
+val SILENT_PARSING_EXCEPTION = ParsingException(
+    reason = ParsingExceptionReason.MISSING_VARIABLE,
+    message = "",
+)

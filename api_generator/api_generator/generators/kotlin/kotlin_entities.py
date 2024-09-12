@@ -394,6 +394,59 @@ class KotlinEntity(Entity):
             hash_text += prop_hash
         return hash_text
 
+    def equals_resolved_declaration(self) -> Text:
+        prop_filter = ['items']
+        is_div_state = utils.capitalize_camel_case(self.name) == 'DivState'
+
+        if is_div_state:
+            prop_filter.append('states')
+
+        result = EMPTY
+        result += f'    fun equals(other: {utils.capitalize_camel_case(self.name)}?, ' +\
+                  'resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {'
+
+        if self.instance_properties_kotlin:
+            result += '        other ?: return false'
+            result += self.__generate_equals_resolved().indented(4)
+        else:
+            result += '        return other != null'
+
+        result += '    }'
+        return result
+
+    def __generate_equals_resolved(self) -> Text:
+        result = Text()
+        props = self.instance_properties_kotlin
+        for prop in props:
+            name = prop.declaration_name
+            prop_type = prop.property_type
+            opt = '?' if prop.should_be_optional else ''
+            or_null = f' ?: (other.{name} == null))' if opt else ''
+            nullable_beginning = ('(' if opt else '') + f'{name}{opt}.'
+            prop_equality = 'return ' if prop == props[0] else '    '
+            if not isinstance(prop_type, Array) and prop.supports_expressions:
+                prop_equality += f'{name}{opt}.evaluate(resolver) == other.{name}{opt}.evaluate(otherResolver)'
+            elif isinstance(prop_type, Object) and not isinstance(prop_type.object, StringEnumeration):
+                prop_equality += nullable_beginning + f'equals(other.{name}, resolver, otherResolver)' + or_null
+            elif isinstance(prop_type, Array):
+                prop_equality += nullable_beginning
+                compare_with = f'compareWith(other.{name}'
+                return_false = ' ?: return false' if opt else ''
+                if prop.supports_expressions:
+                    prop_equality += f'evaluate(resolver){opt}.{compare_with}{opt}.evaluate(otherResolver)' +\
+                                     return_false + ') { a, b -> a == b }'
+                elif isinstance(prop_type.property_type, Object) and \
+                        not isinstance(prop_type.property_type.object, StringEnumeration):
+                    prop_equality += compare_with + return_false + ') { a, b -> a.equals(b, resolver, otherResolver) }'
+                else:
+                    prop_equality += compare_with + return_false + ') { a, b -> a == b }'
+                prop_equality += or_null
+            else:
+                prop_equality += f'{name} == other.{name}'
+            prop_equality += ' &&' if prop != props[-1] else ''
+            result += prop_equality
+        return result
+
 
 class KotlinProperty(Property):
     @property

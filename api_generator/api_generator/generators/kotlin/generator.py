@@ -61,6 +61,7 @@ class KotlinGenerator(Generator):
 
         if not is_template:
             result += entity.hash_declaration(self._generate_equality)
+            result += entity.equals_resolved_declaration()
 
         if self.generate_serialization:
             result += EMPTY
@@ -199,6 +200,8 @@ class KotlinGenerator(Generator):
             for hash_type in hash_types:
                 result += self._hash_enumeration_declaration(entity_enumeration, entity_declarations, hash_type)
                 result += EMPTY
+            result += self._equals_resolved_enumeration_declaration(entity_enumeration, entity_declarations)
+            result += EMPTY
             if self._generate_equality:
                 result += '    fun isHashCalculated() = _hash != null'
                 result += EMPTY
@@ -346,6 +349,24 @@ class KotlinGenerator(Generator):
         result += '        }'
         result += f'       _{hash_type} = {hash_type}'
         result += f'       return {hash_type}'
+        result += '    }'
+        return result
+
+    @staticmethod
+    def _equals_resolved_enumeration_declaration(
+            entity_enumeration: KotlinEntityEnumeration,
+            entity_declarations: List[str]
+    ) -> Text:
+        result = Text()
+        name = utils.capitalize_camel_case(entity_enumeration.name)
+        result += f'    fun equals(other: {name}?, resolver: ExpressionResolver, otherResolver: ExpressionResolver)' +\
+                  ': Boolean {'
+        result += '        other ?: return false'
+        result += '        return when(this) {'
+        for decl in entity_declarations:
+            naming = entity_enumeration.format_case_naming(decl)
+            result += f'            is {naming} -> this.value.equals(other.value() as? {decl}, resolver, otherResolver)'
+        result += '        }'
         result += '    }'
         return result
 

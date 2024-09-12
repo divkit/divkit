@@ -21,6 +21,11 @@ class EntityWithRawArray(
         return hash
     }
 
+    fun equals(other: EntityWithRawArray?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return array.evaluate(resolver) == other.array.evaluate(otherResolver)
+    }
+
     fun copy(
         array: Expression<JSONArray> = this.array,
     ) = EntityWithRawArray(

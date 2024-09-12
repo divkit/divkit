@@ -17,6 +17,10 @@ class EntityWithoutProperties() : Hashable {
         return hash
     }
 
+    fun equals(other: EntityWithoutProperties?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        return other != null
+    }
+
     fun copy() = EntityWithoutProperties()
 
     companion object {

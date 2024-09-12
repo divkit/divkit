@@ -34,6 +34,11 @@ class EntityWithArray(
         return hash
     }
 
+    fun equals(other: EntityWithArray?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return array.compareWith(other.array) { a, b -> a.equals(b, resolver, otherResolver) }
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "array", value = array)

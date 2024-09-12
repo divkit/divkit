@@ -21,6 +21,11 @@ class EntityWithEntityProperty(
         return hash
     }
 
+    fun equals(other: EntityWithEntityProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return entity.equals(other.entity, resolver, otherResolver)
+    }
+
     fun copy(
         entity: Entity = this.entity,
     ) = EntityWithEntityProperty(

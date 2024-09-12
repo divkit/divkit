@@ -34,6 +34,11 @@ class EntityWithOptionalComplexProperty(
         return hash
     }
 
+    fun equals(other: EntityWithOptionalComplexProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return (property?.equals(other.property, resolver, otherResolver) ?: (other.property == null))
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "property", value = property)
@@ -79,6 +84,11 @@ class EntityWithOptionalComplexProperty(
                 value.hashCode()
             _hash = hash
             return hash
+        }
+
+        fun equals(other: Property?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+            other ?: return false
+            return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
         override fun writeToJSON(): JSONObject {

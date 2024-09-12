@@ -34,6 +34,11 @@ class EntityWithRequiredProperty(
         return hash
     }
 
+    fun equals(other: EntityWithRequiredProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
+        other ?: return false
+        return property.evaluate(resolver) == other.property.evaluate(otherResolver)
+    }
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpression(key = "property", value = property)

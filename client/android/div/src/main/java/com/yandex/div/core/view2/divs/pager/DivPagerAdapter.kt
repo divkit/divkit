@@ -3,12 +3,14 @@ package com.yandex.div.core.view2.divs.pager
 import android.util.SparseArray
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
+import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.DivItemBuilderResult
 
 internal class DivPagerAdapter(
@@ -19,6 +21,7 @@ internal class DivPagerAdapter(
     private val viewCreator: DivViewCreator,
     private val path: DivStatePath,
     private val accessibilityEnabled: Boolean,
+    private val pagerView: DivPagerView,
 ) : DivCollectionAdapter<DivPagerViewHolder>(items) {
 
     val itemsToShow = object : AbstractList<DivItemBuilderResult>() {
@@ -40,6 +43,9 @@ internal class DivPagerAdapter(
             field = value
             notifyItemRangeChanged(0, itemCount)
         }
+
+    private var removedItems = 0
+    private var currentItem = NO_POSITION
 
     fun getPosition(visibleItemIndex: Int) = visibleItemIndex + if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM else 0
 
@@ -64,34 +70,56 @@ internal class DivPagerAdapter(
         }
     }
 
+    override fun setItems(newItems: List<DivItemBuilderResult>) {
+        val oldSize = items.size
+        removedItems = 0
+        val oldCurrentItem = pagerView.currentItem
+        currentItem = oldCurrentItem
+        super.setItems(newItems)
+        pagerView.currentItem = if (removedItems == oldSize) oldCurrentItem else currentItem
+    }
+
     override fun notifyRawItemRemoved(position: Int) {
+        removedItems++
         if (!infiniteScrollEnabled) {
             notifyItemRemoved(position)
+            if (currentItem > position) {
+                currentItem--
+            }
             return
         }
 
         notifyItemRemoved(position + OFFSET_TO_REAL_ITEM)
         notifyVirtualItemsChanged(position)
+        if (currentItem > position + OFFSET_TO_REAL_ITEM) {
+            currentItem--
+        }
     }
 
     override fun notifyRawItemInserted(position: Int) {
         if (!infiniteScrollEnabled) {
             notifyItemInserted(position)
+            if (currentItem >= position) {
+                currentItem++
+            }
             return
         }
 
         notifyItemInserted(position + OFFSET_TO_REAL_ITEM)
         notifyVirtualItemsChanged(position)
+        if (currentItem >= position + OFFSET_TO_REAL_ITEM) {
+            currentItem++
+        }
     }
 
-    override fun notifyRawItemRangeInserted(positionStart: Int, itemCount: Int) {
+    override fun notifyRawItemChanged(position: Int) {
         if (!infiniteScrollEnabled) {
-            notifyItemRangeInserted(positionStart, itemCount)
+            notifyItemChanged(position)
             return
         }
 
-        notifyItemRangeInserted(positionStart + OFFSET_TO_REAL_ITEM, itemCount)
-        notifyVirtualItemsChanged(positionStart)
+        notifyItemChanged(position + OFFSET_TO_REAL_ITEM)
+        notifyVirtualItemsChanged(position)
     }
 
     private fun notifyVirtualItemsChanged(originalPosition: Int) {
