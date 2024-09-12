@@ -2531,6 +2531,21 @@
       ],
       "file": "patch/patchable_card_with_visibility_actions.json"
     },
+
+    {
+      "title": "Patch root div",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "Second element is gallery"
+      ],
+      "file": "patch/root.json"
+    },
    
     {
       "title": "State with variable binding",

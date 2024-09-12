@@ -425,7 +425,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
     }
 
     companion object {
+        const val TAG = "DivPatchApply"
         private const val PATH_FOLLOWING_ERROR = "Unable to find the next child to patch by following a precalculated path"
-        private const val TAG = "DivPatchApply"
     }
 }

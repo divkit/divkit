@@ -1,0 +1,76 @@
+{
+  "templates": {
+    "item": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "paddings": {
+        "start": 16,
+        "top": 16,
+        "end": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#888888"
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "patch_root",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "id": "root_div",
+          "type": "container",
+          "visibility_action": {
+            "log_id": "visibility",
+            "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Froot-patch.json"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "container",
+              "id": "item1",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Original text",
+                  "height": {
+                    "type": "fixed",
+                    "value": 48
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "item2",
+              "height": {
+                "type": "match_parent"
+              },
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "item",
+                  "text": "First item in container"
+                },
+                {
+                  "type": "item",
+                  "text": "Second item in container"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
