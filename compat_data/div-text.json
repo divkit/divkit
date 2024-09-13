@@ -56,5 +56,21 @@
                 "version_added": "30.7.0"
             }
         }
+    }, {
+        "id": "text_images_accessibility",
+        "name": "<code>accessibility</code> property for images inside text",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            }
+        }
+    }, {
+        "id": "text_items_alignment_vertical",
+        "name": "<code>alignment_vertical</code> property for images and ranges inside text",
+        "compat": {
+            "android": {
+                "version_added": "30.17.0"
+            }
+        }
     }]
 }
