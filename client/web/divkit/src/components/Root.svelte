@@ -1732,7 +1732,12 @@
             window.addEventListener('pointerdown', onWindowPointerDown);
         }
 
-        initVariableTriggers();
+        // delay for children components initialization
+        tick().then(() => {
+            if (isMounted) {
+                initVariableTriggers();
+            }
+        });
     });
 
     onDestroy(() => {
