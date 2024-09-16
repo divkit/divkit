@@ -1613,6 +1613,15 @@
                         return;
                     }
 
+                    if (!Array.isArray(trigger.actions)) {
+                        logError(wrapError(new Error('variable_trigger has no actions'), {
+                            additional: {
+                                condition: trigger.condition
+                            }
+                        }));
+                        return;
+                    }
+
                     const mode = trigger.mode || 'on_condition';
 
                     if (mode !== 'on_variable' && mode !== 'on_condition') {
