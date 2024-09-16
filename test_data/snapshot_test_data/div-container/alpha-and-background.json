@@ -1,0 +1,61 @@
+{
+  "description": "Alpha applies to the background as well as to the content",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 150
+          },
+          "items": [
+            {
+              "type": "container",
+              "alpha": 0.5,
+              "width": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "text_color = #FFFFFF\nbackground = #FF0000\nalpha = 0.5",
+                  "text_color": "#FFFFFF",
+                  "font_size": 20,
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "margins": {
+                    "left": 10,
+                    "right": 10,
+                    "top": 10,
+                    "bottom": 10
+                  }
+                }
+              ],
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF0000"
+                }
+              ]
+            }
+          ],
+          "background": [
+            {
+              "type": "solid",
+              "color": "#00A0A0"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

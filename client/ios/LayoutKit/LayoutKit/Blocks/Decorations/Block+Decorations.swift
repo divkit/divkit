@@ -30,10 +30,11 @@ extension Block {
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String?
   ) -> Block {
+    let hasAlpha = alpha != nil && alpha?.isApproximatelyEqualTo(1) != true
     let anythingToApplyExceptBoundary =
       (border != nil && border?.width.isApproximatelyEqualTo(0) != true)
         || (backgroundColor != nil && backgroundColor?.alpha.isApproximatelyEqualTo(0) != true)
-        || (alpha != nil && alpha?.isApproximatelyEqualTo(1) != true)
+        || hasAlpha
         || blurEffect != nil
         || actions != nil
         || doubleTapActions != nil
@@ -45,33 +46,16 @@ extension Block {
         || accessibilityElement != nil
         || reuseId != nil
 
-    if !forceWrapping, let block = self as? DecoratingBlock {
+    let decoratingSelf = self as? DecoratingBlock
+    let selfBackgroundColor = decoratingSelf?.backgroundColor
+    let shouldWrapAlpha = hasAlpha
+      && selfBackgroundColor != nil
+      && selfBackgroundColor != DecoratingBlock.defaultBackgroundColor
+    if !forceWrapping, !shouldWrapAlpha, let block = decoratingSelf {
       guard (boundary != nil && boundary != block.boundary) || anythingToApplyExceptBoundary
       else {
         return self
       }
-
-      #if INTERNAL_BUILD
-      assert(
-        block.backgroundColor.alpha.isApproximatelyEqualTo(0) || backgroundColor == nil,
-        "Replacing background color is suspicious, consider revising decorations order"
-      )
-
-      assert(
-        block.analyticsURL == nil || analyticsURL == nil,
-        "Applying analytics URL over another one doesn't make sense"
-      )
-
-      assert(
-        border == nil || block.border == nil,
-        "Applying border over another border doesn't make sense"
-      )
-
-      assert(
-        block.visibilityParams == nil || visibilityParams == nil,
-        "Applying visibility actions over another one doesn't make sense"
-      )
-      #endif
 
       return block.modifying(
         backgroundColor: backgroundColor,

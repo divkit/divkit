@@ -287,6 +287,67 @@ final class DivBaseExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_WithAlpha() {
+    let block = makeBlock(
+      divSeparator(
+        alpha: 0.3
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: separatorBlock(),
+        childAlpha: 0.3,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithBackground() {
+    let block = makeBlock(
+      divSeparator(
+        background: solidBackground(RGBAColor.red)
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: separatorBlock(),
+        backgroundColor: RGBAColor.red,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithAlphaAndBackground() {
+    let block = makeBlock(
+      divSeparator(
+        alpha: 0.3,
+        background: solidBackground(RGBAColor.red)
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: DecoratingBlock(
+          child: separatorBlock(),
+          backgroundColor: RGBAColor.red,
+          accessibilityElement: .default
+        ),
+        childAlpha: 0.3
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
   func test_WithLocalVariables() {
     let block = makeBlock(
       divText(
