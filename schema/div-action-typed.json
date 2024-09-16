@@ -25,6 +25,9 @@
       "$ref": "div-action-dict-set-value.json"
     },
     {
+      "$ref": "div-action-download.json"
+    },
+    {
       "$ref": "div-action-focus-element.json"
     },
     {

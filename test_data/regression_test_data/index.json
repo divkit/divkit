@@ -2336,6 +2336,25 @@
       "file": "patch/container.json"
     },
     {
+      "title": "Patch container typed action",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "patch",
+        "TypedActions"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red",
+        "In case of success, 'Success!' text appears",
+        "In case of fail 'Fail!' text appears"
+      ],
+      "file": "patch/typed-container.json"
+    },
+    {
       "title": "Patch container internal items",
       "tags": [
         "patch"
@@ -2347,6 +2366,23 @@
         "2 original items should be replaced with the new ones, which background is red"
       ],
       "file": "patch/inside_container.json"
+    },
+    {
+      "title": "Patch gallery with typed action",
+      "platforms":  [
+        "android"
+      ],
+      "tags": [
+        "TypedActions",
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/typed-gallery.json"
     },
     {
       "title": "Patch gallery",
