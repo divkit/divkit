@@ -312,9 +312,10 @@
     };
 
     function onInput(event: Event): void {
+        const input = event.target;
         let val = (isMultiline ?
-            (event.target as HTMLDivElement).innerText :
-            (event.target as HTMLInputElement).value
+            (input as HTMLDivElement).innerText :
+            (input as HTMLInputElement).value
         ) || '';
 
         if (val === '\n') {
@@ -323,6 +324,9 @@
 
         if (val.length > maxLength) {
             val = contentEditableValue = val.slice(0, maxLength);
+            if (input instanceof HTMLInputElement) {
+                input.value = val;
+            }
         }
 
         if (value !== val) {
