@@ -1496,7 +1496,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "variables"
@@ -2546,7 +2547,7 @@
       ],
       "file": "patch/root.json"
     },
-   
+
     {
       "title": "State with variable binding",
       "tags": [

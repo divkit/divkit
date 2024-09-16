@@ -226,7 +226,9 @@
       },
       "$description": "translations.json#/div_base_variables",
       "platforms": [
-        "ios"
+        "ios",
+        "web",
+        "android"
       ]
     },
     "variable_triggers": {

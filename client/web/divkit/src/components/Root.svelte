@@ -1264,7 +1264,22 @@
                     componentContext.path.push(div.type);
                 }
 
-                componentContext.variables = mergeVars(res.variables, opts.variables);
+                let localVars: Map<string, Variable> | undefined;
+
+                if (Array.isArray(childProcessedJson.variables)) {
+                    localVars = new Map();
+                    childProcessedJson.variables.forEach(desc => {
+                        const varInstance = constructVariable(desc);
+                        if (varInstance && localVars) {
+                            localVars.set(varInstance.getName(), varInstance);
+                        }
+                    });
+                }
+
+                componentContext.variables = mergeVars(
+                    res.variables,
+                    mergeVars(localVars, opts.variables)
+                );
 
                 if (opts.fake) {
                     componentContext.fakeElement = true;
@@ -1465,8 +1480,8 @@
         }
     }
 
-    function declVariable(variable: DivVariable): void {
-        if (!(variable.type in TYPE_TO_CLASS)) {
+    function constructVariable(variable: MaybeMissing<DivVariable>): Variable | undefined {
+        if (!variable.type || !variable.name || !(variable.type in TYPE_TO_CLASS)) {
             // Skip unknown types (from the future versions maybe)
             return;
         }
@@ -1485,16 +1500,22 @@
         }
 
         try {
-            const varInstance = createVariable(variable.name, variable.type, variable.value);
-
-            localVariables.set(variable.name, varInstance);
-            variables.set(variable.name, varInstance);
+            return createVariable(variable.name, variable.type, variable.value);
         } catch (err: any) {
             logError(wrapError(err, {
                 additional: {
                     name: variable.name
                 }
             }));
+        }
+    }
+
+    function declVariable(variable: DivVariable): void {
+        const varInstance = constructVariable(variable);
+
+        if (varInstance) {
+            localVariables.set(variable.name, varInstance);
+            variables.set(variable.name, varInstance);
         }
     }
 
