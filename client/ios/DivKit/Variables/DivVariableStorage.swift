@@ -147,7 +147,7 @@ public final class DivVariableStorage {
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
   ) -> Bool {
-    let (isUpdated, hasLocalValue) = lock.withLock {
+    var (isUpdated, hasLocalValue) = lock.withLock {
       guard let oldValue = _values[name] else {
         return (false, false)
       }
@@ -167,12 +167,12 @@ public final class DivVariableStorage {
     }
 
     if let outerStorage {
-      _ = outerStorage.update(name: name, valueFactory: valueFactory)
+      isUpdated = outerStorage.update(name: name, valueFactory: valueFactory)
     } else {
       DivKitLogger.error("Variable is not declared: \(name)")
     }
 
-    return false
+    return isUpdated
   }
 
   public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
