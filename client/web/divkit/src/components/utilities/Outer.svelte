@@ -291,7 +291,7 @@
                 strokeColor = correctColor(border.stroke.color, 1, strokeColor);
                 newBorderElemStyle['--divkit-border'] = `${pxToEm(strokeWidth + 1)} solid ${strokeColor}`;
             }
-            if (border.corners_radius) {
+            if (border.corners_radius && typeof border.corners_radius === 'object') {
                 cornersRadius = correctBorderRadiusObject(border.corners_radius, cornersRadius);
                 newBorderStyle['border-radius'] = borderRadius(cornersRadius);
                 ([
