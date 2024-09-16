@@ -10,8 +10,6 @@ import android.util.TypedValue
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
-import com.yandex.div.core.actions.closeKeyboard
-import com.yandex.div.core.actions.openKeyboard
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.internal.widget.SuperLineHeightEditText
@@ -82,7 +80,6 @@ internal class DivInputView @JvmOverloads constructor(
     override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
         focusTracker?.inputFocusChanged(tag = tag, view = this, focused = focused)
         super.onFocusChanged(focused, direction, previouslyFocusedRect)
-        if (focused) openKeyboard() else closeKeyboard()
     }
 
     override fun draw(canvas: Canvas) {
