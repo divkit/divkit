@@ -232,6 +232,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.registerMethod(GetNumber)
         registry.registerMethod(GetString)
         registry.registerMethod(GetUrl)
+        registry.registerMethod(DictIsEmpty)
 
         // Array functions legacy
         registry.register(GetArrayInteger)
