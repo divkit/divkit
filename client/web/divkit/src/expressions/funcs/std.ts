@@ -40,6 +40,9 @@ function toNumber(_ctx: EvalContext, arg: IntegerValue | StringValue): EvalValue
     if (Number.isNaN(num) || !Number.isFinite(num)) {
         throw new Error('Unable to convert value to Number.');
     }
+    if (arg.value === '') {
+        throw new Error('Unable to convert value to Number.');
+    }
 
     return {
         type: NUMBER,
