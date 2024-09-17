@@ -134,5 +134,4 @@ sealed class Entity : Hashable {
             is WithoutProperties -> value
         }
     }
-
 }

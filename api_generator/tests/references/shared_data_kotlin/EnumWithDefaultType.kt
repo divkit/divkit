@@ -49,5 +49,4 @@ sealed class EnumWithDefaultType : Hashable {
             is WithoutDefaultCase -> value
         }
     }
-
 }

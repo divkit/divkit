@@ -27,7 +27,7 @@ class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWith
         json: JSONObject
     ) {
         val logger = env.logger
-        items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, EntityWithArrayOfEnums.Item.Converter.FROM_STRING, ITEMS_TEMPLATE_VALIDATOR, logger, env)
+        items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_TEMPLATE_VALIDATOR, logger, env)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfEnums {
@@ -38,7 +38,7 @@ class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWith
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.writeField(key = "items", field = items, converter = { v: EntityWithArrayOfEnums.Item -> EntityWithArrayOfEnums.Item.toString(v) })
+        json.writeField(key = "items", field = items, converter = EntityWithArrayOfEnums.Item.TO_STRING)
         json.write(key = "type", value = TYPE)
         return json
     }
@@ -49,10 +49,9 @@ class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWith
         private val ITEMS_VALIDATOR = ListValidator<EntityWithArrayOfEnums.Item> { it: List<*> -> it.size >= 1 }
         private val ITEMS_TEMPLATE_VALIDATOR = ListValidator<EntityWithArrayOfEnums.Item> { it: List<*> -> it.size >= 1 }
 
-        val ITEMS_READER: Reader<List<EntityWithArrayOfEnums.Item>> = { key, json, env -> JsonParser.readList(json, key, EntityWithArrayOfEnums.Item.Converter.FROM_STRING, ITEMS_VALIDATOR, env.logger, env) }
+        val ITEMS_READER: Reader<List<EntityWithArrayOfEnums.Item>> = { key, json, env -> JsonParser.readList(json, key, EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_VALIDATOR, env.logger, env) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfEnumsTemplate(env, json = it) }
     }
-
 }

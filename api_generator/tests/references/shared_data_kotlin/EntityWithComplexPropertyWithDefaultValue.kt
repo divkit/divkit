@@ -38,7 +38,6 @@ class EntityWithComplexPropertyWithDefaultValue(
         private val PROPERTY_DEFAULT_VALUE = EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
     }
 
-
     class Property(
         @JvmField final val value: Expression<String>,
     ) : Hashable {

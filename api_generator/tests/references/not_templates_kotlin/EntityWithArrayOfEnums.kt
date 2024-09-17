@@ -49,18 +49,18 @@ class EntityWithArrayOfEnums(
         return items.compareWith(other.items) { a, b -> a == b }
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.write(key = "items", value = items, converter = { v: Item -> Item.toString(v) })
-        json.write(key = "type", value = TYPE)
-        return json
-    }
-
     fun copy(
         items: List<Item> = this.items,
     ) = EntityWithArrayOfEnums(
         items = items,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.write(key = "items", value = items, converter = Item.TO_STRING)
+        json.write(key = "type", value = TYPE)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_array_of_enums"
@@ -70,7 +70,7 @@ class EntityWithArrayOfEnums(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithArrayOfEnums {
             val logger = env.logger
             return EntityWithArrayOfEnums(
-                items = JsonParser.readList(json, "items", Item.Converter.FROM_STRING, ITEMS_VALIDATOR, logger, env)
+                items = JsonParser.readList(json, "items", Item.FROM_STRING, ITEMS_VALIDATOR, logger, env)
             )
         }
 
@@ -79,31 +79,26 @@ class EntityWithArrayOfEnums(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfEnums(env, json = it) }
     }
 
-
     enum class Item(private val value: String) {
         FIRST("first"),
         SECOND("second");
 
         companion object Converter {
+
             fun toString(obj: Item): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Item? {
-                return when (string) {
+            fun fromString(value: String): Item? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     else -> null
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    else -> null
-                }
-            }
+            val TO_STRING = { value: Item -> toString(value) }
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

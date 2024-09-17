@@ -26,5 +26,4 @@ class EntityWithoutProperties() : Hashable {
     companion object {
         const val TYPE = "entity_without_properties"
     }
-
 }

@@ -63,21 +63,6 @@ class EntityWithSimpleProperties(
             url?.evaluate(resolver) == other.url?.evaluate(otherResolver)
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.writeExpression(key = "boolean", value = boolean)
-        json.writeExpression(key = "boolean_int", value = booleanInt)
-        json.writeExpression(key = "color", value = color, converter = COLOR_INT_TO_STRING)
-        json.writeExpression(key = "double", value = double)
-        json.write(key = "id", value = id)
-        json.writeExpression(key = "integer", value = integer)
-        json.writeExpression(key = "positive_integer", value = positiveInteger)
-        json.writeExpression(key = "string", value = string)
-        json.write(key = "type", value = TYPE)
-        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
-        return json
-    }
-
     fun copy(
         boolean: Expression<Boolean>? = this.boolean,
         booleanInt: Expression<Boolean>? = this.booleanInt,
@@ -99,6 +84,21 @@ class EntityWithSimpleProperties(
         string = string,
         url = url,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.writeExpression(key = "boolean", value = boolean)
+        json.writeExpression(key = "boolean_int", value = booleanInt)
+        json.writeExpression(key = "color", value = color, converter = COLOR_INT_TO_STRING)
+        json.writeExpression(key = "double", value = double)
+        json.write(key = "id", value = id)
+        json.writeExpression(key = "integer", value = integer)
+        json.writeExpression(key = "positive_integer", value = positiveInteger)
+        json.writeExpression(key = "string", value = string)
+        json.write(key = "type", value = TYPE)
+        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_simple_properties"
@@ -127,5 +127,4 @@ class EntityWithSimpleProperties(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithSimpleProperties(env, json = it) }
     }
-
 }

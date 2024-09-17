@@ -136,6 +136,7 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
         }
 
     companion object {
+
         @Throws(ParsingException::class)
         operator fun invoke(
             env: ParsingEnvironment,
@@ -169,6 +170,7 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
                 else -> throw typeMismatch(json = json, key = "type", value = type)
             }
         }
+
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityTemplate(env, json = it) }
     }
 }

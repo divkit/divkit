@@ -39,18 +39,18 @@ class EntityWithRequiredProperty(
         return property.evaluate(resolver) == other.property.evaluate(otherResolver)
     }
 
+    fun copy(
+        property: Expression<String> = this.property,
+    ) = EntityWithRequiredProperty(
+        property = property,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpression(key = "property", value = property)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        property: Expression<String> = this.property,
-    ) = EntityWithRequiredProperty(
-        property = property,
-    )
 
     companion object {
         const val TYPE = "entity_with_required_property"
@@ -68,5 +68,4 @@ class EntityWithRequiredProperty(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithRequiredProperty(env, json = it) }
     }
-
 }

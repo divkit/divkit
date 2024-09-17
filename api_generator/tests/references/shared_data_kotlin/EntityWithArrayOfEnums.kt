@@ -48,31 +48,26 @@ class EntityWithArrayOfEnums(
         private val ITEMS_VALIDATOR = ListValidator<EntityWithArrayOfEnums.Item> { it: List<*> -> it.size >= 1 }
     }
 
-
     enum class Item(private val value: String) {
         FIRST("first"),
         SECOND("second");
 
         companion object Converter {
+
             fun toString(obj: Item): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Item? {
-                return when (string) {
+            fun fromString(value: String): Item? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     else -> null
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    else -> null
-                }
-            }
+            val TO_STRING = { value: Item -> toString(value) }
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

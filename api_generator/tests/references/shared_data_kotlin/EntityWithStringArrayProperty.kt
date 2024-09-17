@@ -37,5 +37,4 @@ class EntityWithStringArrayProperty(
 
         private val ARRAY_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
     }
-
 }

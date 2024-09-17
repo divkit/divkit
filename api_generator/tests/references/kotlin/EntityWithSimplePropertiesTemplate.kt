@@ -97,5 +97,4 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithSimplePropertiesTemplate(env, json = it) }
     }
-
 }

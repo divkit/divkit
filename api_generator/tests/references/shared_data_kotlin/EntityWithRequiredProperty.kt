@@ -37,5 +37,4 @@ class EntityWithRequiredProperty(
 
         private val PROPERTY_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
     }
-
 }

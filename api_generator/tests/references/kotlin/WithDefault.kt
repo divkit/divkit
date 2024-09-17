@@ -34,13 +34,13 @@ class WithDefault() : JSONSerializable, Hashable {
         return other != null
     }
 
+    fun copy() = WithDefault()
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy() = WithDefault()
 
     companion object {
         const val TYPE = "default"
@@ -55,5 +55,4 @@ class WithDefault() : JSONSerializable, Hashable {
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> WithDefault(env, json = it) }
     }
-
 }

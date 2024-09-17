@@ -39,18 +39,18 @@ class EntityWithStringArrayProperty(
         return array.evaluate(resolver).compareWith(other.array.evaluate(otherResolver)) { a, b -> a == b }
     }
 
+    fun copy(
+        array: ExpressionList<String> = this.array,
+    ) = EntityWithStringArrayProperty(
+        array = array,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpressionList(key = "array", value = array)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        array: ExpressionList<String> = this.array,
-    ) = EntityWithStringArrayProperty(
-        array = array,
-    )
 
     companion object {
         const val TYPE = "entity_with_string_array_property"
@@ -68,5 +68,4 @@ class EntityWithStringArrayProperty(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithStringArrayProperty(env, json = it) }
     }
-
 }

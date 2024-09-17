@@ -49,18 +49,18 @@ class EntityWithArrayOfNestedItems(
         return items.compareWith(other.items) { a, b -> a.equals(b, resolver, otherResolver) }
     }
 
+    fun copy(
+        items: List<Item> = this.items,
+    ) = EntityWithArrayOfNestedItems(
+        items = items,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "items", value = items)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        items: List<Item> = this.items,
-    ) = EntityWithArrayOfNestedItems(
-        items = items,
-    )
 
     companion object {
         const val TYPE = "entity_with_array_of_nested_items"
@@ -78,7 +78,6 @@ class EntityWithArrayOfNestedItems(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItems(env, json = it) }
     }
-
 
     @Mockable
     class Item(
@@ -106,13 +105,6 @@ class EntityWithArrayOfNestedItems(
                 property.evaluate(resolver) == other.property.evaluate(otherResolver)
         }
 
-        override fun writeToJSON(): JSONObject {
-            val json = JSONObject()
-            json.write(key = "entity", value = entity)
-            json.writeExpression(key = "property", value = property)
-            return json
-        }
-
         fun copy(
             entity: Entity = this.entity,
             property: Expression<String> = this.property,
@@ -120,6 +112,13 @@ class EntityWithArrayOfNestedItems(
             entity = entity,
             property = property,
         )
+
+        override fun writeToJSON(): JSONObject {
+            val json = JSONObject()
+            json.write(key = "entity", value = entity)
+            json.writeExpression(key = "property", value = property)
+            return json
+        }
 
         companion object {
             @JvmStatic
@@ -134,6 +133,5 @@ class EntityWithArrayOfNestedItems(
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Item(env, json = it) }
         }
-
     }
 }

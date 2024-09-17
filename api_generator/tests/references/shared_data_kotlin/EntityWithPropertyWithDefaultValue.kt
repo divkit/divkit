@@ -52,7 +52,6 @@ class EntityWithPropertyWithDefaultValue(
         private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
     }
 
-
     class Nested(
         @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
         @JvmField final val nonOptional: Expression<String>,
@@ -98,6 +97,5 @@ class EntityWithPropertyWithDefaultValue(
             private val INT_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
             private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
         }
-
     }
 }

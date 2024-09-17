@@ -39,18 +39,18 @@ class EntityWithEntityProperty(
         return entity.equals(other.entity, resolver, otherResolver)
     }
 
+    fun copy(
+        entity: Entity = this.entity,
+    ) = EntityWithEntityProperty(
+        entity = entity,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "entity", value = entity)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        entity: Entity = this.entity,
-    ) = EntityWithEntityProperty(
-        entity = entity,
-    )
 
     companion object {
         const val TYPE = "entity_with_entity_property"
@@ -68,5 +68,4 @@ class EntityWithEntityProperty(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithEntityProperty(env, json = it) }
     }
-
 }

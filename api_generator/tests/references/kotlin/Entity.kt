@@ -173,6 +173,7 @@ sealed class Entity : JSONSerializable, Hashable {
     }
 
     companion object {
+
         @Throws(ParsingException::class)
         @JvmStatic
         @JvmName("fromJson")
@@ -207,6 +208,7 @@ sealed class Entity : JSONSerializable, Hashable {
                 throw typeMismatch(json = json, key = "type", value = type)
             }
         }
+
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Entity(env, json = it) }
     }
 }

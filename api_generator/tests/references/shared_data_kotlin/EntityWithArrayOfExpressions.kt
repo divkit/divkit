@@ -47,5 +47,4 @@ class EntityWithArrayOfExpressions(
 
         private val ITEMS_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
     }
-
 }

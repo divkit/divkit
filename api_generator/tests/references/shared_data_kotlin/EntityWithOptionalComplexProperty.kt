@@ -36,7 +36,6 @@ class EntityWithOptionalComplexProperty(
         const val TYPE = "entity_with_optional_complex_property"
     }
 
-
     class Property(
         @JvmField final val value: Expression<Uri>,
     ) : Hashable {

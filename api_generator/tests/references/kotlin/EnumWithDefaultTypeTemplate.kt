@@ -51,6 +51,7 @@ sealed class EnumWithDefaultTypeTemplate : JSONSerializable, JsonTemplate<EnumWi
         }
 
     companion object {
+
         @Throws(ParsingException::class)
         operator fun invoke(
             env: ParsingEnvironment,
@@ -67,6 +68,7 @@ sealed class EnumWithDefaultTypeTemplate : JSONSerializable, JsonTemplate<EnumWi
                 else -> throw typeMismatch(json = json, key = "type", value = type)
             }
         }
+
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EnumWithDefaultTypeTemplate(env, json = it) }
     }
 }

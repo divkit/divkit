@@ -26,5 +26,4 @@ class WithDefault() : Hashable {
     companion object {
         const val TYPE = "default"
     }
-
 }

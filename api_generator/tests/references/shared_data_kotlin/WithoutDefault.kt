@@ -26,5 +26,4 @@ class WithoutDefault() : Hashable {
     companion object {
         const val TYPE = "non_default"
     }
-
 }

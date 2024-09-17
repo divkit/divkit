@@ -39,18 +39,18 @@ class EntityWithOptionalProperty(
         return property?.evaluate(resolver) == other.property?.evaluate(otherResolver)
     }
 
+    fun copy(
+        property: Expression<String>? = this.property,
+    ) = EntityWithOptionalProperty(
+        property = property,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpression(key = "property", value = property)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        property: Expression<String>? = this.property,
-    ) = EntityWithOptionalProperty(
-        property = property,
-    )
 
     companion object {
         const val TYPE = "entity_with_optional_property"
@@ -66,5 +66,4 @@ class EntityWithOptionalProperty(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithOptionalProperty(env, json = it) }
     }
-
 }

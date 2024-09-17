@@ -27,7 +27,7 @@ class EntityWithOptionalStringEnumPropertyTemplate : JSONSerializable, JsonTempl
         json: JSONObject
     ) {
         val logger = env.logger
-        property = JsonTemplateParser.readOptionalFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithOptionalStringEnumProperty.Property.Converter.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
+        property = JsonTemplateParser.readOptionalFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithOptionalStringEnumProperty.Property.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithOptionalStringEnumProperty {
@@ -38,7 +38,7 @@ class EntityWithOptionalStringEnumPropertyTemplate : JSONSerializable, JsonTempl
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.writeFieldWithExpression(key = "property", field = property, converter = { v: EntityWithOptionalStringEnumProperty.Property -> EntityWithOptionalStringEnumProperty.Property.toString(v) })
+        json.writeFieldWithExpression(key = "property", field = property, converter = EntityWithOptionalStringEnumProperty.Property.TO_STRING)
         json.write(key = "type", value = TYPE)
         return json
     }
@@ -48,10 +48,9 @@ class EntityWithOptionalStringEnumPropertyTemplate : JSONSerializable, JsonTempl
 
         private val TYPE_HELPER_PROPERTY = TypeHelper.from(default = EntityWithOptionalStringEnumProperty.Property.values().first()) { it is EntityWithOptionalStringEnumProperty.Property }
 
-        val PROPERTY_READER: Reader<Expression<EntityWithOptionalStringEnumProperty.Property>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, EntityWithOptionalStringEnumProperty.Property.Converter.FROM_STRING, env.logger, env, TYPE_HELPER_PROPERTY) }
+        val PROPERTY_READER: Reader<Expression<EntityWithOptionalStringEnumProperty.Property>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, EntityWithOptionalStringEnumProperty.Property.FROM_STRING, env.logger, env, TYPE_HELPER_PROPERTY) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithOptionalStringEnumPropertyTemplate(env, json = it) }
     }
-
 }

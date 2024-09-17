@@ -71,6 +71,7 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
     }
 
     companion object {
+
         @Throws(ParsingException::class)
         @JvmStatic
         @JvmName("fromJson")
@@ -88,6 +89,7 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
                 throw typeMismatch(json = json, key = "type", value = type)
             }
         }
+
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EnumWithDefaultType(env, json = it) }
     }
 }
