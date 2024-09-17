@@ -149,6 +149,7 @@
           "default_value": "auto",
           "$description": "translations.json#/div_input_autocapitalization",
           "platforms": [
+            "android",
             "ios"
           ]
         },

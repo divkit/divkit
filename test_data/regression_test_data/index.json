@@ -2632,6 +2632,7 @@
     {
       "title": "Input keyboard types",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [
