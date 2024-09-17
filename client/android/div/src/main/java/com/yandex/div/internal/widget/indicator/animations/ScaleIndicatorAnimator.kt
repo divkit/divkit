@@ -25,7 +25,7 @@ internal class ScaleIndicatorAnimator(private val styleParams: IndicatorParams.S
         scaleIndicatorByOffset(position, 1f - positionOffset)
         if (position < itemsCount - 1) {
             scaleIndicatorByOffset(position + 1, positionOffset)
-        } else {
+        } else if (itemsCount > 1) {
             scaleIndicatorByOffset(0, positionOffset)
         }
     }
