@@ -255,7 +255,8 @@
       "$description": "translations.json#/div_layout_provider",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "reuse_id": {

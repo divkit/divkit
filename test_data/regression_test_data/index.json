@@ -2007,7 +2007,8 @@
       "title": "LayoutProvider",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "LayoutProvider"
@@ -2016,6 +2017,22 @@
         "Blocks with correct size"
       ],
       "file": "layout_provider.json"
+    },
+    {
+      "title": "LayoutProvider recursive",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "LayoutProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size",
+        "Warning about recursive layout, depends on platform"
+      ],
+      "file": "layout_provider_recursive.json"
     },
     {
       "title": "SizeProvider extension",

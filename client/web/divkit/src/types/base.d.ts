@@ -108,6 +108,11 @@ export interface Tooltip {
     animation_out?: Animation;
 }
 
+export interface DivLayoutProvider {
+    width_variable_name?: string;
+    height_variable_name?: string;
+}
+
 export interface DivBaseData {
     type: string;
     id?: string;
@@ -135,6 +140,7 @@ export interface DivBaseData {
     transition_triggers?: TransitionTrigger[];
     selected_actions?: Action[];
     focus?: Focus;
+    layout_provider?: DivLayoutProvider;
     transform?: Transform;
     variables?: DivVariable[];
 }

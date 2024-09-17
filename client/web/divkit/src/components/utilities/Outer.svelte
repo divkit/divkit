@@ -72,6 +72,7 @@
     import { isDeepEqual } from '../../utils/isDeepEqual';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
+    import { layoutProvider } from '../../use/layoutProvider';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -171,6 +172,8 @@
     let pivotYNum = 0;
     let transformOrigin: string | undefined;
     let transform: string | undefined;
+
+    let layoutProviderResizeObserver: ResizeObserver | undefined;
 
     let hasCustomFocus = false;
 
@@ -939,6 +942,17 @@
             rootCtx.registerTooltip(node, tooltip);
         });
 
+        if (layoutProviderResizeObserver) {
+            layoutProviderResizeObserver.disconnect();
+            layoutProviderResizeObserver = undefined;
+        }
+        layoutProviderResizeObserver = layoutProvider(
+            currentNode,
+            componentContext,
+            componentContext.json.layout_provider?.width_variable_name,
+            componentContext.json.layout_provider?.height_variable_name
+        );
+
         if (devtool && !componentContext.fakeElement) {
             dev = devtool(node, rootCtx, componentContext);
         }
@@ -988,6 +1002,11 @@
             rootCtx.unregisterParentOf(id);
         });
         prevChilds = [];
+
+        if (layoutProviderResizeObserver) {
+            layoutProviderResizeObserver.disconnect();
+            layoutProviderResizeObserver = undefined;
+        }
 
         componentContext.json.tooltips?.forEach(tooltip => {
             rootCtx.unregisterTooltip(tooltip);
