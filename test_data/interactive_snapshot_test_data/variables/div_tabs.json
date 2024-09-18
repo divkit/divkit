@@ -3756,8 +3756,8 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=dynamic_height&value=1",
-          "log_id": "dynamic_height=DYNAMIC"
+          "url": "div-action://set_variable?name=selected_tab&value=1",
+          "log_id": "active_tab=1"
         }
       ],
       "expected_screenshot": "step1.png"
@@ -3765,20 +3765,11 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=dynamic_height&value=0",
-          "log_id": "dynamic_height=MAX_HEIGHT"
+          "url": "div-action://set_variable?name=dynamic_height&value=1",
+          "log_id": "dynamic_height=DYNAMIC"
         }
       ],
       "expected_screenshot": "step2.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=tab.line_height&value=20",
-          "log_id": "tab.line_height=20"
-        }
-      ],
-      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
@@ -3787,29 +3778,7 @@
           "log_id": "tab.line_height=30"
         }
       ],
-      "expected_screenshot": "step4.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=active_text_color&value=%23000",
-          "log_id": "active_text_color=#000"
-        },
-        {
-          "url": "div-action://set_variable?name=active_background_color&value=%23FFCC00",
-          "log_id": "active_background_color=#FFCC00"
-        },
-        {
-          "url": "div-action://set_variable?name=inactive_text_color&value=%23000000",
-          "log_id": "inactive_text_color=#000000"
-        },
-        {
-          "url": "div-action://set_variable?name=inactive_background_color&value=%2300000000",
-          "log_id": "inactive_background_color=#C6ABDB"
-        }
-      ],
-      "delay": 100,
-      "expected_screenshot": "step5.png"
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
@@ -3831,16 +3800,7 @@
         }
       ],
       "delay": 100,
-      "expected_screenshot": "step6.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=selected_tab&value=0",
-          "log_id": "selected_tab=0"
-        }
-      ],
-      "expected_screenshot": "step7.png"
+      "expected_screenshot": "step4.png"
     },
     {
       "div_actions": [
@@ -3849,16 +3809,7 @@
           "log_id": "selected_tab=6"
         }
       ],
-      "expected_screenshot": "step8.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=has_separator&value=false",
-          "log_id": "has_separator=0"
-        }
-      ],
-      "expected_screenshot": "step9.png"
+      "expected_screenshot": "step5.png"
     },
     {
       "div_actions": [
@@ -3867,16 +3818,7 @@
           "log_id": "has_separator=1"
         }
       ],
-      "expected_screenshot": "step10.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator.color&value=%23ffcc00",
-          "log_id": "separator.color=yellow"
-        }
-      ],
-      "expected_screenshot": "step11.png"
+      "expected_screenshot": "step6.png"
     },
     {
       "div_actions": [
@@ -3885,16 +3827,7 @@
           "log_id": "separator.color=purple"
         }
       ],
-      "expected_screenshot": "step12.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_paddings.top&value=0",
-          "log_id": "separator_paddings.top=0"
-        }
-      ],
-      "expected_screenshot": "step13.png"
+      "expected_screenshot": "step7.png"
     },
     {
       "div_actions": [
@@ -3903,16 +3836,7 @@
           "log_id": "separator_paddings.top=20"
         }
       ],
-      "expected_screenshot": "step14.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_paddings.bottom&value=0",
-          "log_id": "separator_paddings.bottom=0"
-        }
-      ],
-      "expected_screenshot": "step15.png"
+      "expected_screenshot": "step8.png"
     },
     {
       "div_actions": [
@@ -3921,16 +3845,7 @@
           "log_id": "separator_paddings.bottom=20"
         }
       ],
-      "expected_screenshot": "step16.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_paddings.left&value=0",
-          "log_id": "separator_paddings.left=0"
-        }
-      ],
-      "expected_screenshot": "step17.png"
+      "expected_screenshot": "step9.png"
     },
     {
       "div_actions": [
@@ -3939,16 +3854,7 @@
           "log_id": "separator_paddings.left=50"
         }
       ],
-      "expected_screenshot": "step18.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_paddings.right&value=0",
-          "log_id": "separator_paddings.right=0"
-        }
-      ],
-      "expected_screenshot": "step19.png"
+      "expected_screenshot": "step10.png"
     },
     {
       "div_actions": [
@@ -3957,16 +3863,7 @@
           "log_id": "separator_paddings.right=50"
         }
       ],
-      "expected_screenshot": "step20.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=title_paddings.top&value=0",
-          "log_id": "title_paddings.top=0"
-        }
-      ],
-      "expected_screenshot": "step21.png"
+      "expected_screenshot": "step11.png"
     },
     {
       "div_actions": [
@@ -3975,16 +3872,7 @@
           "log_id": "title_paddings.top=20"
         }
       ],
-      "expected_screenshot": "step22.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=title_paddings.bottom&value=0",
-          "log_id": "title_paddings.bottom=0"
-        }
-      ],
-      "expected_screenshot": "step23.png"
+      "expected_screenshot": "step12.png"
     },
     {
       "div_actions": [
@@ -3993,16 +3881,16 @@
           "log_id": "title_paddings.bottom=20"
         }
       ],
-      "expected_screenshot": "step24.png"
+      "expected_screenshot": "step13.png"
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=title_paddings.left&value=0",
-          "log_id": "title_paddings.left=0"
+          "url": "div-action://set_variable?name=selected_tab&value=0",
+          "log_id": "active_tab=0"
         }
       ],
-      "expected_screenshot": "step25.png"
+      "expected_screenshot": "step14.png"
     },
     {
       "div_actions": [
@@ -4011,16 +3899,16 @@
           "log_id": "title_paddings.left=50"
         }
       ],
-      "expected_screenshot": "step26.png"
+      "expected_screenshot": "step15.png"
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=title_paddings.right&value=0",
-          "log_id": "title_paddings.right=0"
+          "url": "div-action://set_variable?name=selected_tab&value=12",
+          "log_id": "active_tab=last"
         }
       ],
-      "expected_screenshot": "step27.png"
+      "expected_screenshot": "step16.png"
     },
     {
       "div_actions": [
@@ -4029,7 +3917,7 @@
           "log_id": "title_paddings.right=50"
         }
       ],
-      "expected_screenshot": "step28.png"
+      "expected_screenshot": "step17.png"
     }
   ]
 }

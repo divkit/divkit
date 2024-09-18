@@ -264,11 +264,11 @@
       "div_actions": [
         {
           "log_id": "open_text",
-          "url": "div-action://set_state?state_id=0/content_0/expanded"
+          "url": "div-action://set_state?state_id=0/content_2/expanded"
         },
         {
           "log_id": "open",
-          "url": "div-action://set_state?state_id=0/button_0/text_collapse"
+          "url": "div-action://set_state?state_id=0/button_2/text_collapse"
         }
       ],
       "expected_screenshot": "step1.png"
@@ -277,11 +277,11 @@
       "div_actions": [
         {
           "log_id": "collapse_text",
-          "url": "div-action://set_state?state_id=0/content_0/collapsed"
+          "url": "div-action://set_state?state_id=0/content_2/collapsed"
         },
         {
           "log_id": "collapse",
-          "url": "div-action://set_state?state_id=0/button_0/text_extend"
+          "url": "div-action://set_state?state_id=0/button_2/text_extend"
         }
       ],
       "expected_screenshot": "step0.png"

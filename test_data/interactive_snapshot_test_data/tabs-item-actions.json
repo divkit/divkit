@@ -5,37 +5,6 @@
   ],
   "div_data": {
     "templates": {
-      "button": {
-        "type": "text",
-        "height": {
-          "type": "fixed",
-          "value": 28
-        },
-        "width": {
-          "type": "fixed",
-          "value": 56
-        },
-        "text_alignment_horizontal": "center",
-        "text_alignment_vertical": "center",
-        "font_size": 18,
-        "font_weight": "bold",
-        "text_color": "#ffffff",
-        "background": [
-          {
-            "color": "#D098D3",
-            "type": "solid"
-          }
-        ],
-        "margins": {
-          "left": 8,
-          "top": 8,
-          "right": 8,
-          "bottom": 8
-        },
-        "border": {
-          "corner_radius": 8
-        }
-      },
       "text_block": {
         "type": "text",
         "background": [
@@ -218,7 +187,7 @@
           "url": "div-action://scroll_to_end?id=my_tabs"
         }
       ],
-      "expected_screenshot": "step2.png"
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [

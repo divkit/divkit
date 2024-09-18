@@ -9,7 +9,7 @@
       {
         "name": "blur",
         "type": "integer",
-        "value": 0
+        "value": 4
       }
     ],
     "states": [

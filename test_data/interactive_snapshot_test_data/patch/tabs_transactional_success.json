@@ -109,7 +109,7 @@
     },
     {
       "delay": 7000,
-      "expected_screenshot": "step0.png"
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [

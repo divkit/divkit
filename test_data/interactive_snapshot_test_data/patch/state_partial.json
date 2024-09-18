@@ -136,10 +136,12 @@
       "expected_screenshot": "step1.png"
     },
     {
-      "div_actions": [{
-        "log_id": "toggle",
-        "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
-      }],
+      "div_actions": [
+        {
+          "log_id": "toggle",
+          "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
+        }
+      ],
       "expected_screenshot": "step2.png"
     }
   ]

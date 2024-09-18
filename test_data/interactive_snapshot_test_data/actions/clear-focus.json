@@ -4,49 +4,6 @@
     "android"
   ],
   "div_data": {
-    "templates": {
-      "button": {
-        "type": "text",
-        "paddings": {
-          "top": 4,
-          "bottom": 4,
-          "left": 8,
-          "right": 8
-        },
-        "margins": {
-          "right": 8,
-          "left": 8
-        },
-        "text_alignment_horizontal": "center",
-        "text_alignment_vertical": "center",
-        "font_size": 12,
-        "text_color": "#ffff",
-        "font_weight": "bold",
-        "height": {
-          "type": "wrap_content"
-        },
-        "width": {
-          "type": "match_parent"
-        },
-        "border": {
-          "corner_radius": 16
-        },
-        "background": [
-          {
-            "type": "solid",
-            "color": "#0000FF"
-          }
-        ],
-        "focus": {
-          "background": [
-            {
-              "type": "solid",
-              "color": "#ff5500"
-            }
-          ]
-        }
-      }
-    },
     "card": {
       "log_id": "tests",
       "variables": [

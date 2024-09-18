@@ -4,21 +4,6 @@
     "android"
   ],
   "div_data": {
-    "templates": {
-      "label_text": {
-        "type": "text",
-        "font_size": 24,
-        "font_weight": "bold",
-        "text_alignment_horizontal": "center",
-        "text_alignment_vertical": "center",
-        "height": {
-          "type": "match_parent"
-        },
-        "width": {
-          "type": "match_parent"
-        }
-      }
-    },
     "card": {
       "variables": [
         {

@@ -68,45 +68,6 @@
         "text_alignment_horizontal": "left",
         "text_alignment_vertical": "center",
         "text_color": "#000000"
-      },
-      "button": {
-        "type": "text",
-        "width": {
-          "type": "match_parent"
-        },
-        "height": {
-          "type": "wrap_content"
-        },
-        "margins": {
-          "left": 16,
-          "top": 16,
-          "right": 16,
-          "bottom": 16
-        },
-        "paddings": {
-          "left": 16,
-          "top": 16,
-          "right": 16,
-          "bottom": 16
-        },
-        "alpha": 1.0,
-        "alignment_horizontal": "center",
-        "alignment_vertical": "center",
-        "background": [
-          {
-            "type": "solid",
-            "color": "#ffdc60"
-          }
-        ],
-        "border": {
-          "corner_radius": 4,
-          "has_shadow": 1
-        },
-        "font_size": 20,
-        "font_weight": "medium",
-        "text_alignment_horizontal": "center",
-        "text_alignment_vertical": "center",
-        "text_color": "#000000"
       }
     },
     "card": {
@@ -207,14 +168,14 @@
                     "state_id": "false",
                     "div": {
                       "type": "text",
-                      "text": "Allow empty"
+                      "text": "Disallow empty"
                     }
                   },
                   {
                     "state_id": "true",
                     "div": {
                       "type": "text",
-                      "text": "Disallow empty"
+                      "text": "Allow empty"
                     }
                   }
                 ]
@@ -270,6 +231,10 @@
         {
           "url": "div-action://set_variable?name=allow_empty&value=1",
           "log_id": "allow empty"
+        },
+        {
+          "log_id": "change_state",
+          "url": "div-action://set_state?state_id=0/state_container/true"
         }
       ],
       "expected_screenshot": "step5.png"

@@ -14,27 +14,6 @@
           "top": 20,
           "bottom": 20
         }
-      },
-      "button": {
-        "type": "title",
-        "width": {
-          "type": "wrap_content"
-        },
-        "background": [
-          {
-            "type": "solid",
-            "color": "#f1dff2"
-          }
-        ],
-        "border": {
-          "corner_radius": 8
-        },
-        "paddings": {
-          "left": 20,
-          "right": 20,
-          "top": 10,
-          "bottom": 10
-        }
       }
     },
     "card": {
@@ -78,11 +57,6 @@
                     }
                   }
                 ]
-              },
-              {
-                "type": "button",
-                "text": "State 2",
-                "actions": []
               }
             ]
           }

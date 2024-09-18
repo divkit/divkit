@@ -261,11 +261,11 @@
       "div_actions": [
         {
           "log_id": "open content",
-          "url": "div-action://set_state?state_id=0/content_0/expanded"
+          "url": "div-action://set_state?state_id=0/content_2/expanded"
         },
         {
           "log_id": "open text",
-          "url": "div-action://set_state?state_id=0/button_0/text_collapse"
+          "url": "div-action://set_state?state_id=0/button_2/text_collapse"
         }
       ],
       "expected_screenshot": "step1.png"
@@ -283,7 +283,7 @@
       "div_actions": [
         {
           "log_id": "change to first",
-          "url": "div-action://set_current_item?id=gallery&item=1"
+          "url": "div-action://set_current_item?id=gallery&item=2"
         }
       ],
       "expected_screenshot": "step1.png"
@@ -292,11 +292,11 @@
       "div_actions": [
         {
           "log_id": "collapse_text",
-          "url": "div-action://set_state?state_id=0/content_0/collapsed"
+          "url": "div-action://set_state?state_id=0/content_2/collapsed"
         },
         {
           "log_id": "collapse",
-          "url": "div-action://set_state?state_id=0/button_0/text_extend"
+          "url": "div-action://set_state?state_id=0/button_2/text_extend"
         }
       ],
       "expected_screenshot": "step0.png"

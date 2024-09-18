@@ -5,65 +5,6 @@
   ],
   "div_data": {
     "templates": {
-      "presets_holder": {
-        "type": "grid",
-        "orientation": "vertical",
-        "column_count": 3,
-        "item_spacing": 4,
-        "background": [
-          {
-            "type": "solid",
-            "color": "#f5f5f5"
-          }
-        ],
-        "paddings": {
-          "top": 2,
-          "bottom": 2
-        }
-      },
-      "presets_header": {
-        "type": "text",
-        "width": {
-          "type": "match_parent",
-          "weight": 1
-        },
-        "font_size": 14,
-        "text_color": "#888888",
-        "text_alignment_vertical": "center",
-        "paddings": {
-          "left": 4,
-          "right": 4
-        }
-      },
-      "presets_button": {
-        "type": "text",
-        "width": {
-          "type": "match_parent",
-          "weight": 1
-        },
-        "font_size": 14,
-        "text_color": "#000",
-        "background": [
-          {
-            "type": "solid",
-            "color": "#0e000000"
-          }
-        ],
-        "paddings": {
-          "left": 4,
-          "right": 4
-        },
-        "alignment_vertical": "center",
-        "text_alignment_horizontal": "center",
-        "text_alignment_vertical": "center",
-        "border": {
-          "corner_radius": 6
-        },
-        "margins": {
-          "top": 2,
-          "bottom": 2
-        }
-      },
       "gallery_item_text": {
         "type": "text",
         "paddings": {
@@ -245,29 +186,11 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=orientation&value=horizontal",
-          "log_id": "orientation=horizontal"
-        }
-      ],
-      "expected_screenshot": "step1.png"
-    },
-    {
-      "div_actions": [
-        {
           "url": "div-action://set_variable?name=orientation&value=vertical",
           "log_id": "orientation=vertical"
         }
       ],
-      "expected_screenshot": "step2.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=column_count&value=1",
-          "log_id": "column_count=1"
-        }
-      ],
-      "expected_screenshot": "step3.png"
+      "expected_screenshot": "step1.png"
     },
     {
       "div_actions": [
@@ -276,16 +199,7 @@
           "log_id": "column_count=2"
         }
       ],
-      "expected_screenshot": "step4.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=item_spacing&value=5",
-          "log_id": "item_spacing=5"
-        }
-      ],
-      "expected_screenshot": "step5.png"
+      "expected_screenshot": "step2.png"
     },
     {
       "div_actions": [
@@ -294,16 +208,7 @@
           "log_id": "item_spacing=25"
         }
       ],
-      "expected_screenshot": "step6.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=cross_spacing&value=5",
-          "log_id": "cross_spacing=5"
-        }
-      ],
-      "expected_screenshot": "step7.png"
+      "expected_screenshot": "step3.png"
     },
     {
       "div_actions": [
@@ -312,34 +217,7 @@
           "log_id": "cross_spacing=25"
         }
       ],
-      "expected_screenshot": "step8.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=restrict_parent_scroll&value=false",
-          "log_id": "restrict_parent_scroll=false"
-        }
-      ],
-      "expected_screenshot": "step9.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=restrict_parent_scroll&value=true",
-          "log_id": "restrict_parent_scroll=true"
-        }
-      ],
-      "expected_screenshot": "step10.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=item_color&value=%2380ff0000",
-          "log_id": "item_color=#80ff0000"
-        }
-      ],
-      "expected_screenshot": "step11.png"
+      "expected_screenshot": "step4.png"
     },
     {
       "div_actions": [
@@ -348,16 +226,7 @@
           "log_id": "item_color=#9614e000"
         }
       ],
-      "expected_screenshot": "step12.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=paddings.left&value=10",
-          "log_id": "paddings.left=10"
-        }
-      ],
-      "expected_screenshot": "step13.png"
+      "expected_screenshot": "step5.png"
     },
     {
       "div_actions": [
@@ -366,16 +235,16 @@
           "log_id": "paddings.left=50"
         }
       ],
-      "expected_screenshot": "step14.png"
+      "expected_screenshot": "step6.png"
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=paddings.right&value=10",
-          "log_id": "paddings.right=10"
+          "url": "div-action://scroll_to_end?id=gallery",
+          "log_id": "scroll_to_end"
         }
       ],
-      "expected_screenshot": "step15.png"
+      "expected_screenshot": "step7.png"
     },
     {
       "div_actions": [
@@ -384,16 +253,16 @@
           "log_id": "paddings.right=50"
         }
       ],
-      "expected_screenshot": "step16.png"
+      "expected_screenshot": "step8.png"
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=paddings.top&value=10",
-          "log_id": "paddings.top=10"
+          "url": "div-action://scroll_to_start?id=gallery",
+          "log_id": "scroll_to_end"
         }
       ],
-      "expected_screenshot": "step17.png"
+      "expected_screenshot": "step7.png"
     },
     {
       "div_actions": [
@@ -402,16 +271,7 @@
           "log_id": "paddings.top=50"
         }
       ],
-      "expected_screenshot": "step18.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=paddings.bottom&value=10",
-          "log_id": "paddings.bottom=10"
-        }
-      ],
-      "expected_screenshot": "step19.png"
+      "expected_screenshot": "step10.png"
     },
     {
       "div_actions": [
@@ -420,16 +280,7 @@
           "log_id": "paddings.bottom=50"
         }
       ],
-      "expected_screenshot": "step20.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=item_text&value=Item text",
-          "log_id": "item_text=Item text"
-        }
-      ],
-      "expected_screenshot": "step21.png"
+      "expected_screenshot": "step11.png"
     },
     {
       "div_actions": [
@@ -438,7 +289,7 @@
           "log_id": "item_text=ITEM TEXT"
         }
       ],
-      "expected_screenshot": "step22.png"
+      "expected_screenshot": "step12.png"
     }
   ]
 }

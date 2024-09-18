@@ -5,65 +5,6 @@
   ],
   "div_data": {
     "templates": {
-      "presets_holder": {
-        "type": "grid",
-        "orientation": "vertical",
-        "column_count": 3,
-        "item_spacing": 4,
-        "background": [
-          {
-            "type": "solid",
-            "color": "#f5f5f5"
-          }
-        ],
-        "paddings": {
-          "top": 3,
-          "bottom": 3
-        }
-      },
-      "presets_header": {
-        "type": "text",
-        "width": {
-          "type": "match_parent",
-          "weight": 1
-        },
-        "font_size": 14,
-        "text_color": "#888888",
-        "text_alignment_vertical": "center",
-        "paddings": {
-          "left": 4,
-          "right": 4
-        }
-      },
-      "presets_button": {
-        "type": "text",
-        "width": {
-          "type": "match_parent",
-          "weight": 1
-        },
-        "font_size": 14,
-        "text_color": "#000",
-        "background": [
-          {
-            "type": "solid",
-            "color": "#0e000000"
-          }
-        ],
-        "paddings": {
-          "left": 4,
-          "right": 4
-        },
-        "alignment_vertical": "center",
-        "text_alignment_horizontal": "center",
-        "text_alignment_vertical": "center",
-        "border": {
-          "corner_radius": 6
-        },
-        "margins": {
-          "top": 4,
-          "bottom": 2
-        }
-      },
       "text_block": {
         "type": "text",
         "background": [
@@ -306,7 +247,7 @@
           "log_id": "orientation=horizontal"
         }
       ],
-      "expected_screenshot": "step1.png"
+      "expected_screenshot": "step0.png"
     },
     {
       "div_actions": [
@@ -324,7 +265,7 @@
           "log_id": "orientation=horizontal back"
         }
       ],
-      "expected_screenshot": "step1.png"
+      "expected_screenshot": "step0.png"
     },
     {
       "div_actions": [
@@ -338,7 +279,7 @@
         }
       ],
       "delay": 100,
-      "expected_screenshot": "step4.png"
+      "expected_screenshot": "step0.png"
     },
     {
       "div_actions": [
@@ -352,7 +293,7 @@
         }
       ],
       "delay": 100,
-      "expected_screenshot": "step5.png"
+      "expected_screenshot": "step0.png"
     },
     {
       "div_actions": [
@@ -385,8 +326,8 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=paddings.left&value=10",
-          "log_id": "paddings.left=10"
+          "url": "div-action://set_variable?name=paddings.left&value=50",
+          "log_id": "paddings.left=50"
         }
       ],
       "expected_screenshot": "step8.png"
@@ -394,20 +335,11 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=paddings.left&value=50",
-          "log_id": "paddings.left=50"
+          "url": "div-action://scroll_to_end?id=pager",
+          "log_id": "scroll_to_end"
         }
       ],
       "expected_screenshot": "step9.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=paddings.right&value=10",
-          "log_id": "paddings.right=10"
-        }
-      ],
-      "expected_screenshot": "step10.png"
     },
     {
       "div_actions": [
@@ -416,16 +348,16 @@
           "log_id": "paddings.right=50"
         }
       ],
-      "expected_screenshot": "step11.png"
+      "expected_screenshot": "step10.png"
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=paddings.top&value=0",
-          "log_id": "paddings.top=0"
+          "url": "div-action://scroll_to_start?id=pager",
+          "log_id": "scroll_to_start_back"
         }
       ],
-      "expected_screenshot": "step12.png"
+      "expected_screenshot": "step9.png"
     },
     {
       "div_actions": [
@@ -434,16 +366,7 @@
           "log_id": "paddings.top=20"
         }
       ],
-      "expected_screenshot": "step13.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=paddings.bottom&value=0",
-          "log_id": "paddings.bottom=0"
-        }
-      ],
-      "expected_screenshot": "step14.png"
+      "expected_screenshot": "step12.png"
     },
     {
       "div_actions": [
@@ -452,16 +375,7 @@
           "log_id": "paddings.bottom=20"
         }
       ],
-      "expected_screenshot": "step15.png"
-    },
-    {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=item_text&value=Item",
-          "log_id": "item_text=Item"
-        }
-      ],
-      "expected_screenshot": "step16.png"
+      "expected_screenshot": "step13.png"
     },
     {
       "div_actions": [
@@ -470,7 +384,7 @@
           "log_id": "item_text=ITEM"
         }
       ],
-      "expected_screenshot": "step17.png"
+      "expected_screenshot": "step14.png"
     }
   ]
 }

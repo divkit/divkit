@@ -14,27 +14,6 @@
                     "top": 20,
                     "bottom": 20
                 }
-            },
-            "button": {
-                "type": "title",
-                "width": {
-                    "type": "wrap_content"
-                },
-                "background": [
-                    {
-                        "type": "solid",
-                        "color": "#f1dff2"
-                    }
-                ],
-                "border": {
-                    "corner_radius": 8
-                },
-                "paddings": {
-                    "left": 20,
-                    "right": 20,
-                    "top": 10,
-                    "bottom": 10
-                }
             }
         },
         "card": {
@@ -81,16 +60,6 @@
                                             "type": "title",
                                             "text": "Third state"
                                         }
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "button",
-                                "text": "Set state 2 by action",
-                                "actions": [
-                                    {
-                                        "log_id": "state2",
-                                        "url": "div-action://set_state?state_id=0/states/state2"
                                     }
                                 ]
                             }
