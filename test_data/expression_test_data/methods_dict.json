@@ -486,7 +486,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -503,7 +504,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     }
   ]
