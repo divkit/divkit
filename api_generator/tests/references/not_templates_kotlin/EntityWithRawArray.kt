@@ -39,18 +39,18 @@ class EntityWithRawArray(
         return array.evaluate(resolver) == other.array.evaluate(otherResolver)
     }
 
+    fun copy(
+        array: Expression<JSONArray> = this.array,
+    ) = EntityWithRawArray(
+        array = array,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpression(key = "array", value = array)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        array: Expression<JSONArray> = this.array,
-    ) = EntityWithRawArray(
-        array = array,
-    )
 
     companion object {
         const val TYPE = "entity_with_raw_array"
@@ -66,5 +66,4 @@ class EntityWithRawArray(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithRawArray(env, json = it) }
     }
-
 }

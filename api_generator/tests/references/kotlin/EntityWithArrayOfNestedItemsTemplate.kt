@@ -55,7 +55,6 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItemsTemplate(env, json = it) }
     }
 
-
     @Mockable
     class ItemTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems.Item> {
         @JvmField final val entity: Field<EntityTemplate>
@@ -92,6 +91,5 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> ItemTemplate(env, json = it) }
         }
-
     }
 }

@@ -39,18 +39,18 @@ class EntityWithOptionalComplexProperty(
         return (property?.equals(other.property, resolver, otherResolver) ?: (other.property == null))
     }
 
+    fun copy(
+        property: Property? = this.property,
+    ) = EntityWithOptionalComplexProperty(
+        property = property,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "property", value = property)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        property: Property? = this.property,
-    ) = EntityWithOptionalComplexProperty(
-        property = property,
-    )
 
     companion object {
         const val TYPE = "entity_with_optional_complex_property"
@@ -66,7 +66,6 @@ class EntityWithOptionalComplexProperty(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithOptionalComplexProperty(env, json = it) }
     }
-
 
     @Mockable
     class Property(
@@ -91,17 +90,17 @@ class EntityWithOptionalComplexProperty(
             return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
-        override fun writeToJSON(): JSONObject {
-            val json = JSONObject()
-            json.writeExpression(key = "value", value = value, converter = URI_TO_STRING)
-            return json
-        }
-
         fun copy(
             value: Expression<Uri> = this.value,
         ) = Property(
             value = value,
         )
+
+        override fun writeToJSON(): JSONObject {
+            val json = JSONObject()
+            json.writeExpression(key = "value", value = value, converter = URI_TO_STRING)
+            return json
+        }
 
         companion object {
             @JvmStatic
@@ -115,6 +114,5 @@ class EntityWithOptionalComplexProperty(
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Property(env, json = it) }
         }
-
     }
 }

@@ -35,5 +35,4 @@ class EntityWithOptionalProperty(
     companion object {
         const val TYPE = "entity_with_optional_property"
     }
-
 }

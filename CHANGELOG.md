@@ -1,3 +1,17 @@
+## 30.18.0
+
+# Android Client:
+* Experimental API: added template serialization interfaces.
+* Fixed a bug where the input field intercept vertical scrolling.
+* Fixed corner clipping while transitions is in progress.
+* Support `div-custom` patching.
+
+# iOS Client:
+* Experiment added to use different drawing methods for blur/tint effects inside `ImageBlock`. Previously `MetalImageView.swift` was the only option. Now using `DivFlagsInfo` - we can set `imageBlurPreferMetal: Bool` or `imageTintPreferMetal: Bool` to false, and `RemoteImageView.swift` will be used instead (with new way to render). By default behaviour stays the same as before.
+* Support resolveValue for RawRepresentable type.
+* Supported div-input max_length field for ios
+
+
 ## 30.17.0
 
 # Android Client:

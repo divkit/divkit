@@ -35,5 +35,4 @@ class EntityWithRawArray(
     companion object {
         const val TYPE = "entity_with_raw_array"
     }
-
 }

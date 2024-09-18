@@ -39,18 +39,18 @@ class EntityWithOptionalStringEnumProperty(
         return property?.evaluate(resolver) == other.property?.evaluate(otherResolver)
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.writeExpression(key = "property", value = property, converter = { v: Property -> Property.toString(v) })
-        json.write(key = "type", value = TYPE)
-        return json
-    }
-
     fun copy(
         property: Expression<Property>? = this.property,
     ) = EntityWithOptionalStringEnumProperty(
         property = property,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.writeExpression(key = "property", value = property, converter = Property.TO_STRING)
+        json.write(key = "type", value = TYPE)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_optional_string_enum_property"
@@ -62,38 +62,33 @@ class EntityWithOptionalStringEnumProperty(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithOptionalStringEnumProperty {
             val logger = env.logger
             return EntityWithOptionalStringEnumProperty(
-                property = JsonParser.readOptionalExpression(json, "property", Property.Converter.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
+                property = JsonParser.readOptionalExpression(json, "property", Property.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
             )
         }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithOptionalStringEnumProperty(env, json = it) }
     }
 
-
     enum class Property(private val value: String) {
         FIRST("first"),
         SECOND("second");
 
         companion object Converter {
+
             fun toString(obj: Property): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Property? {
-                return when (string) {
+            fun fromString(value: String): Property? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     else -> null
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    else -> null
-                }
-            }
+            val TO_STRING = { value: Property -> toString(value) }
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

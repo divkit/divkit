@@ -49,18 +49,18 @@ class EntityWithArrayOfExpressions(
         return items.evaluate(resolver).compareWith(other.items.evaluate(otherResolver)) { a, b -> a == b }
     }
 
+    fun copy(
+        items: ExpressionList<String> = this.items,
+    ) = EntityWithArrayOfExpressions(
+        items = items,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpressionList(key = "items", value = items)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        items: ExpressionList<String> = this.items,
-    ) = EntityWithArrayOfExpressions(
-        items = items,
-    )
 
     companion object {
         const val TYPE = "entity_with_array_of_expressions"
@@ -78,5 +78,4 @@ class EntityWithArrayOfExpressions(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfExpressions(env, json = it) }
     }
-
 }

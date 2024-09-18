@@ -34,13 +34,13 @@ class EntityWithoutProperties() : JSONSerializable, Hashable {
         return other != null
     }
 
+    fun copy() = EntityWithoutProperties()
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy() = EntityWithoutProperties()
 
     companion object {
         const val TYPE = "entity_without_properties"
@@ -55,5 +55,4 @@ class EntityWithoutProperties() : JSONSerializable, Hashable {
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithoutProperties(env, json = it) }
     }
-
 }

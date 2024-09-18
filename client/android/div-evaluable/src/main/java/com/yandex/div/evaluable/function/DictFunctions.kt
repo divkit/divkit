@@ -809,6 +809,26 @@ internal object DictContainsKey : Function() {
     }
 }
 
+internal object DictIsEmpty : Function() {
+    override val name = "isEmpty"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT)
+    )
+
+    override val resultType = EvaluableType.BOOLEAN
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val dict = args[0] as JSONObject
+        return dict.isEmpty
+    }
+}
+
 private fun evaluateSafe(args: List<Any>, fallback: Any, defaultFallback: Boolean = false): Any? {
     val dictIndex = if (defaultFallback) 0 else 1
     var dict = args[dictIndex] as? JSONObject ?: return fallback

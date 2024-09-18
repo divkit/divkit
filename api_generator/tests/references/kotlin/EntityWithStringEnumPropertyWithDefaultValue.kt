@@ -39,18 +39,18 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         return value.evaluate(resolver) == other.value.evaluate(otherResolver)
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.write(key = "type", value = TYPE)
-        json.writeExpression(key = "value", value = value, converter = { v: Value -> Value.toString(v) })
-        return json
-    }
-
     fun copy(
         value: Expression<Value> = this.value,
     ) = EntityWithStringEnumPropertyWithDefaultValue(
         value = value,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.write(key = "type", value = TYPE)
+        json.writeExpression(key = "value", value = value, converter = Value.TO_STRING)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_string_enum_property_with_default_value"
@@ -64,13 +64,12 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
             val logger = env.logger
             return EntityWithStringEnumPropertyWithDefaultValue(
-                value = JsonParser.readOptionalExpression(json, "value", Value.Converter.FROM_STRING, logger, env, VALUE_DEFAULT_VALUE, TYPE_HELPER_VALUE) ?: VALUE_DEFAULT_VALUE
+                value = JsonParser.readOptionalExpression(json, "value", Value.FROM_STRING, logger, env, VALUE_DEFAULT_VALUE, TYPE_HELPER_VALUE) ?: VALUE_DEFAULT_VALUE
             )
         }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithStringEnumPropertyWithDefaultValue(env, json = it) }
     }
-
 
     enum class Value(private val value: String) {
         FIRST("first"),
@@ -78,12 +77,13 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         THIRD("third");
 
         companion object Converter {
+
             fun toString(obj: Value): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Value? {
-                return when (string) {
+            fun fromString(value: String): Value? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     THIRD.value -> THIRD
@@ -91,14 +91,8 @@ class EntityWithStringEnumPropertyWithDefaultValue(
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    THIRD.value -> THIRD
-                    else -> null
-                }
-            }
+            val TO_STRING = { value: Value -> toString(value) }
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

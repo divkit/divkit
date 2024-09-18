@@ -37,5 +37,4 @@ class EntityWithEntityProperty(
 
         private val ENTITY_DEFAULT_VALUE = Entity.WithStringEnumProperty(EntityWithStringEnumProperty(property = Expression.constant(EntityWithStringEnumProperty.Property.SECOND)))
     }
-
 }

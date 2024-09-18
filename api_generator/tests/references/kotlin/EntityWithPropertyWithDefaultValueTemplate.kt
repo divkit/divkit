@@ -70,7 +70,6 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValueTemplate(env, json = it) }
     }
 
-
     @Mockable
     class NestedTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue.Nested> {
         @JvmField final val int: Field<Expression<Long>> // constraint: number >= 0; default value: 0
@@ -120,6 +119,5 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> NestedTemplate(env, json = it) }
         }
-
     }
 }

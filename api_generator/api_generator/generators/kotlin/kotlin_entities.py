@@ -25,6 +25,7 @@ from ...schema.modeling.entities import (
     ObjectFormat,
     KotlinGeneratorProperties
 )
+from ...config import Config
 from ...config import GenerationMode
 from ... import utils
 from ...schema.modeling.text import Text, EMPTY
@@ -135,6 +136,71 @@ class KotlinEntity(Entity):
             result += prop.serialization_declaration.indented(indent_width=4)
         result += '    return json'
         result += '}'
+        return result
+
+    def header_declaration(
+            self,
+            kotlin_annotations: Config.KotlinAnnotations,
+            generate_serialization: bool = True
+    ) -> Text:
+        result = Text()
+        for annotation in kotlin_annotations.classes:
+            result += annotation
+        prefix = f'class {utils.capitalize_camel_case(self.name)}'
+
+        interfaces = ['JSONSerializable'] if generate_serialization else []
+        if not self.generation_mode.is_template:
+            interfaces.append('Hashable')
+        protocol_plus_super_entities = self.protocol_plus_super_entities()
+        if protocol_plus_super_entities is not None:
+            interfaces.append(protocol_plus_super_entities)
+        interfaces = ', '.join(interfaces)
+        suffix = f' : {interfaces}' if interfaces else ''
+        suffix += ' {'
+
+        def add_instance_properties(text: Text, is_template: bool) -> Text:
+            mixed_properties = self.instance_properties_kotlin
+            if self.errors_collector_enabled:
+                mixed_properties.append(KotlinProperty(
+                    name=PARSING_ERRORS_PROP_NAME,
+                    description='',
+                    description_translations={},
+                    dict_field='',
+                    property_type=Object(name='List<Exception>', object=None, format=ObjectFormat.DEFAULT),
+                    optional=True,
+                    is_deprecated=False,
+                    mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES,
+                    supports_expressions_flag=False,
+                    default_value=None,
+                    platforms=None
+                ))
+            for prop in mixed_properties:
+                overridden = False
+                if self.implemented_protocol is not None:
+                    overridden = any(p.name == prop.name for p in self.implemented_protocol.properties)
+                text += prop.declaration(
+                    overridden=overridden,
+                    in_interface=False,
+                    with_comma=not is_template,
+                    with_default=not is_template
+                ).indented(indent_width=4)
+            return text
+
+        if self.generation_mode.is_template:
+            result += prefix + suffix
+            if self.instance_properties:
+                result = add_instance_properties(text=result, is_template=True)
+        else:
+            constructor_prefix = ''
+            if kotlin_annotations.constructors:
+                constructor_annotations = ', '.join(kotlin_annotations.constructors)
+                constructor_prefix = f' {constructor_annotations} constructor '
+            if not self.instance_properties:
+                result += f'{prefix}{constructor_prefix}(){suffix}'
+            else:
+                result += f'{prefix}{constructor_prefix}('
+                result = add_instance_properties(text=result, is_template=False)
+                result += f'){suffix}'
         return result
 
     def static_declarations(self, generate_serialization: bool = True) -> Text:
@@ -888,7 +954,7 @@ class KotlinPropertyType(PropertyType):
                 typename = self.object.resolved_prefixed_declaration
             else:
                 typename = utils.capitalize_camel_case(self.object.name)
-            return f'{typename}.Converter.FROM_STRING'
+            return f'{typename}.FROM_STRING'
         elif isinstance(self, Double):
             return 'NUMBER_TO_DOUBLE'
         elif isinstance(self, Int):
@@ -1037,7 +1103,7 @@ class KotlinPropertyType(PropertyType):
                 typename = self.object.resolved_prefixed_declaration
             else:
                 typename = utils.capitalize_camel_case(self.object.name)
-            return f'{prefix}{{ v: {typename} -> {typename}.toString(v) }}'
+            return f'{prefix}{typename}.TO_STRING'
         elif isinstance(self, Color):
             return f'{prefix}COLOR_INT_TO_STRING'
         elif isinstance(self, Array):

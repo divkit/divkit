@@ -4,7 +4,7 @@ import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
 import type { Dimension } from './sizes';
-import type { Action, DisappearAction, VisibilityAction } from '../../typings/common';
+import type { Action, DisappearAction, DivVariable, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 import type { Animation } from './animation';
 
@@ -108,6 +108,11 @@ export interface Tooltip {
     animation_out?: Animation;
 }
 
+export interface DivLayoutProvider {
+    width_variable_name?: string;
+    height_variable_name?: string;
+}
+
 export interface DivBaseData {
     type: string;
     id?: string;
@@ -135,5 +140,7 @@ export interface DivBaseData {
     transition_triggers?: TransitionTrigger[];
     selected_actions?: Action[];
     focus?: Focus;
+    layout_provider?: DivLayoutProvider;
     transform?: Transform;
+    variables?: DivVariable[];
 }

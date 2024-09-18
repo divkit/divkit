@@ -467,6 +467,46 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "expression": "@{dict_var.isEmpty()}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {
+            "dict": {
+              "inner_key": "value"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{dict_var.isEmpty()}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "name": "dict_var",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
     }
   ]
 }

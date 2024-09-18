@@ -53,5 +53,4 @@ class EntityWithEntityPropertyTemplate : JSONSerializable, JsonTemplate<EntityWi
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithEntityPropertyTemplate(env, json = it) }
     }
-
 }

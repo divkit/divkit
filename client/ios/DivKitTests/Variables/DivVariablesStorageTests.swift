@@ -261,6 +261,19 @@ final class DivVariablesStorageTest: XCTestCase {
     )
   }
 
+  func test_update_UpdatesParentLocalVariable_FromInnerScope_SendsUpdateEvent() {
+    let parentPath = cardId.path + "parent_id"
+    storage.initializeIfNeeded(path: parentPath, variables: variables)
+    storage.initializeIfNeeded(
+      path: parentPath + "element_id",
+      variables: ["another_var": .integer(2)]
+    )
+
+    storage.update(path: parentPath + "element_id", name: "string_var", value: "new value")
+
+    XCTAssertEqual(.local(cardId, ["string_var"]), event?.kind)
+  }
+
   func test_setGlobalVariables_SendsUpdateEvent() {
     let globalVariables: DivVariables = [
       "global_var": .string("global value"),

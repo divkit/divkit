@@ -52,7 +52,6 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyTemplate(env, json = it) }
     }
 
-
     @Mockable
     class PropertyTemplate : JSONSerializable, JsonTemplate<EntityWithComplexProperty.Property> {
         @JvmField final val value: Field<Expression<Uri>>
@@ -84,6 +83,5 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> PropertyTemplate(env, json = it) }
         }
-
     }
 }

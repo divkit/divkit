@@ -36,31 +36,26 @@ class EntityWithStringEnumProperty(
         const val TYPE = "entity_with_string_enum_property"
     }
 
-
     enum class Property(private val value: String) {
         FIRST("first"),
         SECOND("second");
 
         companion object Converter {
+
             fun toString(obj: Property): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Property? {
-                return when (string) {
+            fun fromString(value: String): Property? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     else -> null
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    else -> null
-                }
-            }
+            val TO_STRING = { value: Property -> toString(value) }
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

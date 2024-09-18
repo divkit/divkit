@@ -48,7 +48,6 @@ class EntityWithArrayOfNestedItems(
         private val ITEMS_VALIDATOR = ListValidator<EntityWithArrayOfNestedItems.Item> { it: List<*> -> it.size >= 1 }
     }
 
-
     class Item(
         @JvmField final val entity: Entity,
         @JvmField final val property: Expression<String>,

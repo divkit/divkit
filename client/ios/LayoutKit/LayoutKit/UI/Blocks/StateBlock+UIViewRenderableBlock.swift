@@ -168,23 +168,21 @@ private final class StateBlockView: BlockView {
     } else {
       forceLayout()
 
-      Task {
-        await changeBoundsWithAnimation(viewsToTransition)
-        await addWithAnimations(viewsToAdd)
-      }
+      changeBoundsWithAnimation(viewsToTransition)
+      addWithAnimations(viewsToAdd)
     }
   }
 
-  private func addWithAnimations(_ views: [DetachableAnimationBlockView]) async {
+  private func addWithAnimations(_ views: [DetachableAnimationBlockView]) {
     for view in views {
-      await view.addWithAnimation(in: self)
+      view.addWithAnimation(in: self)
     }
   }
 
-  private func changeBoundsWithAnimation(_ views: [SubviewStorage.FrameWithID]) async {
+  private func changeBoundsWithAnimation(_ views: [SubviewStorage.FrameWithID]) {
     for (id, frame) in views {
       if let view = subviewStorage.getView(id) {
-        await view.changeBoundsWithAnimation(in: self, startFrame: frame)
+        view.changeBoundsWithAnimation(in: self, startFrame: frame)
       }
     }
   }

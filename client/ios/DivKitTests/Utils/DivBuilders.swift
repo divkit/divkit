@@ -1,6 +1,6 @@
 @testable import DivKit
-
 import Foundation
+import VGSL
 
 func divAction(
   isEnabled: Bool = true,
@@ -121,6 +121,8 @@ func divText(
 func divSeparator(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  alpha: CGFloat? = nil,
+  background: DivBackground? = nil,
   border: DivBorder? = nil,
   delimiterStyle: DivSeparator.DelimiterStyle? = nil,
   id: String? = nil,
@@ -133,6 +135,8 @@ func divSeparator(
   .divSeparator(DivSeparator(
     accessibility: accessibility,
     actions: actions,
+    alpha: alpha.map { .value($0) },
+    background: background.map { [$0] },
     border: border,
     delimiterStyle: delimiterStyle,
     id: id,
@@ -481,4 +485,8 @@ func wrapContentSize() -> DivSize {
 
 func variable(_ name: String, _ value: String) -> DivVariable {
   .stringVariable(StringVariable(name: name, value: value))
+}
+
+func solidBackground(_ color: RGBAColor) -> DivBackground {
+  .divSolidBackground(DivSolidBackground(color: .value(color)))
 }

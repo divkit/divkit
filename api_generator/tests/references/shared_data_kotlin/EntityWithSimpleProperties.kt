@@ -80,5 +80,4 @@ class EntityWithSimpleProperties(
 
         private val POSITIVE_INTEGER_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
     }
-
 }

@@ -5,11 +5,9 @@ import android.text.InputFilter
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
-import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
@@ -34,6 +32,7 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
@@ -87,7 +86,7 @@ internal class DivInputBinder @Inject constructor(
             observeHintColor(div, expressionResolver)
             observeHighlightColor(div, expressionResolver)
 
-            observeKeyboardType(div, expressionResolver)
+            observeKeyboardTypeAndCapitalization(div, expressionResolver)
             observeSelectAllOnFocus(div, expressionResolver)
             observeIsEnabled(div, expressionResolver)
 
@@ -247,16 +246,18 @@ internal class DivInputBinder @Inject constructor(
         addSubscription(highlightColorExpr.observeAndGet(resolver, callback))
     }
 
-    private fun DivInputView.observeKeyboardType(div: DivInput, resolver: ExpressionResolver) {
-        val callback = { type: DivInput.KeyboardType ->
-            applyKeyboardType(type)
+    private fun DivInputView.observeKeyboardTypeAndCapitalization(div: DivInput, resolver: ExpressionResolver) {
+        val callback = { _: Any ->
+            val type = div.keyboardType.evaluate(resolver)
+            inputType = getKeyboardType(type) or getCapitalization(div, resolver)
             setHorizontallyScrolling(type != DivInput.KeyboardType.MULTI_LINE_TEXT)
         }
-        addSubscription(div.keyboardType.observeAndGet(resolver, callback))
+        addSubscription(div.keyboardType.observe(resolver, callback))
+        addSubscription(div.autocapitalization.observeAndGet(resolver, callback))
     }
 
-    private fun EditText.applyKeyboardType(type: DivInput.KeyboardType) {
-        inputType = when(type) {
+    private fun getKeyboardType(type: DivInput.KeyboardType): Int {
+        return when(type) {
             DivInput.KeyboardType.SINGLE_LINE_TEXT -> InputType.TYPE_CLASS_TEXT
             DivInput.KeyboardType.MULTI_LINE_TEXT -> InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE
@@ -609,5 +610,17 @@ internal class DivInputBinder @Inject constructor(
         }
 
         updateMaskData(Unit)
+    }
+
+    private fun getCapitalization(
+        div: DivInput,
+        resolver: ExpressionResolver,
+    ): Int {
+        return when (div.autocapitalization.evaluate(resolver)) {
+            DivInput.Autocapitalization.SENTENCES -> InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            DivInput.Autocapitalization.WORDS -> InputType.TYPE_TEXT_FLAG_CAP_WORDS
+            DivInput.Autocapitalization.ALL_CHARACTERS -> InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+            else -> 0
+        }
     }
 }

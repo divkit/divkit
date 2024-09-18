@@ -38,19 +38,19 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         private val VALUE_DEFAULT_VALUE = Expression.constant(Value.SECOND)
     }
 
-
     enum class Value(private val value: String) {
         FIRST("first"),
         SECOND("second"),
         THIRD("third");
 
         companion object Converter {
+
             fun toString(obj: Value): String {
                 return obj.value
             }
 
-            fun fromString(string: String): Value? {
-                return when (string) {
+            fun fromString(value: String): Value? {
+                return when (value) {
                     FIRST.value -> FIRST
                     SECOND.value -> SECOND
                     THIRD.value -> THIRD
@@ -58,14 +58,8 @@ class EntityWithStringEnumPropertyWithDefaultValue(
                 }
             }
 
-            val FROM_STRING = { string: String ->
-                when (string) {
-                    FIRST.value -> FIRST
-                    SECOND.value -> SECOND
-                    THIRD.value -> THIRD
-                    else -> null
-                }
-            }
+            val TO_STRING = { value: Value -> toString(value) }
+            val FROM_STRING = { value: String -> fromString(value) }
         }
     }
 }

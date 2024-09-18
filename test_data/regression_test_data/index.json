@@ -1541,7 +1541,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "variables"
@@ -2076,7 +2077,8 @@
       "title": "LayoutProvider",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "LayoutProvider"
@@ -2085,6 +2087,22 @@
         "Blocks with correct size"
       ],
       "file": "layout_provider.json"
+    },
+    {
+      "title": "LayoutProvider recursive",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "LayoutProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size",
+        "Warning about recursive layout, depends on platform"
+      ],
+      "file": "layout_provider_recursive.json"
     },
     {
       "title": "SizeProvider extension",
@@ -2432,6 +2450,25 @@
       "file": "patch/container.json"
     },
     {
+      "title": "Patch container typed action",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "patch",
+        "TypedActions"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red",
+        "In case of success, 'Success!' text appears",
+        "In case of fail 'Fail!' text appears"
+      ],
+      "file": "patch/typed-container.json"
+    },
+    {
       "title": "Patch container internal items",
       "tags": [
         "patch"
@@ -2446,6 +2483,23 @@
         "2 original items should be replaced with the new ones, which background is red"
       ],
       "file": "patch/inside_container.json"
+    },
+    {
+      "title": "Patch gallery with typed action",
+      "platforms":  [
+        "android"
+      ],
+      "tags": [
+        "TypedActions",
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 original items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/typed-gallery.json"
     },
     {
       "title": "Patch gallery",
@@ -2676,7 +2730,7 @@
       ],
       "file": "patch/root.json"
     },
-   
+
     {
       "title": "State with variable binding",
       "tags": [
@@ -2725,6 +2779,7 @@
     {
       "title": "Input keyboard types",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [

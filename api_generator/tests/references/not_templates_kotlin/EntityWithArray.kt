@@ -39,18 +39,18 @@ class EntityWithArray(
         return array.compareWith(other.array) { a, b -> a.equals(b, resolver, otherResolver) }
     }
 
+    fun copy(
+        array: List<Entity> = this.array,
+    ) = EntityWithArray(
+        array = array,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.write(key = "array", value = array)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        array: List<Entity> = this.array,
-    ) = EntityWithArray(
-        array = array,
-    )
 
     companion object {
         const val TYPE = "entity_with_array"
@@ -68,5 +68,4 @@ class EntityWithArray(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArray(env, json = it) }
     }
-
 }

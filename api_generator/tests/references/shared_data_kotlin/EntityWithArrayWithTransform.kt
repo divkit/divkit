@@ -37,5 +37,4 @@ class EntityWithArrayWithTransform(
 
         private val ARRAY_VALIDATOR = ListValidator<Int> { it: List<*> -> it.size >= 1 }
     }
-
 }

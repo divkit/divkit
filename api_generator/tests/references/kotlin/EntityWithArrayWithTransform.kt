@@ -39,18 +39,18 @@ class EntityWithArrayWithTransform(
         return array.evaluate(resolver).compareWith(other.array.evaluate(otherResolver)) { a, b -> a == b }
     }
 
+    fun copy(
+        array: ExpressionList<Int> = this.array,
+    ) = EntityWithArrayWithTransform(
+        array = array,
+    )
+
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
         json.writeExpressionList(key = "array", value = array, converter = COLOR_INT_TO_STRING)
         json.write(key = "type", value = TYPE)
         return json
     }
-
-    fun copy(
-        array: ExpressionList<Int> = this.array,
-    ) = EntityWithArrayWithTransform(
-        array = array,
-    )
 
     companion object {
         const val TYPE = "entity_with_array_with_transform"
@@ -68,5 +68,4 @@ class EntityWithArrayWithTransform(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayWithTransform(env, json = it) }
     }
-
 }

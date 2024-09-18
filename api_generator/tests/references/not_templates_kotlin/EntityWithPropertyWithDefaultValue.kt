@@ -45,15 +45,6 @@ class EntityWithPropertyWithDefaultValue(
             url.evaluate(resolver) == other.url.evaluate(otherResolver)
     }
 
-    override fun writeToJSON(): JSONObject {
-        val json = JSONObject()
-        json.writeExpression(key = "int", value = int)
-        json.write(key = "nested", value = nested)
-        json.write(key = "type", value = TYPE)
-        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
-        return json
-    }
-
     fun copy(
         int: Expression<Long> = this.int,
         nested: Nested? = this.nested,
@@ -63,6 +54,15 @@ class EntityWithPropertyWithDefaultValue(
         nested = nested,
         url = url,
     )
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.writeExpression(key = "int", value = int)
+        json.write(key = "nested", value = nested)
+        json.write(key = "type", value = TYPE)
+        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
+        return json
+    }
 
     companion object {
         const val TYPE = "entity_with_property_with_default_value"
@@ -86,7 +86,6 @@ class EntityWithPropertyWithDefaultValue(
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValue(env, json = it) }
     }
-
 
     @Mockable
     class Nested(
@@ -117,14 +116,6 @@ class EntityWithPropertyWithDefaultValue(
                 url.evaluate(resolver) == other.url.evaluate(otherResolver)
         }
 
-        override fun writeToJSON(): JSONObject {
-            val json = JSONObject()
-            json.writeExpression(key = "int", value = int)
-            json.writeExpression(key = "non_optional", value = nonOptional)
-            json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
-            return json
-        }
-
         fun copy(
             int: Expression<Long> = this.int,
             nonOptional: Expression<String> = this.nonOptional,
@@ -134,6 +125,14 @@ class EntityWithPropertyWithDefaultValue(
             nonOptional = nonOptional,
             url = url,
         )
+
+        override fun writeToJSON(): JSONObject {
+            val json = JSONObject()
+            json.writeExpression(key = "int", value = int)
+            json.writeExpression(key = "non_optional", value = nonOptional)
+            json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
+            return json
+        }
 
         companion object {
             private val INT_DEFAULT_VALUE = Expression.constant(0L)
@@ -155,6 +154,5 @@ class EntityWithPropertyWithDefaultValue(
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Nested(env, json = it) }
         }
-
     }
 }
