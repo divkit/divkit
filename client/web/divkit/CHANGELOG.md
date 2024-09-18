@@ -1,3 +1,15 @@
+## 30.19.0 (September 23, 2024)
+
+* Added local `variables` support.
+* Fixed the behavior of `toNumber('')` to return an error.
+* Added `layout_provider` property support.
+* Fixed the `transition_out` animation when `visibility` became `gone`.
+* Fixed an issue with the `max_length` of `input` with the `keyboard_type` equal to `number`.
+* Fixed the first call of `variable_triggers` before full initialization of child components.
+* Fixed an issue with incorrect `corners_radius`.
+* Fixed an issue with incorrect `variable_triggers`.
+
+
 ## 30.14.0 (August 19, 2024)
 
 * Added `markdownExtensionBuilder` function, which accepts the markdown processing function and produces a `markdown` extension.
