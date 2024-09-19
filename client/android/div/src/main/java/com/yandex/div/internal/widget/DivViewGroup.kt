@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.GravityCompat
 import kotlin.math.max
 import kotlin.math.min
 
@@ -23,7 +22,7 @@ abstract class DivViewGroup @JvmOverloads constructor(
 
             var newGravity = value
             if ((newGravity.toHorizontalGravity()) == 0) {
-                newGravity = newGravity or GravityCompat.START
+                newGravity = newGravity or Gravity.START
             }
             if ((newGravity.toVerticalGravity()) == 0) {
                 newGravity = newGravity or Gravity.TOP

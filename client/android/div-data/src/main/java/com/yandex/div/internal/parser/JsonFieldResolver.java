@@ -11,6 +11,8 @@ import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
 import com.yandex.div.serialization.TemplateResolver;
+
+import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONObject;
 
@@ -25,6 +27,7 @@ import static com.yandex.div.json.ParsingExceptionKt.invalidValue;
 import static com.yandex.div.json.ParsingExceptionKt.missingValue;
 
 @SuppressWarnings({"ForLoopReplaceableByForEach", "StringEquality", "unused"})
+@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonFieldResolver {
 
     @NonNull

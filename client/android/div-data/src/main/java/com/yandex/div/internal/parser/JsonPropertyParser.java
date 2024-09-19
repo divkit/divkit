@@ -7,6 +7,8 @@ import com.yandex.div.json.ParsingException;
 import com.yandex.div.json.ParsingExceptionKt;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
+
+import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,6 +35,7 @@ import static com.yandex.div.json.ParsingExceptionKt.typeMismatch;
  * This will only make parsing slower.
  */
 @SuppressWarnings({"unused", "unchecked"})
+@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonPropertyParser {
 
     private JsonPropertyParser() {

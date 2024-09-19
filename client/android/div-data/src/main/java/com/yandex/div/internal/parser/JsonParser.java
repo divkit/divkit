@@ -11,6 +11,8 @@ import com.yandex.div.json.expressions.ConstantExpressionList;
 import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.json.expressions.MutableExpressionList;
+
+import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.internal.Intrinsics;
@@ -34,6 +36,7 @@ import static com.yandex.div.json.ParsingExceptionKt.typeMismatch;
  * NOTE! Please do not change Function1 and Function2 with readable java-interfaces.
  * This will only make parsing slower.
  */
+@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonParser {
     @NonNull
     private static final ValueValidator<?> ALWAYS_VALID = (any) -> true;

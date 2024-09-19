@@ -9,6 +9,8 @@ import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.json.expressions.MutableExpressionList;
 import com.yandex.div.serialization.ParsingContext;
+
+import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,6 +36,7 @@ import static com.yandex.div.json.ParsingExceptionKt.typeMismatch;
  * This will only make parsing slower.
  */
 @SuppressWarnings({"unused", "unchecked"})
+@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonExpressionParser {
 
     private static final ExpressionList<?> EMPTY_EXPRESSION_LIST = new ConstantExpressionList<>(Collections.emptyList());

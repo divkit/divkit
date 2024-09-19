@@ -43,5 +43,5 @@ internal fun DivInputView.openKeyboard() {
 
 internal fun View.closeKeyboard() {
     val imm = ContextCompat.getSystemService(context, InputMethodManager::class.java)
-    imm?.hideSoftInputFromWindow(windowToken, InputMethodManager.SHOW_IMPLICIT)
+    imm?.hideSoftInputFromWindow(windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 }

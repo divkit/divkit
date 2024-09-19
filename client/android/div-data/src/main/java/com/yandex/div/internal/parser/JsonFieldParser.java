@@ -10,6 +10,8 @@ import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
+
+import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONObject;
 
@@ -29,6 +31,7 @@ import static com.yandex.div.internal.parser.JsonTemplateParserKt.suppressMissin
  * This will only make parsing slower.
  */
 @SuppressWarnings("unused")
+@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonFieldParser {
 
     private static final ValueValidator<String> IS_NOT_EMPTY = value -> !value.isEmpty();
