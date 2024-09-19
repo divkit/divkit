@@ -33,13 +33,24 @@ internal class VariableControllerImpl(
         invokeOnSubscription: Boolean,
         observer: (Variable) -> Unit
     ): Disposable {
+        val disposables = mutableListOf<Disposable>()
         names.forEach { name ->
-            subscribeToVariableChangeImpl(name, null, invokeOnSubscription, observer)
-        }
-        return Disposable {
-            names.forEach { name ->
-                removeChangeObserver(name, observer)
+            if (!variables.containsKey(name) && delegate?.getMutableVariable(name) != null) {
+                // if required variable stored in delegate we should subscribe on it
+                delegate.subscribeToVariableChange(
+                    name = name,
+                    errorCollector = null,
+                    invokeOnSubscription = invokeOnSubscription,
+                    observer = observer,
+                ).also { disposables.add(it) }
+            } else {
+                subscribeToVariableChangeImpl(name, null, invokeOnSubscription, observer)
             }
+        }
+
+        return Disposable {
+            names.forEach { removeChangeObserver(it, observer) }
+            disposables.forEach { it.close() }
         }
     }
 
@@ -49,9 +60,17 @@ internal class VariableControllerImpl(
         invokeOnSubscription: Boolean,
         observer: (Variable) -> Unit
     ): Disposable {
-        subscribeToVariableChangeImpl(name, errorCollector, invokeOnSubscription, observer)
-        return Disposable {
-            removeChangeObserver(name, observer)
+        return if (!variables.containsKey(name) && delegate?.getMutableVariable(name) != null) {
+            // if required variable stored in delegate we should subscribe on it
+            delegate.subscribeToVariableChange(
+                name = name,
+                errorCollector = errorCollector,
+                invokeOnSubscription = invokeOnSubscription,
+                observer = observer,
+            )
+        } else {
+            subscribeToVariableChangeImpl(name, errorCollector, invokeOnSubscription, observer)
+            Disposable { removeChangeObserver(name, observer) }
         }
     }
 
@@ -61,12 +80,11 @@ internal class VariableControllerImpl(
         invokeOnSubscription: Boolean = false,
         observer: (Variable) -> Unit
     ) {
-        val variable = getMutableVariable(name)
-            ?: run {
-                errorCollector?.logError(missingVariable(name))
-                addObserver(name, observer)
-                return
-            }
+        val variable = getMutableVariable(name) ?: run {
+            errorCollector?.logError(missingVariable(name))
+            addObserver(name, observer)
+            return
+        }
 
         if (invokeOnSubscription) {
             // Any on variable changed notify should be executed on main thread.
@@ -84,7 +102,9 @@ internal class VariableControllerImpl(
     private fun notifyVariableChanged(v: Variable) {
         Assert.assertMainThread()
         onAnyVariableChangeObservers.forEach { it.invoke(v) }
-        onChangeObservers[v.name]?.forEach { it.invoke(v) }
+        onChangeObservers[v.name]?.forEach {
+            it.invoke(v)
+        }
     }
 
     /**

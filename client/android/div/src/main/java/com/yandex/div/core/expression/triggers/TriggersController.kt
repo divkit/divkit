@@ -155,7 +155,7 @@ private class TriggerExecutor(
                 logger.logTrigger(div2View, it)
             }
         }
-        divActionBinder.handleActions(viewFacade, viewFacade.expressionResolver, actions, DivActionReason.TRIGGER)
+        divActionBinder.handleActions(viewFacade, resolver, actions, DivActionReason.TRIGGER)
     }
 
     private fun conditionSatisfied(): Boolean {

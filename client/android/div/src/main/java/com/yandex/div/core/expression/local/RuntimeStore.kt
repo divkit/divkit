@@ -1,8 +1,12 @@
 package com.yandex.div.core.expression.local
 
+import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.VariableControllerImpl
+import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluationContext
@@ -10,6 +14,7 @@ import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivTrigger
 
 internal const val ROOT_RUNTIME_PATH = "root_runtime_path"
 private const val ERROR_UNKNOWN_RESOLVER =
@@ -23,11 +28,14 @@ private const val WARNING_LOCAL_USING_LOCAL_VARIABLES =
 internal class RuntimeStore(
     private val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
+    private val div2Logger: Div2Logger,
+    private val divActionBinder: DivActionBinder,
 ) {
     private var warningShown = false
     private val pathToRuntimes = mutableMapOf<String, ExpressionsRuntime?>()
     private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime?>()
     private val allRuntimes = mutableSetOf<ExpressionsRuntime>()
+    internal var divTree: DivRuntimeTree? = null
 
     private val onCreateCallback by lazy {
         ExpressionResolverImpl.OnCreateCallback { resolver, variableController ->
@@ -48,8 +56,13 @@ internal class RuntimeStore(
         }
     }
 
-    internal fun getOrCreateRuntime(path: String, parentPath: String?, variables: List<Variable>?) =
-        pathToRuntimes[path] ?: getRuntimeOrCreateChild(path, parentPath, variables)
+    internal fun getOrCreateRuntime(
+        path: String,
+        parentPath: String? = null,
+        variables: List<Variable>? = null,
+        triggers: List<DivTrigger>? = null,
+        parentRuntime: ExpressionsRuntime? = null
+    ) = pathToRuntimes[path] ?: getRuntimeOrCreateChild(path, parentPath, variables, triggers, parentRuntime)
 
     internal fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
 
@@ -67,6 +80,7 @@ internal class RuntimeStore(
         path: String,
         parentPath: String?,
         variables: List<Variable>?,
+        triggers: List<DivTrigger>?,
         resolver: ExpressionResolver,
         parentRuntime: ExpressionsRuntime? = null,
     ): ExpressionsRuntime? {
@@ -79,7 +93,7 @@ internal class RuntimeStore(
         }
 
         if (runtimeForPath != null) removeRuntimesFor(path)
-        return getRuntimeOrCreateChild(path, parentPath, variables, existingRuntime, parentRuntime)
+        return getRuntimeOrCreateChild(path, parentPath, variables, triggers, existingRuntime, parentRuntime)
     }
 
     internal fun cleanup() {
@@ -88,7 +102,10 @@ internal class RuntimeStore(
     }
 
     internal fun updateSubscriptions() =
-        pathToRuntimes.values.toSet().forEach { it?.updateSubscriptions() }
+        allRuntimes.forEach { it.updateSubscriptions() }
+
+    internal fun onAttachedToWindow(view: DivViewFacade) =
+        allRuntimes.forEach { it.onAttachedToWindow(view) }
 
     private fun reportError(message: String) {
         Assert.fail(message)
@@ -98,10 +115,11 @@ internal class RuntimeStore(
     private fun createChildRuntime(
         parentRuntime: ExpressionsRuntime,
         path: String,
-        variables: List<Variable>
+        variables: List<Variable>?,
+        variablesTriggers: List<DivTrigger>?,
     ): ExpressionsRuntime {
         val localVariableController = VariableControllerImpl(parentRuntime.variableController)
-        variables.forEach { localVariableController.declare(it) }
+        variables?.forEach { localVariableController.declare(it) }
 
         val evaluationContext = EvaluationContext(
             variableProvider = localVariableController,
@@ -110,15 +128,27 @@ internal class RuntimeStore(
             warningSender = evaluator.evaluationContext.warningSender
         )
 
+        val evaluator = Evaluator(evaluationContext)
         val resolver = ExpressionResolverImpl(
             variableController = localVariableController,
-            evaluator = Evaluator(evaluationContext),
+            evaluator = evaluator,
             errorCollector = errorCollector,
             onCreateCallback = onCreateCallback,
         )
 
+        val triggerController = if (variablesTriggers == null) null else TriggersController(
+            localVariableController,
+            resolver,
+            evaluator,
+            errorCollector,
+            div2Logger,
+            divActionBinder
+        ).apply {
+            ensureTriggersSynced(variablesTriggers)
+        }
+
         return ExpressionsRuntime(
-            resolver, localVariableController, null, parentRuntime.runtimeStore
+            resolver, localVariableController, triggerController, parentRuntime.runtimeStore
         ).also {
             putRuntime(it, path)
         }
@@ -137,6 +167,7 @@ internal class RuntimeStore(
         path: String,
         parentPath: String?,
         variables: List<Variable>?,
+        variablesTriggers: List<DivTrigger>?,
         existingRuntime: ExpressionsRuntime? = null,
         parentRuntime: ExpressionsRuntime? = null,
     ): ExpressionsRuntime? {
@@ -147,13 +178,13 @@ internal class RuntimeStore(
                 return null
             }
 
-        return if (variables.isNullOrEmpty()) {
+        return if (variables.isNullOrEmpty() && variablesTriggers.isNullOrEmpty()) {
             runtime.also {
                 pathToRuntimes[path] = it
                 runtime.updateSubscriptions()
             }
         } else {
-            createChildRuntime(runtime, path, variables)
+            createChildRuntime(runtime, path, variables, variablesTriggers)
         }
     }
 }

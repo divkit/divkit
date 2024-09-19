@@ -93,7 +93,8 @@ internal class DivBinder @Inject constructor(
             parentContext.runtimeStore?.getOrCreateRuntime(
                 path = path.fullPath,
                 parentPath = path.parentFullPath,
-                variables = div.value().variables?.toVariables()
+                variables = div.value().variables?.toVariables(),
+                triggers = div.value().variableTriggers,
             )?.expressionResolver ?: parentContext.expressionResolver
         )
         val divView = context.divView

@@ -214,10 +214,10 @@ class Div2View private constructor(
     private fun attachVariableTriggers() {
         if (bindOnAttachEnabled) {
             setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
-                expressionsRuntime?.onAttachedToWindow(this)
+                runtimeStore?.onAttachedToWindow(this)
             }
         } else {
-            expressionsRuntime?.onAttachedToWindow(this)
+            runtimeStore?.onAttachedToWindow(this)
         }
     }
 

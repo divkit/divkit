@@ -1,6 +1,7 @@
 {
   "description": "Local triggers",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

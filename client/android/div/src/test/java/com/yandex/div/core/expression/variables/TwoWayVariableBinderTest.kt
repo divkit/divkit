@@ -40,7 +40,7 @@ class TwoWayVariableBinderTest {
         declare(variable)
     }
     private val path = DivStatePath(0)
-    private val store = RuntimeStore(mock(), mock())
+    private val store = RuntimeStore(mock(), mock(), mock(), mock())
     private val expressionResolver = ExpressionResolverImpl(mock(), mock(), mock(), mock())
     private val expressionsRuntime = ExpressionsRuntime(expressionResolver, variableController, mock(), store)
     private val expressionsRuntimeProvider = mock<ExpressionsRuntimeProvider> {

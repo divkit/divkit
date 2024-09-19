@@ -1,9 +1,11 @@
 package com.yandex.div.core.expression.local
 
+import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluationContext
@@ -30,8 +32,10 @@ class RuntimeStoreTest {
     }
     private val errorCollector = mock<ErrorCollector>()
 
+    private val div2Logger = Div2Logger.STUB
+    private val divActionBinder = mock<DivActionBinder>()
     private val path = DivStatePath(0, emptyList(), PATH, PARENT_PATH)
-    private val underTest = RuntimeStore(evaluator, errorCollector)
+    private val underTest = RuntimeStore(evaluator, errorCollector, div2Logger, divActionBinder)
 
     private var runtimeFromCallback: ExpressionsRuntime? = null
     private val callback = ExpressionResolverImpl.OnCreateCallback { resolver, variableController ->
@@ -60,19 +64,19 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith links path to created runtime`() {
         val newResolver = ExpressionResolverImpl(mock(), mock(), errorCollector, callback)
-        underTest.resolveRuntimeWith(path.fullPath, path.parentFullPath, null, newResolver)
+        underTest.resolveRuntimeWith(path.fullPath, path.parentFullPath, null, null, newResolver)
 
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(newResolver))
         Assert.assertEquals(
             runtimeFromCallback,
-            underTest.getOrCreateRuntime(path.fullPath, path.parentFullPath, null)
+            underTest.getOrCreateRuntime(path.fullPath, path.parentFullPath)
         )
     }
 
     @Test
     fun `setPathToRuntimeWith creates runtime with new variables if variables provided`() {
         val variables = listOf(Variable.IntegerVariable(CHILD_VARIABLE, 123))
-        underTest.resolveRuntimeWith(path.fullPath, path.parentFullPath, variables, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, path.parentFullPath, variables, null, resolver)
 
         val runtime = underTest.getOrCreateRuntime(path.fullPath, path.parentFullPath, null)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
@@ -139,7 +143,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith links path to runtime`() {
         val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
-        underTest.resolveRuntimeWith(path.fullPath, null, null, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, null, null, null, resolver)
 
         Assert.assertNotNull(runtimeFromCallback)
         Assert.assertEquals(
@@ -162,7 +166,7 @@ class RuntimeStoreTest {
             parentVariableController, evaluator, errorCollector, callback
         )
 
-        underTest.resolveRuntimeWith(path.fullPath, path.parentFullPath, variables, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, path.parentFullPath, variables, null,resolver)
         val newRuntime = underTest.getOrCreateRuntime(path.fullPath, null, null)
 
         Assert.assertNotNull(newRuntime)
