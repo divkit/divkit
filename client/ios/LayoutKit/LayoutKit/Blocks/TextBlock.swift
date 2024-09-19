@@ -110,7 +110,7 @@ public final class TextBlock: BlockWithTraits {
         return cached
       }
 
-      let width = ceil(text.sizeForWidth(.infinity).width)
+      let width = ceil(text.sizeForWidth(maxSize).width)
       let result = clamp(width, min: minSize, max: maxSize)
       cachedIntrinsicWidth = result
       return result
