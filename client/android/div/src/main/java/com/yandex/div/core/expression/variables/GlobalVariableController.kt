@@ -114,7 +114,7 @@ class GlobalVariableController {
         // Property update may fail cause only part of variables just got declared.
         if (newDeclaredVariables.isNotEmpty()) {
             declarationObservers.forEach { observer ->
-                newDeclaredVariables.forEach { variable -> observer.invoke(variable) }
+                newDeclaredVariables.forEach { variable -> observer.onDeclared(variable) }
             }
         }
     }

@@ -16,10 +16,14 @@ internal class VariableControllerImpl(
     private val variables = mutableMapOf<String, Variable>()
     private val extraVariablesSources = mutableListOf<VariableSource>()
     private val onChangeObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
+    private val onRemoveObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
 
     private val onAnyVariableChangeObservers = ObserverList<(Variable) -> Unit>()
     private val notifyVariableChangedCallback = { v : Variable -> notifyVariableChanged(v) }
-    private val declarationObserver = { v : Variable -> onVariableDeclared(v) }
+    private val declarationObserver = object : DeclarationObserver {
+        override fun onDeclared(variable: Variable) = onVariableDeclared(variable)
+        override fun onUndeclared(variable: Variable) = onVariableRemoved(variable)
+    }
 
     private fun addObserver(name: String, observer: (Variable) -> Unit) {
         val observers = onChangeObservers.getOrPut(name) {
@@ -74,6 +78,23 @@ internal class VariableControllerImpl(
         }
     }
 
+    override fun subscribeToVariablesUndeclared(
+        names: List<String>,
+        observer: (Variable) -> Unit
+    ): Disposable {
+        names.forEach {
+            onRemoveObservers.getOrPut(it) {
+                ObserverList<(Variable) -> Unit>()
+            }.addObserver(observer)
+        }
+
+        return Disposable {
+            names.forEach {
+                onRemoveObservers[it]?.removeObserver(observer)
+            }
+        }
+    }
+
     private fun subscribeToVariableChangeImpl(
         name: String,
         errorCollector: ErrorCollector? = null,
@@ -119,6 +140,17 @@ internal class VariableControllerImpl(
     private fun onVariableDeclared(variable: Variable) {
         variable.addObserver(notifyVariableChangedCallback)
         notifyVariableChanged(variable)
+    }
+
+    private fun onVariableRemoved(variable: Variable) {
+        variable.removeObserver(notifyVariableChangedCallback)
+        onRemoveObservers[variable.name]?.forEach { it.invoke(variable) }
+        onAnyVariableChangeObservers.forEach {
+            it.invoke(variable)
+            variable.removeObserver(it)
+        }
+
+        variables.remove(variable.name)
     }
 
     override fun getMutableVariable(name: String): Variable? {
