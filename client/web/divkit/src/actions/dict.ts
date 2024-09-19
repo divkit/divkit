@@ -1,9 +1,11 @@
 import type { ActionDictSetValue, WrappedError } from '../../typings/common';
 import type { Variable } from '../../typings/variables';
 import type { MaybeMissing } from '../expressions/json';
+import type { ComponentContext } from '../types/componentContext';
 import { wrapError } from '../utils/wrapError';
 
 export function dictSetValue(
+    componentContext: ComponentContext | undefined,
     variables: Map<string, Variable>,
     logError: (error: WrappedError) => void,
     actionTyped: MaybeMissing<ActionDictSetValue>
@@ -28,7 +30,7 @@ export function dictSetValue(
         return;
     }
 
-    const variableInstance = variables.get(name);
+    const variableInstance = componentContext?.getVariable(name) || variables.get(name);
 
     if (!variableInstance) {
         logError(wrapError(new Error('Cannot find variable'), {
