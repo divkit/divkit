@@ -116,6 +116,11 @@
             },
             "items": [
               {
+                "id": "len_of_text_warning",
+                "type": "text",
+                "text": "Len of text must be greater or equal to 8."
+              },
+              {
                 "id": "input",
                 "type": "pretty_input",
                 "variable": "input",
@@ -139,14 +144,13 @@
               },
               {
                 "id": "regex_input",
-                "type": "pretty_input",
-                "variable": "regex",
-                "hint": "regex"
+                "type": "text",
+                "text": "@{regex}"
               },
               {
                 "id": "too_short_title",
                 "type": "pretty_text",
-                "text": "Text are too short",
+                "text": "Text is too short",
                 "text_color": "#ff0000",
                 "font_size": 14,
                 "visibility": "@{text_not_are_too_short ? 'invisible' : 'visible'}"
@@ -204,6 +208,10 @@
         {
           "url": "div-action://set_variable?name=regex&value=[a-zA-Z]%2b",
           "log_id": "change regex"
+        },
+        {
+          "url": "div-action://set_variable?name=text_contains_valid_characters_title&value=Text+must+contain+only+latin+characters",
+          "log_id": "change warning to suitable"
         }
       ],
       "expected_screenshot": "step2.png"

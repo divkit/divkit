@@ -258,20 +258,11 @@
     {
       "div_actions": [
         {
-          "url": "div-action://scroll_to_start?id=gallery",
-          "log_id": "scroll_to_end"
-        }
-      ],
-      "expected_screenshot": "step7.png"
-    },
-    {
-      "div_actions": [
-        {
           "url": "div-action://set_variable?name=paddings.top&value=50",
           "log_id": "paddings.top=50"
         }
       ],
-      "expected_screenshot": "step10.png"
+      "expected_screenshot": "step9.png"
     },
     {
       "div_actions": [
@@ -280,16 +271,16 @@
           "log_id": "paddings.bottom=50"
         }
       ],
-      "expected_screenshot": "step11.png"
+      "expected_screenshot": "step10.png"
     },
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=item_text&value=ITEM TEXT",
-          "log_id": "item_text=ITEM TEXT"
+          "url": "div-action://set_variable?name=item_text&value=ITEM+TEXT",
+          "log_id": "item_text=ITEM+TEXT"
         }
       ],
-      "expected_screenshot": "step12.png"
+      "expected_screenshot": "step11.png"
     }
   ]
 }

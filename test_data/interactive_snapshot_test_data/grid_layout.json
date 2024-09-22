@@ -33,44 +33,6 @@
         "delimiter_style": {
           "color": "#00000000"
         }
-      },
-      "button": {
-        "type": "text",
-        "width": {
-          "type": "match_parent"
-        },
-        "height": {
-          "type": "wrap_content"
-        },
-        "paddings": {
-          "left": 16,
-          "top": 16,
-          "right": 16,
-          "bottom": 16
-        },
-        "margins": {
-          "top": 16,
-          "bottom": 16,
-          "left": 16,
-          "right": 16
-        },
-        "border": {
-          "corner_radius": 8
-        },
-        "background": [
-          {
-            "type": "solid",
-            "color": "#0E000000"
-          }
-        ],
-        "font_size": 16,
-        "font_weight": "medium",
-        "text_alignment_vertical": "center",
-        "text_alignment_horizontal": "center",
-        "text_color": "#000000",
-        "alpha": 1.0,
-        "alignment_horizontal": "center",
-        "alignment_vertical": "center"
       }
     },
     "card": {
@@ -156,10 +118,6 @@
         {
           "log_id": "update_row_span_right",
           "url": "div-action://set_variable?name=row_span_right&value=2"
-        },
-        {
-          "log_id": "update_button",
-          "url": "div-action://set_state?state_id=0/button/state1"
         }
       ],
       "expected_screenshot": "step1.png"
@@ -173,10 +131,6 @@
         {
           "log_id": "update_row_span_right",
           "url": "div-action://set_variable?name=row_span_right&value=1"
-        },
-        {
-          "log_id": "update_button",
-          "url": "div-action://set_state?state_id=0/button/state0"
         }
       ],
       "expected_screenshot": "step0.png"

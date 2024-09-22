@@ -41,17 +41,17 @@
                                 "state_id_variable": "state_id_var",
                                 "states": [
                                     {
-                                        "state_id": "state1",
-                                        "div": {
-                                            "type": "title",
-                                            "text": "State 1"
-                                        }
-                                    },
-                                    {
                                         "state_id": "state2",
                                         "div": {
                                             "type": "title",
                                             "text": "Second state"
+                                        }
+                                    },
+                                    {
+                                        "state_id": "state1",
+                                        "div": {
+                                            "type": "title",
+                                            "text": "State 1"
                                         }
                                     },
                                     {
