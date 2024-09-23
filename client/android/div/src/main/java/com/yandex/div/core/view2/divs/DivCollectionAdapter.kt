@@ -65,8 +65,9 @@ internal abstract class DivCollectionAdapter<VH: RecyclerView.ViewHolder>(
                     idToFind,
                     bindingContext.expressionResolver
                 )?.let { newDiv ->
+                    updateItemVisibility(i, DivVisibility.GONE)
                     items[i] = DivItemBuilderResult(newDiv, bindingContext.expressionResolver)
-                    notifyItemChanged(i)
+                    updateItemVisibility(i)
                     return@forEach
                 }
             }
