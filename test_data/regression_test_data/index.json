@@ -2602,6 +2602,47 @@
     },
 
     {
+      "title": "Patch on_applied_actions",
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "web",
+        "android",
+        "ios"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "2 elements should become red",
+        "Patch status text should become success"
+      ],
+      "file": "patch/actions_applied.json"
+    },
+
+    {
+      "title": "Patch on_failed_actions",
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "web",
+        "android"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "Patch status text should become fail",
+        "No other elements hould be changed"
+      ],
+      "file": "patch/actions_failed.json"
+    },
+
+    {
       "title": "State with variable binding",
       "tags": [
         "DivState"

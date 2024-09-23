@@ -1,4 +1,4 @@
-import type { DivBase } from '../../typings/common';
+import type { Action, DivBase } from '../../typings/common';
 
 export interface PatchChange {
     id: string;
@@ -10,5 +10,7 @@ export interface Patch {
     patch: {
         mode?: 'transactional' | 'partial';
         changes: PatchChange[];
+        on_applied_actions?: Action[];
+        on_failed_actions?: Action[];
     };
 }

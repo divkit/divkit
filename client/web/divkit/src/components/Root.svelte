@@ -645,6 +645,7 @@
                                     id: failed.id
                                 }
                             }));
+                            execAnyActions(json.patch?.on_failed_actions);
                             execAnyActions(action.download_callbacks?.on_fail_actions);
                             return;
                         }
@@ -655,6 +656,7 @@
                             methods.replaceWith(change.id, change.items);
                         }
                     });
+                    execAnyActions(json.patch?.on_applied_actions);
                     execAnyActions(action.download_callbacks?.on_success_actions);
                 }
             }).catch(err => {
