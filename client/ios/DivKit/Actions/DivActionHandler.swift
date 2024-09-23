@@ -24,6 +24,7 @@ public final class DivActionHandler {
   private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
   private let focusElementActionHandler = FocusElementActionHandler()
   private let setVariableActionHandler = SetVariableActionHandler()
+  private let timerActionHandler: TimerActionHandler
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
   public init(
@@ -62,6 +63,7 @@ public final class DivActionHandler {
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
     self.reporter = reporter ?? DefaultDivReporter()
+    self.timerActionHandler = TimerActionHandler(performer: performTimerAction)
   }
 
   public func handle(
@@ -141,7 +143,9 @@ public final class DivActionHandler {
       focusElementActionHandler.handle(action, context: context)
     case let .divActionSetVariable(action):
       setVariableActionHandler.handle(action, context: context)
-    case .divActionAnimatorStart, .divActionAnimatorStop, .divActionTimer, .divActionVideo,
+    case let .divActionTimer(action):
+      timerActionHandler.handle(action, context: context)
+    case .divActionAnimatorStart, .divActionAnimatorStop, .divActionVideo,
         .divActionShowTooltip, .divActionSetState, .divActionHideTooltip:
       break
     case .none:
