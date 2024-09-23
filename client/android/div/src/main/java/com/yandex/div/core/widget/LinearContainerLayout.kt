@@ -97,7 +97,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     // Children with match_parent size in main direction can be stretched
     // according to the ratio of their weight to total weight of those children.
     private var totalWeight = 0f
-    private var hasDefinedCrossSize = false
 
     override fun shouldDelayChildPressedState(): Boolean {
         return false
@@ -209,7 +208,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         totalMatchParentLength = 0
         totalWeight = 0f
         childMeasuredState = 0
-        hasDefinedCrossSize = false
 
         firstVisibleChildIndex = children.indexOfFirst { !it.isGone }
         lastVisibleChildIndex = children.indexOfLast { !it.isGone }
@@ -276,6 +274,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             measureChildWithSignificantSizeVertical(child, widthMeasureSpec, heightSpec)
         }
         considerMatchParentChildrenInMaxWidth(widthMeasureSpec, heightSpec)
+        crossMatchParentChildren.forEach { measureMatchParentWidthChild(it, heightSpec) }
 
         if (totalLength > 0 && hasDividerBeforeChildAt(childCount)) {
             totalLength += dividerHeightWithMargins
@@ -403,24 +402,19 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     }
 
     private fun considerMatchParentChildrenInMaxWidth(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (isExact(widthMeasureSpec)) {
-            hasDefinedCrossSize = true
-            return
-        }
+        if (isExact(widthMeasureSpec)) return
 
         // If container's width is defined by children with exact sizes (fixed or wrap_content)
         // we should consider margins of children with match_parent size.
         if (maxCrossSize != 0) {
-            hasDefinedCrossSize = true
             crossMatchParentChildren.forEach { maxCrossSize = max(maxCrossSize, it.lp.horizontalMargins) }
-            crossMatchParentChildren.forEach { measureMatchParentWidthChild(it, heightMeasureSpec) }
             return
         }
 
         // Otherwise we calculate maximum size of match_parent children content.
         crossMatchParentChildren.forEach { child ->
             measureVerticalFirstTime(child, widthMeasureSpec, heightMeasureSpec,
-                considerWidth = true, considerHeight = hasSignificantHeight(child, heightMeasureSpec))
+                considerWidth = true, considerHeight = false)
             skippedMatchParentChildren -= child
         }
     }
@@ -495,7 +489,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val oldWidth = lp.width
         when {
             oldWidth != MATCH_PARENT -> Unit
-            !hasDefinedCrossSize -> lp.width = WRAP_CONTENT_CONSTRAINED
+            maxWidth == 0 -> lp.width = WRAP_CONTENT_CONSTRAINED
             else -> widthSpec = makeExactSpec(maxWidth)
         }
         val childWidthMeasureSpec = getChildMeasureSpec(
@@ -574,8 +568,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
         var heightSize = MeasureSpec.getSize(heightSpec)
         val exactHeight = isExact(heightSpec)
-        val exactCrossSize = exactHeight || aspectRatio != DEFAULT_ASPECT_RATIO
-        hasDefinedCrossSize = exactCrossSize
 
         val initialMaxHeight = (if (exactHeight) heightSize else max(suggestedMinimumHeight, verticalPaddings))
             .coerceAtLeast(0)
@@ -585,7 +577,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 totalLength += dividerWidthWithMargins
             }
             totalWeight += child.lp.fixedHorizontalWeight
-            hasDefinedCrossSize = hasDefinedCrossSize || child.lp.height != MATCH_PARENT
             measureChildWithSignificantSizeHorizontal(child, widthMeasureSpec, heightSpec)
         }
 
@@ -606,7 +597,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
         remeasureChildrenHorizontalIfNeeded(widthMeasureSpec, widthSize, heightSpec)
 
-        if (!exactCrossSize) {
+        if (!exactHeight && aspectRatio == DEFAULT_ASPECT_RATIO) {
             forEachSignificant { considerMatchParentChildInMaxHeight(it, heightSpec, maxCrossSize == 0) }
             maxCrossSize = max(initialMaxHeight, maxCrossSize + verticalPaddings)
             if (maxBaselineAscent != -1) {
@@ -616,12 +607,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             heightSize = resolveSize(maxCrossSize, heightSpec)
         }
 
-        if (hasDefinedCrossSize) {
-            heightSpec = makeExactSpec(heightSize)
-        }
-        forEachSignificant {
-            remeasureDynamicHeightChild(it, heightSpec)
-        }
+        forEachSignificant { remeasureDynamicHeightChild(it, makeExactSpec(heightSize)) }
 
         setMeasuredDimension(
             widthSizeAndState,

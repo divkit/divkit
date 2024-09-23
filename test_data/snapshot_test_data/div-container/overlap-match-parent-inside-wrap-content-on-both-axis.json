@@ -1,7 +1,6 @@
 {
     "platforms": [
       "android",
-      "ios",
       "web"
     ],
     "description": "match_parent inside wrap_content of an overlap container without known size should transform into the wrap_content with constrained",
@@ -20,12 +19,6 @@
                 "top": 5,
                 "bottom": 5
             },
-            "background": [
-                {
-                    "type": "solid",
-                    "color": "#151515"
-                }
-            ],
             "items": [
                 {
                     "type": "container",
@@ -89,12 +82,24 @@
                         {
                             "type": "my-card",
                             "title_prop": "Card title\n\nmore",
-                            "label_prop": "Label"
+                            "label_prop": "Label",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#151515"
+                                }
+                            ]
                         },
                         {
                             "type": "my-card",
                             "title_prop": "Long card title",
-                            "label_prop": "Label"
+                            "label_prop": "Label",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#80FFFFFF"
+                                }
+                            ]
                         }
                     ]
                 }
