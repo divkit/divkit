@@ -14,6 +14,7 @@ extension TextInputBlock {
     let inputView = view as! TextInputBlockView
     inputView.setLayoutDirection(layoutDirection)
     inputView.setInputType(inputType)
+    inputView.setInputAccessoryView(accessoryView)
     inputView.setAutocapitalizationType(autocapitalizationType)
     inputView.setValidators(validators)
     inputView.setFilters(filters)
@@ -187,6 +188,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       multiLineInput.tintColor = multiLineInput.backgroundColor
       multiLineInput.inputView = selectionView
     }
+  }
+
+  func setInputAccessoryView(_ accessoryView: ViewType?) {
+    multiLineInput.inputAccessoryView = accessoryView
+    singleLineInput.inputAccessoryView = accessoryView
   }
 
   func setAutocapitalizationType(_ type: TextInputBlock.AutocapitalizationType) {

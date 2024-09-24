@@ -297,6 +297,7 @@ public final class DivKitComponents {
       cardId: cardId,
       additionalId: additionalId,
       stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,

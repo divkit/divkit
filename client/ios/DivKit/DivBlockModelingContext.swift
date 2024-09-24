@@ -14,6 +14,7 @@ public struct DivBlockModelingContext {
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
   let stateManager: DivStateManager
+  public let actionHandler: DivActionHandler?
   public let blockStateStorage: DivBlockStateStorage
   let visibilityCounter: DivVisibilityCounting
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
@@ -50,6 +51,7 @@ public struct DivBlockModelingContext {
     parentPath: UIElementPath? = nil,
     parentDivStatePath: DivStatePath? = nil,
     stateManager: DivStateManager,
+    actionHandler: DivActionHandler? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     visibilityCounter: DivVisibilityCounting? = nil,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
@@ -88,6 +90,7 @@ public struct DivBlockModelingContext {
       parentPath: parentPath,
       parentDivStatePath: parentDivStatePath,
       stateManager: stateManager,
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,
@@ -119,6 +122,7 @@ public struct DivBlockModelingContext {
     parentPath: UIElementPath?,
     parentDivStatePath: DivStatePath?,
     stateManager: DivStateManager,
+    actionHandler: DivActionHandler?,
     blockStateStorage: DivBlockStateStorage,
     visibilityCounter: DivVisibilityCounting?,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache?,
@@ -149,6 +153,7 @@ public struct DivBlockModelingContext {
     self.parentPath = parentPath
     self.parentDivStatePath = parentDivStatePath
     self.stateManager = stateManager
+    self.actionHandler = actionHandler
     self.blockStateStorage = blockStateStorage
     self.visibilityCounter = visibilityCounter ?? DivVisibilityCounter()
     self.lastVisibleBoundsCache = lastVisibleBoundsCache ?? DivLastVisibleBoundsCache()

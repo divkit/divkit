@@ -67,6 +67,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let textTypo: Typo
   public let multiLineMode: Bool
   public let inputType: InputType
+  public var accessoryView: ViewType?
   public let autocapitalizationType: AutocapitalizationType
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
@@ -95,6 +96,7 @@ public final class TextInputBlock: BlockWithTraits {
     textTypo: Typo,
     multiLineMode: Bool = true,
     inputType: InputType = .default,
+    accessoryView: ViewType? = nil,
     autocapitalizationType: AutocapitalizationType = .sentences,
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
@@ -122,6 +124,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.textTypo = textTypo
     self.multiLineMode = multiLineMode
     self.inputType = inputType
+    self.accessoryView = accessoryView
     self.autocapitalizationType = autocapitalizationType
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
