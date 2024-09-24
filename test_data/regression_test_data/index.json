@@ -2692,7 +2692,8 @@
       "title": "Input keyboard types",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
