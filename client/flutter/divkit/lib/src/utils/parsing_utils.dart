@@ -431,12 +431,10 @@ Future<int?> safeParseIntAsync(
 int? safeParseInt(Object? source) {
   if (source is int) {
     return source;
-  }
-  if (source is double) {
+  } else if (source is double) {
     return source.round();
-  }
-  if (source is String) {
-    return int.tryParse(source);
+  } else if (source is String) {
+    return double.tryParse(source)?.toInt();
   }
   return null;
 }

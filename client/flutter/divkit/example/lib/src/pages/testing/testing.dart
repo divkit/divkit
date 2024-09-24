@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:divkit/divkit.dart';
 import 'package:example/src/pages/testing/data.dart';
@@ -10,9 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 Future<List<Item>> process(Box box) async {
-  // Register the background isolate with the root isolate.
-  BackgroundIsolateBinaryMessenger.ensureInitialized(box.token);
-
   final it = <Item>[];
   for (int i = 0; i < box.data.length; ++i) {
     try {
@@ -26,10 +22,8 @@ Future<List<Item>> process(Box box) async {
         templates: json['templates'],
       );
       await data.build();
-      // Expressions only work on mobile platforms!
-      if (Platform.isAndroid || Platform.isIOS) {
-        await data.preload();
-      }
+      await data.preload();
+
       it.add(Item(
         name,
         data,
@@ -42,14 +36,13 @@ Future<List<Item>> process(Box box) async {
 
 Future<List<Item>> loadList() async {
   final index = json.decode(
-    await rootBundle
-        .loadString('assets/test_data/regression_test_data/index.json'),
+    await rootBundle.loadString('assets/regression/index.json'),
   );
 
   List<String> strings = [];
   List<Map> metas = [];
   for (var test in index['tests']) {
-    final asset = 'assets/test_data/regression_test_data/${test['file']}';
+    final asset = 'assets/regression/${test['file']}';
     strings.add(await rootBundle.loadString(asset));
     metas.add(test);
   }

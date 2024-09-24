@@ -1,9 +1,128 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:ui';
-
 import 'package:divkit/divkit.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+const json = {
+  "div": {
+    "type": "container",
+    "orientation": "vertical",
+    "width": {"type": "wrap_content"},
+    "height": {"type": "wrap_content"},
+    "background": [
+      {"type": "solid", "color": "#FFFFFF"},
+    ],
+    "layout_mode": "no_wrap",
+    "items": [
+      {
+        "type": "text",
+        "text": "Linear container with baseline alignment:",
+        "width": {"type": "wrap_content"},
+        "height": {"type": "wrap_content"},
+        "paddings": {"left": 10, "top": 10, "bottom": 10},
+      },
+      {
+        "type": "container",
+        "border": {
+          "stroke": {"color": "#FF0000"},
+        },
+        "orientation": "horizontal",
+        "width": {"type": "wrap_content"},
+        "height": {"type": "wrap_content"},
+        "content_alignment_horizontal": "center",
+        "content_alignment_vertical": "center",
+        "layout_mode": "no_wrap",
+        "items": [
+          {
+            "type": "text",
+            "text": "External",
+            "height": {"type": "wrap_content"},
+            "width": {"type": "wrap_content"},
+            "alignment_vertical": "baseline",
+            "paddings": {"left": 5, "top": 10, "right": 5, "bottom": 5},
+            "border": {
+              "stroke": {"color": "#FF0000"},
+            },
+            "font_size": 16,
+          },
+          {
+            "type": "text",
+            "text": "container.",
+            "height": {"type": "wrap_content"},
+            "width": {"type": "wrap_content"},
+            "alignment_vertical": "baseline",
+            "paddings": {"left": 5, "top": 5, "right": 5, "bottom": 10},
+            "border": {
+              "stroke": {"color": "#FF0000"},
+            },
+            "font_size": 10,
+          },
+          {
+            "type": "container",
+            "border": {
+              "stroke": {"color": "#0000EE"},
+            },
+            "orientation": "horizontal",
+            "width": {"type": "wrap_content"},
+            "height": {"type": "wrap_content"},
+            "alignment_vertical": "baseline",
+            "content_alignment_horizontal": "center",
+            "content_alignment_vertical": "baseline",
+            "layout_mode": "no_wrap",
+            "items": [
+              {
+                "type": "text",
+                "text": "Inner",
+                "height": {"type": "wrap_content"},
+                "width": {"type": "wrap_content"},
+                "alignment_vertical": "baseline",
+                "paddings": {"left": 5, "top": 10, "right": 5, "bottom": 5},
+                "border": {
+                  "stroke": {"color": "#FF0000"},
+                },
+                "font_size": 16,
+              },
+              {
+                "type": "text",
+                "text": "container.",
+                "height": {"type": "wrap_content"},
+                "width": {"type": "wrap_content"},
+                "alignment_vertical": "baseline",
+                "paddings": {"left": 5, "top": 5, "right": 5, "bottom": 10},
+                "border": {
+                  "stroke": {"color": "#FF0000"},
+                },
+                "font_size": 10,
+              }
+            ],
+          },
+          {
+            "type": "text",
+            "text": "Long long long text in multiline.",
+            "height": {"type": "wrap_content"},
+            "width": {"type": "fixed", "value": 50},
+            "alignment_vertical": "baseline",
+            "paddings": {"left": 5, "top": 5, "right": 5, "bottom": 5},
+            "border": {
+              "stroke": {"color": "#FF0000"},
+            },
+            "font_size": 8,
+          },
+          {
+            "type": "text",
+            "text": "Bottom alignment.",
+            "height": {"type": "wrap_content"},
+            "width": {"type": "wrap_content"},
+            "alignment_vertical": "bottom",
+            "paddings": {"left": 5, "top": 5, "right": 5, "bottom": 10},
+            "border": {
+              "stroke": {"color": "#FF0000"},
+            },
+            "font_size": 8,
+          }
+        ],
+      }
+    ],
+  },
+};
 
 const reference = Div.divContainer(
   DivContainer(
@@ -156,7 +275,8 @@ const reference = Div.divContainer(
                 text: ValueExpression("Long long long text in multiline."),
                 height: DivSize.divWrapContentSize(DivWrapContentSize()),
                 width: DivSize.divFixedSize(
-                    DivFixedSize(value: ValueExpression(50))),
+                  DivFixedSize(value: ValueExpression(50)),
+                ),
                 alignmentVertical:
                     ValueExpression(DivAlignmentVertical.baseline),
                 paddings: DivEdgeInsets(
@@ -203,9 +323,6 @@ const reference = Div.divContainer(
 void main() {
   group('Generated modals test', () {
     test('Build tree using div components', () async {
-      final file = File('test_data/json/div_container_with_inner_texts.json');
-      final input = await file.readAsString();
-      final json = jsonDecode(input);
       final divContainer = Div.fromJson(json['div']);
       expect(divContainer, reference);
     });

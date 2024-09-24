@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:divkit/divkit.dart';
@@ -8,25 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Box {
-  final RootIsolateToken token;
   final List<String> data;
 
-  Box(this.data) : token = ServicesBinding.rootIsolateToken!;
+  const Box(this.data);
 }
 
 Future<List<DivKitData>> process(Box box) async {
-  // Register the background isolate with the root isolate.
-  BackgroundIsolateBinaryMessenger.ensureInitialized(box.token);
-
   final it = <DivKitData>[];
   for (final str in box.data) {
     final json = jsonDecode(str);
     final data = DefaultDivKitData.fromJson(json);
     await data.build();
-    // Expressions only work on mobile platforms!
-    if (Platform.isAndroid || Platform.isIOS) {
-      await data.preload();
-    }
+    await data.preload();
     it.add(data);
   }
   return it;
@@ -37,8 +29,7 @@ Future<List<DivKitData>> loadList() async {
     await rootBundle.loadString('AssetManifest.json'),
   );
   manifestMap.removeWhere(
-    (key, value) =>
-        !key.startsWith('assets/test_data/samples') || !key.endsWith('json'),
+    (key, value) => !key.startsWith('assets/samples') || !key.endsWith('json'),
   );
 
   List<String> strings = [];

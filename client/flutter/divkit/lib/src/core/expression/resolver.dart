@@ -1,8 +1,4 @@
-import 'package:div_expressions_resolver/div_expressions_resolver.dart';
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/core/protocol/div_logger.dart';
-import 'package:divkit/src/core/protocol/div_variable.dart';
-import 'package:flutter/services.dart';
+import 'package:divkit/divkit.dart';
 
 /// Print logs with information about expression calculations.
 bool debugPrintDivExpressionResolve = false;
@@ -26,15 +22,9 @@ abstract class DivExpressionResolver {
     Expression<T> expression, {
     required DivVariableContext context,
   });
-
-  /// Re-create new DivVariableController to clear variables.
-  /// Helps to fix variable mutation exception.
-  Future<void> clearVariables();
 }
 
 class DefaultDivExpressionResolver implements DivExpressionResolver {
-  final _platform = NativeDivExpressionsResolver();
-
   @override
   Future<T> resolve<T>(
     Expression<T> expression, {
@@ -43,9 +33,9 @@ class DefaultDivExpressionResolver implements DivExpressionResolver {
     if (expression is ResolvableExpression) {
       final expr = expression as ResolvableExpression;
       try {
-        var result = await _platform.resolve(
-          expr.source!,
-          context: context.current,
+        var result = await runtime.execute(
+          expr.executionTree,
+          context.current,
         );
 
         if (expr.parse != null) {
@@ -53,7 +43,7 @@ class DefaultDivExpressionResolver implements DivExpressionResolver {
         }
 
         _log(
-          "Expr ${expr.source} with args ${context.current}"
+          "Expr ${expr.source} with args ${context.current}\n"
           "and result $result [${result.runtimeType}]",
         );
 
@@ -79,14 +69,5 @@ class DefaultDivExpressionResolver implements DivExpressionResolver {
     }
 
     return expression.value!;
-  }
-
-  @override
-  Future<void> clearVariables() async {
-    try {
-      await _platform.clearVariables();
-    } on PlatformException catch (e, st) {
-      logger.error(e.message, stackTrace: st);
-    }
   }
 }

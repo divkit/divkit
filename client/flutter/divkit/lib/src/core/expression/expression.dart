@@ -1,7 +1,9 @@
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/expression/analyzer.dart';
+import 'package:divkit/src/core/runtime/entities.dart';
 import 'package:divkit/src/utils/trace.dart';
 import 'package:equatable/equatable.dart';
+import 'package:petitparser/petitparser.dart';
 
 abstract class Expression<T> with EquatableMixin {
   T? get value;
@@ -58,6 +60,12 @@ abstract class Preloadable extends Object {
 class ResolvableExpression<T> extends Expression<T> {
   final String? source;
 
+  Result<dynamic>? _executionTree;
+
+  ExpressionToken get executionTree => _executionTree!.isSuccess
+      ? _executionTree!.value
+      : throw _executionTree!.message;
+
   Set<String>? variables;
 
   final T? Function(Object?)? parse;
@@ -77,6 +85,7 @@ class ResolvableExpression<T> extends Expression<T> {
   Future<T> resolveValue({
     required DivVariableContext context,
   }) async {
+    _executionTree ??= parser.parse(source!);
     variables ??= await traceAsyncFunc(
       'extractVariables',
       () => exprAnalyzer.extractVariables(source!),

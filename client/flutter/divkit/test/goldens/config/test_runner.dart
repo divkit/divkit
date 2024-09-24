@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path_package;
 
-import 'test_maker.dart';
 import '../models/test_files.dart';
+import 'test_maker.dart';
 
 Future<void> runTests(List<GoldenTestFile> testEntries) async {
   for (var testEntry in testEntries) {

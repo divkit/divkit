@@ -33,6 +33,7 @@ class _ScenarioPageState extends State<ScenarioPage> {
             Expanded(
               child: SingleChildScrollView(
                 child: DivKitView(
+                  key: ObjectKey(widget.scenarios[index].src),
                   showUnsupportedDivs: true,
                   data: widget.scenarios[index].src,
                 ),

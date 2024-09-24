@@ -232,13 +232,14 @@ class DivTextModel with EquatableMixin {
         );
 
         final rangesList = await DivRangeHelper.getRangeItems(
-            text,
-            data.ranges ?? [],
-            context,
-            style,
-            linesStyleList,
-            viewScale,
-            fontProvider);
+          text,
+          data.ranges ?? [],
+          context,
+          style,
+          linesStyleList,
+          viewScale,
+          fontProvider,
+        );
 
         return DivTextModel(
           ranges: rangesList,

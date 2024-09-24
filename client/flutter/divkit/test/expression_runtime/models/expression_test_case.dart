@@ -9,6 +9,7 @@ class ExpressionTestCase with EquatableMixin {
   final TestCaseResult result;
   final List<TestCaseVariable>? testVariables;
   final List<String>? availablePlatforms;
+  final Map<String, dynamic>? unsupportedPlatforms;
 
   const ExpressionTestCase({
     required this.caseName,
@@ -16,6 +17,7 @@ class ExpressionTestCase with EquatableMixin {
     required this.result,
     this.testVariables,
     this.availablePlatforms,
+    this.unsupportedPlatforms,
   });
 
   factory ExpressionTestCase.fromJson(Map<String, Object?> json) {
@@ -31,6 +33,8 @@ class ExpressionTestCase with EquatableMixin {
       availablePlatforms: (json['platforms'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      unsupportedPlatforms:
+          json['unsupported_platforms'] as Map<String, dynamic>?,
     );
   }
 
