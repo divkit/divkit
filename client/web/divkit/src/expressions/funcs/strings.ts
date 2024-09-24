@@ -171,6 +171,14 @@ function testRegex(_ctx: EvalContext, str: StringValue, regex: StringValue): Eva
     };
 }
 
+function encodeRegex(_ctx: EvalContext, str: StringValue): EvalValue {
+    return {
+        type: STRING,
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#escaping
+        value: str.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    };
+}
+
 export function registerStrings(): void {
     registerFunc('len', [STRING], len);
     registerFunc('contains', [STRING, STRING], contains);
@@ -188,4 +196,5 @@ export function registerStrings(): void {
     registerFunc('padEnd', [STRING, INTEGER, STRING], padEnd);
     registerFunc('padEnd', [INTEGER, INTEGER, STRING], padEnd);
     registerFunc('testRegex', [STRING, STRING], testRegex);
+    registerFunc('encodeRegex', [STRING], encodeRegex);
 }

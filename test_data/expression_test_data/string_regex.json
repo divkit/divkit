@@ -10,7 +10,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"               
+                "web"
             ]
         },
         {
@@ -23,7 +23,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -37,7 +37,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -51,7 +51,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -64,7 +64,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -78,7 +78,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -91,7 +91,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -104,7 +104,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -117,7 +117,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -130,7 +130,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -143,7 +143,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -156,7 +156,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -169,7 +169,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -182,7 +182,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -195,7 +195,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -208,7 +208,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -221,7 +221,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -234,7 +234,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -247,7 +247,7 @@
             "platforms": [
                 "android",
                 "ios",
-                "web"      
+                "web"
             ]
         },
         {
@@ -261,6 +261,26 @@
                 "android",
                 "web",
                 "ios"
+            ]
+        },
+        {
+            "expression": "@{encodeRegex('')}",
+            "expected": {
+                "type": "string",
+                "value": ""
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "expression": "@{encodeRegex('.*+?^${}()|[]\\\\abcde12345')}",
+            "expected": {
+                "type": "string",
+                "value": "\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\|\\[\\]\\\\abcde12345"
+            },
+            "platforms": [
+                "web"
             ]
         }
     ]
