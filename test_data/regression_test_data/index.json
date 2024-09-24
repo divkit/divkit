@@ -1919,7 +1919,8 @@
         "TypedActions"
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "expected_results": [
         "The timer calls tick_actions and changes the variable with the set interval.",
