@@ -26,6 +26,7 @@ public final class DivActionHandler {
   private let focusElementActionHandler = FocusElementActionHandler()
   private let setVariableActionHandler = SetVariableActionHandler()
   private let timerActionHandler: TimerActionHandler
+  private let videoActionHandler = VideoActionHandler()
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
   public init(
@@ -151,7 +152,9 @@ public final class DivActionHandler {
       setVariableActionHandler.handle(action, context: context)
     case let .divActionTimer(action):
       timerActionHandler.handle(action, context: context)
-    case .divActionAnimatorStart, .divActionAnimatorStop, .divActionVideo,
+    case let .divActionVideo(action):
+      videoActionHandler.handle(action, context: context)
+    case .divActionAnimatorStart, .divActionAnimatorStop,
         .divActionShowTooltip, .divActionSetState, .divActionHideTooltip:
       break
     case .none:
