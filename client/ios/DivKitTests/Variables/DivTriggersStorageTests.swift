@@ -5,6 +5,7 @@ import LayoutKit
 
 final class DivTriggerTests: XCTestCase {
   private let variablesStorage = DivVariablesStorage()
+  private let persistentValuesStorage = DivPersistentValuesStorage()
 
   private lazy var actionHandler = DivActionHandler(
     stateUpdater: FakeDivStateUpdater(),
@@ -14,16 +15,17 @@ final class DivTriggerTests: XCTestCase {
     urlHandler: DivUrlHandlerDelegate { [unowned self] _, _ in
       self.triggersCount += 1
     },
-    persistentValuesStorage: DivPersistentValuesStorage()
+    persistentValuesStorage: persistentValuesStorage
   )
 
   private lazy var blockStateStorage = DivBlockStateStorage()
 
   private lazy var triggerStorage = DivTriggersStorage(
     variablesStorage: variablesStorage,
+    functionsStorage: DivFunctionsStorage(),
     stateUpdates: blockStateStorage.stateUpdates,
     actionHandler: actionHandler,
-    persistentValuesStorage: DivPersistentValuesStorage()
+    persistentValuesStorage: persistentValuesStorage
   )
 
   private var triggersCount = 0

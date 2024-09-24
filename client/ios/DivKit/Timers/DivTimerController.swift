@@ -19,6 +19,7 @@ final class DivTimerController {
   private let runActions: RunActions
   private let updateCard: UpdateCard
   private let variablesStorage: DivVariablesStorage
+  private let functionsStorage: DivFunctionsStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let reporter: DivReporter
 
@@ -40,6 +41,7 @@ final class DivTimerController {
     runActions: @escaping RunActions,
     updateCard: @escaping UpdateCard,
     variablesStorage: DivVariablesStorage,
+    functionsStorage: DivFunctionsStorage,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter
   ) {
@@ -50,6 +52,7 @@ final class DivTimerController {
     self.runActions = runActions
     self.updateCard = updateCard
     self.variablesStorage = variablesStorage
+    self.functionsStorage = functionsStorage
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter
   }
@@ -62,6 +65,7 @@ final class DivTimerController {
     let expressionResolver = ExpressionResolver(
       path: cardId.path,
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter
     )

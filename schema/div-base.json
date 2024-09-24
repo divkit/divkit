@@ -217,7 +217,9 @@
         "$ref": "div-function.json"
       },
       "$description": "translations.json#/div_base_functions",
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     "variables": {
       "type": "array",

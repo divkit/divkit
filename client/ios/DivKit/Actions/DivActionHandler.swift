@@ -13,6 +13,7 @@ public final class DivActionHandler {
   private let trackVisibility: TrackVisibility
   private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
+  private let functionsStorage: DivFunctionsStorage?
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let blockStateStorage: DivBlockStateStorage
   private let updateCard: DivActionURLHandler.UpdateCardAction
@@ -32,6 +33,7 @@ public final class DivActionHandler {
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     patchProvider: DivPatchProvider,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
+    functionsStorage: DivFunctionsStorage? = nil,
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
@@ -59,6 +61,7 @@ public final class DivActionHandler {
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
+    self.functionsStorage = functionsStorage
     self.persistentValuesStorage = persistentValuesStorage
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
@@ -108,6 +111,9 @@ public final class DivActionHandler {
       functionsProvider: FunctionsProvider(
         persistentValuesStorage: persistentValuesStorage
       ),
+      customFunctionsStorageProvider: { [weak functionsStorage] in
+        functionsStorage?.getStorage(path: path, contains: $0)
+      },
       variableValueProvider: { [unowned variablesStorage] in
         if let value = localValues[$0] {
           return value
