@@ -1488,6 +1488,9 @@
     },
     {
       "title": "Variables in DivIndicator",
+      "tags": [
+        "DivIndicator"
+      ],
       "file": "variables/div_indicator.json"
     },
     {
@@ -1953,10 +1956,13 @@
       "platforms": [
         "android"
       ],
+      "tags": [
+        "DivIndicator"
+      ],
       "expected_results": [
         "Two pagers with indicator of different shapes - Rounded Rectangle and Circle"
       ],
-      "file": "indicator_shapes.json"
+      "file": "indicator/indicator_shapes.json"
     },
     {
       "title": "Gallery items posing",
@@ -2285,7 +2291,7 @@
       "tags": [
         "DivVideo",
         "Disappear action",
-        "Visibility_actions",
+        "visibility_actions",
         "DivGallery"
       ],
       "file": "video/video_in_gallery.json"
@@ -2306,7 +2312,7 @@
       "tags": [
         "DivVideo",
         "Disappear action",
-        "Visibility_actions",
+        "visibility_actions",
         "DivGallery"
       ],
       "file": "video/fullscreen_video_in_recycler.json"
@@ -2367,7 +2373,7 @@
       ],
       "tags": [
         "Tooltips",
-        "Visibility_actions",
+        "visibility_actions",
         "TypedActions"
       ],
       "steps": [
@@ -2384,7 +2390,7 @@
       "title": "Tooltips",
       "tags": [
         "Tooltips",
-        "Visibility_actions"
+        "visibility_actions"
       ],
       "steps": [
         "Click on buttons"
@@ -2970,7 +2976,7 @@
         "android"
       ],
       "tags": [
-        "input"
+        "DivInput"
       ],
       "steps": [
         "Type something inside password",
@@ -2990,7 +2996,7 @@
         "web"
       ],
       "tags": [
-        "input"
+        "DivInput"
       ],
       "steps": [
         "Tap the \"Disable\" button and try to edit text",
@@ -3077,6 +3083,70 @@
         "Page change is logged"
       ],
       "file": "pager/pager.json"
+    },
+    {
+      "title": "Indicator with pager with invisible items",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe pages in both directions"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Only pages with even numbers are shown",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_invisible_items.json"
+    },
+    {
+      "title": "Indicator with pager with infinite scroll",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe forward from 0 to 5 element",
+        "Swipe forward",
+        "Swipe backward"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Page with number 0 appears after the page with number 5",
+        "Page with number 5 appears before the page with number 0",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_infinite_scroll.json"
+    },
+    {
+      "title": "Indicator with pager with invisible items and infinite scroll",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe forward from 0 to 10 element",
+        "Swipe forward",
+        "Swipe backward"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Only pages with even numbers are shown",
+        "Page with number 0 appears after the page with number 10",
+        "Page with number 10 appears before the page with number 0",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_invisible_items_and_infinite_scroll.json"
     }
   ]
 }
