@@ -1,26 +1,22 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithPropertyWithDefaultValue(
-    @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
-    @JvmField final val nested: Nested? = null,
-    @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
+    @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
+    @JvmField val nested: Nested? = null,
+    @JvmField val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -87,11 +83,10 @@ class EntityWithPropertyWithDefaultValue(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValue(env, json = it) }
     }
 
-    @Mockable
     class Nested(
-        @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
-        @JvmField final val nonOptional: Expression<String>,
-        @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
+        @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
+        @JvmField val nonOptional: Expression<String>,
+        @JvmField val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
     ) : JSONSerializable, Hashable {
 
         private var _hash: Int? = null 

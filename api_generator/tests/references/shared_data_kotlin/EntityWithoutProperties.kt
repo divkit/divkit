@@ -1,7 +1,8 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithoutProperties() : Hashable {

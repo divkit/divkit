@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithComplexPropertyWithDefaultValue(
-    @JvmField final val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
+    @JvmField val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -39,7 +40,7 @@ class EntityWithComplexPropertyWithDefaultValue(
     }
 
     class Property(
-        @JvmField final val value: Expression<String>,
+        @JvmField val value: Expression<String>,
     ) : Hashable {
 
         private var _hash: Int? = null 

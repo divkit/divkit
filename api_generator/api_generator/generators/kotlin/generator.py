@@ -1,17 +1,22 @@
 from typing import cast, List
+import os.path
 
 from .kotlin_entities import (
     KotlinEntity,
     KotlinEntityEnumeration,
-    ENTITY_STATIC_CREATOR
+    ENTITY_STATIC_CREATOR,
+    ENTITY_PARSER_NAME,
+    TEMPLATE_PARSER_NAME,
+    TEMPLATE_RESOLVER_NAME
 )
 from ..base import Generator
 from ... import utils
 from ...config import GenerationMode, GeneratedLanguage, TEMPLATE_SUFFIX
 from ...schema.modeling.entities import (
+    Declarable,
     StringEnumeration,
     EntityEnumeration,
-    Entity,
+    Entity
 )
 from ...schema.modeling.text import Text, EMPTY
 
@@ -23,9 +28,56 @@ class KotlinGenerator(Generator):
         self._error_collectors = config.generation.errors_collectors
         self.generate_equality = config.generation.generate_equality
         self.generate_serialization = config.generation.generate_serialization
+        self.generate_serializers = config.generation.generate_serializers
         self._entity_generator = KotlinEntityGenerator(self)
         self._entity_template_generator = KotlinEntityTemplateGenerator(self)
         self._string_enumeration_generator = KotlinStringEnumerationGenerator()
+        self._serializer_generator = KotlinSerializerGenerator(self)
+
+    def generate(self, objects: List[Declarable]):
+        super(KotlinGenerator, self).generate(objects)
+        if self.generate_serializers:
+            serializers = list(filter(lambda obj: self.__is_serializer(obj), objects))
+            flatten_serializers: List[Declarable] = []
+            for serializer in serializers:
+                self.__flatten_object(serializer, flatten_serializers)
+            self.generate_parser_component(flatten_serializers)
+
+    @staticmethod
+    def __is_serializer(obj: Declarable) -> bool:
+        if isinstance(obj, Entity):
+            return cast(Entity, obj).generation_mode.is_serializer
+        elif isinstance(obj, EntityEnumeration):
+            return cast(EntityEnumeration, obj).mode.is_serializer
+        else:
+            return False
+
+    def generate_parser_component(self, objects: List[Declarable]):
+        component_declaration = Text()
+        component_declaration += 'internal class JsonParserComponent {'
+        for obj in objects:
+            serializer_type_prefix = (obj.entity_declaration_prefix.replace('.', '')
+                                      + utils.capitalize_camel_case(obj.name_for(GenerationMode.NORMAL_WITH_TEMPLATES)))
+            serializer_name_prefix = utils.lower_camel_case(serializer_type_prefix)
+            component_declaration += EMPTY
+            component_declaration += f'    val {serializer_name_prefix}JsonEntityParser = lazy {{ {serializer_type_prefix}JsonParser.{ENTITY_PARSER_NAME}(this) }}'
+            component_declaration += f'    val {serializer_name_prefix}JsonTemplateParser = lazy {{ {serializer_type_prefix}JsonParser.{TEMPLATE_PARSER_NAME}(this) }}'
+            component_declaration += f'    val {serializer_name_prefix}JsonTemplateResolver = lazy {{ {serializer_type_prefix}JsonParser.{TEMPLATE_RESOLVER_NAME}(this) }}'
+        component_declaration += '}'
+        head_for_file = self._head_for_file + '\n'
+        file_content = f'{head_for_file}{component_declaration}\n'
+        filename = os.path.join(self._output_path, 'JsonParserComponent.kt')
+        with open(filename, 'w') as file:
+            file.write(file_content.__str__())
+            file.close()
+
+    def __flatten_object(self, obj: Declarable, list: List[Declarable]):
+        list.append(obj)
+        if not isinstance(obj, Entity):
+            return
+        entity = cast(Entity, obj)
+        for inner_type in filter(lambda t: isinstance(t, Entity) or isinstance(t, EntityEnumeration), entity.inner_types):
+            self.__flatten_object(inner_type, list)
 
     def filename(self, name: str) -> str:
         return f'{utils.capitalize_camel_case(name)}.kt'
@@ -39,6 +91,8 @@ class KotlinGenerator(Generator):
 
         if entity.generation_mode.is_template:
             return self._entity_template_generator.entity_declaration(entity)
+        elif entity.generation_mode.is_serializer:
+            return self._serializer_generator.entity_serializer_declaration(entity)
         else:
             return self._entity_generator.entity_declaration(entity)
 
@@ -47,6 +101,8 @@ class KotlinGenerator(Generator):
         entity_enumeration.__class__ = KotlinEntityEnumeration
         if entity_enumeration.mode.is_template:
             return self._entity_template_generator.entity_enumeration_declaration(entity_enumeration)
+        elif entity_enumeration.mode.is_serializer:
+            return self._serializer_generator.entity_enumeration_serializer_declaration(entity_enumeration)
         else:
             return self._entity_generator.entity_enumeration_declaration(entity_enumeration)
 
@@ -60,6 +116,7 @@ class KotlinEntityGenerator:
         self._kotlin_annotations = generator.kotlin_annotations
         self._generate_equality = generator.generate_equality
         self._generate_serialization = generator.generate_serialization
+        self._generate_serializers = generator.generate_serializers
 
     def entity_declaration(self, entity: KotlinEntity) -> Text:
         if entity.generate_as_protocol:
@@ -73,9 +130,9 @@ class KotlinEntityGenerator:
 
         if self._generate_serialization:
             result += EMPTY
-            result += entity.serialization_declaration.indented(indent_width=4)
+            result += entity.serialization_declaration(self._generate_serializers).indented(indent_width=4)
 
-        static_declarations = entity.static_declarations(self._generate_serialization)
+        static_declarations = entity.static_declarations(self._generate_serialization, self._generate_serializers)
         if static_declarations.lines:
             result += EMPTY
             result += '    companion object {'
@@ -166,12 +223,18 @@ class KotlinEntityGenerator:
 
         result += EMPTY
         result += '    override fun writeToJSON(): JSONObject {'
-        result += '        return when (this) {'
-        for decl in entity_declarations:
-            naming = entity_enumeration.format_case_naming(decl)
-            decl = f'is {naming} -> value.writeToJSON()'
-            result += Text(indent_width=12, init_lines=decl)
-        result += '        }'
+        if self._generate_serializers:
+            serializer_name = entity_enumeration.entity_serializer_name_declaration
+            result += f'        return builtInParserComponent.{serializer_name}'
+            result += '            .value'
+            result += '            .serialize(context = builtInParsingContext, value = this)'
+        else:
+            result += '        return when (this) {'
+            for decl in entity_declarations:
+                naming = entity_enumeration.format_case_naming(decl)
+                decl = f'is {naming} -> value.writeToJSON()'
+                result += Text(indent_width=12, init_lines=decl)
+            result += '        }'
         result += '    }'
 
         read_type_expr = 'json.read("type", logger = logger, env = env)'
@@ -185,30 +248,35 @@ class KotlinEntityGenerator:
         result += '        @JvmStatic'
         result += '        @JvmName("fromJson")'
         result += f'        operator fun invoke(env: ParsingEnvironment, json: JSONObject): {declaration_name} {{'
-        result += '            val logger = env.logger'
-        if default_entity_decl:
-            result += f'            val type: String = {read_type_opt_expr} ?: {default_entity_decl}.TYPE'
+        if self._generate_serializers:
+            serializer_name = entity_enumeration.entity_serializer_name_declaration
+            result += f'            return builtInParserComponent.{serializer_name}'
+            result += '                .value'
+            result += '                .deserialize(context = env, data = json)'
         else:
-            result += f'            val type: String = {read_type_expr}'
-        result += '            when (type) {'
-        for decl in entity_declarations:
-            naming = entity_enumeration.format_case_naming(decl)
-            line = f'{decl}.TYPE -> return {naming}({decl}(env, json))'
-            result += Text(indent_width=16, init_lines=line)
-
-        if entity_enumeration.mode is GenerationMode.NORMAL_WITH_TEMPLATES:
-            result += '            }'
-            name = utils.capitalize_camel_case(entity_enumeration.name + TEMPLATE_SUFFIX)
-            template_type = entity_enumeration.template_declaration_prefix + name
-            result += f'            val template = env.templates.getOrThrow(type, json) as? {template_type}'
-            result += '            if (template != null) {'
-            result += '                return template.resolve(env, json)'
-            result += '            } else {'
-            result += f'                {throwing_expr}'
-            result += '            }'
-        else:
-            result += f'                else -> {throwing_expr}'
-            result += '            }'
+            result += '            val logger = env.logger'
+            if default_entity_decl:
+                result += f'            val type: String = {read_type_opt_expr} ?: {default_entity_decl}.TYPE'
+            else:
+                result += f'            val type: String = {read_type_expr}'
+            result += '            when (type) {'
+            for decl in entity_declarations:
+                naming = entity_enumeration.format_case_naming(decl)
+                line = f'{decl}.TYPE -> return {naming}({decl}(env, json))'
+                result += Text(indent_width=16, init_lines=line)
+            if entity_enumeration.mode is GenerationMode.NORMAL_WITH_TEMPLATES:
+                result += '            }'
+                name = utils.capitalize_camel_case(entity_enumeration.name + TEMPLATE_SUFFIX)
+                template_type = entity_enumeration.template_declaration_prefix + name
+                result += f'            val template = env.templates.getOrThrow(type, json) as? {template_type}'
+                result += '            if (template != null) {'
+                result += '                return template.resolve(env, json)'
+                result += '            } else {'
+                result += f'                {throwing_expr}'
+                result += '            }'
+            else:
+                result += f'                else -> {throwing_expr}'
+                result += '            }'
         result += '        }'
 
         static_creator_lambda = f'env: ParsingEnvironment, it: JSONObject -> {declaration_name}(env, json = it)'
@@ -263,29 +331,56 @@ class KotlinEntityTemplateGenerator:
         self._generator = generator
         self._kotlin_annotations = generator.kotlin_annotations
         self._generate_serialization = generator.generate_serialization
+        self._generate_serializers = generator.generate_serializers
 
     def entity_declaration(self, entity: KotlinEntity) -> Text:
         result: Text = entity.header_declaration(self._kotlin_annotations, self._generate_serialization)
         result += EMPTY
-        result += '    constructor ('
-        result += '        env: ParsingEnvironment,'
-        result += f'        parent: {utils.capitalize_camel_case(entity.name)}? = null,'
-        result += '        topLevel: Boolean = false,'
-        result += '        json: JSONObject'
-        result += '    ) {'
-        constructor = entity.constructor_body(with_commas=False)
-        if constructor.lines:
-            result += '        val logger = env.logger'
-            result += constructor.indented(indent_width=8)
-        result += '    }'
-        result += EMPTY
-        result += entity.value_resolving_declaration.indented(indent_width=4)
+        if entity.instance_properties_kotlin:
+            result += '    constructor('
+            for property in entity.instance_properties_kotlin:
+                result += property.argument_declaration(with_default=False).indented(indent_width=8)
+            result += '    ) {'
+            for property in entity.instance_properties_kotlin:
+                result += f'        this.{property.declaration_name} = {property.declaration_name}'
+            result += '    }'
+        else:
+            result += '    constructor()'
 
         if self._generate_serialization:
             result += EMPTY
-            result += entity.serialization_declaration.indented(indent_width=4)
+            result += '    constructor('
+            result += '        env: ParsingEnvironment,'
+            result += f'        parent: {utils.capitalize_camel_case(entity.name)}? = null,'
+            result += '        topLevel: Boolean = false,'
+            result += '        json: JSONObject'
+            if self._generate_serializers:
+                if entity.instance_properties_kotlin:
+                    result += '    ) : this('
+                    for property in entity.instance_properties_kotlin:
+                        result += f'        {property.declaration_name} = Field.nullField(false),'
+                    result += '    ) {'
+                else:
+                    result += '    ) : this() {'
+            else:
+                result += '    ) {'
+            if self._generate_serializers:
+                result += '        throw UnsupportedOperationException("Do not use this constructor directly.")'
+            else:
+                constructor = entity.constructor_body(with_commas=False).indented(indent_width=8)
+                if constructor.lines:
+                    result += '        val logger = env.logger'
+                    result += constructor
+            result += '    }'
 
-        static_declarations = entity.static_declarations(self._generate_serialization)
+        result += EMPTY
+        result += entity.value_resolving_declaration(self._generate_serializers).indented(indent_width=4)
+
+        if self._generate_serialization:
+            result += EMPTY
+            result += entity.serialization_declaration(self._generate_serializers).indented(indent_width=4)
+
+        static_declarations = entity.static_declarations(self._generate_serialization, self._generate_serializers)
         if static_declarations.lines:
             result += EMPTY
             result += '    companion object {'
@@ -334,23 +429,35 @@ class KotlinEntityTemplateGenerator:
         if self._generate_serialization:
             result += EMPTY
             result += '    override fun writeToJSON(): JSONObject {'
-            result += '        return when (this) {'
-            for decl in entity_declarations:
-                naming = entity_enumeration.format_case_naming(decl)
-                decl = f'is {naming} -> value.writeToJSON()'
-                result += Text(indent_width=12, init_lines=decl)
-            result += '        }'
+            if self._generate_serializers:
+                serializer_name = entity_enumeration.template_serializer_name_declaration
+                result += f'        return builtInParserComponent.{serializer_name}'
+                result += '            .value'
+                result += '            .serialize(context = builtInParsingContext, value = this)'
+            else:
+                result += '        return when (this) {'
+                for decl in entity_declarations:
+                    naming = entity_enumeration.format_case_naming(decl)
+                    decl = f'is {naming} -> value.writeToJSON()'
+                    result += Text(indent_width=12, init_lines=decl)
+                result += '        }'
             result += '    }'
 
         self_name = entity_enumeration.resolved_prefixed_declaration
         result += EMPTY
         result += f'    override fun resolve(env: ParsingEnvironment, data: JSONObject): {self_name} {{'
-        result += '        return when (this) {'
-        for decl in entity_declarations:
-            case_name = entity_enumeration.format_case_naming(decl)
-            line = f'is {case_name} -> {self_name}.{case_name}(value.resolve(env, data))'
-            result += Text(indent_width=12, init_lines=line)
-        result += '        }'
+        if self._generate_serializers:
+            resolver_name = entity_enumeration.template_resolver_name_declaration
+            result += f'        return builtInParserComponent.{resolver_name}'
+            result += '            .value'
+            result += '            .resolve(context = env, template = this, data = data)'
+        else:
+            result += '        return when (this) {'
+            for decl in entity_declarations:
+                case_name = entity_enumeration.format_case_naming(decl)
+                line = f'is {case_name} -> {self_name}.{case_name}(value.resolve(env, data))'
+                result += Text(indent_width=12, init_lines=line)
+            result += '        }'
         result += '    }'
         result += EMPTY
         result += '    val type: String'
@@ -367,34 +474,39 @@ class KotlinEntityTemplateGenerator:
             result += '}'
             return result
 
-        result += EMPTY
-        result += '    companion object {'
-        result += EMPTY
-        result += '        @Throws(ParsingException::class)'
-
         read_type_expr = 'json.read("type", logger = logger, env = env)'
         read_type_opt_expr = 'json.readOptional("type", logger = logger, env = env)'
         throwing_expr = 'throw typeMismatch(json = json, key = "type", value = type)'
 
+        result += EMPTY
+        result += '    companion object {'
+        result += EMPTY
+        result += '        @Throws(ParsingException::class)'
         result += '        operator fun invoke('
         result += '            env: ParsingEnvironment,'
         result += '            topLevel: Boolean = false,'
         result += '            json: JSONObject'
         result += f'        ): {declaration_name} {{'
-        result += '            val logger = env.logger'
-        if default_entity_decl:
-            result += f'            val receivedType: String = {read_type_opt_expr} ?: {default_entity_decl}Template.TYPE'
+        if self._generate_serializers:
+            serializer_name = entity_enumeration.template_serializer_name_declaration
+            result += f'            return builtInParserComponent.{serializer_name}'
+            result += '                .value'
+            result += '                .deserialize(context = env, data = json)'
         else:
-            result += f'            val receivedType: String = {read_type_expr}'
-        result += f'            val parent = env.templates[receivedType] as? {declaration_name}'
-        result += '            val type = parent?.type ?: receivedType'
-        result += '            when (type) {'
-        for decl in entity_declarations:
-            naming = entity_enumeration.format_case_naming(decl)
-            line = f'{decl}.TYPE -> return {naming}({decl}(env, parent?.value() as {decl}?, topLevel, json))'
-            result += Text(indent_width=16, init_lines=line)
-        result += f'                else -> {throwing_expr}'
-        result += '            }'
+            result += '            val logger = env.logger'
+            if default_entity_decl:
+                result += f'            val receivedType: String = {read_type_opt_expr} ?: {default_entity_decl}Template.TYPE'
+            else:
+                result += f'            val receivedType: String = {read_type_expr}'
+            result += f'            val parent = env.templates[receivedType] as? {declaration_name}'
+            result += '            val type = parent?.type ?: receivedType'
+            result += '            when (type) {'
+            for decl in entity_declarations:
+                naming = entity_enumeration.format_case_naming(decl)
+                line = f'{decl}.TYPE -> return {naming}({decl}(env, parent?.value() as {decl}?, topLevel, json))'
+                result += Text(indent_width=16, init_lines=line)
+            result += f'                else -> {throwing_expr}'
+            result += '            }'
         result += '        }'
 
         static_creator_lambda = f'env: ParsingEnvironment, it: JSONObject -> {declaration_name}(env, json = it)'
@@ -431,9 +543,175 @@ class KotlinStringEnumerationGenerator:
         result += '            }'
         result += '        }'
         result += EMPTY
+        result += '        @JvmField'
         result += f'        val TO_STRING = {{ value: {declaration_name} -> toString(value) }}'
+        result += EMPTY
+        result += '        @JvmField'
         result += '        val FROM_STRING = { value: String -> fromString(value) }'
         result += '    }'
         result += '}'
 
+        return result
+
+
+class KotlinSerializerGenerator:
+    def __init__(self, generator: KotlinGenerator):
+        self._generator = generator
+
+    def entity_serializer_declaration(self, entity: KotlinEntity) -> Text:
+        result = entity.serializer_declaration()
+        if entity.inner_types:
+            for inner_type in filter(lambda t: not isinstance(t, StringEnumeration) or True, entity.inner_types):
+                if isinstance(inner_type, Entity):
+                    result += EMPTY
+                    inner_entity: KotlinEntity = cast(KotlinEntity, inner_type)
+                    inner_entity.__class__ = KotlinEntity
+                    result += self.entity_serializer_declaration(inner_entity)
+                elif isinstance(inner_type, EntityEnumeration):
+                    result += EMPTY
+                    inner_entity_enumeration: KotlinEntityEnumeration = cast(KotlinEntityEnumeration, inner_type)
+                    inner_entity_enumeration.__class__ = KotlinEntityEnumeration
+                    result += self.entity_enumeration_serializer_declaration(inner_entity_enumeration)
+        return result
+
+    def entity_enumeration_serializer_declaration(self, entity_enumeration: KotlinEntityEnumeration) -> Text:
+        entities = entity_enumeration.entities_kotlin
+        result = Text()
+        result += f'internal class {entity_enumeration.serializer_type_declaration}('
+        result += '    private val component: JsonParserComponent'
+        result += ') {'
+        result += EMPTY
+        result += self.__entity_enumeration_entity_serializer_declaration(entity_enumeration, entities).indented(indent_width=4)
+        result += EMPTY
+        result += self.__entity_enumeration_template_serializer_declaration(entity_enumeration, entities).indented(indent_width=4)
+        result += EMPTY
+        result += self.__entity_enumeration_template_resolver_declaration(entity_enumeration, entities).indented(indent_width=4)
+        result += '}'
+        return result
+
+    def __entity_enumeration_entity_serializer_declaration(
+        self,
+        entity_enumeration: KotlinEntityEnumeration,
+        entities: List[KotlinEntity]
+    ) -> Text:
+        entity_type = entity_enumeration.prefixed_declaration_for(mode=GenerationMode.NORMAL_WITH_TEMPLATES)
+        template_type = entity_enumeration.prefixed_declaration_for(mode=GenerationMode.TEMPLATE)
+        default_entity_decl = utils.capitalize_camel_case(str(entity_enumeration.default_entity_declaration))
+
+        read_type_expr = 'JsonPropertyParser.readString(data, "type")'
+        read_type_opt_expr = 'JsonPropertyParser.readOptionalString(context.logger, data, "type")'
+
+        result = Text()
+        result += f'class {ENTITY_PARSER_NAME}('
+        result += '    private val component: JsonParserComponent'
+        result += f') : Parser<JSONObject, {entity_type}> {{'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun deserialize(context: ParsingContext, data: JSONObject): {entity_type} {{'
+        if default_entity_decl:
+            result += f'        val type: String = {read_type_opt_expr} ?: {default_entity_decl}.TYPE'
+        else:
+            result += f'        val type: String = {read_type_expr}'
+        result += '        when (type) {'
+        for subentity in entities:
+            variant_name = entity_enumeration.format_case_naming(utils.capitalize_camel_case(subentity.name))
+            subentity_type = utils.capitalize_camel_case(subentity.name_for(mode=GenerationMode.NORMAL_WITH_TEMPLATES))
+            line = f'{subentity_type}.TYPE -> return {entity_type}.{variant_name}'\
+                f'(component.{subentity.entity_serializer_name_declaration}.value.deserialize(context, data))'
+            result += Text(indent_width=12, init_lines=line)
+        result += '        }'
+        result += EMPTY
+        result += f'        val template = context.templates.getOrThrow(type, data) as? {template_type}'
+        result += '        if (template != null) {'
+        result += f'            return component.{entity_enumeration.template_resolver_name_declaration}'
+        result += '                .value'
+        result += '                .resolve(context, template, data)'
+        result += '        } else {'
+        result += '            throw typeMismatch(json = data, key = "type", value = type)'
+        result += '        }'
+        result += '    }'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun serialize(context: ParsingContext, value: {entity_type}): JSONObject {{'
+        result += '        return when (value) {'
+        for subentity in entities:
+            variant_name = entity_enumeration.format_case_naming(utils.capitalize_camel_case(subentity.name))
+            line = f'is {entity_type}.{variant_name} -> component.{subentity.entity_serializer_name_declaration}.value.serialize(context, value.value)'
+            result += Text(indent_width=12, init_lines=line)
+        result += '        }'
+        result += '    }'
+        result += '}'
+        return result
+
+    def __entity_enumeration_template_serializer_declaration(
+        self,
+        entity_enumeration: KotlinEntityEnumeration,
+        entities: List[KotlinEntity]
+    ) -> Text:
+        template_type = entity_enumeration.prefixed_declaration_for(mode=GenerationMode.TEMPLATE)
+        default_entity_decl = utils.capitalize_camel_case(str(entity_enumeration.default_entity_declaration))
+
+        read_type_expr = 'JsonPropertyParser.readString(data, "type")'
+        read_type_opt_expr = 'JsonPropertyParser.readOptionalString(context.logger, data, "type")'
+
+        result = Text()
+        result += f'class {TEMPLATE_PARSER_NAME}('
+        result += '    private val component: JsonParserComponent'
+        result += f') : Parser<JSONObject, {template_type}> {{'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun deserialize(context: ParsingContext, data: JSONObject): {template_type} {{'
+        if default_entity_decl:
+            result += f'        val extendedType = {read_type_opt_expr} ?: {default_entity_decl}Template.TYPE'
+        else:
+            result += f'        val extendedType = {read_type_expr}'
+        result += f'        val parent = context.templates[extendedType] as? {template_type}'
+        result += '        val type = parent?.type ?: extendedType'
+        result += '        when (type) {'
+        for subentity in entities:
+            subentity_template_type = utils.capitalize_camel_case(subentity.name_for(mode=GenerationMode.TEMPLATE))
+            variant_name = entity_enumeration.format_case_naming(utils.capitalize_camel_case(subentity.name))
+            line = f'{subentity_template_type}.TYPE -> return {template_type}.{variant_name}'\
+                f'(component.{subentity.template_serializer_name_declaration}.value.deserialize(context, parent?.value() as {subentity_template_type}?, data))'
+            result += Text(indent_width=12, init_lines=line)
+        result += '            else -> throw typeMismatch(json = data, key = "type", value = type)'
+        result += '        }'
+        result += '    }'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun serialize(context: ParsingContext, value: {template_type}): JSONObject {{'
+        result += '        return when (value) {'
+        for subentity in entities:
+            variant_name = entity_enumeration.format_case_naming(utils.capitalize_camel_case(subentity.name))
+            line = f'is {template_type}.{variant_name} -> component.{subentity.template_serializer_name_declaration}.value.serialize(context, value.value)'
+            result += Text(indent_width=12, init_lines=line)
+        result += '        }'
+        result += '    }'
+        result += '}'
+        return result
+
+    def __entity_enumeration_template_resolver_declaration(
+        self,
+        entity_enumeration: KotlinEntityEnumeration,
+        entities: List[KotlinEntity]
+    ) -> Text:
+        entity_type = entity_enumeration.prefixed_declaration_for(mode=GenerationMode.NORMAL_WITH_TEMPLATES)
+        template_type = entity_enumeration.prefixed_declaration_for(mode=GenerationMode.TEMPLATE)
+
+        result = Text()
+        result += f'class {TEMPLATE_RESOLVER_NAME}('
+        result += '    private val component: JsonParserComponent'
+        result += f') : TemplateResolver<JSONObject, {template_type}, {entity_type}> {{'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun resolve(context: ParsingContext, template: {template_type}, data: JSONObject): {entity_type} {{'
+        result += '        return when (template) {'
+        for subentity in entities:
+            variant_name = entity_enumeration.format_case_naming(utils.capitalize_camel_case(subentity.name))
+            line = f'is {template_type}.{variant_name} -> {entity_type}.{variant_name}'\
+                f'(component.{subentity.template_resolver_name_declaration}.value.resolve(context, template.value, data))'
+            result += Text(indent_width=12, init_lines=line)
+        result += '        }'
+        result += '    }'
+        result += '}'
         return result

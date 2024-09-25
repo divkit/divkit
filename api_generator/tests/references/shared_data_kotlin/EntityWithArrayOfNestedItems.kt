@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithArrayOfNestedItems(
-    @JvmField final val items: List<Item>, // at least 1 elements
+    @JvmField val items: List<Item>, // at least 1 elements
 ) : Hashable {
 
     private var _propertiesHash: Int? = null 
@@ -44,13 +45,11 @@ class EntityWithArrayOfNestedItems(
 
     companion object {
         const val TYPE = "entity_with_array_of_nested_items"
-
-        private val ITEMS_VALIDATOR = ListValidator<EntityWithArrayOfNestedItems.Item> { it: List<*> -> it.size >= 1 }
     }
 
     class Item(
-        @JvmField final val entity: Entity,
-        @JvmField final val property: Expression<String>,
+        @JvmField val entity: Entity,
+        @JvmField val property: Expression<String>,
     ) : Hashable {
 
         private var _hash: Int? = null 

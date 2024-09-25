@@ -10,8 +10,8 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
+import com.yandex.div2.DivData
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -49,7 +49,7 @@ class TwoWayVariableBinderTest {
 
     private val divView = mock<Div2View> {
         on { dataTag } doReturn mock()
-        on { divData } doReturn mock()
+        on { divData } doReturn DivData(logId = "test", states = emptyList())
     }
     private val updateCaptor = argumentCaptor<(String) -> Unit>()
     private val callbacks = mock<TwoWayStringVariableBinder.Callbacks> {

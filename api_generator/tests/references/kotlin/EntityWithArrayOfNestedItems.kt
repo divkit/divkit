@@ -1,24 +1,20 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithArrayOfNestedItems(
-    @JvmField final val items: List<Item>, // at least 1 elements
+    @JvmField val items: List<Item>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
     private var _propertiesHash: Int? = null 
@@ -79,10 +75,9 @@ class EntityWithArrayOfNestedItems(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItems(env, json = it) }
     }
 
-    @Mockable
     class Item(
-        @JvmField final val entity: Entity,
-        @JvmField final val property: Expression<String>,
+        @JvmField val entity: Entity,
+        @JvmField val property: Expression<String>,
     ) : JSONSerializable, Hashable {
 
         private var _hash: Int? = null 

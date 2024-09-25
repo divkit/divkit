@@ -25,24 +25,29 @@ class GeneratedLanguage(str, Enum):
 
 
 TEMPLATE_SUFFIX = '_template'
+SERIALIZER_SUFFIX = '_json_parser'
 
 
 class GenerationMode(Enum):
     NORMAL_WITH_TEMPLATES = auto()
     NORMAL_WITHOUT_TEMPLATES = auto()
     TEMPLATE = auto()
+    SERIALIZER = auto()
 
     @property
     def is_template(self) -> bool:
-        if self in [GenerationMode.NORMAL_WITH_TEMPLATES, GenerationMode.NORMAL_WITHOUT_TEMPLATES]:
-            return False
-        elif self is GenerationMode.TEMPLATE:
-            return True
+        return self is GenerationMode.TEMPLATE
+
+    @property
+    def is_serializer(self) -> bool:
+        return self is GenerationMode.SERIALIZER
 
     @property
     def name_suffix(self) -> str:
         if self in [GenerationMode.NORMAL_WITH_TEMPLATES, GenerationMode.NORMAL_WITHOUT_TEMPLATES]:
             return ''
+        if self is GenerationMode.SERIALIZER:
+            return SERIALIZER_SUFFIX
         elif self is GenerationMode.TEMPLATE:
             return TEMPLATE_SUFFIX
 
@@ -82,6 +87,12 @@ class Config:
                     print_warning('Templates can not be generated without Serialization. '
                                   'Templates will not be generated.')
                 self.generate_templates = False
+
+            self.generate_serializers: bool = dictionary.get('generateSerializers', False)
+
+            if ('generateSerializers' in dictionary) and \
+                    self.lang != GeneratedLanguage.KOTLIN:
+                raise NotImplementedError('generateSerializers flag is supported only for Kotlin language')
 
     def __init__(self, generator_path: Optional[str], config_path: str, schema_path: str, output_path: str):
         self.schema_path: str = schema_path

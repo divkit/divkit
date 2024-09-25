@@ -43,7 +43,7 @@ abstract class TemplateParsingEnvironment<T: JsonTemplate<*>> @JvmOverloads cons
         val parsedTemplates = arrayMap<String, T>()
         val templateDependencies = arrayMap<String, Set<String>>()
         try {
-            val orderedNamesWithDependencies = JsonTopologicalSorting.sort(json, logger, env = this)
+            val orderedNamesWithDependencies = JsonTopologicalSorting.sort(this, json)
             mainTemplateProvider.takeSnapshot(parsedTemplates)
             val tmpProvider = TemplateProvider.wrap(parsedTemplates)
 

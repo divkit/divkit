@@ -12,6 +12,7 @@ import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
 
 import kotlin.OptIn;
+import kotlin.Lazy;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONObject;
 
@@ -26,7 +27,7 @@ import static com.yandex.div.internal.parser.JsonTemplateParserKt.suppressMissin
 /**
  * A Java-version of JsonTemplateParser.kt that is faster because it generates less garbage during parsing
  * and skips unnecessary checks (like nullability).
- *
+ * <p>
  * NOTE! Please do not change Function1 and Function2 with readable java-interfaces.
  * This will only make parsing slower.
  */
@@ -37,61 +38,61 @@ public class JsonFieldParser {
     private static final ValueValidator<String> IS_NOT_EMPTY = value -> !value.isEmpty();
 
     @NonNull
-    public static <T> Field<T> readField(
+    public static <V> Field<V> readField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback
+            @Nullable final Field<V> fallback
     ) {
         return readField(context, logger, json, key, overridable, fallback, doNotConvert(), alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Field<T> readField(
+    public static <R, V> Field<V> readField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback,
-            @NonNull final Function1<R, T> converter
+            @Nullable final Field<V> fallback,
+            @NonNull final Function1<R, V> converter
     ) {
         return readField(context, logger, json, key, overridable, fallback, converter, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<T> readField(
+    public static <V> Field<V> readField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback,
-            @NonNull final ValueValidator<T> validator
+            @Nullable final Field<V> fallback,
+            @NonNull final ValueValidator<V> validator
     ) {
         return readField(context, logger, json, key, overridable, fallback, doNotConvert(), validator);
     }
 
     @NonNull
-    public static <R, T> Field<T> readField(
+    public static <R, V> Field<V> readField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ValueValidator<T> validator
+            @Nullable final Field<V> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
         try {
-            T value = JsonPropertyParser.read(context, logger, json, key, converter, validator);
+            V value = JsonPropertyParser.read(context, logger, json, key, converter, validator);
             return new Field.Value<>(overridable, value);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, logger, json, key);
-            Field<T> referenceOrFallback = referenceOrFallback(overridable, reference, fallback);
+            Field<V> referenceOrFallback = referenceOrFallback(overridable, reference, fallback);
             if (referenceOrFallback != null) {
                 return referenceOrFallback;
             } else {
@@ -101,22 +102,22 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <T> Field<T> readField(
+    public static <V> Field<V> readField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback,
-            @NonNull final Deserializer<T, JSONObject> deserializer
+            @Nullable final Field<V> fallback,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
         try {
-            T result = JsonPropertyParser.read(context, logger, json, key, deserializer);
+            V result = JsonPropertyParser.read(context, logger, json, key, deserializer);
             return new Field.Value<>(overridable, result);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, logger, json, key);
-            Field<T> referenceOrFallback = referenceOrFallback(overridable, reference, fallback);
+            Field<V> referenceOrFallback = referenceOrFallback(overridable, reference, fallback);
             if (referenceOrFallback != null) {
                 return referenceOrFallback;
             } else {
@@ -126,55 +127,55 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <T> Field<T> readOptionalField(
+    public static <V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback
+            @Nullable final Field<V> fallback
     ) {
         return readOptionalField(context, logger, json, key, overridable, fallback, doNotConvert(), alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Field<T> readOptionalField(
+    public static <R, V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback,
-            @NonNull final Function1<R, T> converter
+            @Nullable final Field<V> fallback,
+            @NonNull final Function1<R, V> converter
     ) {
         return readOptionalField(context, logger, json, key, overridable, fallback, converter, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<T> readOptionalField(
+    public static <V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback,
-            @NonNull final ValueValidator<T> validator
+            @Nullable final Field<V> fallback,
+            @NonNull final ValueValidator<V> validator
     ) {
         return readOptionalField(context, logger, json, key, overridable, fallback, doNotConvert(), validator);
     }
 
     @NonNull
-    public static <R, T> Field<T> readOptionalField(
+    public static <R, V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ValueValidator<T> validator
+            @Nullable final Field<V> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
-        T opt = JsonPropertyParser.readOptional(context, logger, json, key, converter, validator);
+        V opt = JsonPropertyParser.readOptional(context, logger, json, key, converter, validator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         }
@@ -189,16 +190,16 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <T> Field<T> readOptionalField(
+    public static <V> Field<V> readOptionalField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<T> fallback,
-            @NonNull final Deserializer<T, JSONObject> deserializer
+            @Nullable final Field<V> fallback,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        T opt = JsonPropertyParser.readOptional(context, logger, json, key, deserializer);
+        V opt = JsonPropertyParser.readOptional(context, logger, json, key, deserializer);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         }
@@ -213,68 +214,68 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <T> Field<Expression<T>> readFieldWithExpression(
+    public static <V> Field<Expression<V>> readFieldWithExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<Expression<T>> fallback
+            @Nullable final Field<Expression<V>> fallback
     ) {
         return readFieldWithExpression(
                 context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Field<Expression<T>> readFieldWithExpression(
+    public static <R, V> Field<Expression<V>> readFieldWithExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<Expression<T>> fallback,
-            @NonNull final Function1<R, T> converter
+            @Nullable final Field<Expression<V>> fallback,
+            @NonNull final Function1<R, V> converter
     ) {
         return readFieldWithExpression(
                 context, logger, json, key, typeHelper, overridable, fallback, converter, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<Expression<T>> readFieldWithExpression(
+    public static <V> Field<Expression<V>> readFieldWithExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<Expression<T>> fallback,
-            @NonNull final ValueValidator<T> validator
+            @Nullable final Field<Expression<V>> fallback,
+            @NonNull final ValueValidator<V> validator
     ) {
         return readFieldWithExpression(
                 context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), validator);
     }
 
     @NonNull
-    public static <R, T> Field<Expression<T>> readFieldWithExpression(
+    public static <R, V> Field<Expression<V>> readFieldWithExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<Expression<T>> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ValueValidator<T> validator
+            @Nullable final Field<Expression<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
         try {
-            Expression<T> expression = JsonExpressionParser.readExpression(
+            Expression<V> expression = JsonExpressionParser.readExpression(
                     context, logger, json, key, typeHelper, converter, validator);
             return new Field.Value<>(overridable, expression);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
-            Field<Expression<T>> referenceOrFallback = referenceOrFallback(
+            Field<Expression<V>> referenceOrFallback = referenceOrFallback(
                     overridable,
                     readReference(context, logger, json, key),
                     fallback);
@@ -301,48 +302,48 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <R, T> Field<Expression<T>> readOptionalFieldWithExpression(
+    public static <R, V> Field<Expression<V>> readOptionalFieldWithExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull TypeHelper<T> typeHelper,
+            @NonNull TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<Expression<T>> fallback,
-            @NonNull final Function1<R, T> converter
+            @Nullable final Field<Expression<V>> fallback,
+            @NonNull final Function1<R, V> converter
     ) {
         return readOptionalFieldWithExpression(
                 context, logger, json, key, typeHelper, overridable, fallback, converter, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<Expression<T>> readOptionalFieldWithExpression(
+    public static <V> Field<Expression<V>> readOptionalFieldWithExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull TypeHelper<T> typeHelper,
+            @NonNull TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<Expression<T>> fallback,
-            @NonNull final ValueValidator<T> validator
+            @Nullable final Field<Expression<V>> fallback,
+            @NonNull final ValueValidator<V> validator
     ) {
         return readOptionalFieldWithExpression(
                 context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), validator);
     }
 
     @NonNull
-    public static <R,T> Field<Expression<T>> readOptionalFieldWithExpression(
+    public static <R, V> Field<Expression<V>> readOptionalFieldWithExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull TypeHelper<T> typeHelper,
+            @NonNull TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<Expression<T>> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ValueValidator<T> validator
+            @Nullable final Field<Expression<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
-        Expression<T> opt = JsonExpressionParser.readOptionalExpression(
+        Expression<V> opt = JsonExpressionParser.readOptionalExpression(
                 context, logger, json, key, typeHelper, converter, validator, null);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
@@ -359,54 +360,54 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <R, T> Field<List<T>> readListField(
+    public static <R, V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Function1<R,T> converter
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Function1<R, V> converter
     ) {
         return readListField(
                 context, logger, json, key, overridable, fallback, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Field<List<T>> readListField(
+    public static <R, V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Function1<R,T> converter,
-            @NonNull final ListValidator<T> listValidator
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return readListField(
                 context, logger, json, key, overridable, fallback, converter, listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Field<List<T>> readListField(
+    public static <R, V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Function1<R,T> converter,
-            @NonNull final ListValidator<T> listValidator,
-            @NonNull final ValueValidator<T> itemValidator
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         try {
-            List<T> opt = JsonPropertyParser.readList(
+            List<V> opt = JsonPropertyParser.readList(
                     context, logger, json, key, converter, listValidator, itemValidator);
             return new Field.Value<>(overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, logger, json, key);
-            Field<List<T>> result = referenceOrFallback(overridable, reference, fallback);
+            Field<List<V>> result = referenceOrFallback(overridable, reference, fallback);
             if (result != null) {
                 return result;
             } else {
@@ -416,23 +417,23 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <T> Field<List<T>> readListField(
+    public static <V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Deserializer<T, JSONObject> deserializer
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
         try {
-            List<T> opt = JsonPropertyParser.readList(
+            List<V> opt = JsonPropertyParser.readList(
                     context, logger, json, key, deserializer);
             return new Field.Value<>(overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, logger, json, key);
-            Field<List<T>> result = referenceOrFallback(overridable, reference, fallback);
+            Field<List<V>> result = referenceOrFallback(overridable, reference, fallback);
             if (result != null) {
                 return result;
             } else {
@@ -442,24 +443,24 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <T> Field<List<T>> readListField(
+    public static <V> Field<List<V>> readListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Deserializer<T, JSONObject> deserializer,
-            @NonNull final ListValidator<T> listValidator
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
+            @NonNull final ListValidator<V> listValidator
     ) {
         try {
-            List<T> opt = JsonPropertyParser.readList(
+            List<V> opt = JsonPropertyParser.readList(
                     context, logger, json, key, deserializer, listValidator);
             return new Field.Value<>(overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, logger, json, key);
-            Field<List<T>> result = referenceOrFallback(overridable, reference, fallback);
+            Field<List<V>> result = referenceOrFallback(overridable, reference, fallback);
             if (result != null) {
                 return result;
             } else {
@@ -469,62 +470,62 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <R, T> Field<List<T>> readOptionalListField(
+    public static <R, V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Function1<R, T> converter
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Function1<R, V> converter
     ) {
         return readOptionalListField(
                 context, logger, json, key, overridable, fallback, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Field<List<T>> readOptionalListField(
+    public static <R, V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> listValidator
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return readOptionalListField(
                 context, logger, json, key, overridable, fallback, converter, listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<List<T>> readOptionalListField(
+    public static <V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final ListValidator<T> listValidator,
-            @NonNull final ValueValidator<T> itemValidator
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return readOptionalListField(
                 context, logger, json, key, overridable, fallback, doNotConvert(), listValidator, itemValidator);
     }
 
     @NonNull
-    public static <R, T> Field<List<T>> readOptionalListField(
+    public static <R, V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> listValidator,
-            @NonNull final ValueValidator<T> itemValidator
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
-        List<T> opt = JsonPropertyParser.readOptionalList(
+        List<V> opt = JsonPropertyParser.readOptionalList(
                 context, logger, json, key, converter, listValidator, itemValidator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
@@ -541,16 +542,16 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <T> Field<List<T>> readOptionalListField(
+    public static <V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Deserializer<T, JSONObject> deserializer
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        List<T> opt = JsonPropertyParser.readOptionalList(context, logger, json, key, deserializer);
+        List<V> opt = JsonPropertyParser.readOptionalList(context, logger, json, key, deserializer);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
         } else {
@@ -566,17 +567,17 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <T> Field<List<T>> readOptionalListField(
+    public static <V> Field<List<V>> readOptionalListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
             final boolean overridable,
-            @Nullable final Field<List<T>> fallback,
-            @NonNull final Deserializer<T, JSONObject> deserializer,
-            @NonNull final ListValidator<T> listValidator
+            @Nullable final Field<List<V>> fallback,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
+            @NonNull final ListValidator<V> listValidator
     ) {
-        List<T> opt = JsonPropertyParser.readOptionalList(
+        List<V> opt = JsonPropertyParser.readOptionalList(
                 context, logger, json, key, deserializer, listValidator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
@@ -593,81 +594,81 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <R, T> Field<ExpressionList<T>> readExpressionListField(
+    public static <R, V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final Function1<R, T> converter
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final Function1<R, V> converter
     ) {
         return readExpressionListField(
                 context, logger, json, key, typeHelper, overridable, fallback, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Field<ExpressionList<T>> readExpressionListField(
+    public static <R, V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> listValidator
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return readExpressionListField(
                 context, logger, json, key, typeHelper, overridable, fallback, converter, listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<ExpressionList<T>> readExpressionListField(
+    public static <V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final ListValidator<T> listValidator
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return readExpressionListField(
                 context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<ExpressionList<T>> readExpressionListField(
+    public static <V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final ListValidator<T> listValidator,
-            @NonNull final ValueValidator<T> itemValidator
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return readExpressionListField(
                 context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, itemValidator);
     }
 
     @NonNull
-    public static <R, T> Field<ExpressionList<T>> readExpressionListField(
+    public static <R, V> Field<ExpressionList<V>> readExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> listValidator,
-            @NonNull final ValueValidator<T> itemValidator
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
-        ExpressionList<T> opt = JsonExpressionParser.readOptionalExpressionList(
+        ExpressionList<V> opt = JsonExpressionParser.readOptionalExpressionList(
                 context, logger, json, key, typeHelper, converter, listValidator, itemValidator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
@@ -684,81 +685,81 @@ public class JsonFieldParser {
     }
 
     @NonNull
-    public static <R, T> Field<ExpressionList<T>> readOptionalExpressionListField(
+    public static <R, V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final Function1<R, T> converter
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final Function1<R, V> converter
     ) {
         return readOptionalExpressionListField(
                 context, logger, json, key, typeHelper, overridable, fallback, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Field<ExpressionList<T>> readOptionalExpressionListField(
+    public static <R, V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> listValidator
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return readOptionalExpressionListField(
                 context, logger, json, key, typeHelper, overridable, fallback, converter, listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<ExpressionList<T>> readOptionalExpressionListField(
+    public static <V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final ListValidator<T> listValidator
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return readOptionalExpressionListField(
                 context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <T> Field<ExpressionList<T>> readOptionalExpressionListField(
+    public static <V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final ListValidator<T> listValidator,
-            @NonNull final ValueValidator<T> itemValidator
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return readOptionalExpressionListField(
                 context, logger, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, itemValidator);
     }
 
     @NonNull
-    public static <R, T> Field<ExpressionList<T>> readOptionalExpressionListField(
+    public static <R, V> Field<ExpressionList<V>> readOptionalExpressionListField(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject json,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
+            @NonNull final TypeHelper<V> typeHelper,
             final boolean overridable,
-            @Nullable final Field<ExpressionList<T>> fallback,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> listValidator,
-            @NonNull final ValueValidator<T> itemValidator
+            @Nullable final Field<ExpressionList<V>> fallback,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
-        ExpressionList<T> opt = JsonExpressionParser.readOptionalExpressionList(
+        ExpressionList<V> opt = JsonExpressionParser.readOptionalExpressionList(
                 context, logger, json, key, typeHelper, converter, listValidator, itemValidator);
         if (opt != null) {
             return new Field.Value<>(overridable, opt);
@@ -786,10 +787,10 @@ public class JsonFieldParser {
 
     @Nullable
     @SuppressWarnings("ConstantConditions")
-    public static <T> Field<T> referenceOrFallback(
+    public static <V> Field<V> referenceOrFallback(
             final boolean overridable,
             @Nullable final String reference,
-            @Nullable final Field<T> fallback
+            @Nullable final Field<V> fallback
     ) {
         if (reference != null) {
             return new Field.Reference<>(overridable, reference);

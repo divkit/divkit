@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems> {
-    @JvmField final val items: Field<List<ItemTemplate>> // at least 1 elements
+    @JvmField val items: Field<List<ItemTemplate>>
 
-    constructor (
+    constructor(
+        items: Field<List<ItemTemplate>>,
+    ) {
+        this.items = items
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithArrayOfNestedItemsTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, ItemTemplate.CREATOR, ITEMS_TEMPLATE_VALIDATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfNestedItems {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfNestedItems {
         return EntityWithArrayOfNestedItems(
-            items = items.resolveTemplateList(env = env, key = "items", data = rawData, ITEMS_VALIDATOR, reader = ITEMS_READER)
+            items = this.items.resolveTemplateList(env = env, key = "items", data = data, ITEMS_VALIDATOR, reader = ITEMS_READER)
         )
     }
 
@@ -55,12 +57,19 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItemsTemplate(env, json = it) }
     }
 
-    @Mockable
     class ItemTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems.Item> {
-        @JvmField final val entity: Field<EntityTemplate>
-        @JvmField final val property: Field<Expression<String>>
+        @JvmField val entity: Field<EntityTemplate>
+        @JvmField val property: Field<Expression<String>>
 
-        constructor (
+        constructor(
+            entity: Field<EntityTemplate>,
+            property: Field<Expression<String>>,
+        ) {
+            this.entity = entity
+            this.property = property
+        }
+
+        constructor(
             env: ParsingEnvironment,
             parent: ItemTemplate? = null,
             topLevel: Boolean = false,
@@ -71,10 +80,10 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
             property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, logger, env, TYPE_HELPER_STRING)
         }
 
-        override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfNestedItems.Item {
+        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfNestedItems.Item {
             return EntityWithArrayOfNestedItems.Item(
-                entity = entity.resolveTemplate(env = env, key = "entity", data = rawData, reader = ENTITY_READER),
-                property = property.resolve(env = env, key = "property", data = rawData, reader = PROPERTY_READER)
+                entity = this.entity.resolveTemplate(env = env, key = "entity", data = data, reader = ENTITY_READER),
+                property = this.property.resolve(env = env, key = "property", data = data, reader = PROPERTY_READER)
             )
         }
 

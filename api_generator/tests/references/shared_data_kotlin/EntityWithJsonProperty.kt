@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithJsonProperty(
-    @JvmField final val jsonProperty: JSONObject = JSON_PROPERTY_DEFAULT_VALUE, // default value: { "key": "value", "items": [ "value" ] }
+    @JvmField val jsonProperty: JSONObject = JSON_PROPERTY_DEFAULT_VALUE, // default value: { "key": "value", "items": [ "value" ] }
 ) : Hashable {
 
     private var _hash: Int? = null 

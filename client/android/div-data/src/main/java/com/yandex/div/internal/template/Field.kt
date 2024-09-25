@@ -15,14 +15,31 @@ import org.json.JSONObject
 
 typealias Reader<T> = (String, JSONObject, env: ParsingEnvironment) -> T
 
-sealed class Field<T>(val overridable: Boolean) {
+sealed class Field<T>(
+    @JvmField val type: Int,
+    @JvmField val overridable: Boolean
+) {
 
-    object Null : Field<Any>(overridable = false)
-    object Placeholder : Field<Any>(overridable = true)
-    class Value<T>(overridable: Boolean, val value: T) : Field<T>(overridable)
-    class Reference<T>(overridable: Boolean, val reference: String) : Field<T>(overridable)
+    object Null : Field<Any>(type = TYPE_NULL, overridable = false)
+
+    object Placeholder : Field<Any>(type = TYPE_PLACEHOLDER, overridable = true)
+
+    class Value<T>(
+        overridable: Boolean,
+        @JvmField val value: T
+    ) : Field<T>(type = TYPE_VALUE, overridable)
+
+    class Reference<T>(
+        overridable: Boolean,
+        @JvmField val reference: String
+    ) : Field<T>(type = TYPE_REFERENCE, overridable)
 
     companion object {
+
+        const val TYPE_NULL = 0
+        const val TYPE_PLACEHOLDER = 1
+        const val TYPE_VALUE = 2
+        const val TYPE_REFERENCE = 3
 
         @Suppress("UNCHECKED_CAST")
         fun <T> nullField(overridable: Boolean): Field<T> {
