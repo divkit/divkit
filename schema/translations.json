@@ -2259,6 +2259,10 @@
     "en": "Gradient text color.",
     "ru": "Градиентный цвет текста."
   },
+  "div_text_tighten_width": {
+    "en": "Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set",
+    "ru": "Ограничивать ширину текста максимальной шириной строки, работает только с шириной wrap_content, constrained=true и выставленным max_size"
+  },
   "div_text_truncate": {
     "en": "Text cropping method. Use `ellipsis` instead.",
     "ru": "Способ обрезания текста. Вместо него используйте `ellipsis`."

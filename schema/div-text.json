@@ -444,6 +444,14 @@
             "web"
           ]
         },
+        "tighten_width": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_text_tighten_width",
+          "platforms": [
+            "android"
+          ]
+        },
         "truncate": {
           "type": "string",
           "enum": [
