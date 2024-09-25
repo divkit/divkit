@@ -2275,7 +2275,8 @@
         "TypedActions"
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "file": "video/typed_video_with_controls.json"
     },
