@@ -499,7 +499,7 @@ public class DivActionHandler {
             return null;
         }
 
-        View targetView = ViewLocator.findViewWithTag(divView, id);
+        View targetView = ViewLocator.findSingleViewWithTag(divView, id);
         if (targetView instanceof DivHolderView) {
             BindingContext bindingContext = ((DivHolderView<?>) targetView).getBindingContext();
             if (bindingContext != null) {

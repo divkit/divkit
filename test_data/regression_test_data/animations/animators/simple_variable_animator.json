@@ -1,0 +1,188 @@
+{
+  "templates": {
+    "case_container": {
+      "type": "container",
+      "orientation": "vertical",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ]
+    },
+    "title": {
+      "type": "text",
+      "font_size": 24,
+      "font_weight": "bold",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#586E75"
+    },
+    "spinner": {
+      "type": "image",
+      "width": {
+        "type": "fixed",
+        "value": 48
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "image_url": "https://s3.mds.yandex.net/div-storage/test/images/spinner.png",
+      "tint_color": "@{tint_color}",
+      "transform": {
+        "rotation": "@{rotation_angle}"
+      },
+      "variables": [
+        {
+          "name": "rotation_angle",
+          "type": "number",
+          "value": 0.0
+        },
+        {
+          "name": "tint_color",
+          "type": "color",
+          "value": "#268BD2"
+        }
+      ],
+      "animators": [
+        {
+          "type": "number_animator",
+          "id": "rotation_animator",
+          "variable_name": "rotation_angle",
+          "duration": 1000,
+          "start_value": 0,
+          "end_value": 360,
+          "interpolator": "ease_in_out",
+          "$cancel_actions": "rotation_animator_cancel_actions"
+        },
+        {
+          "type": "color_animator",
+          "id": "tint_color_animator",
+          "variable_name": "tint_color",
+          "duration": 1000,
+          "start_value": "#268BD2",
+          "end_value": "#D33682",
+          "$cancel_actions": "tint_color_animator_cancel_actions"
+        }
+      ]
+    },
+    "button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#FDF6E3"
+    }
+  },
+  "card": {
+    "log_id": "variable_animators",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "case_container",
+          "background_color": "#FDF6E3",
+          "items": [
+            {
+              "type": "title",
+              "margins": {
+                "bottom": 16
+              },
+              "text": "Simple animator"
+            },
+            {
+              "type": "spinner",
+              "id": "spinner",
+              "margins": {
+                "bottom": 16
+              },
+              "alignment_horizontal": "center"
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "button",
+                  "margins": {
+                    "right": 16
+                  },
+                  "background_color": "#2AA198",
+                  "text": "Start",
+                  "actions": [
+                    {
+                      "log_id": "start_rotation_animation",
+                      "scope_id": "spinner",
+                      "typed": {
+                        "type": "animator_start",
+                        "animator_id": "rotation_animator"
+                      }
+                    },
+                    {
+                      "log_id": "start_tint_color_animation",
+                      "scope_id": "spinner",
+                      "typed": {
+                        "type": "animator_start",
+                        "animator_id": "tint_color_animator"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "background_color": "#CB4B16",
+                  "text": "Stop",
+                  "actions": [
+                    {
+                      "log_id": "stop_rotation_animation",
+                      "scope_id": "spinner",
+                      "typed": {
+                        "type": "animator_stop",
+                        "animator_id": "rotation_animator"
+                      }
+                    },
+                    {
+                      "log_id": "stop_tint_color_animation",
+                      "scope_id": "spinner",
+                      "typed": {
+                        "type": "animator_stop",
+                        "animator_id": "tint_color_animator"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

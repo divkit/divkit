@@ -600,6 +600,7 @@ class Div2View private constructor(
         super.onDetachedFromWindow()
         discardVisibilityTracking()
         divTimerEventDispatcher?.onDetach(this)
+        viewComponent.animatorController.onDetachedFromWindow()
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {

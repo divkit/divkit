@@ -1053,6 +1053,80 @@
       "file": "action_animation/button_press_action_animations.json"
     },
     {
+      "title": "Simple variable animator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for completion",
+        "Press \"Start\" button again",
+        "Press \"Stop\" button before animation ends"
+      ],
+      "expected_results": [
+        "Spinner performs full rotation cycle and changes color. If stopped it stands still."
+      ],
+      "file": "animations/animators/simple_variable_animator.json"
+    },
+    {
+      "title": "Repeating variable animator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for completion",
+        "Press \"Start\" button again",
+        "Press \"Stop\" button before animation ends"
+      ],
+      "expected_results": [
+        "Spinner performs full rotation cycle and changes color 4 times. If stopped it stands still."
+      ],
+      "file": "animations/animators/repeating_variable_animator.json"
+    },
+    {
+      "title": "Infinite variable animator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for couple of cycles",
+        "Press \"Stop\" button"
+      ],
+      "expected_results": [
+        "Spinner performs multiple rotation cycles until being stopped. When stopped it reset rotation angle and color."
+      ],
+      "file": "animations/animators/infinite_variable_animator.json"
+    },
+    {
+      "title": "Infinite alternating variable animator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for couple of cycles",
+        "Press \"Stop\" button"
+      ],
+      "expected_results": [
+        "Spinner performs multiple rotation cycles alternating direction until being stopped. When stopped it reset rotation angle and color."
+      ],
+      "file": "animations/animators/infinite_alternating_variable_animator.json"
+    },
+    {
       "title": "Visibility actions in gallery",
       "automated": [
         "web"

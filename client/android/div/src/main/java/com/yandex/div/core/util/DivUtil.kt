@@ -11,6 +11,7 @@ import com.yandex.div.core.animation.EaseInOutInterpolator
 import com.yandex.div.core.animation.EaseInterpolator
 import com.yandex.div.core.animation.EaseOutInterpolator
 import com.yandex.div.core.animation.SpringInterpolator
+import com.yandex.div.core.animation.reversed
 import com.yandex.div.core.expression.variables.toVariable
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.data.Variable
@@ -18,6 +19,7 @@ import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivAnimationDirection
 import com.yandex.div2.DivAnimationInterpolator
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
@@ -83,6 +85,30 @@ internal val DivAnimationInterpolator.androidInterpolator: Interpolator
         DivAnimationInterpolator.EASE_OUT -> EaseOutInterpolator()
         DivAnimationInterpolator.EASE_IN_OUT -> EaseInOutInterpolator()
         DivAnimationInterpolator.SPRING -> SpringInterpolator()
+    }
+
+internal fun DivAnimationInterpolator.androidInterpolator(reverse: Boolean): Interpolator {
+    return if (reverse) {
+        androidInterpolator.reversed()
+    } else {
+        androidInterpolator
+    }
+}
+
+internal val DivAnimationDirection.isReversed: Boolean
+    get() {
+        return when (this) {
+            DivAnimationDirection.REVERSE, DivAnimationDirection.ALTERNATE_REVERSE -> true
+            else -> false
+        }
+    }
+
+internal val DivAnimationDirection.isAlternated: Boolean
+    get() {
+        return when (this) {
+            DivAnimationDirection.ALTERNATE, DivAnimationDirection.ALTERNATE_REVERSE -> true
+            else -> false
+        }
     }
 
 internal fun requestHierarchyLayout(v : View) {

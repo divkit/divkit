@@ -7,8 +7,8 @@ import com.yandex.div.core.actions.logError
 internal object ViewLocator {
 
     @JvmStatic
-    fun findViewWithTag(divView: Div2View, tag: String): View? {
-        val foundViews = divView.view.findViewsWithTag(tag)
+    fun findSingleViewWithTag(divView: Div2View, tag: String): View? {
+        val foundViews = findViewsWithTag(divView, tag)
         if (foundViews.isEmpty()) {
             return null
         }
@@ -17,6 +17,11 @@ internal object ViewLocator {
             return null
         }
         return foundViews.first()
+    }
+
+    @JvmStatic
+    fun findViewsWithTag(divView: Div2View, tag: String): List<View> {
+        return divView.view.findViewsWithTag(tag)
     }
 
     private fun View.findViewsWithTag(tag: Any?): List<View> {

@@ -40,6 +40,5 @@ internal object DivActionTypedHandlerProxy {
             return DivDownloadActionHandler.handleAction(action.value, downloadCallbacks, view, resolver)
         }
         return view.div2Component.actionTypedHandlerCombiner.handleAction(scopeId, action, view, resolver)
-
     }
 }
