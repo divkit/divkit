@@ -114,7 +114,8 @@ extension DivText: DivBlockModeling {
       accessibilityElement: nil,
       truncationToken: truncationToken,
       truncationImages: truncationImages,
-      canSelect: resolveSelectable(expressionResolver)
+      canSelect: resolveSelectable(expressionResolver),
+      tightenWidth: resolveTightenWidth(expressionResolver)
     )
   }
 
