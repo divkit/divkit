@@ -30,6 +30,7 @@ import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
@@ -272,8 +273,8 @@ internal class DivBaseBinder @Inject constructor(
         val listener = View.OnLayoutChangeListener { _, left, top, right, bottom,
                                                      oldLeft, oldTop, oldRight, oldBottom ->
             val metrics = resources.displayMetrics
-            updateVariable(divView, metrics, widthVariable, variablesHolder, left, right, oldLeft, oldRight)
-            updateVariable(divView, metrics, heightVariable, variablesHolder, top, bottom, oldTop, oldBottom)
+            updateSizeVariable(divView, metrics, widthVariable, variablesHolder, left, right, oldLeft, oldRight, resolver)
+            updateSizeVariable(divView, metrics, heightVariable, variablesHolder, top, bottom, oldTop, oldBottom, resolver)
         }
         addOnLayoutChangeListener(listener)
         setTag(R.id.div_layout_provider_listener_id, listener)
@@ -281,7 +282,11 @@ internal class DivBaseBinder @Inject constructor(
 
         val clearVariablesListener = ViewTreeObserver.OnPreDrawListener {
             variablesHolder.clear()
-            divView.layoutSizes.forEach { divView.setVariable(it.key, it.value.toString()) }
+            divView.layoutSizes.forEach { (resolver, variableMap) ->
+                variableMap.forEach {
+                    VariableMutationHandler.setVariable(divView, it.key, it.value.toString(), resolver)
+                }
+            }
             divView.layoutSizes.clear()
             true
         }
@@ -289,7 +294,7 @@ internal class DivBaseBinder @Inject constructor(
         divView.viewTreeObserver.addOnPreDrawListener(clearVariablesListener)
     }
 
-    private fun updateVariable(
+    private fun updateSizeVariable(
         divView: Div2View,
         metrics: DisplayMetrics,
         variableName: String?,
@@ -297,7 +302,8 @@ internal class DivBaseBinder @Inject constructor(
         start: Int,
         end: Int,
         oldStart: Int,
-        oldEnd: Int
+        oldEnd: Int,
+        resolver: ExpressionResolver,
     ) {
         if (variableName.isNullOrEmpty()) return
 
@@ -310,7 +316,9 @@ internal class DivBaseBinder @Inject constructor(
             return
         }
 
-        divView.layoutSizes[variableName] = size.pxToDp(metrics)
+        divView.layoutSizes.getOrPut(resolver) { mutableMapOf() }.also {
+            it[variableName] = size.pxToDp(metrics)
+        }
     }
 
     private fun View.clearLayoutProviderVariables() {

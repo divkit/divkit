@@ -177,7 +177,7 @@ class Div2View private constructor(
     }
     internal val inputFocusTracker = viewComponent.inputFocusTracker
 
-    internal val layoutSizes = mutableMapOf<String, Int>()
+    internal val layoutSizes = mutableMapOf<ExpressionResolver, MutableMap<String, Int>>()
     internal val variablesHolders = mutableMapOf<DivData, DivLayoutProviderVariablesHolder>()
     internal var clearVariablesListener: ViewTreeObserver.OnPreDrawListener? = null
 
