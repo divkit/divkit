@@ -30,6 +30,7 @@ public final class TextBlock: BlockWithTraits {
   public let images: [InlineImage]
   public let accessibilityElement: AccessibilityElement?
   public let canSelect: Bool
+  public let tightenWidth: Bool
 
   let attachments: [TextAttachment]
   let truncationToken: NSAttributedString?
@@ -51,7 +52,8 @@ public final class TextBlock: BlockWithTraits {
     accessibilityElement: AccessibilityElement?,
     truncationToken: NSAttributedString? = nil,
     truncationImages: [TextBlock.InlineImage] = [],
-    canSelect: Bool = false
+    canSelect: Bool = false,
+    tightenWidth: Bool = false
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -63,6 +65,7 @@ public final class TextBlock: BlockWithTraits {
     self.images = images
     self.accessibilityElement = accessibilityElement
     self.canSelect = canSelect
+    self.tightenWidth = tightenWidth
     self.truncationImages = truncationImages
     if let truncationToken {
       (self.truncationToken, self.truncationAttachments) = setImagePlaceholders(
@@ -85,7 +88,8 @@ public final class TextBlock: BlockWithTraits {
     images: [InlineImage] = [],
     truncationToken: NSAttributedString? = nil,
     truncationImages: [TextBlock.InlineImage] = [],
-    canSelect: Bool = false
+    canSelect: Bool = false,
+    tightenWidth: Bool = false
   ) {
     self.init(
       widthTrait: widthTrait,
@@ -99,7 +103,8 @@ public final class TextBlock: BlockWithTraits {
       accessibilityElement: .staticText(label: text.string),
       truncationToken: truncationToken,
       truncationImages: truncationImages,
-      canSelect: canSelect
+      canSelect: canSelect,
+      tightenWidth: tightenWidth
     )
   }
 
@@ -110,7 +115,7 @@ public final class TextBlock: BlockWithTraits {
         return cached
       }
 
-      let width = ceil(text.sizeForWidth(maxSize).width)
+      let width = ceil(text.sizeForWidth(tightenWidth ? maxSize : .infinity).width)
       let result = clamp(width, min: minSize, max: maxSize)
       cachedIntrinsicWidth = result
       return result
@@ -171,6 +176,7 @@ public final class TextBlock: BlockWithTraits {
       && lhs.minNumberOfHiddenLines == rhs.minNumberOfHiddenLines
       && lhs.images == rhs.images
       && lhs.accessibilityElement == rhs.accessibilityElement
+      && lhs.tightenWidth == rhs.tightenWidth
   }
 }
 

@@ -306,6 +306,7 @@ public final class DivText: DivBase {
   public let textColor: Expression<Color> // default value: #FF000000
   public let textGradient: DivTextGradient?
   public let textShadow: DivShadow?
+  public let tightenWidth: Expression<Bool> // default value: false
   public let tooltips: [DivTooltip]?
   public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
@@ -416,6 +417,10 @@ public final class DivText: DivBase {
     resolver.resolveColor(textColor) ?? Color.colorWithARGBHexCode(0xFF000000)
   }
 
+  public func resolveTightenWidth(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(tightenWidth) ?? false
+  }
+
   public func resolveUnderline(_ resolver: ExpressionResolver) -> DivLineStyle {
     resolver.resolveEnum(underline) ?? DivLineStyle.none
   }
@@ -500,6 +505,7 @@ public final class DivText: DivBase {
     textColor: Expression<Color>? = nil,
     textGradient: DivTextGradient? = nil,
     textShadow: DivShadow? = nil,
+    tightenWidth: Expression<Bool>? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
     transitionChange: DivChangeTransition? = nil,
@@ -562,6 +568,7 @@ public final class DivText: DivBase {
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textGradient = textGradient
     self.textShadow = textShadow
+    self.tightenWidth = tightenWidth ?? .value(false)
     self.tooltips = tooltips
     self.transform = transform
     self.transitionChange = transitionChange
@@ -694,34 +701,35 @@ extension DivText: Equatable {
       return false
     }
     guard
+      lhs.tightenWidth == rhs.tightenWidth,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.underline == rhs.underline,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -783,6 +791,7 @@ extension DivText: Serializable {
     result["text_color"] = textColor.toValidSerializationValue()
     result["text_gradient"] = textGradient?.toDictionary()
     result["text_shadow"] = textShadow?.toDictionary()
+    result["tighten_width"] = tightenWidth.toValidSerializationValue()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()

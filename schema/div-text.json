@@ -449,7 +449,8 @@
           "default_value": "false",
           "$description": "translations.json#/div_text_tighten_width",
           "platforms": [
-            "android"
+            "android",
+            "ios"
           ]
         },
         "truncate": {

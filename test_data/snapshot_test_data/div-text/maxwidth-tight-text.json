@@ -1,7 +1,8 @@
 {
   "description": "Text with max width with tighten_width enabled and disabled",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "templates": {
     "max_width_text": {
