@@ -117,6 +117,7 @@
     $: {
         let newItems: {
             div: MaybeMissing<DivBaseData>;
+            id?: string | undefined;
             vars?: Map<string, Variable> | undefined;
         }[] = [];
         if (
@@ -134,6 +135,7 @@
                 const additionalVars = rootCtx.preparePrototypeVariables(builder.data_element_name || 'it', it as Record<string, unknown>, index);
 
                 let div: MaybeMissing<DivBaseData> | undefined;
+                let id: string | undefined;
                 for (let i = 0; i < builder.prototypes.length; ++i) {
                     const prototype = builder.prototypes[i];
                     if (!prototype.div) {
@@ -141,12 +143,14 @@
                     }
                     if (prototype.selector === undefined) {
                         div = prototype.div;
+                        id = componentContext.getJsonWithVars(prototype.id, additionalVars);
                         break;
                     }
 
                     const selectorVal = componentContext.getJsonWithVars(prototype.selector, additionalVars);
                     if (selectorVal) {
                         div = prototype.div;
+                        id = componentContext.getJsonWithVars(prototype.id, additionalVars);
                         break;
                     }
                 }
@@ -154,6 +158,7 @@
                 if (div) {
                     newItems.push({
                         div,
+                        id,
                         vars: additionalVars
                     });
                 }
@@ -169,7 +174,8 @@
         items = newItems.map((item, index) => {
             return componentContext.produceChildContext(item.div, {
                 path: index,
-                variables: item.vars
+                variables: item.vars,
+                id: item.id
             });
         });
     }
@@ -337,7 +343,7 @@
     {style}
     {additionalPaddings}
     heightByAspect={Boolean(aspect)}
-    parentOf={items.map(it => it.json)}
+    parentOf={items}
     {replaceItems}
 >
     {#each items as item}

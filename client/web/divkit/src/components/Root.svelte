@@ -1201,6 +1201,7 @@
 
     function produceComponentContext(from?: ComponentContext | undefined): ComponentContext {
         const res: ComponentContext = {
+            id: '',
             json: {} as DivBaseData,
             path: [],
             templateContext: {},
@@ -1258,6 +1259,7 @@
                 componentContext.json = childProcessedJson;
                 componentContext.templateContext = childProcessedContext;
                 componentContext.origJson = div;
+                componentContext.id = childProcessedJson.id || opts.id || '';
 
                 if (opts.path !== undefined/*  && !res.isRootState */) {
                     componentContext.path.push(String(opts.path));

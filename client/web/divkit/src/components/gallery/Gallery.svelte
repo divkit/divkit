@@ -378,8 +378,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     const galleryElements = getItems();
@@ -504,7 +504,7 @@
     {layoutParams}
     customPaddings={true}
     customActions={'gallery'}
-    parentOf={jsonItems}
+    parentOf={items}
     {replaceItems}
 >
     <div

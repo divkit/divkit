@@ -203,7 +203,7 @@
     $: pagers = rootCtx.getStore<Map<string, PagerData>>('pagers');
 
     function pagerDataUpdate(size: number, currentItem: number): void {
-        const pagerId = componentContext.json.id;
+        const pagerId = componentContext.id;
         if (pagerId) {
             const newPagersMap = new Map($pagers);
             $pagers = newPagersMap.set(pagerId, { instId, size, currentItem, scrollToPagerItem });
@@ -267,8 +267,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     if (item < 0 || item > items.length - 1) {
@@ -321,7 +321,7 @@
         {componentContext}
         {layoutParams}
         customPaddings={true}
-        parentOf={items.map(it => it.json)}
+        parentOf={items}
         {replaceItems}
     >
         <div

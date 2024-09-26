@@ -223,7 +223,7 @@
     {componentContext}
     {style}
     {layoutParams}
-    parentOf={items.map(it => it.json)}
+    parentOf={items}
     {replaceItems}
 >
     {#each resultItems as item}

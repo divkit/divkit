@@ -85,7 +85,10 @@
     export let customActions = '';
     export let additionalPaddings: EdgeInsets | null = null;
     export let heightByAspect = false;
-    export let parentOf: (MaybeMissing<DivBaseData> | undefined)[] | undefined = undefined;
+    export let parentOf: {
+        json: MaybeMissing<DivBaseData> | undefined;
+        id: string | undefined;
+    }[] | undefined = undefined;
     export let parentOfSimpleMode: boolean | undefined = undefined;
     export let replaceItems: ((items: (MaybeMissing<DivBaseData> | undefined)[]) => void) | undefined = undefined;
     export let hasInnerFocusable = false;
@@ -200,8 +203,8 @@
         jsonTransitionTriggers = componentContext.fakeElement ?
             [] :
             (componentContext.json.transition_triggers || ['state_change', 'visibility_change']);
-        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.json.id);
-        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.json.id);
+        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.id);
+        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.id);
 
         if (currentNode) {
             useAction(currentNode);
@@ -265,11 +268,14 @@
 
         const index = parentOf.findIndex(item => item?.id === id);
         const newItems = parentOf.slice();
-        newItems.splice(index, 1, ...(items || []));
+        newItems.splice(index, 1, ...(items || [] as DivBase[]).map(it => ({
+            json: it,
+            id: it?.id as string | undefined
+        })));
 
         parentOf = newItems;
 
-        replaceItems(newItems);
+        replaceItems(newItems.map(it => it?.json));
     }
 
     $: {
@@ -614,7 +620,7 @@
         transitionChangeInProgress = undefined;
         if (
             hasStateChangeTrigger &&
-            rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(componentContext.json.id)
+            rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(componentContext.id)
         ) {
             transitionChangeInProgress = true;
         }
@@ -952,7 +958,7 @@
             });
         }
 
-        const id = componentContext.json.id;
+        const id = componentContext.id;
         if (id) {
             stateCtx.registerChild(id);
         }

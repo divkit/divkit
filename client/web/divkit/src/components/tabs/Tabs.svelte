@@ -122,7 +122,10 @@
 
     $: items = Array.isArray(componentContext.json.items) && componentContext.json.items || [];
     $: parentOfItems = items.map(it => {
-        return it.div;
+        return {
+            json: it.div,
+            id: it.div?.id
+        };
     });
 
     $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
@@ -618,8 +621,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !hasError && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !hasError && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     if (item < 0 || item > items.length - 1) {

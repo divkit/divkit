@@ -38,7 +38,7 @@
     let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
     let prevStateId: string | undefined;
-    $: stateId = componentContext.json.div_id || componentContext.json.id;
+    $: stateId = componentContext.json.div_id || componentContext.id;
     let selectedId: string | undefined;
     let selectedComponentContext: ComponentContext | undefined;
     $: jsonDefaultStateId = componentContext.getJsonWithVars(componentContext.json.default_state_id);
@@ -71,7 +71,10 @@
 
     $: items = Array.isArray(componentContext.json.states) && componentContext.json.states || [];
     $: parentOfItems = items.map(it => {
-        return it.div;
+        return {
+            json: it.div,
+            id: it.div?.id
+        };
     });
 
     $: {
@@ -113,6 +116,7 @@
     }
 
     interface AnimationItem {
+        id: string;
         json: DivBaseData;
         componentContextCopy: ComponentContext;
         elementBbox: DOMRect;
@@ -131,6 +135,7 @@
         maxDuration: number;
     }
     interface ChangeBoundsItem {
+        id: string;
         json: DivBaseData;
         componentContextCopy: ComponentContext;
         rootBbox: DOMRect;
@@ -181,6 +186,7 @@
         };
 
         return {
+            id: parentComponentContext.id || '',
             json: jsonCopy,
             componentContextCopy: parentComponentContext.produceChildContext(jsonCopy, {
                 fake: true
@@ -263,7 +269,7 @@
 
         let transitionsInToRun: AnimationItem[] =
             childrenWithTransitionIn.filter(it => {
-                if (it.json.id && !wasIds.has(it.json.id)) {
+                if (it.parentComponentContext.id && !wasIds.has(it.parentComponentContext.id)) {
                     return true;
                 }
                 it.resolvePromise?.();
@@ -272,7 +278,7 @@
                 .map(it => getItemAnimation(rootBbox, it, 'in'));
 
         transitionsOutToRun = transitionsOutToRun.filter(it => {
-            if (it.json.id && !childrenIds.has(it.json.id)) {
+            if (it.id && !childrenIds.has(it.id)) {
                 return true;
             }
             it.resolvePromise?.();
@@ -300,6 +306,7 @@
                 const saved = transitionChangeBoxes.get(child.id) as ChildTransitionChangeData;
 
                 const res: ChangeBoundsItem = {
+                    id: child.parentComponentContext.id || '',
                     json: jsonCopy,
                     componentContextCopy: child.parentComponentContext.produceChildContext(jsonCopy, {
                         fake: true
@@ -461,7 +468,7 @@
             transitions: TransitionChange | undefined,
             node: HTMLElement
         ) {
-            const id = json.id;
+            const id = parentComponentContext.id;
 
             if (!id) {
                 return Promise.resolve();

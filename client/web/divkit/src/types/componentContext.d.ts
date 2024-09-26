@@ -16,6 +16,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     isRootState?: boolean;
     fakeElement?: boolean;
     parentContext?: ComponentContext;
+    id: string;
 
     logError(error: WrappedError): void;
     execAnyActions(
@@ -40,6 +41,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
         isRootState?: boolean;
         fake?: boolean;
         variables?: Map<string, Variable>;
+        id?: string;
         tooltips?: {
             internalId: number;
             ownerNode: HTMLElement;

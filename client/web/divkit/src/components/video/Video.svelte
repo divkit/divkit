@@ -135,8 +135,8 @@
             prevId = undefined;
         }
 
-        if (componentContext.json.id && !hasError && !componentContext.fakeElement) {
-            prevId = componentContext.json.id;
+        if (componentContext.id && !hasError && !componentContext.fakeElement) {
+            prevId = componentContext.id;
             rootCtx.registerInstance<VideoElements>(prevId, {
                 pause,
                 start
