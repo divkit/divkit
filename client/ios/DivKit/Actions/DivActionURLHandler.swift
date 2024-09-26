@@ -120,14 +120,7 @@ public final class DivActionURLHandler {
       setPreviousItem(id: id, cardId: cardId, overflow: overflow)
       updateCard(.state(cardId))
     case let .scroll(id, mode):
-      switch mode {
-      case .start:
-        setEdgeItem(id: id, cardId: cardId, isLast: false)
-      case .end:
-        setEdgeItem(id: id, cardId: cardId, isLast: true)
-      default:
-        setContentOffset(id: id, cardId: cardId, mode: mode)
-      }
+      setContentOffset(id: id, cardId: cardId, mode: mode)
     case let .video(id: id, action: action):
       blockStateStorage.setState(
         id: id,
@@ -159,8 +152,9 @@ public final class DivActionURLHandler {
   }
 
   private func setContentOffset(id: String, cardId: DivCardID, mode: ScrollMode) {
-    guard let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId) else {
-      DivKitLogger.error("\(#file).\(#function) get unexpected type for id \(id)")
+    guard let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId),
+          case .offset = state.contentPosition else {
+      setEdgeItem(id: id, cardId: cardId, mode: mode)
       return
     }
 
@@ -239,14 +233,22 @@ public final class DivActionURLHandler {
     )
   }
 
-  private func setEdgeItem(id: String, cardId: DivCardID, isLast: Bool) {
+  private func setEdgeItem(id: String, cardId: DivCardID, mode: ScrollMode) {
     guard let state = blockStateStorage
       .getStateUntyped(id, cardId: cardId) as? GalleryTypeViewState else {
       DivKitLogger.error("\(#file).\(#function) get unexpected type for id \(id)")
       return
     }
 
-    let index = isLast ? state.itemsCount - 1 : 0
+    let index: Int
+    switch mode {
+    case .start:
+      index = 0
+    case .end:
+      index = state.itemsCount - 1
+    default:
+      return
+    }
 
     setCurrentItem(
       id: id,
