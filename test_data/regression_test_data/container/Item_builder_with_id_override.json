@@ -1,0 +1,177 @@
+{
+    "templates": {
+        "number_input": {
+            "type": "input",
+            "width": {
+                "type": "match_parent"
+            },
+            "height": {
+                "type": "wrap_content"
+            },
+            "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+            },
+            "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+            },
+            "border": {
+                "corner_radius": 8,
+                "stroke": {
+                    "color": "#0000FF"
+                }
+            },
+            "focus": {
+                "background": [
+                    {
+                        "type": "solid",
+                        "color": "#ff5500"
+                    }
+                ]
+            }
+        },
+        "button": {
+            "type": "text",
+            "paddings": {
+                "top": 4,
+                "bottom": 4,
+                "left": 8,
+                "right": 8
+            },
+            "margins": {
+                "right": 8,
+                "left": 8
+            },
+            "text_alignment_horizontal": "center",
+            "text_alignment_vertical": "center",
+            "font_size": 12,
+            "text_color": "#ffff",
+            "font_weight": "bold",
+            "height": {
+                "type": "wrap_content"
+            },
+            "width": {
+                "type": "match_parent"
+            },
+            "border": {
+                "corner_radius": 16
+            },
+            "background": [
+                {
+                    "type": "solid",
+                    "color": "#0000FF"
+                }
+            ],
+            "focus": {
+                "background": [
+                    {
+                        "type": "solid",
+                        "color": "#ff5500"
+                    }
+                ]
+            }
+        }
+    },
+    "card": {
+        "log_id": "tests",
+        "variables": [
+            {
+                "name": "input_value_1",
+                "type": "string",
+                "value": "initial_text_1"
+            },
+            {
+                "name": "input_value_2",
+                "type": "string",
+                "value": "initial_text_2"
+            },
+            {
+                "name": "input_value_3",
+                "type": "string",
+                "value": "initial_text_3"
+            },
+            {
+                "name": "select_value",
+                "type": "string",
+                "value": ""
+            },
+            {
+                "name": "slide_value",
+                "type": "integer",
+                "value": 2
+            },
+            {
+                "name": "slide_value2",
+                "type": "integer",
+                "value": 5
+            }
+        ],
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "margins": {
+                        "top": 24,
+                        "bottom": 24
+                    },
+                    "items": [
+                        {
+                            "type": "container",
+                            "item_builder": {
+                                "data": [
+                                    {
+                                        "id": "input_1"
+                                    },
+                                    {
+                                        "id": "input_2"
+                                    },
+                                    {
+                                        "id": "input_3"
+                                    }
+                                ],
+                                "prototypes": [
+                                    {
+                                        "id": "@{getStringFromDict(it, 'id')}",
+                                        "div": {
+                                            "type": "number_input",
+                                            "id": "input_1",
+                                            "text_variable": "input_value_1"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "container",
+                            "orientation": "horizontal",
+                            "margins": {
+                                "bottom": 16
+                            },
+                            "items": [
+                                {
+                                    "type": "button",
+                                    "text": "Focus 2",
+                                    "id": "button_2",
+                                    "action": {
+                                        "log_id": "focus_2",
+                                        "typed": {
+                                            "type": "focus_element",
+                                            "element_id": "input_2"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

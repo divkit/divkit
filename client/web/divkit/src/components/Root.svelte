@@ -1259,7 +1259,7 @@
                 componentContext.json = childProcessedJson;
                 componentContext.templateContext = childProcessedContext;
                 componentContext.origJson = div;
-                componentContext.id = childProcessedJson.id || opts.id || '';
+                componentContext.id = opts.id || childProcessedJson.id || '';
 
                 if (opts.path !== undefined/*  && !res.isRootState */) {
                     componentContext.path.push(String(opts.path));

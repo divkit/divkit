@@ -2958,8 +2958,8 @@
     {
       "title": "Container with item_builder",
       "platforms": [
-          "ios",
-          "web"
+        "ios",
+        "web"
       ],
       "tags": [
         "actions",
@@ -2969,6 +2969,22 @@
         "Tap to cards. Their description is displayed in the first card."
       ],
       "file": "container/item_builder.json"
+    },
+    {
+      "title": "Container with item_builder and id for each item",
+      "platforms": [
+        "ios",
+        "web",
+        "android"
+      ],
+      "tags": [
+        "actions",
+        "DivContainer"
+      ],
+      "steps": [
+        "Tap on button. Second input should be focused"
+      ],
+      "file": "container/Item_builder_with_id_override.json"
     },
     {
       "title": "Input password",
