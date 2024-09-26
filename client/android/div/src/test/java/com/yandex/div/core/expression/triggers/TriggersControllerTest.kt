@@ -34,6 +34,7 @@ import org.robolectric.RobolectricTestRunner
 class TriggersControllerTest {
     private val variableController = mock<VariableController> {
         on { subscribeToVariablesChange(any(), any(), any()) } doReturn Disposable.NULL
+        on { subscribeToVariablesUndeclared(any(), any()) } doReturn Disposable.NULL
     }
     private val expressionResolver = mock<ExpressionResolver>()
     private val divActionBinder = mock<DivActionBinder>()

@@ -2,12 +2,14 @@ package com.yandex.div.serialization
 
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.internal.parser.Converter
+import com.yandex.div.internal.parser.Creator
+import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingException
 import org.json.JSONArray
 import org.json.JSONObject
 
 @ExperimentalApi
-fun <T> Serializer<T, JSONObject>.serialize(context: ParsingContext, value: T?): JSONObject? {
+fun <V> Serializer<JSONObject, V>.serialize(context: ParsingContext, value: V?): JSONObject? {
     if (value == null) {
         return null
     }
@@ -21,7 +23,7 @@ fun <T> Serializer<T, JSONObject>.serialize(context: ParsingContext, value: T?):
 }
 
 @ExperimentalApi
-fun <T> Serializer<T, JSONObject>.serialize(context: ParsingContext, list: List<T>?): JSONArray? {
+fun <V> Serializer<JSONObject, V>.serialize(context: ParsingContext, list: List<V>?): JSONArray? {
     if (list == null) {
         return null
     }
@@ -39,6 +41,11 @@ fun <T> Serializer<T, JSONObject>.serialize(context: ParsingContext, list: List<
 }
 
 @ExperimentalApi
-internal inline fun <reified T> Serializer<T, JSONObject>.asConverter(context: ParsingContext): Converter<T, JSONObject> {
-    return { value: T -> serialize(context, value) }
+internal inline fun <reified V> Serializer<JSONObject, V>.asConverter(context: ParsingContext): Converter<V, JSONObject> {
+    return { value: V -> serialize(context, value) }
+}
+
+@Suppress("DEPRECATION", "TYPEALIAS_EXPANSION_DEPRECATION")
+internal inline fun <reified V> Serializer<JSONObject, V>.asCreator(): Creator<V, JSONObject> {
+    return { env: ParsingEnvironment, value: V -> serialize(env, value) }
 }

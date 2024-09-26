@@ -103,6 +103,7 @@
     let description = '';
     let isEnabled = true;
     let maxLength = Infinity;
+    let autocapitalization = 'off';
 
     $: origJson = componentContext.origJson;
 
@@ -121,6 +122,7 @@
         inputMode = undefined;
         isEnabled = true;
         maxLength = Infinity;
+        autocapitalization = 'off';
     }
 
     $: if (origJson) {
@@ -153,6 +155,7 @@
     $: jsonSelectAll = componentContext.getDerivedFromVars(componentContext.json.select_all_on_focus);
     $: jsonIsEnabled = componentContext.getDerivedFromVars(componentContext.json.is_enabled);
     $: jsonMaxLength = componentContext.getDerivedFromVars(componentContext.json.max_length);
+    $: jsonAutocapitalization = componentContext.getDerivedFromVars(componentContext.json.autocapitalization);
 
     $: if (variable) {
         hasError = false;
@@ -276,6 +279,16 @@
             top: (Number(selfPadding.top) || 0) / fontSize * 10,
             bottom: (Number(selfPadding.bottom) || 0) / fontSize * 10
         }, $direction) : '';
+    }
+
+    $: if ($jsonAutocapitalization === 'all_characters') {
+        autocapitalization = 'characters';
+    } else if ($jsonAutocapitalization === 'sentences') {
+        autocapitalization = 'sentences';
+    } else if ($jsonAutocapitalization === 'words') {
+        autocapitalization = 'words';
+    } else if ($jsonAutocapitalization === 'none' || $jsonAutocapitalization === 'auto') {
+        autocapitalization = 'off';
     }
 
     $: if ($jsonAccessibility?.description) {
@@ -506,7 +519,7 @@
                     <span
                         bind:this={input}
                         class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, multiline: true })}
-                        autocapitalize="off"
+                        autocapitalize={autocapitalization}
                         contenteditable="true"
                         role="textbox"
                         tabindex="0"
@@ -527,7 +540,7 @@
                     <span
                         bind:this={input}
                         class={genClassName('input__input', css, { multiline: true })}
-                        autocapitalize="off"
+                        autocapitalize={autocapitalization}
                         contenteditable="false"
                         role="textbox"
                         aria-label={description}
@@ -546,7 +559,7 @@
                 inputmode={inputMode}
                 class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, singleline: true })}
                 autocomplete="off"
-                autocapitalize="off"
+                autocapitalize={autocapitalization}
                 aria-label={description}
                 style={makeStyle(paddingStl)}
                 disabled={!isEnabled}

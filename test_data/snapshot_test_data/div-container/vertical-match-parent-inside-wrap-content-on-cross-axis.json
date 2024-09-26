@@ -1,7 +1,6 @@
 {
     "platforms": [
       "android",
-      "ios",
       "web"
     ],
     "description": "match_parent inside wrap_content on cross-axis of a vertical container without known size should transform into the wrap_content with constrained",

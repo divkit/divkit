@@ -1,5 +1,3 @@
-import type { Variable } from '../expressions/variable';
-import type { DivBaseData, Tooltip } from './base';
 import type { Orientation } from './orientation';
 
 export type Align = 'start' | 'center' | 'end';
@@ -14,6 +12,8 @@ export interface LayoutParams {
     parentLayoutOrientation?: Orientation;
     parentHorizontalWrapContent?: boolean;
     parentVerticalWrapContent?: boolean;
+    stretchWidth?: boolean;
+    stretchHeight?: boolean;
     overlapParent?: boolean;
     gridArea?: {
         x: number;

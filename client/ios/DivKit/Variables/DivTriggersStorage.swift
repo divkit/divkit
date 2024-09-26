@@ -27,6 +27,7 @@ public final class DivTriggersStorage {
   private let lock = AllocatedUnfairLock()
 
   private let variablesStorage: DivVariablesStorage
+  private let functionsStorage: DivFunctionsStorage?
   private let actionHandler: DivActionHandler?
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let reporter: DivReporter
@@ -34,12 +35,14 @@ public final class DivTriggersStorage {
 
   public init(
     variablesStorage: DivVariablesStorage,
+    functionsStorage: DivFunctionsStorage? = nil,
     stateUpdates: Signal<DivBlockStateStorage.ChangeEvent> = .empty,
     actionHandler: DivActionHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter? = nil
   ) {
     self.variablesStorage = variablesStorage
+    self.functionsStorage = functionsStorage
     self.actionHandler = actionHandler
     self.persistentValuesStorage = persistentValuesStorage
     self.reporter = reporter ?? DefaultDivReporter()
@@ -167,6 +170,7 @@ public final class DivTriggersStorage {
       let expressionResolver = ExpressionResolver(
         path: path,
         variablesStorage: variablesStorage,
+        functionsStorage: functionsStorage,
         persistentValuesStorage: persistentValuesStorage,
         reporter: reporter
       )

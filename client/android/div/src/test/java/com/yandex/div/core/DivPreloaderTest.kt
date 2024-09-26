@@ -5,9 +5,11 @@ import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.view2.DivImagePreloader
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom
+import com.yandex.div2.DivExtension
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivText
@@ -37,21 +39,21 @@ class DivPreloaderTest {
     private val extensionHandlers = listOf<DivExtensionHandler>(mock(), mock())
     private val extensionHandlersController = DivExtensionController(extensionHandlers)
 
-    private val text = mock<DivText>()
+    private val text = DivText(text = Expression.constant("test"))
     private val divText = Div.Text(text)
 
-    private val custom = mock<DivCustom>()
+    private val custom = DivCustom(customType = "test")
     private val divCustom = Div.Custom(custom)
 
-    private val input = mock<DivInput>()
+    private val input = DivInput(textVariable = "test")
     private val divInput = Div.Input(input)
 
-    private val separator = DivSeparator(extensions = listOf(mock()))
+    private val separator = DivSeparator(extensions = listOf(DivExtension(id = "test1")))
     private val divSeparator = Div.Separator(separator)
 
     private val containerItems = Arrays.asList(divText, divInput, divCustom, divSeparator)
 
-    private val container = DivContainer(items = containerItems, extensions = listOf(mock()))
+    private val container = DivContainer(items = containerItems, extensions = listOf(DivExtension(id = "test2")))
     private val divContainer = Div.Container(container)
     private val videoPreloader = mock<DivPlayerPreloader>()
 

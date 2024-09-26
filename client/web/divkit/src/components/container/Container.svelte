@@ -44,7 +44,7 @@
     import { genClassName } from '../../utils/genClassName';
     import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
     import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
-    import { calcAdditionalPaddings, calcItemsGap, hasKnownHeightCheck, hasKnownWidthCheck } from '../../utils/container';
+    import { calcAdditionalPaddings, calcItemsGap, isHeightMatchParent, isWidthMatchParent } from '../../utils/container';
     import { hasGapSupport } from '../../utils/hasGapSupport';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import ContainerSeparators from './ContainerSeparators.svelte';
@@ -196,8 +196,11 @@
 
     $: wrap = $jsonLayoutMode === 'wrap';
 
-    $: hasKnownWidth = orientation !== 'horizontal' && !wrap && $childStore.some(hasKnownWidthCheck);
-    $: hasKnownHeight = orientation !== 'vertical' && !wrap && $childStore.some(hasKnownHeightCheck);
+    $: supportWidthWrapContent = orientation !== 'horizontal' && !wrap;
+    $: supportHeightWrapContent = orientation !== 'vertical' && !wrap;
+
+    $: stretchWidth = orientation === 'overlap' && !$childStore.every(isWidthMatchParent);
+    $: stretchHeight = orientation === 'overlap' && !$childStore.every(isHeightMatchParent);
 
     $: {
         contentVAlign = correctContentAlignmentVertical($jsonContentVAlign, contentVAlign);
@@ -281,23 +284,23 @@
         if (orientation !== 'vertical') {
             newChildLayoutParams.parentVAlign = wrap ? 'start' : VALIGN_MAP[contentVAlign];
         }
-        if (
-            !aspect && !hasKnownHeight && (
-                !$jsonHeight ||
-                $jsonHeight.type === 'wrap_content' ||
-                $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
-            )
-        ) {
-            newChildLayoutParams.parentVerticalWrapContent = true;
-        }
-        if (
-            !hasKnownWidth && (
-                $jsonWidth?.type === 'wrap_content' ||
-                $jsonWidth?.type === 'match_parent' && layoutParams?.parentHorizontalWrapContent
-            )
-        ) {
+        const isWidthWrapContent = (
+            $jsonWidth?.type === 'wrap_content' ||
+            $jsonWidth?.type === 'match_parent' && layoutParams?.parentHorizontalWrapContent
+        );
+        const isHeightWrapContent = (
+            !$jsonHeight ||
+            $jsonHeight.type === 'wrap_content' ||
+            $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
+        );
+        if (!supportWidthWrapContent && isWidthWrapContent) {
             newChildLayoutParams.parentHorizontalWrapContent = true;
         }
+        if (!aspect && !supportHeightWrapContent && isHeightWrapContent) {
+            newChildLayoutParams.parentVerticalWrapContent = true;
+        }
+        newChildLayoutParams.stretchWidth = stretchWidth;
+        newChildLayoutParams.stretchHeight = stretchHeight;
         if (orientation === 'horizontal') {
             newChildLayoutParams.parentContainerOrientation = 'horizontal';
         }

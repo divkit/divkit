@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithArrayWithTransformTemplate : JSONSerializable, JsonTemplate<EntityWithArrayWithTransform> {
-    @JvmField final val array: Field<ExpressionList<Int>> // at least 1 elements
+    @JvmField val array: Field<ExpressionList<Int>>
 
-    constructor (
+    constructor(
+        array: Field<ExpressionList<Int>>,
+    ) {
+        this.array = array
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithArrayWithTransformTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithArrayWithTransformTemplate : JSONSerializable, JsonTemplate<Enti
         array = JsonTemplateParser.readExpressionListField(json, "array", topLevel, parent?.array, STRING_TO_COLOR_INT, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayWithTransform {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayWithTransform {
         return EntityWithArrayWithTransform(
-            array = array.resolveExpressionList(env = env, key = "array", data = rawData, reader = ARRAY_READER)
+            array = this.array.resolveExpressionList(env = env, key = "array", data = data, reader = ARRAY_READER)
         )
     }
 

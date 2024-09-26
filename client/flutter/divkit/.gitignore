@@ -10,6 +10,7 @@ build/
 .fvm
 .flutter-plugins-dependencies
 .flutter-plugins
+/test_data
 
 ## Example
 # Flutter/Dart/Pub related
@@ -22,7 +23,9 @@ build/
 /example/.pub-cache/
 /example/.pub/
 /example/build/
-/example/assets/test_data
+/example/assets/samples
+/example/assets/regression
+/example/assets/perf
 
 # Symbolication related
 /example/app.*.symbols

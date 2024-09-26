@@ -35,6 +35,10 @@ internal class DivPagerAdapter(
         }
     }
 
+    val currentRealItem get() = pagerView.currentItem - offsetToRealItem
+
+    private val offsetToRealItem get() = if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM else 0
+
     var orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
     var infiniteScrollEnabled = false
@@ -42,12 +46,15 @@ internal class DivPagerAdapter(
             if (field == value) return
             field = value
             notifyItemRangeChanged(0, itemCount)
+            pagerView.currentItem += if (value) OFFSET_TO_REAL_ITEM else -OFFSET_TO_REAL_ITEM
         }
 
     private var removedItems = 0
     private var currentItem = NO_POSITION
 
-    fun getPosition(visibleItemIndex: Int) = visibleItemIndex + if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM else 0
+    fun getPosition(visibleItemIndex: Int) = visibleItemIndex + offsetToRealItem
+
+    fun getRealPosition(rawPosition: Int) = rawPosition - offsetToRealItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
         val view = DivPagerPageLayout(bindingContext.divView.context) { orientation }

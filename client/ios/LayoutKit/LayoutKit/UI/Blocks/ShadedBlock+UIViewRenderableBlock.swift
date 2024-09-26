@@ -73,7 +73,8 @@ private final class ShadedBlockView: ViewWithShadow, BlockViewProtocol,
     } else {
       blockView = model.block.makeBlockView(
         observer: observer,
-        overscrollDelegate: overscrollDelegate
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate
       )
     }
     shadow = model.shadow

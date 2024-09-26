@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithEntityPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithEntityProperty> {
-    @JvmField final val entity: Field<EntityTemplate> // default value: Entity.WithStringEnumProperty(EntityWithStringEnumProperty(property = Expression.constant(EntityWithStringEnumProperty.Property.SECOND)))
+    @JvmField val entity: Field<EntityTemplate>
 
-    constructor (
+    constructor(
+        entity: Field<EntityTemplate>,
+    ) {
+        this.entity = entity
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithEntityPropertyTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithEntityPropertyTemplate : JSONSerializable, JsonTemplate<EntityWi
         entity = JsonTemplateParser.readOptionalField(json, "entity", topLevel, parent?.entity, EntityTemplate.CREATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithEntityProperty {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithEntityProperty {
         return EntityWithEntityProperty(
-            entity = entity.resolveOptionalTemplate(env = env, key = "entity", data = rawData, reader = ENTITY_READER) ?: ENTITY_DEFAULT_VALUE
+            entity = this.entity.resolveOptionalTemplate(env = env, key = "entity", data = data, reader = ENTITY_READER) ?: ENTITY_DEFAULT_VALUE
         )
     }
 

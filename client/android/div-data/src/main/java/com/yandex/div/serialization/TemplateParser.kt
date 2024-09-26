@@ -4,4 +4,4 @@ import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.data.EntityTemplate
 
 @ExperimentalApi
-interface TemplateParser<T : EntityTemplate<*>, R> : Serializer<T, R>, TemplateDeserializer<T, R>
+interface TemplateParser<D, T : EntityTemplate<*>> : Serializer<D, T>, TemplateDeserializer<D, T>

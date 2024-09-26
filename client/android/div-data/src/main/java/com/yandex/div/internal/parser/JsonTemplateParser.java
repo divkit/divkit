@@ -9,6 +9,8 @@ import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.ParsingException;
 import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
+
+import kotlin.OptIn;
 import kotlin.PublishedApi;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
@@ -29,6 +31,7 @@ import static com.yandex.div.internal.parser.JsonTemplateParserKt.suppressMissin
  * NOTE! Please do not change Function1 and Function2 with readable java-interfaces.
  * This will only make parsing slower.
  */
+@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonTemplateParser {
     private static final ValueValidator<String> IS_NOT_EMPTY = value -> !value.isEmpty();
 

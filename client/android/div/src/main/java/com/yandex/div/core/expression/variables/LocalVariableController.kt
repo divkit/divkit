@@ -1,5 +1,6 @@
 package com.yandex.div.core.expression.variables
 
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 
@@ -13,6 +14,13 @@ internal class LocalVariableController(
         invokeOnSubscription: Boolean,
         observer: (Variable) -> Unit
     ) = delegate.subscribeToVariablesChange(names, invokeOnSubscription, observer)
+
+    override fun subscribeToVariablesUndeclared(
+        names: List<String>,
+        observer: (Variable) -> Unit
+    ): Disposable {
+        return delegate.subscribeToVariablesUndeclared(names, observer)
+    }
 
     override fun subscribeToVariableChange(
         name: String,

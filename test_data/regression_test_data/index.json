@@ -1079,6 +1079,80 @@
       "file": "action_animation/button_press_action_animations.json"
     },
     {
+      "title": "Simple variable animator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for completion",
+        "Press \"Start\" button again",
+        "Press \"Stop\" button before animation ends"
+      ],
+      "expected_results": [
+        "Spinner performs full rotation cycle and changes color. If stopped it stands still."
+      ],
+      "file": "animations/animators/simple_variable_animator.json"
+    },
+    {
+      "title": "Repeating variable animator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for completion",
+        "Press \"Start\" button again",
+        "Press \"Stop\" button before animation ends"
+      ],
+      "expected_results": [
+        "Spinner performs full rotation cycle and changes color 4 times. If stopped it stands still."
+      ],
+      "file": "animations/animators/repeating_variable_animator.json"
+    },
+    {
+      "title": "Infinite variable animator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for couple of cycles",
+        "Press \"Stop\" button"
+      ],
+      "expected_results": [
+        "Spinner performs multiple rotation cycles until being stopped. When stopped it reset rotation angle and color."
+      ],
+      "file": "animations/animators/infinite_variable_animator.json"
+    },
+    {
+      "title": "Infinite alternating variable animator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animators"
+      ],
+      "steps": [
+        "Press \"Start\" button",
+        "Wait for couple of cycles",
+        "Press \"Stop\" button"
+      ],
+      "expected_results": [
+        "Spinner performs multiple rotation cycles alternating direction until being stopped. When stopped it reset rotation angle and color."
+      ],
+      "file": "animations/animators/infinite_alternating_variable_animator.json"
+    },
+    {
       "title": "Visibility actions in gallery",
       "automated": [
         "web"
@@ -1451,6 +1525,9 @@
     },
     {
       "title": "Variables in DivIndicator",
+      "tags": [
+        "DivIndicator"
+      ],
       "file": "variables/div_indicator.json"
     },
     {
@@ -1940,10 +2017,13 @@
       "automated": [
         "android"
       ],
+      "tags": [
+        "DivIndicator"
+      ],
       "expected_results": [
         "Two pagers with indicator of different shapes - Rounded Rectangle and Circle"
       ],
-      "file": "indicator_shapes.json"
+      "file": "indicator/indicator_shapes.json"
     },
     {
       "title": "Gallery items posing",
@@ -1980,7 +2060,8 @@
         "TypedActions"
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "expected_results": [
         "The timer calls tick_actions and changes the variable with the set interval.",
@@ -2285,7 +2366,8 @@
         "TypedActions"
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "file": "video/typed_video_with_controls.json"
     },
@@ -2301,7 +2383,7 @@
       "tags": [
         "DivVideo",
         "Disappear action",
-        "Visibility_actions",
+        "visibility_actions",
         "DivGallery"
       ],
       "file": "video/video_in_gallery.json"
@@ -2322,7 +2404,7 @@
       "tags": [
         "DivVideo",
         "Disappear action",
-        "Visibility_actions",
+        "visibility_actions",
         "DivGallery"
       ],
       "file": "video/fullscreen_video_in_recycler.json"
@@ -2386,7 +2468,7 @@
       ],
       "tags": [
         "Tooltips",
-        "Visibility_actions",
+        "visibility_actions",
         "TypedActions"
       ],
       "steps": [
@@ -2403,7 +2485,7 @@
       "title": "Tooltips",
       "tags": [
         "Tooltips",
-        "Visibility_actions"
+        "visibility_actions"
       ],
       "steps": [
         "Click on buttons"
@@ -2732,6 +2814,47 @@
     },
 
     {
+      "title": "Patch on_applied_actions",
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "web",
+        "android",
+        "ios"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "2 elements should become red",
+        "Patch status text should become success"
+      ],
+      "file": "patch/actions_applied.json"
+    },
+
+    {
+      "title": "Patch on_failed_actions",
+      "tags": [
+        "patch"
+      ],
+      "platforms": [
+        "web",
+        "android"
+      ],
+      "steps": [
+        "Wait 10 seconds",
+        "Check items"
+      ],
+      "expected_results": [
+        "Patch status text should become fail",
+        "No other elements hould be changed"
+      ],
+      "file": "patch/actions_failed.json"
+    },
+
+    {
       "title": "State with variable binding",
       "tags": [
         "DivState"
@@ -2780,7 +2903,8 @@
       "title": "Input keyboard types",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
@@ -2983,7 +3107,7 @@
         "android"
       ],
       "tags": [
-        "input"
+        "DivInput"
       ],
       "steps": [
         "Type something inside password",
@@ -3006,7 +3130,7 @@
         "android"
       ],
       "tags": [
-        "input"
+        "DivInput"
       ],
       "steps": [
         "Tap the \"Disable\" button and try to edit text",
@@ -3096,6 +3220,70 @@
         "Page change is logged"
       ],
       "file": "pager/pager.json"
+    },
+    {
+      "title": "Indicator with pager with invisible items",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe pages in both directions"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Only pages with even numbers are shown",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_invisible_items.json"
+    },
+    {
+      "title": "Indicator with pager with infinite scroll",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe forward from 0 to 5 element",
+        "Swipe forward",
+        "Swipe backward"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Page with number 0 appears after the page with number 5",
+        "Page with number 5 appears before the page with number 0",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_infinite_scroll.json"
+    },
+    {
+      "title": "Indicator with pager with invisible items and infinite scroll",
+      "tags": [
+        "DivPager",
+        "DivIndicator"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Swipe forward from 0 to 10 element",
+        "Swipe forward",
+        "Swipe backward"
+      ],
+      "expected_results": [
+        "There are 6 circles in indicator",
+        "Only pages with even numbers are shown",
+        "Page with number 0 appears after the page with number 10",
+        "Page with number 10 appears before the page with number 0",
+        "Active indicator item follows swipe direction"
+      ],
+      "file": "indicator/indicator_with_invisible_items_and_infinite_scroll.json"
     }
   ]
 }

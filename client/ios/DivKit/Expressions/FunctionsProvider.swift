@@ -1,3 +1,5 @@
+import Foundation
+
 import VGSL
 
 final class FunctionsProvider {
@@ -40,7 +42,13 @@ final class FunctionsProvider {
           guard let self else {
             return nil
           }
-          return FunctionEvaluator(symbol, functions: self.functions)
+          return CustomFunctionEvaluator(
+            symbol,
+            fallbackEvaluator: FunctionEvaluator(
+              symbol,
+              functions: self.functions
+            )
+          )
         case let .method(name):
           return FunctionEvaluator(symbol, functions: methods)
         case .postfix:
@@ -48,6 +56,48 @@ final class FunctionsProvider {
         }
       }
     }
+}
+
+private struct CustomFunctionEvaluator: Function {
+  private let symbol: CalcExpression.Symbol
+  private let fallbackEvaluator: Function
+
+  init(
+    _ symbol: CalcExpression.Symbol,
+    fallbackEvaluator: Function
+  ) {
+    self.symbol = symbol
+    self.fallbackEvaluator = fallbackEvaluator
+  }
+
+  func invoke(_ args: [Any], context: ExpressionContext) throws -> Any {
+    let name = symbol.name
+    if let customFunctionsStorage = context.customFunctionsStorageProvider(name) {
+      var storage: DivFunctionsStorage? = customFunctionsStorage
+
+      var result: Any?
+      while result == nil, storage != nil, let functions = storage?.getFunctions(with: name), 
+        !functions.isEmpty {
+        do {
+          result = try OverloadedFunction(
+            functions: functions
+          ).invoke(args, context: context)
+        } catch {
+          if error is NoMatchingSignatureError {
+            storage = storage?.outerStorage
+          } else {
+            throw error
+          }
+        }
+      }
+
+      if let result {
+        return result
+      }
+    }
+
+    return try fallbackEvaluator.invoke(args, context: context)
+  }
 }
 
 private struct FunctionEvaluator: Function {

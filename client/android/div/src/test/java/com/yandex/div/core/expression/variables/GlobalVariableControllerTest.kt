@@ -10,9 +10,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.spy
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.stubbing.Answer
 import org.robolectric.RobolectricTestRunner
 
 /**
@@ -57,9 +60,12 @@ class GlobalVariableControllerTest {
     fun `variable declaration notification happens only once`() {
         val name = "var_name"
         var lastVariableValue: Any? = null
-        underTest.variableSource.observeDeclaration {
-            lastVariableValue = it.getValue()
-        }
+        underTest.variableSource.observeDeclaration (object : DeclarationObserver {
+            override fun onDeclared(variable: Variable) {
+                lastVariableValue = variable.getValue()
+            }
+            override fun onUndeclared(variable: Variable) = Unit
+        })
 
         val firstVar = Variable.StringVariable(name, "A")
         val secondVar = Variable.StringVariable(name, "B")
@@ -75,9 +81,12 @@ class GlobalVariableControllerTest {
         val firstVar = Variable.StringVariable("A", "value of A")
         val secondVar = Variable.StringVariable("B", "value of B")
         var secondVarAtDeclareTime: Variable? = null
-        underTest.variableSource.observeDeclaration {
-            secondVarAtDeclareTime = underTest.variableSource.getMutableVariable(secondVar.name)
-        }
+        underTest.variableSource.observeDeclaration (object : DeclarationObserver {
+            override fun onDeclared(variable: Variable) {
+                secondVarAtDeclareTime = underTest.variableSource.getMutableVariable(secondVar.name)
+            }
+            override fun onUndeclared(variable: Variable) = Unit
+        })
 
         underTest.putOrUpdate(firstVar, secondVar)
         Assert.assertEquals(secondVar, secondVarAtDeclareTime)
@@ -87,8 +96,8 @@ class GlobalVariableControllerTest {
     fun `put or update in declaration callback not lead to deadlock`() = runBlocking {
         val firstVar = Variable.StringVariable("A", "value of A")
         val secondVar = Variable.StringVariable("B", "value of B")
-        val declarationCallback = mock<(Variable) -> Unit> {
-            on { invoke(any()) } doAnswer { underTest.putOrUpdate(secondVar) }
+        val declarationCallback = mock<DeclarationObserver> {
+            on { onDeclared(any()) } doAnswer Answer { underTest.putOrUpdate(secondVar) }
         }
 
         withContext(Dispatchers.IO) {
@@ -97,7 +106,7 @@ class GlobalVariableControllerTest {
         }
 
         underTest.putOrUpdate(firstVar)
-        verify(declarationCallback, times(2)).invoke(any())
+        verify(declarationCallback, times(2)).onDeclared(any())
     }
 
     @Test

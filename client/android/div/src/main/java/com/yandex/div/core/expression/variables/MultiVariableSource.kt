@@ -11,11 +11,11 @@ internal class MultiVariableSource(
         return variableController.get(name)
     }
 
-    override fun observeDeclaration(observer: (Variable) -> Unit) {
+    override fun observeDeclaration(observer: DeclarationObserver) {
         variableController.addDeclarationObserver(observer)
     }
 
-    override fun removeDeclarationObserver(observer: (Variable) -> Unit) {
+    override fun removeDeclarationObserver(observer: DeclarationObserver) {
         variableController.removeDeclarationObserver(observer)
     }
 

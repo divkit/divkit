@@ -47,5 +47,5 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
             timeoutId: number | null;
         }[];
     }): ComponentContext;
-    getVariable(varName: string, type: VariableType): Variable | undefined;
+    getVariable(varName: string, type?: VariableType): Variable | undefined;
 }

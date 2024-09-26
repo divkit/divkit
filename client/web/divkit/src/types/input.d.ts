@@ -29,6 +29,8 @@ export interface CurrencyInputMask extends MaskBase {
 
 export type InputMask = FixedLengthInputMask | CurrencyInputMask;
 
+export type InputAutocapitalization = 'auto' | 'none' | 'words' | 'sentences' | 'all_characters';
+
 export interface DivInputData extends DivBaseData {
     type: 'input';
 
@@ -53,4 +55,5 @@ export interface DivInputData extends DivBaseData {
     mask?: InputMask;
     select_all_on_focus?: BooleanInt;
     is_enabled?: BooleanInt;
+    autocapitalization?: InputAutocapitalization;
 }

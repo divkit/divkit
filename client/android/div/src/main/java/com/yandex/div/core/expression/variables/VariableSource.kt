@@ -7,13 +7,13 @@ import com.yandex.div.data.Variable
 internal interface VariableSource {
     fun getMutableVariable(name: String): Variable?
 
-    fun observeDeclaration(observer: (Variable) -> Unit)
+    fun observeDeclaration(observer: DeclarationObserver)
 
     fun observeVariables(observer: (Variable) -> Unit)
 
     fun receiveVariablesUpdates(observer: (Variable) -> Unit)
 
-    fun removeDeclarationObserver(observer: (Variable) -> Unit)
+    fun removeDeclarationObserver(observer: DeclarationObserver)
 
     fun removeVariablesObserver(observer: (Variable) -> Unit)
 
@@ -21,9 +21,13 @@ internal interface VariableSource {
         operator fun invoke(
             variables: Map<String, Variable>,
             requestObserver: (variableName: String) -> Unit,
-            declarationObservers: MutableCollection<(Variable) -> Unit>
+            declarationObservers: MutableCollection<DeclarationObserver>
         ): VariableSource {
-            return SingleVariableSource(variables, requestObserver, declarationObservers)
+            return SingleVariableSource(
+                variables,
+                requestObserver,
+                declarationObservers
+            )
         }
     }
 }

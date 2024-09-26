@@ -1,24 +1,20 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithStringEnumPropertyWithDefaultValue(
-    @JvmField final val value: Expression<Value> = VALUE_DEFAULT_VALUE, // default value: second
+    @JvmField val value: Expression<Value> = VALUE_DEFAULT_VALUE, // default value: second
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -91,7 +87,10 @@ class EntityWithStringEnumPropertyWithDefaultValue(
                 }
             }
 
+            @JvmField
             val TO_STRING = { value: Value -> toString(value) }
+
+            @JvmField
             val FROM_STRING = { value: String -> fromString(value) }
         }
     }

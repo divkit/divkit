@@ -12,8 +12,13 @@ internal class DivActionTypedHandlerCombiner @Inject constructor(
     private val handlers: Set<@JvmSuppressWildcards DivActionTypedHandler>
 ) {
 
-    fun handleAction(action: DivActionTyped, div2View: Div2View, resolver: ExpressionResolver): Boolean {
-        val wasHandled = handlers.find { it.handleAction(action, div2View, resolver) } != null
+    fun handleAction(
+        scopeId: String?,
+        action: DivActionTyped,
+        div2View: Div2View,
+        resolver: ExpressionResolver
+    ): Boolean {
+        val wasHandled = handlers.find { it.handleAction(scopeId, action, div2View, resolver) } != null
         if (!wasHandled) {
             KLog.d(TAG) { "Unexpected ${action::class.java} was not handled" }
         }

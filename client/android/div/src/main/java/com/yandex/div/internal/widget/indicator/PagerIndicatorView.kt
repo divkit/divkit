@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.widget.indicator.animations.getIndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.getIndicatorDrawer
@@ -29,17 +30,20 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
                     positionOffset > 1 -> 1f
                     else -> positionOffset
                 }
-                it.onPageScrolled(position, offset)
+                it.onPageScrolled(position.toRealPosition(), offset)
                 invalidate()
             }
         }
 
         override fun onPageSelected(position: Int) {
             stripDrawer?.let {
-                it.onPageSelected(position)
+                it.onPageSelected(position.toRealPosition())
                 invalidate()
             }
         }
+
+        private fun Int.toRealPosition() =
+            (divPager?.viewPager?.adapter as? DivPagerAdapter)?.getRealPosition(this) ?: this
     }
 
     fun setStyle(style: IndicatorParams.Style) {
@@ -116,12 +120,12 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
     }
 
     private fun IndicatorsStripDrawer.update() {
-        divPager?.viewPager?.let {
-            it.adapter?.let { adapter ->
-                setItemsCount(adapter.itemCount)
+        divPager?.viewPager?.let { pager ->
+            (pager.adapter as? DivPagerAdapter)?.let {
+                setItemsCount(it.visibleItems.size)
+                onPageSelected(it.currentRealItem)
+                invalidate()
             }
-            onPageSelected(it.currentItem)
-            invalidate()
         }
     }
 }

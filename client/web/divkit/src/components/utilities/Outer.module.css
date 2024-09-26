@@ -122,14 +122,6 @@
     grid-area: 1 / 1 / 2 / 2;
 }
 
-.outer_parent-overlap-absolute {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-
 .outer_scroll-snap_center {
     scroll-snap-align: center;
 }

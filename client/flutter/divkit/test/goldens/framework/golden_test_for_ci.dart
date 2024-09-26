@@ -54,7 +54,7 @@ Future<void> goldenTestForCI({
         tester.binding.window.devicePixelRatioTestValue =
             device.devicePixelRatio;
 
-        await screenMatchesGoldenForCI(
+        await enhancedScreenMatchesGolden(
           tester,
           testFileName,
         );

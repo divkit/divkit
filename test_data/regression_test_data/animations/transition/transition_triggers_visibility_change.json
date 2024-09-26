@@ -322,7 +322,10 @@
                 "alpha": 0,
                 "duration": 1000,
                 "interpolator": "ease_out"
-              }
+              },
+              "transition_triggers": [
+                "data_change"
+              ]
             },
             {
               "type": "text",

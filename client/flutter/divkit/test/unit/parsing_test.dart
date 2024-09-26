@@ -1,10 +1,11 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:divkit/divkit.dart';
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:divkit/divkit.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
 
-final directoryPath = 'example/assets/test_data/parsing_test_data';
+const directoryPath = 'test_data/parsing_test_data';
 
 Future<List<Map<String, dynamic>>> loadTests(String directoryPath) async {
   final directory = Directory(directoryPath);
@@ -32,7 +33,7 @@ void main() async {
       // We cannot pass this case due to the fact that the calculator sends strings on ios
       if (![
         'String value in boolean_int property (div-text.auto_ellipsize)',
-        'Invalid item in array (transition_triggers) is ignored'
+        'Invalid item in array (transition_triggers) is ignored',
       ].contains(testCase['description'])) {
         test(
           testCase['description'] ?? testCase['path'],

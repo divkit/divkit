@@ -5,6 +5,7 @@ from typing import List, Optional, cast
 
 from ..base import declaration_comment
 from ...schema.modeling.entities import (
+    Declarable,
     Entity,
     EntityEnumeration,
     StringEnumeration,
@@ -27,6 +28,7 @@ from ...schema.modeling.entities import (
 )
 from ...config import Config
 from ...config import GenerationMode
+from ...config import SERIALIZER_SUFFIX
 from ... import utils
 from ...schema.modeling.text import Text, EMPTY
 
@@ -34,6 +36,9 @@ EXPRESSION_TYPE_NAME = 'Expression'
 EXPRESSION_LIST_TYPE_NAME = 'ExpressionList'
 PARSING_ERRORS_PROP_NAME = "parsingErrors"
 ENTITY_STATIC_CREATOR = 'CREATOR'
+ENTITY_PARSER_NAME = "EntityParserImpl"
+TEMPLATE_PARSER_NAME = "TemplateParserImpl"
+TEMPLATE_RESOLVER_NAME = "TemplateResolverImpl"
 
 
 def _number_validator_decl(type: str, constraint: Optional[str]) -> Optional[str]:
@@ -54,7 +59,7 @@ def _kotlin_default_value_declaration_comment(p: Property) -> str:
 
 
 class KotlinEntity(Entity):
-    errors_collector_enabled: bool
+    errors_collector_enabled: bool = False
 
     def update_bases(self):
         Int.__bases__ = (KotlinPropertyType, PropertyType,)
@@ -88,6 +93,40 @@ class KotlinEntity(Entity):
             result.append(cast(KotlinProperty, prop))
         return result
 
+    @property
+    def plain_type_declaration(self) -> str:
+        return (self.entity_declaration_prefix.replace('.', '')
+                + utils.capitalize_camel_case(self.name_for(GenerationMode.NORMAL_WITH_TEMPLATES)))
+
+    @property
+    def serializer_type_declaration(self) -> str:
+        return (self.entity_declaration_prefix.replace('.', '')
+                + utils.capitalize_camel_case(self.name_for(GenerationMode.SERIALIZER)))
+
+    @property
+    def entity_serializer_type_declaration(self) -> str:
+        return f'{self.plain_type_declaration}.{ENTITY_PARSER_NAME}'
+
+    @property
+    def entity_serializer_name_declaration(self) -> str:
+        return utils.lower_camel_case(self.plain_type_declaration) + 'JsonEntityParser'
+
+    @property
+    def template_serializer_type_declaration(self) -> str:
+        return f'{self.plain_type_declaration}.{TEMPLATE_PARSER_NAME}'
+
+    @property
+    def template_serializer_name_declaration(self) -> str:
+        return utils.lower_camel_case(self.plain_type_declaration) + 'JsonTemplateParser'
+
+    @property
+    def template_resolver_type_declaration(self) -> str:
+        return f'{self.plain_type_declaration}.{TEMPLATE_RESOLVER_NAME}'
+
+    @property
+    def template_resolver_name_declaration(self) -> str:
+        return utils.lower_camel_case(self.plain_type_declaration) + 'JsonTemplateResolver'
+
     def eval_errors_collector_enabled(self, errors_collectors: List[str]):
         self.errors_collector_enabled = not self.generation_mode.is_template and self.original_name in errors_collectors
 
@@ -108,33 +147,46 @@ class KotlinEntity(Entity):
             result += f'{expr}{comma}'
         return result
 
-    @property
-    def value_resolving_declaration(self) -> Text:
-        args = 'env: ParsingEnvironment, rawData: JSONObject'
+    def value_resolving_declaration(self, generate_serializers: bool) -> Text:
+        args = 'env: ParsingEnvironment, data: JSONObject'
         result = Text(f'override fun resolve({args}): {self.resolved_prefixed_declaration} {{')
-        if not self.instance_properties:
-            result += f'    return {self.resolved_prefixed_declaration}()'
+
+        if generate_serializers:
+            result += f'    return builtInParserComponent.{self.template_resolver_name_declaration}'
+            result += '        .value'
+            result += '        .resolve(context = env, template = this, data = data)'
         else:
-            result += f'    return {self.resolved_prefixed_declaration}('
-            prop_decl = Text()
-            props = self.instance_properties_kotlin
-            for ind, p in enumerate(props):
-                ending = ',' if ind != (len(props) - 1) else ''
-                template_deserialization = p.make_template_deserialization(dict_field=p.dict_field,
-                                                                           value_override=None)
-                prop_decl += f'{template_deserialization}{ending}'
-            result += prop_decl.indented(indent_width=8)
-            result += '    )'
+            if not self.instance_properties:
+                result += f'    return {self.resolved_prefixed_declaration}()'
+            else:
+                result += f'    return {self.resolved_prefixed_declaration}('
+                prop_decl = Text()
+                props = self.instance_properties_kotlin
+                for ind, p in enumerate(props):
+                    ending = ',' if ind != (len(props) - 1) else ''
+                    template_deserialization = p.make_template_deserialization(dict_field=p.dict_field,
+                                                                               value_override=None)
+                    prop_decl += f'{template_deserialization}{ending}'
+                result += prop_decl.indented(indent_width=8)
+                result += '    )'
         result += '}'
         return result
 
-    @property
-    def serialization_declaration(self) -> Text:
+    def serialization_declaration(self, generate_serializers: bool) -> Text:
         result = Text('override fun writeToJSON(): JSONObject {')
-        result += '    val json = JSONObject()'
-        for prop in self.properties_kotlin:
-            result += prop.serialization_declaration.indented(indent_width=4)
-        result += '    return json'
+        if generate_serializers:
+            if self.generation_mode.is_template:
+                serializer_name = self.template_serializer_name_declaration
+            else:
+                serializer_name = self.entity_serializer_name_declaration
+            result += f'    return builtInParserComponent.{serializer_name}'
+            result += '        .value'
+            result += '        .serialize(context = builtInParsingContext, value = this)'
+        else:
+            result += '    val json = JSONObject()'
+            for prop in self.properties_kotlin:
+                result += prop.serialization_declaration.indented(indent_width=4)
+            result += '    return json'
         result += '}'
         return result
 
@@ -203,87 +255,343 @@ class KotlinEntity(Entity):
                 result += f'){suffix}'
         return result
 
-    def static_declarations(self, generate_serialization: bool = True) -> Text:
+    def serializer_declaration(self) -> Text:
+        entity_type = self.resolved_prefixed_declaration
+        result = Text()
+        result += f'internal class {self.serializer_type_declaration}('
+        result += '    private val component: JsonParserComponent'
+        result += ') {'
+        result += EMPTY
+        result += self.__entity_serializer_declaration().indented(indent_width=4)
+        result += EMPTY
+        result += self.__template_serializer_declaration().indented(indent_width=4)
+        result += EMPTY
+        result += self.__template_resolver_declaration().indented(indent_width=4)
+        serializer_static_declaration = self.__serializer_static_declaration(entity_type)
+        if serializer_static_declaration.lines:
+            result += EMPTY
+            result += '    private companion object {'
+            result += serializer_static_declaration.indented(4)
+            result += '    }'
+        result += '}'
+        return result
+
+    def __entity_serializer_declaration(self) -> Text:
+        entity_type = self.resolved_prefixed_declaration
+        result = Text()
+        result += f'class {ENTITY_PARSER_NAME}('
+        result += '    private val component: JsonParserComponent'
+        result += f') : Parser<JSONObject, {entity_type}> {{'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun deserialize(context: ParsingContext, data: JSONObject): {entity_type} {{'
+        if self.instance_properties_kotlin:
+            result += '        val logger = context.logger'
+            if self.errors_collector_enabled:
+                result += '        @Suppress("NAME_SHADOWING") val context = context.collectingErrors()'
+            result += f'        return {entity_type}('
+            for property in self.instance_properties_kotlin:
+                result += self.property_deserialization_declaration(property, mode=GenerationMode.NORMAL_WITH_TEMPLATES).indented(indent_width=12)
+            if self.errors_collector_enabled:
+                result += f'            {PARSING_ERRORS_PROP_NAME} = context.collectedErrors'
+            result += '        )'
+        else:
+            result += f'        return {entity_type}()'
+        result += '    }'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun serialize(context: ParsingContext, value: {entity_type}): JSONObject {{'
+        result += '        val data = JSONObject()'
+        for property in self.properties_kotlin:
+            result += self.property_serialization_declaration(property, mode=GenerationMode.NORMAL_WITH_TEMPLATES).indented(indent_width=8)
+        result += '        return data'
+        result += '    }'
+        result += '}'
+        return result
+
+    def __template_serializer_declaration(self) -> Text:
+        template_type = self.prefixed_declaration_for(mode=GenerationMode.TEMPLATE)
+        result = Text()
+        result += f'class {TEMPLATE_PARSER_NAME}('
+        result += '    private val component: JsonParserComponent'
+        result += f') : TemplateParser<JSONObject, {template_type}> {{'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun deserialize(context: ParsingContext, parent: {template_type}?, data: JSONObject): {template_type} {{'
+        if self.instance_properties_kotlin:
+            result += '        val logger = context.logger'
+            result += '        val allowOverride = context.allowPropertyOverride'
+            result += '        @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()'
+            result += f'        return {template_type}('
+            for property in self.instance_properties_kotlin:
+                result += self.property_deserialization_declaration(property, mode=GenerationMode.TEMPLATE).indented(indent_width=12)
+            result += '        )'
+        else:
+            result += f'        return {template_type}()'
+        result += '    }'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun serialize(context: ParsingContext, value: {template_type}): JSONObject {{'
+        result += '        val data = JSONObject()'
+        for property in self.properties_kotlin:
+            result += self.property_serialization_declaration(property, mode=GenerationMode.TEMPLATE).indented(indent_width=8)
+        result += '      return data'
+        result += '    }'
+        result += '}'
+        return result
+
+    def __template_resolver_declaration(self) -> Text:
+        entity_type = self.resolved_prefixed_declaration
+        template_type = self.prefixed_declaration_for(mode=GenerationMode.TEMPLATE)
+        result = Text()
+        result += f'class {TEMPLATE_RESOLVER_NAME}('
+        result += '    private val component: JsonParserComponent'
+        result += f') : TemplateResolver<JSONObject, {template_type}, {entity_type}> {{'
+        result += EMPTY
+        result += '    @Throws(ParsingException::class)'
+        result += f'    override fun resolve(context: ParsingContext, template: {template_type}, data: JSONObject): {entity_type} {{'
+        if self.instance_properties_kotlin:
+            result += '        val logger = context.logger'
+            result += f'        return {entity_type}('
+            for property in self.instance_properties_kotlin:
+                result += self.property_resolving_declaration(property, mode=GenerationMode.TEMPLATE).indented(indent_width=12)
+            result += '        )'
+        else:
+            result += f'        return {entity_type}()'
+        result += '    }'
+        result += '}'
+        return result
+
+    def __serializer_static_declaration(self, declaration_name: str) -> Text:
+        groups = []
+
+        default_values = self.default_values_static_declaration(is_private=False)
+        type_helpers = self.type_helpers_static_declaration(is_private=False)
+        validators = set()
+        validators.update(self.validators_static_declaration(is_private=False, is_template=False))
+
+        if default_values:
+            groups.append(Text(default_values))
+
+        if type_helpers:
+            groups.append(Text(type_helpers))
+
+        if validators:
+            groups.append(Text(sorted(validators)))
+
+        result = Text()
+        for index, group in enumerate(groups):
+            result += EMPTY
+            result += group
+        return result
+
+    def property_serializer_list(self) -> List[str]:
+        serializers = map(lambda property: cast(KotlinProperty, property).serializer_type_declaration, self.instance_properties_kotlin)
+        object_serializers = filter(lambda serializer_type: serializer_type is not None, serializers)
+        return sorted(set(object_serializers))
+
+    def property_deserialization_declaration(self, property: KotlinProperty, mode: GenerationMode) -> Text:
+        property_type = cast(KotlinPropertyType, property.property_type)
+
+        if isinstance(property_type, Array):
+            if property.supports_expressions and property_type.is_array_of_expressions:
+                collection_prefix = EXPRESSION_LIST_TYPE_NAME
+            else:
+                collection_prefix = 'List'
+            expression_prexix = ''
+            expression_suffix = ''
+        else:
+            if property.supports_expressions:
+                expression_prexix = EXPRESSION_TYPE_NAME
+                expression_suffix = 'WithExpression'
+            else:
+                expression_prexix = ''
+                expression_suffix = ''
+            collection_prefix = ''
+        optionality_prefix = 'Optional' if property.parsed_value_is_optional else ''
+
+        if mode.is_template:
+            method_name = f'read{optionality_prefix}{collection_prefix}Field{expression_suffix}'
+            template_args = f'allowOverride, parent?.{property.declaration_name}'
+        else:
+            method_name = f'read{optionality_prefix}{expression_prexix}{collection_prefix}'
+            template_args = ''
+        key = f'"{property.dict_field}"'
+
+        if mode.is_template:
+            serializer_name = property.template_serializer_name_declaration
+        else:
+            serializer_name = property.entity_serializer_name_declaration
+        if serializer_name is None:
+            deserializer = ''
+        else:
+            deserializer = f'component.{serializer_name}'
+        transform = property_type.deserialization_transform(string_enum_prefixed=True)
+
+        type_helper = property_type.type_helper_reference(property) if property.supports_expressions else ''
+        validator = property_type.validator_arg(
+            property_name=property.name,
+            with_template_validators=False
+        )
+        if validator and isinstance(property_type, Array) and mode.is_template:
+            validator = validator + '.cast()'
+        arg_list = ['context', 'logger', 'data', key, type_helper, template_args, deserializer, transform, validator]
+        if isinstance(property_type, Array):
+            arg_list.append(cast(KotlinPropertyType, property_type.property_type).validator_arg(
+                property_name=property.name + '_item',
+                with_template_validators=False
+            ))
+        if property.supports_expressions and not mode.is_template and property.default_value_definition is not None:
+            arg_list.append(property.default_value_var_name)
+        args = ', '.join(filter(lambda arg: arg, arg_list))
+
+        if mode.is_template:
+            receiver = 'JsonFieldParser'
+        else:
+            receiver = 'JsonExpressionParser' if property.supports_expressions else 'JsonPropertyParser'
+        deserialization_expr = f'{receiver}.{method_name}({args})'
+        return Text(f'{property.declaration_name} = {deserialization_expr}{property.default_value_coalescing(mode)},')
+
+    def property_serialization_declaration(self, property: KotlinProperty, mode: GenerationMode) -> Text:
+        field_prefix = 'Field' if mode.is_template and not property.is_static else ''
+        if property.use_expression_type:
+            expression_prefix = '' if mode.is_template else EXPRESSION_TYPE_NAME
+            expression_suffix = 'WithExpression' if mode.is_template else ''
+        else:
+            expression_prefix = ''
+            if property.supports_expressions and \
+                    cast(KotlinPropertyType, property.property_type).is_array_of_expressions:
+                expression_prefix = EXPRESSION_LIST_TYPE_NAME
+            expression_suffix = ''
+        property_type = cast(KotlinPropertyType, property.property_type)
+
+        if property.is_static:
+            value_prefix = self.resolved_prefixed_declaration
+        else:
+            value_prefix = 'value'
+
+        if mode.is_template:
+            serializer_name = property.template_serializer_name_declaration
+            value_suffix = ''
+            if serializer_name is not None:
+                serialization_transform = f', converter = component.{serializer_name}.value.asConverter(context)'
+            else:
+                serialization_transform = property_type.serialization_transform(string_enum_prefixed=True)
+        else:
+            serializer_name = property.entity_serializer_name_declaration
+            if serializer_name is not None:
+                value_prefix = f'component.{serializer_name}.value.serialize(context, {value_prefix}'
+                value_suffix = ')'
+            else:
+                value_suffix = ''
+            serialization_transform = property_type.serialization_transform(string_enum_prefixed=True)
+
+        value_arg_name = 'field' if mode.is_template and not property.is_static else 'value'
+        args = f'key = "{property.dict_field}", {value_arg_name} = {value_prefix}.{property.declaration_name}{value_suffix}{serialization_transform}'
+        return Text(f'data.write{expression_prefix}{field_prefix}{expression_suffix}({args})')
+
+    def property_resolving_declaration(self, property: KotlinProperty, mode: GenerationMode) -> Text:
+        optionality_prefix = 'Optional' if property.parsed_value_is_optional else ''
+        property_type = cast(KotlinPropertyType, property.property_type)
+        if isinstance(property_type, Array):
+            if property.supports_expressions and property_type.is_array_of_expressions:
+                collection_prefix = EXPRESSION_LIST_TYPE_NAME
+            else:
+                collection_prefix = 'List'
+            expression_prefix = ''
+        else:
+            collection_prefix = ''
+            expression_prefix = EXPRESSION_TYPE_NAME if property.supports_expressions else ''
+
+        type_helper = property_type.type_helper_reference(property) if property.supports_expressions else ''
+        resolver_name = property.template_resolver_name_declaration
+        if resolver_name is None:
+            resolver = ''
+        else:
+            resolver = f'component.{resolver_name}'
+        deserializer_name = property.entity_serializer_name_declaration
+        if deserializer_name is None:
+            value_deserializer = ''
+        else:
+            value_deserializer = f'component.{deserializer_name}'
+        transform = property_type.deserialization_transform(string_enum_prefixed=mode.is_template)
+        validator = property_type.validator_arg(
+            property_name=property.name,
+            with_template_validators=False
+        )
+
+        context = 'context'
+        arg_list = [context, 'logger', f'template.{property.declaration_name}', 'data',
+                    f'"{property.dict_field}"', type_helper, resolver, value_deserializer, transform, validator]
+        if isinstance(property_type, Array):
+            arg_list.append(cast(KotlinPropertyType, property_type.property_type).validator_arg(
+                property_name=property.name + '_item',
+                with_template_validators=False
+            ))
+
+        args = ', '.join(filter(lambda arg: arg, arg_list))
+        default_value = property.default_value_coalescing(GenerationMode.NORMAL_WITH_TEMPLATES)
+        return Text(f'{property.declaration_name} = JsonFieldResolver.resolve{optionality_prefix}{expression_prefix}{collection_prefix}({args}){default_value},')
+
+    def static_declarations(self, generate_serialization: bool, generate_serializers: bool) -> Text:
         is_template = self.generation_mode.is_template
         name = utils.capitalize_camel_case(self.name)
-
-        is_private = True
-        if isinstance(self.generator_properties, KotlinGeneratorProperties):
-            is_private = not self.generator_properties.public_default_values
-        default_values = self.default_values_static_declaration(is_private)
-
-        type_helpers = []
-        for p in self.instance_properties_kotlin:
-            if p.supports_expressions:
-                property_type = p.property_type
-                if isinstance(property_type, Array):
-                    property_type = property_type.property_type
-                property_type = cast(KotlinPropertyType, property_type)
-                if property_type.is_enum_of_expressions:
-                    type_helpers.append(property_type.type_helper_declaration(p))
         groups = []
 
         static_properties_declaration = self.static_properties_declaration
         if static_properties_declaration.lines:
             groups.append(static_properties_declaration)
 
+        is_private = True
+        if isinstance(self.generator_properties, KotlinGeneratorProperties):
+            is_private = not self.generator_properties.public_default_values
+        default_values = self.default_values_static_declaration(is_private)
         if default_values:
             groups.append(Text(default_values))
 
-        if type_helpers and generate_serialization:
-            groups.append(Text(type_helpers))
+        if generate_serialization and not generate_serializers:
+            type_helpers = self.type_helpers_static_declaration(is_private=True)
+            if type_helpers and generate_serialization:
+                groups.append(Text(type_helpers))
 
         if not is_template and generate_serialization:
             constructor = Text()
             constructor += '@JvmStatic'
             constructor += '@JvmName("fromJson")'
             constructor += f'operator fun invoke(env: ParsingEnvironment, json: JSONObject): {name} {{'
+            if generate_serializers:
+                constructor += f'    return builtInParserComponent.{self.entity_serializer_name_declaration}'
+                constructor += '        .value'
+                constructor += '        .deserialize(context = env, data = json)'
+            else:
+                if self.errors_collector_enabled:
+                    constructor += '    val env = env.withErrorsCollector()'
 
-            if self.errors_collector_enabled:
-                constructor += '    val env = env.withErrorsCollector()'
+                constructor += '    val logger = env.logger'
+                constructor += f'    return {name}('
+                extra_properties = []
+                if self.errors_collector_enabled:
+                    extra_properties.append(f'{PARSING_ERRORS_PROP_NAME} = env.collectErrors()')
 
-            constructor += '    val logger = env.logger'
-            constructor += f'    return {name}('
-            extra_properties = []
-            if self.errors_collector_enabled:
-                extra_properties.append(f'{PARSING_ERRORS_PROP_NAME} = env.collectErrors()')
-
-            constructor_body = self.constructor_body(with_commas=True,
-                                                     extra_properties=extra_properties).indented(indent_width=8)
-            if constructor_body.lines:
-                constructor += constructor_body
-            constructor += utils.indented(')', indent_width=4)
+                constructor_body = self.constructor_body(with_commas=True,
+                                                         extra_properties=extra_properties).indented(indent_width=8)
+                if constructor_body.lines:
+                    constructor += constructor_body
+                constructor += utils.indented(')', indent_width=4)
             constructor += '}'
             groups.append(constructor)
 
-        validators = Text()
-        for p in self.properties_kotlin:
-            validator_or_empty = p.property_type.static_validator_expression(
-                property_name=p.name,
-                supports_expressions=p.supports_expressions,
-                with_template_validators=is_template
-            )
-            if str(validator_or_empty):
-                validators += validator_or_empty
+        if generate_serialization and not generate_serializers:
+            validators = self.validators_static_declaration(is_private=True, is_template=is_template)
 
-            if isinstance(p.property_type, Array):
-                validator_or_empty = cast(KotlinPropertyType, p.property_type.property_type) \
-                    .static_validator_expression(
-                    property_name=p.name + '_item',
-                    supports_expressions=p.supports_expressions,
-                    with_template_validators=is_template
-                )
-                if str(validator_or_empty):
-                    validators += validator_or_empty
+            if validators:
+                groups.append(Text(validators))
 
-        if validators.lines:
-            groups.append(validators)
-
-        if is_template:
-            readers = Text()
-            for p in self.properties_kotlin:
-                readers += p.static_reader_deserialization_expression
-            groups.append(readers)
+            if is_template:
+                readers = Text()
+                for p in self.properties_kotlin:
+                    readers += p.static_reader_deserialization_expression
+                groups.append(readers)
 
         if generate_serialization:
             static_creator_lambda = f'env: ParsingEnvironment, it: JSONObject -> {name}(env, json = it)'
@@ -304,6 +612,42 @@ class KotlinEntity(Entity):
             if decl is not None:
                 default_values.append(decl)
         return default_values
+
+    def type_helpers_static_declaration(self, is_private: bool) -> List[str]:
+        type_helpers = []
+        for p in self.instance_properties_kotlin:
+            if p.supports_expressions:
+                property_type = p.property_type
+                if isinstance(property_type, Array):
+                    property_type = property_type.property_type
+                property_type = cast(KotlinPropertyType, property_type)
+                if property_type.is_enum_of_expressions:
+                    type_helpers.append(property_type.type_helper_declaration(p, is_private))
+        return type_helpers
+
+    def validators_static_declaration(self, is_private: bool, is_template: bool) -> List[str]:
+        validators = []
+        for p in self.properties_kotlin:
+            validators_or_empty = p.property_type.static_validator_expression(
+                property_name=p.name,
+                supports_expressions=p.supports_expressions,
+                with_template_validators=is_template,
+                is_private=is_private
+            )
+            if validators_or_empty:
+                validators.extend(validators_or_empty)
+
+            if p.property_type.is_array:
+                validators_or_empty = cast(KotlinPropertyType, p.property_type.property_type) \
+                    .static_validator_expression(
+                    property_name=p.name + '_item',
+                    supports_expressions=p.supports_expressions,
+                    with_template_validators=is_template,
+                    is_private=is_private
+                )
+                if validators_or_empty:
+                    validators.append(validators_or_empty)
+        return validators
 
     @property
     def static_properties_declaration(self) -> Text:
@@ -516,6 +860,10 @@ class KotlinEntity(Entity):
 
 class KotlinProperty(Property):
     @property
+    def is_static(self) -> bool:
+        return isinstance(self.property_type, StaticString)
+
+    @property
     def declaration_name(self) -> str:
         if isinstance(self.property_type, StaticString):
             name = utils.constant_upper_case(self.name)
@@ -530,7 +878,7 @@ class KotlinProperty(Property):
     def default_value_declaration(self, is_private: bool = True) -> Optional[str]:
         default_value_definition = self.default_value_definition
         if default_value_definition is not None:
-            prefix = 'private ' if is_private else ''
+            prefix = 'private ' if is_private else '@JvmField '
             return f'{prefix}val {self.default_value_var_name} = {default_value_definition}'
         return None
 
@@ -539,7 +887,7 @@ class KotlinProperty(Property):
         if self.default_value is not None:
             declaration = cast(KotlinPropertyType, self.property_type).declaration_by_default_value(
                 default_value=self.default_value,
-                string_enum_prefixed=self.mode.is_template,
+                string_enum_prefixed=self.mode.is_template or self.mode.is_serializer,
                 supports_expressions_flag=self.supports_expressions_flag
             )
             if declaration is not None:
@@ -588,6 +936,46 @@ class KotlinProperty(Property):
         return f'{prefix}{type_decl}{suffix}{"?" if self.should_be_optional else ""}'
 
     @property
+    def plain_type_declaration(self) -> str:
+        property_type = cast(KotlinPropertyType, self.property_type)
+        return property_type.plain_type_declaration
+
+    @property
+    def serializer_type_declaration(self) -> str:
+        prefix = self.plain_type_declaration
+        return None if prefix is None else prefix + utils.capitalize_camel_case(SERIALIZER_SUFFIX)
+
+    @property
+    def entity_serializer_type_declaration(self) -> str:
+        prefix = self.plain_type_declaration
+        return None if prefix is None else f'{prefix}.{ENTITY_PARSER_NAME}'
+
+    @property
+    def entity_serializer_name_declaration(self) -> str:
+        prefix = self.plain_type_declaration
+        return None if prefix is None else utils.lower_camel_case(prefix) + 'JsonEntityParser'
+
+    @property
+    def template_serializer_type_declaration(self) -> str:
+        prefix = self.plain_type_declaration
+        return None if prefix is None else f'{prefix}.{TEMPLATE_PARSER_NAME}'
+
+    @property
+    def template_serializer_name_declaration(self) -> str:
+        prefix = self.plain_type_declaration
+        return None if prefix is None else utils.lower_camel_case(prefix) + 'JsonTemplateParser'
+
+    @property
+    def template_resolver_type_declaration(self) -> str:
+        prefix = self.plain_type_declaration
+        return None if prefix is None else f'{prefix}.{TEMPLATE_RESOLVER_NAME}'
+
+    @property
+    def template_resolver_name_declaration(self) -> str:
+        prefix = self.plain_type_declaration
+        return None if prefix is None else utils.lower_camel_case(prefix) + 'JsonTemplateResolver'
+
+    @property
     def use_custom_hash(self) -> bool:
         return self.property_type.use_custom_hash
 
@@ -599,7 +987,7 @@ class KotlinProperty(Property):
             prefix = 'override '
             assert not in_interface
         elif not in_interface:
-            prefix = '@JvmField final '
+            prefix = '@JvmField '
         else:
             prefix = ''
         comma = ',' if with_comma else ''
@@ -609,8 +997,19 @@ class KotlinProperty(Property):
                 default_assignment = ' = null'
             elif self.default_value_declaration() is not None:
                 default_assignment = f' = {self.default_value_var_name}'
-        comment = declaration_comment(self, _kotlin_default_value_declaration_comment)
+        comment = declaration_comment(self, _kotlin_default_value_declaration_comment) if with_default else ''
         return Text(f'{prefix}val {self.declaration_name}: {self.type_declaration}{default_assignment}{comma}{comment}')
+
+    def argument_declaration(self, with_default: bool) -> Text:
+        if isinstance(self.property_type, StaticString):
+            return None
+        default_assignment = ''
+        if with_default:
+            if self.should_be_optional:
+                default_assignment = ' = null'
+            elif self.default_value_declaration() is not None:
+                default_assignment = f' = {self.default_value_var_name}'
+        return Text(f'{self.declaration_name}: {self.type_declaration}{default_assignment},')
 
     def deserialization_declaration(self, mode: GenerationMode) -> str:
         deserialization_expr = self.deserialization_expression(mode=mode, reuse_logger_instance=True)
@@ -728,9 +1127,9 @@ class KotlinProperty(Property):
             validator = ''
             expression_or_empty = ''
         method_name = f'.resolve{optionality}{plain_or_empty}{expression_or_empty}{list_or_empty}'
-        method_args = f'env = env, key = "{dict_field}", data = rawData{validator}{value_override}, reader = {reader}'
+        method_args = f'env = env, key = "{dict_field}", data = data{validator}{value_override}, reader = {reader}'
         def_val = self.default_value_coalescing(mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES)
-        return f'{self.declaration_name} = {self.declaration_name}{method_name}({method_args}){def_val}'
+        return f'{self.declaration_name} = this.{self.declaration_name}{method_name}({method_args}){def_val}'
 
     @property
     def reader_declaration_name(self) -> str:
@@ -779,6 +1178,10 @@ class KotlinProperty(Property):
 
 
 class KotlinPropertyType(PropertyType):
+    @property
+    def is_array(self) -> bool:
+        return isinstance(self, Array)
+
     @property
     def is_array_of_expressions(self) -> bool:
         if isinstance(self, Array):
@@ -897,6 +1300,28 @@ class KotlinPropertyType(PropertyType):
             supports_expressions=supports_expressions
         )
 
+    @property
+    def is_object(self) -> bool:
+        return isinstance(self, Object) and not isinstance(self.object, StringEnumeration)
+
+    @property
+    def is_array_of_objects(self) -> bool:
+        if isinstance(self, Array):
+            item_type = cast(KotlinPropertyType, self.property_type)
+            return item_type.is_object
+        else:
+            return False
+
+    @property
+    def plain_type_declaration(self) -> Optional[str]:
+        if self.is_object and self.object is not None:
+            return self.object.resolved_prefixed_declaration.replace('.', '')
+        elif self.is_array_of_objects:
+            item_type = cast(KotlinPropertyType, self.property_type)
+            return item_type.plain_type_declaration
+        else:
+            return None
+
     def declaration_by_prefixed(self,
                                 prefixed: bool,
                                 mode: GenerationMode,
@@ -939,7 +1364,7 @@ class KotlinPropertyType(PropertyType):
                 obj_name = utils.capitalize_camel_case(self.object.resolved_name)
             prefix = ''
             if prefixed:
-                prefix = self.object.declaration_prefix if mode.is_template else self.object.resolved_declaration_prefix
+                prefix = self.object.declaration_prefix_for(mode)
             return f'{prefix}{obj_name or utils.capitalize_camel_case(self.name)}'
 
     def deserialization_transform(self, string_enum_prefixed: bool) -> str:
@@ -969,12 +1394,14 @@ class KotlinPropertyType(PropertyType):
     def static_validator_expression(self,
                                     property_name: str,
                                     supports_expressions: bool,
-                                    with_template_validators: bool) -> Text:
-        result = Text()
+                                    with_template_validators: bool,
+                                    is_private: bool) -> List[str]:
+        result = []
         definition = self.validator_definition() or ''
         if not definition:
             return result
 
+        prefix = 'private ' if is_private else '@JvmField '
         if isinstance(self, Array) and self.min_items > 0:
             item_type = cast(KotlinPropertyType, self.property_type)
             list_type = item_type.prefixed_declaration(
@@ -987,9 +1414,10 @@ class KotlinPropertyType(PropertyType):
                 property_name=property_name,
                 with_templates=False
             )
-            result += f'private val {validator_instance_name} = ListValidator<{list_type}> {definition}'
+            result.append(f'{prefix}val {validator_instance_name} = ListValidator<{list_type}> {definition}')
 
             if with_template_validators:
+
                 templated_list_type = item_type.prefixed_declaration(
                     GenerationMode.TEMPLATE,
                     supports_expressions
@@ -998,7 +1426,7 @@ class KotlinPropertyType(PropertyType):
                     property_name=property_name,
                     with_templates=True
                 )
-                result += f'private val {validator_instance_name} = ListValidator<{templated_list_type}> {definition}'
+                result.append(f'{prefix}val {validator_instance_name} = ListValidator<{templated_list_type}> {definition}')
         else:
             validator_type = self.prefixed_declaration(
                 GenerationMode.NORMAL_WITH_TEMPLATES,
@@ -1014,17 +1442,21 @@ class KotlinPropertyType(PropertyType):
                     property_name=property_name,
                     with_templates=True
                 )
-                result += f'private val {validator_instance_name_with} = ValueValidator<{validator_type}> {definition}'
+                result.append(f'{prefix}val {validator_instance_name_with} = ValueValidator<{validator_type}> {definition}')
 
-            result += f'private val {validator_instance_name_without} = ValueValidator<{validator_type}> {definition}'
+            result.append(f'{prefix}val {validator_instance_name_without} = ValueValidator<{validator_type}> {definition}')
 
         return result
 
     def validator_arg(self,
                       property_name: str,
-                      with_template_validators: bool) -> str:
-        if self.validator_definition() is None:
+                      with_template_validators: bool,
+                      inline_definition: bool = False) -> str:
+        validator_definition = self.validator_definition()
+        if validator_definition is None:
             return ''
+        if inline_definition:
+            return validator_definition
         return self.validator_instance_name(property_name, with_template_validators)
 
     @staticmethod
@@ -1059,13 +1491,14 @@ class KotlinPropertyType(PropertyType):
         else:
             return None
 
-    def type_helper_declaration(self, p: KotlinProperty) -> str:
+    def type_helper_declaration(self, p: KotlinProperty, is_private: bool) -> str:
         type_decl = self.prefixed_declaration(
             mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES,
             supports_expressions=p.supports_expressions
         )
         definition = f'TypeHelper.from(default = {type_decl}.values().first()) {{ it is {type_decl} }}'
-        return f'private val {self.type_helper_reference(p)} = {definition}'
+        prefix = 'private ' if is_private else '@JvmField '
+        return f'{prefix}val {self.type_helper_reference(p)} = {definition}'
 
     def type_helper_reference(self, p: KotlinProperty) -> str:
         prefix = 'TYPE_HELPER_'
@@ -1119,7 +1552,7 @@ class CaseNaming:
         elif isinstance(self, RemoveCommonPart):
             reduced_name = name[len(self.prefix):len(name) - len(self.suffix)]
             # Add `Case` suffix in templates to match the naming of corresponding enumeration inner classes.
-            if self.prefix == '' and self.suffix == 'template':
+            if self.prefix == '' and self.suffix in ['Template', 'JsonParser']:
                 return reduced_name + 'Case'
             return reduced_name
 
@@ -1135,6 +1568,49 @@ class RemoveCommonPart(CaseNaming):
 
 
 class KotlinEntityEnumeration(EntityEnumeration):
+
+    @property
+    def entities_kotlin(self) -> List[KotlinEntity]:
+        return list(map(lambda x: self.__cast_entity_kotlin(x[1]), self.entities))
+
+    def __cast_entity_kotlin(self, obj: Declarable) -> KotlinEntity:
+        entity: KotlinEntity = cast(KotlinEntity, obj)
+        entity.__class__ = KotlinEntity
+        return entity
+
+    @property
+    def plain_type_declaration(self) -> str:
+        return (self.entity_declaration_prefix.replace('.', '')
+                + utils.capitalize_camel_case(self.name_for(GenerationMode.NORMAL_WITH_TEMPLATES)))
+
+    @property
+    def serializer_type_declaration(self) -> str:
+        return (self.entity_declaration_prefix.replace('.', '')
+                + utils.capitalize_camel_case(self.name_for(GenerationMode.SERIALIZER)))
+
+    @property
+    def entity_serializer_type_declaration(self) -> str:
+        return f'{self.plain_type_declaration}.{ENTITY_PARSER_NAME}'
+
+    @property
+    def entity_serializer_name_declaration(self) -> str:
+        return utils.lower_camel_case(self.plain_type_declaration) + 'JsonEntityParser'
+
+    @property
+    def template_serializer_type_declaration(self) -> str:
+        return f'{self.plain_type_declaration}.{TEMPLATE_PARSER_NAME}'
+
+    @property
+    def template_serializer_name_declaration(self) -> str:
+        return utils.lower_camel_case(self.plain_type_declaration) + 'JsonTemplateParser'
+
+    @property
+    def template_resolver_type_declaration(self) -> str:
+        return f'{self.plain_type_declaration}.{TEMPLATE_RESOLVER_NAME}'
+
+    @property
+    def template_resolver_name_declaration(self) -> str:
+        return utils.lower_camel_case(self.plain_type_declaration) + 'JsonTemplateResolver'
 
     def format_case_naming(self, entity_name: str) -> str:
         return self.__case_naming(entity_name).format_case_name(entity_name)
@@ -1155,7 +1631,8 @@ class KotlinEntityEnumeration(EntityEnumeration):
             element.reverse()
         common_suffix = reduce(find_common_prefix, names)
         if common_prefix or common_suffix:
-            return RemoveCommonPart(prefix=utils.lower_camel_case('_'.join(common_prefix)),
-                                    suffix=utils.lower_camel_case('_'.join(common_suffix)))
+            return RemoveCommonPart(
+                prefix=utils.capitalize_camel_case('_'.join(reversed(common_prefix))),
+                suffix=utils.capitalize_camel_case('_'.join(reversed(common_suffix))))
         else:
             return Suffix()

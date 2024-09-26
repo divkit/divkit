@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithArray(
-    @JvmField final val array: List<Entity>, // at least 1 elements
+    @JvmField val array: List<Entity>, // at least 1 elements
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -34,7 +35,5 @@ class EntityWithArray(
 
     companion object {
         const val TYPE = "entity_with_array"
-
-        private val ARRAY_VALIDATOR = ListValidator<Entity> { it: List<*> -> it.size >= 1 }
     }
 }

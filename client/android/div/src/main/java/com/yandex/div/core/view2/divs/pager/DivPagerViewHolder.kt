@@ -63,14 +63,16 @@ internal class DivPagerViewHolder(
         oldDiv = div
         val id = div.value().getChildPathUnit(position)
 
-        resolveRuntime(
-            runtimeStore = bindingContext.runtimeStore,
-            pathUnit = id,
-            parentPath = path.fullPath,
-            variables = div.value().variables,
-            resolver = resolver,
-            parentRuntime = parentRuntime,
-        )
+        if (parentContext.expressionResolver != resolver) {
+            resolveRuntime(
+                runtimeStore = bindingContext.runtimeStore,
+                div  = div.value(),
+                pathUnit = id,
+                parentPath = path.fullPath,
+                resolver = resolver,
+                parentRuntime = parentRuntime,
+            )
+        }
 
         divBinder.bind(bindingContext, divView, div, path.appendDiv(id))
         bindingContext.runtimeStore?.showWarningIfNeeded(div.value())

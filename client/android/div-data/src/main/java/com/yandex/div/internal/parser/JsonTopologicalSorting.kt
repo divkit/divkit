@@ -2,9 +2,9 @@ package com.yandex.div.internal.parser
 
 import android.annotation.SuppressLint
 import com.yandex.div.internal.util.forEach
-import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
+import com.yandex.div.serialization.ParsingContext
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -47,8 +47,8 @@ internal object JsonTopologicalSorting {
      */
     @SuppressLint("NewApi")
     @Throws(JSONException::class, ParsingException::class, CyclicDependencyException::class)
-    fun sort(json: JSONObject, logger: ParsingErrorLogger, env: ParsingEnvironment): Map<String, Set<String>> {
-        val types = parseTypeDependencies(json, logger, env)
+    fun sort(context: ParsingContext, json: JSONObject): Map<String, Set<String>> {
+        val types = parseTypeDependencies(context, json)
         val visited = LinkedHashSet<String>()
         val processed = LinkedHashSet<String>()
         val sorted = LinkedHashMap<String, Set<String>>()
@@ -59,16 +59,16 @@ internal object JsonTopologicalSorting {
         return sorted
     }
 
-    private fun parseTypeDependencies(json: JSONObject, logger: ParsingErrorLogger, env: ParsingEnvironment): MutableMap<String, List<String>> {
+    private fun parseTypeDependencies(context: ParsingContext, json: JSONObject, ): MutableMap<String, List<String>> {
         val result = LinkedHashMap<String, List<String>>(json.length())
         json.forEach<JSONObject> { key, entry ->
             val dependencies = mutableListOf<String>()
             readObjectDependencies(
+                context = context,
+                logger = TemplateParsingErrorLogger(logger = context.logger, templateId = key),
                 json = entry,
                 requireParent = true,
-                dependencies = dependencies,
-                logger = TemplateParsingErrorLogger(logger = logger, templateId = key),
-                env = env,
+                dependencies = dependencies
             )
             result[key] = dependencies
         }
@@ -76,43 +76,47 @@ internal object JsonTopologicalSorting {
     }
 
     private fun readObjectDependencies(
+        context: ParsingContext,
+        logger: ParsingErrorLogger,
         json: JSONObject,
         requireParent: Boolean,
-        dependencies: MutableList<String>,
-        logger: ParsingErrorLogger,
-        env: ParsingEnvironment,
+        dependencies: MutableList<String>
     ) {
-        val parent = if (requireParent) readParent(json, logger, env) else readOptionalParent(json, logger, env)
+        val parent = if (requireParent) {
+            readParent(context, logger, json)
+        } else {
+            readOptionalParent(context, logger, json)
+        }
         parent?.let { dependencies.add(it) }
 
         json.forEach<JSONObject> { _, jsonObject ->
             readObjectDependencies(
+                context = context,
+                logger = logger,
                 json = jsonObject,
                 requireParent = false,
-                dependencies = dependencies,
-                logger = logger,
-                env = env,
+                dependencies = dependencies
             )
         }
         json.forEach<JSONArray> { _, jsonArray ->
             jsonArray.forEach<JSONObject> { _, item ->
                 readObjectDependencies(
+                    context = context,
+                    logger = logger,
                     json = item,
                     requireParent = false,
-                    dependencies = dependencies,
-                    logger = logger,
-                    env = env,
+                    dependencies = dependencies
                 )
             }
         }
     }
 
-    private fun readParent(json: JSONObject, logger: ParsingErrorLogger, env: ParsingEnvironment): String {
-        return json.read(key = "type", validator = { it.isNotEmpty() }, logger = logger, env = env)
+    private fun readParent(context: ParsingContext, logger: ParsingErrorLogger, json: JSONObject): String {
+        return JsonPropertyParser.read<String>(context, logger, json, "type", { it.isNotEmpty() })
     }
 
-    private fun readOptionalParent(json: JSONObject, logger: ParsingErrorLogger, env: ParsingEnvironment): String? {
-        return json.readOptional(key = "type", validator = { it.isNotEmpty() }, logger = logger, env = env)
+    private fun readOptionalParent(context: ParsingContext, logger: ParsingErrorLogger, json: JSONObject): String? {
+        return JsonPropertyParser.readOptional<String>(context, logger, json, "type", { it.isNotEmpty() })
     }
 
     private fun processType(

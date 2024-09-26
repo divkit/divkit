@@ -13,6 +13,7 @@ public final class DivActionHandler {
   private let trackVisibility: TrackVisibility
   private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
+  private let functionsStorage: DivFunctionsStorage?
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let blockStateStorage: DivBlockStateStorage
   private let updateCard: DivActionURLHandler.UpdateCardAction
@@ -24,6 +25,8 @@ public final class DivActionHandler {
   private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
   private let focusElementActionHandler = FocusElementActionHandler()
   private let setVariableActionHandler = SetVariableActionHandler()
+  private let timerActionHandler: TimerActionHandler
+  private let videoActionHandler = VideoActionHandler()
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
   public init(
@@ -31,6 +34,7 @@ public final class DivActionHandler {
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     patchProvider: DivPatchProvider,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
+    functionsStorage: DivFunctionsStorage? = nil,
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
@@ -58,10 +62,12 @@ public final class DivActionHandler {
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
+    self.functionsStorage = functionsStorage
     self.persistentValuesStorage = persistentValuesStorage
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
     self.reporter = reporter ?? DefaultDivReporter()
+    self.timerActionHandler = TimerActionHandler(performer: performTimerAction)
   }
 
   public func handle(
@@ -106,6 +112,9 @@ public final class DivActionHandler {
       functionsProvider: FunctionsProvider(
         persistentValuesStorage: persistentValuesStorage
       ),
+      customFunctionsStorageProvider: { [weak functionsStorage] in
+        functionsStorage?.getStorage(path: path, contains: $0)
+      },
       variableValueProvider: { [unowned variablesStorage] in
         if let value = localValues[$0] {
           return value
@@ -141,7 +150,11 @@ public final class DivActionHandler {
       focusElementActionHandler.handle(action, context: context)
     case let .divActionSetVariable(action):
       setVariableActionHandler.handle(action, context: context)
-    case .divActionAnimatorStart, .divActionAnimatorStop, .divActionTimer, .divActionVideo,
+    case let .divActionTimer(action):
+      timerActionHandler.handle(action, context: context)
+    case let .divActionVideo(action):
+      videoActionHandler.handle(action, context: context)
+    case .divActionAnimatorStart, .divActionAnimatorStop,
         .divActionShowTooltip, .divActionSetState, .divActionHideTooltip:
       break
     case .none:

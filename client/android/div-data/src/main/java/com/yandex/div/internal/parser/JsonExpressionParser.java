@@ -9,6 +9,8 @@ import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.json.expressions.MutableExpressionList;
 import com.yandex.div.serialization.ParsingContext;
+
+import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,6 +36,7 @@ import static com.yandex.div.json.ParsingExceptionKt.typeMismatch;
  * This will only make parsing slower.
  */
 @SuppressWarnings({"unused", "unchecked"})
+@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonExpressionParser {
 
     private static final ExpressionList<?> EMPTY_EXPRESSION_LIST = new ConstantExpressionList<>(Collections.emptyList());
@@ -43,49 +46,49 @@ public class JsonExpressionParser {
     }
 
     @NonNull
-    public static <T> Expression<T> readExpression(
+    public static <V> Expression<V> readExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper
+            @NonNull final TypeHelper<V> typeHelper
     ) {
         return readExpression(context, logger, jsonObject, key, typeHelper, doNotConvert(), alwaysValid());
     }
 
     @NonNull
-    public static <R, T> Expression<T> readExpression(
+    public static <R, V> Expression<V> readExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter
     ) {
         return readExpression(context, logger, jsonObject, key, typeHelper, converter, alwaysValid());
     }
 
     @NonNull
-    public static <T> Expression<T> readExpression(
+    public static <V> Expression<V> readExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final ValueValidator<T> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ValueValidator<V> validator
     ) {
         return readExpression(context, logger, jsonObject, key, typeHelper, doNotConvert(), validator);
     }
 
     @NonNull
-    public static <R, T> Expression<T> readExpression(
+    public static <R, V> Expression<V> readExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ValueValidator<T> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
         final Object intermediate = optSafe(jsonObject, key);
         if (intermediate == null) {
@@ -96,7 +99,7 @@ public class JsonExpressionParser {
             return new Expression.MutableExpression<>(
                     key, intermediate.toString(), converter, validator, logger, typeHelper, null);
         } else {
-            T value;
+            V value;
             try {
                 value = converter.invoke((R) intermediate);
             } catch (ClassCastException castException) {
@@ -136,91 +139,91 @@ public class JsonExpressionParser {
     }
 
     @Nullable
-    public static <T> Expression<T> readOptionalExpression(
+    public static <V> Expression<V> readOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @Nullable final Expression<T> defaultValue
+            @NonNull final TypeHelper<V> typeHelper,
+            @Nullable final Expression<V> defaultValue
     ) {
         return readOptionalExpression(context, logger, jsonObject, key, typeHelper, doNotConvert(), alwaysValid(), defaultValue);
     }
 
     @Nullable
-    public static <R, T> Expression<T> readOptionalExpression(
+    public static <R, V> Expression<V> readOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter
     ) {
         return readOptionalExpression(context, logger, jsonObject, key, typeHelper, converter, alwaysValid(), null);
     }
 
     @Nullable
-    public static <R, T> Expression<T> readOptionalExpression(
+    public static <R, V> Expression<V> readOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter,
-            @Nullable final Expression<T> defaultValue
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @Nullable final Expression<V> defaultValue
     ) {
         return readOptionalExpression(context, logger, jsonObject, key, typeHelper, converter, alwaysValid(), defaultValue);
 
     }
 
     @Nullable
-    public static <T> Expression<T> readOptionalExpression(
+    public static <V> Expression<V> readOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final ValueValidator<T> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ValueValidator<V> validator
     ) {
         return readOptionalExpression(context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, null);
     }
 
     @Nullable
-    public static <T> Expression<T> readOptionalExpression(
+    public static <V> Expression<V> readOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final ValueValidator<T> validator,
-            @Nullable final Expression<T> defaultValue
-        ) {
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ValueValidator<V> validator,
+            @Nullable final Expression<V> defaultValue
+    ) {
         return readOptionalExpression(context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, defaultValue);
     }
 
     @Nullable
-    public static <R, T> Expression<T> readOptionalExpression(
+    public static <R, V> Expression<V> readOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ValueValidator<T> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
         return readOptionalExpression(context, logger, jsonObject, key, typeHelper, converter, validator, null);
     }
 
     @Nullable
-    public static <R, T> Expression<T> readOptionalExpression(
+    public static <R, V> Expression<V> readOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ValueValidator<T> validator,
-            @Nullable final Expression<T> defaultValue
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator,
+            @Nullable final Expression<V> defaultValue
     ) {
         final Object intermediate = optSafe(jsonObject, key);
 
@@ -234,7 +237,7 @@ public class JsonExpressionParser {
             return new Expression.MutableExpression<>(
                     key, intermediate.toString(), converter, validator, logger, typeHelper, defaultValue);
         } else {
-            T value;
+            V value;
             try {
                 value = converter.invoke((R) intermediate);
             } catch (ClassCastException castException
@@ -286,13 +289,13 @@ public class JsonExpressionParser {
     }
 
     @NonNull
-    public static <R, T> ExpressionList<T> readExpressionList(
+    public static <R, V> ExpressionList<V> readExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter
     ) {
         return readExpressionList(context, logger, jsonObject, key, typeHelper, converter, alwaysValidList(), alwaysValid());
     }
@@ -310,43 +313,43 @@ public class JsonExpressionParser {
     }
 
     @NonNull
-    public static <R, T> ExpressionList<T> readExpressionList(
+    public static <R, V> ExpressionList<V> readExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> validator
     ) {
         return readExpressionList(context, logger, jsonObject, key, typeHelper, converter, validator, alwaysValid());
     }
 
     @NonNull
-    public static <T> ExpressionList<T> readExpressionList(
+    public static <V> ExpressionList<V> readExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final ListValidator<T> validator,
-            @NonNull final ValueValidator<T> itemValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ListValidator<V> validator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return readExpressionList(context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, itemValidator);
     }
 
     @NonNull
-    public static <R, T> ExpressionList<T> readExpressionList(
+    public static <R, V> ExpressionList<V> readExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> validator,
-            @NonNull final ValueValidator<T> itemValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> validator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
-        ExpressionList<T> result = readOptionalExpressionList(
+        ExpressionList<V> result = readOptionalExpressionList(
                 context, logger, jsonObject, key, typeHelper, converter, validator, itemValidator, failFastHandler());
         if (result == null) {
             throw invalidValue(key, jsonObject);
@@ -355,70 +358,70 @@ public class JsonExpressionParser {
     }
 
     @Nullable
-    public static <R, T> ExpressionList<T> readOptionalExpressionList(
+    public static <R, V> ExpressionList<V> readOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter
     ) {
         return readOptionalExpressionList(
                 context, logger, jsonObject, key, typeHelper, converter, alwaysValidList(), alwaysValid());
     }
 
     @Nullable
-    public static <T> ExpressionList<T> readOptionalExpressionList(
+    public static <V> ExpressionList<V> readOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final ListValidator<T> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ListValidator<V> validator
     ) {
         return readOptionalExpressionList(
                 context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, alwaysValid());
     }
 
     @Nullable
-    public static <T> ExpressionList<T> readOptionalExpressionList(
+    public static <V> ExpressionList<V> readOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final ListValidator<T> validator,
-            @NonNull final ValueValidator<T> itemValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ListValidator<V> validator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return readOptionalExpressionList(
                 context, logger, jsonObject, key, typeHelper, doNotConvert(), validator, itemValidator);
     }
 
     @Nullable
-    public static <R, T> ExpressionList<T> readOptionalExpressionList(
+    public static <R, V> ExpressionList<V> readOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> validator,
-            @NonNull final ValueValidator<T> itemValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> validator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return readOptionalExpressionList(
                 context, logger, jsonObject, key, typeHelper, converter, validator, itemValidator, ignoreErrorHandler());
     }
 
     @Nullable
-    private static <R, T> ExpressionList<T> readOptionalExpressionList(
+    private static <R, V> ExpressionList<V> readOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
-            @NonNull final TypeHelper<T> typeHelper,
-            @NonNull final Function1<R, T> converter,
-            @NonNull final ListValidator<T> validator,
-            @NonNull final ValueValidator<T> itemValidator,
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> validator,
+            @NonNull final ValueValidator<V> itemValidator,
             @NonNull final ErrorHandler errorHandler
     ) {
         JSONArray array = jsonObject.optJSONArray(key);
@@ -429,7 +432,7 @@ public class JsonExpressionParser {
 
         int length = array.length();
         if (length == 0) {
-            List<T> emptyList = Collections.emptyList();
+            List<V> emptyList = Collections.emptyList();
             try {
                 if (!validator.isValid(emptyList)) {
                     logger.logError(invalidValue(jsonObject, key, emptyList));
@@ -465,7 +468,7 @@ public class JsonExpressionParser {
                         /*typeHelper*/ typeHelper,
                         /*fieldDefaultValue*/ null));
             } else {
-                T item;
+                V item;
                 try {
                     item = converter.invoke((R) intermediate);
                 } catch (ClassCastException castException) {
@@ -509,10 +512,10 @@ public class JsonExpressionParser {
                 untypedList.set(i, Expression.constant(item));
             }
 
-            List<Expression<T>> list = (List<Expression<T>>) untypedList;
-            return new MutableExpressionList<T>(key, list, validator, logger);
+            List<Expression<V>> list = (List<Expression<V>>) untypedList;
+            return new MutableExpressionList<V>(key, list, validator, logger);
         } else {
-            List<T> list = (List<T>) untypedList;
+            List<V> list = (List<V>) untypedList;
             try {
                 if (!validator.isValid(list)) {
                     errorHandler.process(invalidValue(jsonObject, key, list));
@@ -528,8 +531,8 @@ public class JsonExpressionParser {
     }
 
     @NonNull
-    private static <T> ExpressionList<T> emptyExpressionList() {
-        return (ExpressionList<T>) EMPTY_EXPRESSION_LIST;
+    private static <V> ExpressionList<V> emptyExpressionList() {
+        return (ExpressionList<V>) EMPTY_EXPRESSION_LIST;
     }
 
     @NonNull

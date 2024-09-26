@@ -1,6 +1,7 @@
 {
   "description": "Local triggers with gallery",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

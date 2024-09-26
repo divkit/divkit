@@ -8,9 +8,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DivActionTypedTimerHandler @Inject constructor()
+internal class DivActionTypedTimerHandler @Inject constructor()
     : DivActionTypedHandler {
     override fun handleAction(
+        scopeId: String?,
         action: DivActionTyped,
         view: Div2View,
         resolver: ExpressionResolver

@@ -1,11 +1,5 @@
 {
-    "lang": "kotlin",
-    "header": "// Generated code. Do not modify.\n\npackage com.yandex.div2\n\nimport android.graphics.Color\nimport android.net.Uri\nimport androidx.annotation.ColorInt\nimport com.yandex.div.json.*\nimport com.yandex.div.json.expressions.Expression\nimport com.yandex.div.json.expressions.ExpressionsList\nimport com.yandex.div.json.schema.*\nimport com.yandex.div.core.annotations.Mockable\nimport java.io.IOException\nimport java.util.BitSet\nimport org.json.JSONObject\nimport com.yandex.div.data.*\nimport org.json.JSONArray\n",
-    "errorsCollectors": [
-        "div-data"
-    ],
-    "kotlinAnnotations": {
-        "classes": ["@Mockable"]
-    },
-    "generateTemplates": false
+  "lang": "kotlin",
+  "header": "// Generated code. Do not modify.\n\npackage com.yandex.div.reference\n\nimport android.graphics.Color\nimport android.net.Uri\nimport androidx.annotation.ColorInt\nimport com.yandex.div.data.*\nimport com.yandex.div.json.*\nimport com.yandex.div.json.expressions.Expression\nimport com.yandex.div.json.expressions.ExpressionsList\nimport com.yandex.div.json.schema.*\nimport org.json.JSONArray\nimport org.json.JSONObject\n",
+  "generateTemplates": false
 }

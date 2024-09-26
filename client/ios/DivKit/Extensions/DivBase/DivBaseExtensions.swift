@@ -14,6 +14,10 @@ extension DivBase {
   ) throws -> Block {
     let path = context.parentPath
 
+    context.functionsStorage?.setIfNeeded(
+      path: path,
+      functions: functions ?? []
+    )
     context.variablesStorage.initializeIfNeeded(
       path: path,
       variables: variables?.extractDivVariableValues() ?? [:]

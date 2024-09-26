@@ -9,7 +9,7 @@
       ]
     },
     "animator_id": {
-      "type": "string",
+      "$ref": "common.json#/id",
       "$description": "translations.json#/div_action_animator_start_animator_id"
     },
     "duration": {
@@ -30,7 +30,7 @@
       "$description": "translations.json#/div_animator_base_direction"
     },
     "repeat_count": {
-      "$ref": "common.json#/non_negative_integer",
+      "$ref": "div-count.json",
       "$description": "translations.json#/div_animator_base_repeat_count"
     },
     "start_value": {

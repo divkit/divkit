@@ -55,6 +55,10 @@
     "en": "Stops specified animator",
     "ru": "Останавливает указанный аниматор."
   },
+  "div_action_animator_stop_animator_id": {
+    "en": "The identifier of the animator being stopped.",
+    "ru": "Идентификатор аниматора, который нужно остановить"
+  },
   "div_action_array_insert_value": {
     "en": "Adds a value to the array",
     "ru": "Добавляет значение в массив"
@@ -284,8 +288,8 @@
     "ru": "Функция интерполяции анимируемого значения."
   },
   "div_animator_base_repeat_count": {
-    "en": "The number of times the animation will repeat before it finishes. `0` enables infinite repeats.",
-    "ru": "Количество повторов анимации, которое будет выполнено до ее остановки. `0` включает бесконечные повторы."
+    "en": "The number of times the animation will repeat before it finishes.",
+    "ru": "Количество повторов анимации, которое будет выполнено до ее остановки."
   },
   "div_animator_base_start_delay": {
     "en": "Animation start delay in milliseconds.",
@@ -2258,6 +2262,10 @@
   "div_text_text_gradient": {
     "en": "Gradient text color.",
     "ru": "Градиентный цвет текста."
+  },
+  "div_text_tighten_width": {
+    "en": "Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set",
+    "ru": "Ограничивать ширину текста максимальной шириной строки, работает только с шириной wrap_content, constrained=true и выставленным max_size"
   },
   "div_text_truncate": {
     "en": "Text cropping method. Use `ellipsis` instead.",

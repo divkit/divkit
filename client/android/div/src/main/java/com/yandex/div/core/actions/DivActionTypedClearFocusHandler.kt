@@ -8,7 +8,13 @@ import javax.inject.Singleton
 
 @Singleton
 internal class DivActionTypedClearFocusHandler @Inject constructor() : DivActionTypedHandler {
-    override fun handleAction(action: DivActionTyped, view: Div2View, resolver: ExpressionResolver): Boolean {
+
+    override fun handleAction(
+        scopeId: String?,
+        action: DivActionTyped,
+        view: Div2View,
+        resolver: ExpressionResolver
+    ): Boolean {
         return when (action) {
             is DivActionTyped.ClearFocus -> {
                 view.clearFocus()

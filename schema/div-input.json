@@ -101,7 +101,7 @@
           "$ref": "common.json#/positive_integer",
           "$description": "translations.json#/div_input_max_length",
           "platforms": [
-            "android",    
+            "android",
             "ios",
             "web"
           ]
@@ -150,7 +150,8 @@
           "$description": "translations.json#/div_input_autocapitalization",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "keyboard_type": {

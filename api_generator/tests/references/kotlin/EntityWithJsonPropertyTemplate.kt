@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithJsonPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithJsonProperty> {
-    @JvmField final val jsonProperty: Field<JSONObject> // default value: { "key": "value", "items": [ "value" ] }
+    @JvmField val jsonProperty: Field<JSONObject>
 
-    constructor (
+    constructor(
+        jsonProperty: Field<JSONObject>,
+    ) {
+        this.jsonProperty = jsonProperty
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithJsonPropertyTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithJsonPropertyTemplate : JSONSerializable, JsonTemplate<EntityWith
         jsonProperty = JsonTemplateParser.readOptionalField(json, "json_property", topLevel, parent?.jsonProperty, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithJsonProperty {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithJsonProperty {
         return EntityWithJsonProperty(
-            jsonProperty = jsonProperty.resolveOptional(env = env, key = "json_property", data = rawData, reader = JSON_PROPERTY_READER) ?: JSON_PROPERTY_DEFAULT_VALUE
+            jsonProperty = this.jsonProperty.resolveOptional(env = env, key = "json_property", data = data, reader = JSON_PROPERTY_READER) ?: JSON_PROPERTY_DEFAULT_VALUE
         )
     }
 

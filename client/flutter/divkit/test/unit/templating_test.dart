@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:divkit/divkit.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('TemplatesResolver flat layout cases', () {
@@ -172,19 +172,19 @@ void main() {
                     "type": "text",
                     "font_size": 36,
                     "paddings": {"top": 24, "bottom": 24},
-                    "text": "DivKit"
+                    "text": "DivKit",
                   },
                   {
                     "type": "text",
                     "font_size": 18,
                     "margins": {"left": 16, "right": 16},
-                    "text": "DivKit is a new Yandex open source framework"
+                    "text": "DivKit is a new Yandex open source framework",
                   }
-                ]
-              }
+                ],
+              },
             }
-          ]
-        }
+          ],
+        },
       };
 
       const result = {
@@ -449,17 +449,17 @@ void main() {
             "width": {"type": "fixed", "value": 64},
             "height": {"type": "fixed", "value": 64},
             "background": [
-              {"color": "#C0C", "type": "solid"}
+              {"color": "#C0C", "type": "solid"},
             ],
-            "border": {"corner_radius": 85}
+            "border": {"corner_radius": 85},
           },
           "box": {
             "type": "container",
             "width": {"type": "fixed", "value": 64},
             "height": {"type": "fixed", "value": 64},
             "background": [
-              {"color": "#1C1", "type": "solid"}
-            ]
+              {"color": "#1C1", "type": "solid"},
+            ],
           },
           "shapeRow": {
             "type": "container",
@@ -468,9 +468,9 @@ void main() {
               {"type": "circle"},
               {"type": "box"},
               {"type": "circle"},
-              {"type": "box"}
-            ]
-          }
+              {"type": "box"},
+            ],
+          },
         },
         "card": {
           "states": [
@@ -480,12 +480,12 @@ void main() {
                 "type": "container",
                 "orientation": "vertical",
                 "items": [
-                  {"type": "shapeRow"}
-                ]
-              }
+                  {"type": "shapeRow"},
+                ],
+              },
             }
-          ]
-        }
+          ],
+        },
       };
 
       final result = {
@@ -505,41 +505,41 @@ void main() {
                       "width": {"type": "fixed", "value": 64},
                       "height": {"type": "fixed", "value": 64},
                       "background": [
-                        {"color": "#C0C", "type": "solid"}
+                        {"color": "#C0C", "type": "solid"},
                       ],
-                      "border": {"corner_radius": 85}
+                      "border": {"corner_radius": 85},
                     },
                     {
                       "type": "container",
                       "width": {"type": "fixed", "value": 64},
                       "height": {"type": "fixed", "value": 64},
                       "background": [
-                        {"color": "#1C1", "type": "solid"}
-                      ]
-                    },
-                    {
-                      "type": "container",
-                      "width": {"type": "fixed", "value": 64},
-                      "height": {"type": "fixed", "value": 64},
-                      "background": [
-                        {"color": "#C0C", "type": "solid"}
+                        {"color": "#1C1", "type": "solid"},
                       ],
-                      "border": {"corner_radius": 85}
                     },
                     {
                       "type": "container",
                       "width": {"type": "fixed", "value": 64},
                       "height": {"type": "fixed", "value": 64},
                       "background": [
-                        {"color": "#1C1", "type": "solid"}
-                      ]
+                        {"color": "#C0C", "type": "solid"},
+                      ],
+                      "border": {"corner_radius": 85},
+                    },
+                    {
+                      "type": "container",
+                      "width": {"type": "fixed", "value": 64},
+                      "height": {"type": "fixed", "value": 64},
+                      "background": [
+                        {"color": "#1C1", "type": "solid"},
+                      ],
                     }
-                  ]
+                  ],
                 }
-              ]
-            }
+              ],
+            },
           }
-        ]
+        ],
       };
 
       // Act
@@ -561,7 +561,7 @@ void main() {
             "type": "text",
             r"$text": "buttonText",
             "font_size": 18,
-            "text_alignment_horizontal": "center"
+            "text_alignment_horizontal": "center",
           },
           "actionButton": {"type": "button", r"$text": "buttonText"},
           "buttonFooter": {
@@ -569,9 +569,9 @@ void main() {
             "orientation": "horizontal",
             "items": [
               {"type": "button", r"$text": "buttonText"},
-              {"type": "actionButton", r"$text": "actionButtonText"}
-            ]
-          }
+              {"type": "actionButton", r"$text": "actionButtonText"},
+            ],
+          },
         },
         "card": {
           "states": [
@@ -586,13 +586,13 @@ void main() {
                   {
                     "type": "buttonFooter",
                     "buttonText": "Secondary",
-                    "actionButtonText": "Primary"
+                    "actionButtonText": "Primary",
                   }
-                ]
-              }
+                ],
+              },
             }
-          ]
-        }
+          ],
+        },
       };
 
       final result = {
@@ -822,9 +822,9 @@ void main() {
                 "type": "some_text",
                 "font_size": 14,
                 "font_weight": "regular",
-                r"$text": "title_text"
+                r"$text": "title_text",
               }
-            ]
+            ],
           },
         },
         "card": {
@@ -864,21 +864,21 @@ void main() {
                       "type": "text",
                       "font_size": 20,
                       "font_weight": "medium",
-                      "text_color": "#ff0000"
+                      "text_color": "#ff0000",
                     },
                     {
                       "type": "text",
                       "font_size": 14,
                       "font_weight": "regular",
                       "text": "Title",
-                      "text_color": "#ff0000"
+                      "text_color": "#ff0000",
                     }
-                  ]
+                  ],
                 }
-              ]
-            }
+              ],
+            },
           }
-        ]
+        ],
       };
 
       // Act
@@ -901,27 +901,27 @@ void main() {
             "content_alignment_vertical": "center",
             "height": {
               "type": "wrap_content",
-              "min_size": {"value": 56}
+              "min_size": {"value": 56},
             },
             "items": [
-              {"type": "body1", r"$mytext": "day"}
+              {"type": "body1", r"$mytext": "day"},
             ],
-            "paddings": {"bottom": 12, "end": 16, "start": 16, "top": 12}
+            "paddings": {"bottom": 12, "end": 16, "start": 16, "top": 12},
           },
           "body1": {
             "type": "text",
             r"$text": "mytext",
             "font_size": 20,
             "font_weight": "medium",
-            "line_height": 20
+            "line_height": 20,
           },
           "lineDivider": {
             "type": "container",
             "background": [
-              {"type": "solid", "color": "#668A8784"}
+              {"type": "solid", "color": "#668A8784"},
             ],
             "height": {"type": "fixed", "value": 1},
-            "margins": {"end": 16, "start": 16}
+            "margins": {"end": 16, "start": 16},
           },
           "orderItem": {
             "type": "container",
@@ -933,13 +933,13 @@ void main() {
                 "action_animation": {
                   "end_value": 0.1,
                   "name": "fade",
-                  "start_value": 0.0
+                  "start_value": 0.0,
                 },
                 "background": [
-                  {"type": "solid", "color": "#FF000000"}
+                  {"type": "solid", "color": "#FF000000"},
                 ],
                 "height": {"type": "match_parent"},
-                "width": {"type": "match_parent"}
+                "width": {"type": "match_parent"},
               },
               {
                 "type": "container",
@@ -947,16 +947,16 @@ void main() {
                 "items": [
                   {
                     "type": "container",
-                    "width": {"type": "fixed", "value": 16}
+                    "width": {"type": "fixed", "value": 16},
                   },
                   {
                     "type": "container",
                     "orientation": "vertical",
                     "items": [
                       {"type": "body2", r"$mytext": "time"},
-                      {"type": "caption1", r"$mytext": "address"}
+                      {"type": "caption1", r"$mytext": "address"},
                     ],
-                    "margins": {"bottom": 12, "top": 12}
+                    "margins": {"bottom": 12, "top": 12},
                   },
                   {
                     "type": "container",
@@ -966,45 +966,45 @@ void main() {
                         "width": {"type": "wrap_content"},
                         r"$mytext": "loyaltyChange",
                         "alignment_horizontal": "end",
-                        "type": "body2"
+                        "type": "body2",
                       },
                       {
                         "width": {"type": "wrap_content"},
                         r"$mytext": "class",
                         "alignment_horizontal": "end",
-                        "type": "caption1"
+                        "type": "caption1",
                       }
                     ],
                     "margins": {"bottom": 12, "top": 12},
-                    "width": {"type": "wrap_content"}
+                    "width": {"type": "wrap_content"},
                   },
-                  {"type": "navTrail"}
-                ]
+                  {"type": "navTrail"},
+                ],
               }
-            ]
+            ],
           },
           "body2": {
             "type": "text",
             r"$text": "mytext",
             "font_size": 16,
             "font_weight": "regular",
-            "line_height": 17
+            "line_height": 17,
           },
           "caption1": {
             "type": "text",
             r"$text": "mytext",
             "font_size": 13,
             "font_weight": "regular",
-            "line_height": 14
+            "line_height": 14,
           },
           "navTrail": {
             "type": "image",
             "image_url": "ChevronRight.svg",
             "height": {"type": "fixed", "value": 24},
             "margins": {"bottom": 16, "end": 8, "top": 16},
-            "width": {"type": "fixed", "value": 24}
+            "width": {"type": "fixed", "value": 24},
           },
-          "card": {"type": "container", r"$items": "cardItems"}
+          "card": {"type": "container", r"$items": "cardItems"},
         },
         "card": {
           "log_id": "my-layout-id",
@@ -1025,15 +1025,15 @@ void main() {
                         "loyaltyChange": "+30",
                         "time": "17:40",
                         "address": "Льва Толстого, 16",
-                        "class": "Эконом"
+                        "class": "Эконом",
                       }
-                    ]
+                    ],
                   }
-                ]
-              }
+                ],
+              },
             }
-          ]
-        }
+          ],
+        },
       };
 
       final result = {
@@ -1054,7 +1054,7 @@ void main() {
                       "content_alignment_vertical": "center",
                       "height": {
                         "type": "wrap_content",
-                        "min_size": {"value": 56}
+                        "min_size": {"value": 56},
                       },
                       "items": [
                         {
@@ -1062,23 +1062,23 @@ void main() {
                           "text": "28  мая",
                           "font_size": 20,
                           "font_weight": "medium",
-                          "line_height": 20
+                          "line_height": 20,
                         }
                       ],
                       "paddings": {
                         "bottom": 12,
                         "end": 16,
                         "start": 16,
-                        "top": 12
-                      }
+                        "top": 12,
+                      },
                     },
                     {
                       "type": "container",
                       "background": [
-                        {"type": "solid", "color": "#668A8784"}
+                        {"type": "solid", "color": "#668A8784"},
                       ],
                       "height": {"type": "fixed", "value": 1},
-                      "margins": {"end": 16, "start": 16}
+                      "margins": {"end": 16, "start": 16},
                     },
                     {
                       "type": "container",
@@ -1090,13 +1090,13 @@ void main() {
                           "action_animation": {
                             "end_value": 0.1,
                             "name": "fade",
-                            "start_value": 0.0
+                            "start_value": 0.0,
                           },
                           "background": [
-                            {"type": "solid", "color": "#FF000000"}
+                            {"type": "solid", "color": "#FF000000"},
                           ],
                           "height": {"type": "match_parent"},
-                          "width": {"type": "match_parent"}
+                          "width": {"type": "match_parent"},
                         },
                         {
                           "type": "container",
@@ -1104,7 +1104,7 @@ void main() {
                           "items": [
                             {
                               "type": "container",
-                              "width": {"type": "fixed", "value": 16}
+                              "width": {"type": "fixed", "value": 16},
                             },
                             {
                               "type": "container",
@@ -1115,17 +1115,17 @@ void main() {
                                   "text": "17:40",
                                   "font_size": 16,
                                   "font_weight": "regular",
-                                  "line_height": 17
+                                  "line_height": 17,
                                 },
                                 {
                                   "type": "text",
                                   "text": "Льва Толстого, 16",
                                   "font_size": 13,
                                   "font_weight": "regular",
-                                  "line_height": 14
+                                  "line_height": 14,
                                 }
                               ],
-                              "margins": {"bottom": 12, "top": 12}
+                              "margins": {"bottom": 12, "top": 12},
                             },
                             {
                               "type": "container",
@@ -1138,7 +1138,7 @@ void main() {
                                   "text": "+30",
                                   "font_size": 16,
                                   "font_weight": "regular",
-                                  "line_height": 17
+                                  "line_height": 17,
                                 },
                                 {
                                   "width": {"type": "wrap_content"},
@@ -1147,29 +1147,29 @@ void main() {
                                   "text": "Эконом",
                                   "font_size": 13,
                                   "font_weight": "regular",
-                                  "line_height": 14
+                                  "line_height": 14,
                                 }
                               ],
                               "margins": {"bottom": 12, "top": 12},
-                              "width": {"type": "wrap_content"}
+                              "width": {"type": "wrap_content"},
                             },
                             {
                               "type": "image",
                               "image_url": "ChevronRight.svg",
                               "height": {"type": "fixed", "value": 24},
                               "margins": {"bottom": 16, "end": 8, "top": 16},
-                              "width": {"type": "fixed", "value": 24}
+                              "width": {"type": "fixed", "value": 24},
                             }
-                          ]
+                          ],
                         }
-                      ]
+                      ],
                     }
-                  ]
+                  ],
                 }
-              ]
-            }
+              ],
+            },
           }
-        ]
+        ],
       };
 
       // Act
@@ -1191,9 +1191,9 @@ void main() {
           "states": [
             {
               "state_id": 0,
-              "div": {"type": "example"}
+              "div": {"type": "example"},
             }
-          ]
+          ],
         },
         "templates": {
           "example": {
@@ -1203,7 +1203,7 @@ void main() {
               {
                 "type": "gradient",
                 "colors": ["#999", "#fff"],
-                "angle": 45
+                "angle": 45,
               }
             ],
             "content_alignment_vertical": "center",
@@ -1212,11 +1212,11 @@ void main() {
               {
                 "type": "text",
                 "text": "Inner object in templates example",
-                "width": {"type": "wrap_content"}
+                "width": {"type": "wrap_content"},
               }
-            ]
-          }
-        }
+            ],
+          },
+        },
       };
 
       final result = {
@@ -1230,7 +1230,7 @@ void main() {
                 {
                   "type": "gradient",
                   "colors": ["#999", "#fff"],
-                  "angle": 45
+                  "angle": 45,
                 }
               ],
               "content_alignment_vertical": "center",
@@ -1239,12 +1239,12 @@ void main() {
                 {
                   "type": "text",
                   "text": "Inner object in templates example",
-                  "width": {"type": "wrap_content"}
+                  "width": {"type": "wrap_content"},
                 }
-              ]
-            }
+              ],
+            },
           }
-        ]
+        ],
       };
 
       // Act

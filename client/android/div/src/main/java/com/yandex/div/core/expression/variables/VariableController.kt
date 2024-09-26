@@ -15,6 +15,11 @@ internal interface VariableController : VariableProvider {
         observer: (Variable) -> Unit
     ): Disposable
 
+    fun subscribeToVariablesUndeclared(
+        names: List<String>,
+        observer: (Variable) -> Unit
+    ): Disposable
+
     fun subscribeToVariableChange(
         name: String,
         errorCollector: ErrorCollector? = null,

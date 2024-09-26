@@ -3,6 +3,7 @@ package com.yandex.div.data
 import android.net.Uri
 import androidx.annotation.MainThread
 import com.yandex.div.core.ObserverList
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.Assert
@@ -216,11 +217,7 @@ sealed class Variable {
             is IntegerVariable -> value = newValue.parseAsLong()
             is BooleanVariable -> value = newValue.parseAsBoolean()
             is DoubleVariable -> value = newValue.parseAsDouble()
-            is ColorVariable -> {
-                val color = STRING_TO_COLOR_INT(newValue) ?: throw VariableMutationException(
-                    "Wrong value format for color variable: '$newValue'")
-                value = Color(color)
-            }
+            is ColorVariable -> value = newValue.parseAsColor()
             is UrlVariable -> value = newValue.parseAsUri()
             is DictVariable -> value = newValue.parseAsJsonObject()
             is ArrayVariable -> {
@@ -244,6 +241,26 @@ sealed class Variable {
             this is DictVariable && from is DictVariable -> this.value = from.value
             this is ArrayVariable && from is ArrayVariable -> this.value = from.value
             else -> throw VariableMutationException("Setting value to $this from $from not supported!")
+        }
+    }
+
+    @InternalApi
+    @MainThread
+    @Throws(VariableMutationException::class)
+    fun setValueDirectly(newValue: Any) {
+        try {
+            return when (this) {
+                is StringVariable -> value = newValue as String
+                is IntegerVariable -> value = (newValue as Number).toLong()
+                is BooleanVariable -> value = newValue as Boolean
+                is DoubleVariable -> value = (newValue as Number).toDouble()
+                is ColorVariable -> value = newValue as Color
+                is UrlVariable -> value = newValue as Uri
+                is DictVariable -> value = newValue as JSONObject
+                is ArrayVariable -> value = newValue as JSONArray
+            }
+        } catch (e: ClassCastException) {
+            throw VariableMutationException("Unable to set value with type ${newValue.javaClass} to $this")
         }
     }
 
@@ -277,6 +294,12 @@ sealed class Variable {
         } catch (e: NumberFormatException) {
             throw VariableMutationException(cause = e)
         }
+    }
+
+    private fun String.parseAsColor(): Color {
+        val color = STRING_TO_COLOR_INT(this)
+            ?: throw VariableMutationException("Wrong value format for color variable: '$this'")
+        return Color(color)
     }
 
     private fun String.parseAsUri(): Uri {

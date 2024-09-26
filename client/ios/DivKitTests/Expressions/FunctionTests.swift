@@ -5,7 +5,9 @@ import XCTest
 final class FunctionTests: XCTestCase {
   private let context = ExpressionContext(
     evaluators: { _ in nil },
-    variableValueProvider: { _ in nil }
+    variableValueProvider: { _ in nil },
+    customFunctionsStorageProvider: { _ in nil },
+    errorTracker: { _ in }
   )
 
   private var unaryFunction = FunctionUnary<String, Bool> { _ in true }

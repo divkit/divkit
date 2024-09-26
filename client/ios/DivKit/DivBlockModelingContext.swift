@@ -14,6 +14,7 @@ public struct DivBlockModelingContext {
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
   let stateManager: DivStateManager
+  public let actionHandler: DivActionHandler?
   public let blockStateStorage: DivBlockStateStorage
   let visibilityCounter: DivVisibilityCounting
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
@@ -31,6 +32,7 @@ public struct DivBlockModelingContext {
   public private(set) var errorsStorage: DivErrorsStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
   let tooltipViewFactory: DivTooltipViewFactory?
+  let functionsStorage: DivFunctionsStorage?
   public let variablesStorage: DivVariablesStorage
   let triggersStorage: DivTriggersStorage?
   public private(set) var expressionResolver: ExpressionResolver
@@ -49,6 +51,7 @@ public struct DivBlockModelingContext {
     parentPath: UIElementPath? = nil,
     parentDivStatePath: DivStatePath? = nil,
     stateManager: DivStateManager,
+    actionHandler: DivActionHandler? = nil,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     visibilityCounter: DivVisibilityCounting? = nil,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
@@ -58,6 +61,7 @@ public struct DivBlockModelingContext {
     fontProvider: DivFontProvider? = nil,
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
+    functionsStorage: DivFunctionsStorage? = nil,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     triggersStorage: DivTriggersStorage? = nil,
     playerFactory: PlayerFactory? = nil,
@@ -86,6 +90,7 @@ public struct DivBlockModelingContext {
       parentPath: parentPath,
       parentDivStatePath: parentDivStatePath,
       stateManager: stateManager,
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,
@@ -95,6 +100,7 @@ public struct DivBlockModelingContext {
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
       extensionHandlers: extensionsHandlersDictionary,
+      functionsStorage: functionsStorage,
       variablesStorage: variablesStorage,
       triggersStorage: triggersStorage,
       playerFactory: playerFactory,
@@ -116,6 +122,7 @@ public struct DivBlockModelingContext {
     parentPath: UIElementPath?,
     parentDivStatePath: DivStatePath?,
     stateManager: DivStateManager,
+    actionHandler: DivActionHandler?,
     blockStateStorage: DivBlockStateStorage,
     visibilityCounter: DivVisibilityCounting?,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache?,
@@ -125,6 +132,7 @@ public struct DivBlockModelingContext {
     fontProvider: DivFontProvider?,
     flagsInfo: DivFlagsInfo,
     extensionHandlers: [String: DivExtensionHandler],
+    functionsStorage: DivFunctionsStorage?,
     variablesStorage: DivVariablesStorage,
     triggersStorage: DivTriggersStorage?,
     playerFactory: PlayerFactory?,
@@ -145,6 +153,7 @@ public struct DivBlockModelingContext {
     self.parentPath = parentPath
     self.parentDivStatePath = parentDivStatePath
     self.stateManager = stateManager
+    self.actionHandler = actionHandler
     self.blockStateStorage = blockStateStorage
     self.visibilityCounter = visibilityCounter ?? DivVisibilityCounter()
     self.lastVisibleBoundsCache = lastVisibleBoundsCache ?? DivLastVisibleBoundsCache()
@@ -164,6 +173,7 @@ public struct DivBlockModelingContext {
     let persistentValuesStorage = persistentValuesStorage ?? DivPersistentValuesStorage()
     self.persistentValuesStorage = persistentValuesStorage
     self.tooltipViewFactory = tooltipViewFactory
+    self.functionsStorage = functionsStorage
     self.variablesStorage = variablesStorage
     self.triggersStorage = triggersStorage
     self.extensionHandlers = extensionHandlers
@@ -176,6 +186,7 @@ public struct DivBlockModelingContext {
       viewId: viewId,
       path: parentPath,
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       localValues: nil,
       variableTracker: variableTracker,
       errorsStorage: errorsStorage
@@ -277,6 +288,7 @@ public struct DivBlockModelingContext {
       viewId: viewId,
       path: context.parentPath,
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       localValues: context.localValues,
       variableTracker: variableTracker,
       errorsStorage: context.errorsStorage
@@ -297,12 +309,16 @@ private func makeExpressionResolver(
   viewId: DivViewId,
   path: UIElementPath,
   variablesStorage: DivVariablesStorage,
+  functionsStorage: DivFunctionsStorage?,
   localValues: [String: AnyHashable]?,
   variableTracker: DivVariableTracker?,
   errorsStorage: DivErrorsStorage
 ) -> ExpressionResolver {
   ExpressionResolver(
     functionsProvider: functionsProvider,
+    customFunctionsStorageProvider: {
+      functionsStorage?.getStorage(path: path, contains: $0)
+    },
     variableValueProvider: {
       if let value = localValues?[$0] {
         return value
