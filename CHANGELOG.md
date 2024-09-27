@@ -1,3 +1,32 @@
+## 30.20.0
+
+# Android Client:
+* Added implementation for local `variable_trigger` field.
+* Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables. 
+* Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts
+* Added support of variable animators.
+* Added support of `scope_id` property for `set_variable` actions.
+* Experimental API: Added code generation of json serializers.
+* Changed behavior in case when all children in container with `wrap_content` size along the cross axis for horizontal and vertical orientation (with `layout_mode` `no_wrap`) or any axis for overlap orientation have `match_parent` size. Now container's size becomes equal to the biggest child's size (as earlier) and other children take the same size (instead of their content's size before).
+* Fixed `indicator` behavior when connected `pager` has invisible items.
+* Fixed `indicator` behavior when infinite scroll is enabled.
+
+# iOS Client:
+* Added new typed action `div-action-timer` that can be used instead of `div-action://timer`.
+* Added new typed action `div-action-video` that can be used instead of `div-action://video`.
+* Added `InputAccessoryViewExtensionHandler` which supports adding `inputAccessoryView` for `div-input` keyboard.
+* Supported `resolveValue` for `RawRepresentable` type.
+* Supported `DivFunction` in `div-base`. Functions can be declared in any div element. Access to functions is carried out in the same way as local div-variables.
+* Fixed problems with keyboard appearing in multiline text input.
+
+# Web Client:
+* Added support for the `on_applied_actions` and `on_failed_actions` inside `patch`.
+* Added support for the `autocapitalization` property in the `input` fields.
+* Added `encodeRegex` function.
+* Added `isEmpty()` method to dict.
+* Changed behavior in case when all children in container with `wrap_content` size along the cross axis for horizontal and vertical orientation (with `layout_mode` `no_wrap`) or any axis for overlap orientation have `match_parent` size. Now container's size becomes equal to the biggest child's size (as earlier) and other children take the same size (instead of their content's size before).
+
+
 ## 30.19.0
 
 # Android Client:
