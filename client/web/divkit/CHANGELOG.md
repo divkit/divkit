@@ -1,3 +1,12 @@
+## 30.20.0 (October 01, 2024)
+
+* Added support for the `on_applied_actions` and `on_failed_actions` inside `patch`.
+* Added support for the `autocapitalization` property in the `input` fields.
+* Added `encodeRegex` function.
+* Added `isEmpty()` method to dict.
+* Changed behavior in case when all children in container with `wrap_content` size along the cross axis for horizontal and vertical orientation (with `layout_mode` `no_wrap`) or any axis for overlap orientation have `match_parent` size. Now container's size becomes equal to the biggest child's size (as earlier) and other children take the same size (instead of their content's size before).
+
+
 ## 30.19.0 (September 23, 2024)
 
 * Added local `variables` support.
