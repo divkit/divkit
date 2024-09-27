@@ -503,7 +503,8 @@ public class JsonExpressionParser {
         }
 
         if (containsExpressions) {
-            for (int i = 0; i < untypedList.size(); i++) {
+            int untypedLength = untypedList.size();
+            for (int i = 0; i < untypedLength; i++) {
                 Object item = untypedList.get(i);
                 if (item instanceof Expression) {
                     continue;

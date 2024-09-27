@@ -101,7 +101,7 @@ public class JsonFieldResolver {
         if (field.overridable && data.has(key)) {
             return JsonPropertyParser.read(context, logger, data, key, deserializer);
         } else if (field.type == Field.TYPE_VALUE) {
-            return resolveDependency(context, ((Field.Value<T>) field).value, data, key, resolver);
+            return resolveDependency(context, ((Field.Value<T>) field).value, data, key, resolver.getValue());
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
             return JsonPropertyParser.read(context, logger, data, reference, deserializer);
@@ -180,7 +180,7 @@ public class JsonFieldResolver {
         if (field.overridable && data.has(key)) {
             return JsonPropertyParser.readOptional(context, logger, data, key, deserializer);
         } else if (field.type == Field.TYPE_VALUE) {
-            return resolveOptionalDependency(context, logger, ((Field.Value<T>) field).value, data, resolver);
+            return resolveOptionalDependency(context, logger, ((Field.Value<T>) field).value, data, resolver.getValue());
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
             return JsonPropertyParser.readOptional(context, logger, data, reference, deserializer);
@@ -446,7 +446,8 @@ public class JsonFieldResolver {
         } else if (!listValidator.isValid(result)) {
             throw invalidValue(data, key, result);
         } else if (itemValidator != alwaysValidList()) {
-            for (int i = 0; i < result.size(); i++) {
+            int length = result.size();
+            for (int i = 0; i < length; i++) {
                 V item = result.get(i);
                 if (!itemValidator.isValid(item)) {
                     throw invalidValue(data, key, item);
@@ -471,10 +472,12 @@ public class JsonFieldResolver {
             result = JsonPropertyParser.readList(context, logger, data, key, deserializer);
         } else if (field.type == Field.TYPE_VALUE) {
             List<T> templates = ((Field.Value<List<T>>) field).value;
-            result = new ArrayList<V>(templates.size());
-            for (int i = 0; i < templates.size(); i++) {
+            int length = templates.size();
+            result = new ArrayList<V>(length);
+            TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
+            for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
-                result.add(resolveOptionalDependency(context, logger, template, data, resolver));
+                result.add(resolveOptionalDependency(context, logger, template, data, resolverLocal));
             }
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
@@ -503,10 +506,12 @@ public class JsonFieldResolver {
             result = JsonPropertyParser.readList(context, logger, data, key, deserializer, listValidator);
         } else if (field.type == Field.TYPE_VALUE) {
             List<T> templates = ((Field.Value<List<T>>) field).value;
-            result = new ArrayList<V>(templates.size());
-            for (int i = 0; i < templates.size(); i++) {
+            int length = templates.size();
+            result = new ArrayList<V>(length);
+            TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
+            for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
-                result.add(resolveOptionalDependency(context, logger, template, data, resolver));
+                result.add(resolveOptionalDependency(context, logger, template, data, resolverLocal));
             }
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
@@ -600,7 +605,8 @@ public class JsonFieldResolver {
             logger.logError(invalidValue(data, key, result));
             return null;
         } else if (itemValidator != alwaysValidList()) {
-            for (int i = 0; i < result.size(); i++) {
+            int length = result.size();
+            for (int i = 0; i < length; i++) {
                 V item = result.get(i);
                 if (!itemValidator.isValid(item)) {
                     logger.logError(invalidValue(data, key, item));
@@ -626,10 +632,12 @@ public class JsonFieldResolver {
             result = JsonPropertyParser.readOptionalList(context, logger, data, key, deserializer);
         } else if (field.type == Field.TYPE_VALUE) {
             List<T> templates = ((Field.Value<List<T>>) field).value;
-            result = new ArrayList<V>(templates.size());
-            for (int i = 0; i < templates.size(); i++) {
+            int length = templates.size();
+            result = new ArrayList<V>(length);
+            TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
+            for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
-                result.add(resolveOptionalDependency(context, logger, template, data, resolver));
+                result.add(resolveOptionalDependency(context, logger, template, data, resolverLocal));
             }
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
@@ -655,10 +663,12 @@ public class JsonFieldResolver {
             result = JsonPropertyParser.readOptionalList(context, logger, data, key, deserializer, listValidator);
         } else if (field.type == Field.TYPE_VALUE) {
             List<T> templates = ((Field.Value<List<T>>) field).value;
-            result = new ArrayList<V>(templates.size());
-            for (int i = 0; i < templates.size(); i++) {
+            int length = templates.size();
+            result = new ArrayList<V>(length);
+            TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
+            for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
-                result.add(resolveOptionalDependency(context, logger, template, data, resolver));
+                result.add(resolveOptionalDependency(context, logger, template, data, resolverLocal));
             }
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
@@ -861,10 +871,10 @@ public class JsonFieldResolver {
             @NonNull final T template,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver
+            @NonNull final TemplateResolver<JSONObject, T, V> resolver
     ) {
         try {
-            return resolver.getValue().resolve(context, template, data);
+            return resolver.resolve(context, template, data);
         } catch (ParsingException e) {
             throw dependencyFailed(data, key, e);
         }
@@ -876,10 +886,10 @@ public class JsonFieldResolver {
             @NonNull final ParsingErrorLogger logger,
             @NonNull final T template,
             @NonNull final JSONObject data,
-            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver
+            @NonNull final TemplateResolver<JSONObject, T, V> resolver
     ) {
         try {
-            return resolver.getValue().resolve(context, template, data);
+            return resolver.resolve(context, template, data);
         } catch (ParsingException e) {
             logger.logError(e);
             return null;
