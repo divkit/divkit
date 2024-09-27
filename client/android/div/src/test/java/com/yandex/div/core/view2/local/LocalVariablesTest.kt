@@ -61,7 +61,7 @@ class LocalVariablesTest {
     @Test
     fun `local variable value can be updated by path`() {
         setDivView(testJsonWithTwoStates)
-        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1/child#0")
+        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1")
 
         Assert.assertEquals(LOCAL_INPUT_MODIFIED_VALUE, inputWithLocalVariable.text.toString())
     }
@@ -69,7 +69,7 @@ class LocalVariablesTest {
     @Test
     fun `changing local variable will not effect other states`() {
         setDivView(testJsonWithTwoStates)
-        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1/child#0")
+        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1")
 
         setState(2)
         Assert.assertEquals(
@@ -81,7 +81,7 @@ class LocalVariablesTest {
     @Test
     fun `local variable restore it's value on changing state to another and returning to original state`() {
         setDivView(testJsonWithTwoStates)
-        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1/child#0")
+        setVariable(LOCAL_VARIABLE_NAME, LOCAL_INPUT_MODIFIED_VALUE, "0/label/state_1")
 
         setState(2)
         setState(1)

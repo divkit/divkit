@@ -89,14 +89,7 @@ internal class DivBinder @Inject constructor(
 ) {
     @MainThread
     fun bind(parentContext: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
-        val context = parentContext.getFor(
-            parentContext.runtimeStore?.getOrCreateRuntime(
-                path = path.fullPath,
-                parentPath = path.parentFullPath,
-                variables = div.value().variables?.toVariables(),
-                triggers = div.value().variableTriggers,
-            )?.expressionResolver ?: parentContext.expressionResolver
-        )
+        val context = getBindingContext(parentContext, div, path)
         val divView = context.divView
         val resolver = context.expressionResolver
         divView.currentRebindReusableList?.pop(div)?.let {
@@ -242,5 +235,22 @@ internal class DivBinder @Inject constructor(
 
     private fun setGridData(context: BindingContext, view: View, data: DivGrid) {
         gridBinder.setDataWithoutBinding(context, view as DivGridLayout, data)
+    }
+
+    private fun getBindingContext(
+        parentContext: BindingContext, div: Div, path: DivStatePath
+    ): BindingContext {
+        return if (div.value().variableTriggers.isNullOrEmpty() && div.value().variables.isNullOrEmpty()) {
+                parentContext
+            } else {
+                parentContext.getFor(
+                parentContext.runtimeStore?.getOrCreateRuntime(
+                    path = path.fullPath,
+                    parentResolver = parentContext.expressionResolver,
+                    variables = div.value().variables?.toVariables(),
+                    triggers = div.value().variableTriggers,
+                )?.expressionResolver ?: parentContext.expressionResolver
+            )
+        }
     }
 }

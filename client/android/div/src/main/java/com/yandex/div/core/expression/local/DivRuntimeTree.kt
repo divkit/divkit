@@ -2,48 +2,82 @@ package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.divs.getChildPathUnit
+import com.yandex.div.internal.Assert
 import com.yandex.div2.Div
 
 internal class DivRuntimeTree(
-    rootDiv: Div,
-    rootPath: DivStatePath,
+    private val rootDiv: Div,
+    private val rootPath: DivStatePath,
+    private val runtimeStore: RuntimeStore,
 ) {
-    private val rootNode = buildTree(rootDiv, rootPath)
-
-    internal fun accept(visitor: ExpressionRuntimeVisitor) {
-        visitor.visit(rootNode)
+    fun createRuntimes() {
+        val rootRuntime = runtimeStore.rootRuntime ?: run {
+            Assert.fail(ERROR_ROOT_RUNTIME_NOT_SPECIFIED)
+            return
+        }
+        visit(rootDiv, rootPath.path.toMutableList(), rootRuntime)
     }
 
-    private fun buildTree(rootDiv: Div, path: DivStatePath): Node {
-        return when (rootDiv) {
-            is Div.Container -> buildNodeForContainer(rootDiv, rootDiv.value.items, path)
-            is Div.Grid -> buildNodeForContainer(rootDiv, rootDiv.value.items, path)
-            is Div.Gallery -> buildNodeForContainer(rootDiv, rootDiv.value.items, path)
-            is Div.Pager -> buildNodeForContainer(rootDiv, rootDiv.value.items, path)
-            is Div.State -> buildNodeForContainer(rootDiv, rootDiv.value.states.map { it.div }, path)
-            is Div.Tabs -> buildNodeForContainer(rootDiv, rootDiv.value.items.map { it.div }, path)
-            else -> Node(rootDiv, path, emptyList())
+    private fun visit(
+        div: Div,
+        path: MutableList<String>,
+        parentRuntime: ExpressionsRuntime?,
+    ) = when (div) {
+        is Div.Container -> visitContainer(div, div.value.items, path, parentRuntime)
+        is Div.Grid -> visitContainer(div, div.value.items, path, parentRuntime)
+        is Div.Gallery -> visitContainer(div, div.value.items, path, parentRuntime)
+        is Div.Pager -> visitContainer(div, div.value.items, path, parentRuntime)
+        is Div.State -> visitContainer(div, div.value.states.mapNotNull { it.div }, path, parentRuntime)
+        is Div.Tabs -> visitContainer(div, div.value.items.map { it.div }, path, parentRuntime)
+
+        is Div.Custom -> defaultVisit(div, path, parentRuntime)
+        is Div.GifImage -> defaultVisit(div, path, parentRuntime)
+        is Div.Image -> defaultVisit(div, path, parentRuntime)
+        is Div.Indicator -> defaultVisit(div, path, parentRuntime)
+        is Div.Input -> defaultVisit(div, path, parentRuntime)
+        is Div.Select -> defaultVisit(div, path, parentRuntime)
+        is Div.Separator -> defaultVisit(div, path, parentRuntime)
+        is Div.Slider -> defaultVisit(div, path, parentRuntime)
+        is Div.Text -> defaultVisit(div, path, parentRuntime)
+        is Div.Video -> defaultVisit(div, path, parentRuntime)
+    }
+
+    private fun defaultVisit(
+        div: Div,
+        path: MutableList<String>,
+        parentRuntime: ExpressionsRuntime?,
+    ): ExpressionsRuntime? {
+        return if (div.value().variables.isNullOrEmpty() && div.value().variableTriggers.isNullOrEmpty()) {
+            parentRuntime
+        } else {
+            val stringPath = path.joinToString("/")
+            runtimeStore.getOrCreateRuntime(
+                path = stringPath,
+                variables = div.value().variables?.toVariables(),
+                triggers = div.value().variableTriggers,
+                parentRuntime = parentRuntime,
+            ) ?: run {
+                Assert.fail("ExpressionRuntimeVisitor cannot create runtime for path = $stringPath")
+                null
+            }
         }
     }
 
-    private fun buildNodeForContainer(div: Div, data: List<Div?>?, path: DivStatePath): Node {
-        val children = mutableListOf<Node>()
-        data?.forEachIndexed { index, div ->
-            if (div != null) children.add(buildChildNode(div, index, path))
+    private fun visitContainer(
+        div: Div,
+        items: List<Div>?,
+        path: MutableList<String>,
+        parentRuntime: ExpressionsRuntime?,
+    ): ExpressionsRuntime? {
+        return defaultVisit(div, path, parentRuntime).also { runtime ->
+            items?.forEachIndexed { index, div ->
+                path.add(div.value().getChildPathUnit(index))
+                visit(div, path, runtime)
+                path.removeLastOrNull()
+            }
         }
-        return Node(div, path, children)
     }
-
-    private fun buildChildNode(div: Div, index: Int, path: DivStatePath): Node {
-        val id = div.value().getChildPathUnit(index)
-        return buildTree(div, path.appendDiv(id))
-    }
-
-    internal class Node(
-        internal val div: Div,
-        internal val path: DivStatePath,
-        internal val children: List<Node>,
-        internal var parentRuntime: ExpressionsRuntime? = null,
-    )
 }
+

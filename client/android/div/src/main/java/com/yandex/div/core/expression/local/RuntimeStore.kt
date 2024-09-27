@@ -16,10 +16,9 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivTrigger
 
-internal const val ROOT_RUNTIME_PATH = "root_runtime_path"
 private const val ERROR_UNKNOWN_RESOLVER =
     "ExpressionResolverImpl didn't call RuntimeStore#putRuntime on create."
-private const val ERROR_ROOT_RUNTIME_NOT_SPECIFIED = "Root runtime is not specified."
+internal const val ERROR_ROOT_RUNTIME_NOT_SPECIFIED = "Root runtime is not specified."
 private const val WARNING_LOCAL_USING_LOCAL_VARIABLES =
     "You are using local variables. Please ensure that all elements that use local variables " +
     "and all of their parents recursively have an 'id' attribute."
@@ -35,7 +34,12 @@ internal class RuntimeStore(
     private val pathToRuntimes = mutableMapOf<String, ExpressionsRuntime?>()
     private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime?>()
     private val allRuntimes = mutableSetOf<ExpressionsRuntime>()
-    internal var divTree: DivRuntimeTree? = null
+
+    internal var rootRuntime: ExpressionsRuntime? = null
+        set(value) {
+            field = value
+            field?.let { putRuntime(it) }
+        }
 
     private val onCreateCallback by lazy {
         ExpressionResolverImpl.OnCreateCallback { resolver, variableController ->
@@ -56,13 +60,22 @@ internal class RuntimeStore(
         }
     }
 
+    /**
+     * Returns runtime if it have been store before, otherwise creates new runtime using
+     * @param parentRuntime or @param parentResolver.
+     *
+     * NOTE: Always provide parentResolver or parentRuntime.
+     * Otherwise, if runtime wasn't created it will be created using rootRuntime
+     */
     internal fun getOrCreateRuntime(
         path: String,
-        parentPath: String? = null,
         variables: List<Variable>? = null,
         triggers: List<DivTrigger>? = null,
-        parentRuntime: ExpressionsRuntime? = null
-    ) = pathToRuntimes[path] ?: getRuntimeOrCreateChild(path, parentPath, variables, triggers, parentRuntime)
+        parentResolver: ExpressionResolver? = null,
+        parentRuntime: ExpressionsRuntime? = null,
+    ) = pathToRuntimes[path] ?: getRuntimeOrCreateChild(
+        path, variables, triggers,null, parentResolver, parentRuntime
+    )
 
     internal fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
 
@@ -78,11 +91,9 @@ internal class RuntimeStore(
 
     internal fun resolveRuntimeWith(
         path: String,
-        parentPath: String?,
         variables: List<Variable>?,
         triggers: List<DivTrigger>?,
         resolver: ExpressionResolver,
-        parentRuntime: ExpressionsRuntime? = null,
     ): ExpressionsRuntime? {
         val runtimeForPath = pathToRuntimes[path]
         if (resolver == runtimeForPath?.expressionResolver) return runtimeForPath
@@ -93,7 +104,7 @@ internal class RuntimeStore(
         }
 
         if (runtimeForPath != null) removeRuntimesFor(path)
-        return getRuntimeOrCreateChild(path, parentPath, variables, triggers, existingRuntime, parentRuntime)
+        return getRuntimeOrCreateChild(path, variables, triggers, existingRuntime)
     }
 
     internal fun cleanup() {
@@ -165,14 +176,16 @@ internal class RuntimeStore(
 
     private fun getRuntimeOrCreateChild(
         path: String,
-        parentPath: String?,
         variables: List<Variable>?,
         variablesTriggers: List<DivTrigger>?,
         existingRuntime: ExpressionsRuntime? = null,
+        parentResolver: ExpressionResolver? = null,
         parentRuntime: ExpressionsRuntime? = null,
     ): ExpressionsRuntime? {
-        val runtime = (existingRuntime ?: parentRuntime ?: parentPath?.let { pathToRuntimes[it] })
-            ?: pathToRuntimes[ROOT_RUNTIME_PATH]
+        val runtime = existingRuntime
+            ?: parentRuntime
+            ?: parentResolver?.let { getRuntimeWithOrNull(it) }
+            ?: rootRuntime
             ?: run {
                 reportError(ERROR_ROOT_RUNTIME_NOT_SPECIFIED)
                 return null

@@ -116,7 +116,7 @@ internal class DivSliderBinder @Inject constructor(
         }
 
         addSubscription(variableBinder.bindVariable(
-            divView, bindingContext?.runtimeStore, variableName, callbacks, path)
+            divView, bindingContext, variableName, callbacks, path)
         )
     }
 
@@ -232,7 +232,7 @@ internal class DivSliderBinder @Inject constructor(
         }
 
         addSubscription(variableBinder.bindVariable(
-            divView, bindingContext?.runtimeStore, variableName, callbacks, path)
+            divView, bindingContext, variableName, callbacks, path)
         )
     }
 

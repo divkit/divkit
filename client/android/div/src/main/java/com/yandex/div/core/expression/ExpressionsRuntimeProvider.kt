@@ -4,7 +4,6 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.local.ROOT_RUNTIME_PATH
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
@@ -170,9 +169,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             variableController,
             triggersController,
             runtimeStore,
-        ).also {
-            runtimeStore.putRuntime(it, ROOT_RUNTIME_PATH)
-        }
+        ).also { runtimeStore.rootRuntime = it }
     }
 }
 

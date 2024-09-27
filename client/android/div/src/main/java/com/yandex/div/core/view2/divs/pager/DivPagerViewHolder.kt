@@ -11,7 +11,6 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.getChildPathUnit
-import com.yandex.div.core.view2.divs.getOrCreateRuntime
 import com.yandex.div.core.view2.divs.resolveRuntime
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
@@ -37,9 +36,6 @@ internal class DivPagerViewHolder(
     }
 
     private var oldDiv: Div? = null
-    private val parentRuntime by lazy {
-        getOrCreateRuntime(parentContext.runtimeStore, path.fullPath, path.parentFullPath, null)
-    }
 
     fun bind(bindingContext: BindingContext, div: Div, position: Int) {
         val resolver = bindingContext.expressionResolver
@@ -62,19 +58,18 @@ internal class DivPagerViewHolder(
         }
         oldDiv = div
         val id = div.value().getChildPathUnit(position)
+        val path = path.appendDiv(id)
 
-        if (parentContext.expressionResolver != resolver) {
+        if (parentContext.expressionResolver != bindingContext.expressionResolver) {
             resolveRuntime(
                 runtimeStore = bindingContext.runtimeStore,
-                div  = div.value(),
-                pathUnit = id,
-                parentPath = path.fullPath,
+                div = div.value(),
+                path.fullPath,
                 resolver = resolver,
-                parentRuntime = parentRuntime,
             )
         }
 
-        divBinder.bind(bindingContext, divView, div, path.appendDiv(id))
+        divBinder.bind(bindingContext, divView, div, path)
         bindingContext.runtimeStore?.showWarningIfNeeded(div.value())
     }
 

@@ -5,10 +5,8 @@ import android.view.ViewGroup.LayoutParams
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.local.DivRuntimeTree
-import com.yandex.div.core.expression.local.ExpressionRuntimeVisitor
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.toVariables
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div2.Div
 import javax.inject.Inject
@@ -35,12 +33,11 @@ internal class Div2Builder @Inject constructor(
 
     fun createView(data: Div, context: BindingContext, path: DivStatePath): View {
         val resolver = context.expressionResolver
+
         context.runtimeStore?.let { runtimeStore ->
-            (runtimeStore.divTree ?: DivRuntimeTree(data, path)).also {
-                runtimeStore.divTree = it
-                it.accept(ExpressionRuntimeVisitor(runtimeStore))
-            }
+            DivRuntimeTree(data, path, runtimeStore).createRuntimes()
         }
+
         val view = viewCreator.create(data, resolver).apply {
             layoutParams = DivLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         }
