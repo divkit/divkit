@@ -7,6 +7,7 @@ import com.yandex.div.core.actions.DivActionTypedDictSetValueHandler
 import com.yandex.div.core.actions.DivActionTypedFocusElementHandler
 import com.yandex.div.core.actions.DivActionTypedHandler
 import com.yandex.div.core.actions.DivActionTypedHideTooltipHandler
+import com.yandex.div.core.actions.DivActionTypedScrollHandler
 import com.yandex.div.core.actions.DivActionTypedSetStateHandler
 import com.yandex.div.core.actions.DivActionTypedSetStoredValueHandler
 import com.yandex.div.core.actions.DivActionTypedSetVariableHandler
@@ -39,6 +40,7 @@ internal interface DivActionTypedModule {
         impl: DivActionTypedClearFocusHandler
     ): DivActionTypedHandler
 
+
     @Binds
     @IntoSet
     fun provideCopyToClipboardActionHandler(
@@ -61,6 +63,12 @@ internal interface DivActionTypedModule {
     @IntoSet
     fun provideHideTooltipActionHandler(
         impl: DivActionTypedHideTooltipHandler
+    ): DivActionTypedHandler
+
+    @Binds
+    @IntoSet
+    fun provideScrollActionHandler(
+        impl: DivActionTypedScrollHandler
     ): DivActionTypedHandler
 
     @Binds

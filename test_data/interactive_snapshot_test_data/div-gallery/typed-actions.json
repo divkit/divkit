@@ -1,0 +1,217 @@
+{
+  "description": "Use typed actions for scroll and navigation in gallery",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "templates": {
+      "text_block": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "fixed",
+          "value": 80
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#eeeeee"
+          }
+        ],
+        "font_size": 20,
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "margins": {
+          "left": 10,
+          "right": 10
+        }
+      }
+    },
+    "card": {
+      "log_id": "card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "gallery",
+                "id": "gallery1",
+                "scroll_mode": "default",
+                "items": [
+                  {
+                    "text": "Item 0",
+                    "type": "text_block"
+                  },
+                  {
+                    "text": "Item 1",
+                    "type": "text_block"
+                  },
+                  {
+                    "text": "Item 2",
+                    "type": "text_block"
+                  },
+                  {
+                    "text": "Item 3",
+                    "type": "text_block"
+                  },
+                  {
+                    "text": "Item 4",
+                    "type": "text_block"
+                  },
+                  {
+                    "text": "Item 5",
+                    "type": "text_block"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/current",
+          "typed":  {
+            "type": "scroll_to",
+            "id": "gallery1",
+            "destination": {
+              "type": "index",
+              "value": 1
+            }
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/next",
+          "typed":  {
+            "type": "scroll_by",
+            "id": "gallery1",
+            "item_count": 1
+          }
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/prev",
+          "typed":  {
+            "type": "scroll_by",
+            "id": "gallery1",
+            "item_count": -1
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/end",
+          "typed":  {
+            "type": "scroll_to",
+            "destination": {
+              "type": "end"
+            },
+            "id": "gallery1"
+          }
+        }
+      ],
+      "delay": 500,
+      "expected_screenshot": "step4.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/start",
+          "typed":  {
+            "type": "scroll_to",
+            "destination": {
+              "type": "start"
+            },
+            "id": "gallery1"
+          }
+        }
+      ],
+      "delay": 500,
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/current 2",
+          "typed":  {
+            "type": "scroll_to",
+            "id": "gallery1",
+            "destination": {
+              "type": "index",
+              "value": 1
+            }
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/forward",
+          "typed":  {
+            "type": "scroll_by",
+            "id": "gallery1",
+            "offset": 50
+          }
+        }
+      ],
+      "expected_screenshot": "step7.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/backward",
+          "typed":  {
+            "type": "scroll_by",
+            "id": "gallery1",
+            "offset": -50
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "gallery1/to_position",
+          "typed":  {
+            "type": "scroll_to",
+            "id": "gallery1",
+            "destination": {
+              "type": "offset",
+              "value": 200
+            }
+          }
+        }
+      ],
+      "expected_screenshot": "step9.png"
+    }
+  ]
+}
+

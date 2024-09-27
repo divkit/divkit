@@ -225,6 +225,24 @@
       "file": "gallery/gallery-item-actions.json"
     },
     {
+      "title": "Gallery item actions typed",
+      "tags": [
+        "DivGallery",
+        "TypedActions"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right",
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Content is changes depending on scroll direction or clicked buttons",
+        "Gallery scroll is logged",
+        "first and last galleries are scrolled without animation"
+      ],
+      "file": "gallery/gallery-item-actions-typed.json"
+    },
+    {
       "title": "Gallery default item states",
       "automated": [
         "web"

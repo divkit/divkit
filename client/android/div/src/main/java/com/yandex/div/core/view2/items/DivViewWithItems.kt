@@ -49,12 +49,17 @@ internal sealed class DivViewWithItems {
     /**
      * Scroll to @param dp value.
      */
-    open fun scrollTo(value: Int, sizeUnit: DivSizeUnit = DivSizeUnit.PX) = Unit
+    open fun scrollTo(value: Int, sizeUnit: DivSizeUnit = DivSizeUnit.PX, animated: Boolean = true) = Unit
 
     /**
      * Scroll to the end of recycler view.
      */
-    open fun scrollToTheEnd() = Unit
+    open fun scrollToTheEnd(animated: Boolean = true) = Unit
+
+    /**
+     * sets Current item without scroll animation
+     */
+    open fun setCurrentItemNoAnimation(index: Int) = Unit
 
     /**
      * Implementation of [DivViewWithItems] specific for div gallery with `scroll_mode` "paging"
@@ -75,9 +80,17 @@ internal sealed class DivViewWithItems {
         override val scrollRange get() = view.scrollRange()
         override val scrollOffset get() = view.scrollOffset()
 
-        override fun scrollTo(value: Int, sizeUnit: DivSizeUnit) =
-            view.scrollTo(value, sizeUnit, metrics)
-        override fun scrollToTheEnd() = view.scrollToTheEnd(metrics)
+        override fun scrollTo(value: Int, sizeUnit: DivSizeUnit, animated: Boolean) =
+            view.scrollTo(value, sizeUnit, metrics, animated)
+        override fun scrollToTheEnd(animated: Boolean) {
+            view.scrollToTheEnd(metrics, animated)
+        }
+
+        override fun setCurrentItemNoAnimation(index: Int) {
+            checkItem(index, itemCount) {
+                view.scrollToPosition(index)
+            }
+        }
     }
 
     /**
@@ -109,9 +122,15 @@ internal sealed class DivViewWithItems {
         override val scrollRange get() = view.scrollRange()
         override val scrollOffset get() = view.scrollOffset()
 
-        override fun scrollTo(value: Int, sizeUnit: DivSizeUnit) =
-            view.scrollTo(value, sizeUnit, metrics)
-        override fun scrollToTheEnd() = view.scrollToTheEnd(metrics)
+        override fun scrollTo(value: Int, sizeUnit: DivSizeUnit, animated: Boolean) =
+            view.scrollTo(value, sizeUnit, metrics, animated)
+        override fun scrollToTheEnd(animated: Boolean) = view.scrollToTheEnd(metrics, animated)
+
+        override fun setCurrentItemNoAnimation(index: Int) {
+            checkItem(index, itemCount) {
+                view.scrollToPosition(index)
+            }
+        }
     }
 
     /**
@@ -127,8 +146,14 @@ internal sealed class DivViewWithItems {
         override val itemCount: Int
             get() = view.viewPager.adapter?.itemCount ?: 0
 
-        override fun scrollToTheEnd() {
-            view.viewPager.setCurrentItem(itemCount - 1, true)
+        override fun scrollToTheEnd(animated: Boolean) {
+            view.viewPager.setCurrentItem(itemCount - 1, animated)
+        }
+
+        override fun setCurrentItemNoAnimation(index: Int) {
+            checkItem(index, itemCount) {
+                view.viewPager.setCurrentItem(index, false)
+            }
         }
     }
 
@@ -145,8 +170,14 @@ internal sealed class DivViewWithItems {
         override val itemCount: Int
             get() = view.viewPager.adapter?.count ?: 0
 
-        override fun scrollToTheEnd() {
-            view.viewPager.setCurrentItem(itemCount - 1, true)
+        override fun scrollToTheEnd(animated: Boolean) {
+            view.viewPager.setCurrentItem(itemCount - 1, animated)
+        }
+
+        override fun setCurrentItemNoAnimation(index: Int) {
+            checkItem(index, itemCount) {
+                view.viewPager.setCurrentItem(index, false)
+            }
         }
     }
 
@@ -206,16 +237,17 @@ private fun <T : RecyclerView> T.canScroll(): Boolean {
     }
 }
 
-private fun <T : RecyclerView> T.scrollTo(value: Int, sizeUnit: DivSizeUnit, metrics: DisplayMetrics) {
+private fun <T : RecyclerView> T.scrollTo(value: Int, sizeUnit: DivSizeUnit, metrics: DisplayMetrics, animated: Boolean = true) {
     val valuePx = when (sizeUnit) {
         DivSizeUnit.PX -> value
         DivSizeUnit.SP -> value.spToPx(metrics)
         DivSizeUnit.DP -> value.dpToPx(metrics)
     }
     val lm = linearLayoutManager ?: return
+    val scroll: (dx: Int, dy: Int) -> Unit = if (animated) this::smoothScrollBy else this::scrollBy
     when (lm.orientation) {
-        RecyclerView.HORIZONTAL -> smoothScrollBy(valuePx - computeHorizontalScrollOffset(), 0)
-        RecyclerView.VERTICAL -> smoothScrollBy(0, valuePx - computeVerticalScrollOffset())
+        RecyclerView.HORIZONTAL -> scroll(valuePx - computeHorizontalScrollOffset(), 0)
+        RecyclerView.VERTICAL -> scroll(0, valuePx - computeVerticalScrollOffset())
     }
 }
 
@@ -229,8 +261,8 @@ private fun <T : RecyclerView> T.scrollOffset() = when (linearLayoutManager?.ori
     else -> computeVerticalScrollOffset()
 }
 
-private fun <T : RecyclerView> T.scrollToTheEnd(metrics: DisplayMetrics) =
-    scrollTo(scrollRange(), DivSizeUnit.PX, metrics)
+private fun <T : RecyclerView> T.scrollToTheEnd(metrics: DisplayMetrics, animated: Boolean = true) =
+    scrollTo(scrollRange(), DivSizeUnit.PX, metrics, animated)
 
 private fun LinearLayoutManager.visibleItemPosition(direction: Direction): Int {
     return when (direction) {

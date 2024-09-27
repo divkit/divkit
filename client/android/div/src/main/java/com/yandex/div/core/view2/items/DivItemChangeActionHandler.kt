@@ -1,12 +1,9 @@
 package com.yandex.div.core.view2.items
 
 import android.net.Uri
-import android.util.DisplayMetrics
-import android.view.View
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivSizeUnit
 
 private const val AUTHORITY_SET_CURRENT_ITEM = "set_current_item"
 private const val AUTHORITY_NEXT_ITEM = "set_next_item"
@@ -49,103 +46,86 @@ internal object DivItemChangeActionHandler {
             KAssert.fail { "$PARAM_ID param is required to set item" }
             return false
         }
-        val targetView = view.view.findViewWithTag<View>(id) ?: return false
         val authority = uri.authority
-        val viewWithItems = DivViewWithItems.create(targetView, resolver) { direction(authority) } ?: return false
+        val viewController = DivViewWithItemsController.create(id, view, resolver, direction(authority)) ?: return false
         return when (authority) {
             AUTHORITY_SET_CURRENT_ITEM ->
-                handleSetCurrentItem(uri, viewWithItems)
+                handleSetCurrentItem(uri, viewController)
 
             AUTHORITY_NEXT_ITEM ->
-                handleNextItem(uri, viewWithItems)
+                handleNextItem(uri, viewController)
 
             AUTHORITY_PREVIOUS_ITEM ->
-                handlePreviousItem(uri, viewWithItems)
+                handlePreviousItem(uri, viewController)
 
             AUTHORITY_SCROLL_BACKWARD ->
-                handleScrollBackward(uri, viewWithItems)
+                handleScrollBackward(uri, viewController)
 
             AUTHORITY_SCROLL_FORWARD ->
-                handleScrollForward(uri, viewWithItems)
+                handleScrollForward(uri, viewController)
 
             AUTHORITY_SCROLL_TO_POSITION ->
-                handleScrollTo(uri, viewWithItems)
+                handleScrollTo(uri, viewController)
 
             AUTHORITY_SCROLL_TO_END ->
-                handleScrollToTheEnd(viewWithItems)
+                handleScrollToTheEnd(viewController)
 
             AUTHORITY_SCROLL_TO_START ->
-                handleScrollToTheStart(viewWithItems)
+                handleScrollToTheStart(viewController)
 
             else -> false
         }
     }
 
-    private fun handleSetCurrentItem(uri: Uri, view: DivViewWithItems): Boolean {
-        val item = uri.getQueryParameter(PARAM_ITEM)
-        if (item == null) {
+    private fun handleSetCurrentItem(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+        val rawItem = uri.getQueryParameter(PARAM_ITEM)
+        if (rawItem == null) {
             KAssert.fail { "$PARAM_ITEM is required to set current item" }
             return false
         }
-        return try {
-            view.currentItem = item.toInt()
-            true
+        val item = try {
+            rawItem.toInt()
         } catch (e: NumberFormatException) {
-            KAssert.fail { "$item is not a number" }
-            false
+            KAssert.fail { "$rawItem is not a number" }
+            return false
         }
-    }
-
-    private fun handleNextItem(uri: Uri, view: DivViewWithItems): Boolean {
-        return handleItemNavigation(uri, view) { strategy, step ->
-            view.currentItem = strategy.nextItem(step)
-        }
-    }
-
-    private fun handlePreviousItem(uri: Uri, view: DivViewWithItems): Boolean {
-        return handleItemNavigation(uri, view) { strategy, step ->
-            view.currentItem = strategy.previousItem(step)
-        }
-    }
-
-
-    private fun handleScrollForward(uri: Uri, view: DivViewWithItems): Boolean {
-        return handleItemNavigation(uri, view) { strategy, step ->
-            view.scrollTo(strategy.positionAfterScrollBy(step))
-        }
-    }
-
-    private fun handleScrollBackward(uri: Uri, view: DivViewWithItems): Boolean {
-        return handleItemNavigation(uri, view) { strategy, step ->
-            view.scrollTo(strategy.positionAfterScrollBy(-step))
-        }
-    }
-
-    private fun handleScrollTo(uri: Uri, view: DivViewWithItems): Boolean {
-        return handleItemNavigation(uri, view) { _, step ->
-            view.scrollTo(step, DivSizeUnit.DP)
-        }
-    }
-
-    private fun handleScrollToTheEnd(view: DivViewWithItems): Boolean {
-        view.scrollToTheEnd()
+        viewController.setCurrentItem(item)
         return true
     }
 
-    private fun handleScrollToTheStart(view: DivViewWithItems): Boolean {
-        view.currentItem = 0
-        return true
+    private fun handleNextItem(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+        return withOverflowAndStep(uri, viewController::changeCurrentItemByStep)
     }
 
-    private inline fun handleItemNavigation(
-        uri: Uri,
-        view: DivViewWithItems,
-        navigate: (strategy: OverflowItemStrategy, step: Int) -> Unit
-    ): Boolean {
-        val strategy = overflowStrategy(uri, view.currentItem, view.itemCount, view.scrollRange,
-            view.scrollOffset, view.metrics)
+    private fun handlePreviousItem(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+        return withOverflowAndStep(uri) { overflow, step ->
+            viewController.changeCurrentItemByStep(overflow, -step)
+        }
+    }
+
+    private fun handleScrollForward(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+        return withOverflowAndStep(uri, viewController::scrollByOffset)
+    }
+
+    private fun handleScrollBackward(uri: Uri, viewController: DivViewWithItemsController): Boolean {
+        return withOverflowAndStep(uri) { overflow, step ->
+            viewController.scrollByOffset(overflow, -step)
+        }
+    }
+
+    private fun handleScrollTo(uri: Uri, viewController: DivViewWithItemsController): Boolean {
         val step = uri.getStepParam()
-        navigate(strategy, step)
+        viewController.scrollTo(step)
+        return true
+    }
+
+    private fun handleScrollToTheEnd(viewController: DivViewWithItemsController): Boolean {
+        viewController.scrollToEnd()
+        return true
+    }
+
+    private fun handleScrollToTheStart(viewController: DivViewWithItemsController): Boolean {
+        viewController.scrollToStart()
         return true
     }
 
@@ -158,18 +138,22 @@ internal object DivItemChangeActionHandler {
             default
         }
     }
-}
 
-private fun overflowStrategy(uri: Uri, currentItem: Int, itemCount: Int, scrollRange: Int,
-                             scrollOffset: Int, metrics: DisplayMetrics): OverflowItemStrategy {
-    val overflow = uri.getQueryParameter(PARAM_OVERFLOW)
-    return OverflowItemStrategy.create(overflow, currentItem, itemCount, scrollRange, scrollOffset, metrics)
-}
+    private inline fun withOverflowAndStep(
+        uri: Uri,
+        actionOnViewController: (String?, Int) -> Unit
+    ): Boolean {
+        val step = uri.getStepParam()
+        val overflow = uri.getQueryParameter(PARAM_OVERFLOW)
+        actionOnViewController(overflow, step)
+        return true
+    }
 
-private fun direction(authority: String?): Direction {
-    return when (authority) {
-        AUTHORITY_PREVIOUS_ITEM -> Direction.PREVIOUS
-        AUTHORITY_NEXT_ITEM -> Direction.NEXT
-        else -> Direction.NEXT
+    private fun direction(authority: String?): Direction {
+        return when (authority) {
+            AUTHORITY_PREVIOUS_ITEM -> Direction.PREVIOUS
+            AUTHORITY_NEXT_ITEM -> Direction.NEXT
+            else -> Direction.NEXT
+        }
     }
 }

@@ -34,6 +34,12 @@
       "$ref": "div-action-hide-tooltip.json"
     },
     {
+      "$ref": "div-action-scroll-by.json"
+    },
+    {
+      "$ref": "div-action-scroll-to.json"
+    },
+    {
       "$ref": "div-action-set-state.json"
     },
     {
