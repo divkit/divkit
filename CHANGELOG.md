@@ -3,7 +3,7 @@
 # Android Client:
 * Added implementation for local `variable_trigger` field.
 * Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables. 
-* Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts
+* Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts.
 * Added support of variable animators.
 * Added support of `scope_id` property for `set_variable` actions.
 * Experimental API: Added code generation of json serializers.
@@ -12,6 +12,7 @@
 * Fixed `indicator` behavior when infinite scroll is enabled.
 
 # iOS Client:
+* Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts.
 * Added new typed action `div-action-timer` that can be used instead of `div-action://timer`.
 * Added new typed action `div-action-video` that can be used instead of `div-action://video`.
 * Added `InputAccessoryViewExtensionHandler` which supports adding `inputAccessoryView` for `div-input` keyboard.
