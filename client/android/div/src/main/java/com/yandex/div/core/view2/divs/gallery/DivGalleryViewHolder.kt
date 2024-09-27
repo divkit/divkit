@@ -9,7 +9,6 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.getChildPathUnit
-import com.yandex.div.core.view2.divs.getOrCreateRuntime
 import com.yandex.div.core.view2.divs.resolveRuntime
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
@@ -28,9 +27,6 @@ internal class DivGalleryViewHolder(
 ) : RecyclerView.ViewHolder(rootView) {
 
     private var oldDiv: Div? = null
-    private val parentRuntime by lazy {
-        getOrCreateRuntime(parentContext.runtimeStore, path.fullPath, path.parentFullPath, null)
-    }
 
     fun bind(context: BindingContext, div: Div, position: Int) {
         if (rootView.tryRebindRecycleContainerChildren(context.divView, div)) {
@@ -50,20 +46,19 @@ internal class DivGalleryViewHolder(
         oldDiv = div
         rootView.setTag(R.id.div_gallery_item_index, position)
         val id = div.value().getChildPathUnit(position)
+        val childPath = path.appendDiv(id)
 
-        if (parentContext.expressionResolver != resolver) {
+        if (parentContext.expressionResolver != context.expressionResolver) {
             resolveRuntime(
                 runtimeStore = context.runtimeStore,
                 div = div.value(),
-                pathUnit = id,
-                parentPath = path.fullPath,
+                path = childPath.fullPath,
                 resolver = resolver,
-                parentRuntime = parentRuntime,
             )
         }
 
         context.runtimeStore?.showWarningIfNeeded(div.value())
-        divBinder.bind(context, divView, div, path.appendDiv(id))
+        divBinder.bind(context, divView, div, childPath)
         divBinder.attachIndicators()
     }
 

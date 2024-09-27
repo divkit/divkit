@@ -19,7 +19,7 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
-import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
@@ -94,7 +94,6 @@ import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
 import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTransform
-import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
 import kotlin.math.max
@@ -616,40 +615,22 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
         div.alignmentVertical?.evaluate(resolver))
 }
 
-internal fun getOrCreateRuntime(
-    runtimeStore: RuntimeStore?,
-    path: String,
-    parentPath: String?,
-    div: DivBase? = null,
-): ExpressionsRuntime? {
-    return runtimeStore?.getOrCreateRuntime(
-        path = path,
-        parentPath = parentPath,
-        variables = div?.variables?.toVariables(),
-        triggers = div?.variableTriggers,
-    )
-}
-
 internal fun getRuntimeFor(runtimeStore: RuntimeStore?, resolver: ExpressionResolver) =
     runtimeStore?.getRuntimeWithOrNull(resolver)
 
 internal fun resolveRuntime(
     runtimeStore: RuntimeStore?,
     div: DivBase,
-    pathUnit: String,
-    parentPath: String,
-    resolver: ExpressionResolver,
-    parentRuntime: ExpressionsRuntime?,
+    path: String,
+    resolver: ExpressionResolver
 ) = runtimeStore?.resolveRuntimeWith(
-        path = "$parentPath/$pathUnit",
-        parentPath = parentPath,
+        path = path,
         variables = div.variables?.toVariables(),
         triggers = div.variableTriggers,
-        resolver = resolver,
-        parentRuntime = parentRuntime
+        resolver = resolver
     )
 
-internal fun DivBase.getChildPathUnit(index: Int) = id ?: "child#$index"
+internal fun DivBase.getChildPathUnit(index: Int) = id ?: ChildPathUnitCache.getValue(index)
 
 /**
  * Binds all descendants of [this] which are [DivStateLayout]s corresponding to DivStates in [div]

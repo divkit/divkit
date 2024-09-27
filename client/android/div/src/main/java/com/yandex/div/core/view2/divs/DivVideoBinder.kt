@@ -167,7 +167,7 @@ internal class DivVideoBinder @Inject constructor(
         }
 
         addSubscription(variableBinder.bindVariable(
-            divView, bindingContext?.runtimeStore, elapsedTimeVariable, callbacks, path)
+            divView, bindingContext, elapsedTimeVariable, callbacks, path)
         )
     }
 

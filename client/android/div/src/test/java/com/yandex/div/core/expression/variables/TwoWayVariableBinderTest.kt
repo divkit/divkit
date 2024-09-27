@@ -3,9 +3,9 @@ package com.yandex.div.core.expression.variables
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider
-import com.yandex.div.core.expression.local.ROOT_RUNTIME_PATH
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -57,9 +57,10 @@ class TwoWayVariableBinderTest {
     }
 
     init {
-        store.putRuntime(expressionsRuntime, ROOT_RUNTIME_PATH)
+        store.rootRuntime = expressionsRuntime
+        val bindingContext = BindingContext.createEmpty(divView).getFor(expressionResolver, store)
         TwoWayStringVariableBinder(errorCollectors, expressionsRuntimeProvider)
-            .bindVariable(divView, store, VARIABLE_NAME, callbacks, path)
+            .bindVariable(divView, bindingContext, VARIABLE_NAME, callbacks, path)
     }
 
     @Test
