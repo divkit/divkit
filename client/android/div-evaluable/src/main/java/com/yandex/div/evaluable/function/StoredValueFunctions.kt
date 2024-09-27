@@ -4,6 +4,9 @@ import com.yandex.div.evaluable.*
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
+import org.json.JSONArray
+import org.json.JSONObject
+import java.math.BigDecimal
 
 internal object GetStoredIntegerValue : Function() {
 
@@ -221,4 +224,46 @@ internal object GetStoredUrlValueWithUrlFallback: Function() {
         return storedValue ?: (args[1] as Url)
     }
 
+}
+
+internal abstract class GetStoredComplexValue<T : Any> : Function() {
+    override val isPure = false
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING),
+    )
+
+    @Suppress("UNCHECKED_CAST")
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val storedValueName = args[0] as String
+        val storedValue = evaluationContext.storedValueProvider.get(storedValueName)
+            ?: throwExceptionOnFunctionEvaluationFailed(name, args, "Missing value.")
+
+        return storedValue as? T
+            ?: throwWrongTypeException(name, args, resultType, storedValue)
+    }
+
+    private fun throwWrongTypeException(functionName: String, args: List<Any>, expected: EvaluableType, actual: Any): Nothing {
+        val actualType = when (actual) {
+            is Int, is Double, is BigDecimal -> "Number"
+            is JSONObject -> "Dict"
+            is JSONArray -> "Array"
+            else -> actual.javaClass.simpleName
+        }
+        throwExceptionOnFunctionEvaluationFailed(functionName, args,
+            "Incorrect value type: expected ${expected.typeName}, got $actualType.")
+    }
+}
+
+internal object GetStoredArrayValue : GetStoredComplexValue<JSONArray>() {
+    override val name = "getStoredArrayValue"
+    override val resultType = EvaluableType.ARRAY
+}
+
+internal object GetStoredDictValue : GetStoredComplexValue<JSONObject>() {
+    override val name = "getStoredDictValue"
+    override val resultType = EvaluableType.DICT
 }

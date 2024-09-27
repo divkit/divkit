@@ -2407,7 +2407,8 @@
       "title": "Persistent values storage",
       "platforms": [
         "ios",
-        "web"
+        "web",
+        "android"
       ],
       "steps": [
         "Press 'Store value for 10 seconds'",
@@ -2420,6 +2421,30 @@
         "In the last open there should be again the text 'Nothing stored'"
       ],
       "file": "stored_value.json"
+    },
+    {
+      "title": "Persistent values storage with typed actions",
+      "tags": [
+        "TypedActions"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Press 'Store string value for 10 seconds'",
+        "Press 'Store color value for 10 seconds'",
+        "Press 'Store url value for 10 seconds'",
+        "Press 'Store array value for 10 seconds'",
+        "Press 'Store dict value for 10 seconds'",
+        "Reopen this json in less than 10 seconds",
+        "Reopen this json in after 10 seconds"
+      ],
+      "expected_results": [
+        "In the first open there should be the text 'No String value, https://no-stored-url.com, [], {}'.",
+        "In the second open there should new values should appear 'Stored typed, https://yandex.ru, [1, 2, 3], {\"key\": \"value\"}' on a green background.",
+        "In the last open there should be again as it was at first open."
+      ],
+      "file": "typed_stored_value.json"
     },
     {
       "title": "Patch container",

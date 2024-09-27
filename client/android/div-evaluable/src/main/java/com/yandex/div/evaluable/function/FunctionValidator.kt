@@ -19,7 +19,7 @@ internal object FunctionValidator {
     fun validateOverloading(nonValidatedFunction: Function, overloadedFunctions: List<Function>): Function {
         overloadedFunctions.forEach { function ->
             if (nonValidatedFunction.conflictsWith(function)) {
-                throw EvaluableException("Function $function has conflict with $function")
+                throw EvaluableException("Function $nonValidatedFunction has conflict with $function")
             }
         }
         return nonValidatedFunction
@@ -60,7 +60,7 @@ private fun Function.conflictsWith(other: Function): Boolean {
     } else if (shorterArgumentList.size == longerArgumentList.size) {
         return shorterArgumentList.last().type == longerArgumentList.last().type
     } else if (longerArgumentList.size == shorterArgumentList.size + 1) {
-        return !longerArgumentList.last().isVariadic
+        return longerArgumentList.last().isVariadic
     } else {
         return false
     }

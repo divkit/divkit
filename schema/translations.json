@@ -159,6 +159,22 @@
     "en": "Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>",
     "ru": "Указывает на изменение состояния:<li>`true` — изменение временное и при пересоздании элемента состояние изменится на исходное (значение по умолчанию);</li><li>`false` — изменение состояния является постоянным.</li>"
   },
+  "div_action_set_stored_value": {
+    "en": "Temporarily saves variable to the persistent storage.",
+    "ru": "Временно cохраняет переменную в хранилище."
+  },
+  "div_action_set_stored_value_lifetime": {
+    "en": "Storing time in seconds.",
+    "ru": "Время хранения в секундах."
+  },
+  "div_action_set_stored_value_name": {
+    "en": "Nave of stored variable.",
+    "ru": "Имя сохраняемой переменной."
+  },
+  "div_action_set_stored_value_value": {
+    "en": "Value to be stored.",
+    "ru": "Сохраняемое значение."
+  },
   "div_action_set_variable": {
     "en": "Assigns a value to the variable",
     "ru": "Присваивает переменной значение"

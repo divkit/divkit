@@ -187,6 +187,8 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetStoredBooleanValue)
         registry.register(GetStoredUrlValueWithStringFallback)
         registry.register(GetStoredUrlValueWithUrlFallback)
+        registry.register(GetStoredArrayValue)
+        registry.register(GetStoredDictValue)
 
         // Dict functions legacy
         registry.register(GetDictInteger)

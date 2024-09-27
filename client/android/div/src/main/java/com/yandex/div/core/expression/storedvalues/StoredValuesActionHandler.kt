@@ -37,18 +37,22 @@ internal object StoredValuesActionHandler {
             ?.run { StoredValue.Type.fromString(this) }
             ?: return false
 
-        return try {
-            val storedValue = createStoredValue(type, name, value)
-            val storedValuesController = div2View.div2Component.storedValuesController
-            val errorCollector = div2View.viewComponent.errorCollectors.getOrCreate(
-                div2View.divTag,
-                div2View.divData
-            )
-            storedValuesController.setStoredValue(storedValue, lifetime, errorCollector)
+        val storedValue = try {
+            createStoredValue(type, name, value)
         } catch (e: StoredValueDeclarationException) {
             KAssert.fail {"Stored value '$name' declaration failed: ${e.message}" }
-            false
+            return false
         }
+        return executeAction(storedValue, lifetime, div2View)
+    }
+
+    fun executeAction(storedValue: StoredValue, lifetime: Long, div2View: Div2View): Boolean {
+        val storedValuesController = div2View.div2Component.storedValuesController
+        val errorCollector = div2View.viewComponent.errorCollectors.getOrCreate(
+            div2View.divTag,
+            div2View.divData
+        )
+        return storedValuesController.setStoredValue(storedValue, lifetime, errorCollector)
     }
 
     private fun Uri.getParam(forName: String): String? {
@@ -72,6 +76,7 @@ internal object StoredValuesActionHandler {
         StoredValue.Type.NUMBER -> StoredValue.DoubleStoredValue(name, value.parseAsDouble())
         StoredValue.Type.COLOR -> StoredValue.ColorStoredValue(name, value.parseAsColor())
         StoredValue.Type.URL -> StoredValue.UrlStoredValue(name, value.parseAsUrl())
+        else -> throw StoredValueDeclarationException("Cannot create stored value of type = '$type'.")
     }
 
     @Throws(StoredValueDeclarationException::class)

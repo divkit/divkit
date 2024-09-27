@@ -1256,6 +1256,36 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "getStoredArrayValue(string) array",
+      "function_name": "getStoredArrayValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the exception will be thrown.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getStoredDictValue(string) dict",
+      "function_name": "getStoredDictValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the exception will be thrown.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        }
+      ],
+      "result_type": "dict",
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }

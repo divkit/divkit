@@ -37,6 +37,9 @@
       "$ref": "div-action-set-state.json"
     },
     {
+      "$ref": "div-action-set-stored-value.json"
+    },
+    {
       "$ref": "div-action-set-variable.json"
     },
     {
