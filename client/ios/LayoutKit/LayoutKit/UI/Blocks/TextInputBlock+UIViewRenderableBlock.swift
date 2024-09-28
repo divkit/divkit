@@ -14,6 +14,7 @@ extension TextInputBlock {
     let inputView = view as! TextInputBlockView
     inputView.setLayoutDirection(layoutDirection)
     inputView.setInputType(inputType)
+    inputView.setInputAccessoryView(accessoryView)
     inputView.setAutocapitalizationType(autocapitalizationType)
     inputView.setValidators(validators)
     inputView.setFilters(filters)
@@ -122,6 +123,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
     multiLineInput.frame = bounds
     multiLineInput.textContainerInset = paddings
+    updateScrollOnMultilineChange()
     updateMultiLineOffset()
 
     singleLineInput.frame = bounds
@@ -186,6 +188,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       multiLineInput.tintColor = multiLineInput.backgroundColor
       multiLineInput.inputView = selectionView
     }
+  }
+
+  func setInputAccessoryView(_ accessoryView: ViewType?) {
+    multiLineInput.inputAccessoryView = accessoryView
+    singleLineInput.inputAccessoryView = accessoryView
   }
 
   func setAutocapitalizationType(_ type: TextInputBlock.AutocapitalizationType) {
@@ -432,9 +439,17 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func tryScrollToMultiLine(_ keyboardHeight: CGFloat) {
     guard !scrollingWasDone, multiLineInput.isFirstResponder,
           !multiLineInput.isHidden else { return }
-    let frameInWindow = multiLineInput.convert(multiLineInput.frame, to: nil)
-    let cursorPoint = frameInWindow.origin.y + multiLineInput.contentSize
-      .height - multiLineOffsetY + additionalOffset
+
+    let frameInWindow = if let textRange = multiLineInput.selectedTextRange {
+      multiLineInput.convert(
+        multiLineInput.caretRect(for: textRange.start),
+        to: nil
+      )
+    } else {
+      multiLineInput.convert(multiLineInput.bounds, to: nil)
+    }
+
+    let cursorPoint = frameInWindow.origin.y + additionalOffset
     scrollToVisible(targetY: cursorPoint, keyboardHeight: keyboardHeight)
   }
 
@@ -822,6 +837,6 @@ private class PatchedUITextView: UITextView {
   }
 }
 
-private let additionalOffset = 25.0
+private let additionalOffset = 40.0
 private let singleLineCusorOffset = 2.0
 private let multiLineCusorOffset = 0.0

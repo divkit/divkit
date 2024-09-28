@@ -1,12 +1,10 @@
 import 'package:divkit/divkit.dart';
-import 'package:flutter/services.dart';
 
 class Box {
-  final RootIsolateToken token;
   final List<String> data;
   final List<Map> metas;
 
-  Box(this.data, this.metas) : token = ServicesBinding.rootIsolateToken!;
+  const Box(this.data, this.metas);
 }
 
 class Item {

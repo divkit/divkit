@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithOptionalStringEnumProperty(
-    @JvmField final val property: Expression<Property>? = null,
+    @JvmField val property: Expression<Property>? = null,
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -54,7 +55,10 @@ class EntityWithOptionalStringEnumProperty(
                 }
             }
 
+            @JvmField
             val TO_STRING = { value: Property -> toString(value) }
+
+            @JvmField
             val FROM_STRING = { value: String -> fromString(value) }
         }
     }

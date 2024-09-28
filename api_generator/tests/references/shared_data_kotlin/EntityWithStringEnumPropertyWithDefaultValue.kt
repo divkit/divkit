@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithStringEnumPropertyWithDefaultValue(
-    @JvmField final val value: Expression<Value> = VALUE_DEFAULT_VALUE, // default value: second
+    @JvmField val value: Expression<Value> = VALUE_DEFAULT_VALUE, // default value: second
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -58,7 +59,10 @@ class EntityWithStringEnumPropertyWithDefaultValue(
                 }
             }
 
+            @JvmField
             val TO_STRING = { value: Value -> toString(value) }
+
+            @JvmField
             val FROM_STRING = { value: String -> fromString(value) }
         }
     }

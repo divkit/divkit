@@ -8,6 +8,8 @@ export 'src/core/expression/expression.dart';
 export 'src/core/expression/resolver.dart';
 export 'src/core/patch/patch.dart';
 export 'src/core/protocol/protocol.dart';
+export 'src/core/runtime/parser.dart';
+export 'src/core/runtime/runtime.dart';
 export 'src/core/state/state.dart';
 export 'src/core/template/resolver.dart';
 export 'src/core/timer/timer.dart';

@@ -26,6 +26,7 @@ class DivVariableController(
     private val mainHandler = Handler(Looper.getMainLooper())
     private val variables = ConcurrentHashMap<String, Variable>()
     private val declarationObservers = ConcurrentLinkedQueue<DeclarationObserver>()
+    private val undeclaredVariables = mutableMapOf<String, String>()
     private val declaredVariableNames = mutableSetOf<String>()
     private val pendingDeclaration = mutableSetOf<String>()
     private val externalVariableRequestObservers = ConcurrentLinkedQueue<VariableRequestObserver>()
@@ -111,10 +112,51 @@ class DivVariableController(
         putOrUpdateInternal(*variables)
     }
 
+    /**
+     * Fully replace all the variables.
+     * Declare new variables, updates old values, and removes old variables which
+     * are not provided in the @param variables.
+     * Doesn't effect internalVariableController.
+     *
+     * PLEASE NOTE THAT CHANGING VALUE OF GIVEN VARIABLES WILL
+     * CHANGE VALUE OF ORIGINAL GLOBAL VARIABLES, BUT NOT VISE-VERSA!
+     */
+    @Throws(VariableMutationException::class)
+    fun replaceAll(vararg variables: Variable)  {
+        if (mainHandler.looper != Looper.myLooper()) {
+            mainHandler.post {
+                replaceAllInternal(*variables)
+            }
+            return
+        }
+        replaceAllInternal(*variables)
+    }
+
+    /**
+     * Removes all variables provided in @param variables.
+     * Doesn't effect internalVariableController.
+     */
+    fun removeAll(vararg variablesNames: String)  {
+        if (mainHandler.looper != Looper.myLooper()) {
+            mainHandler.post {
+                removeVariableInternal(*variablesNames)
+            }
+            return
+        }
+        removeVariableInternal(*variablesNames)
+    }
+
     private fun putOrUpdateInternal(vararg variables: Variable) {
         val newDeclaredVariables = mutableListOf<Variable>()
         synchronized(declaredVariableNames) {
             variables.forEach { variable ->
+                val undeclaredVariableType = undeclaredVariables[variable.name]
+                if (undeclaredVariableType != null && undeclaredVariableType != variable::class.java.name) {
+                    throw VariableMutationException("Cannot declare new variable with type = " +
+                        "${variable::class.java.name}, because this variable have been declared" +
+                        "with another type = $undeclaredVariableType")
+                }
+
                 if (!declaredVariableNames.contains(variable.name)) {
                     declaredVariableNames.add(variable.name)
                     pendingDeclaration.remove(variable.name)
@@ -131,6 +173,7 @@ class DivVariableController(
                     already exists '$existing'! Is there a race?
                 """.trimIndent())
                 }
+                undeclaredVariables.remove(variable.name)
             }
         }
         // Declaration notifications must happen apart from updates and declarations
@@ -138,9 +181,42 @@ class DivVariableController(
         // Property update may fail cause only part of variables just got declared.
         if (newDeclaredVariables.isNotEmpty()) {
             declarationObservers.forEach { observer ->
-                newDeclaredVariables.forEach { variable -> observer.invoke(variable) }
+                newDeclaredVariables.forEach { variable -> observer.onDeclared(variable) }
             }
         }
+    }
+
+    private fun removeVariableInternal(vararg names: String) {
+        val existingVariables = variables.filter {
+            names.contains(it.key)
+        }
+
+        synchronized(declaredVariableNames) {
+            existingVariables.forEach { existing ->
+                declaredVariableNames.remove(existing.key)
+                undeclaredVariables[existing.key] = existing.value::class.java.name
+                variables.remove(existing.key)
+            }
+        }
+
+        declarationObservers.forEach { observer ->
+            existingVariables.forEach { (_, variable) ->
+                observer.onUndeclared(variable)
+            }
+        }
+    }
+
+    private fun replaceAllInternal(vararg newVariables: Variable) {
+        val variablesToRemove = variables.filter {
+            !newVariables.any { newVar: Variable ->
+                it.key == newVar.name
+            }
+        }.values
+
+        val variablesToUpdate = newVariables.toMutableList().apply { removeAll(variablesToRemove) }
+
+        variablesToRemove.map { it.name }.forEach { removeVariableInternal(it) }
+        variablesToUpdate.forEach { putOrUpdateInternal(it) }
     }
 
     private fun isDeclaredLocal(variableName: String): Boolean = synchronized(declaredVariableNames) {
@@ -164,12 +240,12 @@ class DivVariableController(
         internalVariableController?.removeVariableRequestObserver(observer)
     }
 
-    internal fun addDeclarationObserver(observer: (Variable) -> Unit) {
+    internal fun addDeclarationObserver(observer: DeclarationObserver) {
         declarationObservers.add(observer)
         internalVariableController?.addDeclarationObserver(observer)
     }
 
-    internal fun removeDeclarationObserver(observer: (Variable) -> Unit) {
+    internal fun removeDeclarationObserver(observer: DeclarationObserver) {
         declarationObservers.remove(observer)
         internalVariableController?.removeDeclarationObserver(observer)
     }

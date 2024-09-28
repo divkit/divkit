@@ -1,5 +1,5 @@
 {
-  "protocol_name": "div-base-animator",
+  "protocol_name": "div-animator-base",
   "type": "object",
   "properties": {
     "id": {
@@ -31,8 +31,8 @@
       "$description": "translations.json#/div_animator_base_direction"
     },
     "repeat_count": {
-      "$ref": "common.json#/non_negative_integer",
-      "default_value": "1",
+      "$ref": "div-count.json",
+      "default_value": "{\"type\": \"fixed\", \"value\": 1}",
       "$description": "translations.json#/div_animator_base_repeat_count"
     },
     "end_actions": {

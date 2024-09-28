@@ -1,10 +1,11 @@
+import 'dart:async';
+
+import 'package:divkit/divkit.dart';
+import 'package:divkit/src/core/widgets/div_visibility_emitter.dart';
+import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:divkit/src/core/widgets/div_visibility_emitter.dart';
-import 'package:divkit/src/utils/provider.dart';
-import 'package:divkit/divkit.dart';
-import 'dart:async';
 
 void main() {
   group(
@@ -15,7 +16,6 @@ void main() {
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
           bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
               (isVisible) {
@@ -24,7 +24,6 @@ void main() {
               DivVisibility.invisible,
             ),
           );
-
           expect(visible, false);
         },
       );
@@ -32,17 +31,12 @@ void main() {
         'If divVisibility != visible then VisibilityDetector not in the tree',
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
-          bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
-              (isVisible) {
-                visible = isVisible;
-              },
+              (isVisible) {},
               DivVisibility.invisible,
             ),
           );
-
           expect(find.byType(VisibilityDetector), findsNothing);
         },
       );
@@ -50,17 +44,12 @@ void main() {
         'If divVisibility != visible then text "Visible" not shown',
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
-          bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
-              (isVisible) {
-                visible = isVisible;
-              },
+              (isVisible) {},
               DivVisibility.invisible,
             ),
           );
-
           expect(find.text('Visible'), findsNothing);
         },
       );
@@ -75,7 +64,6 @@ void main() {
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
           bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
               (isVisible) {
@@ -84,11 +72,9 @@ void main() {
               DivVisibility.visible,
             ),
           );
-
           await tester.pump(
-            Duration(seconds: 1),
+            const Duration(seconds: 1),
           );
-
           expect(visible, true);
         },
       );
@@ -97,7 +83,6 @@ void main() {
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
           bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
               (isVisible) {
@@ -106,7 +91,6 @@ void main() {
               DivVisibility.visible,
             ),
           );
-
           expect(visible, false);
         },
       );
@@ -115,7 +99,6 @@ void main() {
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
           bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
               (isVisible) {
@@ -125,11 +108,9 @@ void main() {
               paddingTop: 550,
             ),
           );
-
           await tester.pump(
-            Duration(seconds: 1),
+            const Duration(seconds: 1),
           );
-
           expect(visible, false);
         },
       );
@@ -137,17 +118,12 @@ void main() {
         'If divVisibility == visible then VisibilityDetector in the tree',
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
-          bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
-              (isVisible) {
-                visible = isVisible;
-              },
+              (isVisible) {},
               DivVisibility.visible,
             ),
           );
-
           expect(find.byType(VisibilityDetector), findsOneWidget);
         },
       );
@@ -155,23 +131,17 @@ void main() {
         'If divVisibility == visible then text "Visible" shown',
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
-          bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
-              (isVisible) {
-                visible = isVisible;
-              },
+              (isVisible) {},
               DivVisibility.visible,
             ),
           );
-
           expect(find.text('Visible'), findsOneWidget);
         },
       );
     },
   );
-
   group(
     'DivVisibilityEmitter test action list empty',
     () {
@@ -180,21 +150,18 @@ void main() {
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
           bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
               (isVisible) {
                 visible = isVisible;
               },
               DivVisibility.visible,
-              actions: [],
+              actions: const [],
             ),
           );
-
           await tester.pump(
-            Duration(seconds: 1),
+            const Duration(seconds: 1),
           );
-
           expect(visible, false);
         },
       );
@@ -202,22 +169,16 @@ void main() {
         'If action list empty then VisibilityDetector not in the tree',
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
-          bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
-              (isVisible) {
-                visible = isVisible;
-              },
-              actions: [],
+              (isVisible) {},
+              actions: const [],
               DivVisibility.visible,
             ),
           );
-
           await tester.pump(
-            Duration(seconds: 1),
+            const Duration(seconds: 1),
           );
-
           expect(find.byType(VisibilityDetector), findsNothing);
         },
       );
@@ -225,22 +186,16 @@ void main() {
         'If action list empty then text "Visible" shown',
         (WidgetTester tester) async {
           VisibilityDetectorController.instance.updateInterval = Duration.zero;
-          bool visible = false;
-
           await tester.pumpWidget(
             _MyApp(
-              (isVisible) {
-                visible = isVisible;
-              },
-              actions: [],
+              (isVisible) {},
+              actions: const [],
               DivVisibility.visible,
             ),
           );
-
           await tester.pump(
-            Duration(seconds: 1),
+            const Duration(seconds: 1),
           );
-
           expect(find.text('Visible'), findsOneWidget);
         },
       );
@@ -265,7 +220,7 @@ class _MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DivKitProvider<DivContext>(
-        value: DivRootContext(buildContext: context)
+        value: DivRootContext(context)
           ..visibilityActionManager = DefaultDivVisibilityActionManager()
           ..actionHandler = _TestDivActionHandler(updateVisible),
         child: Scaffold(
@@ -279,7 +234,7 @@ class _MyApp extends StatelessWidget {
                 id: "id",
                 visibilityActions: actions ??
                     [
-                      DivVisibilityActionModel(
+                      const DivVisibilityActionModel(
                         divAction: DivActionModel(
                           enabled: true,
                           logId: "id",
@@ -288,7 +243,7 @@ class _MyApp extends StatelessWidget {
                         visibilityDuration: 1000,
                       ),
                     ],
-                child: Container(
+                child: const SizedBox(
                   height: 200,
                   child: Center(
                     child: Text('Visible'),

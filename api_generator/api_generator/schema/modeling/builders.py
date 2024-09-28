@@ -41,6 +41,10 @@ def __generate_templates(config: Config.GenerationConfig) -> bool:
     return config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.KOTLIN] and config.generate_templates
 
 
+def __generate_serializers(config: Config.GenerationConfig) -> bool:
+    return config.lang is GeneratedLanguage.KOTLIN and config.generate_serializers
+
+
 def __resolve_string_field(name: str,
                            mode: GenerationMode,
                            config: Config.GenerationConfig,
@@ -182,9 +186,12 @@ def entity_enumeration_build(entities: List[Dict[str, any]],
     gen_mode = GenerationMode.NORMAL_WITH_TEMPLATES if generate_templates else GenerationMode.NORMAL_WITHOUT_TEMPLATES
     normal_result: List[Declarable] = make_result(GenerationMode(gen_mode))
     template_result: List[Declarable] = []
+    serializer_result: List[Declarable] = []
     if generate_templates:
         template_result += make_result(GenerationMode(GenerationMode.TEMPLATE))
-    return normal_result + template_result
+    if __generate_serializers(config):
+        serializer_result += make_result(GenerationMode(GenerationMode.SERIALIZER))
+    return normal_result + template_result + serializer_result
 
 
 def entity_build(name: str,
@@ -201,8 +208,14 @@ def entity_build(name: str,
 
     normal: Entity = make_result(mode=GenerationMode.NORMAL_WITH_TEMPLATES)
     if not normal.generate_as_protocol and __generate_templates(config):
-        return [normal, make_result(mode=GenerationMode.TEMPLATE)]
-    return [normal]
+        template: Entity = make_result(mode=GenerationMode.TEMPLATE)
+    else:
+        template = None
+    if not normal.generate_as_protocol and __generate_serializers(config):
+        serializer: Entity = make_result(GenerationMode(GenerationMode.SERIALIZER))
+    else:
+        serializer = None
+    return filter(lambda entity: entity, [normal, template, serializer])
 
 
 def type_property_build(dictionary: Dict[str, any],

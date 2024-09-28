@@ -17,7 +17,7 @@ from .utils import (
 )
 from ...utils import capitalize_camel_case
 
-from ...config import Config, GeneratedLanguage, GenerationMode, Platform, TEMPLATE_SUFFIX
+from ...config import Config, GeneratedLanguage, GenerationMode, Platform, SERIALIZER_SUFFIX, TEMPLATE_SUFFIX
 from ..preprocessing.entities import ElementLocation
 from ..preprocessing.errors import UnresolvedReferenceError
 from .errors import GenericError, InvalidFieldRepresentationError
@@ -191,16 +191,29 @@ class Declarable(ABC):
             return f'{self.parent.declaration_prefix}{capitalize_camel_case(self.parent.name)}.'
         return ''
 
+    def declaration_prefix_for(self, mode: GenerationMode) -> str:
+        if self.parent is not None:
+            return self.parent.declaration_prefix_for(mode) + capitalize_camel_case(self.parent.name_for(mode)) + '.'
+        return ''
+
+    @property
+    def entity_declaration_prefix(self) -> str:
+        return self.declaration_prefix_for(mode=GenerationMode.NORMAL_WITH_TEMPLATES)
+
     @property
     def template_declaration_prefix(self) -> str:
-        if self.parent is not None:
-            name = capitalize_camel_case(self.parent.resolved_name + TEMPLATE_SUFFIX)
-            return f'{self.parent.template_declaration_prefix}{name}.'
-        return ''
+        return self.declaration_prefix_for(mode=GenerationMode.TEMPLATE)
+
+    def prefixed_declaration_for(self, mode: GenerationMode) -> str:
+        return self.declaration_prefix_for(mode) + capitalize_camel_case(self.name_for(mode))
 
     @property
     @abstractmethod
     def name(self) -> str:
+        pass
+
+    @abstractmethod
+    def name_for(self, mode: GenerationMode) -> str:
         pass
 
     @property
@@ -349,6 +362,9 @@ class Entity(Declarable):
     @property
     def name(self) -> str:
         return self._name
+
+    def name_for(self, mode: GenerationMode) -> str:
+        return self._resolved_name + mode.name_suffix
 
     @property
     def resolved_name(self) -> str:
@@ -556,6 +572,9 @@ class EntityEnumeration(Declarable):
     def name(self) -> str:
         return self._name
 
+    def name_for(self, mode: GenerationMode) -> str:
+        return self._resolved_name + mode.name_suffix
+
     @property
     def resolved_name(self) -> str:
         return self._resolved_name
@@ -611,6 +630,12 @@ class EntityEnumeration(Declarable):
                 common_entity = next((d for d in global_objects if name == d.original_name + TEMPLATE_SUFFIX), None)
                 if common_entity is not None:
                     new_obj = next((d for d in global_objects if d.name == common_entity.name + TEMPLATE_SUFFIX), None)
+
+            # fixing name with alias for serializers
+            if self.mode == GenerationMode.SERIALIZER and new_obj is None:
+                common_entity = next((d for d in global_objects if name == d.original_name + SERIALIZER_SUFFIX), None)
+                if common_entity is not None:
+                    new_obj = next((d for d in global_objects if d.name == common_entity.name + SERIALIZER_SUFFIX), None)
 
             if new_obj is not None:
                 new_name = new_obj.name
@@ -698,6 +723,9 @@ class StringEnumeration(Declarable):
 
     @property
     def name(self) -> str:
+        return self._name
+
+    def name_for(self, mode: GenerationMode) -> str:
         return self._name
 
     @property

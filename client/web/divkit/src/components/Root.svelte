@@ -645,6 +645,7 @@
                                     id: failed.id
                                 }
                             }));
+                            execAnyActions(json.patch?.on_failed_actions);
                             execAnyActions(action.download_callbacks?.on_fail_actions);
                             return;
                         }
@@ -655,6 +656,7 @@
                             methods.replaceWith(change.id, change.items);
                         }
                     });
+                    execAnyActions(json.patch?.on_applied_actions);
                     execAnyActions(action.download_callbacks?.on_success_actions);
                 }
             }).catch(err => {
@@ -813,7 +815,7 @@
                         const value = params.get('value');
 
                         if (name && value !== null) {
-                            const variableInstance = variables.get(name);
+                            const variableInstance = componentContext?.getVariable(name) || variables.get(name);
                             if (variableInstance) {
                                 const type = variableInstance.getType();
                                 if (type === 'dict' || type === 'array') {
@@ -890,7 +892,7 @@
                 case 'set_variable': {
                     const { variable_name: name, value } = actionTyped;
                     if (name && value) {
-                        const variableInstance = variables.get(name);
+                        const variableInstance = componentContext?.getVariable(name) || variables.get(name);
                         if (variableInstance) {
                             const type = variableInstance.getType();
                             if (type === value.type) {
@@ -920,13 +922,13 @@
                     break;
                 }
                 case 'array_insert_value':
-                    arrayInsert(variables, log, actionTyped);
+                    arrayInsert(componentContext, variables, log, actionTyped);
                     break;
                 case 'array_remove_value':
-                    arrayRemove(variables, log, actionTyped);
+                    arrayRemove(componentContext, variables, log, actionTyped);
                     break;
                 case 'array_set_value':
-                    arraySet(variables, log, actionTyped);
+                    arraySet(componentContext, variables, log, actionTyped);
                     break;
                 case 'copy_to_clipboard':
                     copyToClipboard(log, actionTyped);
@@ -955,7 +957,7 @@
                     break;
                 }
                 case 'dict_set_value': {
-                    dictSetValue(variables, log, actionTyped);
+                    dictSetValue(componentContext, variables, log, actionTyped);
                     break;
                 }
                 default: {
@@ -1182,7 +1184,7 @@
 
     function getExtensionContext(componentContext: ComponentContext): DivExtensionContext {
         return {
-            variables,
+            variables: mergeVars(variables, componentContext.variables),
             processExpressions<T>(t: T) {
                 return getJsonWithVars(
                     logError,
@@ -1296,7 +1298,7 @@
                 if (variable) {
                     const foundType = variable.getType();
 
-                    if (foundType !== type) {
+                    if (type && foundType !== type) {
                         res.logError(wrapError(new Error(`Variable should have type "${type}"`), {
                             additional: {
                                 name: varName,

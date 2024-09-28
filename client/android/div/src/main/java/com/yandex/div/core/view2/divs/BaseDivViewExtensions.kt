@@ -620,12 +620,13 @@ internal fun getOrCreateRuntime(
     runtimeStore: RuntimeStore?,
     path: String,
     parentPath: String?,
-    variables: List<DivVariable>? = null
+    div: DivBase? = null,
 ): ExpressionsRuntime? {
     return runtimeStore?.getOrCreateRuntime(
         path = path,
         parentPath = parentPath,
-        variables = variables?.toVariables()
+        variables = div?.variables?.toVariables(),
+        triggers = div?.variableTriggers,
     )
 }
 
@@ -634,15 +635,16 @@ internal fun getRuntimeFor(runtimeStore: RuntimeStore?, resolver: ExpressionReso
 
 internal fun resolveRuntime(
     runtimeStore: RuntimeStore?,
+    div: DivBase,
     pathUnit: String,
     parentPath: String,
-    variables: List<DivVariable>?,
     resolver: ExpressionResolver,
     parentRuntime: ExpressionsRuntime?,
 ) = runtimeStore?.resolveRuntimeWith(
         path = "$parentPath/$pathUnit",
         parentPath = parentPath,
-        variables = variables?.toVariables(),
+        variables = div.variables?.toVariables(),
+        triggers = div.variableTriggers,
         resolver = resolver,
         parentRuntime = parentRuntime
     )

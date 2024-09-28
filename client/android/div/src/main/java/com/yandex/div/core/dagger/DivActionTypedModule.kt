@@ -4,20 +4,27 @@ import com.yandex.div.core.actions.DivActionTypedArrayMutationHandler
 import com.yandex.div.core.actions.DivActionTypedClearFocusHandler
 import com.yandex.div.core.actions.DivActionTypedCopyToClipboardHandler
 import com.yandex.div.core.actions.DivActionTypedDictSetValueHandler
-import com.yandex.div.core.actions.DivActionTypedSetVariableHandler
-import com.yandex.div.core.actions.DivActionTypedHandler
 import com.yandex.div.core.actions.DivActionTypedFocusElementHandler
+import com.yandex.div.core.actions.DivActionTypedHandler
 import com.yandex.div.core.actions.DivActionTypedHideTooltipHandler
 import com.yandex.div.core.actions.DivActionTypedSetStateHandler
+import com.yandex.div.core.actions.DivActionTypedSetVariableHandler
+import com.yandex.div.core.actions.DivActionTypedShowTooltipHandler
 import com.yandex.div.core.actions.DivActionTypedTimerHandler
 import com.yandex.div.core.actions.DivActionTypedVideoHandler
-import com.yandex.div.core.actions.DivActionTypedShowTooltipHandler
+import com.yandex.div.core.actions.DivAnimatorTypedActionHandler
 import com.yandex.yatagan.Binds
 import com.yandex.yatagan.IntoSet
 import com.yandex.yatagan.Module
 
 @Module
 internal interface DivActionTypedModule {
+
+    @Binds
+    @IntoSet
+    fun provideAnimatorTypedActionHandler(
+        impl: DivAnimatorTypedActionHandler
+    ): DivActionTypedHandler
 
     @Binds
     @IntoSet

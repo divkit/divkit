@@ -61,13 +61,14 @@ internal class DivPagerView @JvmOverloads constructor(
 
     private val accessibilityDelegate by lazy(LazyThreadSafetyMode.NONE) {
         val recycler = getRecyclerView() ?: return@lazy null
+        recycler.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
 
         object : RecyclerViewAccessibilityDelegate(recycler) {
             override fun onRequestSendAccessibilityEvent(
                 host: ViewGroup?, child: View?, event: AccessibilityEvent?
             ): Boolean {
                 if (child != null && event?.eventType == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
-                    (child.getTag(R.id.div_pager_item_clip_id) as Int?)?.let { pos ->
+                    getFocusedChildPos(child)?.let { pos ->
                         viewPager.adapter?.let { adapter ->
                             if (pos >= 0 && pos < adapter.itemCount) {
                                 currentItem = pos
@@ -128,6 +129,15 @@ internal class DivPagerView @JvmOverloads constructor(
         val recyclerView = getRecyclerView() ?: return null
         val wrappedChild = recyclerView.getChildAt(index) as? ViewGroup ?: return null
         return wrappedChild.getChildAt(0)
+    }
+
+    private fun getFocusedChildPos(child: View): Int? {
+        var child = child
+        while (child != this) {
+            (child.getTag(R.id.div_pager_item_clip_id) as? Int)?.let { return it }
+            child = child.parent as? View ?: return null
+        }
+        return null
     }
 
     internal fun interface OnItemsUpdatedCallback {

@@ -1,8 +1,6 @@
 package com.yandex.div.storage.database
 
-import android.database.Cursor
 import android.database.SQLException
-import com.yandex.div.internal.KAssert
 import com.yandex.div.storage.RawDataAndMetadata
 import com.yandex.div.storage.rawjson.RawJson
 import com.yandex.div.storage.templates.Template
@@ -12,29 +10,6 @@ import com.yandex.div.storage.util.bindNullableBlob
  * Repository of statements for [com.yandex.div.storage.StorageStatementExecutor.execute].
  */
 internal object StorageStatements {
-    private fun captureTemplateIds(readState: ReadState,
-                                   filter: (Cursor) -> Boolean = { true }): MutableList<String> {
-        val usedTemplates = mutableListOf<String>()
-        readState.use {
-            val cursor = it.cursor
-
-            if (!cursor.moveToFirst()) {
-                return usedTemplates
-            }
-            do {
-                if (!filter(cursor)) {
-                    continue
-                }
-                try {
-                    val templateId = cursor.getString(cursor.getColumnIndex(COLUMN_TEMPLATE_ID))
-                    usedTemplates.add(templateId)
-                } catch (e: SQLException) {
-                    KAssert.fail(e) { "Error getting templates" }
-                }
-            } while (cursor.moveToNext())
-        }
-        return usedTemplates
-    }
 
     fun writeTemplates(templates: List<Template>) = object : StorageStatement {
         override fun execute(compiler: SqlCompiler) {

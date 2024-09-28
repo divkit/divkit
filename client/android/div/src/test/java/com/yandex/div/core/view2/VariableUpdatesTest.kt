@@ -12,6 +12,7 @@ import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
+import com.yandex.div.data.VariableMutationException
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
 import org.json.JSONObject
@@ -25,7 +26,8 @@ import org.robolectric.RobolectricTestRunner
 
 private const val VARIABLE_NAME = "variable"
 private const val INITIAL_VALUE = "initial"
-private const val UPDATED_VALUE = "initial"
+private const val UPDATED_VALUE = "updated"
+private const val UNDEFINED_VALUE = "undefined"
 
 private const val CARD_WITH_GLOBAL_VARIABLE = """
 {
@@ -35,7 +37,7 @@ private const val CARD_WITH_GLOBAL_VARIABLE = """
         "state_id": 0,
         "div": {
           "type": "text",
-          "text": "@{$VARIABLE_NAME}"
+          "text": "@{$VARIABLE_NAME !: '$UNDEFINED_VALUE'}"
         }
       }
     ]
@@ -125,7 +127,62 @@ class VariableUpdatesTest {
         divView = Div2View(div2Context.childContext(createLifecycleOwner()))
         setDataToDivView(CARD_WITH_GLOBAL_VARIABLE, divView)
 
-        divView.assertVariableShown(INITIAL_VALUE)
+        divView.assertVariableShown(UPDATED_VALUE)
+    }
+
+    @Test
+    fun `DivView receive new variable on DivVariableController#replaceAll`() {
+        val divView = Div2View(div2Context)
+
+        // set DivData without defining global variable, text will be 'undefined'
+        setDataToDivView(CARD_WITH_GLOBAL_VARIABLE, divView)
+        divView.assertVariableShown(UNDEFINED_VALUE)
+
+        // setting global variable value to 'updated'
+        val variable = Variable.StringVariable(VARIABLE_NAME, UPDATED_VALUE)
+        variableController.replaceAll(variable)
+        divView.assertVariableShown(UPDATED_VALUE)
+    }
+
+    @Test
+    fun `DivView removes variable on DivVariableController#replaceAll`() {
+        val divView = Div2View(div2Context)
+
+        // setting global variable value to 'updated'
+        setGlobalVariable(VARIABLE_NAME, UPDATED_VALUE)
+        setDataToDivView(CARD_WITH_GLOBAL_VARIABLE, divView)
+        divView.assertVariableShown(UPDATED_VALUE)
+
+        // removing global variable, value should be updated to 'undefined'
+        variableController.replaceAll()
+        divView.assertVariableShown(UNDEFINED_VALUE)
+    }
+
+    @Test(expected = VariableMutationException::class)
+    fun `DivVariableController#replaceAll cannot change variable type`() {
+        val divView = Div2View(div2Context)
+
+        // set DivData and define variable with type 'string'
+        setGlobalVariable(VARIABLE_NAME, INITIAL_VALUE)
+        setDataToDivView(CARD_WITH_GLOBAL_VARIABLE, divView)
+
+        // trying to replace variable with 'double' one
+        val variable = Variable.DoubleVariable(VARIABLE_NAME, 1.0)
+        variableController.replaceAll(variable)
+    }
+
+    @Test
+    fun `DivView removes variable on DivVariableController#removeAll`() {
+        val divView = Div2View(div2Context)
+
+        // setting global variable value to 'updated'
+        setGlobalVariable(VARIABLE_NAME, UPDATED_VALUE)
+        setDataToDivView(CARD_WITH_GLOBAL_VARIABLE, divView)
+        divView.assertVariableShown(UPDATED_VALUE)
+
+        // removing global variable, value should be updated to 'undefined'
+        variableController.removeAll(VARIABLE_NAME)
+        divView.assertVariableShown(UNDEFINED_VALUE)
     }
 
     @Test

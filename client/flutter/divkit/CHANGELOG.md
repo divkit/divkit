@@ -1,8 +1,17 @@
-## 0.4.1-rc.2
+## 0.5.0-rc.1
 
+* Add full implementation on Dart of DivKit specification for calculating expressions: Runtime
+* Completely remove use of the div_expressions_resolver plugin
+* Start to remove additional code intended for using plugin
+* Previously organize caching of the execution tree within life cycle of expression
 * Fix patches are not applied to items of custom
-* Provide documentation for generated schema
 * Add custom font family provider
+* Provide documentation for generated schema
+
+## Migration 0.4 → 0.5
+* The method `clearVariables` was removed as unused
+* To ensure stability and a large change in the root calculation mechanism,
+  you need to check the your application when updating
 
 ## 0.4.0
 

@@ -1,17 +1,20 @@
 package com.yandex.div.core;
 
 import android.net.Uri;
+import android.view.View;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.yandex.div.core.actions.DivActionTypedHandlerProxy;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
 import com.yandex.div.core.state.DivStatePath;
 import com.yandex.div.core.state.PathFormatException;
+import com.yandex.div.core.view2.BindingContext;
 import com.yandex.div.core.view2.Div2View;
+import com.yandex.div.core.view2.ViewLocator;
+import com.yandex.div.core.view2.divs.widgets.DivHolderView;
 import com.yandex.div.core.view2.items.DivItemChangeActionHandler;
 import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
@@ -43,6 +46,8 @@ public class DivActionHandler {
         public static final String TIMER = "timer";
         public static final String TRIGGER = "trigger";
         public static final String VIDEO = "video";
+        public static final String ANIMATION_END = "animation_end";
+        public static final String ANIMATION_CANCEL = "animation_cancel";
     }
 
     private static final String SCHEME_DIV_ACTION = "div-action";
@@ -95,14 +100,17 @@ public class DivActionHandler {
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
     ) {
-        if (DivActionTypedHandlerProxy.handleAction(action, view, resolver)) {
+        ExpressionResolver scopedResolver = findExpressionResolverById((Div2View) view, action.scopeId);
+        ExpressionResolver localResolver = scopedResolver == null ? resolver : scopedResolver;
+
+        if (DivActionTypedHandlerProxy.handleAction(action, view, localResolver)) {
             return true;
         }
         Uri url = action.url != null ? action.url.evaluate(resolver) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
-            return DivDownloadActionHandler.handleAction(action, (Div2View) view, resolver);
+            return DivDownloadActionHandler.handleAction(action, (Div2View) view, localResolver);
         }
-        return handleActionUrl(url, view, resolver);
+        return handleAction(action.scopeId, url, view, localResolver);
     }
 
     /**
@@ -220,14 +228,17 @@ public class DivActionHandler {
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
     ) {
-        if (DivActionTypedHandlerProxy.handleVisibilityAction(action, view, resolver)) {
+        ExpressionResolver scopedResolver = findExpressionResolverById((Div2View) view, action.getScopeId());
+        ExpressionResolver localResolver = scopedResolver == null ? resolver : scopedResolver;
+
+        if (DivActionTypedHandlerProxy.handleVisibilityAction(action, view, localResolver)) {
             return true;
         }
         Uri url = action.getUrl() != null ? action.getUrl().evaluate(resolver) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
-            return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view, resolver);
+            return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view, localResolver);
         }
-        return handleActionUrl(url, view, resolver);
+        return handleAction(action.getScopeId(), url, view, resolver);
     }
 
     /**
@@ -326,19 +337,53 @@ public class DivActionHandler {
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver
     ) {
+        return handleActionUrl(null, uri, view, resolver);
+    }
+
+    /**
+     * Handles the URI with {@code div-action} scheme.
+     *
+     * @param scopeId id of div that denotes scope of given action
+     * @param uri  URI to handle
+     * @param view calling DivView
+     * @param resolver resolver for current action
+     * @return TRUE if uri was handled
+     */
+    public final boolean handleActionUrl(
+            @Nullable String scopeId,
+            @Nullable Uri uri,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
+        ExpressionResolver scopedResolver = findExpressionResolverById((Div2View) view, scopeId);
+        ExpressionResolver localResolver = scopedResolver == null ? resolver : scopedResolver;
+        return handleAction(scopeId, uri, view, localResolver);
+    }
+
+    private boolean handleAction(
+            @Nullable String scopeId,
+            @Nullable Uri uri,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
         if (uri == null) {
             return false;
         }
 
         //noinspection SimplifiableIfStatement
         if (SCHEME_DIV_ACTION.equals(uri.getScheme())) {
-            return handleAction(uri, view, resolver);
+            return handleActionInternal(scopeId, uri, view, resolver);
         }
 
         return false;
     }
 
-    private boolean handleAction(@NonNull Uri uri, @NonNull DivViewFacade view, @NonNull ExpressionResolver resolver) {
+    private boolean handleActionInternal(
+            @Nullable String scopeId,
+            @Nullable Uri uri,
+            @NonNull DivViewFacade view,
+            @NonNull ExpressionResolver resolver
+    ) {
         String action = uri.getAuthority();
         if (AUTHORITY_SWITCH_STATE.equals(action)) {
             String stateId = uri.getQueryParameter(PARAM_STATE_ID);
@@ -446,5 +491,21 @@ public class DivActionHandler {
         }
 
         return false;
+    }
+
+    @Nullable
+    private static ExpressionResolver findExpressionResolverById(Div2View divView, @Nullable String id) {
+        if (id == null) {
+            return null;
+        }
+
+        View targetView = ViewLocator.findSingleViewWithTag(divView, id);
+        if (targetView instanceof DivHolderView) {
+            BindingContext bindingContext = ((DivHolderView<?>) targetView).getBindingContext();
+            if (bindingContext != null) {
+                return bindingContext.getExpressionResolver();
+            }
+        }
+        return null;
     }
 }

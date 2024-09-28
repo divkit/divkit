@@ -17,8 +17,10 @@ internal inline fun <T, R> Converter<T, R?>.tryConvert(value: T): R? {
     }
 }
 
+@JvmField
 val COLOR_INT_TO_STRING: Converter<Int, String> = { value -> Color(value).toString() }
 
+@JvmField
 val STRING_TO_COLOR_INT: Converter<Any?, Int?> = { value ->
     when (value) {
         is String -> Color.parse(value).value
@@ -28,17 +30,23 @@ val STRING_TO_COLOR_INT: Converter<Any?, Int?> = { value ->
     }
 }
 
+@JvmField
 val URI_TO_STRING: Converter<Uri, String> = { uri -> uri.toString() }
 
+@JvmField
 val STRING_TO_URI: Converter<String, Uri> = { value -> Uri.parse(value) }
 
+@JvmField
 val ANY_TO_BOOLEAN: Converter<Any, Boolean?> = { value ->
     when (value) {
-        is Number -> value.toBoolean()
         is Boolean -> value
+        is Number -> value.toBoolean()
         else -> throw ClassCastException("Received value of wrong type")
     }
 }
+
+@JvmField
 val NUMBER_TO_DOUBLE: Converter<Number, Double> = { n: Number -> n.toDouble() }
 
+@JvmField
 val NUMBER_TO_INT: Converter<Number, Long> = { n: Number -> n.toLong() }

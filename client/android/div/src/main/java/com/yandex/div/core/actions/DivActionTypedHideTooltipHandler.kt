@@ -8,10 +8,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DivActionTypedHideTooltipHandler @Inject constructor()
+internal class DivActionTypedHideTooltipHandler @Inject constructor()
     : DivActionTypedHandler {
 
     override fun handleAction(
+        scopeId: String?,
         action: DivActionTyped,
         view: Div2View,
         resolver: ExpressionResolver

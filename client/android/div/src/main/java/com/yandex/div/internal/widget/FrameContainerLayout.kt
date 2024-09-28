@@ -48,9 +48,6 @@ open class FrameContainerLayout @JvmOverloads constructor(
     private var maxHeight = 0
     private var childState = 0
 
-    private var hasDefinedWidth = false
-    private var hasDefinedHeight = false
-
     override var aspectRatio by aspectRatioProperty()
 
     override fun setForegroundGravity(gravity: Int) {
@@ -69,9 +66,6 @@ open class FrameContainerLayout @JvmOverloads constructor(
         maxHeight = 0
         childState = 0
 
-        hasDefinedWidth = false
-        hasDefinedHeight = false
-
         val exactWidth = isExact(widthMeasureSpec)
         var heightSpec = when {
             !useAspect -> heightMeasureSpec
@@ -88,7 +82,7 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
         val widthSizeAndState = resolveSizeAndState(getDynamicWidth(widthMeasureSpec), widthMeasureSpec, childState)
         val heightSize = getDynamicHeight(widthMeasureSpec, heightSpec, widthSizeAndState and MEASURED_SIZE_MASK)
-        if (hasDefinedHeight && isUnspecified(heightSpec)) {
+        if (isUnspecified(heightSpec)) {
             heightSpec = makeExactSpec(heightSize)
             remeasureWrapContentConstrainedChildren(widthMeasureSpec, heightSpec)
         }
@@ -163,11 +157,11 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
         val exactWidth = isExact(widthMeasureSpec)
         val exactHeight = isExact(heightMeasureSpec)
-        hasDefinedWidth = exactWidth || maxWidth != 0
-        hasDefinedHeight = exactHeight || useAspect || maxHeight != 0
         if (exactWidth && exactHeight) return
 
-        if (hasDefinedWidth && hasDefinedHeight) {
+        val needMeasureWidth = !exactWidth && maxWidth == 0
+        val needMeasureHeight = !exactHeight && !useAspect && maxHeight == 0
+        if (!needMeasureWidth && !needMeasureHeight) {
             matchParentChildren.forEach { considerMatchParentMargins(it, exactWidth, exactHeight) }
             return
         }
@@ -175,16 +169,16 @@ open class FrameContainerLayout @JvmOverloads constructor(
         matchParentChildren.forEach { child ->
             val lp = child.lp
             if (skippedMatchParentChildren.contains(child) &&
-                ((lp.width == MATCH_PARENT && !hasDefinedWidth) ||
-                    (lp.height == MATCH_PARENT && !hasDefinedHeight))) {
+                ((lp.width == MATCH_PARENT && needMeasureWidth) ||
+                    (lp.height == MATCH_PARENT && needMeasureHeight))) {
                 measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
                 childState = combineMeasuredStates(childState, child.measuredState)
                 skippedMatchParentChildren -= child
             }
-            if (!hasDefinedWidth) {
+            if (needMeasureWidth) {
                 updateMaxWidth(child.measuredWidth + lp.horizontalMargins)
             }
-            if (!hasDefinedHeight) {
+            if (needMeasureHeight) {
                 updateMaxHeight(child.measuredHeight + lp.verticalMargins)
             }
         }
@@ -245,14 +239,14 @@ open class FrameContainerLayout @JvmOverloads constructor(
         val childHorizontalPadding = horizontalPadding + lp.horizontalMargins
         val childVerticalPadding = verticalPadding + lp.verticalMargins
 
-        val childWidthMeasureSpec = if (hasDefinedWidth && lp.width == MATCH_PARENT) {
+        val childWidthMeasureSpec = if (lp.width == MATCH_PARENT) {
             makeExactSpec((measuredWidth - childHorizontalPadding).coerceAtLeast(0))
         } else {
             getChildMeasureSpec(widthMeasureSpec, childHorizontalPadding,
                 lp.width, child.minimumWidth, lp.maxWidth)
         }
 
-        val childHeightMeasureSpec = if (hasDefinedHeight && lp.height == MATCH_PARENT) {
+        val childHeightMeasureSpec = if (lp.height == MATCH_PARENT) {
             makeExactSpec((measuredHeight - childVerticalPadding).coerceAtLeast(0))
         } else {
             getChildMeasureSpec(heightMeasureSpec, childVerticalPadding,

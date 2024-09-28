@@ -1,9 +1,11 @@
 import type { ActionArrayInsertValue, ActionArrayRemoveValue, ActionArraySetValue, WrappedError } from '../../typings/common';
 import type { ArrayVariable, Variable } from '../../typings/variables';
 import type { MaybeMissing } from '../expressions/json';
+import type { ComponentContext } from '../types/componentContext';
 import { wrapError } from '../utils/wrapError';
 
 export function arrayInsert(
+    componentContext: ComponentContext | undefined,
     variables: Map<string, Variable>,
     logError: (error: WrappedError) => void,
     actionTyped: MaybeMissing<ActionArrayInsertValue>
@@ -19,7 +21,7 @@ export function arrayInsert(
         return;
     }
 
-    handle(variables, logError, actionTyped, variableInstance => {
+    handle(componentContext, variables, logError, actionTyped, variableInstance => {
         const list = variableInstance.getValue();
         if (typeof index === 'number' && (index < 0 || index > list.length)) {
             logError(wrapError(new Error(`Index out of bound for mutation ${actionTyped.type}`), {
@@ -42,6 +44,7 @@ export function arrayInsert(
 }
 
 export function arrayRemove(
+    componentContext: ComponentContext | undefined,
     variables: Map<string, Variable>,
     logError: (error: WrappedError) => void,
     actionTyped: MaybeMissing<ActionArrayRemoveValue>
@@ -57,7 +60,7 @@ export function arrayRemove(
         return;
     }
 
-    handle(variables, logError, actionTyped, variableInstance => {
+    handle(componentContext, variables, logError, actionTyped, variableInstance => {
         const list = variableInstance.getValue();
         if (typeof index === 'number' && (index < 0 || index >= list.length)) {
             logError(wrapError(new Error(`Index out of bound for mutation ${actionTyped.type}`), {
@@ -76,6 +79,7 @@ export function arrayRemove(
 }
 
 export function arraySet(
+    componentContext: ComponentContext | undefined,
     variables: Map<string, Variable>,
     logError: (error: WrappedError) => void,
     actionTyped: MaybeMissing<ActionArraySetValue>
@@ -91,7 +95,7 @@ export function arraySet(
         return;
     }
 
-    handle(variables, logError, actionTyped, variableInstance => {
+    handle(componentContext, variables, logError, actionTyped, variableInstance => {
         const list = variableInstance.getValue();
         if (typeof index === 'number' && (index < 0 || index >= list.length)) {
             logError(wrapError(new Error(`Index out of bound for mutation ${actionTyped.type}`), {
@@ -110,6 +114,7 @@ export function arraySet(
 }
 
 function handle(
+    componentContext: ComponentContext | undefined,
     variables: Map<string, Variable>,
     logError: (error: WrappedError) => void,
     actionTyped: MaybeMissing<ActionArrayRemoveValue | ActionArrayInsertValue | ActionArraySetValue>,
@@ -126,7 +131,7 @@ function handle(
         return;
     }
 
-    const variableInstance = variables.get(name);
+    const variableInstance = componentContext?.getVariable(name) || variables.get(name);
 
     if (!variableInstance) {
         logError(wrapError(new Error('Cannot find variable'), {

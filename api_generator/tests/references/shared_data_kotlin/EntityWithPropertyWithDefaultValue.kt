@@ -1,13 +1,14 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithPropertyWithDefaultValue(
-    @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
-    @JvmField final val nested: Nested? = null,
-    @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
+    @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
+    @JvmField val nested: Nested? = null,
+    @JvmField val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -47,15 +48,12 @@ class EntityWithPropertyWithDefaultValue(
 
         private val INT_DEFAULT_VALUE = Expression.constant(0L)
         private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
-
-        private val INT_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
-        private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
     }
 
     class Nested(
-        @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
-        @JvmField final val nonOptional: Expression<String>,
-        @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
+        @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
+        @JvmField val nonOptional: Expression<String>,
+        @JvmField val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
     ) : Hashable {
 
         private var _hash: Int? = null 
@@ -93,9 +91,6 @@ class EntityWithPropertyWithDefaultValue(
         companion object {
             private val INT_DEFAULT_VALUE = Expression.constant(0L)
             private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
-
-            private val INT_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
-            private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
         }
     }
 }

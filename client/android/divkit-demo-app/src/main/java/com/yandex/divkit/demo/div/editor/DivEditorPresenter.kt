@@ -206,12 +206,18 @@ class DivEditorPresenter(
                         .put("device_key", deviceKey)
                         .put("screenshot", encodedImage)
                         .put("rendering_time", JSONObject().apply {
-                            put("div_render_total", metadataHost.renderingTimeMessages
-                                .getOrDefault(DIV_RENDER_TOTAL, null)?.toJSONObject())
-                            put("div_parsing_data", metadataHost.renderingTimeMessages
-                                .getOrDefault(DIV_PARSING_DATA, null)?.toJSONObject())
-                            put("div_parsing_templates", metadataHost.renderingTimeMessages
-                                .getOrDefault(DIV_PARSING_TEMPLATES, null)?.toJSONObject())
+                            put(
+                                "div_render_total",
+                                metadataHost.renderingTimeMessages[DIV_RENDER_TOTAL]?.toJSONObject()
+                            )
+                            put(
+                                "div_parsing_data",
+                                metadataHost.renderingTimeMessages[DIV_PARSING_DATA]?.toJSONObject()
+                            )
+                            put(
+                                "div_parsing_templates",
+                                metadataHost.renderingTimeMessages[DIV_PARSING_TEMPLATES]?.toJSONObject()
+                            )
                         })
                     webController.sendMessage(MessageType.UI_STATE, message)
                 } catch (e: Exception) {

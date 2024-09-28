@@ -6,5 +6,5 @@ import com.yandex.div2.DivActionTyped
 
 internal interface DivActionTypedHandler {
 
-    fun handleAction(action: DivActionTyped, view: Div2View, resolver: ExpressionResolver): Boolean
+    fun handleAction(scopeId: String?, action: DivActionTyped, view: Div2View, resolver: ExpressionResolver): Boolean
 }

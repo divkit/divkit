@@ -51,14 +51,16 @@ internal class DivGalleryViewHolder(
         rootView.setTag(R.id.div_gallery_item_index, position)
         val id = div.value().getChildPathUnit(position)
 
-        resolveRuntime(
-            runtimeStore = context.runtimeStore,
-            pathUnit = id,
-            parentPath = path.fullPath,
-            variables = div.value().variables,
-            resolver = resolver,
-            parentRuntime = parentRuntime,
-        )
+        if (parentContext.expressionResolver != resolver) {
+            resolveRuntime(
+                runtimeStore = context.runtimeStore,
+                div = div.value(),
+                pathUnit = id,
+                parentPath = path.fullPath,
+                resolver = resolver,
+                parentRuntime = parentRuntime,
+            )
+        }
 
         context.runtimeStore?.showWarningIfNeeded(div.value())
         divBinder.bind(context, divView, div, path.appendDiv(id))

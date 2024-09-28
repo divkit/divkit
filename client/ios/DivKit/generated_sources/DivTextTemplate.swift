@@ -830,6 +830,7 @@ public final class DivTextTemplate: TemplateValue {
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
   public let textGradient: Field<DivTextGradientTemplate>?
   public let textShadow: Field<DivShadowTemplate>?
+  public let tightenWidth: Field<Expression<Bool>>? // default value: false
   public let tooltips: Field<[DivTooltipTemplate]>?
   public let transform: Field<DivTransformTemplate>?
   public let transitionChange: Field<DivChangeTransitionTemplate>?
@@ -895,6 +896,7 @@ public final class DivTextTemplate: TemplateValue {
       textColor: dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:)),
       textGradient: dictionary.getOptionalField("text_gradient", templateToType: templateToType),
       textShadow: dictionary.getOptionalField("text_shadow", templateToType: templateToType),
+      tightenWidth: dictionary.getOptionalExpressionField("tighten_width"),
       tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
       transform: dictionary.getOptionalField("transform", templateToType: templateToType),
       transitionChange: dictionary.getOptionalField("transition_change", templateToType: templateToType),
@@ -961,6 +963,7 @@ public final class DivTextTemplate: TemplateValue {
     textColor: Field<Expression<Color>>? = nil,
     textGradient: Field<DivTextGradientTemplate>? = nil,
     textShadow: Field<DivShadowTemplate>? = nil,
+    tightenWidth: Field<Expression<Bool>>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
     transitionChange: Field<DivChangeTransitionTemplate>? = nil,
@@ -1024,6 +1027,7 @@ public final class DivTextTemplate: TemplateValue {
     self.textColor = textColor
     self.textGradient = textGradient
     self.textShadow = textShadow
+    self.tightenWidth = tightenWidth
     self.tooltips = tooltips
     self.transform = transform
     self.transitionChange = transitionChange
@@ -1088,6 +1092,7 @@ public final class DivTextTemplate: TemplateValue {
     let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let textGradientValue = parent?.textGradient?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let textShadowValue = parent?.textShadow?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let tightenWidthValue = parent?.tightenWidth?.resolveOptionalValue(context: context) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionChangeValue = parent?.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -1150,6 +1155,7 @@ public final class DivTextTemplate: TemplateValue {
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
       textGradientValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_gradient", error: $0) },
       textShadowValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_shadow", error: $0) },
+      tightenWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "tighten_width", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
@@ -1221,6 +1227,7 @@ public final class DivTextTemplate: TemplateValue {
       textColor: textColorValue.value,
       textGradient: textGradientValue.value,
       textShadow: textShadowValue.value,
+      tightenWidth: tightenWidthValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
       transitionChange: transitionChangeValue.value,
@@ -1290,6 +1297,7 @@ public final class DivTextTemplate: TemplateValue {
     var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
     var textGradientValue: DeserializationResult<DivTextGradient> = .noValue
     var textShadowValue: DeserializationResult<DivShadow> = .noValue
+    var tightenWidthValue: DeserializationResult<Expression<Bool>> = parent?.tightenWidth?.value() ?? .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
@@ -1401,6 +1409,8 @@ public final class DivTextTemplate: TemplateValue {
         textGradientValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextGradientTemplate.self).merged(with: textGradientValue)
       case "text_shadow":
         textShadowValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self).merged(with: textShadowValue)
+      case "tighten_width":
+        tightenWidthValue = deserialize(__dictValue).merged(with: tightenWidthValue)
       case "tooltips":
         tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
       case "transform":
@@ -1523,6 +1533,8 @@ public final class DivTextTemplate: TemplateValue {
         textGradientValue = textGradientValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextGradientTemplate.self) })
       case parent?.textShadow?.link:
         textShadowValue = textShadowValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self) })
+      case parent?.tightenWidth?.link:
+        tightenWidthValue = tightenWidthValue.merged(with: { deserialize(__dictValue) })
       case parent?.tooltips?.link:
         tooltipsValue = tooltipsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self) })
       case parent?.transform?.link:
@@ -1636,6 +1648,7 @@ public final class DivTextTemplate: TemplateValue {
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
       textGradientValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_gradient", error: $0) },
       textShadowValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_shadow", error: $0) },
+      tightenWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "tighten_width", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
@@ -1707,6 +1720,7 @@ public final class DivTextTemplate: TemplateValue {
       textColor: textColorValue.value,
       textGradient: textGradientValue.value,
       textShadow: textShadowValue.value,
+      tightenWidth: tightenWidthValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
       transitionChange: transitionChangeValue.value,
@@ -1781,6 +1795,7 @@ public final class DivTextTemplate: TemplateValue {
       textColor: textColor ?? mergedParent.textColor,
       textGradient: textGradient ?? mergedParent.textGradient,
       textShadow: textShadow ?? mergedParent.textShadow,
+      tightenWidth: tightenWidth ?? mergedParent.tightenWidth,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
       transitionChange: transitionChange ?? mergedParent.transitionChange,
@@ -1850,6 +1865,7 @@ public final class DivTextTemplate: TemplateValue {
       textColor: merged.textColor,
       textGradient: merged.textGradient?.tryResolveParent(templates: templates),
       textShadow: merged.textShadow?.tryResolveParent(templates: templates),
+      tightenWidth: merged.tightenWidth,
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),
       transitionChange: merged.transitionChange?.tryResolveParent(templates: templates),

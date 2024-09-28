@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfEnums> {
-    @JvmField final val items: Field<List<EntityWithArrayOfEnums.Item>> // at least 1 elements
+    @JvmField val items: Field<List<EntityWithArrayOfEnums.Item>>
 
-    constructor (
+    constructor(
+        items: Field<List<EntityWithArrayOfEnums.Item>>,
+    ) {
+        this.items = items
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithArrayOfEnumsTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWith
         items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, EntityWithArrayOfEnums.Item.FROM_STRING, ITEMS_TEMPLATE_VALIDATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfEnums {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfEnums {
         return EntityWithArrayOfEnums(
-            items = items.resolveList(env = env, key = "items", data = rawData, ITEMS_VALIDATOR, reader = ITEMS_READER)
+            items = this.items.resolveList(env = env, key = "items", data = data, ITEMS_VALIDATOR, reader = ITEMS_READER)
         )
     }
 

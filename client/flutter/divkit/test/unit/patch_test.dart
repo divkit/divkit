@@ -1,7 +1,6 @@
 import 'package:divkit/divkit.dart';
-import 'package:divkit/src/core/expression/expression.dart';
-import 'package:divkit/src/core/patch/patch_manager.dart';
 import 'package:divkit/src/core/data/data_provider.dart';
+import 'package:divkit/src/core/patch/patch_manager.dart';
 import 'package:divkit/src/core/variable/variable_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 

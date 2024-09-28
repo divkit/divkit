@@ -1,3 +1,33 @@
+## 30.19.0
+
+# Android Client:
+* Experimental API: added new parsers for properties and template fields.
+* Supported `item-builder` property in `gallery` and `pager`.
+* Supported `autocapitalization` in `input`. Allows you to control capital letters in the keyboard
+* Added new typed action `div-action-download` that can be used instead of `div-action://download`.
+* Added new typed action `div-action-hide-tooltip` that can be used instead of `div-action://hide_tooltip`.
+* Added new typed action `div-action-set-state` that can be used instead of action `div-action://set_state`.
+* Added `isEmpty()` method to dict.
+* Create markwon lazily.
+* Fixed patch applying to root div.
+* Fixed focus navigation inside `gallery`.
+* Fixed keyboard blinking when changing focus between inputs.
+
+# iOS Client:
+* Fixed a bug with notification observers while changing parent variable from child scope
+* Fixed opacity for elements with solid background.
+
+# Web Client:
+* Added local `variables` support.
+* Added `layout_provider` property support.
+* Fixed the behavior of `toNumber('')` to return an error.
+* Fixed the `transition_out` animation when `visibility` became `gone`.
+* Fixed an issue with the `max_length` of `input` with the `keyboard_type` equal to `number`.
+* Fixed the first call of `variable_triggers` before full initialization of child components.
+* Fixed an issue with incorrect `corners_radius`.
+* Fixed an issue with incorrect `variable_triggers`.
+
+
 ## 30.18.0
 
 # Android Client:

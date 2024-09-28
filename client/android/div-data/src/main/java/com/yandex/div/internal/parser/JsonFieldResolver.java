@@ -11,6 +11,9 @@ import com.yandex.div.json.expressions.ExpressionList;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
 import com.yandex.div.serialization.TemplateResolver;
+
+import kotlin.OptIn;
+import kotlin.Lazy;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONObject;
 
@@ -24,14 +27,15 @@ import static com.yandex.div.json.ParsingExceptionKt.dependencyFailed;
 import static com.yandex.div.json.ParsingExceptionKt.invalidValue;
 import static com.yandex.div.json.ParsingExceptionKt.missingValue;
 
-@SuppressWarnings({"ForLoopReplaceableByForEach", "StringEquality", "unused"})
+@SuppressWarnings({"ForLoopReplaceableByForEach", "unused"})
+@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
 public class JsonFieldResolver {
 
     @NonNull
-    public static <D> D resolve(
+    public static <V> V resolve(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<D> field,
+            @NonNull final Field<V> field,
             @NonNull final JSONObject data,
             @NonNull final String key
     ) {
@@ -39,45 +43,45 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <R, D> D resolve(
+    public static <R, V> V resolve(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<D> field,
+            @NonNull final Field<V> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter
+            @NonNull final Function1<R, V> converter
     ) {
         return resolve(context, logger, field, data, key, converter, alwaysValid());
     }
 
     @NonNull
-    public static <D> D resolve(
+    public static <V> V resolve(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<D> field,
+            @NonNull final Field<V> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final ValueValidator<D> validator
+            @NonNull final ValueValidator<V> validator
     ) {
         return resolve(context, logger, field, data, key, doNotConvert(), validator);
     }
 
     @NonNull
-    public static <R, D> D resolve(
+    public static <R, V> V resolve(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<D> field,
+            @NonNull final Field<V> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ValueValidator<D> validator
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonPropertyParser.read(context, logger, data, key, converter, validator);
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<D>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<V>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonPropertyParser.read(context, logger, data, reference, converter, validator);
         }
 
@@ -85,21 +89,21 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <D, T extends EntityTemplate<D>> D resolve(
+    public static <T extends EntityTemplate<V>, V> V resolve(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final Field<T> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TemplateResolver<D, T, JSONObject> resolver,
-            @NonNull final Deserializer<D, JSONObject> deserializer
+            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
             ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonPropertyParser.read(context, logger, data, key, deserializer);
-        } else if (field instanceof Field.Value) {
-            return resolveDependency(context, ((Field.Value<T>) field).getValue(), data, key, resolver);
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return resolveDependency(context, ((Field.Value<T>) field).value, data, key, resolver);
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonPropertyParser.read(context, logger, data, reference, deserializer);
         }
 
@@ -107,10 +111,10 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <D> D resolveOptional(
+    public static <V> V resolveOptional(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<D> field,
+            @NonNull final Field<V> field,
             @NonNull final JSONObject data,
             @NonNull final String key
     ) {
@@ -118,88 +122,88 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <R, D> D resolveOptional(
+    public static <R, V> V resolveOptional(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<D> field,
+            @NonNull final Field<V> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter
+            @NonNull final Function1<R, V> converter
     ) {
         return resolveOptional(context, logger, field, data, key, converter, alwaysValid());
     }
 
     @Nullable
-    public static <D> D resolveOptional(
+    public static <V> V resolveOptional(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<D> field,
+            @NonNull final Field<V> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final ValueValidator<D> validator
+            @NonNull final ValueValidator<V> validator
     ) {
         return resolveOptional(context, logger, field, data, key, doNotConvert(), validator);
     }
 
     @Nullable
-    public static <R, D> D resolveOptional(
+    public static <R, V> V resolveOptional(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<D> field,
+            @NonNull final Field<V> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ValueValidator<D> validator
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
-        if (field.getOverridable() && data.has(key)) {
-            return JsonPropertyParser.read(context, logger, data, key, converter, validator);
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<D>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
-            return JsonPropertyParser.read(context, logger, data, reference, converter, validator);
+        if (field.overridable && data.has(key)) {
+            return JsonPropertyParser.readOptional(context, logger, data, key, converter, validator);
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<V>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
+            return JsonPropertyParser.readOptional(context, logger, data, reference, converter, validator);
         }
 
         return null;
     }
 
     @Nullable
-    public static <D, T extends EntityTemplate<D>> D resolveOptional(
+    public static <T extends EntityTemplate<V>, V> V resolveOptional(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final Field<T> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TemplateResolver<D, T, JSONObject> resolver,
-            @NonNull final Deserializer<D, JSONObject> deserializer
+            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        if (field.getOverridable() && data.has(key)) {
-            return JsonPropertyParser.read(context, logger, data, key, deserializer);
-        } else if (field instanceof Field.Value) {
-            return resolveOptionalDependency(context, logger, ((Field.Value<T>) field).getValue(), data, resolver);
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
-            return JsonPropertyParser.read(context, logger, data, reference, deserializer);
+        if (field.overridable && data.has(key)) {
+            return JsonPropertyParser.readOptional(context, logger, data, key, deserializer);
+        } else if (field.type == Field.TYPE_VALUE) {
+            return resolveOptionalDependency(context, logger, ((Field.Value<T>) field).value, data, resolver);
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
+            return JsonPropertyParser.readOptional(context, logger, data, reference, deserializer);
         }
 
         return null;
     }
 
     @NonNull
-    public static <D> Expression<D> resolveExpression(
+    public static <V> Expression<V> resolveExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<Expression<D>> field,
+            @NonNull final Field<Expression<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper
+            @NonNull final TypeHelper<V> typeHelper
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readExpression(context, logger, data, key, typeHelper);
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<Expression<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readExpression(context, logger, data, reference, typeHelper);
         }
 
@@ -207,21 +211,21 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <R, D> Expression<D> resolveExpression(
+    public static <R, V> Expression<V> resolveExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<Expression<D>> field,
+            @NonNull final Field<Expression<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readExpression(context, logger, data, key, typeHelper, converter);
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<Expression<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readExpression(context, logger, data, reference, typeHelper, converter);
         }
 
@@ -229,21 +233,21 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <D> Expression<D> resolveExpression(
+    public static <V> Expression<V> resolveExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<Expression<D>> field,
+            @NonNull final Field<Expression<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final ValueValidator<D> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ValueValidator<V> validator
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readExpression(context, logger, data, key, typeHelper, validator);
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<Expression<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readExpression(context, logger, data, reference, typeHelper, validator);
         }
 
@@ -251,22 +255,22 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <R, D> Expression<D> resolveExpression(
+    public static <R, V> Expression<V> resolveExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<Expression<D>> field,
+            @NonNull final Field<Expression<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ValueValidator<D> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readExpression(context, logger, data, key, typeHelper, converter, validator);
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<Expression<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readExpression(
                     context, logger, data, reference, typeHelper, converter, validator);
         }
@@ -275,20 +279,20 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <D> Expression<D> resolveOptionalExpression(
+    public static <V> Expression<V> resolveOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<Expression<D>> field,
+            @NonNull final Field<Expression<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper
+            @NonNull final TypeHelper<V> typeHelper
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readOptionalExpression(context, logger, data, key, typeHelper, doNotConvert());
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<Expression<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readOptionalExpression(
                     context, logger, data, reference, typeHelper, doNotConvert());
         }
@@ -297,21 +301,21 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <R, D> Expression<D> resolveOptionalExpression(
+    public static <R, V> Expression<V> resolveOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<Expression<D>> field,
+            @NonNull final Field<Expression<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readOptionalExpression(context, logger, data, key, typeHelper, converter);
-        } else if (field instanceof Field.Value){
-            return ((Field.Value<Expression<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE){
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readOptionalExpression(context, logger, data, reference, typeHelper, converter);
         }
 
@@ -319,21 +323,21 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <D> Expression<D> resolveOptionalExpression(
+    public static <V> Expression<V> resolveOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<Expression<D>> field,
+            @NonNull final Field<Expression<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final ValueValidator<D> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ValueValidator<V> validator
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readOptionalExpression(context, logger, data, key, typeHelper, validator);
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<Expression<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readOptionalExpression(context, logger, data, reference, typeHelper, validator);
         }
 
@@ -341,23 +345,23 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <R, D> Expression<D> resolveOptionalExpression(
+    public static <R, V> Expression<V> resolveOptionalExpression(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<Expression<D>> field,
+            @NonNull final Field<Expression<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ValueValidator<D> validator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ValueValidator<V> validator
     ) {
-        if (field.getOverridable() && data.has(key)) {
+        if (field.overridable && data.has(key)) {
             return JsonExpressionParser.readOptionalExpression(
                     context, logger, data, key, typeHelper, converter, validator);
-        } else if (field instanceof Field.Value) {
-            return ((Field.Value<Expression<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            return ((Field.Value<Expression<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             return JsonExpressionParser.readOptionalExpression(
                     context, logger, data, reference, typeHelper, converter, validator);
         }
@@ -366,73 +370,73 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <R, D> List<D> resolveList(
+    public static <R, V> List<V> resolveList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter
+            @NonNull final Function1<R, V> converter
     ) {
         return resolveList(context, logger, field, data, key, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
-    public static <R, D> List<D> resolveList(
+    public static <R, V> List<V> resolveList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return resolveList(context, logger, field, data, key, converter, listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <D> List<D> resolveList(
+    public static <V> List<V> resolveList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final ListValidator<V> listValidator
     ) {
         return resolveList(context, logger, field, data, key, doNotConvert(), listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <D> List<D> resolveList(
+    public static <V> List<V> resolveList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final ListValidator<D> listValidator,
-            @NonNull final ValueValidator<D> itemValidator
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return resolveList(context, logger, field, data, key, doNotConvert(), listValidator, itemValidator);
     }
 
     @NonNull
-    public static <R, D> List<D> resolveList(
+    public static <R, V> List<V> resolveList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ListValidator<D> listValidator,
-            @NonNull final ValueValidator<D> itemValidator
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
-        List<D> result = null;
-        if (field.getOverridable() && data.has(key)) {
+        List<V> result = null;
+        if (field.overridable && data.has(key)) {
             result = JsonPropertyParser.readList(context, logger, data, key, converter, listValidator, itemValidator);
-        } else if (field instanceof Field.Value) {
-            result = ((Field.Value<List<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            result = ((Field.Value<List<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             result = JsonPropertyParser.readList(
                     context, logger, data, reference, converter, listValidator, itemValidator);
         }
@@ -443,7 +447,7 @@ public class JsonFieldResolver {
             throw invalidValue(data, key, result);
         } else if (itemValidator != alwaysValidList()) {
             for (int i = 0; i < result.size(); i++) {
-                D item = result.get(i);
+                V item = result.get(i);
                 if (!itemValidator.isValid(item)) {
                     throw invalidValue(data, key, item);
                 }
@@ -453,27 +457,27 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <D, T extends EntityTemplate<D>> List<D> resolveList(
+    public static <T extends EntityTemplate<V>, V> List<V> resolveList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final Field<List<T>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TemplateResolver<D, T, JSONObject> resolver,
-            @NonNull final Deserializer<D, JSONObject> deserializer
+            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        List<D> result = null;
-        if (field.getOverridable() && data.has(key)) {
+        List<V> result = null;
+        if (field.overridable && data.has(key)) {
             result = JsonPropertyParser.readList(context, logger, data, key, deserializer);
-        } else if (field instanceof Field.Value) {
-            List<T> templates = ((Field.Value<List<T>>) field).getValue();
-            result = new ArrayList<D>(templates.size());
+        } else if (field.type == Field.TYPE_VALUE) {
+            List<T> templates = ((Field.Value<List<T>>) field).value;
+            result = new ArrayList<V>(templates.size());
             for (int i = 0; i < templates.size(); i++) {
                 T template = templates.get(i);
                 result.add(resolveOptionalDependency(context, logger, template, data, resolver));
             }
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             result = JsonPropertyParser.readList(context, logger, data, reference, deserializer);
         }
 
@@ -484,28 +488,28 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <D, T extends EntityTemplate<D>> List<D> resolveList(
+    public static <T extends EntityTemplate<V>, V> List<V> resolveList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final Field<List<T>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TemplateResolver<D, T, JSONObject> resolver,
-            @NonNull final Deserializer<D, JSONObject> deserializer,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
+            @NonNull final ListValidator<V> listValidator
     ) {
-        List<D> result = null;
-        if (field.getOverridable() && data.has(key)) {
+        List<V> result = null;
+        if (field.overridable && data.has(key)) {
             result = JsonPropertyParser.readList(context, logger, data, key, deserializer, listValidator);
-        } else if (field instanceof Field.Value) {
-            List<T> templates = ((Field.Value<List<T>>) field).getValue();
-            result = new ArrayList<D>(templates.size());
+        } else if (field.type == Field.TYPE_VALUE) {
+            List<T> templates = ((Field.Value<List<T>>) field).value;
+            result = new ArrayList<V>(templates.size());
             for (int i = 0; i < templates.size(); i++) {
                 T template = templates.get(i);
                 result.add(resolveOptionalDependency(context, logger, template, data, resolver));
             }
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             result = JsonPropertyParser.readList(context, logger, data, reference, deserializer, listValidator);
         }
 
@@ -518,74 +522,74 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <R, D> List<D> resolveOptionalList(
+    public static <R, V> List<V> resolveOptionalList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter
+            @NonNull final Function1<R, V> converter
     ) {
         return resolveOptionalList(context, logger, field, data, key, converter, alwaysValidList(), alwaysValid());
     }
 
     @Nullable
-    public static <R, D> List<D> resolveOptionalList(
+    public static <R, V> List<V> resolveOptionalList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return resolveOptionalList(context, logger, field, data, key, converter, listValidator, alwaysValid());
     }
 
     @Nullable
-    public static <D> List<D> resolveOptionalList(
+    public static <V> List<V> resolveOptionalList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final ListValidator<V> listValidator
     ) {
         return resolveOptionalList(context, logger, field, data, key, doNotConvert(), listValidator, alwaysValid());
     }
 
     @Nullable
-    public static <D> List<D> resolveOptionalList(
+    public static <V> List<V> resolveOptionalList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final ListValidator<D> listValidator,
-            @NonNull final ValueValidator<D> itemValidator
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return resolveOptionalList(context, logger, field, data, key, doNotConvert(), listValidator, itemValidator);
     }
 
     @Nullable
-    public static <R, D> List<D> resolveOptionalList(
+    public static <R, V> List<V> resolveOptionalList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<List<D>> field,
+            @NonNull final Field<List<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ListValidator<D> listValidator,
-            @NonNull final ValueValidator<D> itemValidator
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
-        List<D> result = null;
-        if (field.getOverridable() && data.has(key)) {
+        List<V> result = null;
+        if (field.overridable && data.has(key)) {
             result = JsonPropertyParser.readOptionalList(
                     context, logger, data, key, converter, listValidator, itemValidator);
-        } else if (field instanceof Field.Value) {
-            result = ((Field.Value<List<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            result = ((Field.Value<List<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             result = JsonPropertyParser.readOptionalList(
                     context, logger, data, reference, converter, listValidator, itemValidator);
         }
@@ -597,7 +601,7 @@ public class JsonFieldResolver {
             return null;
         } else if (itemValidator != alwaysValidList()) {
             for (int i = 0; i < result.size(); i++) {
-                D item = result.get(i);
+                V item = result.get(i);
                 if (!itemValidator.isValid(item)) {
                     logger.logError(invalidValue(data, key, item));
                     return null;
@@ -608,27 +612,27 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <D, T extends EntityTemplate<D>> List<D> resolveOptionalList(
+    public static <T extends EntityTemplate<V>, V> List<V> resolveOptionalList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final Field<List<T>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TemplateResolver<D, T, JSONObject> resolver,
-            @NonNull final Deserializer<D, JSONObject> deserializer
+            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer
     ) {
-        List<D> result = null;
-        if (field.getOverridable() && data.has(key)) {
+        List<V> result = null;
+        if (field.overridable && data.has(key)) {
             result = JsonPropertyParser.readOptionalList(context, logger, data, key, deserializer);
-        } else if (field instanceof Field.Value) {
-            List<T> templates = ((Field.Value<List<T>>) field).getValue();
-            result = new ArrayList<D>(templates.size());
+        } else if (field.type == Field.TYPE_VALUE) {
+            List<T> templates = ((Field.Value<List<T>>) field).value;
+            result = new ArrayList<V>(templates.size());
             for (int i = 0; i < templates.size(); i++) {
                 T template = templates.get(i);
                 result.add(resolveOptionalDependency(context, logger, template, data, resolver));
             }
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             result = JsonPropertyParser.readOptionalList(context, logger, data, reference, deserializer);
         }
 
@@ -636,28 +640,28 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <D, T extends EntityTemplate<D>> List<D> resolveOptionalList(
+    public static <T extends EntityTemplate<V>, V> List<V> resolveOptionalList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final Field<List<T>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TemplateResolver<D, T, JSONObject> resolver,
-            @NonNull final Deserializer<D, JSONObject> deserializer,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver,
+            @NonNull final Lazy<Deserializer<JSONObject, V>> deserializer,
+            @NonNull final ListValidator<V> listValidator
     ) {
-        List<D> result = null;
-        if (field.getOverridable() && data.has(key)) {
+        List<V> result = null;
+        if (field.overridable && data.has(key)) {
             result = JsonPropertyParser.readOptionalList(context, logger, data, key, deserializer, listValidator);
-        } else if (field instanceof Field.Value) {
-            List<T> templates = ((Field.Value<List<T>>) field).getValue();
-            result = new ArrayList<D>(templates.size());
+        } else if (field.type == Field.TYPE_VALUE) {
+            List<T> templates = ((Field.Value<List<T>>) field).value;
+            result = new ArrayList<V>(templates.size());
             for (int i = 0; i < templates.size(); i++) {
                 T template = templates.get(i);
                 result.add(resolveOptionalDependency(context, logger, template, data, resolver));
             }
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             result = JsonPropertyParser.readOptionalList(context, logger, data, reference, deserializer, listValidator);
         }
 
@@ -671,78 +675,78 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    public static <D> ExpressionList<D> resolveExpressionList(
+    public static <V> ExpressionList<V> resolveExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper
+            @NonNull final TypeHelper<V> typeHelper
     ) {
         return resolveExpressionList(
                 context, logger, field, data, key, typeHelper, doNotConvert(), alwaysValidList(), alwaysValid());
     }
 
     @NonNull
-    public static <R, D> ExpressionList<D> resolveExpressionList(
+    public static <R, V> ExpressionList<V> resolveExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter
     ) {
         return resolveExpressionList(context, logger, field, data, key, typeHelper, converter, alwaysValidList(), alwaysValid());
     }
 
     @NonNull
-    public static <R, D> ExpressionList<D> resolveExpressionList(
+    public static <R, V> ExpressionList<V> resolveExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return resolveExpressionList(context, logger, field, data, key, typeHelper, converter, listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <D> ExpressionList<D> resolveExpressionList(
+    public static <V> ExpressionList<V> resolveExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return resolveExpressionList(context, logger, field, data, key, typeHelper, doNotConvert(), listValidator, alwaysValid());
     }
 
     @NonNull
-    public static <R, D> ExpressionList<D> resolveExpressionList(
+    public static <R, V> ExpressionList<V> resolveExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ListValidator<D> listValidator,
-            @NonNull final ValueValidator<D> itemValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
-        ExpressionList<D> result = null;
-        if (field.getOverridable() && data.has(key)) {
+        ExpressionList<V> result = null;
+        if (field.overridable && data.has(key)) {
             result = JsonExpressionParser.readExpressionList(
                     context, logger, data, key, typeHelper, converter, listValidator, itemValidator);
-        } else if (field instanceof Field.Value) {
-            result = ((Field.Value<ExpressionList<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            result = ((Field.Value<ExpressionList<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             result = JsonExpressionParser.readExpressionList(
                     context, logger, data, reference, typeHelper, converter, listValidator, itemValidator);
         }
@@ -754,96 +758,96 @@ public class JsonFieldResolver {
     }
 
     @Nullable
-    public static <D> ExpressionList<D> resolveOptionalExpressionList(
+    public static <V> ExpressionList<V> resolveOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper
+            @NonNull final TypeHelper<V> typeHelper
     ) {
         return resolveOptionalExpressionList(
                 context, logger, field, data, key, typeHelper, doNotConvert(), alwaysValidList(), alwaysValid());
     }
 
     @Nullable
-    public static <R, D> ExpressionList<D> resolveOptionalExpressionList(
+    public static <R, V> ExpressionList<V> resolveOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter
     ) {
         return resolveOptionalExpressionList(
                 context, logger, field, data, key, typeHelper, converter, alwaysValidList(), alwaysValid());
     }
 
     @Nullable
-    public static <R, D> ExpressionList<D> resolveOptionalExpressionList(
+    public static <R, V> ExpressionList<V> resolveOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return resolveOptionalExpressionList(
                 context, logger, field, data, key, typeHelper, converter, listValidator, alwaysValid());
     }
 
     @Nullable
-    public static <D> ExpressionList<D> resolveOptionalExpressionList(
+    public static <V> ExpressionList<V> resolveOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final ListValidator<D> listValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ListValidator<V> listValidator
     ) {
         return resolveOptionalExpressionList(
                 context, logger, field, data, key, typeHelper, doNotConvert(), listValidator, alwaysValid());
     }
 
     @Nullable
-    public static <D> ExpressionList<D> resolveOptionalExpressionList(
+    public static <V> ExpressionList<V> resolveOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final ListValidator<D> listValidator,
-            @NonNull final ValueValidator<D> itemValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
         return resolveOptionalExpressionList(
                 context, logger, field, data, key, typeHelper, doNotConvert(), listValidator, itemValidator);
     }
 
     @Nullable
-    public static <R, D> ExpressionList<D> resolveOptionalExpressionList(
+    public static <R, V> ExpressionList<V> resolveOptionalExpressionList(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
-            @NonNull final Field<ExpressionList<D>> field,
+            @NonNull final Field<ExpressionList<V>> field,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TypeHelper<D> typeHelper,
-            @NonNull final Function1<R, D> converter,
-            @NonNull final ListValidator<D> listValidator,
-            @NonNull final ValueValidator<D> itemValidator
+            @NonNull final TypeHelper<V> typeHelper,
+            @NonNull final Function1<R, V> converter,
+            @NonNull final ListValidator<V> listValidator,
+            @NonNull final ValueValidator<V> itemValidator
     ) {
-        ExpressionList<D> result = null;
-        if (field.getOverridable() && data.has(key)) {
+        ExpressionList<V> result = null;
+        if (field.overridable && data.has(key)) {
             result = JsonExpressionParser.readOptionalExpressionList(
                     context, logger, data, key, typeHelper, converter, listValidator, itemValidator);
-        } else if (field instanceof Field.Value) {
-            result = ((Field.Value<ExpressionList<D>>) field).getValue();
-        } else if (field instanceof Field.Reference) {
-            String reference = ((Field.Reference<?>) field).getReference();
+        } else if (field.type == Field.TYPE_VALUE) {
+            result = ((Field.Value<ExpressionList<V>>) field).value;
+        } else if (field.type == Field.TYPE_REFERENCE) {
+            String reference = ((Field.Reference<?>) field).reference;
             result = JsonExpressionParser.readOptionalExpressionList(
                     context, logger, data, reference, typeHelper, converter, listValidator, itemValidator);
         }
@@ -852,30 +856,30 @@ public class JsonFieldResolver {
     }
 
     @NonNull
-    private static <D, T extends EntityTemplate<D>> D resolveDependency(
+    private static <T extends EntityTemplate<V>, V> V resolveDependency(
             @NonNull final ParsingContext context,
             @NonNull final T template,
             @NonNull final JSONObject data,
             @NonNull final String key,
-            @NonNull final TemplateResolver<D, T, JSONObject> resolver
+            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver
     ) {
         try {
-            return resolver.resolve(context, template, data);
+            return resolver.getValue().resolve(context, template, data);
         } catch (ParsingException e) {
             throw dependencyFailed(data, key, e);
         }
     }
 
     @Nullable
-    private static <D, T extends EntityTemplate<D>> D resolveOptionalDependency(
+    private static <T extends EntityTemplate<V>, V> V resolveOptionalDependency(
             @NonNull final ParsingContext context,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final T template,
             @NonNull final JSONObject data,
-            @NonNull final TemplateResolver<D, T, JSONObject> resolver
+            @NonNull final Lazy<TemplateResolver<JSONObject, T, V>> resolver
     ) {
         try {
-            return resolver.resolve(context, template, data);
+            return resolver.getValue().resolve(context, template, data);
         } catch (ParsingException e) {
             logger.logError(e);
             return null;

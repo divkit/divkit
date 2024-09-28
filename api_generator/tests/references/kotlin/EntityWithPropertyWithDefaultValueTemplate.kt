@@ -1,28 +1,34 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue> {
-    @JvmField final val int: Field<Expression<Long>> // constraint: number >= 0; default value: 0
-    @JvmField final val nested: Field<NestedTemplate>
-    @JvmField final val url: Field<Expression<Uri>> // valid schemes: [https]; default value: https://yandex.ru
+    @JvmField val int: Field<Expression<Long>>
+    @JvmField val nested: Field<NestedTemplate>
+    @JvmField val url: Field<Expression<Uri>>
 
-    constructor (
+    constructor(
+        int: Field<Expression<Long>>,
+        nested: Field<NestedTemplate>,
+        url: Field<Expression<Uri>>,
+    ) {
+        this.int = int
+        this.nested = nested
+        this.url = url
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithPropertyWithDefaultValueTemplate? = null,
         topLevel: Boolean = false,
@@ -34,11 +40,11 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithPropertyWithDefaultValue {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue {
         return EntityWithPropertyWithDefaultValue(
-            int = int.resolveOptional(env = env, key = "int", data = rawData, reader = INT_READER) ?: INT_DEFAULT_VALUE,
-            nested = nested.resolveOptionalTemplate(env = env, key = "nested", data = rawData, reader = NESTED_READER),
-            url = url.resolveOptional(env = env, key = "url", data = rawData, reader = URL_READER) ?: URL_DEFAULT_VALUE
+            int = this.int.resolveOptional(env = env, key = "int", data = data, reader = INT_READER) ?: INT_DEFAULT_VALUE,
+            nested = this.nested.resolveOptionalTemplate(env = env, key = "nested", data = data, reader = NESTED_READER),
+            url = this.url.resolveOptional(env = env, key = "url", data = data, reader = URL_READER) ?: URL_DEFAULT_VALUE
         )
     }
 
@@ -70,13 +76,22 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValueTemplate(env, json = it) }
     }
 
-    @Mockable
     class NestedTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue.Nested> {
-        @JvmField final val int: Field<Expression<Long>> // constraint: number >= 0; default value: 0
-        @JvmField final val nonOptional: Field<Expression<String>>
-        @JvmField final val url: Field<Expression<Uri>> // valid schemes: [https]; default value: https://yandex.ru
+        @JvmField val int: Field<Expression<Long>>
+        @JvmField val nonOptional: Field<Expression<String>>
+        @JvmField val url: Field<Expression<Uri>>
 
-        constructor (
+        constructor(
+            int: Field<Expression<Long>>,
+            nonOptional: Field<Expression<String>>,
+            url: Field<Expression<Uri>>,
+        ) {
+            this.int = int
+            this.nonOptional = nonOptional
+            this.url = url
+        }
+
+        constructor(
             env: ParsingEnvironment,
             parent: NestedTemplate? = null,
             topLevel: Boolean = false,
@@ -88,11 +103,11 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
             url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
         }
 
-        override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithPropertyWithDefaultValue.Nested {
+        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue.Nested {
             return EntityWithPropertyWithDefaultValue.Nested(
-                int = int.resolveOptional(env = env, key = "int", data = rawData, reader = INT_READER) ?: INT_DEFAULT_VALUE,
-                nonOptional = nonOptional.resolve(env = env, key = "non_optional", data = rawData, reader = NON_OPTIONAL_READER),
-                url = url.resolveOptional(env = env, key = "url", data = rawData, reader = URL_READER) ?: URL_DEFAULT_VALUE
+                int = this.int.resolveOptional(env = env, key = "int", data = data, reader = INT_READER) ?: INT_DEFAULT_VALUE,
+                nonOptional = this.nonOptional.resolve(env = env, key = "non_optional", data = data, reader = NON_OPTIONAL_READER),
+                url = this.url.resolveOptional(env = env, key = "url", data = data, reader = URL_READER) ?: URL_DEFAULT_VALUE
             )
         }
 

@@ -396,7 +396,7 @@
             }
 
             if (type === 'match_parent' || !type) {
-                componentContext.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                componentContext.logError(wrapError(new Error('Incorrect child size. Container with wrap_content size contains child with match_parent size along the main axis'), {
                     level: 'warn'
                 }));
             }
@@ -408,8 +408,22 @@
                     level: 'error'
                 }));
             }
-            if (layoutParams.parentLayoutOrientation === 'vertical') {
-                newWidth = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.left || 0) + ($jsonMargins?.right || 0))})`;
+            if (layoutParams.parentLayoutOrientation === 'vertical' || layoutParams.stretchWidth) {
+                const leftMargin = ($direction === 'ltr' ? $jsonMargins?.start : $jsonMargins?.end) ??
+                    $jsonMargins?.left ??
+                    0;
+                const rightMargin = ($direction === 'ltr' ? $jsonMargins?.end : $jsonMargins?.start) ??
+                    $jsonMargins?.right ??
+                    0;
+                const totalWidth = `calc(100% - ${pxToEmWithUnits(leftMargin + rightMargin)})`;
+
+                if (layoutParams.stretchWidth) {
+                    // force preferred width to 0
+                    newWidth = '0';
+                    newWidthMin = totalWidth;
+                } else {
+                    newWidth = totalWidth;
+                }
             } else if (layoutParams.parentContainerOrientation === 'horizontal') {
                 newFlexGrow = $jsonWidth && 'weight' in $jsonWidth && $jsonWidth.weight || 1;
                 if (layoutParams.parentContainerWrap) {
@@ -474,8 +488,18 @@
                     level: 'error'
                 }));
             }
-            if (layoutParams.parentLayoutOrientation === 'horizontal') {
-                newHeight = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.top || 0) + ($jsonMargins?.bottom || 0))})`;
+            if (layoutParams.parentLayoutOrientation === 'horizontal' || layoutParams.stretchHeight) {
+                const topMargin = $jsonMargins?.top ?? 0;
+                const bottomMargin = $jsonMargins?.bottom ?? 0;
+                const totalHeight = `calc(100% - ${pxToEmWithUnits(topMargin + bottomMargin)})`;
+
+                if (layoutParams.stretchHeight) {
+                    // force preferred height to 0
+                    newHeight = '0';
+                    newHeightMin = totalHeight;
+                } else {
+                    newHeight = totalHeight;
+                }
             } else if (layoutParams.parentContainerOrientation === 'vertical') {
                 newFlexGrow = $jsonHeight?.weight || 1;
                 if (layoutParams.parentContainerWrap) {
@@ -505,7 +529,7 @@
             }
 
             if (type === 'match_parent') {
-                componentContext.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                componentContext.logError(wrapError(new Error('Incorrect child size. Container with wrap_content size contains child with match_parent size along the main axis'), {
                     level: 'warn'
                 }));
             }
@@ -542,10 +566,6 @@
     }
 
     $: parentOverlapMod = layoutParams.overlapParent ? true : undefined;
-
-    $: parentOverlapAbsoluteMod = layoutParams.overlapParent &&
-        (!$jsonWidth || $jsonWidth.type === 'match_parent') && !layoutParams.parentHorizontalWrapContent &&
-        $jsonHeight?.type === 'match_parent' && !layoutParams.parentVerticalWrapContent;
 
     $: gridArea = layoutParams.gridArea ?
         `${layoutParams.gridArea.y + 1}/${layoutParams.gridArea.x + 1}/span ${layoutParams.gridArea.rowSpan}/span ${layoutParams.gridArea.colSpan}` :
@@ -807,7 +827,6 @@
         ...widthMods,
         ...heightMods,
         'parent-overlap': parentOverlapMod,
-        'parent-overlap-absolute': parentOverlapAbsoluteMod,
         'scroll-snap': layoutParams.scrollSnap,
         'hide-on-transition-in': stateChangingInProgress ||
             visibilityChangingInProgress ||

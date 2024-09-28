@@ -11,6 +11,7 @@ import com.yandex.div.storage.database.ExecutionResult
 import com.yandex.div.storage.database.StorageException
 import com.yandex.div.storage.templates.DivParsingHistogramProxy
 import com.yandex.div.storage.templates.TemplatesContainer
+import com.yandex.div2.DivData
 import com.yandex.div2.DivTemplate
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -32,6 +33,7 @@ import javax.inject.Provider
 private const val INVALID_CARD_ID = "card#invalid"
 private const val DIV_DATA_INVALID_KEY = "isInvalid"
 private const val DIV_DATA_UNEXPECTED_PARSING_ERROR_MESSAGE = "some unexpected parsing error"
+private val MOCK_DIV_DATA = DivData(logId = "test", states = emptyList())
 
 @RunWith(RobolectricTestRunner::class)
 class DivDataRepositoryImplTest {
@@ -59,7 +61,7 @@ class DivDataRepositoryImplTest {
                     on { message } doReturn DIV_DATA_UNEXPECTED_PARSING_ERROR_MESSAGE
                 }
             }
-            mock()
+            MOCK_DIV_DATA
         }
     }
 

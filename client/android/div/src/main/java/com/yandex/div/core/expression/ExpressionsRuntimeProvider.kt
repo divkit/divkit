@@ -142,7 +142,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
         val evaluator = Evaluator(evaluationContext)
 
-        val runtimeStore = RuntimeStore(evaluator, errorCollector)
+        val runtimeStore = RuntimeStore(evaluator, errorCollector, logger, divActionBinder)
         val callback = ExpressionResolverImpl.OnCreateCallback { resolver, variableController ->
             runtimeStore.putRuntime(
                 runtime = ExpressionsRuntime(resolver, variableController, null, runtimeStore)

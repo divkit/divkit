@@ -22,6 +22,8 @@ class DivVisibilityEmitter extends StatelessWidget {
     final isVisible = divVisibility == DivVisibility.visible;
     return Visibility(
       visible: isVisible,
+      // ToDo: Needs replace to something?
+      // Have test error, but not checked!
       replacement: IgnorePointer(child: child),
       child: IgnorePointer(
         ignoring: !isVisible,

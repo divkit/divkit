@@ -16,9 +16,14 @@ interface ParsingContext {
         get() = true
 }
 
+@ExperimentalApi
+internal interface ParsingContextWrapper : ParsingContext {
+    val baseContext: ParsingContext
+}
+
 private class ErrorCollectingParsingContext(
-    private val baseContext: ParsingContext
-) : ParsingContext by baseContext {
+    override val baseContext: ParsingContext
+) : ParsingContext by baseContext, ParsingContextWrapper {
 
     val errors = mutableListOf<Exception>()
 
@@ -28,22 +33,21 @@ private class ErrorCollectingParsingContext(
     }
 }
 
-internal fun ParsingContext.collectErrors(): ParsingContext {
+internal fun ParsingContext.collectingErrors(): ParsingContext {
     return if (this is ErrorCollectingParsingContext) this else ErrorCollectingParsingContext(this)
 }
 
+@Suppress("RecursivePropertyAccessor")
 internal val ParsingContext.collectedErrors: List<Exception>
-    get() {
-        return if (this is ErrorCollectingParsingContext) {
-            errors
-        } else {
-            emptyList()
-        }
-}
+    get() = when (this) {
+        is ErrorCollectingParsingContext -> errors
+        is ParsingContextWrapper -> baseContext.collectedErrors
+        else -> emptyList()
+    }
 
 private class OverrideRestrictingParsingContext(
-    val baseContext: ParsingContext
-) : ParsingContext by baseContext {
+    override val baseContext: ParsingContext
+) : ParsingContext by baseContext, ParsingContextWrapper {
 
     override val allowPropertyOverride: Boolean
         get() = false

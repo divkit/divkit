@@ -1,26 +1,28 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithComplexProperty> {
-    @JvmField final val property: Field<PropertyTemplate>
+    @JvmField val property: Field<PropertyTemplate>
 
-    constructor (
+    constructor(
+        property: Field<PropertyTemplate>,
+    ) {
+        this.property = property
+    }
+
+    constructor(
         env: ParsingEnvironment,
         parent: EntityWithComplexPropertyTemplate? = null,
         topLevel: Boolean = false,
@@ -30,9 +32,9 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
         property = JsonTemplateParser.readField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithComplexProperty {
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty {
         return EntityWithComplexProperty(
-            property = property.resolveTemplate(env = env, key = "property", data = rawData, reader = PROPERTY_READER)
+            property = this.property.resolveTemplate(env = env, key = "property", data = data, reader = PROPERTY_READER)
         )
     }
 
@@ -52,11 +54,16 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyTemplate(env, json = it) }
     }
 
-    @Mockable
     class PropertyTemplate : JSONSerializable, JsonTemplate<EntityWithComplexProperty.Property> {
-        @JvmField final val value: Field<Expression<Uri>>
+        @JvmField val value: Field<Expression<Uri>>
 
-        constructor (
+        constructor(
+            value: Field<Expression<Uri>>,
+        ) {
+            this.value = value
+        }
+
+        constructor(
             env: ParsingEnvironment,
             parent: PropertyTemplate? = null,
             topLevel: Boolean = false,
@@ -66,9 +73,9 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
             value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
         }
 
-        override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithComplexProperty.Property {
+        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty.Property {
             return EntityWithComplexProperty.Property(
-                value = value.resolve(env = env, key = "value", data = rawData, reader = VALUE_READER)
+                value = this.value.resolve(env = env, key = "value", data = data, reader = VALUE_READER)
             )
         }
 

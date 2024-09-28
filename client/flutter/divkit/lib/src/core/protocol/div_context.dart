@@ -272,8 +272,5 @@ class DivRootContext extends DivContext {
     _patchManager = null;
     _visibilityActionManager = null;
     triggerManager = null;
-
-    // Clear the expression resolver.
-    await exprResolver.clearVariables();
   }
 }

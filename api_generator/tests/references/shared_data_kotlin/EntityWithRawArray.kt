@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithRawArray(
-    @JvmField final val array: Expression<JSONArray>,
+    @JvmField val array: Expression<JSONArray>,
 ) : Hashable {
 
     private var _hash: Int? = null 

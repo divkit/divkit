@@ -1,6 +1,6 @@
 import 'package:divkit/divkit.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:divkit/src/core/variable/variable_manager.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Timer test', () {

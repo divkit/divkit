@@ -5,7 +5,7 @@ import com.yandex.div.data.Variable
 internal class SingleVariableSource(
     private val variables: Map<String, Variable>,
     private val requestObserver: (variableName: String) -> Unit,
-    private val declarationObservers: MutableCollection<(Variable) -> Unit>
+    private val declarationObservers: MutableCollection<DeclarationObserver>,
 ) : VariableSource {
 
     override fun getMutableVariable(name: String): Variable? {
@@ -13,7 +13,7 @@ internal class SingleVariableSource(
         return variables[name]
     }
 
-    override fun observeDeclaration(observer: (Variable) -> Unit) {
+    override fun observeDeclaration(observer: DeclarationObserver) {
         declarationObservers.add(observer)
     }
 
@@ -29,7 +29,7 @@ internal class SingleVariableSource(
         }
     }
 
-    override fun removeDeclarationObserver(observer: (Variable) -> Unit) {
+    override fun removeDeclarationObserver(observer: DeclarationObserver) {
         declarationObservers.remove(observer)
     }
 

@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithOptionalProperty(
-    @JvmField final val property: Expression<String>? = null,
+    @JvmField val property: Expression<String>? = null,
 ) : Hashable {
 
     private var _hash: Int? = null 

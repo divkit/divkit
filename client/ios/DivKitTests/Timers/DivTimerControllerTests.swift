@@ -18,6 +18,8 @@ final class DivTimerControllerTests: XCTestCase {
 
   private let variablesStorage = DivVariablesStorage()
 
+  private let functionsStorage = DivFunctionsStorage()
+
   private var variableValue: Int? {
     variablesStorage.getVariableValue(cardId: "test_card", name: "test_variable_name")
   }
@@ -361,6 +363,7 @@ final class DivTimerControllerTests: XCTestCase {
       },
       updateCard: {},
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       persistentValuesStorage: DivPersistentValuesStorage(),
       reporter: DefaultDivReporter()
     )

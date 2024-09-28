@@ -42,6 +42,7 @@ public final class DivKitComponents {
   private let layoutProviderHandler: DivLayoutProviderHandler
   private let persistentValuesStorage = DivPersistentValuesStorage()
   private let timerStorage: DivTimerStorage
+  private let functionsStorage: DivFunctionsStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
@@ -164,11 +165,14 @@ public final class DivKitComponents {
     self.tooltipManager = tooltipManager ?? DefaultTooltipManager()
     #endif
 
+    functionsStorage = DivFunctionsStorage(reporter: reporter)
+
     actionHandler = DivActionHandler(
       stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
       patchProvider: self.patchProvider,
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: self.tooltipManager,
@@ -182,6 +186,7 @@ public final class DivKitComponents {
 
     triggersStorage = DivTriggersStorage(
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       stateUpdates: blockStateStorage.stateUpdates,
       actionHandler: actionHandler,
       persistentValuesStorage: persistentValuesStorage,
@@ -190,6 +195,7 @@ public final class DivKitComponents {
 
     timerStorage = DivTimerStorage(
       variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
       actionHandler: actionHandler,
       updateCard: updateCard,
       persistentValuesStorage: persistentValuesStorage,
@@ -211,6 +217,7 @@ public final class DivKitComponents {
     stateManagement.reset()
     variablesStorage.reset()
     triggersStorage.reset()
+    functionsStorage.reset()
     visibilityCounter.reset()
     timerStorage.reset()
   }
@@ -221,6 +228,7 @@ public final class DivKitComponents {
     stateManagement.reset(cardId: cardId)
     variablesStorage.reset(cardId: cardId)
     triggersStorage.reset(cardId: cardId)
+    functionsStorage.reset(cardId: cardId)
     visibilityCounter.reset(cardId: cardId)
     timerStorage.reset(cardId: cardId)
   }
@@ -289,6 +297,7 @@ public final class DivKitComponents {
       cardId: cardId,
       additionalId: additionalId,
       stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
+      actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,
@@ -297,6 +306,7 @@ public final class DivKitComponents {
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
       extensionHandlers: extensionHandlers,
+      functionsStorage: functionsStorage,
       variablesStorage: variablesStorage,
       triggersStorage: triggersStorage,
       playerFactory: playerFactory,

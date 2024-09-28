@@ -1,24 +1,20 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
 import android.graphics.Color
 import android.net.Uri
 import androidx.annotation.ColorInt
+import com.yandex.div.data.*
 import com.yandex.div.json.*
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionsList
 import com.yandex.div.json.schema.*
-import com.yandex.div.core.annotations.Mockable
-import java.io.IOException
-import java.util.BitSet
-import org.json.JSONObject
-import com.yandex.div.data.*
 import org.json.JSONArray
+import org.json.JSONObject
 
-@Mockable
 class EntityWithComplexPropertyWithDefaultValue(
-    @JvmField final val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
+    @JvmField val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
@@ -69,9 +65,8 @@ class EntityWithComplexPropertyWithDefaultValue(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyWithDefaultValue(env, json = it) }
     }
 
-    @Mockable
     class Property(
-        @JvmField final val value: Expression<String>,
+        @JvmField val value: Expression<String>,
     ) : JSONSerializable, Hashable {
 
         private var _hash: Int? = null 

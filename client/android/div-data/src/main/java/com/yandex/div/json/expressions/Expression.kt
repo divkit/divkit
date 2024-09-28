@@ -11,7 +11,6 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.resolveFailed
 import com.yandex.div.json.typeMismatch
-import java.util.concurrent.ConcurrentHashMap
 
 private const val EXPR_SYMBOL = '@'
 private const val EXPR_OPEN_BRACKET = '{'
@@ -220,18 +219,15 @@ abstract class Expression<T : Any> {
     }
 
     companion object {
-        private val pool = ConcurrentHashMap<Any, Expression<*>>(1000)
 
         @JvmStatic
+        @Suppress("UNCHECKED_CAST")
         fun <T : Any> constant(value: T): Expression<T> {
-            val unTypedExpression = pool.getOrPut(value) {
-                if (value is String) {
-                    StringConstantExpression(value)
-                } else {
-                    ConstantExpression(value)
-                }
+            return if (value is String) {
+                StringConstantExpression(value) as Expression<T>
+            } else {
+                ConstantExpression(value)
             }
-            return unTypedExpression as Expression<T>
         }
 
         @JvmStatic

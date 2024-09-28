@@ -67,6 +67,10 @@ android {
             java.srcDirs += 'src/screenshotTest/java'
         }
     }
+
+    lint {
+        baseline file("lint-baseline.xml")
+    }
 }
 
 dependencies {

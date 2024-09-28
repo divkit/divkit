@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:divkit/divkit.dart';
 import 'package:example/src/configuration/playground_custom_handler.dart';
 import 'package:example/src/configuration/playground_font_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../state.dart';
+import 'package:example/src/state.dart';
 
 class ShowPage extends ConsumerStatefulWidget {
   final Map<String, dynamic> data;
@@ -25,10 +23,8 @@ class _ShowPageState extends ConsumerState<ShowPage> {
       templates: json['templates'],
     );
     await data.build();
-    // Expressions only work on mobile platforms!
-    if (Platform.isAndroid || Platform.isIOS) {
-      await data.preload();
-    }
+    await data.preload();
+
     return data;
   }
 

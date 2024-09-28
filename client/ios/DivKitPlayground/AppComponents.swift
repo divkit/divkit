@@ -32,6 +32,7 @@ enum AppComponents {
       extensionHandlers: [
         lottieExtensionHanlder,
         sizeProviderExtensionHandler,
+        InputAccessoryViewExtensionHandler(viewProvider: AccessoryViewProvider()),
         ShimmerImagePreviewExtension(),
         VideoDurationExtensionHandler(),
         GestureExtensionHandler(),

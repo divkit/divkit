@@ -59,6 +59,20 @@ final class BlockTests_Layout: XCTestCase {
     XCTAssertEqual(block.intrinsicContentWidth, maxWidth)
   }
 
+  func test_IntrinsicWidthOfNotConstrainedTextBlockWithMaxSize_LessThanTextWidth_EqualsToMultilineTextWidth(
+  ) {
+    let maxWidth = intrinsicTextSize.width / 2
+    let block = TextBlock(
+      widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxWidth),
+      text: text,
+      tightenWidth: true
+    )
+
+    let result = block.intrinsicContentWidth
+    XCTAssertTrue(result <= maxWidth)
+    XCTAssertEqual(result, multilineTextSize.width)
+  }
+
   func test_IntrinsicWidthOfNotConstrainedTextBlockWithMaxSize_MoreThanTextWidth_EqualsToTextWidth(
   ) {
     let block = TextBlock(

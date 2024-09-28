@@ -1,11 +1,12 @@
 // Generated code. Do not modify.
 
-package com.yandex.div2
+package com.yandex.div.reference
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithOptionalComplexProperty(
-    @JvmField final val property: Property? = null,
+    @JvmField val property: Property? = null,
 ) : Hashable {
 
     private var _hash: Int? = null 
@@ -37,7 +38,7 @@ class EntityWithOptionalComplexProperty(
     }
 
     class Property(
-        @JvmField final val value: Expression<Uri>,
+        @JvmField val value: Expression<Uri>,
     ) : Hashable {
 
         private var _hash: Int? = null 

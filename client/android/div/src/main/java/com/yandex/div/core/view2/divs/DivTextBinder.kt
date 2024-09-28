@@ -122,6 +122,7 @@ internal class DivTextBinder @Inject constructor(
         view.bindTextGradient(div, oldDiv, expressionResolver)
         view.bindTextShadow(div, oldDiv, expressionResolver)
         view.bindSelectable(div, oldDiv, expressionResolver)
+        view.bindTightenWidth(div, oldDiv, expressionResolver)
         view.updateFocusableState(div)
     }
 
@@ -491,6 +492,34 @@ internal class DivTextBinder @Inject constructor(
 
     private fun TextView.applySelectable(selectable: Boolean) {
         setTextIsSelectable(selectable)
+    }
+
+    //endregion
+
+    //region Tighten Width
+
+    private fun DivLineHeightTextView.bindTightenWidth(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.tightenWidth.equalsToConstant(oldDiv?.tightenWidth)) {
+            return
+        }
+
+        applyTightenWidth(newDiv.tightenWidth.evaluate(resolver))
+
+        if (newDiv.tightenWidth.isConstant()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.tightenWidth.observe(resolver) { applyTightenWidth(it) }
+        )
+    }
+
+    private fun DivLineHeightTextView.applyTightenWidth(tight: Boolean) {
+        isTightenWidth = tight
     }
 
     //endregion
