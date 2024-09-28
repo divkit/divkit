@@ -20,6 +20,10 @@ internal inline fun <T, R> Converter<T, R?>.tryConvert(value: T): R? {
 @JvmField
 val COLOR_INT_TO_STRING: Converter<Int, String> = { value -> Color(value).toString() }
 
+@Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
+@Deprecated("Do not use internal API")
+fun getCOLOR_INT_TO_STRING() = COLOR_INT_TO_STRING
+
 @JvmField
 val STRING_TO_COLOR_INT: Converter<Any?, Int?> = { value ->
     when (value) {
@@ -30,11 +34,23 @@ val STRING_TO_COLOR_INT: Converter<Any?, Int?> = { value ->
     }
 }
 
+@Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
+@Deprecated("Do not use internal API")
+fun getSTRING_TO_COLOR_INT() = STRING_TO_COLOR_INT
+
 @JvmField
 val URI_TO_STRING: Converter<Uri, String> = { uri -> uri.toString() }
 
+@Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
+@Deprecated("Do not use internal API")
+fun getURI_TO_STRING() = URI_TO_STRING
+
 @JvmField
 val STRING_TO_URI: Converter<String, Uri> = { value -> Uri.parse(value) }
+
+@Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
+@Deprecated("Do not use internal API")
+fun getSTRING_TO_URI() = STRING_TO_URI
 
 @JvmField
 val ANY_TO_BOOLEAN: Converter<Any, Boolean?> = { value ->
@@ -45,8 +61,20 @@ val ANY_TO_BOOLEAN: Converter<Any, Boolean?> = { value ->
     }
 }
 
+@Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
+@Deprecated("Do not use internal API")
+fun getANY_TO_BOOLEAN() = ANY_TO_BOOLEAN
+
 @JvmField
 val NUMBER_TO_DOUBLE: Converter<Number, Double> = { n: Number -> n.toDouble() }
 
+@Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
+@Deprecated("Do not use internal API")
+fun getNUMBER_TO_DOUBLE() = NUMBER_TO_DOUBLE
+
 @JvmField
 val NUMBER_TO_INT: Converter<Number, Long> = { n: Number -> n.toLong() }
+
+@Suppress("FunctionName", "DeprecatedCallableAddReplaceWith")
+@Deprecated("Do not use internal API")
+fun getNUMBER_TO_INT() = NUMBER_TO_INT
