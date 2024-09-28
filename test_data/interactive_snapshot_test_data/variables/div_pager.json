@@ -279,7 +279,7 @@
         }
       ],
       "delay": 100,
-      "expected_screenshot": "step0.png"
+      "expected_screenshot": "step4.png"
     },
     {
       "div_actions": [
@@ -339,6 +339,7 @@
           "log_id": "scroll_to_end"
         }
       ],
+      "delay": 100,
       "expected_screenshot": "step9.png"
     },
     {
@@ -357,7 +358,8 @@
           "log_id": "scroll_to_start_back"
         }
       ],
-      "expected_screenshot": "step9.png"
+      "delay": 100,
+      "expected_screenshot": "step8.png"
     },
     {
       "div_actions": [
