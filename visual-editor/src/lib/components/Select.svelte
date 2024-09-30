@@ -1,5 +1,9 @@
+<script lang="ts" context="module">
+    const WINDOW_OFFSET = 24;
+</script>
+
 <script lang="ts">
-    import { createEventDispatcher, tick } from 'svelte';
+    import { afterUpdate, createEventDispatcher, tick } from 'svelte';
     import { fly } from 'svelte/transition';
     import { popupClose, submit, suggestDown, suggestFirst, suggestLast, suggestUp } from '../utils/keybinder/shortcuts';
     import { encodeBackground } from '../utils/encodeBackground';
@@ -26,8 +30,10 @@
     const dispatch = createEventDispatcher();
 
     let toggled = false;
+    let direction = 'down';
     let node: HTMLElement;
     let control: HTMLElement;
+    let popup: HTMLElement;
 
     function move(by: number): void {
         let index = items.findIndex(item => item.value === value);
@@ -89,7 +95,10 @@
     }
 
     function select(val: string): void {
-        selectValue(val);
+        if (val !== value) {
+            selectValue(val);
+        }
+
         toggled = false;
 
         tick().then(() => {
@@ -104,6 +113,21 @@
 
         toggled = !toggled;
     }
+
+    afterUpdate(() => {
+        if (!toggled) {
+            return;
+        }
+
+        const nodeBottom = node.getBoundingClientRect().bottom;
+        const popupHeight = popup.offsetHeight;
+
+        if (nodeBottom + popupHeight + WINDOW_OFFSET > window.innerHeight) {
+            direction = 'up';
+        } else {
+            direction = 'down';
+        }
+    });
 </script>
 
 <svelte:window
@@ -145,7 +169,8 @@
 
     {#if toggled}
         <div
-            class="select__popup"
+            bind:this={popup}
+            class="select__popup select__popup_direction_{direction}"
             id="popup_{id}"
             transition:fly={{
                 duration: 200,
@@ -285,6 +310,11 @@
         border-radius: 8px;
         box-shadow: var(--shadow-16);
         background: var(--background-primary);
+    }
+
+    .select__popup_direction_up {
+        top: auto;
+        bottom: calc(100% + 4px);
     }
 
     .select__list {

@@ -1,6 +1,14 @@
 <script lang="ts">
     import { createEventDispatcher, getContext, onDestroy } from 'svelte';
-    import type { Action } from '@divkitframework/divkit/typings/common';
+    import type {
+        Action,
+        ActionArrayInsertValue,
+        ActionArrayRemoveValue,
+        ActionFocusElement,
+        ActionSetVariable,
+        ActionDictSetValue,
+        ActionArraySetValue
+    } from '@divkitframework/divkit/typings/common';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { parseAction } from '../../data/actions';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
@@ -18,13 +26,42 @@
     let text = '';
 
     function updateVal(value: Action): void {
-        const parsed = parseAction(value?.url, $customActions);
+        const parsed = parseAction(value, $customActions);
 
         type = '';
 
         if (parsed.type === 'url') {
             type = $l10n('actions-url');
             text = parsed.url || '';
+        } else if (parsed.type.startsWith('typed:')) {
+            if (parsed.type === 'typed:focus_element') {
+                type = $l10n('actions.focus_element');
+                text = (parsed.typedParams as ActionFocusElement)?.element_id || '';
+            } else if (parsed.type === 'typed:clear_focus') {
+                type = $l10n('actions.clear_focus');
+                text = '';
+            } else if (parsed.type === 'typed:set_variable') {
+                type = $l10n('actions.set_variable');
+                text = (parsed.typedParams as ActionSetVariable)?.variable_name || '';
+            } else if (parsed.type === 'typed:array_insert_value') {
+                type = $l10n('actions.array_insert_value');
+                text = (parsed.typedParams as ActionArrayInsertValue)?.variable_name || '';
+            } else if (parsed.type === 'typed:array_remove_value') {
+                type = $l10n('actions.array_remove_value');
+                text = (parsed.typedParams as ActionArrayRemoveValue)?.variable_name || '';
+            } else if (parsed.type === 'typed:dict_set_value') {
+                type = $l10n('actions.dict_set_value');
+                text = (parsed.typedParams as ActionDictSetValue)?.variable_name || '';
+            } else if (parsed.type === 'typed:array_set_value') {
+                type = $l10n('actions.array_set_value');
+                text = (parsed.typedParams as ActionArraySetValue)?.variable_name || '';
+            } else if (parsed.type === 'typed:copy_to_clipboard') {
+                type = $l10n('actions.copy_to_clipboard');
+                text = '';
+            } else {
+                type = $l10n('actions-unknown');
+                text = parsed.url || '';
+            }
         } else if (parsed.desc) {
             type = parsed.desc.text[$lang] || parsed.desc.baseUrl;
             text = '';
@@ -100,6 +137,7 @@
         font-size: 14px;
         line-height: 20px;
         color: var(--text-secondary);
+        white-space: nowrap;
     }
 
     .actions2-item__text {

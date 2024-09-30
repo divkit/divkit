@@ -146,6 +146,7 @@
     <Actions2Prop
         {item}
         {value}
+        {processedJson}
         on:change
     />
 {:else if item.type === 'video_sources'}

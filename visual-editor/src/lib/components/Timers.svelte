@@ -77,10 +77,13 @@
     }
 
     function onTickActions(index: number, event: CustomEvent<{
-        value: Action[];
+        values: {
+            prop: string;
+            value: Action[];
+        }[];
     }>): void {
         const timer = { ...$timers[index] };
-        timer.tick_actions = event.detail.value;
+        timer.tick_actions = event.detail.values.find(it => it.prop === 'actions')?.value;
         const newList = $timers.slice();
         newList[index] = timer;
 
@@ -88,10 +91,13 @@
     }
 
     function onEndActions(index: number, event: CustomEvent<{
-        value: Action[];
+        values: {
+            prop: string;
+            value: Action[];
+        }[];
     }>): void {
         const timer = { ...$timers[index] };
-        timer.end_actions = event.detail.value;
+        timer.end_actions = event.detail.values.find(it => it.prop === 'actions')?.value;
         const newList = $timers.slice();
         newList[index] = timer;
 

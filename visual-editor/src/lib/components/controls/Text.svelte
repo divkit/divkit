@@ -5,7 +5,7 @@
 
     export let id: string = '';
     export let value: string | number | undefined;
-    export let subtype: '' | 'integer' | 'number' | 'percent' | 'angle' | 'file' = '';
+    export let subtype: '' | 'integer' | 'number' | 'percent' | 'angle' | 'file' | 'dict' | 'array' = '';
     export let fileType: '' | 'image' | 'gif' | 'lottie' | 'video' | 'image_preview' = '';
     export let min: number | undefined = undefined;
     export let max: number | undefined = undefined;
@@ -29,16 +29,34 @@
 
     let internalValue: string | number = 0;
     let elem: HTMLElement;
+    let subtypeError = false;
+    let isFocused = false;
 
-    $: if (subtype === 'percent') {
-        internalValue = Math.round(Number(value || defaultValue || 0) * 100);
-    } else if (subtype === 'integer' || subtype === 'number' || subtype === 'angle') {
-        internalValue = Number(value || defaultValue || 0);
-    } else {
-        internalValue = value || defaultValue || '';
+    function updateInternalValue(
+        subtype: string,
+        value: string | number | undefined,
+        defaultValue: string | number | undefined
+    ): void {
+        if (isFocused) {
+            return;
+        }
+
+        if (subtype === 'percent') {
+            internalValue = Math.round(Number(value || defaultValue || 0) * 100);
+        } else if (subtype === 'integer' || subtype === 'number' || subtype === 'angle') {
+            internalValue = Number(value || defaultValue || 0);
+        } else if (subtype === 'dict' || subtype === 'array') {
+            internalValue = typeof value === 'string' ? value : JSON.stringify(value);
+        } else {
+            internalValue = value || defaultValue || '';
+        }
     }
 
-    $: type = subtype && subtype !== 'file' ? 'number' : 'text';
+    $: updateInternalValue(subtype, value, defaultValue);
+
+    $: type = (subtype === 'angle' || subtype === 'integer' || subtype === 'number' || subtype === 'percent') ?
+        'number' :
+        'text';
 
     // eslint-disable-next-line no-nested-ternary
     $: step = anyStep ?
@@ -58,6 +76,21 @@
                 }
                 value = val;
             }
+        } else if (subtype === 'dict' || subtype === 'array') {
+            const str = String(internalValue);
+
+            if (subtype === 'dict' && !str.startsWith('{')) {
+                subtypeError = true;
+            } else if (subtype === 'array' && !str.startsWith('[')) {
+                subtypeError = true;
+            } else {
+                try {
+                    value = JSON.parse(String(internalValue));
+                    subtypeError = false;
+                } catch (err) {
+                    subtypeError = true;
+                }
+            }
         } else {
             value = internalValue;
         }
@@ -65,6 +98,14 @@
         dispatch('change', {
             value
         });
+    }
+
+    function onFocus(): void {
+        isFocused = true;
+    }
+
+    function onBlur(): void {
+        isFocused = false;
     }
 
     function onMore(): void {
@@ -98,7 +139,7 @@
     class:text_inline-label={Boolean(inlineLabel)}
     class:text_button={hasButton}
     class:text_disabled={disabled}
-    class:text_error={Boolean(error)}
+    class:text_error={Boolean(error || subtypeError)}
     title={error}
     aria-label={title}
     data-custom-tooltip={title}
@@ -119,6 +160,8 @@
             {disabled}
             bind:value={internalValue}
             on:input={onChange}
+            on:focus={onFocus}
+            on:blur={onBlur}
         >
     {:else}
         <input
@@ -140,6 +183,8 @@
             {disabled}
             bind:value={internalValue}
             on:input={onChange}
+            on:focus={onFocus}
+            on:blur={onBlur}
         >
     {/if}
 

@@ -1,6 +1,19 @@
+<script lang="ts" context="module">
+    const TYPED_TO_SCHEMA_MAP = {
+        focus_element: 'div-action-focus-element',
+        clear_focus: 'div-action-clear-focus',
+        set_variable: 'div-action-set-variable',
+        array_insert_value: 'div-action-array-insert-value',
+        array_remove_value: 'div-action-array-remove-value',
+        dict_set_value: 'div-action-dict-set-value',
+        array_set_value: 'div-action-array-set-value',
+        copy_to_clipboard: 'div-action-copy-to-clipboard'
+    };
+</script>
+
 <script lang="ts">
     import { getContext } from 'svelte';
-    import type { Action } from '@divkitframework/divkit/typings/common';
+    import type { Action, TypedAction } from '@divkitframework/divkit/typings/common';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import Select from '../Select.svelte';
     import Text from '../controls/Text.svelte';
@@ -8,6 +21,8 @@
     import { parseAction, type ArgResult } from '../../data/actions';
     import { APP_CTX, type Actions2DialogShowProps, type AppContext } from '../../ctx/appContext';
     import type { ActionDesc } from '../../../lib';
+    import { parseControls, type Control } from '../../data/schemaTypedActions';
+    import ControlsList from './actions-controls/ControlsList.svelte';
 
     const { l10n, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state } = getContext<AppContext>(APP_CTX);
@@ -20,13 +35,24 @@
         callback(value);
     }
 
+    $: if (subtype.startsWith('typed:')) {
+        const typedType = subtype.split(':')[1];
+        if (typedType in TYPED_TO_SCHEMA_MAP) {
+            typedControls = parseControls(TYPED_TO_SCHEMA_MAP[typedType as keyof typeof TYPED_TO_SCHEMA_MAP]);
+        } else {
+            typedControls = [];
+        }
+    } else {
+        typedControls = null;
+    }
+
     export function show(props: Actions2DialogShowProps): void {
         callback = props.callback;
         target = props.target;
         value = props.value;
         readOnly = props.readOnly;
         isShown = true;
-        const parsed = parseAction(props.value?.url, $customActions);
+        const parsed = parseAction(props.value, $customActions);
         subtype = parsed.type;
         customDesc = parsed.desc;
         actionArgs = parsed.args || [];
@@ -44,6 +70,7 @@
     let callback: ((val: Action) => void) | undefined;
     let readOnly: boolean | undefined;
     let customDesc: ActionDesc | undefined;
+    let typedControls: Control[] | null = null;
 
     function onClose(): void {
         isShown = false;
@@ -70,6 +97,10 @@
                     desc
                 };
             }) || [];
+        } else if (subtype.startsWith('typed:')) {
+            value.typed = {
+                type: subtype.split(':')[1]
+            } as TypedAction;
         } else {
             actionArgs = [];
         }
@@ -86,6 +117,30 @@
     $: types = [{
         value: 'url',
         text: $l10n('actions-url')
+    }, {
+        value: 'typed:set_variable',
+        text: $l10n('actions.set_variable')
+    }, {
+        value: 'typed:focus_element',
+        text: $l10n('actions.focus_element')
+    }, {
+        value: 'typed:clear_focus',
+        text: $l10n('actions.clear_focus')
+    }, {
+        value: 'typed:array_insert_value',
+        text: $l10n('actions.array_insert_value')
+    }, {
+        value: 'typed:array_remove_value',
+        text: $l10n('actions.array_remove_value')
+    }, {
+        value: 'typed:array_set_value',
+        text: $l10n('actions.array_set_value')
+    }, {
+        value: 'typed:dict_set_value',
+        text: $l10n('actions.dict_set_value')
+    }, {
+        value: 'typed:copy_to_clipboard',
+        text: $l10n('actions.copy_to_clipboard')
     }].concat($customActions.map((actionDesc, i) => {
         return {
             value: `custom:${i}`,
@@ -95,7 +150,12 @@
 </script>
 
 {#if isShown && target}
-    <ContextDialog {target} on:close={onClose} canMove={true}>
+    <ContextDialog
+        {target}
+        canMove={true}
+        overflow="visible"
+        on:close={onClose}
+    >
         <div class="actions2-dialog__content">
             <Select
                 items={types}
@@ -119,6 +179,12 @@
                         />
                     </label>
                 </div>
+            {:else if typedControls?.length && value.typed}
+                <ControlsList
+                    {readOnly}
+                    bind:value={value.typed}
+                    controls={typedControls}
+                />
             {:else if actionArgs.length}
                 {#each actionArgs as arg}
                     <div>

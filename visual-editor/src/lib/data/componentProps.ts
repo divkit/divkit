@@ -111,6 +111,7 @@ export interface ColorProperty extends BaseProperty {
 
 export interface Actions2Property extends BaseProperty {
     type: 'actions2';
+    aloneProp?: string;
 }
 
 export interface VideoSourcesProperty extends BaseProperty {
@@ -435,7 +436,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
         list: [{
             name: 'props.actions',
             prop: 'actions',
-            type: 'actions2'
+            type: 'actions2',
+            aloneProp: 'action'
         }]
     }],
     image: [...BASE_COMPONENT_PROPS, {

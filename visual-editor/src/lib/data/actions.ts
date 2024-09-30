@@ -1,3 +1,4 @@
+import type { Action, TypedAction } from '@divkitframework/divkit/typings/common';
 import type { ActionArg, ActionDesc } from '../../lib';
 import type { DivAction } from '../../types/divjson';
 import { decline } from '../utils/decline';
@@ -19,13 +20,30 @@ export interface ArgResult {
     value: string;
 }
 
-export function parseAction(url: string | undefined, customActions: ActionDesc[]): {
+export function parseAction(action: Action | undefined, customActions: ActionDesc[]): {
     type: string;
     url?: string;
     desc?: ActionDesc;
     args?: ArgResult[];
+    typedParams?: TypedAction;
 } {
     const obj: Record<string, string> = {};
+
+    if (!action) {
+        return {
+            type: 'url',
+            url: ''
+        };
+    }
+
+    if (action.typed) {
+        return {
+            type: 'typed:' + action.typed.type,
+            typedParams: action.typed
+        };
+    }
+
+    const url = action?.url;
 
     if (!url) {
         return {
