@@ -39,9 +39,6 @@ extension ImageBlock {
   }
 
   private func suitableTypeOfImageView() -> any RemoteImageViewContentProtocol.Type {
-    if tintMode != .sourceIn {
-      return MetalImageView.self
-    }
     let blurEffectUsingMetal = blurUsingMetal ?? true
     let tintEffectUsingMetal = tintUsingMetal ?? true
     let (hasBlur, hasTint) = usedEffects()
@@ -51,7 +48,7 @@ extension ImageBlock {
 
   private func usedEffects() -> (blur: Bool, tint: Bool) {
     var hasBlur = false
-    var hasTint = false
+    var hasTint = tintMode != .sourceIn && tintColor != nil
     for effect in effects {
       switch effect {
       case .blur:
