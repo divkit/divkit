@@ -122,6 +122,38 @@
             }
         }
     }, {
+        "id": "action_typed_download",
+        "name": "Typed action <code>download</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "action_typed_hide_tooltip",
+        "name": "Typed action <code>hide_tooltip</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "action_typed_show_tooltip",
+        "name": "Typed action <code>show_tooltip</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
+        "id": "action_typed_set_state",
+        "name": "Typed action <code>set_state</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
+    }, {
         "id": "action_is_enabled",
         "name": "Action <code>is_enabled</code> property",
         "compat": {

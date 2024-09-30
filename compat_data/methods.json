@@ -84,5 +84,13 @@
                 "version_added": "30.4.0"
             }
         }
+    }, {
+        "id": "methods_dict_is_empty",
+        "name": "Method-<code>isEmpty</code> for the <code>dict</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.19.0"
+            }
+        }
     }]
 }
