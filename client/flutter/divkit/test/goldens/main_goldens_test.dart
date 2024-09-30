@@ -12,9 +12,9 @@ void main() async {
     if (kDebugMode) {
       print('Running tests...');
       print('Will skip ${skippedTests.length} tests');
+      print('All tests: ${tests.length}');
     }
 
-    print('All tests: ${tests.length}');
     await runTests(tests);
   }
 }

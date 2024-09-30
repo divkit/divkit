@@ -13,6 +13,12 @@ class _SkipTest {
 enum _Reason {
   divNotSupported,
   haveToLoadNetworkImage,
+  // SVG images crash, or test stucks on forever
+  // We need to support mocking them
+  // https://st.yandex-team.ru/YXPRODELIVERY-4382
+  svgImage,
+  // One or more sides of the image happened to be 0
+  invalidImageDimensions,
   crashesOnImageDimensions,
   crashesOnAspectRatio,
   crashesOnRenderFlexOverflow,
@@ -309,31 +315,6 @@ final skippedTests = [
   ),
 
   ...[
-    'test_data/snapshot_test_data/div-container/horizontal-orientation-bottom-horizontal-alignment.json',
-    'test_data/snapshot_test_data/div-container/horizontal-orientation-bottom-vertical-alignment.json',
-    'test_data/snapshot_test_data/div-container/horizontal-orientation-center-horizontal-alignment.json',
-    'test_data/snapshot_test_data/div-container/horizontal-orientation-center-vertical-alignment.json',
-    'test_data/snapshot_test_data/div-container/horizontal-orientation-space-around-alignment.json',
-    'test_data/snapshot_test_data/div-container/horizontal-orientation-space-between-alignment.json',
-    'test_data/snapshot_test_data/div-container/horizontal-orientation-space-evenly-alignment.json',
-    'test_data/snapshot_test_data/div-container/overlap-orientation.json',
-    'test_data/snapshot_test_data/div-container/overlap-with-match-parent-child.json',
-    'test_data/snapshot_test_data/div-container/size_unit.json',
-    'test_data/snapshot_test_data/div-container/vertical-orientation-center-alignment.json',
-    'test_data/snapshot_test_data/div-container/vertical-orientation-space-around-alignment.json',
-    'test_data/snapshot_test_data/div-container/vertical-orientation-space-between-alignment.json',
-    'test_data/snapshot_test_data/div-container/vertical-orientation-space-evenly-alignment.json',
-    'test_data/snapshot_test_data/div-background/scale_stretch.json',
-    'test_data/snapshot_test_data/div-container/no-scale-background.json',
-  ].map(
-    (e) => _SkipTest(
-      e,
-      _Reason.haveToLoadNetworkImage,
-      'Framework can not load load network images during testing',
-    ),
-  ),
-
-  ...[
     'test_data/snapshot_test_data/div-container/overlap-container-alignment.json',
     'test_data/snapshot_test_data/div-container/overlap-orientation-default-alignments.json',
     'test_data/snapshot_test_data/div-container/vertical-orientation-alignments.json',
@@ -483,47 +464,21 @@ final skippedTests = [
 
   ...[
     'test_data/snapshot_test_data/div-image/custom-preview.json',
-    'test_data/snapshot_test_data/div-image/custom-tint-color.json',
     'test_data/snapshot_test_data/div-image/placeholder-color.json',
     'test_data/snapshot_test_data/div-image/preview.json',
-    'test_data/snapshot_test_data/div-image/tint-mode.json',
-    'test_data/snapshot_test_data/div-image/aspect-fixed.json',
-    'test_data/snapshot_test_data/div-image/aspect-match_parent.json',
-    'test_data/snapshot_test_data/div-image/aspect-wrap_content.json',
-    'test_data/snapshot_test_data/div-image/blur-with-big-radius.json',
-    'test_data/snapshot_test_data/div-image/blur.json',
-    'test_data/snapshot_test_data/div-image/border-with-stroke.json',
-    'test_data/snapshot_test_data/div-image/composite-background.json',
-    'test_data/snapshot_test_data/div-image/content-horizontal-alignment-end.json',
-    'test_data/snapshot_test_data/div-image/content-horizontal-alignment-start.json',
-    'test_data/snapshot_test_data/div-image/corner-radius.json',
-    'test_data/snapshot_test_data/div-image/corners_radius.json',
-    'test_data/snapshot_test_data/div-image/custom-alpha.json',
-    'test_data/snapshot_test_data/div-image/custom-height.json',
-    'test_data/snapshot_test_data/div-image/custom-margins.json',
-    'test_data/snapshot_test_data/div-image/custom-paddings.json',
-    'test_data/snapshot_test_data/div-image/custom-width.json',
-    'test_data/snapshot_test_data/div-image/no_scale.json',
-    'test_data/snapshot_test_data/div-image/no_scale_bottom_right.json',
-    'test_data/snapshot_test_data/div-image/no_scale_top_left.json',
-    'test_data/snapshot_test_data/div-image/rtl-filter.json',
-    'test_data/snapshot_test_data/div-image/rtl-image-content-horizontal-alignment-end.json',
-    'test_data/snapshot_test_data/div-image/rtl-image-content-horizontal-alignment-start.json',
-    'test_data/snapshot_test_data/div-image/scale_fill.json',
-    'test_data/snapshot_test_data/div-image/scale_fill_bottom.json',
-    'test_data/snapshot_test_data/div-image/scale_fill_right.json',
-    'test_data/snapshot_test_data/div-image/scale_fit.json',
-    'test_data/snapshot_test_data/div-image/scale_fit_bottom.json',
-    'test_data/snapshot_test_data/div-image/scale_fit_left.json',
-    'test_data/snapshot_test_data/div-image/scale_fit_right.json',
-    'test_data/snapshot_test_data/div-image/scale_fit_top.json',
-    'test_data/snapshot_test_data/div-image/scale_stretch.json',
-    'test_data/snapshot_test_data/div-image/shadow.json',
-    'test_data/snapshot_test_data/div-image/wrap-content-width-by-height.json',
   ].map(
     (e) => _SkipTest(
       e,
       _Reason.haveToLoadNetworkImage,
+    ),
+  ),
+
+  ...[
+    'test_data/snapshot_test_data/div-image/tint-mode.json',
+  ].map(
+    (e) => _SkipTest(
+      e,
+      _Reason.invalidImageDimensions,
     ),
   ),
 
@@ -643,20 +598,6 @@ final skippedTests = [
     (e) => _SkipTest(
       e,
       _Reason.divNotSupported,
-    ),
-  ),
-
-// # div-shadow
-
-  ...[
-    'test_data/snapshot_test_data/div-shadow/shadow-with-alpha.json',
-    'test_data/snapshot_test_data/div-shadow/shadow-with-blur.json',
-    'test_data/snapshot_test_data/div-shadow/shadow-with-color.json',
-    'test_data/snapshot_test_data/div-shadow/shadow-with-offset.json',
-  ].map(
-    (e) => _SkipTest(
-      e,
-      _Reason.haveToLoadNetworkImage,
     ),
   ),
 
@@ -821,18 +762,8 @@ final skippedTests = [
   ),
   const _SkipTest(
     'test_data/snapshot_test_data/div-text/blur-background.json',
-    _Reason.haveToLoadNetworkImage,
+    _Reason.invalidImageDimensions,
     'https://paste.yandex-team.ru/3e965301-f3ac-4ff3-ba62-c81665108399',
-  ),
-  const _SkipTest(
-    'test_data/snapshot_test_data/div-text/composite-background.json',
-    _Reason.haveToLoadNetworkImage,
-    'https://paste.yandex-team.ru/04b3d5a3-5e4f-49d6-89b5-f5544e6e7242',
-  ),
-  const _SkipTest(
-    'test_data/snapshot_test_data/div-text/image-background.json',
-    _Reason.haveToLoadNetworkImage,
-    'https://paste.yandex-team.ru/15650b63-7b14-4c08-9259-db6f5b3de7b6',
   ),
   const _SkipTest(
     'test_data/snapshot_test_data/div-text/images.json',
@@ -862,29 +793,28 @@ final skippedTests = [
       _Reason.divNotSupported,
     ),
   ),
-  ...[
-    'test_data/snapshot_test_data/div-transform/transform_identity.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_bottom_center.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_bottom_left_corner.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_bottom_right_corner.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_center.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_left_center.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_right_center.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_top_center.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_top_left_corner.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_45_around_top_right_corner.json',
-    'test_data/snapshot_test_data/div-transform/transform_turn_90_around_center.json',
+  _SkipTest(
     'test_data/snapshot_test_data/div-text/custom-image-tint-color.json',
-    'test_data/snapshot_test_data/div-text/custom-text-alignment-with-attachments.json',
-    'test_data/snapshot_test_data/div-text/ellipsis-with-image.json',
-    'test_data/snapshot_test_data/div-text/all_attributes.json',
-    'test_data/snapshot_test_data/div-container/vertical-composite-background.json',
-  ].map(
-    (e) => _SkipTest(
-      e,
-      _Reason.haveToLoadNetworkImage,
-    ),
+    _Reason.divNotSupported,
+    'https://a.yandex-team.ru/review/6756853/files/5#comment-9971090',
   ),
+  _SkipTest(
+    'test_data/snapshot_test_data/div-text/custom-text-alignment-with-attachment.json',
+    _Reason.divNotSupported,
+    'https://a.yandex-team.ru/review/6756853/files/5#comment-9971092',
+  ),
+  _SkipTest(
+    'test_data/snapshot_test_data/div-text/ellipsis-with-image.json',
+    _Reason.divNotSupported,
+    'https://a.yandex-team.ru/review/6756853/details#comment-9971095',
+  ),
+  _SkipTest(
+    'test_data/snapshot_test_data/div-text/all_attributes.json',
+    _Reason.divNotSupported,
+    'https://a.yandex-team.ru/review/6756853/details#comment-9971087',
+  ),
+
+// # div-svg
 
   ...[
     'test_data/snapshot_test_data/div-svg/svg_background.json',
@@ -894,7 +824,8 @@ final skippedTests = [
   ].map(
     (e) => _SkipTest(
       e,
-      _Reason.haveToLoadNetworkImage,
+      _Reason.svgImage,
+      'https://paste.yandex-team.ru/db093d74-d606-40ab-9649-94ec071e12eb',
     ),
   ),
 ];
