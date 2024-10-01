@@ -2,7 +2,7 @@ name: divkit
 description: Open source SDUI framework for server-driven app updates, rapid UI prototyping, and cross-platform layouts.
 homepage: https://github.com/divkit/divkit
 repository: https://github.com/divkit/divkit
-version: 0.5.0-rc.1
+version: 0.5.1-rc.1
 
 environment:
   sdk: '>=2.17.0 <4.0.0'
@@ -18,7 +18,7 @@ dependencies:
   logging: ^1.1.1
   clock: ^1.1.1
   collection: ^1.17.0
-  petitparser: ">=5.0.0 <7.0.0"
+  petitparser: ">=5.1.0 <7.0.0"
   visibility_detector: ">=0.2.0 <0.5.0"
 
   cached_network_image: ^3.2.3

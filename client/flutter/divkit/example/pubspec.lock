@@ -87,7 +87,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.5.0-rc.1"
+    version: "0.5.1-rc.1"
   equatable:
     dependency: "direct main"
     description:

@@ -138,9 +138,9 @@ class _TestRunnerState extends State<TestRunner> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final message = snapshot.requireData.join('\n');
-                      // if (kDebugMode) {
-                      print(message);
-                      // }
+                      if (kDebugMode) {
+                        print(message);
+                      }
                       return Text(message);
                     } else if (snapshot.hasError) {
                       return Text(snapshot.error.toString());
