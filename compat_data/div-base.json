@@ -19,6 +19,9 @@
         "compat": {
             "ios": {
                 "version_added": "30.13.0"
+            },
+            "android": {
+                "version_added": "30.20.0"
             }
         }
     }, {
@@ -47,6 +50,22 @@
             },
             "web": {
                 "notes": "Web support is not planned, it works on other principles"
+            }
+        }
+    }, {
+        "id": "base_component_animators",
+        "name": "Base component property <code>animators</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "base_component_functions",
+        "name": "Base component property <code>functions</code>",
+        "compat": {
+            "ios": {
+                "version_added": "30.20.0"
             }
         }
     }]

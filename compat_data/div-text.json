@@ -72,5 +72,16 @@
                 "version_added": "30.17.0"
             }
         }
+    }, {
+        "id": "text_tighten_width",
+        "name": "Text <code>tighten_width</code> property, that removes unnecessary horizontal paddings in multiline texts",
+        "compat": {
+            "android": {
+                "version_added": "30.20.0"
+            },
+            "ios": {
+                "version_added": "30.20.0"
+            }
+        }
     }]
 }

@@ -94,5 +94,13 @@
                 "version_added": "30.3.0"
             }
         }
+    }, {
+        "id": "fn_encode_regex",
+        "name": "<code>encodeRegex</code> function",
+        "compat": {
+            "web": {
+                "version_added": "30.20.0"
+            }
+        }
     }]
 }

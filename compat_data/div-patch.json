@@ -47,6 +47,9 @@
             },
             "ios": {
                 "version_added": "30.12.0"
+            },
+            "web": {
+                "version_added": "30.20.0"
             }
         }
     }, {
@@ -55,6 +58,9 @@
         "compat": {
             "android": {
                 "version_added": "30.12.0"
+            },
+            "web": {
+                "version_added": "30.20.0"
             }
         }
     }]

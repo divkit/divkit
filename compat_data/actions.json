@@ -111,6 +111,9 @@
         "compat": {
             "android": {
                 "version_added": "30.17.0"
+            },
+            "ios": {
+                "version_added": "30.20.0"
             }
         }
     }, {
@@ -119,6 +122,9 @@
         "compat": {
             "android": {
                 "version_added": "30.17.0"
+            },
+            "ios": {
+                "version_added": "30.20.0"
             }
         }
     }, {
@@ -179,6 +185,14 @@
             },
             "web": {
                 "version_added": "29.15.0"
+            }
+        }
+    }, {
+        "id": "action_set_variable_scope_id",
+        "name": "<code>scope_id</code> property for the <code>set_variable</code> action",
+        "compat": {
+            "android": {
+                "version_added": "30.20.0"
             }
         }
     }]
