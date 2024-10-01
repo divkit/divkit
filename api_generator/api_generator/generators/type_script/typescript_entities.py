@@ -263,6 +263,11 @@ class TypeScriptProperty(Property):
                 result += ' *'
             result += ' * @deprecated'
 
+        if self.platforms is not None:
+            if result.lines:
+                result += ' *'
+            result += ' * Platforms: ' + (", ".join(self.platforms) if len(self.platforms) > 0 else "not supported")
+
         if result.lines:
             result = Text('/**') + result + Text(' */')
             return result

@@ -12,6 +12,9 @@ export class EntityWithArray<T extends EntityWithArrayProps = EntityWithArrayPro
     readonly _props?: Exact<EntityWithArrayProps, T>;
 
     readonly type = 'entity_with_array';
+    /**
+     * Platforms: android, ios, web, flutter
+     */
     array: Type<NonEmptyArray<Entity>>;
 
     constructor(props: Exact<EntityWithArrayProps, T>) {
@@ -20,5 +23,8 @@ export class EntityWithArray<T extends EntityWithArrayProps = EntityWithArrayPro
 }
 
 export interface EntityWithArrayProps {
+    /**
+     * Platforms: android, ios, web, flutter
+     */
     array: Type<NonEmptyArray<Entity>>;
 }
