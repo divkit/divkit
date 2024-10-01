@@ -382,7 +382,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "web"
+        "web",
+        "android"
       ]
     }
   ]

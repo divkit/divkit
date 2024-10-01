@@ -442,6 +442,28 @@ internal object TestRegex : Function() {
     }
 }
 
+internal object EncodeRegex : Function() {
+
+    override val name = "encodeRegex"
+
+    override val declaredArgs: List<FunctionArgument> = listOf(
+        FunctionArgument(type = EvaluableType.STRING)
+    )
+
+    override val resultType = EvaluableType.STRING
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val str = args[0] as String
+        val regex = Regex("[.*+?^\${}()|\\[\\]\\\\]")
+        return str.replace(regex) { "\\${it.value}" }
+    }
+}
+
 private fun buildRepeatableString(
     evaluationContext: EvaluationContext,
     expressionContext: ExpressionContext,

@@ -270,7 +270,8 @@
                 "value": ""
             },
             "platforms": [
-                "web"
+                "web",
+                "android"
             ]
         },
         {
@@ -280,7 +281,8 @@
                 "value": "\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\|\\[\\]\\\\abcde12345"
             },
             "platforms": [
-                "web"
+                "web",
+                "android"
             ]
         }
     ]

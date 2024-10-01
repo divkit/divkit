@@ -122,6 +122,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetIntervalSeconds)
 
         // String functions
+        registry.register(EncodeRegex)
         registry.register(StringLength)
         registry.register(StringContains)
         registry.register(StringSubstring)
