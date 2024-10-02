@@ -247,6 +247,42 @@
     "en": "Defines whether tooltip can be shown again after being closed.",
     "ru": "Устанавливает, может ли тултип показываться еще раз после закрытия."
   },
+  "div_action_submit": {
+    "en": "Sends variables from the container via a url. The data sending configuration can be determined by the host application. By default, variables are passed in body in json format, the request method is POST.",
+    "ru": "Отправляет переменные из контейнера по ссылке. Конфигурация отправки данных может определяться приложением-хостом. По умолчанию, переменные передаются в теле запроса в виде json, метод запроса - POST."
+  },
+  "div_action_submit_container_id": {
+    "en": "The identifier of the container that contains variables to submit.",
+    "ru": "Идентификатор контейнера в котором содержатся переменные для отправки."
+  },
+  "div_action_submit_on_fail_actions": {
+    "en": "Actions in case of unsuccessful submit.",
+    "ru": "Действия при неуспешной отправке данных."
+  },
+  "div_action_submit_on_success_actions": {
+    "en": "Actions in case of successful submit.",
+    "ru": "Действия при успешной отправке данных."
+  },
+  "div_action_submit_request": {
+    "en": "The HTTP request parameters that are used to configure how data is sent.",
+    "ru": "Параметры HTTP запроса, которые используются для конфигурации отправки данных."
+  },
+  "div_action_submit_request_headers": {
+    "en": "The HTTP request headers.",
+    "ru": "Заголовки HTTP-запроса."
+  },
+  "div_action_submit_request_method": {
+    "en": "The HTTP request method.",
+    "ru": "Метод HTTP-запроса."
+  },
+  "div_action_submit_request_query_parameters": {
+    "en": "Query parameters.",
+    "ru": "Параметры запроса."
+  },
+  "div_action_submit_request_url": {
+    "en": "The url to which data from the container is sent.",
+    "ru": "Ссылка по которой отправляются данные из контейнера."
+  },
   "div_action_target": {
     "en": "The tab in which the URL must be opened.",
     "ru": "Вкладка, в которой должна открыться ссылка."

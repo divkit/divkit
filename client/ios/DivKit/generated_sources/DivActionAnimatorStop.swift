@@ -6,14 +6,10 @@ import VGSL
 
 public final class DivActionAnimatorStop {
   public static let type: String = "animator_stop"
-  public let animatorId: Expression<String>
-
-  public func resolveAnimatorId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(animatorId)
-  }
+  public let animatorId: String
 
   init(
-    animatorId: Expression<String>
+    animatorId: String
   ) {
     self.animatorId = animatorId
   }
@@ -36,7 +32,7 @@ extension DivActionAnimatorStop: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["animator_id"] = animatorId.toValidSerializationValue()
+    result["animator_id"] = animatorId
     return result
   }
 }

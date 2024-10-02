@@ -1,0 +1,91 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_submit",
+  "definitions": {
+    "parameter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_action_submit_request_url"
+        },
+        "query_parameters": {
+          "type": "array",
+          "$description": "translations.json#/div_action_submit_request_query_parameters",
+          "items": {
+            "$ref": "#/definitions/parameter"
+          }
+        },
+        "headers": {
+          "type": "array",
+          "$description": "translations.json#/div_action_submit_request_headers",
+          "items": {
+            "$ref": "#/definitions/parameter"
+          }
+        },
+        "method": {
+          "type": "string",
+          "default_value": "POST",
+          "$description": "translations.json#/div_action_submit_request_method",
+          "enum": [
+            "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"
+          ]
+        }
+      },
+      "required": [
+        "url"
+      ]
+    }
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "submit"
+      ]
+    },
+    "container_id": {
+      "type": "string",
+      "$description": "translations.json#/div_action_submit_container_id"
+    },
+    "request": {
+      "$ref": "#/definitions/request",
+      "$description": "translations.json#/div_action_submit_request"
+    },
+    "on_success_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_action_submit_on_success_actions"
+    },
+    "on_fail_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_action_submit_on_fail_actions"
+    }
+  },
+  "platforms": [],
+  "required": [
+    "type",
+    "container_id",
+    "request"
+  ]
+}

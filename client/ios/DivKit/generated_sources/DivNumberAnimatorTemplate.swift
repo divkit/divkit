@@ -14,7 +14,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
   public let endValue: Field<Expression<Double>>?
   public let id: Field<String>?
   public let interpolator: Field<Expression<DivAnimationInterpolator>>? // default value: linear
-  public let repeatCount: Field<Expression<Int>>? // constraint: number >= 0; default value: 1
+  public let repeatCount: Field<DivCountTemplate>? // default value: .divFixedCount(DivFixedCount(value: .value(1)))
   public let startDelay: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let startValue: Field<Expression<Double>>?
   public let variableName: Field<String>?
@@ -29,7 +29,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
       endValue: dictionary.getOptionalExpressionField("end_value"),
       id: dictionary.getOptionalField("id"),
       interpolator: dictionary.getOptionalExpressionField("interpolator"),
-      repeatCount: dictionary.getOptionalExpressionField("repeat_count"),
+      repeatCount: dictionary.getOptionalField("repeat_count", templateToType: templateToType),
       startDelay: dictionary.getOptionalExpressionField("start_delay"),
       startValue: dictionary.getOptionalExpressionField("start_value"),
       variableName: dictionary.getOptionalField("variable_name")
@@ -45,7 +45,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
     endValue: Field<Expression<Double>>? = nil,
     id: Field<String>? = nil,
     interpolator: Field<Expression<DivAnimationInterpolator>>? = nil,
-    repeatCount: Field<Expression<Int>>? = nil,
+    repeatCount: Field<DivCountTemplate>? = nil,
     startDelay: Field<Expression<Int>>? = nil,
     startValue: Field<Expression<Double>>? = nil,
     variableName: Field<String>? = nil
@@ -72,7 +72,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
     let endValueValue = parent?.endValue?.resolveValue(context: context) ?? .noValue
     let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue
-    let repeatCountValue = parent?.repeatCount?.resolveOptionalValue(context: context, validator: ResolvedValue.repeatCountValidator) ?? .noValue
+    let repeatCountValue = parent?.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let startValueValue = parent?.startValue?.resolveOptionalValue(context: context) ?? .noValue
     let variableNameValue = parent?.variableName?.resolveValue(context: context) ?? .noValue
@@ -136,7 +136,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
     var endValueValue: DeserializationResult<Expression<Double>> = parent?.endValue?.value() ?? .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = parent?.interpolator?.value() ?? .noValue
-    var repeatCountValue: DeserializationResult<Expression<Int>> = parent?.repeatCount?.value() ?? .noValue
+    var repeatCountValue: DeserializationResult<DivCount> = .noValue
     var startDelayValue: DeserializationResult<Expression<Int>> = parent?.startDelay?.value() ?? .noValue
     var startValueValue: DeserializationResult<Expression<Double>> = parent?.startValue?.value() ?? .noValue
     var variableNameValue: DeserializationResult<String> = parent?.variableName?.value() ?? .noValue
@@ -157,7 +157,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
       case "interpolator":
         interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
       case "repeat_count":
-        repeatCountValue = deserialize(__dictValue, validator: ResolvedValue.repeatCountValidator).merged(with: repeatCountValue)
+        repeatCountValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self).merged(with: repeatCountValue)
       case "start_delay":
         startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
       case "start_value":
@@ -179,7 +179,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
       case parent?.interpolator?.link:
         interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
       case parent?.repeatCount?.link:
-        repeatCountValue = repeatCountValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.repeatCountValidator) })
+        repeatCountValue = repeatCountValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self) })
       case parent?.startDelay?.link:
         startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
       case parent?.startValue?.link:
@@ -192,6 +192,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
     if let parent = parent {
       cancelActionsValue = cancelActionsValue.merged(with: { parent.cancelActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       endActionsValue = endActionsValue.merged(with: { parent.endActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      repeatCountValue = repeatCountValue.merged(with: { parent.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       cancelActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "cancel_actions", error: $0) },
@@ -277,7 +278,7 @@ public final class DivNumberAnimatorTemplate: TemplateValue {
       endValue: merged.endValue,
       id: merged.id,
       interpolator: merged.interpolator,
-      repeatCount: merged.repeatCount,
+      repeatCount: merged.repeatCount?.tryResolveParent(templates: templates),
       startDelay: merged.startDelay,
       startValue: merged.startValue,
       variableName: merged.variableName

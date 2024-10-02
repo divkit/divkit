@@ -14,11 +14,13 @@ public enum DivActionTyped {
   case divActionClearFocus(DivActionClearFocus)
   case divActionCopyToClipboard(DivActionCopyToClipboard)
   case divActionDictSetValue(DivActionDictSetValue)
+  case divActionDownload(DivActionDownload)
   case divActionFocusElement(DivActionFocusElement)
   case divActionHideTooltip(DivActionHideTooltip)
   case divActionSetState(DivActionSetState)
   case divActionSetVariable(DivActionSetVariable)
   case divActionShowTooltip(DivActionShowTooltip)
+  case divActionSubmit(DivActionSubmit)
   case divActionTimer(DivActionTimer)
   case divActionVideo(DivActionVideo)
 
@@ -40,6 +42,8 @@ public enum DivActionTyped {
       return value
     case let .divActionDictSetValue(value):
       return value
+    case let .divActionDownload(value):
+      return value
     case let .divActionFocusElement(value):
       return value
     case let .divActionHideTooltip(value):
@@ -49,6 +53,8 @@ public enum DivActionTyped {
     case let .divActionSetVariable(value):
       return value
     case let .divActionShowTooltip(value):
+      return value
+    case let .divActionSubmit(value):
       return value
     case let .divActionTimer(value):
       return value
@@ -78,6 +84,8 @@ extension DivActionTyped: Equatable {
       return l == r
     case let (.divActionDictSetValue(l), .divActionDictSetValue(r)):
       return l == r
+    case let (.divActionDownload(l), .divActionDownload(r)):
+      return l == r
     case let (.divActionFocusElement(l), .divActionFocusElement(r)):
       return l == r
     case let (.divActionHideTooltip(l), .divActionHideTooltip(r)):
@@ -87,6 +95,8 @@ extension DivActionTyped: Equatable {
     case let (.divActionSetVariable(l), .divActionSetVariable(r)):
       return l == r
     case let (.divActionShowTooltip(l), .divActionShowTooltip(r)):
+      return l == r
+    case let (.divActionSubmit(l), .divActionSubmit(r)):
       return l == r
     case let (.divActionTimer(l), .divActionTimer(r)):
       return l == r

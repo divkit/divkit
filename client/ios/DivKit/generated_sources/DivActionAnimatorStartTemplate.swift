@@ -7,24 +7,24 @@ import VGSL
 public final class DivActionAnimatorStartTemplate: TemplateValue {
   public static let type: String = "animator_start"
   public let parent: String?
-  public let animatorId: Field<Expression<String>>?
+  public let animatorId: Field<String>?
   public let direction: Field<Expression<DivAnimationDirection>>?
   public let duration: Field<Expression<Int>>? // constraint: number >= 0
   public let endValue: Field<DivTypedValueTemplate>?
   public let interpolator: Field<Expression<DivAnimationInterpolator>>?
-  public let repeatCount: Field<Expression<Int>>? // constraint: number >= 0
+  public let repeatCount: Field<DivCountTemplate>?
   public let startDelay: Field<Expression<Int>>? // constraint: number >= 0
   public let startValue: Field<DivTypedValueTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
-      animatorId: dictionary.getOptionalExpressionField("animator_id"),
+      animatorId: dictionary.getOptionalField("animator_id"),
       direction: dictionary.getOptionalExpressionField("direction"),
       duration: dictionary.getOptionalExpressionField("duration"),
       endValue: dictionary.getOptionalField("end_value", templateToType: templateToType),
       interpolator: dictionary.getOptionalExpressionField("interpolator"),
-      repeatCount: dictionary.getOptionalExpressionField("repeat_count"),
+      repeatCount: dictionary.getOptionalField("repeat_count", templateToType: templateToType),
       startDelay: dictionary.getOptionalExpressionField("start_delay"),
       startValue: dictionary.getOptionalField("start_value", templateToType: templateToType)
     )
@@ -32,12 +32,12 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
 
   init(
     parent: String?,
-    animatorId: Field<Expression<String>>? = nil,
+    animatorId: Field<String>? = nil,
     direction: Field<Expression<DivAnimationDirection>>? = nil,
     duration: Field<Expression<Int>>? = nil,
     endValue: Field<DivTypedValueTemplate>? = nil,
     interpolator: Field<Expression<DivAnimationInterpolator>>? = nil,
-    repeatCount: Field<Expression<Int>>? = nil,
+    repeatCount: Field<DivCountTemplate>? = nil,
     startDelay: Field<Expression<Int>>? = nil,
     startValue: Field<DivTypedValueTemplate>? = nil
   ) {
@@ -58,7 +58,7 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let endValueValue = parent?.endValue?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue
-    let repeatCountValue = parent?.repeatCount?.resolveOptionalValue(context: context, validator: ResolvedValue.repeatCountValidator) ?? .noValue
+    let repeatCountValue = parent?.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let startValueValue = parent?.startValue?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
@@ -96,12 +96,12 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var animatorIdValue: DeserializationResult<Expression<String>> = parent?.animatorId?.value() ?? .noValue
+    var animatorIdValue: DeserializationResult<String> = parent?.animatorId?.value() ?? .noValue
     var directionValue: DeserializationResult<Expression<DivAnimationDirection>> = parent?.direction?.value() ?? .noValue
     var durationValue: DeserializationResult<Expression<Int>> = parent?.duration?.value() ?? .noValue
     var endValueValue: DeserializationResult<DivTypedValue> = .noValue
     var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = parent?.interpolator?.value() ?? .noValue
-    var repeatCountValue: DeserializationResult<Expression<Int>> = parent?.repeatCount?.value() ?? .noValue
+    var repeatCountValue: DeserializationResult<DivCount> = .noValue
     var startDelayValue: DeserializationResult<Expression<Int>> = parent?.startDelay?.value() ?? .noValue
     var startValueValue: DeserializationResult<DivTypedValue> = .noValue
     context.templateData.forEach { key, __dictValue in
@@ -117,7 +117,7 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
       case "interpolator":
         interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
       case "repeat_count":
-        repeatCountValue = deserialize(__dictValue, validator: ResolvedValue.repeatCountValidator).merged(with: repeatCountValue)
+        repeatCountValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self).merged(with: repeatCountValue)
       case "start_delay":
         startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
       case "start_value":
@@ -133,7 +133,7 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
       case parent?.interpolator?.link:
         interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
       case parent?.repeatCount?.link:
-        repeatCountValue = repeatCountValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.repeatCountValidator) })
+        repeatCountValue = repeatCountValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self) })
       case parent?.startDelay?.link:
         startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
       case parent?.startValue?.link:
@@ -143,6 +143,7 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
     }
     if let parent = parent {
       endValueValue = endValueValue.merged(with: { parent.endValue?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      repeatCountValue = repeatCountValue.merged(with: { parent.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       startValueValue = startValueValue.merged(with: { parent.startValue?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
@@ -206,7 +207,7 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
       duration: merged.duration,
       endValue: merged.endValue?.tryResolveParent(templates: templates),
       interpolator: merged.interpolator,
-      repeatCount: merged.repeatCount,
+      repeatCount: merged.repeatCount?.tryResolveParent(templates: templates),
       startDelay: merged.startDelay,
       startValue: merged.startValue?.tryResolveParent(templates: templates)
     )

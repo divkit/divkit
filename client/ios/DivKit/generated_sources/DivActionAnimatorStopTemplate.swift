@@ -7,18 +7,18 @@ import VGSL
 public final class DivActionAnimatorStopTemplate: TemplateValue {
   public static let type: String = "animator_stop"
   public let parent: String?
-  public let animatorId: Field<Expression<String>>?
+  public let animatorId: Field<String>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
-      animatorId: dictionary.getOptionalExpressionField("animator_id")
+      animatorId: dictionary.getOptionalField("animator_id")
     )
   }
 
   init(
     parent: String?,
-    animatorId: Field<Expression<String>>? = nil
+    animatorId: Field<String>? = nil
   ) {
     self.parent = parent
     self.animatorId = animatorId
@@ -47,7 +47,7 @@ public final class DivActionAnimatorStopTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var animatorIdValue: DeserializationResult<Expression<String>> = parent?.animatorId?.value() ?? .noValue
+    var animatorIdValue: DeserializationResult<String> = parent?.animatorId?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "animator_id":

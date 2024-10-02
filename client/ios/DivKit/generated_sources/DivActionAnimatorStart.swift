@@ -6,18 +6,14 @@ import VGSL
 
 public final class DivActionAnimatorStart {
   public static let type: String = "animator_start"
-  public let animatorId: Expression<String>
+  public let animatorId: String
   public let direction: Expression<DivAnimationDirection>?
   public let duration: Expression<Int>? // constraint: number >= 0
   public let endValue: DivTypedValue?
   public let interpolator: Expression<DivAnimationInterpolator>?
-  public let repeatCount: Expression<Int>? // constraint: number >= 0
+  public let repeatCount: DivCount?
   public let startDelay: Expression<Int>? // constraint: number >= 0
   public let startValue: DivTypedValue?
-
-  public func resolveAnimatorId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveString(animatorId)
-  }
 
   public func resolveDirection(_ resolver: ExpressionResolver) -> DivAnimationDirection? {
     resolver.resolveEnum(direction)
@@ -31,10 +27,6 @@ public final class DivActionAnimatorStart {
     resolver.resolveEnum(interpolator)
   }
 
-  public func resolveRepeatCount(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumeric(repeatCount)
-  }
-
   public func resolveStartDelay(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(startDelay)
   }
@@ -42,19 +34,16 @@ public final class DivActionAnimatorStart {
   static let durationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let repeatCountValidator: AnyValueValidator<Int> =
-    makeValueValidator(valueValidator: { $0 >= 0 })
-
   static let startDelayValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
   init(
-    animatorId: Expression<String>,
+    animatorId: String,
     direction: Expression<DivAnimationDirection>? = nil,
     duration: Expression<Int>? = nil,
     endValue: DivTypedValue? = nil,
     interpolator: Expression<DivAnimationInterpolator>? = nil,
-    repeatCount: Expression<Int>? = nil,
+    repeatCount: DivCount? = nil,
     startDelay: Expression<Int>? = nil,
     startValue: DivTypedValue? = nil
   ) {
@@ -101,12 +90,12 @@ extension DivActionAnimatorStart: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["animator_id"] = animatorId.toValidSerializationValue()
+    result["animator_id"] = animatorId
     result["direction"] = direction?.toValidSerializationValue()
     result["duration"] = duration?.toValidSerializationValue()
     result["end_value"] = endValue?.toDictionary()
     result["interpolator"] = interpolator?.toValidSerializationValue()
-    result["repeat_count"] = repeatCount?.toValidSerializationValue()
+    result["repeat_count"] = repeatCount?.toDictionary()
     result["start_delay"] = startDelay?.toValidSerializationValue()
     result["start_value"] = startValue?.toDictionary()
     return result

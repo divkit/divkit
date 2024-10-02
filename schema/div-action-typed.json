@@ -52,6 +52,9 @@
       "$ref": "div-action-show-tooltip.json"
     },
     {
+      "$ref": "div-action-submit.json"
+    },
+    {
       "$ref": "div-action-timer.json"
     },
     {

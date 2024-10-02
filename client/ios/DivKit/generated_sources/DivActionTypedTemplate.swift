@@ -14,11 +14,13 @@ public enum DivActionTypedTemplate: TemplateValue {
   case divActionClearFocusTemplate(DivActionClearFocusTemplate)
   case divActionCopyToClipboardTemplate(DivActionCopyToClipboardTemplate)
   case divActionDictSetValueTemplate(DivActionDictSetValueTemplate)
+  case divActionDownloadTemplate(DivActionDownloadTemplate)
   case divActionFocusElementTemplate(DivActionFocusElementTemplate)
   case divActionHideTooltipTemplate(DivActionHideTooltipTemplate)
   case divActionSetStateTemplate(DivActionSetStateTemplate)
   case divActionSetVariableTemplate(DivActionSetVariableTemplate)
   case divActionShowTooltipTemplate(DivActionShowTooltipTemplate)
+  case divActionSubmitTemplate(DivActionSubmitTemplate)
   case divActionTimerTemplate(DivActionTimerTemplate)
   case divActionVideoTemplate(DivActionVideoTemplate)
 
@@ -40,6 +42,8 @@ public enum DivActionTypedTemplate: TemplateValue {
       return value
     case let .divActionDictSetValueTemplate(value):
       return value
+    case let .divActionDownloadTemplate(value):
+      return value
     case let .divActionFocusElementTemplate(value):
       return value
     case let .divActionHideTooltipTemplate(value):
@@ -49,6 +53,8 @@ public enum DivActionTypedTemplate: TemplateValue {
     case let .divActionSetVariableTemplate(value):
       return value
     case let .divActionShowTooltipTemplate(value):
+      return value
+    case let .divActionSubmitTemplate(value):
       return value
     case let .divActionTimerTemplate(value):
       return value
@@ -75,6 +81,8 @@ public enum DivActionTypedTemplate: TemplateValue {
       return .divActionCopyToClipboardTemplate(try value.resolveParent(templates: templates))
     case let .divActionDictSetValueTemplate(value):
       return .divActionDictSetValueTemplate(try value.resolveParent(templates: templates))
+    case let .divActionDownloadTemplate(value):
+      return .divActionDownloadTemplate(try value.resolveParent(templates: templates))
     case let .divActionFocusElementTemplate(value):
       return .divActionFocusElementTemplate(try value.resolveParent(templates: templates))
     case let .divActionHideTooltipTemplate(value):
@@ -85,6 +93,8 @@ public enum DivActionTypedTemplate: TemplateValue {
       return .divActionSetVariableTemplate(try value.resolveParent(templates: templates))
     case let .divActionShowTooltipTemplate(value):
       return .divActionShowTooltipTemplate(try value.resolveParent(templates: templates))
+    case let .divActionSubmitTemplate(value):
+      return .divActionSubmitTemplate(try value.resolveParent(templates: templates))
     case let .divActionTimerTemplate(value):
       return .divActionTimerTemplate(try value.resolveParent(templates: templates))
     case let .divActionVideoTemplate(value):
@@ -166,6 +176,14 @@ public enum DivActionTypedTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divActionDownloadTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionDownload(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionDownload(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case let .divActionFocusElementTemplate(value):
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
@@ -203,6 +221,14 @@ public enum DivActionTypedTemplate: TemplateValue {
       switch result {
       case let .success(value): return .success(.divActionShowTooltip(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionShowTooltip(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divActionSubmitTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionSubmit(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSubmit(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -295,6 +321,14 @@ public enum DivActionTypedTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivActionDownload.type:
+      let result = DivActionDownloadTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionDownload(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionDownload(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case DivActionFocusElement.type:
       let result = DivActionFocusElementTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
@@ -332,6 +366,14 @@ public enum DivActionTypedTemplate: TemplateValue {
       switch result {
       case let .success(value): return .success(.divActionShowTooltip(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionShowTooltip(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case DivActionSubmit.type:
+      let result = DivActionSubmitTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionSubmit(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSubmit(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -378,6 +420,8 @@ extension DivActionTypedTemplate {
       self = .divActionCopyToClipboardTemplate(try DivActionCopyToClipboardTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionDictSetValueTemplate.type:
       self = .divActionDictSetValueTemplate(try DivActionDictSetValueTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionDownloadTemplate.type:
+      self = .divActionDownloadTemplate(try DivActionDownloadTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionFocusElementTemplate.type:
       self = .divActionFocusElementTemplate(try DivActionFocusElementTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionHideTooltipTemplate.type:
@@ -388,6 +432,8 @@ extension DivActionTypedTemplate {
       self = .divActionSetVariableTemplate(try DivActionSetVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionShowTooltipTemplate.type:
       self = .divActionShowTooltipTemplate(try DivActionShowTooltipTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionSubmitTemplate.type:
+      self = .divActionSubmitTemplate(try DivActionSubmitTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionTimerTemplate.type:
       self = .divActionTimerTemplate(try DivActionTimerTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionVideoTemplate.type:

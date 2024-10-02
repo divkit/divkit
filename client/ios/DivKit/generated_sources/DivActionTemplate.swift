@@ -124,6 +124,7 @@ public final class DivActionTemplate: TemplateValue {
   public let menuItems: Field<[MenuItemTemplate]>?
   public let payload: Field<[String: Any]>?
   public let referer: Field<Expression<URL>>?
+  public let scopeId: Field<String>?
   public let typed: Field<DivActionTypedTemplate>?
   public let url: Field<Expression<URL>>?
 
@@ -136,6 +137,7 @@ public final class DivActionTemplate: TemplateValue {
       menuItems: dictionary.getOptionalArray("menu_items", templateToType: templateToType),
       payload: dictionary.getOptionalField("payload"),
       referer: dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
+      scopeId: dictionary.getOptionalField("scope_id"),
       typed: dictionary.getOptionalField("typed", templateToType: templateToType),
       url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
     )
@@ -149,6 +151,7 @@ public final class DivActionTemplate: TemplateValue {
     menuItems: Field<[MenuItemTemplate]>? = nil,
     payload: Field<[String: Any]>? = nil,
     referer: Field<Expression<URL>>? = nil,
+    scopeId: Field<String>? = nil,
     typed: Field<DivActionTypedTemplate>? = nil,
     url: Field<Expression<URL>>? = nil
   ) {
@@ -159,6 +162,7 @@ public final class DivActionTemplate: TemplateValue {
     self.menuItems = menuItems
     self.payload = payload
     self.referer = referer
+    self.scopeId = scopeId
     self.typed = typed
     self.url = url
   }
@@ -171,6 +175,7 @@ public final class DivActionTemplate: TemplateValue {
     let menuItemsValue = parent?.menuItems?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let payloadValue = parent?.payload?.resolveOptionalValue(context: context) ?? .noValue
     let refererValue = parent?.referer?.resolveOptionalValue(context: context, transform: URL.init(string:)) ?? .noValue
+    let scopeIdValue = parent?.scopeId?.resolveOptionalValue(context: context) ?? .noValue
     let typedValue = parent?.typed?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:)) ?? .noValue
     var errors = mergeErrors(
@@ -181,6 +186,7 @@ public final class DivActionTemplate: TemplateValue {
       menuItemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "menu_items", error: $0) },
       payloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "payload", error: $0) },
       refererValue.errorsOrWarnings?.map { .nestedObjectError(field: "referer", error: $0) },
+      scopeIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "scope_id", error: $0) },
       typedValue.errorsOrWarnings?.map { .nestedObjectError(field: "typed", error: $0) },
       urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) }
     )
@@ -200,6 +206,7 @@ public final class DivActionTemplate: TemplateValue {
       menuItems: menuItemsValue.value,
       payload: payloadValue.value,
       referer: refererValue.value,
+      scopeId: scopeIdValue.value,
       typed: typedValue.value,
       url: urlValue.value
     )
@@ -217,6 +224,7 @@ public final class DivActionTemplate: TemplateValue {
     var menuItemsValue: DeserializationResult<[DivAction.MenuItem]> = .noValue
     var payloadValue: DeserializationResult<[String: Any]> = parent?.payload?.value() ?? .noValue
     var refererValue: DeserializationResult<Expression<URL>> = parent?.referer?.value() ?? .noValue
+    var scopeIdValue: DeserializationResult<String> = parent?.scopeId?.value() ?? .noValue
     var typedValue: DeserializationResult<DivActionTyped> = .noValue
     var urlValue: DeserializationResult<Expression<URL>> = parent?.url?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
@@ -235,6 +243,8 @@ public final class DivActionTemplate: TemplateValue {
         payloadValue = deserialize(__dictValue).merged(with: payloadValue)
       case "referer":
         refererValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: refererValue)
+      case "scope_id":
+        scopeIdValue = deserialize(__dictValue).merged(with: scopeIdValue)
       case "typed":
         typedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTypedTemplate.self).merged(with: typedValue)
       case "url":
@@ -253,6 +263,8 @@ public final class DivActionTemplate: TemplateValue {
         payloadValue = payloadValue.merged(with: { deserialize(__dictValue) })
       case parent?.referer?.link:
         refererValue = refererValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+      case parent?.scopeId?.link:
+        scopeIdValue = scopeIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.typed?.link:
         typedValue = typedValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTypedTemplate.self) })
       case parent?.url?.link:
@@ -273,6 +285,7 @@ public final class DivActionTemplate: TemplateValue {
       menuItemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "menu_items", error: $0) },
       payloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "payload", error: $0) },
       refererValue.errorsOrWarnings?.map { .nestedObjectError(field: "referer", error: $0) },
+      scopeIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "scope_id", error: $0) },
       typedValue.errorsOrWarnings?.map { .nestedObjectError(field: "typed", error: $0) },
       urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) }
     )
@@ -292,6 +305,7 @@ public final class DivActionTemplate: TemplateValue {
       menuItems: menuItemsValue.value,
       payload: payloadValue.value,
       referer: refererValue.value,
+      scopeId: scopeIdValue.value,
       typed: typedValue.value,
       url: urlValue.value
     )
@@ -313,6 +327,7 @@ public final class DivActionTemplate: TemplateValue {
       menuItems: merged.menuItems?.tryResolveParent(templates: templates),
       payload: merged.payload,
       referer: merged.referer,
+      scopeId: merged.scopeId,
       typed: merged.typed?.tryResolveParent(templates: templates),
       url: merged.url
     )

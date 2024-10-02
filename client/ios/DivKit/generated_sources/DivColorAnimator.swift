@@ -4,7 +4,7 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivColorAnimator {
+public final class DivColorAnimator: DivAnimatorBase {
   public static let type: String = "color_animator"
   public let cancelActions: [DivAction]?
   public let direction: Expression<DivAnimationDirection> // default value: normal
@@ -13,7 +13,7 @@ public final class DivColorAnimator {
   public let endValue: Expression<Color>
   public let id: String
   public let interpolator: Expression<DivAnimationInterpolator> // default value: linear
-  public let repeatCount: Expression<Int> // constraint: number >= 0; default value: 1
+  public let repeatCount: DivCount // default value: .divFixedCount(DivFixedCount(value: .value(1)))
   public let startDelay: Expression<Int> // constraint: number >= 0; default value: 0
   public let startValue: Expression<Color>?
   public let variableName: String
@@ -34,10 +34,6 @@ public final class DivColorAnimator {
     resolver.resolveEnum(interpolator) ?? DivAnimationInterpolator.linear
   }
 
-  public func resolveRepeatCount(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumeric(repeatCount) ?? 1
-  }
-
   public func resolveStartDelay(_ resolver: ExpressionResolver) -> Int {
     resolver.resolveNumeric(startDelay) ?? 0
   }
@@ -47,9 +43,6 @@ public final class DivColorAnimator {
   }
 
   static let durationValidator: AnyValueValidator<Int> =
-    makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let repeatCountValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
   static let startDelayValidator: AnyValueValidator<Int> =
@@ -63,7 +56,7 @@ public final class DivColorAnimator {
     endValue: Expression<Color>,
     id: String,
     interpolator: Expression<DivAnimationInterpolator>? = nil,
-    repeatCount: Expression<Int>? = nil,
+    repeatCount: DivCount? = nil,
     startDelay: Expression<Int>? = nil,
     startValue: Expression<Color>? = nil,
     variableName: String
@@ -75,7 +68,7 @@ public final class DivColorAnimator {
     self.endValue = endValue
     self.id = id
     self.interpolator = interpolator ?? .value(.linear)
-    self.repeatCount = repeatCount ?? .value(1)
+    self.repeatCount = repeatCount ?? .divFixedCount(DivFixedCount(value: .value(1)))
     self.startDelay = startDelay ?? .value(0)
     self.startValue = startValue
     self.variableName = variableName
@@ -128,7 +121,7 @@ extension DivColorAnimator: Serializable {
     result["end_value"] = endValue.toValidSerializationValue()
     result["id"] = id
     result["interpolator"] = interpolator.toValidSerializationValue()
-    result["repeat_count"] = repeatCount.toValidSerializationValue()
+    result["repeat_count"] = repeatCount.toDictionary()
     result["start_delay"] = startDelay.toValidSerializationValue()
     result["start_value"] = startValue?.toValidSerializationValue()
     result["variable_name"] = variableName

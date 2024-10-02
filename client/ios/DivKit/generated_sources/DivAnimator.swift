@@ -9,7 +9,7 @@ public enum DivAnimator {
   case divColorAnimator(DivColorAnimator)
   case divNumberAnimator(DivNumberAnimator)
 
-  public var value: Serializable {
+  public var value: Serializable & DivAnimatorBase {
     switch self {
     case let .divColorAnimator(value):
       return value
