@@ -4,7 +4,7 @@ import android.view.View
 import androidx.annotation.AnyThread
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.getChildPathUnit
+import com.yandex.div.core.view2.divs.resolvePath
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import javax.inject.Inject
@@ -77,7 +77,7 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
             divView.bindingContext.getFor(expressionResolver),
             childView,
             div,
-            divStatePath.appendDiv(div.value().getChildPathUnit(childIndex))
+            div.value().resolvePath(childIndex, divStatePath)
         )
         divView.runtimeStore?.showWarningIfNeeded(div.value())
     }

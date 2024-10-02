@@ -118,6 +118,8 @@ internal class RuntimeStore(
     internal fun onAttachedToWindow(view: DivViewFacade) =
         allRuntimes.forEach { it.onAttachedToWindow(view) }
 
+    internal fun clearBindings() = allRuntimes.forEach { it.clearBinding() }
+
     private fun reportError(message: String) {
         Assert.fail(message)
         errorCollector.logError(AssertionError(message))

@@ -6,6 +6,7 @@ import com.yandex.div.core.util.toVariables
 import com.yandex.div.core.view2.divs.getChildPathUnit
 import com.yandex.div.internal.Assert
 import com.yandex.div2.Div
+import com.yandex.div2.DivState
 
 internal class DivRuntimeTree(
     private val rootDiv: Div,
@@ -29,7 +30,7 @@ internal class DivRuntimeTree(
         is Div.Grid -> visitContainer(div, div.value.items, path, parentRuntime)
         is Div.Gallery -> visitContainer(div, div.value.items, path, parentRuntime)
         is Div.Pager -> visitContainer(div, div.value.items, path, parentRuntime)
-        is Div.State -> visitContainer(div, div.value.states.mapNotNull { it.div }, path, parentRuntime)
+        is Div.State -> visitStates(div, path, parentRuntime)
         is Div.Tabs -> visitContainer(div, div.value.items.map { it.div }, path, parentRuntime)
 
         is Div.Custom -> defaultVisit(div, path, parentRuntime)
@@ -77,6 +78,26 @@ internal class DivRuntimeTree(
                 visit(div, path, runtime)
                 path.removeLastOrNull()
             }
+        }
+    }
+
+    private fun visitStates(
+        div: Div.State,
+        path: MutableList<String>,
+        parentRuntime: ExpressionsRuntime?,
+    ): ExpressionsRuntime? {
+        val id = div.value.id ?: div.value.divId ?: return parentRuntime
+        path.add(id)
+
+        return defaultVisit(div, path, parentRuntime).also { runtime ->
+            div.value.states.forEach {
+                it.div?.let { childDiv ->
+                    path.add(it.stateId)
+                    visit(childDiv, path, runtime)
+                    path.removeLastOrNull()
+                }
+            }
+            path.removeLastOrNull()
         }
     }
 }

@@ -110,10 +110,10 @@ internal class DivGridBinder @Inject constructor(
         patchedItems.forEachIndexed { index, item ->
             val childView = getChildAt(index)
             val childDiv = item.value()
-            val childId = childDiv.getChildPathUnit(index)
+            val childPath = childDiv.resolvePath(index, path)
 
             childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            divBinder.get().bind(bindingContext, childView, item, path.appendDiv(childId))
+            divBinder.get().bind(bindingContext, childView, item, childPath)
             bindLayoutParams(childView, childDiv, resolver)
             if (childDiv.hasSightActions) {
                 divView.bindViewToDiv(childView, item)

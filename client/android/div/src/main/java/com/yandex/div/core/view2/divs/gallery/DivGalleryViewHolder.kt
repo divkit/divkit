@@ -9,6 +9,7 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.getChildPathUnit
+import com.yandex.div.core.view2.divs.resolvePath
 import com.yandex.div.core.view2.divs.resolveRuntime
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
@@ -28,6 +29,8 @@ internal class DivGalleryViewHolder(
 
     private var oldDiv: Div? = null
 
+    private val childrenPaths = mutableMapOf<String, DivStatePath>()
+
     fun bind(context: BindingContext, div: Div, position: Int) {
         if (rootView.tryRebindRecycleContainerChildren(context.divView, div)) {
             oldDiv = div
@@ -46,7 +49,7 @@ internal class DivGalleryViewHolder(
         oldDiv = div
         rootView.setTag(R.id.div_gallery_item_index, position)
         val id = div.value().getChildPathUnit(position)
-        val childPath = path.appendDiv(id)
+        val childPath = childrenPaths.getOrPut(id) { div.value().resolvePath(id, path) }
 
         if (parentContext.expressionResolver != context.expressionResolver) {
             resolveRuntime(

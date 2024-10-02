@@ -216,8 +216,7 @@ internal class DivContainerBinder @Inject constructor(
             val childView = getChildAt(index)
             val childDiv = item.div.value()
             val oldChildDiv = (childView as? DivHolderView<*>)?.div
-            val childId = childDiv.getChildPathUnit(index)
-            val childPath = path.appendDiv(childId)
+            val childPath = childDiv.resolvePath(index, path)
 
             if (bindingContext.expressionResolver != item.expressionResolver) {
                 resolveRuntime(

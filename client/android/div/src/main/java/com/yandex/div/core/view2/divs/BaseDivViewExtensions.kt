@@ -91,6 +91,7 @@ import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
+import com.yandex.div2.DivState
 import com.yandex.div2.DivStroke
 import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTransform
@@ -631,6 +632,16 @@ internal fun resolveRuntime(
     )
 
 internal fun DivBase.getChildPathUnit(index: Int) = id ?: ChildPathUnitCache.getValue(index)
+
+internal fun DivBase.resolvePath(index: Int, parentPath: DivStatePath): DivStatePath {
+    return if (this is DivState) parentPath
+    else parentPath.appendDiv(getChildPathUnit(index))
+}
+
+internal fun DivBase.resolvePath(pathUnit: String, parentPath: DivStatePath): DivStatePath {
+    return if (this is DivState) parentPath
+    else parentPath.appendDiv(pathUnit)
+}
 
 /**
  * Binds all descendants of [this] which are [DivStateLayout]s corresponding to DivStates in [div]

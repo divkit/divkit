@@ -11,6 +11,7 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.getChildPathUnit
+import com.yandex.div.core.view2.divs.resolvePath
 import com.yandex.div.core.view2.divs.resolveRuntime
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
@@ -36,6 +37,7 @@ internal class DivPagerViewHolder(
     }
 
     private var oldDiv: Div? = null
+    private val childrenPaths = mutableMapOf<String, DivStatePath>()
 
     fun bind(bindingContext: BindingContext, div: Div, position: Int) {
         val resolver = bindingContext.expressionResolver
@@ -57,19 +59,20 @@ internal class DivPagerViewHolder(
             frameLayout.setTag(R.id.div_pager_item_clip_id, position)
         }
         oldDiv = div
+
         val id = div.value().getChildPathUnit(position)
-        val path = path.appendDiv(id)
+        val childPath = childrenPaths.getOrPut(id) { div.value().resolvePath(id, path) }
 
         if (parentContext.expressionResolver != bindingContext.expressionResolver) {
             resolveRuntime(
                 runtimeStore = bindingContext.runtimeStore,
                 div = div.value(),
-                path.fullPath,
+                childPath.fullPath,
                 resolver = resolver,
             )
         }
 
-        divBinder.bind(bindingContext, divView, div, path)
+        divBinder.bind(bindingContext, divView, div, childPath)
         bindingContext.runtimeStore?.showWarningIfNeeded(div.value())
     }
 
