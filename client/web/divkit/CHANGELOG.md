@@ -1,3 +1,8 @@
+## 30.21.0 (October 7, 2024)
+
+* Supported `id` property for the prototypes in the `item_builder`.
+
+
 ## 30.20.0 (October 01, 2024)
 
 * Added support for the `on_applied_actions` and `on_failed_actions` inside `patch`.

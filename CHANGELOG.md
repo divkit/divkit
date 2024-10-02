@@ -1,3 +1,23 @@
+## 30.21.0
+
+# Android Client:
+* Added evaluable functions `getStoredArrayValue(name)`, `getStoredDictValue(name)`.
+* Added new typed action `scroll_by` that can be used instead of `div-action://scroll_forward`, `div-action://scroll_backward`, `div-action://set_next_item` and `div-action://set_previous_item`.
+* Added new typed action `scroll_to` that can be used instead of `div-action://set_current_item`, `div-action://scroll_to_position`, `div-action://scroll_to_start` and `div-action://scroll_to_end`.
+* Added new typed action `set_stored_value` that can be used instead of `div-action://set_stored_value`.
+
+# iOS Client:
+* Changed pager's page size evaluation to make the behavior consistent with other platforms.
+* Fixed focus on ios. update blocks after changing focus via actions or inside blocks.
+* `ImageBlock` `tintMode: TintMode` and `tintColor: Color?` can now be rendered using `RemoteImageView` instead of `MetalImageView`. To do so `imageTintPreferMetal: Bool` must be set to `false` via `DivFlagsInfo`
+
+# Web Client:
+* Supported `id` property for the prototypes in the `item_builder`.
+
+# TypeScript JSON Builder:
+* Added platforms support in the TSDoc comments.
+
+
 ## 30.20.0
 
 # Android Client:
