@@ -41,7 +41,7 @@
   },
   "div_action_animator_start_animator_id": {
     "en": "The identifier of the animator being started.",
-    "ru": "Идентификатор запускаемого аниматора"
+    "ru": "Идентификатор запускаемого аниматора."
   },
   "div_action_animator_start_end_value": {
     "en": "Overrides value that will be set at the end of animation.",
@@ -68,8 +68,8 @@
     "ru": "Удаляет значение из массива"
   },
   "div_action_array_set_value": {
-    "en": "Sets value in the array",
-    "ru": "Устанавливает значение в массиве по индексу"
+    "en": "Sets value in the array.",
+    "ru": "Устанавливает значение в массиве по индексу."
   },
   "div_action_base_download_callbacks": {
     "en": "Callbacks that are called after [data loading](../../interaction#loading-data).",
@@ -93,7 +93,7 @@
   },
   "div_action_base_scope_id": {
     "en": "Div identifier denotes the scope in which this action will be performed.",
-    "ru": "Идентификатор дива, в области видимости которого будет выполняться данное действие."
+    "ru": "Идентификатор элемента, в области видимости которого будет выполняться данное действие."
   },
   "div_action_base_url": {
     "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).",
@@ -117,7 +117,7 @@
   },
   "div_action_download_url": {
     "en": "URL to get the patch.",
-    "ru": "Ссылка для получения патча."
+    "ru": "Ссылка для получения изменений."
   },
   "div_action_focus_element": {
     "en": "Requests focus for an element. May require a user action on the web.",
@@ -155,13 +155,13 @@
     "en": "Scrolls scrollable container from current position by `item_count` or by `offset`, if both provided scroll action will be combined, negative numbers associated with backward scroll.",
     "ru": "Пролистывает контейнер со скроллом от текущей позиции на `item_count` или `offset`, если оба значения указаны, действие будет скомбинированным, отрицательные значения пролистывают назад."
   },
-  "div_action_scroll_by_offset": {
-    "en": "Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.",
-    "ru": "Расстояние для скроллинга измеряемое в `dp` от текущей позиции, отрицательные значения пролистывают назад. Применим только в `gallery`"
-  },
   "div_action_scroll_by_item_count": {
     "en": "Count of container items to scroll, negative value is associated with backward scroll.",
     "ru": "Количество элементов контейнера, которые надо пролистать, отрицательные значения пролистывают назад."
+  },
+  "div_action_scroll_by_offset": {
+    "en": "Distance to scroll measured in `dp` from current position, negative value is associated with backward scroll. Applicable only in `gallery`.",
+    "ru": "Расстояние для скроллинга измеряемое в `dp` от текущей позиции, отрицательные значения пролистывают назад. Применим только в `gallery`"
   },
   "div_action_scroll_destination": {
     "en": "Specifies the destination of scroll in a container.",
@@ -212,12 +212,12 @@
     "ru": "Устанавливает новый внешний вид контента в `div-state`."
   },
   "div_action_set_state_state_id": {
-    "en": "The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>",
-    "ru": "Путь состояния внутри `state`, которое нужно активировать. Задается в формате `div_data_state_id/id/state_id`. Mожет быть иерархическим: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Состоит из:<li>`div_data_state_id` - числовое значение `state_id` объекта `state` в data;</li><li>`id` - значение `id` объекта `state`;</li><li>`state_id` - значение `state_id` объекта state в `state`.</li>"
+    "en": "The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>",
+    "ru": "Путь состояния внутри `state`, которое нужно активировать. Задается в формате `div_data_state_id/id/state_id`. Mожет быть иерархическим: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Состоит из:<li>`div_data_state_id` — числовое значение `state_id` объекта `state` в `data`;</li><li>`id` — значение `id` объекта `state`;</li><li>`state_id` — значение `state_id` объекта `state` в `state`.</li>"
   },
   "div_action_set_state_temporary": {
     "en": "Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>",
-    "ru": "Указывает на изменение состояния:<li>`true` — изменение временное и при пересоздании элемента состояние изменится на исходное (значение по умолчанию);</li><li>`false` — изменение состояния является постоянным.</li>"
+    "ru": "Указывает на изменение состояния:<li>`true` — изменение временное, и при пересоздании элемента состояние изменится на исходное (значение по умолчанию);</li><li>`false` — изменение постоянное.</li>"
   },
   "div_action_set_stored_value": {
     "en": "Temporarily saves variable to the persistent storage.",
@@ -245,7 +245,7 @@
   },
   "div_action_show_tooltip_multiple": {
     "en": "Defines whether tooltip can be shown again after being closed.",
-    "ru": "Mожет ли тултип показаться ещё раз после закрытия."
+    "ru": "Устанавливает, может ли тултип показываться еще раз после закрытия."
   },
   "div_action_target": {
     "en": "The tab in which the URL must be opened.",
@@ -256,8 +256,8 @@
     "ru": "Управляет таймером."
   },
   "div_action_timer_action": {
-    "en": "Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>",
-    "ru": "Указывает действие с таймером:<li>`start`- запускает таймер из остановленного положения;</li><li>`stop`- останавливает таймер, выполняет действие onEnd;</li><li>`pause`- ставит таймер на паузу, время сохраняется;</li><li>`resume`- продолжает таймер после паузы;</li><li>`cancel`- прерывает действие таймера, время сбрасывается;</li><li>`reset`- отменяет таймер, затем запускает заново.</li>"
+    "en": "Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>",
+    "ru": "Действие с таймером:<li>`start`— запускает таймер из остановленного положения;</li><li>`stop`— останавливает таймер, выполняет действие `onEnd`;</li><li>`pause`— ставит таймер на паузу, время сохраняется;</li><li>`resume`— продолжает таймер после паузы;</li><li>`cancel`— прерывает действие таймера, время сбрасывается;</li><li>`reset`— отменяет таймер, затем запускает заново.</li>"
   },
   "div_action_timer_id": {
     "en": "Timer identifier.",
@@ -265,15 +265,15 @@
   },
   "div_action_tooltip_id": {
     "en": "Tooltip identifier.",
-    "ru": "Идентификтор тултипа."
+    "ru": "Идентификатор тултипа."
   },
   "div_action_video": {
     "en": "Controls given video.",
-    "ru": "Управляет видео."
+    "ru": "Управляет воспроизведением видео."
   },
   "div_action_video_action": {
     "en": "Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>",
-    "ru": "Определяет действие с видео: <li>`start` - начинает воспроизведение видео если видео готово к воспроизведению или планирует воспроизведение;</li><li>`pause` - останавливает воспроизведение видео.</li>"
+    "ru": "Определяет действие с видео: <li>`start` — начинает воспроизведение видео, если видео готово к воспроизведению, или планирует воспроизведение;</li><li>`pause` — останавливает воспроизведение видео.</li>"
   },
   "div_action_video_id": {
     "en": "Video identifier.",
@@ -345,7 +345,7 @@
   },
   "div_animator_base_direction": {
     "en": "Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.",
-    "ru": "Направление анимации. Описывает то, должна ли анимация воспроизводиться вперёд, назад или переменно вперёд и назад."
+    "ru": "Направление анимации. Определяет, должна ли анимация воспроизводиться вперед, назад или переменно вперед и назад."
   },
   "div_animator_base_duration": {
     "en": "Animation duration in milliseconds.",
@@ -364,8 +364,8 @@
     "ru": "Функция интерполяции анимируемого значения."
   },
   "div_animator_base_repeat_count": {
-    "en": "The number of times the animation will repeat before it finishes.",
-    "ru": "Количество повторов анимации, которое будет выполнено до ее остановки."
+    "en": "The number of times the animation will repeat before it finishes. `0` enables infinite repeats.",
+    "ru": "Количество повторов анимации, которое будет выполнено до ее остановки. Значение `0` включает бесконечные повторы."
   },
   "div_animator_base_start_delay": {
     "en": "Animation start delay in milliseconds.",
@@ -533,7 +533,7 @@
   },
   "div_base_variables": {
     "en": "Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.",
-    "ru": "Объявление переменных, которые могут использоваться внутри элемента. Переменные, объявленные в данном массиве могут использоваться только внутри самого элемента и его дочерних элементов."
+    "ru": "Объявление переменных, которые могут использоваться внутри элемента. Переменные, объявленные в данном массиве, могут использоваться только внутри самого элемента и его дочерних элементов."
   },
   "div_base_visibility": {
     "en": "Element visibility.",
@@ -969,7 +969,7 @@
   },
   "div_function_argument_name": {
     "en": "Function argument name.",
-    "ru": "Наименование аргумента функции."
+    "ru": "Название аргумента функции."
   },
   "div_function_argument_type": {
     "en": "Function argument type.",
@@ -981,7 +981,7 @@
   },
   "div_function_name": {
     "en": "Function name.",
-    "ru": "Наименование функции."
+    "ru": "Название функции."
   },
   "div_function_return_type": {
     "en": "Return type.",
@@ -1273,7 +1273,7 @@
   },
   "div_input_filters": {
     "en": "Filtering that prevents the entry of text that does not meet specified conditions.",
-    "ru": "Фильтрация, которая не допускает ввод текста, не соответствующего заданным условиям."
+    "ru": "Фильтр, который не допускает ввод текста, не соответствующего заданным условиям."
   },
   "div_input_filters_expression": {
     "en": "[Calculated expression](../../expressions) filter.",
@@ -1281,7 +1281,7 @@
   },
   "div_input_filters_expression_condition": {
     "en": "[Calculated expression](../../expressions) used as a value validity condition.",
-    "ru": "[Вычисляемое выражение](../../expressions), которое используется как условие валидности значения."
+    "ru": "[Вычисляемое выражение](../../expressions), которое используется для проверки валидности значения."
   },
   "div_input_filters_regex": {
     "en": "Regex filter.",
@@ -1305,7 +1305,7 @@
   },
   "div_input_is_enabled": {
     "en": "Indicates if the text editing is enabled.",
-    "ru": "Определяет, включено ли редактирование текста."
+    "ru": "Включает или отключает возможность редактирования текста."
   },
   "div_input_keyboard_type": {
     "en": "Keyboard type.",
@@ -1525,11 +1525,11 @@
   },
   "div_pager_next_page_alpha": {
     "en": "Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
-    "ru": "Минимальная прозрачность следующей страницы во время листания пейджера в границах [0, 1]. Следующая страница - это всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
+    "ru": "Минимальная прозрачность следующей страницы в диапазоне [0, 1] при листании пейджера. Следующая страница — всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_next_page_scale": {
     "en": "Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
-    "ru": "Маштабирование следующей страницы во время листания пейджера. Следующая страница - это всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
+    "ru": "Маштабирование следующей страницы во время листания пейджера. Следующая страница — всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_orientation": {
     "en": "Pager orientation.",
@@ -1541,7 +1541,7 @@
   },
   "div_pager_page_transformation_interpolator": {
     "en": "Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>",
-    "ru": "Transformation скорости анимации. При значении `spring` — обрезанная до 0.7 анимация затухающих колебаний с параметром `damping=1`. Остальные варианты соответствует кривой Безье:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
+    "ru": "Изменение скорости анимации. При значении `spring` — обрезанная до 0.7 анимация затухающих колебаний с параметром `damping=1`. Остальные значения соответствуют кривой Безье:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
   },
   "div_pager_page_transformation_overlap": {
     "en": "The pages are stacked when the pager is scrolled overlapping each other.",
@@ -1549,7 +1549,7 @@
   },
   "div_pager_page_transformation_overlap_reversed_stacking_order": {
     "en": "If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
-    "ru": "При значении false следующие страницы будут собираться в стопку над предыдущими. При значении true - наоборот. Следующая страница - это всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
+    "ru": "При значении `false` следующие страницы будут собираться в стопку над предыдущими. При значении `true` — наоборот. Следующая страница — всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_page_transformation_slide": {
     "en": "The pages are moving when the pager is flipping without overlaping each other.",
@@ -1557,11 +1557,11 @@
   },
   "div_pager_previous_page_alpha": {
     "en": "Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.",
-    "ru": "Минимальная прозрачность предыдущей страницы во время листания пейджера в границах [0, 1]. Предыдущая страница - это всегда страница с меньшим порядковым номером с списке `items`, независимо от направления листания."
+    "ru": "Минимальная прозрачность предыдущей страницы в диапазоне [0, 1] во время листания пейджера. Предыдущая страница — всегда страница с меньшим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_previous_page_scale": {
     "en": "Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.",
-    "ru": "Маштабирование предыдущей страницы во время листания пейджера. Предыдущая страница - это всегда страница с меньшим порядковым номером с списке `items`, независимо от направления листания."
+    "ru": "Маштабирование предыдущей страницы во время листания пейджера. Предыдущая страница — всегда страница с меньшим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_restrict_parent_scroll": {
     "en": "If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.",
@@ -1593,11 +1593,11 @@
   },
   "div_patch_on_applied_actions": {
     "en": "Actions after applying patch.",
-    "ru": "Действия после применения патча."
+    "ru": "Действия после применения изменений."
   },
   "div_patch_on_failed_actions": {
     "en": "Actions after an error applying patch in transactional mode.",
-    "ru": "Действия после ошибки применения патча в транзакционном режиме."
+    "ru": "Действия после ошибки применения изменений в транзакционном режиме."
   },
   "div_percentage_size": {
     "en": "Element size (%).",
@@ -1672,8 +1672,8 @@
     "ru": "Тип относительного радиуса градиентного перехода."
   },
   "div_reuse_id": {
-    "en": "Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)",
-    "ru": "Id для структуры div-объекта. Используется для более оптимального переиспользования блоков. См. [переиспользование блоков](../../reuse/reuse.md)"
+    "en": "ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).",
+    "ru": "ID для структуры div-объекта. Используется для более оптимального переиспользования блоков. См. [переиспользование блоков](../../reuse/reuse.md)."
   },
   "div_rounded_rectangle_shape": {
     "en": "A rectangle with rounded corners.",
@@ -2077,11 +2077,11 @@
   },
   "div_tabs_tab_title_delimiter_style_corner_radius": {
     "en": "Delimiters corner rounding radii. If the parameter isn't specified, the rounding is maximum (half of the smallest size). Not used if the `corners_radius` parameter is set.",
-    "ru": "Радиус скругления углов разделителей. Если параметр не задан, то максимальное скругление (половина от наименьшего размера). Не используется, если задан параметр `corners_radius`."
+    "ru": "Радиус скругления углов разделителей. Если параметр не задан, то применяется максимальное скругление (половина от наименьшего размера). Не используется, если задан параметр `corners_radius`."
   },
   "div_tabs_tab_title_delimiter_style_corners_radius": {
     "en": "Rounding radii of corners of delimiters. Empty values are replaced by 0.",
-    "ru": "Радиусы скругления углов разделителей. Пустые значения будут заменены на 0."
+    "ru": "Радиусы скругления углов разделителей. Пустые значения заменяются на 0."
   },
   "div_tabs_tab_title_style": {
     "en": "Design style of tab titles.",
@@ -2257,7 +2257,7 @@
   },
   "div_text_range_alignment_vertical": {
     "en": "Vertical text range alignment within a string.",
-    "ru": "Вертикальное выравнивание текстового диапазона внутри строки."
+    "ru": "Вертикальное выравнивание текста внутри строки."
   },
   "div_text_range_background": {
     "en": "Character range background.",
@@ -2556,7 +2556,7 @@
     "ru": "Действия, которые выполняются при возобновлении воспроизведения видео."
   },
   "div_video_scale": {
-    "en": "Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>",
+    "en": "Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>",
     "ru": "Масштабирование видео:<li>`fit` помещает видео в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует видео по размеру элемента и обрезает лишнее.</li>"
   },
   "div_video_source": {
