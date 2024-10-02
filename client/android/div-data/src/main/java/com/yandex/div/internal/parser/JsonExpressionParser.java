@@ -451,7 +451,7 @@ public class JsonExpressionParser {
         boolean containsExpressions = false;
 
         for (int i = 0; i < length; i++) {
-            final Object intermediate = optSafe(array.opt(i));
+            final Object intermediate = optSafe(array, i);
 
             if (intermediate == null) {
                 continue;

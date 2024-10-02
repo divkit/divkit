@@ -202,6 +202,10 @@ fun missingVariable(variableName: String, cause: Throwable? = null) =
     )
 
 fun dependencyFailed(json: JSONObject, key: String, cause: ParsingException): ParsingException {
+    return dependencyFailed(json, key, cause as Exception)
+}
+
+internal fun dependencyFailed(json: JSONObject, key: String, cause: Exception): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.DEPENDENCY_FAILED,
         message = "Value for key '$key' is failed to create",
@@ -212,6 +216,10 @@ fun dependencyFailed(json: JSONObject, key: String, cause: ParsingException): Pa
 }
 
 fun dependencyFailed(json: JSONArray, key: String, index: Int, cause: ParsingException): ParsingException {
+    return dependencyFailed(json, key, index, cause as Exception)
+}
+
+internal fun dependencyFailed(json: JSONArray, key: String, index: Int, cause: Exception): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.DEPENDENCY_FAILED,
         message = "Value at $index position of '$key' is failed to create",
@@ -222,6 +230,10 @@ fun dependencyFailed(json: JSONArray, key: String, index: Int, cause: ParsingExc
 }
 
 fun dependencyFailed(path: String, cause: ParsingException): ParsingException {
+    return dependencyFailed(path, cause as Exception)
+}
+
+internal fun dependencyFailed(path: String, cause: Exception): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.DEPENDENCY_FAILED,
         message = "Value at path '$path' is failed to create",
@@ -230,6 +242,10 @@ fun dependencyFailed(path: String, cause: ParsingException): ParsingException {
 }
 
 fun dependencyFailed(key: String, path: String, cause: ParsingException): ParsingException {
+    return dependencyFailed(key, path, cause as Exception)
+}
+
+fun dependencyFailed(key: String, path: String, cause: Exception): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.DEPENDENCY_FAILED,
         message = "Value for key '$key' at path '$path' is failed to create",

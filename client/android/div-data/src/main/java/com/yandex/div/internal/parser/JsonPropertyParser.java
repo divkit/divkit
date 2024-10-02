@@ -3,13 +3,11 @@ package com.yandex.div.internal.parser;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.json.ParsingErrorLogger;
-import com.yandex.div.json.ParsingException;
 import com.yandex.div.json.ParsingExceptionKt;
 import com.yandex.div.serialization.Deserializer;
 import com.yandex.div.serialization.ParsingContext;
-
-import kotlin.OptIn;
 import kotlin.Lazy;
+import kotlin.OptIn;
 import kotlin.jvm.functions.Function1;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +20,7 @@ import static com.yandex.div.internal.parser.JsonParsers.alwaysValid;
 import static com.yandex.div.internal.parser.JsonParsers.alwaysValidList;
 import static com.yandex.div.internal.parser.JsonParsers.alwaysValidString;
 import static com.yandex.div.internal.parser.JsonParsers.doNotConvert;
+import static com.yandex.div.internal.parser.JsonParsers.nullable;
 import static com.yandex.div.internal.parser.JsonParsers.optSafe;
 import static com.yandex.div.json.ParsingExceptionKt.dependencyFailed;
 import static com.yandex.div.json.ParsingExceptionKt.invalidValue;
@@ -129,14 +128,14 @@ public class JsonPropertyParser {
             @NonNull final Function1<R, V> converter,
             @NonNull final ValueValidator<V> validator
     ) {
-        final Object intermediate = optSafe(jsonObject, key);
+        final R intermediate = optSafe(jsonObject, key);
         if (intermediate == null) {
             throw missingValue(jsonObject, key);
         }
 
         V result;
         try {
-            result = converter.invoke((R) intermediate);
+            result = converter.invoke(intermediate);
         } catch (ClassCastException castException) {
             throw typeMismatch(jsonObject, key, intermediate);
         } catch (Exception e) {
@@ -174,7 +173,7 @@ public class JsonPropertyParser {
         V result;
         try {
             result = deserializer.getValue().deserialize(context, json);
-        } catch (ParsingException e) {
+        } catch (Exception e) {
             throw dependencyFailed(jsonObject, key, e);
         }
 
@@ -226,14 +225,14 @@ public class JsonPropertyParser {
             @NonNull final Function1<R, V> converter,
             @NonNull final ValueValidator<V> validator
     ) {
-        final Object intermediate = optSafe(jsonObject, key);
+        final R intermediate = optSafe(jsonObject, key);
         if (intermediate == null) {
             return null;
         }
 
         V result = null;
         try {
-            result = converter.invoke((R) intermediate);
+            result = converter.invoke(intermediate);
         } catch (ClassCastException castException) {
             logger.logError(typeMismatch(jsonObject, key, intermediate));
             return null;
@@ -275,8 +274,8 @@ public class JsonPropertyParser {
 
         try {
             return deserializer.getValue().deserialize(context, json);
-        } catch (ParsingException e) {
-            logger.logError(e);
+        } catch (Exception e) {
+            logger.logError(dependencyFailed(jsonObject, key, e));
             return null;
         }
     }
@@ -347,7 +346,7 @@ public class JsonPropertyParser {
 
         List<V> list = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
-            final Object intermediate = optSafe(array.opt(i));
+            final R intermediate = optSafe(array, i);
 
             if (intermediate == null) {
                 continue;
@@ -355,7 +354,7 @@ public class JsonPropertyParser {
 
             V item;
             try {
-                item = converter.invoke((R) intermediate);
+                item = converter.invoke(intermediate);
             } catch (ClassCastException castException) {
                 logger.logError(typeMismatch(array, key, i, intermediate));
                 continue;
@@ -412,7 +411,7 @@ public class JsonPropertyParser {
 
         List<V> list = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
-            final JSONObject json = optSafe(array.optJSONObject(i));
+            final JSONObject json = nullable(array.optJSONObject(i));
 
             if (json == null) {
                 continue;
@@ -421,11 +420,8 @@ public class JsonPropertyParser {
             V item;
             try {
                 item = deserializer.getValue().deserialize(context, json);
-            } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(array, key, i, json));
-                continue;
             } catch (Exception e) {
-                logger.logError(invalidValue(array, key, i, json, e));
+                logger.logError(dependencyFailed(array, key, i, e));
                 continue;
             }
 
@@ -470,7 +466,7 @@ public class JsonPropertyParser {
 
         List<V> list = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
-            final JSONObject json = optSafe(array.optJSONObject(i));
+            final JSONObject json = nullable(array.optJSONObject(i));
 
             if (json == null) {
                 continue;
@@ -479,11 +475,8 @@ public class JsonPropertyParser {
             V item;
             try {
                 item = deserializer.getValue().deserialize(context, json);
-            } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(array, key, i, json));
-                continue;
             } catch (Exception e) {
-                logger.logError(invalidValue(array, key, i, json, e));
+                logger.logError(dependencyFailed(array, key, i, e));
                 continue;
             }
 
@@ -560,7 +553,7 @@ public class JsonPropertyParser {
         List<V> list = new ArrayList<>(length);
 
         for (int i = 0; i < length; i++) {
-            final Object intermediate = optSafe(array.opt(i));
+            final R intermediate = optSafe(array, i);
 
             if (intermediate == null) {
                 continue;
@@ -568,7 +561,7 @@ public class JsonPropertyParser {
 
             V item;
             try {
-                item = converter.invoke((R) intermediate);
+                item = converter.invoke(intermediate);
             } catch (ClassCastException castException) {
                 logger.logError(typeMismatch(array, key, i, intermediate));
                 continue;
@@ -627,7 +620,7 @@ public class JsonPropertyParser {
         List<V> list = new ArrayList<>(length);
 
         for (int i = 0; i < length; i++) {
-            final JSONObject json = optSafe(array.optJSONObject(i));
+            final JSONObject json = nullable(array.optJSONObject(i));
 
             if (json == null) {
                 continue;
@@ -636,11 +629,8 @@ public class JsonPropertyParser {
             V item;
             try {
                 item = deserializer.getValue().deserialize(context, json);
-            } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(array, key, i, json));
-                continue;
             } catch (Exception e) {
-                logger.logError(invalidValue(array, key, i, json, e));
+                logger.logError(dependencyFailed(array, key, i, e));
                 continue;
             }
 
@@ -685,7 +675,7 @@ public class JsonPropertyParser {
         List<V> list = new ArrayList<>(length);
 
         for (int i = 0; i < length; i++) {
-            final JSONObject json = optSafe(array.optJSONObject(i));
+            final JSONObject json = nullable(array.optJSONObject(i));
 
             if (json == null) {
                 continue;
@@ -694,11 +684,8 @@ public class JsonPropertyParser {
             V item;
             try {
                 item = deserializer.getValue().deserialize(context, json);
-            } catch (ClassCastException castException) {
-                logger.logError(typeMismatch(array, key, i, json));
-                continue;
             } catch (Exception e) {
-                logger.logError(invalidValue(array, key, i, json, e));
+                logger.logError(dependencyFailed(array, key, i, e));
                 continue;
             }
 

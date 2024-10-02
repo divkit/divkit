@@ -3,9 +3,10 @@ package com.yandex.div.internal.parser;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import kotlin.jvm.functions.Function1;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-class JsonParsers {
+public class JsonParsers {
 
     @NonNull
     private static final ValueValidator<?> ALWAYS_VALID = (any) -> true;
@@ -21,7 +22,7 @@ class JsonParsers {
     }
 
     @Nullable
-    static <T> T optSafe(@Nullable T json) {
+    static JSONObject nullable(@Nullable JSONObject json) {
         if (json == null || json == JSONObject.NULL) {
             return null;
         }
@@ -30,13 +31,23 @@ class JsonParsers {
     }
 
     @Nullable
-    static Object optSafe(JSONObject json, String key) {
+    static <T> T optSafe(JSONObject json, String key) {
         Object value = json.opt(key);
         if (value == null || value == JSONObject.NULL) {
             return null;
         }
 
-        return value;
+        return (T) value;
+    }
+
+    @Nullable
+    static <T> T optSafe(JSONArray json, int index) {
+        Object value = json.opt(index);
+        if (value == null || value == JSONObject.NULL) {
+            return null;
+        }
+
+        return (T) value;
     }
 
     @NonNull
@@ -58,7 +69,7 @@ class JsonParsers {
 
     @NonNull
     @SuppressWarnings("unchecked")
-    static <T> Function1<T, T> doNotConvert() {
+    public static <T> Function1<T, T> doNotConvert() {
         return (Function1<T, T>) AS_IS;
     }
 }
