@@ -41,6 +41,9 @@ class ActionAnimatorStop internal constructor(
     )
 
     class Properties internal constructor(
+        /**
+         * The identifier of the animator being stopped.
+         */
         val animatorId: Property<String>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -52,6 +55,9 @@ class ActionAnimatorStop internal constructor(
     }
 }
 
+/**
+ * @param animatorId The identifier of the animator being stopped.
+ */
 @Generated
 fun DivScope.actionAnimatorStop(
     `use named arguments`: Guard = Guard.instance,
@@ -62,6 +68,9 @@ fun DivScope.actionAnimatorStop(
     )
 )
 
+/**
+ * @param animatorId The identifier of the animator being stopped.
+ */
 @Generated
 fun DivScope.actionAnimatorStopProps(
     `use named arguments`: Guard = Guard.instance,
@@ -70,6 +79,9 @@ fun DivScope.actionAnimatorStopProps(
     animatorId = valueOrNull(animatorId),
 )
 
+/**
+ * @param animatorId The identifier of the animator being stopped.
+ */
 @Generated
 fun TemplateScope.actionAnimatorStopRefs(
     `use named arguments`: Guard = Guard.instance,
@@ -78,6 +90,9 @@ fun TemplateScope.actionAnimatorStopRefs(
     animatorId = animatorId,
 )
 
+/**
+ * @param animatorId The identifier of the animator being stopped.
+ */
 @Generated
 fun ActionAnimatorStop.override(
     `use named arguments`: Guard = Guard.instance,
@@ -88,20 +103,13 @@ fun ActionAnimatorStop.override(
     )
 )
 
+/**
+ * @param animatorId The identifier of the animator being stopped.
+ */
 @Generated
 fun ActionAnimatorStop.defer(
     `use named arguments`: Guard = Guard.instance,
     animatorId: ReferenceProperty<String>? = null,
-): ActionAnimatorStop = ActionAnimatorStop(
-    ActionAnimatorStop.Properties(
-        animatorId = animatorId ?: properties.animatorId,
-    )
-)
-
-@Generated
-fun ActionAnimatorStop.evaluate(
-    `use named arguments`: Guard = Guard.instance,
-    animatorId: ExpressionProperty<String>? = null,
 ): ActionAnimatorStop = ActionAnimatorStop(
     ActionAnimatorStop.Properties(
         animatorId = animatorId ?: properties.animatorId,

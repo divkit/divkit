@@ -84,6 +84,7 @@ class Text internal constructor(
             textColor = additive.textColor ?: properties.textColor,
             textGradient = additive.textGradient ?: properties.textGradient,
             textShadow = additive.textShadow ?: properties.textShadow,
+            tightenWidth = additive.tightenWidth ?: properties.tightenWidth,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
@@ -306,6 +307,11 @@ class Text internal constructor(
          */
         val textShadow: Property<Shadow>?,
         /**
+         * Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+         * Default value: `false`.
+         */
+        val tightenWidth: Property<Boolean>?,
+        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -418,6 +424,7 @@ class Text internal constructor(
             result.tryPutProperty("text_color", textColor)
             result.tryPutProperty("text_gradient", textGradient)
             result.tryPutProperty("text_shadow", textShadow)
+            result.tryPutProperty("tighten_width", tightenWidth)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transition_change", transitionChange)
@@ -829,6 +836,7 @@ class Text internal constructor(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -895,6 +903,7 @@ fun DivScope.text(
     textColor: Color? = null,
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
+    tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -959,6 +968,7 @@ fun DivScope.text(
         textColor = valueOrNull(textColor),
         textGradient = valueOrNull(textGradient),
         textShadow = valueOrNull(textShadow),
+        tightenWidth = valueOrNull(tightenWidth),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transitionChange = valueOrNull(transitionChange),
@@ -1024,6 +1034,7 @@ fun DivScope.text(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1090,6 +1101,7 @@ fun DivScope.textProps(
     textColor: Color? = null,
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
+    tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -1153,6 +1165,7 @@ fun DivScope.textProps(
     textColor = valueOrNull(textColor),
     textGradient = valueOrNull(textGradient),
     textShadow = valueOrNull(textShadow),
+    tightenWidth = valueOrNull(tightenWidth),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transitionChange = valueOrNull(transitionChange),
@@ -1217,6 +1230,7 @@ fun DivScope.textProps(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1283,6 +1297,7 @@ fun TemplateScope.textRefs(
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
+    tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -1346,6 +1361,7 @@ fun TemplateScope.textRefs(
     textColor = textColor,
     textGradient = textGradient,
     textShadow = textShadow,
+    tightenWidth = tightenWidth,
     tooltips = tooltips,
     transform = transform,
     transitionChange = transitionChange,
@@ -1410,6 +1426,7 @@ fun TemplateScope.textRefs(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1476,6 +1493,7 @@ fun Text.override(
     textColor: Color? = null,
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
+    tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -1540,6 +1558,7 @@ fun Text.override(
         textColor = valueOrNull(textColor) ?: properties.textColor,
         textGradient = valueOrNull(textGradient) ?: properties.textGradient,
         textShadow = valueOrNull(textShadow) ?: properties.textShadow,
+        tightenWidth = valueOrNull(tightenWidth) ?: properties.tightenWidth,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
@@ -1605,6 +1624,7 @@ fun Text.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1671,6 +1691,7 @@ fun Text.defer(
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
+    tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -1735,6 +1756,7 @@ fun Text.defer(
         textColor = textColor ?: properties.textColor,
         textGradient = textGradient ?: properties.textGradient,
         textShadow = textShadow ?: properties.textShadow,
+        tightenWidth = tightenWidth ?: properties.tightenWidth,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transitionChange = transitionChange ?: properties.transitionChange,
@@ -1776,6 +1798,7 @@ fun Text.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -1807,6 +1830,7 @@ fun Text.evaluate(
     textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
+    tightenWidth: ExpressionProperty<Boolean>? = null,
     truncate: ExpressionProperty<Text.Truncate>? = null,
     underline: ExpressionProperty<LineStyle>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1860,6 +1884,7 @@ fun Text.evaluate(
         textColor = textColor ?: properties.textColor,
         textGradient = properties.textGradient,
         textShadow = properties.textShadow,
+        tightenWidth = tightenWidth ?: properties.tightenWidth,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transitionChange = properties.transitionChange,
@@ -1925,6 +1950,7 @@ fun Text.evaluate(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1991,6 +2017,7 @@ fun Component<Text>.override(
     textColor: Color? = null,
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
+    tightenWidth: Boolean? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -2056,6 +2083,7 @@ fun Component<Text>.override(
         textColor = valueOrNull(textColor),
         textGradient = valueOrNull(textGradient),
         textShadow = valueOrNull(textShadow),
+        tightenWidth = valueOrNull(tightenWidth),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transitionChange = valueOrNull(transitionChange),
@@ -2121,6 +2149,7 @@ fun Component<Text>.override(
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
  * @param textShadow Parameters of the shadow applied to the text.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -2187,6 +2216,7 @@ fun Component<Text>.defer(
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
+    tightenWidth: ReferenceProperty<Boolean>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -2252,6 +2282,7 @@ fun Component<Text>.defer(
         textColor = textColor,
         textGradient = textGradient,
         textShadow = textShadow,
+        tightenWidth = tightenWidth,
         tooltips = tooltips,
         transform = transform,
         transitionChange = transitionChange,
@@ -2293,6 +2324,7 @@ fun Component<Text>.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param tightenWidth Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param visibility Element visibility.
@@ -2324,6 +2356,7 @@ fun Component<Text>.evaluate(
     textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
+    tightenWidth: ExpressionProperty<Boolean>? = null,
     truncate: ExpressionProperty<Text.Truncate>? = null,
     underline: ExpressionProperty<LineStyle>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -2378,6 +2411,7 @@ fun Component<Text>.evaluate(
         textColor = textColor,
         textGradient = null,
         textShadow = null,
+        tightenWidth = tightenWidth,
         tooltips = null,
         transform = null,
         transitionChange = null,

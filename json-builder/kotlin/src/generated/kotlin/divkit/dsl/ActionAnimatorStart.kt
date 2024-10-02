@@ -69,9 +69,9 @@ class ActionAnimatorStart internal constructor(
          */
         val interpolator: Property<AnimationInterpolator>?,
         /**
-         * The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+         * The number of times the animation will repeat before it finishes.
          */
-        val repeatCount: Property<Int>?,
+        val repeatCount: Property<Count>?,
         /**
          * Animation start delay in milliseconds.
          */
@@ -103,7 +103,7 @@ class ActionAnimatorStart internal constructor(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -115,7 +115,7 @@ fun DivScope.actionAnimatorStart(
     duration: Long? = null,
     endValue: TypedValue? = null,
     interpolator: AnimationInterpolator? = null,
-    repeatCount: Int? = null,
+    repeatCount: Count? = null,
     startDelay: Int? = null,
     startValue: TypedValue? = null,
 ): ActionAnimatorStart = ActionAnimatorStart(
@@ -137,7 +137,7 @@ fun DivScope.actionAnimatorStart(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -149,7 +149,7 @@ fun DivScope.actionAnimatorStartProps(
     duration: Long? = null,
     endValue: TypedValue? = null,
     interpolator: AnimationInterpolator? = null,
-    repeatCount: Int? = null,
+    repeatCount: Count? = null,
     startDelay: Int? = null,
     startValue: TypedValue? = null,
 ) = ActionAnimatorStart.Properties(
@@ -169,7 +169,7 @@ fun DivScope.actionAnimatorStartProps(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -181,7 +181,7 @@ fun TemplateScope.actionAnimatorStartRefs(
     duration: ReferenceProperty<Long>? = null,
     endValue: ReferenceProperty<TypedValue>? = null,
     interpolator: ReferenceProperty<AnimationInterpolator>? = null,
-    repeatCount: ReferenceProperty<Int>? = null,
+    repeatCount: ReferenceProperty<Count>? = null,
     startDelay: ReferenceProperty<Int>? = null,
     startValue: ReferenceProperty<TypedValue>? = null,
 ) = ActionAnimatorStart.Properties(
@@ -201,7 +201,7 @@ fun TemplateScope.actionAnimatorStartRefs(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -213,7 +213,7 @@ fun ActionAnimatorStart.override(
     duration: Long? = null,
     endValue: TypedValue? = null,
     interpolator: AnimationInterpolator? = null,
-    repeatCount: Int? = null,
+    repeatCount: Count? = null,
     startDelay: Int? = null,
     startValue: TypedValue? = null,
 ): ActionAnimatorStart = ActionAnimatorStart(
@@ -235,7 +235,7 @@ fun ActionAnimatorStart.override(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -247,7 +247,7 @@ fun ActionAnimatorStart.defer(
     duration: ReferenceProperty<Long>? = null,
     endValue: ReferenceProperty<TypedValue>? = null,
     interpolator: ReferenceProperty<AnimationInterpolator>? = null,
-    repeatCount: ReferenceProperty<Int>? = null,
+    repeatCount: ReferenceProperty<Count>? = null,
     startDelay: ReferenceProperty<Int>? = null,
     startValue: ReferenceProperty<TypedValue>? = null,
 ): ActionAnimatorStart = ActionAnimatorStart(
@@ -264,30 +264,26 @@ fun ActionAnimatorStart.defer(
 )
 
 /**
- * @param animatorId The identifier of the animator being started.
  * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
  * @param duration Animation duration in milliseconds.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  */
 @Generated
 fun ActionAnimatorStart.evaluate(
     `use named arguments`: Guard = Guard.instance,
-    animatorId: ExpressionProperty<String>? = null,
     direction: ExpressionProperty<AnimationDirection>? = null,
     duration: ExpressionProperty<Long>? = null,
     interpolator: ExpressionProperty<AnimationInterpolator>? = null,
-    repeatCount: ExpressionProperty<Int>? = null,
     startDelay: ExpressionProperty<Int>? = null,
 ): ActionAnimatorStart = ActionAnimatorStart(
     ActionAnimatorStart.Properties(
-        animatorId = animatorId ?: properties.animatorId,
+        animatorId = properties.animatorId,
         direction = direction ?: properties.direction,
         duration = duration ?: properties.duration,
         endValue = properties.endValue,
         interpolator = interpolator ?: properties.interpolator,
-        repeatCount = repeatCount ?: properties.repeatCount,
+        repeatCount = properties.repeatCount,
         startDelay = startDelay ?: properties.startDelay,
         startValue = properties.startValue,
     )

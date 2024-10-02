@@ -98,6 +98,14 @@ object BlankEnumValue : EnumValue("_blank"),
     Action.Target
 
 @Generated
+object ClampEnumValue : EnumValue("clamp"),
+    ActionScrollBy.Overflow
+
+@Generated
+object RingEnumValue : EnumValue("ring"),
+    ActionScrollBy.Overflow
+
+@Generated
 object StartEnumValue : EnumValue("start"),
     ActionTimer.Action,
     ActionVideo.Action,
@@ -592,6 +600,14 @@ val DivScope.self: SelfEnumValue
 @Generated
 val DivScope.blank: BlankEnumValue
     get() = BlankEnumValue
+
+@Generated
+val DivScope.clamp: ClampEnumValue
+    get() = ClampEnumValue
+
+@Generated
+val DivScope.ring: RingEnumValue
+    get() = RingEnumValue
 
 @Generated
 val DivScope.start: StartEnumValue

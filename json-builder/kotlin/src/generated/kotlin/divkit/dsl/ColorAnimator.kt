@@ -82,10 +82,10 @@ class ColorAnimator internal constructor(
          */
         val interpolator: Property<AnimationInterpolator>?,
         /**
-         * The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
-         * Default value: `1`.
+         * The number of times the animation will repeat before it finishes.
+         * Default value: `{"type": "fixed", "value": 1}`.
          */
-        val repeatCount: Property<Int>?,
+        val repeatCount: Property<Count>?,
         /**
          * Animation start delay in milliseconds.
          * Default value: `0`.
@@ -127,7 +127,7 @@ class ColorAnimator internal constructor(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -142,7 +142,7 @@ fun DivScope.colorAnimator(
     endValue: Color? = null,
     id: String? = null,
     interpolator: AnimationInterpolator? = null,
-    repeatCount: Int? = null,
+    repeatCount: Count? = null,
     startDelay: Int? = null,
     startValue: Color? = null,
     variableName: String? = null,
@@ -170,7 +170,7 @@ fun DivScope.colorAnimator(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -185,7 +185,7 @@ fun DivScope.colorAnimatorProps(
     endValue: Color? = null,
     id: String? = null,
     interpolator: AnimationInterpolator? = null,
-    repeatCount: Int? = null,
+    repeatCount: Count? = null,
     startDelay: Int? = null,
     startValue: Color? = null,
     variableName: String? = null,
@@ -211,7 +211,7 @@ fun DivScope.colorAnimatorProps(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -226,7 +226,7 @@ fun TemplateScope.colorAnimatorRefs(
     endValue: ReferenceProperty<Color>? = null,
     id: ReferenceProperty<String>? = null,
     interpolator: ReferenceProperty<AnimationInterpolator>? = null,
-    repeatCount: ReferenceProperty<Int>? = null,
+    repeatCount: ReferenceProperty<Count>? = null,
     startDelay: ReferenceProperty<Int>? = null,
     startValue: ReferenceProperty<Color>? = null,
     variableName: ReferenceProperty<String>? = null,
@@ -252,7 +252,7 @@ fun TemplateScope.colorAnimatorRefs(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -267,7 +267,7 @@ fun ColorAnimator.override(
     endValue: Color? = null,
     id: String? = null,
     interpolator: AnimationInterpolator? = null,
-    repeatCount: Int? = null,
+    repeatCount: Count? = null,
     startDelay: Int? = null,
     startValue: Color? = null,
     variableName: String? = null,
@@ -295,7 +295,7 @@ fun ColorAnimator.override(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+ * @param repeatCount The number of times the animation will repeat before it finishes.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -310,7 +310,7 @@ fun ColorAnimator.defer(
     endValue: ReferenceProperty<Color>? = null,
     id: ReferenceProperty<String>? = null,
     interpolator: ReferenceProperty<AnimationInterpolator>? = null,
-    repeatCount: ReferenceProperty<Int>? = null,
+    repeatCount: ReferenceProperty<Count>? = null,
     startDelay: ReferenceProperty<Int>? = null,
     startValue: ReferenceProperty<Color>? = null,
     variableName: ReferenceProperty<String>? = null,
@@ -335,7 +335,6 @@ fun ColorAnimator.defer(
  * @param duration Animation duration in milliseconds.
  * @param endValue Value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  */
@@ -346,7 +345,6 @@ fun ColorAnimator.evaluate(
     duration: ExpressionProperty<Long>? = null,
     endValue: ExpressionProperty<Color>? = null,
     interpolator: ExpressionProperty<AnimationInterpolator>? = null,
-    repeatCount: ExpressionProperty<Int>? = null,
     startDelay: ExpressionProperty<Int>? = null,
     startValue: ExpressionProperty<Color>? = null,
 ): ColorAnimator = ColorAnimator(
@@ -358,7 +356,7 @@ fun ColorAnimator.evaluate(
         endValue = endValue ?: properties.endValue,
         id = properties.id,
         interpolator = interpolator ?: properties.interpolator,
-        repeatCount = repeatCount ?: properties.repeatCount,
+        repeatCount = properties.repeatCount,
         startDelay = startDelay ?: properties.startDelay,
         startValue = startValue ?: properties.startValue,
         variableName = properties.variableName,
