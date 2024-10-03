@@ -477,7 +477,10 @@ public class JsonFieldResolver {
             TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
             for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
-                result.add(resolveOptionalDependency(context, logger, template, data, resolverLocal));
+                V value = resolveOptionalDependency(context, logger, template, data, resolverLocal);
+                if (value != null) {
+                    result.add(value);
+                }
             }
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
@@ -511,7 +514,10 @@ public class JsonFieldResolver {
             TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
             for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
-                result.add(resolveOptionalDependency(context, logger, template, data, resolverLocal));
+                V value = resolveOptionalDependency(context, logger, template, data, resolverLocal);
+                if (value != null) {
+                    result.add(value);
+                }
             }
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
@@ -637,7 +643,10 @@ public class JsonFieldResolver {
             TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
             for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
-                result.add(resolveOptionalDependency(context, logger, template, data, resolverLocal));
+                V value = resolveOptionalDependency(context, logger, template, data, resolverLocal);
+                if (value != null) {
+                    result.add(value);
+                }
             }
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
@@ -668,7 +677,10 @@ public class JsonFieldResolver {
             TemplateResolver<JSONObject, T, V> resolverLocal = resolver.getValue();
             for (int i = 0; i < length; i++) {
                 T template = templates.get(i);
-                result.add(resolveOptionalDependency(context, logger, template, data, resolverLocal));
+                V value = resolveOptionalDependency(context, logger, template, data, resolverLocal);
+                if (value != null) {
+                    result.add(value);
+                }
             }
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
