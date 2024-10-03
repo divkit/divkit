@@ -62,9 +62,12 @@ class ResolvableExpression<T> extends Expression<T> {
 
   Result<dynamic>? _executionTree;
 
-  ExpressionToken get executionTree => _executionTree!.isSuccess
-      ? _executionTree!.value
-      : throw _executionTree!.message;
+  ExpressionToken get executionTree {
+    if (_executionTree! is Success) {
+      return _executionTree!.value;
+    }
+    throw _executionTree!.message;
+  }
 
   Set<String>? variables;
 

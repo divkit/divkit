@@ -7,7 +7,6 @@ import 'package:divkit/src/utils/div_scaling_model.dart';
 import 'package:divkit/src/utils/provider.dart';
 import 'package:divkit/src/utils/trace.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:meta/meta.dart';
 
 /// The main widget embedding DivKit BDUI in the Flutter host application.
@@ -38,10 +37,6 @@ class DivKitView extends StatelessWidget {
 
   /// LTR or RTL mode. If null used auto.
   final TextDirection? textDirection;
-
-  /// [NOT_USED_FOR_SVG] Cache manager to override DefaultCacheManager if needed in DivImage.
-  @experimental
-  final BaseCacheManager? cacheManager;
 
   /// [NOT_SUPPORTED_YET] Light or dark mode. If null used auto.
   @experimental
@@ -87,7 +82,6 @@ class DivKitView extends StatelessWidget {
     this.actionHandler,
     this.customHandler,
     this.fontProvider,
-    this.cacheManager,
     this.brightness,
     this.textDirection,
     this.showUnsupportedDivs = false,
@@ -110,16 +104,13 @@ class DivKitView extends StatelessWidget {
             ),
             child: provide(
               fontProvider ?? DivFontProvider.direct(),
-              child: provide(
-                cacheManager,
-                child: FocusScope(
-                  child: _DivKitView(
-                    data: data,
-                    loadingBuilder: loadingBuilder,
-                    variableStorage: variableStorage,
-                    actionHandler: actionHandler,
-                    customHandler: customHandler,
-                  ),
+              child: FocusScope(
+                child: _DivKitView(
+                  data: data,
+                  loadingBuilder: loadingBuilder,
+                  variableStorage: variableStorage,
+                  actionHandler: actionHandler,
+                  customHandler: customHandler,
                 ),
               ),
             ),

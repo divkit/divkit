@@ -1,5 +1,7 @@
 ## 0.5.1-rc.1
 
+* Clean dependencies
+
 ## 0.5.0
 
 * Add full implementation on Dart of DivKit specification for calculating expressions: Runtime

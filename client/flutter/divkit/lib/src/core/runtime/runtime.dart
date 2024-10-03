@@ -2,7 +2,7 @@ import 'package:divkit/src/core/runtime/core.dart';
 import 'package:divkit/src/core/runtime/entities.dart';
 import 'package:divkit/src/core/runtime/functions/functions.dart';
 import 'package:divkit/src/core/runtime/members.dart';
-import 'package:divkit/src/core/runtime/sync_runtime.dart';
+import 'package:divkit/src/core/runtime/runtime_sync.dart';
 
 const runtime = SyncRuntime(
   functions: defaultFunctions,

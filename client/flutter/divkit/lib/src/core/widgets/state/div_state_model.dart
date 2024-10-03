@@ -37,8 +37,8 @@ class DivStateModel with EquatableMixin {
         divId = data.divId ?? data.id ?? '';
       }
 
-      final state = read<DivContext>(context)!.stateManager;
-      state.registerState(divId);
+      final state = read<DivContext>(context)!.stateManager
+        ..registerState(divId);
 
       return DivStateModel(
         divId: divId,

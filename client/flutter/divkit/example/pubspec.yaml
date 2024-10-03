@@ -47,10 +47,12 @@ flutter:
     - assets/regression/accessibility/mode/
     - assets/regression/action_animation/
     - assets/regression/animations/
+    - assets/regression/animations/animators/
     - assets/regression/animations/lottie/
     - assets/regression/animations/transition/
     - assets/regression/animations/rive/
     - assets/regression/gallery/
+    - assets/regression/indicator/
     - assets/regression/pager/
     - assets/regression/variables/
     - assets/regression/video/

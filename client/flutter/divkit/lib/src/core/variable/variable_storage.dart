@@ -28,8 +28,9 @@ class DefaultDivVariableStorage extends DivVariableStorage with EquatableMixin {
         inheritedStorage?.names.contains(variable.name) ?? false;
 
     if (isLocal) {
-      _storage
-          .add(Map.of(_storage.value)..update(variable.name, (_) => variable));
+      _storage.add(
+        Map.of(_storage.value)..update(variable.name, (_) => variable),
+      );
     } else if (isInherited) {
       inheritedStorage?.update(variable);
     }
@@ -61,8 +62,7 @@ class DefaultDivVariableStorage extends DivVariableStorage with EquatableMixin {
     if (_contextStreamSubject == null) {
       final inheritedStream = inheritedStorage?.stream;
       if (inheritedStream != null) {
-        _contextStreamSubject =
-            BehaviorSubject<Map<String, DivVariableModel>>();
+        _contextStreamSubject = BehaviorSubject();
         _contextStreamSubscription ??= CombineLatestStream.combine2(
           inheritedStream,
           _storage.stream,

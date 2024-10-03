@@ -7,9 +7,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divkit/divkit.dart';
 import 'package:divkit/src/core/widgets/image/div_image_model.dart';
-import 'package:divkit/src/utils/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
 
 class DivImageWidget extends StatefulWidget {
@@ -116,7 +114,6 @@ class _DivImageWidgetState extends State<DivImageWidget> {
                     alignment: model.contentAlignment.resolve(
                       Directionality.maybeOf(context),
                     ),
-                    cacheManager: watch<BaseCacheManager>(context),
                   );
                 }
               }
