@@ -760,7 +760,7 @@
         if (type === 'integer' || type === 'number') {
             val = Number(val);
         } else if (type === 'boolean') {
-            val = val === 'true';
+            val = val === 'true' || val === '1';
         }
 
         store.setValue(name, type as StoreTypes, val, Number(lifetime));
