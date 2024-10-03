@@ -42,8 +42,11 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
             }
         }
 
-        private fun Int.toRealPosition() =
-            (divPager?.viewPager?.adapter as? DivPagerAdapter)?.getRealPosition(this) ?: this
+        private fun Int.toRealPosition(): Int {
+            val adapter = divPager?.viewPager?.adapter as? DivPagerAdapter ?: return this
+            val count = adapter.visibleItems.size
+            return (adapter.getRealPosition(this) + count) % count
+        }
     }
 
     fun setStyle(style: IndicatorParams.Style) {
@@ -120,12 +123,10 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
     }
 
     private fun IndicatorsStripDrawer.update() {
-        divPager?.viewPager?.let { pager ->
-            (pager.adapter as? DivPagerAdapter)?.let {
-                setItemsCount(it.visibleItems.size)
-                onPageSelected(it.currentRealItem)
-                invalidate()
-            }
+        (divPager?.viewPager?.adapter as? DivPagerAdapter)?.let {
+            setItemsCount(it.visibleItems.size)
+            onPageSelected(it.currentRealItem)
+            invalidate()
         }
     }
 }
