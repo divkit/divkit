@@ -224,6 +224,7 @@ public final class DivKitComponents {
     functionsStorage.reset()
     visibilityCounter.reset()
     timerStorage.reset()
+    tooltipManager.reset()
   }
 
   public func reset(cardId: DivCardID) {
