@@ -27,7 +27,7 @@ export function convertDictToPalette(json: any) {
     };
     const now = Date.now();
 
-    const dictPalette = json.card.variables.find((it: JsonVariable) => it.name === 'local_palette')?.value;
+    const dictPalette = json.card.variables?.find((it: JsonVariable) => it.name === 'local_palette')?.value;
 
     if (dictPalette) {
         json.card.variables = json.card.variables.filter((it: JsonVariable) => it.name !== 'local_palette');
@@ -82,7 +82,9 @@ export function convertDictToPalette(json: any) {
 
     const copy = proc(json);
 
-    copy.palette = palette;
+    if (knownColors.size) {
+        copy.palette = palette;
+    }
 
     return copy;
 }
@@ -135,14 +137,16 @@ export function convertPaletteToDict(json: any) {
 
     delete copy.palette;
 
-    if (!json.card.variables) {
-        copy.card.variables = [];
+    if (Object.keys(palette).length) {
+        if (!json.card.variables) {
+            copy.card.variables = [];
+        }
+        copy.card.variables.push({
+            type: 'dict',
+            name: 'local_palette',
+            value: palette
+        });
     }
-    copy.card.variables.push({
-        type: 'dict',
-        name: 'local_palette',
-        value: palette
-    });
 
     return copy;
 }

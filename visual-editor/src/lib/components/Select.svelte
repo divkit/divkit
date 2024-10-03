@@ -16,7 +16,7 @@
 
     export let items: Item[];
     export let value: string;
-    export let theme: 'normal' | 'canvas';
+    export let theme: 'normal' | 'canvas' | 'transparent';
     export let size: 'small' | 'medium' = 'small';
     export let disabled = false;
     export let mix = '';
@@ -289,6 +289,24 @@
         background-color: var(--fill-transparent-4);
     }
 
+    .select_theme_transparent .select__select {
+        padding: 4px 6px;
+        border-radius: 8px;
+        transition: background-color .15s ease-in-out;
+    }
+
+    .select_theme_transparent:not(.select_disabled) .select__select:hover {
+        background: var(--fill-transparent-1);
+    }
+
+    .select_theme_transparent .select__select:focus-visible {
+        outline: 1px solid var(--accent-purple);
+    }
+
+    .select_theme_transparent .select__arrow {
+        display: none;
+    }
+
     .select_theme_normal .select__select:focus-visible,
     .select_theme_normal .select__select:focus-visible:hover {
         outline: none;
@@ -309,7 +327,7 @@
         padding: 4px 0;
         border-radius: 8px;
         box-shadow: var(--shadow-16);
-        background: var(--background-primary);
+        background: var(--background-tertiary);
     }
 
     .select__popup_direction_up {

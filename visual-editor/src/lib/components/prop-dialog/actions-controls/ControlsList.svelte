@@ -78,19 +78,17 @@
                 {/if}
             </label>
 
-            {#if control.type === 'select'}
-                {#if control.subcontrols[value[control.name].type]}
-                    <div class="controls-list__sublist">
-                        {#key value[control.name].type}
-                            <svelte:self
-                                bind:value={value[control.name]}
-                                controls={control.subcontrols[value[control.name].type]}
-                                {readOnly}
-                                on:change
-                            />
-                        {/key}
-                    </div>
-                {/if}
+            {#if control.type === 'select' && control.subcontrols[value[control.name].type]}
+                <div class="controls-list__sublist">
+                    {#key value[control.name].type}
+                        <svelte:self
+                            bind:value={value[control.name]}
+                            controls={control.subcontrols[value[control.name].type]}
+                            {readOnly}
+                            on:change
+                        />
+                    {/key}
+                </div>
             {/if}
         </div>
     {/each}

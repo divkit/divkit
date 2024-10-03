@@ -31,10 +31,10 @@
         horizontalValue = event.detail.horizontal;
         verticalValue = event.detail.vertical;
         dispatch('change', {
-            values: [event.detail.horizontal && {
+            values: [event.detail.horizontal !== undefined && {
                 prop: item.horizontalProp,
                 value: event.detail.horizontal
-            }, event.detail.vertical && {
+            }, event.detail.vertical !== undefined && {
                 prop: item.verticalProp,
                 value: event.detail.vertical
             }].filter(Boolean),

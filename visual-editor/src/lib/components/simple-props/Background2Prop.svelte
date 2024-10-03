@@ -39,6 +39,8 @@
     }
 </script>
 
+<svelte:options immutable={true} />
+
 <div class="background2">
     <div class="background2__list">
         <MoveList2

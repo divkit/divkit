@@ -7,6 +7,30 @@ describe('convertPalette', () => {
 
         expect(convertDictToPalette({
             card: {
+                states: [{
+                    state_id: 0,
+                    div: {
+                        type: 'text',
+                        text: 'Hello',
+                        text_color: '#fff'
+                    }
+                }]
+            }
+        })).toEqual({
+            card: {
+                states: [{
+                    state_id: 0,
+                    div: {
+                        type: 'text',
+                        text: 'Hello',
+                        text_color: '#fff'
+                    }
+                }]
+            }
+        });
+
+        expect(convertDictToPalette({
+            card: {
                 variables: [{
                     name: 'local_palette',
                     type: 'dict',
@@ -61,6 +85,30 @@ describe('convertPalette', () => {
     });
 
     test('convertPaletteToDict', () => {
+        expect(convertPaletteToDict({
+            card: {
+                states: [{
+                    state_id: 0,
+                    div: {
+                        type: 'text',
+                        text: 'Hello',
+                        text_color: '#fff'
+                    }
+                }]
+            }
+        })).toEqual({
+            card: {
+                states: [{
+                    state_id: 0,
+                    div: {
+                        type: 'text',
+                        text: 'Hello',
+                        text_color: '#fff'
+                    }
+                }]
+            }
+        });
+
         expect(convertPaletteToDict({
             card: {
                 variables: [{

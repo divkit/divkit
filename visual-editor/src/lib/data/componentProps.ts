@@ -680,6 +680,85 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             default: '#000',
             enableSources: true
         }]
+    }],
+    input: [...BASE_COMPONENT_PROPS, {
+        type: 'group',
+        title: 'a11yProps.title',
+        list: [{
+            name: 'props.a11y_description',
+            prop: 'accessibility.description',
+            type: 'string'
+        }]
+    }, {
+        type: 'group',
+        title: 'inputProps.title',
+        list: [{
+            name: 'props.text_variable',
+            prop: 'text_variable',
+            type: 'string',
+            enableSources: true
+        }, {
+            name: 'props.keyboard_type',
+            prop: 'keyboard_type',
+            type: 'select',
+            default: 'multi_line_text',
+            options: [{
+                name: 'props.keyboard_single_line_text',
+                value: 'single_line_text'
+            }, {
+                name: 'props.keyboard_multi_line_text',
+                value: 'multi_line_text'
+            }, {
+                name: 'props.keyboard_phone',
+                value: 'phone'
+            }, {
+                name: 'props.keyboard_number',
+                value: 'number'
+            }, {
+                name: 'props.keyboard_email',
+                value: 'email'
+            }, {
+                name: 'props.keyboard_uri',
+                value: 'uri'
+            }, {
+                name: 'props.keyboard_password',
+                value: 'password'
+            }],
+            enableSources: true
+        }, {
+            name: 'props.max_length',
+            type: 'integer',
+            min: 0,
+            max: 99999,
+            enableSources: true
+        }, {
+            type: 'split',
+            list: [{
+                name: 'props.font_size',
+                prop: 'font_size',
+                type: 'integer',
+                min: 1,
+                max: 1000,
+                enableSources: true
+            }, {
+                name: 'props.line_height',
+                prop: 'line_height',
+                type: 'integer',
+                min: 0,
+                max: 1000,
+                enableSources: true
+            }]
+        }, {
+            name: 'props.text_color',
+            prop: 'text_color',
+            type: 'color',
+            enableSources: true
+        }, {
+            name: 'props.hint_text',
+            prop: 'hint_text',
+            type: 'string',
+            enableSources: true
+        }]
     }]
 };
 

@@ -198,10 +198,10 @@ export const namedTemplates: Record<string, TemplateDescription> = {
                     url: 'div-screen://close'
                 }
             ],
-            image_url: 'https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png',
+            image_url: 'empty://',
+            preview: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAABUBAMAAADuRQ3yAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAwUExURQAAAIeHh4qKiouLi4yMjIyMjIqKioyMjIuLi4uLi4yMjIyMjIyMjI2NjYyMjIyMjDn5Ri0AAAAPdFJOUwAgMEBQX2B/gKCvv8/f707huRkAAAFkSURBVEjH7dfNTcQwEAXgsEiOYIW2lS2BEugk6SB0QAMUQQXQBy1w4baRODwOm7XH43kzPu5hfYs9+pQfz5MzDLdxFeP+8++lc20BTqy0XtsBwGxXjgBQ2EeAsgsAfOTLJ1B2BAD8qtITRUXpAxh7RsUN7MDYMyoea5gIu6GrmEqE3dBXOWezBspYC7VZE7VZG7VYglosQ1uWoi3LUc06qGY9tGZdtGZ9VLIBKtkILWyIFjZGMxujme1AK3YNgi51o4Jdw/xM3Whm145YXgAnGI02pXnboh3sWF7W3IuG7Cg/7NyLBuxln04xe9mnKWTL5g/ZsvkjVnZUwMqO8tm6TV22blOP1b3vsLr3OdsGCmXbQGGslVKEtVLKZu3oM1k7+iyW5anBsjxt2UQDZWOf88SeplTSx5wDT6lJHZ4OPPqSKt070TfVN5CcPE3qnPXm5OmkzllfP0dWevf+fbz9DFzH+AfPICZho9A64QAAAABJRU5ErkJggg==',
             tint_color: '#73000000',
             type: 'image',
-            preload_required: true,
         }
     },
     _template_list_item: {

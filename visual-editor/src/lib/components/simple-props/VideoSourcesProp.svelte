@@ -39,6 +39,8 @@
     }
 </script>
 
+<svelte:options immutable={true} />
+
 <div class="video-sources">
     <div class="video-sources__list">
         <MoveList2

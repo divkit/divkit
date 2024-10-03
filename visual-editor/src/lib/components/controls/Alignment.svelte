@@ -2,6 +2,7 @@
     import { createEventDispatcher, getContext } from 'svelte';
     import { alignDown, alignLeft, alignRight, alignUp, clear } from '../../utils/keybinder/shortcuts';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
+    import Select from '../Select.svelte';
 
     export let horizontal: string | undefined;
     export let vertical: string | undefined;
@@ -166,42 +167,64 @@
     <div class="alignment__item alignment__text">
         <div class="alignment__select-group">
             <div class="alignment__select-wrapper">
-                <select
-                    class="alignment__select"
-                    bind:value={horizontalSelectValue}
-                    on:change={() => selectAlignment(horizontalSelectValue, vertical)}
-                    disabled={disabled || isHorizontalDisabled}
-                >
-                    <option value="left">{$l10n(TEXT_MAP.left)}</option>
-                    <option value="center">{$l10n(TEXT_MAP.center)}</option>
-                    <option value="right">{$l10n(TEXT_MAP.right)}</option>
-                    <option value="">{$l10n(TEXT_MAP[''])}</option>
-                </select>
-                <div class="alignment__select-visual">
-                    <span class="alignment__select-label">
-                        X:
-                    </span>
-                    {$l10n(isHorizontalDisabled ? 'props.size_match_parent' : TEXT_MAP[horizontalSelectValue || ''])}
+                <div>
+                    X:
                 </div>
+                {#if isHorizontalDisabled}
+                    <div class="alignment__select-fill">
+                        {$l10n('props.size_match_parent')}
+                    </div>
+                {:else}
+                    <Select
+                        items={[{
+                            text: $l10n(TEXT_MAP.left),
+                            value: 'left'
+                        }, {
+                            text: $l10n(TEXT_MAP.center),
+                            value: 'center'
+                        }, {
+                            text: $l10n(TEXT_MAP.right),
+                            value: 'right'
+                        }, {
+                            text: $l10n(TEXT_MAP['']),
+                            value: ''
+                        }]}
+                        bind:value={horizontalSelectValue}
+                        theme="transparent"
+                        {disabled}
+                        on:change={() => selectAlignment(horizontalSelectValue, vertical)}
+                    />
+                {/if}
             </div>
             <div class="alignment__select-wrapper">
-                <select
-                    class="alignment__select"
-                    bind:value={verticalSelectValue}
-                    on:change={() => selectAlignment(horizontal, verticalSelectValue)}
-                    disabled={disabled || isVerticalDisabled}
-                >
-                    <option value="top">{$l10n(TEXT_MAP.top)}</option>
-                    <option value="center">{$l10n(TEXT_MAP.center)}</option>
-                    <option value="bottom">{$l10n(TEXT_MAP.bottom)}</option>
-                    <option value="">{$l10n(TEXT_MAP[''])}</option>
-                </select>
-                <div class="alignment__select-visual">
-                    <span class="alignment__select-label">
-                        Y:
-                    </span>
-                    {$l10n(isVerticalDisabled ? 'props.size_match_parent' : TEXT_MAP[verticalSelectValue || ''])}
+                <div>
+                    Y:
                 </div>
+                {#if isVerticalDisabled}
+                <div class="alignment__select-fill">
+                        {$l10n('props.size_match_parent')}
+                    </div>
+                {:else}
+                    <Select
+                        items={[{
+                            text: $l10n(TEXT_MAP.top),
+                            value: 'top'
+                        }, {
+                            text: $l10n(TEXT_MAP.center),
+                            value: 'center'
+                        }, {
+                            text: $l10n(TEXT_MAP.bottom),
+                            value: 'bottom'
+                        }, {
+                            text: $l10n(TEXT_MAP['']),
+                            value: ''
+                        }]}
+                        bind:value={verticalSelectValue}
+                        theme="transparent"
+                        {disabled}
+                        on:change={() => selectAlignment(horizontal, verticalSelectValue)}
+                    />
+                {/if}
             </div>
         </div>
 
@@ -356,6 +379,14 @@
 
     .alignment__select-wrapper {
         position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        gap: 8px;
+    }
+
+    .alignment__select-fill {
+        padding: 4px 6px;
     }
 
     .alignment__select {
@@ -369,10 +400,6 @@
         opacity: 0;
     }
 
-    .alignment__select[disabled] {
-        cursor: default;
-    }
-
     .alignment__select-visual {
         position: relative;
         padding: 4px 6px;
@@ -380,10 +407,6 @@
         border-radius: 6px;
         pointer-events: none;
         transition: background-color .15s ease-in-out;
-    }
-
-    .alignment__select[disabled] ~ .alignment__select-visual {
-        color: var(--text-secondary);
     }
 
     .alignment__select:not([disabled]):hover ~ .alignment__select-visual {
