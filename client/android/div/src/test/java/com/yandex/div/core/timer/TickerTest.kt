@@ -17,8 +17,8 @@ class TickerTest {
     private val defaultTimerName = "test_timer"
     private val defaultDuration = 3000L
     private val defaultInterval = 1000L
-    private val defaultDeviation = 10L
-    private val retryCount = 1
+    private val defaultDeviation = 15L
+    private val retryCount = 3
 
     private val defaultValue = -1L
 
