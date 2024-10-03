@@ -385,15 +385,13 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
     configureRecognizers()
 
-    if #available(iOS 13.0, *) {
-      interactions.forEach(removeInteraction)
-      contextMenuDelegate = nil
-      if let longTapActions = model.longTapActions,
-         case let .contextMenu(contextMenu) = longTapActions {
-        let delegate = ContextMenuDelegate(contextMenu: contextMenu, view: self)
-        contextMenuDelegate = delegate
-        addInteraction(UIContextMenuInteraction(delegate: delegate))
-      }
+    interactions.forEach(removeInteraction)
+    contextMenuDelegate = nil
+    if let longTapActions = model.longTapActions,
+       case let .contextMenu(contextMenu) = longTapActions {
+      let delegate = ContextMenuDelegate(contextMenu: contextMenu, view: self)
+      contextMenuDelegate = delegate
+      addInteraction(UIContextMenuInteraction(delegate: delegate))
     }
 
     layer.masksToBounds = model.boundary.clipsToBounds
@@ -483,14 +481,8 @@ extension DecoratingView {
       switch longTapActions {
       case let .actions(actions):
         actions.forEach { $0.perform(sendingFrom: self) }
-      case let .contextMenu(contextMenu):
-        if #available(iOS 13.0, *) {} else {
-          window?.rootViewController!.present(
-            contextMenu.makeAlertController(sender: self),
-            animated: true,
-            completion: nil
-          )
-        }
+      case .contextMenu:
+        break;
       }
     }
   }
@@ -532,28 +524,6 @@ extension DecoratingView.Model {
 }
 
 private let contentAnimationDuration = UIStyles.AnimationDuration.touchHighlighting
-
-extension ContextMenu {
-  fileprivate func makeAlertController(
-    sender: UIResponder
-  ) -> UIAlertController {
-    let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
-    for item in items {
-      let action = item.action
-      let style: UIAlertAction.Style = item.isDestructive ? .destructive : .default
-      alert.addAction(UIAlertAction(
-        title: item.text,
-        style: style,
-        handler: { [action] _ in
-          action.perform(sendingFrom: sender)
-        }
-      ))
-    }
-
-    alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: nil))
-    return alert
-  }
-}
 
 extension BlurEffect {
   fileprivate func cast() -> UIBlurEffect.Style {
