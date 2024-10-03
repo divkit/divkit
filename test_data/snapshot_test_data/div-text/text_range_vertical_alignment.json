@@ -1,7 +1,8 @@
 {
   "description": "Ranges with text vertical alignment",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "title": {

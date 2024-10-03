@@ -4,7 +4,7 @@
     import css from './Text.module.css';
     import rootCss from '../Root.module.css';
 
-    import type { DivTextData, TextImage, TextRange, TextStyles } from '../../types/text';
+    import type { DivTextData, TextImage, TextRange, TextStyles, TextVerticalAlignment } from '../../types/text';
     import type { Style } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { AlignmentHorizontal } from '../../types/alignment';
@@ -40,7 +40,7 @@
     let text = '';
     let fontSize = 12;
     let lineHeight = 1.25;
-    let customLineHeight = false;
+    let customLineHeight: number | null = null;
     let maxHeight = '';
     let maxLines: number | undefined;
     let lineClamp: string | number = '';
@@ -64,6 +64,7 @@
             wrapperStyle: Style;
             svgFilterId: string;
             preloadRequired: boolean;
+            verticalAlign: TextVerticalAlignment | undefined;
         };
     })[] = [];
     let usedTintColors: [string, TintMode][] = [];
@@ -71,7 +72,7 @@
     $: if (componentContext.json) {
         fontSize = 12;
         lineHeight = 1.25;
-        customLineHeight = false;
+        customLineHeight = null;
         maxHeight = '';
         maxLines = undefined;
         lineClamp = '';
@@ -123,9 +124,9 @@
         const newLineHeight = $jsonLineHeight;
         if (isPositiveNumber(newLineHeight)) {
             lineHeight = Number(newLineHeight) / fontSize;
-            customLineHeight = true;
+            customLineHeight = lineHeight;
         } else {
-            customLineHeight = false;
+            customLineHeight = null;
         }
     }
 
@@ -372,7 +373,8 @@
                         height: imageHeight,
                         wrapperStyle,
                         svgFilterId,
-                        preloadRequired: Boolean(item.image.preload_required)
+                        preloadRequired: Boolean(item.image.preload_required),
+                        verticalAlign: item.image.alignment_vertical
                     }
                 });
             }
@@ -456,7 +458,13 @@
                         />
                     {/if}
                 {:else if item.image}
-                    <span style={makeStyle(item.image.wrapperStyle)}><img
+                    <span style={makeStyle(item.image.wrapperStyle)}><span class={genClassName('text__image-wrapper', css, {
+                        align: item.image.verticalAlign,
+                        crop: customLineHeight !== null
+                    })} style={makeStyle({
+                        width: item.image.width,
+                        height: (customLineHeight && item.image.verticalAlign !== 'baseline') ? customLineHeight + 'em' : undefined
+                    })}><img
                         class={css.text__image}
                         src={item.image.url}
                         loading={item.image.preloadRequired ? 'eager' : 'lazy'}
@@ -464,15 +472,11 @@
                         aria-hidden="true"
                         alt=""
                         style={makeStyle({
-                            width: item.image.width,
                             height: item.image.height,
-                            // Normalizes line-height for the containing text line
-                            'margin-top': customLineHeight ? `-${item.image.height}` : undefined,
-                            'margin-bottom': customLineHeight ? `-${item.image.height}` : undefined,
                             filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
                         })}
                         on:error={onImgError}
-                    ></span>
+                    ></span></span>
                 {/if}
             {/each}
         {:else}

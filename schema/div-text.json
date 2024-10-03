@@ -29,7 +29,8 @@
           "$ref": "div-text-alignment-vertical.json",
           "$description": "translations.json#/div_text_range_alignment_vertical",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "font_size": {
@@ -202,7 +203,8 @@
           "default_value": "center",
           "$description": "translations.json#/div_text_image_alignment_vertical",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         }
       },

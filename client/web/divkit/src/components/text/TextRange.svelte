@@ -122,12 +122,13 @@
 
     $: mods = {
         singleline,
-        decoration
+        decoration,
+        align: textStyles.alignment_vertical
     };
 
     $: style = {
         'font-size': pxToEm((fontSize * 10) / rootFontSize),
-        'line-height': lineHeight,
+        'line-height': textStyles.alignment_vertical ? 'normal' : lineHeight,
         'letter-spacing': letterSpacing,
         'font-weight': fontWeight,
         'font-family': fontFamily,

@@ -1,7 +1,8 @@
 {
   "description": "Images with vertical alignment",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "title": {
@@ -45,7 +46,7 @@
           },
           "$alignment_vertical": "image_alignment_vertical",
           "tint_color": "#657B83",
-          "url": "https://s3.mds.yandex.net/div-storage/test/images/ic_image.png"
+          "url": "https://yastatic.net/s3/home/divkit/ic_image.png"
         }
       ]
     }

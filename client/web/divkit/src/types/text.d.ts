@@ -34,6 +34,8 @@ export interface TextRangeBorder {
     corner_radius?: number;
 }
 
+export type TextVerticalAlignment = 'top' | 'center' | 'bottom' | 'baseline';
+
 export interface TextRange extends TextStyles {
     start: number;
     end: number;
@@ -41,6 +43,7 @@ export interface TextRange extends TextStyles {
     top_offset?: number;
     border?: TextRangeBorder;
     background?: SolidBackground;
+    alignment_vertical?: TextVerticalAlignment;
 }
 
 export interface TextImage {
@@ -51,6 +54,7 @@ export interface TextImage {
     tint_color?: string;
     tint_mode?: TintMode;
     preload_required?: BooleanInt;
+    alignment_vertical?: TextVerticalAlignment;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
