@@ -8,17 +8,18 @@ import javax.inject.Inject
 
 @DivScope
 internal class DivVideoViewMapper @Inject constructor() {
-    private val currentViews = WeakHashMap<DivVideo, DivVideoView>()
+    private val currentViews = WeakHashMap<DivVideoView, DivVideo>()
 
     fun addView(view: DivVideoView, div: DivVideo) {
-        currentViews[div] = view
+        currentViews[view] = div
     }
 
     fun getPlayerView(div: DivVideo): DivPlayerView? {
-        val playerView = currentViews[div]?.getPlayerView()
+        val videoView = currentViews.entries.find { it.value == div }?.key
+        val playerView = videoView?.getPlayerView()
 
-        if (playerView == null) {
-            currentViews.remove(div)
+        if (playerView == null && videoView != null) {
+            currentViews.remove(videoView)
         }
         return playerView
     }
