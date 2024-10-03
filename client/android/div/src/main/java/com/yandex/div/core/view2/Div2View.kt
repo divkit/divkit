@@ -648,6 +648,7 @@ class Div2View private constructor(
         }
         discardVisibilityTracking()
         cancelImageLoads()
+        releaseMedia(this)
         stopLoadAndSubscriptions() // Depends on children, should be called before removing them
         if (removeChildren) {
             releaseAndRemoveChildren(this) // Removes children
