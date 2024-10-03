@@ -977,6 +977,7 @@
             componentContext?: ComponentContext;
             processUrls?: boolean;
             node?: HTMLElement;
+            logType?: string;
         } = {}
     ): Promise<void> {
         if (!actions || !Array.isArray(actions)) {
@@ -1024,7 +1025,7 @@
         }
         filtered.forEach(action => {
             if (action.log_id) {
-                logStat('click', action as Action);
+                logStat(opts.logType || 'click', action as Action);
             }
         });
     }
@@ -1678,17 +1679,11 @@
                                 (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                             ) {
                                 prevConditionResult = Boolean(conditionResult.value);
-                                const actionsToLog: Action[] = [];
                                 const actions = trigger.actions.map(action => getJsonWithVars(logError, action));
-                                for (const action of actions) {
-                                    if (action.log_id) {
-                                        await execActionInternal(action as Action);
-                                        actionsToLog.push(action as Action);
-                                    }
-                                }
-                                for (const action of actionsToLog) {
-                                    logStat('trigger', action);
-                                }
+
+                                await execAnyActions(actions, {
+                                    logType: 'trigger'
+                                });
                             } else {
                                 prevConditionResult = Boolean(conditionResult.value);
                             }
