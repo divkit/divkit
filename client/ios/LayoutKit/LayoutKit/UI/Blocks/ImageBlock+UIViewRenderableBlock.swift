@@ -25,6 +25,7 @@ extension ImageBlock {
       tintMode: tintMode,
       effects: effects
     )
+    contentView.filter = filter
     contentView.isUserInteractionEnabled = false
     remoteImageViewContainer.contentView = contentView
     if remoteImageViewContainer.imageHolder !== imageHolder {

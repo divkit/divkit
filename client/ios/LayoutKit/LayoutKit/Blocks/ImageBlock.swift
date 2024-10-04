@@ -11,6 +11,7 @@ public final class ImageBlock: ImageBaseBlock {
   public let tintColor: Color?
   public let tintMode: TintMode
   public let effects: [ImageEffect]
+  public let filter: AnyEquatableImageFilter?
   public let accessibilityElement: AccessibilityElement?
   public let appearanceAnimation: TransitioningAnimation?
   public let blurUsingMetal: Bool?
@@ -24,6 +25,7 @@ public final class ImageBlock: ImageBaseBlock {
     tintColor: Color?,
     tintMode: TintMode,
     effects: [ImageEffect] = [],
+    filter: AnyEquatableImageFilter? = nil,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil,
     blurUsingMetal: Bool? = nil,
@@ -36,6 +38,7 @@ public final class ImageBlock: ImageBaseBlock {
     self.tintColor = tintColor
     self.tintMode = tintMode
     self.effects = effects
+    self.filter = filter
     self.accessibilityElement = accessibilityElement
     self.appearanceAnimation = appearanceAnimation
     self.blurUsingMetal = blurUsingMetal
@@ -50,6 +53,7 @@ public final class ImageBlock: ImageBaseBlock {
     tintColor: Color? = nil,
     tintMode: TintMode = .sourceIn,
     effects: [ImageEffect] = [],
+    filter: AnyEquatableImageFilter? = nil,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil,
     blurUsingMetal: Bool? = nil,
@@ -63,6 +67,7 @@ public final class ImageBlock: ImageBaseBlock {
       tintColor: tintColor,
       tintMode: tintMode,
       effects: effects,
+      filter: filter,
       accessibilityElement: accessibilityElement,
       appearanceAnimation: appearanceAnimation,
       blurUsingMetal: blurUsingMetal,
@@ -77,6 +82,7 @@ public final class ImageBlock: ImageBaseBlock {
     tintColor: Color? = nil,
     tintMode: TintMode = .sourceIn,
     effects: [ImageEffect] = [],
+    filter: AnyEquatableImageFilter? = nil,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil,
     blurUsingMetal: Bool? = nil,
@@ -90,6 +96,7 @@ public final class ImageBlock: ImageBaseBlock {
       tintColor: tintColor,
       tintMode: tintMode,
       effects: effects,
+      filter: filter,
       accessibilityElement: accessibilityElement,
       appearanceAnimation: appearanceAnimation,
       blurUsingMetal: blurUsingMetal,
@@ -113,7 +120,8 @@ public func ==(lhs: ImageBlock, rhs: ImageBlock) -> Bool {
     lhs.contentMode == rhs.contentMode &&
     lhs.tintColor == rhs.tintColor &&
     lhs.accessibilityElement == rhs.accessibilityElement &&
-    lhs.appearanceAnimation == rhs.appearanceAnimation
+    lhs.appearanceAnimation == rhs.appearanceAnimation &&
+    lhs.filter == rhs.filter
 }
 
 extension ImageBlock: LayoutCachingDefaultImpl {}
