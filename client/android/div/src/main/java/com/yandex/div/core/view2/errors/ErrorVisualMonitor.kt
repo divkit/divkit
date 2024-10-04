@@ -2,9 +2,12 @@ package com.yandex.div.core.view2.errors
 
 import android.view.ViewGroup
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.actions.logError
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.dagger.ExperimentFlag
+import com.yandex.div.core.experiments.Experiment.PERMANENT_DEBUG_PANEL_ENABLED
 import com.yandex.div.core.experiments.Experiment.VISUAL_ERRORS_ENABLED
+import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Binding
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewBindingProvider
@@ -19,16 +22,17 @@ private const val SHOW_LIMIT = 25
 internal class ErrorVisualMonitor @Inject constructor(
     errorCollectors: ErrorCollectors,
     divView: Div2View,
-    @ExperimentFlag(VISUAL_ERRORS_ENABLED) private val enabledByConfiguration: Boolean,
+    @ExperimentFlag(VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
+    @ExperimentFlag(PERMANENT_DEBUG_PANEL_ENABLED) private val showPermanently: Boolean,
     private val bindingProvider: ViewBindingProvider,
 ) {
-    internal var enabled = enabledByConfiguration
+    internal var enabled = visualErrorsEnabled || showPermanently
         set(value) {
             field = value
             connectOrDisconnect()
         }
 
-    private val errorModel = ErrorModel(errorCollectors, divView)
+    private val errorModel = ErrorModel(errorCollectors, divView, visualErrorsEnabled)
     private var lastConnectionView: ViewGroup? = null
     private var errorView: ErrorView? = null
 
@@ -54,13 +58,14 @@ internal class ErrorVisualMonitor @Inject constructor(
             return
         }
         errorView?.close()
-        errorView = ErrorView(root, errorModel)
+        errorView = ErrorView(root, errorModel, showPermanently)
     }
 }
 
 internal class ErrorModel(
     private val errorCollectors: ErrorCollectors,
     private val div2View: Div2View,
+    private val visualErrorsEnabled: Boolean
     ) {
     fun bind(binding: Binding) {
             existingSubscription?.close()
@@ -75,16 +80,18 @@ internal class ErrorModel(
     private var existingSubscription: Disposable? = null
 
     private val updateOnErrors = { errors: List<Throwable>, warnings: List<Throwable> ->
-        this.currentErrors.apply {
-            clear()
-            addAll(errors.reversed())
+        if (visualErrorsEnabled) {
+            this.currentErrors.apply {
+                clear()
+                addAll(errors.reversed())
+            }
+            this.currentWarnings.apply {
+                clear()
+                addAll(warnings.reversed())
+            }
+            state = state.copy(errorCount = currentErrors.size, errorDetails = errorsToDetails(currentErrors),
+                warningCount = currentWarnings.size, warningDetails = warningsToDetails(currentWarnings))
         }
-        this.currentWarnings.apply {
-            clear()
-            addAll(warnings.reversed())
-        }
-        state = state.copy(errorCount = currentErrors.size, errorDetails = errorsToDetails(currentErrors),
-            warningCount = currentWarnings.size, warningDetails = warningsToDetails(currentWarnings))
     }
 
     private fun errorsToDetails(errors: List<Throwable>): String {
@@ -154,6 +161,25 @@ internal class ErrorModel(
 
         results.put("card", dumpCardWithContextVariables())
         return results.toString(/*indentSpaces*/ 4)
+    }
+
+    fun getAllControllers(): Map<String, VariableController> {
+        val runtimeStore = div2View.runtimeStore ?: return emptyMap()
+        val pathToRuntimes = runtimeStore.getUniquePathsAndRuntimes()
+
+        val result = mutableMapOf<String, VariableController>()
+        runtimeStore.rootRuntime?.let {
+            result[""] = it.variableController
+        }
+
+        pathToRuntimes.forEach { (path, runtime) ->
+            result[path] = runtime.variableController
+        }
+        return result
+    }
+
+    fun getErrorHandler(): (Throwable) -> Unit {
+        return div2View::logError
     }
 
     private fun dumpCardWithContextVariables() = JSONObject().apply {

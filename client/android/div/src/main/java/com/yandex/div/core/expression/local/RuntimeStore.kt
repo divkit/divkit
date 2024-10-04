@@ -120,6 +120,12 @@ internal class RuntimeStore(
 
     internal fun clearBindings() = allRuntimes.forEach { it.clearBinding() }
 
+    internal fun getUniquePathsAndRuntimes(): List<Pair<String, ExpressionsRuntime>> {
+        return pathToRuntimes.mapNotNull { (path, runtime) ->
+            runtime?.let { path to it }
+        }
+    }
+
     private fun reportError(message: String) {
         Assert.fail(message)
         errorCollector.logError(AssertionError(message))

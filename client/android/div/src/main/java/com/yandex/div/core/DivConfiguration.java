@@ -99,6 +99,7 @@ public class DivConfiguration {
     private boolean mMultipleStateChangeEnabled;
     private boolean mBindOnAttachEnabled;
     private boolean mComplexRebindEnabled;
+    private boolean mPermanentDebugPanelEnabled;
 
     private float mRecyclerScrollInterceptionAngle;
 
@@ -139,6 +140,7 @@ public class DivConfiguration {
             boolean multipleStateChangeEnabled,
             boolean bindOnAttachEnabled,
             boolean complexRebindEnabled,
+            boolean permanentDebugPanelEnabled,
             float recyclerScrollInterceptionAngle
     ) {
         mImageLoader = imageLoader;
@@ -175,6 +177,7 @@ public class DivConfiguration {
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
         mComplexRebindEnabled = complexRebindEnabled;
+        mPermanentDebugPanelEnabled = permanentDebugPanelEnabled;
         mGlobalVariableController = globalVariableController;
         mDivVariableController = divVariableController;
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
@@ -399,6 +402,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @ExperimentFlag(experiment = Experiment.PERMANENT_DEBUG_PANEL_ENABLED)
+    public boolean isPermanentDebugPanelEnabled() {
+        return mPermanentDebugPanelEnabled;
+    }
+
+    @Provides
     public float getRecyclerScrollInterceptionAngle() {
         return mRecyclerScrollInterceptionAngle;
     }
@@ -474,6 +483,7 @@ public class DivConfiguration {
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
         private boolean mBindOnAttachEnabled = false;
         private boolean mComplexRebindEnabled = Experiment.COMPLEX_REBIND_ENABLED.getDefaultValue();
+        private boolean mPermanentDebugPanelEnabled = Experiment.PERMANENT_DEBUG_PANEL_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
 
         public Builder(@NonNull DivImageLoader imageLoader) {
@@ -716,6 +726,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder enablePermanentDebugPanel(boolean enable) {
+            mPermanentDebugPanelEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         @Deprecated
         public Builder globalVariableController(GlobalVariableController globalVariableController) {
             mGlobalVariableController = globalVariableController;
@@ -775,6 +791,7 @@ public class DivConfiguration {
                     mMultipleStateChangeEnabled,
                     mBindOnAttachEnabled,
                     mComplexRebindEnabled,
+                    mPermanentDebugPanelEnabled,
                     mRecyclerScrollInterceptionAngle);
         }
     }

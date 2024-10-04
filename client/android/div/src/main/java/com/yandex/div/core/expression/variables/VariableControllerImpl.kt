@@ -203,4 +203,8 @@ internal class VariableControllerImpl(
             if (variables[it.name] == null) callback.invoke(it)
         }
     }
+
+    override fun captureAll(): List<Variable> {
+        return variables.values.toList()
+    }
 }

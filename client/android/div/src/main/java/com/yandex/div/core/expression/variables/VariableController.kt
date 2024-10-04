@@ -38,4 +38,6 @@ internal interface VariableController : VariableProvider {
     fun cleanupSubscriptions()
 
     fun restoreSubscriptions()
+
+    fun captureAll(): List<Variable> = emptyList()
 }

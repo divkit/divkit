@@ -18,6 +18,7 @@ const val DIV2_MULTIPLE_STATE_CHANGE = "multiple_state_change"
 const val DIV2_DEMO_SHOW_RENDERING_TIME = "demo_activity_rendering_time"
 const val IMAGE_LOADER = "image_loader"
 const val COMPLEX_REBIND = "complex_rebind"
+const val PERMANENT_DEBUG_PANEL = "permanent_debug_panel"
 
 const val NIGHT_MODE = "night_mode"
 const val NIGHT_MODE_NIGHT = "NIGHT"
@@ -52,6 +53,7 @@ internal object SettingsActionHandler {
             DIV2_VIEW_POOL_PROFILING -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, valueInt.toBoolean())
             DIV2_MULTIPLE_STATE_CHANGE -> setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, valueInt.toBoolean())
             DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, valueInt.toBoolean())
+            PERMANENT_DEBUG_PANEL -> setPreferencesBooleanFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED, valueInt.toBoolean())
             else -> return false
         }
 

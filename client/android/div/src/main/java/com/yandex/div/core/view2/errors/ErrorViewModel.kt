@@ -21,6 +21,7 @@ internal data class ErrorViewModel(
 
     fun getCounterBackground(): Int {
         return if (warningCount > 0 && errorCount > 0) R.drawable.warning_error_counter_background
+        else if (warningCount == 0 && errorCount == 0) R.drawable.neutral_counter_background
         else if (warningCount > 0) R.drawable.warning_counter_background
         else R.drawable.error_counter_background
     }
