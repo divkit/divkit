@@ -94,9 +94,15 @@ internal class DivStateBinder @Inject constructor(
                 .logError(missingValue("id", divStatePath.toString()))
         }
         val path = "$divStatePath/$id"
-        val stateId = temporaryStateCache.getState(cardId, path) ?: divStateCache.getState(cardId, path)
+        var stateId = temporaryStateCache.getState(cardId, path) ?: divStateCache.getState(cardId, path)
         stateId?.let { layout.valueUpdater?.invoke(it) }
         layout.observeStateIdVariable(div, divView, divStatePath, stateId)
+
+        if (stateId == null) {
+            div.stateIdVariable?.let { variableName ->
+                stateId = getValueFromVariable(context, variableName)
+            }
+        }
 
         val oldState = div.states.find { it.stateId == layout.stateId }
             ?: div.getDefaultState(resolver)
@@ -237,6 +243,13 @@ internal class DivStateBinder @Inject constructor(
                 ?: extractParentContentAlignmentVertical(resolver)?.toAlignmentVertical()
             applyAlignment(resolvedHorizontalAlignment, resolvedVerticalAlignment)
         }
+    }
+
+    private fun getValueFromVariable(context: BindingContext, variableName: String): String? {
+        val variableController = context.runtimeStore?.getRuntimeWithOrNull(context.expressionResolver)?.variableController
+            ?: context.divView.expressionsRuntime?.variableController ?: return null
+
+        return variableController.getMutableVariable(variableName)?.getValue()?.toString()
     }
 
     private fun DivStateLayout.observeStateIdVariable(
