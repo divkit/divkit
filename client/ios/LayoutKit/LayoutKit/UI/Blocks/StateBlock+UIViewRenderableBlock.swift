@@ -111,6 +111,9 @@ private final class StateBlockView: BlockView {
   private var stateId: String?
 
   private var parentBlock: StateBlock?
+  private weak var observer: ElementStateObserver?
+  private weak var overscrollDelegate: ScrollDelegate?
+  private weak var renderingDelegate: RenderingDelegate?
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
@@ -124,10 +127,16 @@ private final class StateBlockView: BlockView {
   ) {
     defer {
       self.parentBlock = parentBlock
+      self.observer = observer
+      self.overscrollDelegate = overscrollDelegate
+      self.renderingDelegate = renderingDelegate
     }
 
     if let oldParentChild = self.parentBlock?.child,
-       child.self.equals(oldParentChild) {
+       child.self.equals(oldParentChild),
+       self.observer === observer,
+       self.overscrollDelegate === overscrollDelegate,
+       self.renderingDelegate === renderingDelegate {
       return // The child block hasn't changed, stop configuring
     }
 
