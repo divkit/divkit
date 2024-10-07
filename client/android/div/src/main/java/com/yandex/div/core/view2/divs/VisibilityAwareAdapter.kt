@@ -12,9 +12,15 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     ExpressionSubscriber {
 
     val items = items.toMutableList()
+    private val indexedItems get() = items.withIndex()
 
-    private val _visibleItems = mutableListOf<DivItemBuilderResult>()
-    val visibleItems: List<DivItemBuilderResult> get() = _visibleItems
+    private val _visibleItems = mutableListOf<IndexedValue<DivItemBuilderResult>>()
+    val visibleItems: List<DivItemBuilderResult> = object : AbstractList<DivItemBuilderResult>() {
+
+        override fun get(index: Int) = _visibleItems[index].value
+
+        override val size get() = _visibleItems.size
+    }
 
     private val visibilityMap = mutableMapOf<DivItemBuilderResult, Boolean>()
 
@@ -26,9 +32,9 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     }
 
     private fun initVisibleItems() {
-        items.forEach {
-            val isVisible = it.visibility != DivVisibility.GONE
-            visibilityMap[it] = isVisible
+        indexedItems.forEach {
+            val isVisible = it.value.visibility != DivVisibility.GONE
+            visibilityMap[it.value] = isVisible
             if (isVisible) {
                 _visibleItems.add(it)
             }
@@ -39,9 +45,9 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
 
     fun subscribeOnElements() {
         closeAllSubscription()
-        items.forEachIndexed { i, item ->
-            val subscription = item.div.value().visibility.observe(item.expressionResolver) {
-                updateItemVisibility(i, it)
+        indexedItems.forEach { item ->
+            val subscription = item.value.div.value().visibility.observe(item.value.expressionResolver) {
+                updateItemVisibility(item.index, it)
             }
             addSubscription(subscription)
         }
@@ -62,23 +68,18 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         val isVisible = newVisibility != DivVisibility.GONE
 
         if (!wasVisible && isVisible) {
-            val position = findPrevVisibleItemIndex(rawIndex) + 1
-            _visibleItems.add(position, item)
+            val position = _visibleItems
+                .indexOfFirst { it.index > rawIndex }
+                .takeUnless { it == -1 } ?: _visibleItems.size
+            _visibleItems.add(position, IndexedValue(rawIndex, item))
             notifyRawItemInserted(position)
         } else if (wasVisible && !isVisible) {
-            val position = _visibleItems.indexOf(item)
+            val position = _visibleItems.indexOfFirst { it.value == item }
             _visibleItems.removeAt(position)
             notifyRawItemRemoved(position)
         }
 
         visibilityMap[item] = isVisible
-    }
-
-    private fun findPrevVisibleItemIndex(index: Int): Int {
-        for (i in index - 1 downTo 0) {
-            if (visibilityMap[items[i]] == true) return i
-        }
-        return -1
     }
 
     override fun getItemCount() = visibleItems.size
