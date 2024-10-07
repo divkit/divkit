@@ -55,11 +55,6 @@ public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDele
   func reset()
 }
 
-extension TooltipManager {
-  public func mapView(_: BlockView, to _: BlockViewID) {}
-  public func reset() {}
-}
-
 public final class DefaultTooltipManager: TooltipManager {
   public struct Tooltip {
     public let id: String
@@ -168,3 +163,8 @@ public final class DefaultTooltipManager: TooltipManager {
   public func hideTooltip(id _: String) {}
 }
 #endif
+
+extension TooltipManager {
+  public func mapView(_: BlockView, to _: BlockViewID) {}
+  public func reset() {}
+}
