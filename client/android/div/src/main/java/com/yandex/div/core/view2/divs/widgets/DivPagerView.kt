@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.R
@@ -69,10 +70,12 @@ internal class DivPagerView @JvmOverloads constructor(
             ): Boolean {
                 if (child != null && event?.eventType == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
                     getFocusedChildPos(child)?.let { pos ->
-                        viewPager.adapter?.let { adapter ->
-                            if (pos >= 0 && pos < adapter.itemCount) {
-                                currentItem = pos
-                            }
+                        if (currentItem != pos) {
+                            recycler.performAccessibilityAction(
+                                if (pos > currentItem) AccessibilityNodeInfo.ACTION_SCROLL_FORWARD
+                                else AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD,
+                                null
+                            )
                         }
                     }
                 }
