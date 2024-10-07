@@ -1,0 +1,95 @@
+{
+  "description": "Text ranges without bounds",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "base_text": {
+        "type": "text",
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "background": [
+          {
+            "type": "solid",
+            "$color": "background_color"
+          }
+        ],
+        "font_size": 20,
+        "text_color": "#073642"
+      }
+    },
+    "card": {
+      "log_id": "test",
+      "variables": [
+        {
+          "name": "test_text",
+          "type": "string",
+          "value": "Lorem ipsum"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "base_text",
+                "background_color": "#EEE8D5",
+                "text": "@{test_text}",
+                "ranges": [
+                  {
+                    "start": 6,
+                    "font_weight": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "base_text",
+                "background_color": "#FDF6E3",
+                "text": "@{test_text}",
+                "ranges": [
+                  {
+                    "end": 5,
+                    "font_weight": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "base_text",
+                "background_color": "#EEE8D5",
+                "text": "@{test_text}",
+                "ranges": [
+                  {
+                    "font_weight": "bold"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "change_test_text",
+          "url": "div-action://set_variable?name=test_text&value=Lorem%20ipsum%20dolor%20sit%20amet"
+        }
+      ]
+    }
+  ]
+}

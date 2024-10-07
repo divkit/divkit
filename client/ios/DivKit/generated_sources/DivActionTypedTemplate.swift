@@ -18,6 +18,7 @@ public enum DivActionTypedTemplate: TemplateValue {
   case divActionFocusElementTemplate(DivActionFocusElementTemplate)
   case divActionHideTooltipTemplate(DivActionHideTooltipTemplate)
   case divActionSetStateTemplate(DivActionSetStateTemplate)
+  case divActionSetStoredValueTemplate(DivActionSetStoredValueTemplate)
   case divActionSetVariableTemplate(DivActionSetVariableTemplate)
   case divActionShowTooltipTemplate(DivActionShowTooltipTemplate)
   case divActionSubmitTemplate(DivActionSubmitTemplate)
@@ -49,6 +50,8 @@ public enum DivActionTypedTemplate: TemplateValue {
     case let .divActionHideTooltipTemplate(value):
       return value
     case let .divActionSetStateTemplate(value):
+      return value
+    case let .divActionSetStoredValueTemplate(value):
       return value
     case let .divActionSetVariableTemplate(value):
       return value
@@ -89,6 +92,8 @@ public enum DivActionTypedTemplate: TemplateValue {
       return .divActionHideTooltipTemplate(try value.resolveParent(templates: templates))
     case let .divActionSetStateTemplate(value):
       return .divActionSetStateTemplate(try value.resolveParent(templates: templates))
+    case let .divActionSetStoredValueTemplate(value):
+      return .divActionSetStoredValueTemplate(try value.resolveParent(templates: templates))
     case let .divActionSetVariableTemplate(value):
       return .divActionSetVariableTemplate(try value.resolveParent(templates: templates))
     case let .divActionShowTooltipTemplate(value):
@@ -205,6 +210,14 @@ public enum DivActionTypedTemplate: TemplateValue {
       switch result {
       case let .success(value): return .success(.divActionSetState(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetState(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .divActionSetStoredValueTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionSetStoredValue(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetStoredValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -353,6 +366,14 @@ public enum DivActionTypedTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivActionSetStoredValue.type:
+      let result = DivActionSetStoredValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divActionSetStoredValue(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetStoredValue(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case DivActionSetVariable.type:
       let result = DivActionSetVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
@@ -428,6 +449,8 @@ extension DivActionTypedTemplate {
       self = .divActionHideTooltipTemplate(try DivActionHideTooltipTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionSetStateTemplate.type:
       self = .divActionSetStateTemplate(try DivActionSetStateTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionSetStoredValueTemplate.type:
+      self = .divActionSetStoredValueTemplate(try DivActionSetStoredValueTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionSetVariableTemplate.type:
       self = .divActionSetVariableTemplate(try DivActionSetVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionShowTooltipTemplate.type:

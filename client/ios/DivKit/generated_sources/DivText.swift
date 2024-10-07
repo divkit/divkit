@@ -120,7 +120,7 @@ public final class DivText: DivBase {
     public let alignmentVertical: Expression<DivTextAlignmentVertical>?
     public let background: DivTextRangeBackground?
     public let border: DivTextRangeBorder?
-    public let end: Expression<Int> // constraint: number > 0
+    public let end: Expression<Int>? // constraint: number > 0
     public let fontFamily: Expression<String>?
     public let fontFeatureSettings: Expression<String>?
     public let fontSize: Expression<Int>? // constraint: number >= 0
@@ -129,7 +129,7 @@ public final class DivText: DivBase {
     public let fontWeightValue: Expression<Int>? // constraint: number > 0
     public let letterSpacing: Expression<Double>?
     public let lineHeight: Expression<Int>? // constraint: number >= 0
-    public let start: Expression<Int> // constraint: number >= 0
+    public let start: Expression<Int> // constraint: number >= 0; default value: 0
     public let strike: Expression<DivLineStyle>?
     public let textColor: Expression<Color>?
     public let textShadow: DivShadow?
@@ -176,8 +176,8 @@ public final class DivText: DivBase {
       resolver.resolveNumeric(lineHeight)
     }
 
-    public func resolveStart(_ resolver: ExpressionResolver) -> Int? {
-      resolver.resolveNumeric(start)
+    public func resolveStart(_ resolver: ExpressionResolver) -> Int {
+      resolver.resolveNumeric(start) ?? 0
     }
 
     public func resolveStrike(_ resolver: ExpressionResolver) -> DivLineStyle? {
@@ -219,7 +219,7 @@ public final class DivText: DivBase {
       alignmentVertical: Expression<DivTextAlignmentVertical>? = nil,
       background: DivTextRangeBackground? = nil,
       border: DivTextRangeBorder? = nil,
-      end: Expression<Int>,
+      end: Expression<Int>? = nil,
       fontFamily: Expression<String>? = nil,
       fontFeatureSettings: Expression<String>? = nil,
       fontSize: Expression<Int>? = nil,
@@ -228,7 +228,7 @@ public final class DivText: DivBase {
       fontWeightValue: Expression<Int>? = nil,
       letterSpacing: Expression<Double>? = nil,
       lineHeight: Expression<Int>? = nil,
-      start: Expression<Int>,
+      start: Expression<Int>? = nil,
       strike: Expression<DivLineStyle>? = nil,
       textColor: Expression<Color>? = nil,
       textShadow: DivShadow? = nil,
@@ -248,7 +248,7 @@ public final class DivText: DivBase {
       self.fontWeightValue = fontWeightValue
       self.letterSpacing = letterSpacing
       self.lineHeight = lineHeight
-      self.start = start
+      self.start = start ?? .value(0)
       self.strike = strike
       self.textColor = textColor
       self.textShadow = textShadow
@@ -970,7 +970,7 @@ extension DivText.Range: Serializable {
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["background"] = background?.toDictionary()
     result["border"] = border?.toDictionary()
-    result["end"] = end.toValidSerializationValue()
+    result["end"] = end?.toValidSerializationValue()
     result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_feature_settings"] = fontFeatureSettings?.toValidSerializationValue()
     result["font_size"] = fontSize?.toValidSerializationValue()

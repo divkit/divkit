@@ -725,7 +725,7 @@ internal class DivTextBinder @Inject constructor(
 
         newDiv.ranges?.forEach { range ->
             addSubscription(range.start.observe(resolver, callback))
-            addSubscription(range.end.observe(resolver, callback))
+            addSubscription(range.end?.observe(resolver, callback))
             addSubscription(range.alignmentVertical?.observe(resolver, callback))
             addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
@@ -882,7 +882,7 @@ internal class DivTextBinder @Inject constructor(
         addSubscription(ellipsis.text.observe(resolver, callback))
         ellipsis.ranges?.forEach { range ->
             addSubscription(range.start.observe(resolver, callback))
-            addSubscription(range.end.observe(resolver, callback))
+            addSubscription(range.end?.observe(resolver, callback))
             addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
             addSubscription(range.fontWeight?.observe(resolver, callback))
@@ -1116,7 +1116,7 @@ internal class DivTextBinder @Inject constructor(
 
         private fun SpannableStringBuilder.addTextRange(range: DivText.Range) {
             val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
-            val end = range.end.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
+            val end = (range.end?.evaluate(resolver)?.toIntSafely() ?: text.length).coerceAtMost(text.length)
             if (start > end) return
 
             range.alignmentVertical?.evaluate(resolver)?.let { alignment ->
@@ -1221,11 +1221,14 @@ internal class DivTextBinder @Inject constructor(
             }
         }
 
-        private fun getActionsForPosition(start: Int): List<DivAction>? {
+        private fun getActionsForPosition(position: Int): List<DivAction>? {
             ranges ?: return null
             val clickableSpans = ranges
-                .filter { it.actions != null }
-                .filter { it.start.evaluate(resolver) <= start && it.end.evaluate(resolver) > start }
+                .filter { range ->
+                    val start = range.start.evaluate(resolver)
+                    val end = range.end?.evaluate(resolver) ?: Long.MAX_VALUE
+                    range.actions != null && start <= position && position < end
+                }
 
             if (clickableSpans.size > 1) {
                 divView.logWarning(Throwable("Two or more clickable ranges intersect."))

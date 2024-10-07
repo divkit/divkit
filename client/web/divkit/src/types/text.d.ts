@@ -37,8 +37,8 @@ export interface TextRangeBorder {
 export type TextVerticalAlignment = 'top' | 'center' | 'bottom' | 'baseline';
 
 export interface TextRange extends TextStyles {
-    start: number;
-    end: number;
+    start?: number;
+    end?: number;
     actions?: Action[];
     top_offset?: number;
     border?: TextRangeBorder;

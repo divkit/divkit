@@ -166,7 +166,13 @@
         !$jsonRanges ||
         (
             text && $jsonRanges.length === 1 && $jsonRanges[0] &&
-            $jsonRanges[0].start === 0 && typeof $jsonRanges[0].end === 'number' && $jsonRanges[0].end >= text.length
+            (
+                !$jsonRanges[0].start || $jsonRanges[0].start === 0
+            ) &&
+            (
+                !$jsonRanges[0].end ||
+                typeof $jsonRanges[0].end === 'number' && $jsonRanges[0].end >= text.length
+            )
         );
 
 
@@ -261,29 +267,31 @@
         })[] = [];
 
         ranges.forEach(range => {
-            if (range.start !== undefined && range.end !== undefined) {
-                const rangeWithExplicitProps = {
-                    top_offset: 0,
-                    ...range
-                };
-                list.push({
-                    index: range.start,
-                    range: rangeWithExplicitProps as typeof range & {
-                        start: number;
-                        end: number;
-                    },
-                    type: 'rangeStart',
-                    isStart: true
-                });
-                list.push({
-                    index: range.end,
-                    range: rangeWithExplicitProps as typeof range & {
-                        start: number;
-                        end: number;
-                    },
-                    type: 'rangeEnd'
-                });
-            }
+            const rangeStart = range.start || 0;
+            const rangeEnd = range.end || text.length;
+            const rangeWithExplicitProps = {
+                top_offset: 0,
+                ...range,
+                start: rangeStart,
+                end: rangeEnd
+            };
+            list.push({
+                index: rangeStart,
+                range: rangeWithExplicitProps as typeof range & {
+                    start: number;
+                    end: number;
+                },
+                type: 'rangeStart',
+                isStart: true
+            });
+            list.push({
+                index: rangeEnd,
+                range: rangeWithExplicitProps as typeof range & {
+                    start: number;
+                    end: number;
+                },
+                type: 'rangeEnd'
+            });
         });
         images.forEach((image, index) => {
             if (image.start !== undefined && image.url && image.start <= content.length) {

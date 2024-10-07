@@ -155,7 +155,8 @@ public final class DivActionHandler {
     case let .divActionVideo(action):
       videoActionHandler.handle(action, context: context)
     case .divActionAnimatorStart, .divActionAnimatorStop, .divActionSubmit,
-        .divActionShowTooltip, .divActionSetState, .divActionHideTooltip, .divActionDownload:
+        .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
+        .divActionSetState, .divActionSetStoredValue:
       break
     case .none:
       isHandled = false

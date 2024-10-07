@@ -432,7 +432,7 @@ public final class DivTextTemplate: TemplateValue {
     public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
     public let letterSpacing: Field<Expression<Double>>?
     public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
-    public let start: Field<Expression<Int>>? // constraint: number >= 0
+    public let start: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
     public let strike: Field<Expression<DivLineStyle>>?
     public let textColor: Field<Expression<Color>>?
     public let textShadow: Field<DivShadowTemplate>?
@@ -510,7 +510,7 @@ public final class DivTextTemplate: TemplateValue {
       let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
       let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-      let endValue = parent?.end?.resolveValue(context: context, validator: ResolvedValue.endValidator) ?? .noValue
+      let endValue = parent?.end?.resolveOptionalValue(context: context, validator: ResolvedValue.endValidator) ?? .noValue
       let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue
       let fontFeatureSettingsValue = parent?.fontFeatureSettings?.resolveOptionalValue(context: context) ?? .noValue
       let fontSizeValue = parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
@@ -519,13 +519,13 @@ public final class DivTextTemplate: TemplateValue {
       let fontWeightValueValue = parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue
       let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
       let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
-      let startValue = parent?.start?.resolveValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
+      let startValue = parent?.start?.resolveOptionalValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
       let strikeValue = parent?.strike?.resolveOptionalValue(context: context) ?? .noValue
       let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       let textShadowValue = parent?.textShadow?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let topOffsetValue = parent?.topOffset?.resolveOptionalValue(context: context, validator: ResolvedValue.topOffsetValidator) ?? .noValue
       let underlineValue = parent?.underline?.resolveOptionalValue(context: context) ?? .noValue
-      var errors = mergeErrors(
+      let errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
         alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
@@ -546,24 +546,12 @@ public final class DivTextTemplate: TemplateValue {
         topOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "top_offset", error: $0) },
         underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) }
       )
-      if case .noValue = endValue {
-        errors.append(.requiredFieldIsMissing(field: "end"))
-      }
-      if case .noValue = startValue {
-        errors.append(.requiredFieldIsMissing(field: "start"))
-      }
-      guard
-        let endNonNil = endValue.value,
-        let startNonNil = startValue.value
-      else {
-        return .failure(NonEmptyArray(errors)!)
-      }
       let result = DivText.Range(
         actions: actionsValue.value,
         alignmentVertical: alignmentVerticalValue.value,
         background: backgroundValue.value,
         border: borderValue.value,
-        end: endNonNil,
+        end: endValue.value,
         fontFamily: fontFamilyValue.value,
         fontFeatureSettings: fontFeatureSettingsValue.value,
         fontSize: fontSizeValue.value,
@@ -572,7 +560,7 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValue: fontWeightValueValue.value,
         letterSpacing: letterSpacingValue.value,
         lineHeight: lineHeightValue.value,
-        start: startNonNil,
+        start: startValue.value,
         strike: strikeValue.value,
         textColor: textColorValue.value,
         textShadow: textShadowValue.value,
@@ -692,7 +680,7 @@ public final class DivTextTemplate: TemplateValue {
         borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
         textShadowValue = textShadowValue.merged(with: { parent.textShadow?.resolveOptionalValue(context: context, useOnlyLinks: true) })
       }
-      var errors = mergeErrors(
+      let errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
         alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
         backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
@@ -713,24 +701,12 @@ public final class DivTextTemplate: TemplateValue {
         topOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "top_offset", error: $0) },
         underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) }
       )
-      if case .noValue = endValue {
-        errors.append(.requiredFieldIsMissing(field: "end"))
-      }
-      if case .noValue = startValue {
-        errors.append(.requiredFieldIsMissing(field: "start"))
-      }
-      guard
-        let endNonNil = endValue.value,
-        let startNonNil = startValue.value
-      else {
-        return .failure(NonEmptyArray(errors)!)
-      }
       let result = DivText.Range(
         actions: actionsValue.value,
         alignmentVertical: alignmentVerticalValue.value,
         background: backgroundValue.value,
         border: borderValue.value,
-        end: endNonNil,
+        end: endValue.value,
         fontFamily: fontFamilyValue.value,
         fontFeatureSettings: fontFeatureSettingsValue.value,
         fontSize: fontSizeValue.value,
@@ -739,7 +715,7 @@ public final class DivTextTemplate: TemplateValue {
         fontWeightValue: fontWeightValueValue.value,
         letterSpacing: letterSpacingValue.value,
         lineHeight: lineHeightValue.value,
-        start: startNonNil,
+        start: startValue.value,
         strike: strikeValue.value,
         textColor: textColorValue.value,
         textShadow: textShadowValue.value,

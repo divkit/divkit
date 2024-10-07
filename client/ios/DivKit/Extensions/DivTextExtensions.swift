@@ -163,9 +163,10 @@ extension DivText: DivBlockModeling {
   ) {
     let expressionResolver = context.expressionResolver
 
-    let start = range.resolveStart(expressionResolver) ?? 0
-    let end = range.resolveEnd(expressionResolver) ?? 0
-    guard end > start, start < CFAttributedStringGetLength(string) else {
+    let stringLength = CFAttributedStringGetLength(string)
+    let start = range.resolveStart(expressionResolver)
+    let end = range.resolveEnd(expressionResolver) ?? stringLength
+    guard end > start, start < stringLength else {
       return
     }
 
@@ -199,7 +200,7 @@ extension DivText: DivBlockModeling {
       return
     }
 
-    let actualEnd = min(end, CFAttributedStringGetLength(string))
+    let actualEnd = min(end, stringLength)
     let cfRange = CFRange(location: start, length: actualEnd - start)
     typos.forEach { $0.apply(to: string, at: cfRange) }
     string.apply(actions, at: cfRange)

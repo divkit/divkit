@@ -19,6 +19,7 @@
       "properties": {
         "start": {
           "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
           "$description": "translations.json#/div_text_range_start"
         },
         "end": {
@@ -120,10 +121,6 @@
           ]
         }
       },
-      "required": [
-        "start",
-        "end"
-      ],
       "$description": "translations.json#/div_text_range"
     },
     "image": {
