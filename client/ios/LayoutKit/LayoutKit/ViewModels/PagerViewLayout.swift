@@ -125,7 +125,9 @@ extension GalleryViewModel {
 
     let origins = frames.enumerated().map { index, frame -> CGFloat in
       guard index > 0 else { return 0.0 }
-      guard index != frames.count - 1 else {
+
+      if index == frames.count - 1,
+         transformation?.style != .overlap {
         return contentSize - bound
       }
 
