@@ -19,9 +19,3 @@ buildscript {
         classpath libs.kotlin.gradle.plugin
     }
 }
-
-wrapper {
-    gradleVersion "8.10"
-    distributionType = Wrapper.DistributionType.ALL
-    distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
-}
