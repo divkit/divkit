@@ -90,7 +90,6 @@ internal class DivSelectBinder @Inject constructor(
         val resolver = bindingContext.expressionResolver
 
         val subscription = variableBinder.bindVariable(
-            bindingContext.divView,
             bindingContext,
             div.valueVariable,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {

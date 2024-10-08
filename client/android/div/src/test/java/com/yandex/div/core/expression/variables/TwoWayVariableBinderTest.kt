@@ -50,6 +50,7 @@ class TwoWayVariableBinderTest {
     private val divView = mock<Div2View> {
         on { dataTag } doReturn mock()
         on { divData } doReturn DivData(logId = "test", states = emptyList())
+        on { runtimeStore } doReturn store
     }
     private val updateCaptor = argumentCaptor<(String) -> Unit>()
     private val callbacks = mock<TwoWayStringVariableBinder.Callbacks> {
@@ -60,7 +61,7 @@ class TwoWayVariableBinderTest {
         store.rootRuntime = expressionsRuntime
         val bindingContext = BindingContext.createEmpty(divView).getFor(expressionResolver, store)
         TwoWayStringVariableBinder(errorCollectors, expressionsRuntimeProvider)
-            .bindVariable(divView, bindingContext, VARIABLE_NAME, callbacks, path)
+            .bindVariable(bindingContext, VARIABLE_NAME, callbacks, path)
     }
 
     @Test

@@ -96,7 +96,7 @@ internal class DivStateBinder @Inject constructor(
         val path = "$divStatePath/$id"
         var stateId = temporaryStateCache.getState(cardId, path) ?: divStateCache.getState(cardId, path)
         stateId?.let { layout.valueUpdater?.invoke(it) }
-        layout.observeStateIdVariable(div, divView, divStatePath, stateId)
+        layout.observeStateIdVariable(div, context, divStatePath, stateId)
 
         if (stateId == null) {
             div.stateIdVariable?.let { variableName ->
@@ -254,21 +254,20 @@ internal class DivStateBinder @Inject constructor(
 
     private fun DivStateLayout.observeStateIdVariable(
         div: DivState,
-        divView: Div2View,
+        bindingContext: BindingContext,
         divStatePath: DivStatePath,
         currentStateId: String?
     ) {
         val stateIdVariable = div.stateIdVariable ?: return
 
         val subscription = variableBinder.bindVariable(
-                divView,
                 bindingContext,
                 stateIdVariable,
                 callbacks = object : TwoWayStringVariableBinder.Callbacks {
                     override fun onVariableChanged(value: String?) {
                         if (value == null || value == currentStateId) return
                         val newDivStatePath = divStatePath.append(div.getId(), value)
-                        divView.switchToState(newDivStatePath, true)
+                        bindingContext.divView.switchToState(newDivStatePath, true)
                     }
 
                     override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {

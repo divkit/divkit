@@ -90,7 +90,7 @@ internal class DivInputBinder @Inject constructor(
             observeSelectAllOnFocus(div, expressionResolver)
             observeIsEnabled(div, expressionResolver)
 
-            observeText(div, expressionResolver, context.divView, path)
+            observeText(div, context, path)
 
             focusTracker = context.divView.inputFocusTracker
             focusTracker?.requestFocusIfNeeded(view)
@@ -288,15 +288,15 @@ internal class DivInputBinder @Inject constructor(
 
     private fun DivInputView.observeText(
         div: DivInput,
-        resolver: ExpressionResolver,
-        divView: Div2View,
+        bindingContext: BindingContext,
         path: DivStatePath,
     ) {
+        val divView = bindingContext.divView
         removeAfterTextChangeListener()
 
         var inputMask: BaseInputMask? = null
 
-        observeMask(div, resolver, divView) {
+        observeMask(div, bindingContext.expressionResolver, divView) {
             inputMask = it
 
             inputMask?.let { mask ->
@@ -356,11 +356,9 @@ internal class DivInputBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(
-            divView, bindingContext, primaryVariable, callbacks, path)
-        )
+        addSubscription(variableBinder.bindVariable(bindingContext, primaryVariable, callbacks, path))
 
-        observeValidators(div, resolver, divView)
+        observeValidators(div, bindingContext.expressionResolver, divView)
     }
 
     private fun DivInputView.observeValidators(

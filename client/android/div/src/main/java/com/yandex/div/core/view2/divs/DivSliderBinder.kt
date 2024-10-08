@@ -7,12 +7,10 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.font.DivTypefaceProvider
-import com.yandex.div.core.state.DivPathUtils
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.errors.ErrorCollector
@@ -74,8 +72,8 @@ internal class DivSliderBinder @Inject constructor(
         )
 
         view.clearOnThumbChangedListener()
-        view.setupThumb(div, divView, path, expressionResolver)
-        view.setupSecondaryThumb(div, divView, path, expressionResolver)
+        view.setupThumb(div, context, path)
+        view.setupSecondaryThumb(div, context, path)
 
         view.setupTrack(div, expressionResolver)
         view.setupTickMarks(div, expressionResolver)
@@ -85,18 +83,17 @@ internal class DivSliderBinder @Inject constructor(
 
     private fun DivSliderView.setupThumb(
         div: DivSlider,
-        divView: Div2View,
+        bindingContext: BindingContext,
         path: DivStatePath,
-        resolver: ExpressionResolver
     ) {
-        observeThumbValue(div, divView, path)
-        observeThumbStyle(resolver, div.thumbStyle)
-        observeThumbTextStyle(resolver, div.thumbTextStyle)
+        observeThumbValue(div, bindingContext, path)
+        observeThumbStyle(bindingContext.expressionResolver, div.thumbStyle)
+        observeThumbTextStyle(bindingContext.expressionResolver, div.thumbTextStyle)
     }
 
     private fun DivSliderView.observeThumbValue(
         div: DivSlider,
-        divView: Div2View,
+        bindingContext: BindingContext,
         path: DivStatePath,
     ) {
         val variableName = div.thumbValueVariable ?: return
@@ -108,16 +105,14 @@ internal class DivSliderBinder @Inject constructor(
             override fun setViewStateChangeListener(valueUpdater: (Long) -> Unit) {
                 addOnThumbChangedListener(object : SliderView.ChangedListener {
                     override fun onThumbValueChanged(value: Float) {
-                        logger.logSliderDrag(divView, this@observeThumbValue, value)
+                        logger.logSliderDrag(bindingContext.divView, this@observeThumbValue, value)
                         valueUpdater(value.roundToLong())
                     }
                 })
             }
         }
 
-        addSubscription(variableBinder.bindVariable(
-            divView, bindingContext, variableName, callbacks, path)
-        )
+        addSubscription(variableBinder.bindVariable(bindingContext, variableName, callbacks, path))
     }
 
     private fun DivSliderView.observeThumbStyle(resolver: ExpressionResolver, thumbStyle: DivDrawable) {
@@ -194,9 +189,8 @@ internal class DivSliderBinder @Inject constructor(
 
     private fun DivSliderView.setupSecondaryThumb(
         div: DivSlider,
-        divView: Div2View,
+        bindingContext: BindingContext,
         path: DivStatePath,
-        resolver: ExpressionResolver
     ) {
         val variableName = div.thumbSecondaryValueVariable
         variableName ?: run {
@@ -205,7 +199,8 @@ internal class DivSliderBinder @Inject constructor(
             return
         }
 
-        observeThumbSecondaryValue(variableName, divView, path)
+        val resolver = bindingContext.expressionResolver
+        observeThumbSecondaryValue(variableName, bindingContext, path)
         div.thumbSecondaryStyle?.let { observeThumbSecondaryStyle(resolver, it) }
             ?: observeThumbSecondaryStyle(resolver, div.thumbStyle)
         observeThumbSecondaryTextStyle(resolver, div.thumbSecondaryTextStyle)
@@ -213,7 +208,7 @@ internal class DivSliderBinder @Inject constructor(
 
     private fun DivSliderView.observeThumbSecondaryValue(
         variableName: String,
-        divView: Div2View,
+        bindingContext: BindingContext,
         path: DivStatePath,
     ) {
         val callbacks = object : TwoWayIntegerVariableBinder.Callbacks {
@@ -224,16 +219,14 @@ internal class DivSliderBinder @Inject constructor(
             override fun setViewStateChangeListener(valueUpdater: (Long) -> Unit) {
                 addOnThumbChangedListener(object : SliderView.ChangedListener {
                     override fun onThumbSecondaryValueChanged(value: Float?) {
-                        logger.logSliderDrag(divView, this@observeThumbSecondaryValue, value)
+                        logger.logSliderDrag(bindingContext.divView, this@observeThumbSecondaryValue, value)
                         valueUpdater(value?.roundToLong() ?: 0)
                     }
                 })
             }
         }
 
-        addSubscription(variableBinder.bindVariable(
-            divView, bindingContext, variableName, callbacks, path)
-        )
+        addSubscription(variableBinder.bindVariable(bindingContext, variableName, callbacks, path))
     }
 
     private fun DivSliderView.setupTrack(div: DivSlider, resolver: ExpressionResolver) {

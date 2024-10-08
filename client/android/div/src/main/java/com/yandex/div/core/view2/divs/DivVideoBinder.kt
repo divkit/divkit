@@ -21,7 +21,6 @@ import com.yandex.div.core.player.DivVideoViewMapper
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.internal.KLog
@@ -121,13 +120,13 @@ internal class DivVideoBinder @Inject constructor(
         playerView.attach(player)
 
         if (div === oldDiv) {
-            view.observeElapsedTime(div, divView, player, path)
+            view.observeElapsedTime(div, context, player, path)
             view.observeMuted(div, resolver, player)
             view.observeScale(div, resolver, playerView)
             return
         }
 
-        view.observeElapsedTime(div, divView, player, path)
+        view.observeElapsedTime(div, context, player, path)
         view.observeMuted(div, resolver, player)
         view.observeScale(div, resolver, playerView)
 
@@ -144,7 +143,7 @@ internal class DivVideoBinder @Inject constructor(
 
     private fun DivVideoView.observeElapsedTime(
         div: DivVideo,
-        divView: Div2View,
+        bindingContext: BindingContext,
         player: DivPlayer,
         path: DivStatePath,
     ) {
@@ -166,9 +165,7 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(
-            divView, bindingContext, elapsedTimeVariable, callbacks, path)
-        )
+        addSubscription(variableBinder.bindVariable(bindingContext, elapsedTimeVariable, callbacks, path))
     }
 
     private fun DivVideoView.observeMuted(

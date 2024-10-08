@@ -72,6 +72,7 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -1110,22 +1111,8 @@ class Div2View private constructor(
     /**
      * @return exception if setting variable failed, null otherwise.
      */
-    fun setVariable(name: String, value: String): VariableMutationException? {
-        val mutableVariable = variableController?.getMutableVariable(name) ?: run {
-            val error = VariableMutationException("Variable '$name' not defined!")
-            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
-            return error
-        }
-
-        try {
-            mutableVariable.set(value)
-        } catch (e: VariableMutationException) {
-            val error = VariableMutationException("Variable '$name' mutation failed!", e)
-            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
-            return error
-        }
-        return null
-    }
+    fun setVariable(name: String, value: String): VariableMutationException? =
+        VariableMutationHandler.setVariable(this, name, value, expressionResolver)
 
     fun applyTimerCommand(id: String, command: String) {
         divTimerEventDispatcher?.changeState(id, command)
