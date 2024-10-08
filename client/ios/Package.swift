@@ -11,6 +11,17 @@ let vgsl = {
   )
 }()
 
+let markdown = {
+  let version = Version("0.4.0")
+  return (
+    package: Package.Dependency.package(
+      url: "https://github.com/apple/swift-markdown.git",
+      from: version
+    ),
+    packageName: "swift-markdown"
+  )
+}()
+
 let swiftSettings: [SwiftSetting] = [.unsafeFlags(["-warnings-as-errors"])]
 
 let package = Package(
@@ -28,7 +39,7 @@ let package = Package(
   ],
   dependencies: [
     vgsl.package,
-    .package(url: "https://github.com/apple/swift-markdown.git", from: "0.4.0"),
+    markdown.package,
   ],
   targets: [
     .target(
@@ -59,7 +70,7 @@ let package = Package(
         "DivKit",
         "LayoutKit",
         .product(name: "VGSL", package: vgsl.packageName),
-        .product(name: "Markdown", package: "swift-markdown"),
+        .product(name: "Markdown", package: markdown.packageName),
       ],
       path: "DivKitMarkdownExtension",
       swiftSettings: swiftSettings
