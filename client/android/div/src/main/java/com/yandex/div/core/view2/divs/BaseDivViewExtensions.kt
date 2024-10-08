@@ -12,6 +12,8 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.core.graphics.withSave
@@ -954,4 +956,9 @@ internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: Expres
     builder.prototypes.forEach {
         it.selector.observe(itemResolver, callback)
     }
+}
+
+internal fun View.gainAccessibilityFocus() {
+    performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
+    sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED)
 }

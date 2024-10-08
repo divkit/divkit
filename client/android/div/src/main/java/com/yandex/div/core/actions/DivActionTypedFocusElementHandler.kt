@@ -1,8 +1,8 @@
 package com.yandex.div.core.actions
 
 import android.view.View
-import android.view.accessibility.AccessibilityEvent
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.gainAccessibilityFocus
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionFocusElement
@@ -31,9 +31,12 @@ internal class DivActionTypedFocusElementHandler @Inject constructor() : DivActi
 
     private fun handleRequestFocus(action: DivActionFocusElement, view: Div2View, resolver: ExpressionResolver) {
         val elementId = action.elementId.evaluate(resolver)
-        val requestedView: View = view.findViewWithTag(elementId) ?: return
+        val requestedView: View = view.findViewWithTag(elementId)
+            ?: view.viewComponent.divTooltipController.findViewWithTag(elementId)
+            ?: return
+
         requestedView.requestFocus()
-        requestedView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+        requestedView.gainAccessibilityFocus()
         when (requestedView) {
             is DivInputView -> requestedView.openKeyboard()
         }

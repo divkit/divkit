@@ -136,6 +136,13 @@ internal class DivTooltipController @VisibleForTesting constructor(
         mainThreadHandler.removeCallbacksAndMessages(null)
     }
 
+    fun findViewWithTag(id: String): View? {
+        tooltips.entries.mapNotNull { it.value.popupWindow.contentView }.forEach {
+            it.findViewWithTag<View>(id)?.let { foundView -> return foundView }
+        }
+        return null
+    }
+
     private fun tryShowTooltip(
         anchor: View,
         divTooltip: DivTooltip,
@@ -197,15 +204,6 @@ internal class DivTooltipController @VisibleForTesting constructor(
                     popup.update(location.x, location.y, finalTooltipWidth, finalTooltipHeight)
                     startVisibilityTracking(context, div, tooltipView)
                     tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
-                }
-
-                if (accessibilityStateProvider.isAccessibilityEnabled(tooltipView.context)) {
-                    tooltipView.doOnPreDraw {
-                        val view = it.getWrappedTooltip()
-                        view.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
-                        view.performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
-                        view.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
-                    }
                 }
 
                 popup.showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
