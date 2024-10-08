@@ -1,5 +1,6 @@
 package com.yandex.div.core.state
 
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 
 /**
@@ -10,7 +11,8 @@ internal class UpdateStateChangePageCallback(
     private val mDivViewState: DivViewState
 ) : OnPageChangeCallback() {
     override fun onPageSelected(position: Int) {
-        super.onPageSelected(position)
-        mDivViewState.putBlockState(mBlockId, PagerState(position))
+        if (position != RecyclerView.NO_POSITION) {
+            mDivViewState.putBlockState(mBlockId, PagerState(position))
+        }
     }
 }

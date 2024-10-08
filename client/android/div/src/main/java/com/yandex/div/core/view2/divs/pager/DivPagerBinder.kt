@@ -122,7 +122,7 @@ internal class DivPagerBinder @Inject constructor(
             divActionBinder = divActionBinder,
         )
 
-        view.changePageCallbackForLogger = PageChangeCallback(
+        view.changePageCallbackForLogger = DivPagerPageChangeCallback(
             bindingContext = context,
             divPager = div,
             recyclerView = view.viewPager.getChildAt(0) as RecyclerView,

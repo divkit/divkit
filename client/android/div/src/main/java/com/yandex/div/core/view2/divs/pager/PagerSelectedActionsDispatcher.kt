@@ -44,7 +44,9 @@ internal class PagerSelectedActionsDispatcher(
             if (currentPage == position) {
                 return
             }
-            selectedPages += position
+            if (position != RecyclerView.NO_POSITION) {
+                selectedPages += position
+            }
             if (currentPage == RecyclerView.NO_POSITION) {
                 trackSelectedPages()
             }
