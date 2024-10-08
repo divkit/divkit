@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class OffsetDestination internal constructor(
+data class OffsetDestination internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionScrollDestination {
@@ -40,7 +40,7 @@ class OffsetDestination internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Position in `dp`.
          */

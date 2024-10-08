@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class IndexDestination internal constructor(
+data class IndexDestination internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionScrollDestination {
@@ -40,7 +40,7 @@ class IndexDestination internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Index of contaner's item.
          */

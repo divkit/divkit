@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-object WithoutProperties : Entity {
+data object WithoutProperties : Entity {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "entity_without_properties")
 }

@@ -29,7 +29,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class WithSimpleProperties internal constructor(
+data class WithSimpleProperties internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Entity {
@@ -52,7 +52,7 @@ class WithSimpleProperties internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Boolean property.
          */

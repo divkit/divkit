@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `color`.
  */
 @Generated
-class Stroke internal constructor(
+data class Stroke internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -40,7 +40,7 @@ class Stroke internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Stroke color.
          */

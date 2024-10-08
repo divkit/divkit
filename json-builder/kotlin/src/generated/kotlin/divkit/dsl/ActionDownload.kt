@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `url, type`.
  */
 @Generated
-class ActionDownload internal constructor(
+data class ActionDownload internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -42,7 +42,7 @@ class ActionDownload internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
          */

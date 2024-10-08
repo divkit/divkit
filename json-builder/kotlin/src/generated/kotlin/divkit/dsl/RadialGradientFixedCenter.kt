@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class RadialGradientFixedCenter internal constructor(
+data class RadialGradientFixedCenter internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : RadialGradientCenter {
@@ -41,7 +41,7 @@ class RadialGradientFixedCenter internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout).
          * Default value: `dp`.

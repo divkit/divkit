@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class WithPropertyWithDefaultValue internal constructor(
+data class WithPropertyWithDefaultValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Entity {
@@ -44,7 +44,7 @@ class WithPropertyWithDefaultValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Default value: `0`.
          */
@@ -76,7 +76,7 @@ class WithPropertyWithDefaultValue internal constructor(
      * Required parameters: `non_optional`.
      */
     @Generated
-    class Nested internal constructor(
+    data class Nested internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -91,7 +91,7 @@ class WithPropertyWithDefaultValue internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Default value: `0`.
              */

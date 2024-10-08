@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, element_id`.
  */
 @Generated
-class ActionFocusElement internal constructor(
+data class ActionFocusElement internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -40,7 +40,7 @@ class ActionFocusElement internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val elementId: Property<String>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

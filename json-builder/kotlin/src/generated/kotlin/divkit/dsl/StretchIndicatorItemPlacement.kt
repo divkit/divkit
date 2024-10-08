@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class StretchIndicatorItemPlacement internal constructor(
+data class StretchIndicatorItemPlacement internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : IndicatorItemPlacement {
@@ -41,7 +41,7 @@ class StretchIndicatorItemPlacement internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Spacing between indicator centers.
          * Default value: `{"type": "fixed","value":5}`.

@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, condition`.
  */
 @Generated
-class InputFilterExpression internal constructor(
+data class InputFilterExpression internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : InputFilter {
@@ -40,7 +40,7 @@ class InputFilterExpression internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * [Calculated expression](../../expressions) used as a value validity condition.
          */

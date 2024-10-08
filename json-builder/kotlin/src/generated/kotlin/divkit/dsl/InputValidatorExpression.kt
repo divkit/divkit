@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `variable, type, label_id, condition`.
  */
 @Generated
-class InputValidatorExpression internal constructor(
+data class InputValidatorExpression internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : InputValidator {
@@ -43,7 +43,7 @@ class InputValidatorExpression internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Determines whether the empty field value is valid.
          * Default value: `false`.

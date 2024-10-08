@@ -4,12 +4,12 @@ import kotlin.Any
 
 sealed interface Resolution<T>
 
-class FinalResolution<T : Any> internal constructor(
+data class FinalResolution<T : Any> internal constructor(
     val reference: ReferenceProperty<T>,
     val value: Any,
 ) : Resolution<T>
 
-class ProxyResolution<T> internal constructor(
+data class ProxyResolution<T> internal constructor(
     val reference: ReferenceProperty<T>,
     val proxy: ReferenceProperty<T>,
 ) : Resolution<T>

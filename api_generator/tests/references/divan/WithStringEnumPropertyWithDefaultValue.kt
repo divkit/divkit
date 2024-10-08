@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class WithStringEnumPropertyWithDefaultValue internal constructor(
+data class WithStringEnumPropertyWithDefaultValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Entity {
@@ -42,7 +42,7 @@ class WithStringEnumPropertyWithDefaultValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Default value: `second`.
          */

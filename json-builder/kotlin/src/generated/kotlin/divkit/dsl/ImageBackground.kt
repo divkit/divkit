@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, image_url`.
  */
 @Generated
-class ImageBackground internal constructor(
+data class ImageBackground internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Background {
@@ -46,7 +46,7 @@ class ImageBackground internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Image transparency.
          * Default value: `1.0`.

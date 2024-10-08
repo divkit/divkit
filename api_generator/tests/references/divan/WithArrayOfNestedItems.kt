@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
-class WithArrayOfNestedItems internal constructor(
+data class WithArrayOfNestedItems internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Entity {
@@ -42,7 +42,7 @@ class WithArrayOfNestedItems internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val items: Property<List<Item>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -59,7 +59,7 @@ class WithArrayOfNestedItems internal constructor(
      * Required parameters: `property, entity`.
      */
     @Generated
-    class Item internal constructor(
+    data class Item internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -73,7 +73,7 @@ class WithArrayOfNestedItems internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             val entity: Property<Entity>?,
             val property: Property<String>?,
         ) {

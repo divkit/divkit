@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class RoundedRectangleShape internal constructor(
+data class RoundedRectangleShape internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Shape {
@@ -44,7 +44,7 @@ class RoundedRectangleShape internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Fill color.
          */

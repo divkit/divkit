@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class FadeTransition internal constructor(
+data class FadeTransition internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : AppearanceTransition {
@@ -43,7 +43,7 @@ class FadeTransition internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Value of the alpha channel which the element starts appearing from or at which it finishes disappearing.
          * Default value: `0.0`.

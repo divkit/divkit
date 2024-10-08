@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, id, destination`.
  */
 @Generated
-class ActionScrollTo internal constructor(
+data class ActionScrollTo internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -42,7 +42,7 @@ class ActionScrollTo internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * If `true` (default value) scroll will be animated, else not.
          * Default value: `true`.

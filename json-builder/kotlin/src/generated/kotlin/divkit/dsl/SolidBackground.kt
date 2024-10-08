@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, color`.
  */
 @Generated
-class SolidBackground internal constructor(
+data class SolidBackground internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Background, TextRangeBackground {
@@ -40,7 +40,7 @@ class SolidBackground internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Color.
          */

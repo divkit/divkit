@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
-class AppearanceSetTransition internal constructor(
+data class AppearanceSetTransition internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : AppearanceTransition {
@@ -40,7 +40,7 @@ class AppearanceSetTransition internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * An array of animations.
          */

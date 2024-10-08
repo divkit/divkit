@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `variable_name, value, type`.
  */
 @Generated
-class ActionSetVariable internal constructor(
+data class ActionSetVariable internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -41,7 +41,7 @@ class ActionSetVariable internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val value: Property<TypedValue>?,
         val variableName: Property<String>?,
     ) {

@@ -57,9 +57,9 @@ class DivanGenerator(Generator):
 
         has_properties = len(entity.instance_properties) > 0
         if not has_properties:
-            result_declaration += f'object {entity_name}{entity.supertype_declaration} {{'
+            result_declaration += f'data object {entity_name}{entity.supertype_declaration} {{'
         else:
-            result_declaration += f'class {entity_name} internal constructor('
+            result_declaration += f'data class {entity_name} internal constructor('
             result_declaration += '    @JsonIgnore'
             result_declaration += '    val properties: Properties,'
             result_declaration += f'){entity.supertype_declaration} {{'
@@ -275,7 +275,9 @@ class DivanGenerator(Generator):
         for annotation in self.kotlin_annotations.top_level_definitions:
             extension_declaration += annotation
         object_name = self.format_value_object_name(value_name)
-        extension_declaration += f'val DivScope.{utils.snake_case(value_name)}: {object_name}'
+        # keep original name if abbreviation
+        extension_name = value_name if value_name.isupper() else utils.snake_case(value_name)
+        extension_declaration += f'val DivScope.{extension_name}: {object_name}'
         extension_declaration += utils.indented(f'get() = {object_name}', level=1, indent_width=4)
         return extension_declaration
 

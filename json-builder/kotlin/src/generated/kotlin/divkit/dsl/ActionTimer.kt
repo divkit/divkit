@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, id, action`.
  */
 @Generated
-class ActionTimer internal constructor(
+data class ActionTimer internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -41,9 +41,9 @@ class ActionTimer internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
-         * Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
+         * Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
          */
         val action: Property<Action>?,
         /**
@@ -61,7 +61,7 @@ class ActionTimer internal constructor(
     }
 
     /**
-     * Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
+     * Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
      * 
      * Possible values: [start], [stop], [pause], [resume], [cancel], [reset].
      */
@@ -70,7 +70,7 @@ class ActionTimer internal constructor(
 }
 
 /**
- * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
+ * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
  * @param id Timer identifier.
  */
 @Generated
@@ -86,7 +86,7 @@ fun DivScope.actionTimer(
 )
 
 /**
- * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
+ * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
  * @param id Timer identifier.
  */
 @Generated
@@ -100,7 +100,7 @@ fun DivScope.actionTimerProps(
 )
 
 /**
- * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
+ * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
  * @param id Timer identifier.
  */
 @Generated
@@ -114,7 +114,7 @@ fun TemplateScope.actionTimerRefs(
 )
 
 /**
- * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
+ * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
  * @param id Timer identifier.
  */
 @Generated
@@ -130,7 +130,7 @@ fun ActionTimer.override(
 )
 
 /**
- * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
+ * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
  * @param id Timer identifier.
  */
 @Generated
@@ -146,7 +146,7 @@ fun ActionTimer.defer(
 )
 
 /**
- * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does onEnd action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
+ * @param action Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>
  * @param id Timer identifier.
  */
 @Generated

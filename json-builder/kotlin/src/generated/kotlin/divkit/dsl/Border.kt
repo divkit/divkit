@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [border].
  */
 @Generated
-class Border internal constructor(
+data class Border internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -40,7 +40,7 @@ class Border internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
          */

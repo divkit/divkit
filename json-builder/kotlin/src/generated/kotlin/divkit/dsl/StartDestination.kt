@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-object StartDestination : ActionScrollDestination {
+data object StartDestination : ActionScrollDestination {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "start")
 }

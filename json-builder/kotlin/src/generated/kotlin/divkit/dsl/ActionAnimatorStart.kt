@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, animator_id`.
  */
 @Generated
-class ActionAnimatorStart internal constructor(
+data class ActionAnimatorStart internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -47,7 +47,7 @@ class ActionAnimatorStart internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * The identifier of the animator being started.
          */
@@ -69,7 +69,7 @@ class ActionAnimatorStart internal constructor(
          */
         val interpolator: Property<AnimationInterpolator>?,
         /**
-         * The number of times the animation will repeat before it finishes.
+         * The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
          */
         val repeatCount: Property<Count>?,
         /**
@@ -103,7 +103,7 @@ class ActionAnimatorStart internal constructor(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -137,7 +137,7 @@ fun DivScope.actionAnimatorStart(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -169,7 +169,7 @@ fun DivScope.actionAnimatorStartProps(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -201,7 +201,7 @@ fun TemplateScope.actionAnimatorStartRefs(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */
@@ -235,7 +235,7 @@ fun ActionAnimatorStart.override(
  * @param duration Animation duration in milliseconds.
  * @param endValue Overrides value that will be set at the end of animation.
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Overrides value that will be set at the start of animation.
  */

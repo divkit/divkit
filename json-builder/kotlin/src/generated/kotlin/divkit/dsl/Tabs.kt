@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
-class Tabs internal constructor(
+data class Tabs internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -82,7 +82,7 @@ class Tabs internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Accessibility settings.
          */
@@ -173,7 +173,7 @@ class Tabs internal constructor(
          */
         val restrictParentScroll: Property<Boolean>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -326,7 +326,7 @@ class Tabs internal constructor(
      * Required parameters: `title, div`.
      */
     @Generated
-    class Item internal constructor(
+    data class Item internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -341,7 +341,7 @@ class Tabs internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Tab contents.
              */
@@ -375,7 +375,7 @@ class Tabs internal constructor(
      * Required parameters: `image_url`.
      */
     @Generated
-    class TabTitleDelimiter internal constructor(
+    data class TabTitleDelimiter internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -390,7 +390,7 @@ class Tabs internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
              * Default value: `{"type": "fixed", "value": 12}`.
@@ -424,7 +424,7 @@ class Tabs internal constructor(
      * Can be created using the method [tabsTabTitleStyle].
      */
     @Generated
-    class TabTitleStyle internal constructor(
+    data class TabTitleStyle internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -454,7 +454,7 @@ class Tabs internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Background color of the active tab title.
              * Default value: `#FFFFDC60`.
@@ -598,7 +598,7 @@ class Tabs internal constructor(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -737,7 +737,7 @@ fun DivScope.tabs(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -874,7 +874,7 @@ fun DivScope.tabsProps(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -1011,7 +1011,7 @@ fun TemplateScope.tabsRefs(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -1150,7 +1150,7 @@ fun Tabs.override(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -1275,7 +1275,7 @@ fun Tabs.defer(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param hasSeparator A separating line between tabs and contents.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
@@ -1368,7 +1368,7 @@ fun Tabs.evaluate(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -1508,7 +1508,7 @@ fun Component<Tabs>.override(
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param selectedTab Ordinal number of the tab that will be opened by default.
@@ -1634,7 +1634,7 @@ fun Component<Tabs>.defer(
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param hasSeparator A separating line between tabs and contents.
  * @param restrictParentScroll If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.

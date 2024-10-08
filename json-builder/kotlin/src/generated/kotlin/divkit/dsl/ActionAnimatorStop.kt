@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, animator_id`.
  */
 @Generated
-class ActionAnimatorStop internal constructor(
+data class ActionAnimatorStop internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -40,7 +40,7 @@ class ActionAnimatorStop internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * The identifier of the animator being stopped.
          */

@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, track_inactive_style, track_active_style, thumb_style`.
  */
 @Generated
-class Slider internal constructor(
+data class Slider internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -85,7 +85,7 @@ class Slider internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Accessibility settings.
          */
@@ -171,7 +171,7 @@ class Slider internal constructor(
          */
         val ranges: Property<List<Range>>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -334,7 +334,7 @@ class Slider internal constructor(
      * Can be created using the method [sliderRange].
      */
     @Generated
-    class Range internal constructor(
+    data class Range internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -351,7 +351,7 @@ class Slider internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * End of section.
              */
@@ -393,7 +393,7 @@ class Slider internal constructor(
      * Required parameters: `font_size`.
      */
     @Generated
-    class TextStyle internal constructor(
+    data class TextStyle internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -411,7 +411,7 @@ class Slider internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Font size.
              */
@@ -476,7 +476,7 @@ class Slider internal constructor(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -624,7 +624,7 @@ fun DivScope.slider(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -770,7 +770,7 @@ fun DivScope.sliderProps(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -916,7 +916,7 @@ fun TemplateScope.sliderRefs(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1064,7 +1064,7 @@ fun Slider.override(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1198,7 +1198,7 @@ fun Slider.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1286,7 +1286,7 @@ fun Slider.evaluate(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1435,7 +1435,7 @@ fun Component<Slider>.override(
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
  * @param ranges Section style.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1570,7 +1570,7 @@ fun Component<Slider>.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */

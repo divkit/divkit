@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `log_id`.
  */
 @Generated
-class DisappearAction internal constructor(
+data class DisappearAction internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -48,7 +48,7 @@ class DisappearAction internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
          * Default value: `800`.

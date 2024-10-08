@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class RadialGradientRelativeCenter internal constructor(
+data class RadialGradientRelativeCenter internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : RadialGradientCenter {
@@ -40,7 +40,7 @@ class RadialGradientRelativeCenter internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Coordinate value in the range "0...1".
          */

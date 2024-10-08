@@ -27,7 +27,7 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
-class WithArrayOfExpressions internal constructor(
+data class WithArrayOfExpressions internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Entity {
@@ -42,7 +42,7 @@ class WithArrayOfExpressions internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val items: Property<List<ArrayElement<String>>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

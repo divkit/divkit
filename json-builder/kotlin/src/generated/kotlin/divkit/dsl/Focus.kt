@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Can be created using the method [focus].
  */
 @Generated
-class Focus internal constructor(
+data class Focus internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -40,7 +40,7 @@ class Focus internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Background of an element when it is in focus. It can contain multiple layers.
          */
@@ -80,7 +80,7 @@ class Focus internal constructor(
      * Can be created using the method [focusNextFocusIds].
      */
     @Generated
-    class NextFocusIds internal constructor(
+    data class NextFocusIds internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -97,7 +97,7 @@ class Focus internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             val down: Property<String>?,
             val forward: Property<String>?,
             val left: Property<String>?,

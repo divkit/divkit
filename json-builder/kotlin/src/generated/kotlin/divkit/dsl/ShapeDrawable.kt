@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, shape, color`.
  */
 @Generated
-class ShapeDrawable internal constructor(
+data class ShapeDrawable internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Drawable {
@@ -42,7 +42,7 @@ class ShapeDrawable internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Fill color.
          */

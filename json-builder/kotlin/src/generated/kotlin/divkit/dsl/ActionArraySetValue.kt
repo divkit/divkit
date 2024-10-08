@@ -18,14 +18,14 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Sets value in the array
+ * Sets value in the array.
  * 
  * Can be created using the method [actionArraySetValue].
  * 
  * Required parameters: `variable_name, value, type, index`.
  */
 @Generated
-class ActionArraySetValue internal constructor(
+data class ActionArraySetValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -42,7 +42,7 @@ class ActionArraySetValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val index: Property<Int>?,
         val value: Property<TypedValue>?,
         val variableName: Property<String>?,

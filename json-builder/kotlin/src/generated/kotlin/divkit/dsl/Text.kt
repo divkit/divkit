@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, text`.
  */
 @Generated
-class Text internal constructor(
+data class Text internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
@@ -102,7 +102,7 @@ class Text internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Text.
          */
@@ -262,7 +262,7 @@ class Text internal constructor(
          */
         val ranges: Property<List<Range>>?,
         /**
-         * Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -459,7 +459,7 @@ class Text internal constructor(
      * Required parameters: `text`.
      */
     @Generated
-    class Ellipsis internal constructor(
+    data class Ellipsis internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -475,7 +475,7 @@ class Text internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Actions when clicking on a crop marker.
              */
@@ -514,7 +514,7 @@ class Text internal constructor(
      * Required parameters: `url, start`.
      */
     @Generated
-    class Image internal constructor(
+    data class Image internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -535,7 +535,7 @@ class Text internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             val accessibility: Property<Accessibility>?,
             /**
              * Vertical text image alignment within a string.
@@ -595,7 +595,7 @@ class Text internal constructor(
          * Can be created using the method [textImageAccessibility].
          */
         @Generated
-        class Accessibility internal constructor(
+        data class Accessibility internal constructor(
             @JsonIgnore
             val properties: Properties,
         ) {
@@ -609,7 +609,7 @@ class Text internal constructor(
                 )
             )
 
-            class Properties internal constructor(
+            data class Properties internal constructor(
                 /**
                  * Element description. It is used as the main description for screen reading applications.
                  */
@@ -645,11 +645,9 @@ class Text internal constructor(
      * Additional parameters of the character range.
      * 
      * Can be created using the method [textRange].
-     * 
-     * Required parameters: `start, end`.
      */
     @Generated
-    class Range internal constructor(
+    data class Range internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -680,7 +678,7 @@ class Text internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Action when clicking on text.
              */
@@ -698,7 +696,7 @@ class Text internal constructor(
              */
             val border: Property<TextRangeBorder>?,
             /**
-             * Ordinal number of the last character to be included in the range.
+             * Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
              */
             val end: Property<Int>?,
             /**
@@ -736,6 +734,7 @@ class Text internal constructor(
             val lineHeight: Property<Int>?,
             /**
              * Ordinal number of a character which the range begins from. The first character has a number `0`.
+             * Default value: `0`.
              */
             val start: Property<Int>?,
             /**
@@ -826,7 +825,7 @@ class Text internal constructor(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1024,7 +1023,7 @@ fun DivScope.text(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1220,7 +1219,7 @@ fun DivScope.textProps(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1416,7 +1415,7 @@ fun TemplateScope.textRefs(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1614,7 +1613,7 @@ fun Text.override(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1791,7 +1790,7 @@ fun Text.defer(
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param strike Strikethrough.
@@ -1940,7 +1939,7 @@ fun Text.evaluate(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -2139,7 +2138,7 @@ fun Component<Text>.override(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -2317,7 +2316,7 @@ fun Component<Text>.defer(
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
- * @param reuseId Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md)
+ * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param strike Strikethrough.
@@ -2778,7 +2777,7 @@ fun Text.Image.asList() = listOf(this)
  * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2845,7 +2844,7 @@ fun DivScope.textRange(
  * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2910,7 +2909,7 @@ fun DivScope.textRangeProps(
  * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2975,7 +2974,7 @@ fun TemplateScope.textRangeRefs(
  * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3042,7 +3041,7 @@ fun Text.Range.override(
  * @param alignmentVertical Vertical text range alignment within a string.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3106,7 +3105,7 @@ fun Text.Range.defer(
 
 /**
  * @param alignmentVertical Vertical text range alignment within a string.
- * @param end Ordinal number of the last character to be included in the range.
+ * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.

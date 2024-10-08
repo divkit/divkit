@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class RadialGradientRelativeRadius internal constructor(
+data class RadialGradientRelativeRadius internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : RadialGradientRadius {
@@ -40,7 +40,7 @@ class RadialGradientRelativeRadius internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Type of the relative radius of the gradient transition.
          */

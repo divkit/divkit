@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `variable_name, value, type`.
  */
 @Generated
-class ActionArrayInsertValue internal constructor(
+data class ActionArrayInsertValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -42,7 +42,7 @@ class ActionArrayInsertValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         val index: Property<Int>?,
         val value: Property<TypedValue>?,
         val variableName: Property<String>?,

@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, id, action`.
  */
 @Generated
-class ActionVideo internal constructor(
+data class ActionVideo internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -41,7 +41,7 @@ class ActionVideo internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
          */

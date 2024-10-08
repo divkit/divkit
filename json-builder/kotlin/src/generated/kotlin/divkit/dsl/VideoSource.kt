@@ -23,7 +23,7 @@ import kotlin.collections.Map
  * Required parameters: `url, type, mime_type`.
  */
 @Generated
-class VideoSource internal constructor(
+data class VideoSource internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -41,7 +41,7 @@ class VideoSource internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
          */
@@ -78,7 +78,7 @@ class VideoSource internal constructor(
      * Required parameters: `width, type, height`.
      */
     @Generated
-    class Resolution internal constructor(
+    data class Resolution internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -94,7 +94,7 @@ class VideoSource internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * Media file frame height.
              */

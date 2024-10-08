@@ -106,6 +106,34 @@ object RingEnumValue : EnumValue("ring"),
     ActionScrollBy.Overflow
 
 @Generated
+object GETEnumValue : EnumValue("GET"),
+    ActionSubmit.Request.Method
+
+@Generated
+object POSTEnumValue : EnumValue("POST"),
+    ActionSubmit.Request.Method
+
+@Generated
+object PUTEnumValue : EnumValue("PUT"),
+    ActionSubmit.Request.Method
+
+@Generated
+object PATCHEnumValue : EnumValue("PATCH"),
+    ActionSubmit.Request.Method
+
+@Generated
+object DELETEEnumValue : EnumValue("DELETE"),
+    ActionSubmit.Request.Method
+
+@Generated
+object HEADEnumValue : EnumValue("HEAD"),
+    ActionSubmit.Request.Method
+
+@Generated
+object OPTIONSEnumValue : EnumValue("OPTIONS"),
+    ActionSubmit.Request.Method
+
+@Generated
 object StartEnumValue : EnumValue("start"),
     ActionTimer.Action,
     ActionVideo.Action,
@@ -608,6 +636,34 @@ val DivScope.clamp: ClampEnumValue
 @Generated
 val DivScope.ring: RingEnumValue
     get() = RingEnumValue
+
+@Generated
+val DivScope.GET: GETEnumValue
+    get() = GETEnumValue
+
+@Generated
+val DivScope.POST: POSTEnumValue
+    get() = POSTEnumValue
+
+@Generated
+val DivScope.PUT: PUTEnumValue
+    get() = PUTEnumValue
+
+@Generated
+val DivScope.PATCH: PATCHEnumValue
+    get() = PATCHEnumValue
+
+@Generated
+val DivScope.DELETE: DELETEEnumValue
+    get() = DELETEEnumValue
+
+@Generated
+val DivScope.HEAD: HEADEnumValue
+    get() = HEADEnumValue
+
+@Generated
+val DivScope.OPTIONS: OPTIONSEnumValue
+    get() = OPTIONSEnumValue
 
 @Generated
 val DivScope.start: StartEnumValue

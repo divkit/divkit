@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `id`.
  */
 @Generated
-class Timer internal constructor(
+data class Timer internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -43,7 +43,7 @@ class Timer internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Timer duration in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).
          * Default value: `0`.

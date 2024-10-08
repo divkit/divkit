@@ -25,14 +25,14 @@ import kotlin.collections.Map
  * Required parameters: `changes`.
  */
 @Generated
-class Patch internal constructor(
+data class Patch internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Element changes.
          */
@@ -76,7 +76,7 @@ class Patch internal constructor(
      * Required parameters: `id`.
      */
     @Generated
-    class Change internal constructor(
+    data class Change internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -90,7 +90,7 @@ class Patch internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * ID of an element to be replaced or removed.
              */

@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, state_id`.
  */
 @Generated
-class ActionSetState internal constructor(
+data class ActionSetState internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -41,9 +41,9 @@ class ActionSetState internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
-         * The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>
+         * The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>
          */
         val stateId: Property<String>?,
         /**
@@ -63,7 +63,7 @@ class ActionSetState internal constructor(
 }
 
 /**
- * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>
+ * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>
  * @param temporary Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>
  */
 @Generated
@@ -79,7 +79,7 @@ fun DivScope.actionSetState(
 )
 
 /**
- * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>
+ * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>
  * @param temporary Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>
  */
 @Generated
@@ -93,7 +93,7 @@ fun DivScope.actionSetStateProps(
 )
 
 /**
- * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>
+ * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>
  * @param temporary Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>
  */
 @Generated
@@ -107,7 +107,7 @@ fun TemplateScope.actionSetStateRefs(
 )
 
 /**
- * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>
+ * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>
  * @param temporary Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>
  */
 @Generated
@@ -123,7 +123,7 @@ fun ActionSetState.override(
 )
 
 /**
- * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>
+ * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>
  * @param temporary Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>
  */
 @Generated
@@ -139,7 +139,7 @@ fun ActionSetState.defer(
 )
 
 /**
- * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in data;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the state object in `state`.</li>
+ * @param stateId The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>
  * @param temporary Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>
  */
 @Generated

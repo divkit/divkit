@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, id`.
  */
 @Generated
-class ActionShowTooltip internal constructor(
+data class ActionShowTooltip internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -41,7 +41,7 @@ class ActionShowTooltip internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Tooltip identifier.
          */

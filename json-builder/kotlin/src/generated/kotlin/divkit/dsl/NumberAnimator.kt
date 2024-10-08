@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `variable_name, type, id, end_value, duration`.
  */
 @Generated
-class NumberAnimator internal constructor(
+data class NumberAnimator internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Animator {
@@ -50,7 +50,7 @@ class NumberAnimator internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received
          */
@@ -82,7 +82,7 @@ class NumberAnimator internal constructor(
          */
         val interpolator: Property<AnimationInterpolator>?,
         /**
-         * The number of times the animation will repeat before it finishes.
+         * The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
          * Default value: `{"type": "fixed", "value": 1}`.
          */
         val repeatCount: Property<Count>?,
@@ -127,7 +127,7 @@ class NumberAnimator internal constructor(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -170,7 +170,7 @@ fun DivScope.numberAnimator(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -211,7 +211,7 @@ fun DivScope.numberAnimatorProps(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -252,7 +252,7 @@ fun TemplateScope.numberAnimatorRefs(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.
@@ -295,7 +295,7 @@ fun NumberAnimator.override(
  * @param endValue Value that will be set at the end of animation.
  * @param id Animator identificator
  * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes.
+ * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
  * @param startDelay Animation start delay in milliseconds.
  * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
  * @param variableName Name of the variable being animated.

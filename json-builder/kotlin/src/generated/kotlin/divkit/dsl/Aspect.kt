@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `ratio`.
  */
 @Generated
-class Aspect internal constructor(
+data class Aspect internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -38,7 +38,7 @@ class Aspect internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * `height = width / ratio`.
          */

@@ -21,7 +21,7 @@ import kotlin.collections.Map
  * Can be created using the method [layoutProvider].
  */
 @Generated
-class LayoutProvider internal constructor(
+data class LayoutProvider internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -35,7 +35,7 @@ class LayoutProvider internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Variable name to store element height.
          */

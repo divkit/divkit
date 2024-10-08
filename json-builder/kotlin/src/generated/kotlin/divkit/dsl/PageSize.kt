@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, page_width`.
  */
 @Generated
-class PageSize internal constructor(
+data class PageSize internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : PagerLayoutMode {
@@ -40,7 +40,7 @@ class PageSize internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Page width as a percentage of the parent element width.
          */

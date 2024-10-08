@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type`.
  */
 @Generated
-class PercentageSize internal constructor(
+data class PercentageSize internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -40,7 +40,7 @@ class PercentageSize internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Element size value.
          */

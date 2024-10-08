@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Can be created using the method [withDefault].
  */
 @Generated
-object WithDefault : EnumWithDefaultType {
+data object WithDefault : EnumWithDefaultType {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "default")
 }

@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `value, type, name, lifetime`.
  */
 @Generated
-class ActionSetStoredValue internal constructor(
+data class ActionSetStoredValue internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
@@ -42,7 +42,7 @@ class ActionSetStoredValue internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Storing time in seconds.
          */

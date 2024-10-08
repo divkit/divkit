@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `name`.
  */
 @Generated
-class Animation internal constructor(
+data class Animation internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -45,7 +45,7 @@ class Animation internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Animation duration in milliseconds.
          * Default value: `300`.

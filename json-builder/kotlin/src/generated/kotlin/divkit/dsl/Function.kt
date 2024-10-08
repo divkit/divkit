@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `return_type, name, body, arguments`.
  */
 @Generated
-class Function internal constructor(
+data class Function internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -41,7 +41,7 @@ class Function internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Function argument.
          */

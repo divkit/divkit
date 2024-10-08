@@ -7,15 +7,15 @@ import kotlin.collections.MutableMap
 
 sealed interface Property<T>
 
-class ReferenceProperty<T> internal constructor(
+data class ReferenceProperty<T> internal constructor(
     val name: String,
 ) : Property<T>
 
-class LiteralProperty<T> internal constructor(
+data class LiteralProperty<T> internal constructor(
     val value: T,
 ) : Property<T>
 
-class ExpressionProperty<T> internal constructor(
+data class ExpressionProperty<T> internal constructor(
     val expression: String,
 ) : Property<T>
 

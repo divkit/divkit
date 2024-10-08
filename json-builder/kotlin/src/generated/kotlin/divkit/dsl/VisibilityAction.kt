@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `log_id`.
  */
 @Generated
-class VisibilityAction internal constructor(
+data class VisibilityAction internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -48,7 +48,7 @@ class VisibilityAction internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Callbacks that are called after [data loading](../../interaction#loading-data).
          */

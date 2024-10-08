@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-class DefaultIndicatorItemPlacement internal constructor(
+data class DefaultIndicatorItemPlacement internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : IndicatorItemPlacement {
@@ -40,7 +40,7 @@ class DefaultIndicatorItemPlacement internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Spacing between indicator centers.
          * Default value: `{"type": "fixed","value":15}`.

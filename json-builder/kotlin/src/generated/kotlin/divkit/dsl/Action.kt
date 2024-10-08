@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `log_id`.
  */
 @Generated
-class Action internal constructor(
+data class Action internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
@@ -48,7 +48,7 @@ class Action internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * Callbacks that are called after [data loading](../../interaction#loading-data).
          */
@@ -124,7 +124,7 @@ class Action internal constructor(
      * Required parameters: `text`.
      */
     @Generated
-    class MenuItem internal constructor(
+    data class MenuItem internal constructor(
         @JsonIgnore
         val properties: Properties,
     ) {
@@ -139,7 +139,7 @@ class Action internal constructor(
             )
         )
 
-        class Properties internal constructor(
+        data class Properties internal constructor(
             /**
              * One action when clicking on a menu item. Not used if the `actions` parameter is set.
              */

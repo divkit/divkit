@@ -25,7 +25,7 @@ import kotlin.collections.Map
  * Required parameters: `type, pattern`.
  */
 @Generated
-class InputFilterRegex internal constructor(
+data class InputFilterRegex internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : InputFilter {
@@ -40,7 +40,7 @@ class InputFilterRegex internal constructor(
         )
     )
 
-    class Properties internal constructor(
+    data class Properties internal constructor(
         /**
          * A regular expression (pattern) that the input value must match.
          */
