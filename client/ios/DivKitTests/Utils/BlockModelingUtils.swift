@@ -1,15 +1,19 @@
 @testable import DivKit
-@testable import LayoutKit
-
 import Foundation
-
+@testable import LayoutKit
 import VGSL
+import XCTest
 
 func makeBlock(
   _ div: Div,
-  context: DivBlockModelingContext = DivBlockModelingContext()
+  context: DivBlockModelingContext = DivBlockModelingContext(),
+  ignoreErrors: Bool = false
 ) -> StateBlock {
-  try! divData(div).makeBlock(context: context) as! StateBlock
+  let block = try! divData(div).makeBlock(context: context) as! StateBlock
+  if !ignoreErrors, let error = context.errorsStorage.errors.first {
+    XCTFail(error.message)
+  }
+  return block
 }
 
 func separatorBlock() -> Block {
@@ -18,9 +22,12 @@ func separatorBlock() -> Block {
   )
 }
 
-func textBlock(text: String) -> Block {
+func textBlock(
+  widthTrait: LayoutTrait = .resizable,
+  text: String
+) -> Block {
   TextBlock(
-    widthTrait: .resizable,
+    widthTrait: widthTrait,
     text: text.withTypo(),
     verticalAlignment: .leading,
     accessibilityElement: nil

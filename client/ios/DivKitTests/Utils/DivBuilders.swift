@@ -481,6 +481,10 @@ func fixedSize(_ value: Int) -> DivSize {
   .divFixedSize(DivFixedSize(value: .value(value)))
 }
 
+func matchParentSize() -> DivSize {
+  .divMatchParentSize(DivMatchParentSize())
+}
+
 func wrapContentSize() -> DivSize {
   .divWrapContentSize(DivWrapContentSize())
 }

@@ -156,7 +156,9 @@ public final class ContainerBlock: BlockWithLayout {
     self.clipContent = clipContent
     self.accessibilityElement = accessibilityElement
 
-    try validateLayoutTraits()
+    if !children.isEmpty {
+      try validateLayoutTraits()
+    }
   }
 
   public func ascent(forWidth width: CGFloat) -> CGFloat? {
