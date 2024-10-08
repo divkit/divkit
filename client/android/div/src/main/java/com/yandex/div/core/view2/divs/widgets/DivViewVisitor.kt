@@ -29,40 +29,40 @@ internal abstract class DivViewVisitor {
 internal fun DivViewVisitor.visitViewTree(view: View) {
     when (view) {
         is DivWrapLayout -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivFrameLayout -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivGridLayout -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivLinearLayout -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivPagerView -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivRecyclerView -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivStateLayout -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivTabsLayout -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivCustomWrapper -> {
-            visit(view)
             view.visitChild(this::visitViewTree)
+            visit(view)
         }
         is DivSeparatorView -> visit(view)
         is DivGifImageView -> visit(view)
@@ -73,10 +73,10 @@ internal fun DivViewVisitor.visitViewTree(view: View) {
         is DivSelectView -> visit(view)
         is DivVideoView -> visit(view)
         else -> {
-            visit(view)
             if (view is ViewGroup) {
                 view.visitChild(this::visitViewTree)
             }
+            visit(view)
         }
     }
 }
