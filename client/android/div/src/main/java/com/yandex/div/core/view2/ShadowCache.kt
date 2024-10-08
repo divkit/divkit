@@ -128,6 +128,7 @@ internal object ShadowCache {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun Bitmap.blur(context: Context, out: Bitmap, blur: Float) {
         val renderScript = RenderScript.create(context)
         val scriptIntrinsicBlur = ScriptIntrinsicBlur
@@ -145,6 +146,7 @@ internal object ShadowCache {
         outAllocation.copyTo(out)
         outAllocation.destroy()
         inAllocation.destroy()
+        scriptIntrinsicBlur.destroy()
     }
 
     private fun Bitmap.toNinePatch() =

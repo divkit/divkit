@@ -49,7 +49,7 @@ internal class BitmapEffectHelper @Inject constructor(
 
         val input = Allocation.createFromBitmap(renderScript, result)
         val output = Allocation.createTyped(renderScript, input.type)
-        ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript)).apply {
+        val blur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript)).apply {
             setRadius(coercedRadius.toFloat())
             setInput(input)
             forEach(output)
@@ -57,6 +57,7 @@ internal class BitmapEffectHelper @Inject constructor(
         output.copyTo(result)
         input.destroy()
         output.destroy()
+        blur.destroy()
         return result
     }
 
