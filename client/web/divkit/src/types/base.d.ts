@@ -4,7 +4,7 @@ import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
 import type { Dimension } from './sizes';
-import type { Action, DisappearAction, DivVariable, VisibilityAction } from '../../typings/common';
+import type { Action, DisappearAction, DivVariable, VariableTrigger, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 import type { Animation } from './animation';
 
@@ -143,4 +143,5 @@ export interface DivBaseData {
     layout_provider?: DivLayoutProvider;
     transform?: Transform;
     variables?: DivVariable[];
+    variable_triggers?: VariableTrigger[];
 }

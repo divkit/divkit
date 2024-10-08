@@ -181,6 +181,7 @@
     let hasCustomFocus = false;
 
     let prevExtensionsVal: MaybeMissing<Extension>[] | undefined = undefined;
+    let prevTriggersUnsubscribe: (() => void) | undefined = undefined;
 
     let registred: {
         destroy(): void;
@@ -209,6 +210,12 @@
         if (currentNode) {
             useAction(currentNode);
         }
+
+        prevTriggersUnsubscribe?.();
+        prevTriggersUnsubscribe = rootCtx.processVariableTriggers(
+            componentContext,
+            componentContext.json.variable_triggers
+        );
     }
 
     // If origJson is same, than the component itself is the same
@@ -1036,6 +1043,8 @@
         componentContext.json.tooltips?.forEach(tooltip => {
             rootCtx.unregisterTooltip(tooltip);
         });
+
+        prevTriggersUnsubscribe?.();
 
         unmountExtensions();
     });

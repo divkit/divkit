@@ -42,7 +42,8 @@
         FetchInit,
         DivVariable,
         Direction,
-        ActionMenuItem
+        ActionMenuItem,
+        VariableTrigger
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -72,6 +73,7 @@
     import { Truthy } from '../utils/truthy';
     import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, VariableType } from '../expressions/variable';
     import {
+        cleanControllerStore,
         getControllerStore,
         getControllerVars,
         GlobalVariablesController
@@ -89,7 +91,7 @@
     export let json: Partial<DivJson> = {};
     export let platform: Platform = 'auto';
     export let theme: Theme = 'system';
-    export let globalVariablesController: GlobalVariablesController = new GlobalVariablesController();
+    export let globalVariablesController: GlobalVariablesController | undefined = undefined;
     export let mix = '';
     export let customization: Customization = {};
     export let builtinProtocols: string[] = ['http', 'https', 'tel', 'mailto', 'intent'];
@@ -199,10 +201,12 @@
         stateChange: false
     };
 
+    const variablesController = globalVariablesController || new GlobalVariablesController();
+
     // Will notify about new global variables
-    const globalVariablesStore = getControllerStore(globalVariablesController);
+    const globalVariablesStore = getControllerStore(variablesController);
     // Global variables only
-    const globalVariables = getControllerVars(globalVariablesController);
+    const globalVariables = getControllerVars(variablesController);
     // Local variables only
     const localVariables = new Map<string, Variable>();
     // Local and global variables combined, with local in precedence
@@ -1034,6 +1038,140 @@
         onCustomAction?.(action);
     }
 
+    function processVariableTriggers(
+        componentContext: ComponentContext | undefined,
+        variableTriggers: MaybeMissing<VariableTrigger>[] | undefined
+    ): (() => void) | undefined {
+        const log = componentContext?.logError || logError;
+
+        if (!Array.isArray(variableTriggers) || !variableTriggers.length) {
+            return;
+        }
+        if (!process.env.ENABLE_EXPRESSIONS) {
+            log(wrapError(new Error('variable_trigger is not supported')));
+            return;
+        }
+
+        const list: (() => void)[] = [];
+
+        variableTriggers.forEach(trigger => {
+            let prevConditionResult = false;
+
+            if (typeof trigger.condition !== 'string') {
+                log(wrapError(new Error('variable_trigger has a condition that is not a string'), {
+                    additional: {
+                        condition: trigger.condition
+                    }
+                }));
+                return;
+            }
+
+            if (!Array.isArray(trigger.actions)) {
+                log(wrapError(new Error('variable_trigger has no actions'), {
+                    additional: {
+                        condition: trigger.condition
+                    }
+                }));
+                return;
+            }
+
+            const mode = trigger.mode || 'on_condition';
+
+            if (mode !== 'on_variable' && mode !== 'on_condition') {
+                log(wrapError(new Error('variable_trigger has an unsupported mode'), {
+                    additional: {
+                        mode
+                    }
+                }));
+                return;
+            }
+
+            try {
+                const ast = parse(trigger.condition, {
+                    startRule: 'JsonStringContents'
+                });
+                const exprVars = gatherVarsFromAst(ast);
+                if (!exprVars.length) {
+                    log(wrapError(new Error('variable_trigger must have variables in the condition'), {
+                        additional: {
+                            condition: trigger.condition
+                        }
+                    }));
+                    return;
+                }
+
+                const stores = exprVars.map(name =>
+                    componentContext?.getVariable(name) ||
+                        variables.get(name) ||
+                        awaitVariableChanges(name)
+                );
+
+                const unsubscribe = derived(stores, () => {
+                    const res = componentContext ?
+                        componentContext.evalExpression(store, ast, {
+                            weekStartDay
+                        }) :
+                        evalExpression(variables, store, ast, {
+                            weekStartDay
+                        });
+
+                    res.warnings.forEach(logError);
+
+                    return res.result;
+                }).subscribe(async conditionResult => {
+                    if (conditionResult.type === 'error') {
+                        log(wrapError(new Error('variable_trigger condition execution error'), {
+                            additional: {
+                                message: conditionResult.value
+                            }
+                        }));
+                        return;
+                    }
+
+                    if (
+                        // if condition is truthy
+                        conditionResult.value &&
+                        // and trigger mode matches
+                        (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
+                    ) {
+                        prevConditionResult = Boolean(conditionResult.value);
+                        const actions = trigger.actions.map(action =>
+                            componentContext ?
+                                componentContext.getJsonWithVars(action) :
+                                getJsonWithVars(logError, action)
+                        );
+
+                        if (componentContext) {
+                            await componentContext.execAnyActions(actions, {
+                                logType: 'trigger'
+                            });
+                        } else {
+                            await execAnyActions(actions, {
+                                logType: 'trigger'
+                            });
+                        }
+                    } else {
+                        prevConditionResult = Boolean(conditionResult.value);
+                    }
+                });
+
+                list.push(unsubscribe);
+            } catch (err) {
+                log(wrapError(new Error('Unable to parse variable_trigger'), {
+                    additional: {
+                        condition: trigger.condition
+                    }
+                }));
+            }
+        });
+
+        return () => {
+            list.forEach(cb => {
+                cb();
+            });
+        };
+    }
+
     function isRunning(type: Running): boolean {
         return running[type];
     }
@@ -1227,7 +1365,8 @@
                 return execAnyActions(actions, {
                     componentContext: res,
                     processUrls: opts.processUrls,
-                    node: opts.node
+                    node: opts.node,
+                    logType: opts.logType
                 });
             },
             getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
@@ -1245,6 +1384,9 @@
                     mergeVars(res.variables, additionalVars),
                     keepComplex
                 );
+            },
+            evalExpression(store, expr, opts) {
+                return evalExpression(mergeVars(variables, res.variables), store, expr, opts);
             },
             produceChildContext(div, opts = {}) {
                 const componentContext = produceComponentContext(res);
@@ -1348,6 +1490,7 @@
         genClass,
         execAction: execActionInternal,
         execCustomAction,
+        processVariableTriggers,
         isRunning,
         setRunning,
         registerInstance,
@@ -1603,103 +1746,7 @@
     });
 
     const initVariableTriggers = () => {
-        const variableTriggers = json?.card?.variable_triggers;
-        if (Array.isArray(variableTriggers)) {
-            if (process.env.ENABLE_EXPRESSIONS) {
-                variableTriggers.forEach(trigger => {
-                    let prevConditionResult = false;
-
-                    if (typeof trigger.condition !== 'string') {
-                        logError(wrapError(new Error('variable_trigger has a condition that is not a string'), {
-                            additional: {
-                                condition: trigger.condition
-                            }
-                        }));
-                        return;
-                    }
-
-                    if (!Array.isArray(trigger.actions)) {
-                        logError(wrapError(new Error('variable_trigger has no actions'), {
-                            additional: {
-                                condition: trigger.condition
-                            }
-                        }));
-                        return;
-                    }
-
-                    const mode = trigger.mode || 'on_condition';
-
-                    if (mode !== 'on_variable' && mode !== 'on_condition') {
-                        logError(wrapError(new Error('variable_trigger has an unsupported mode'), {
-                            additional: {
-                                mode
-                            }
-                        }));
-                        return;
-                    }
-
-                    try {
-                        const ast = parse(trigger.condition, {
-                            startRule: 'JsonStringContents'
-                        });
-                        const exprVars = gatherVarsFromAst(ast);
-                        if (!exprVars.length) {
-                            logError(wrapError(new Error('variable_trigger must have variables in the condition'), {
-                                additional: {
-                                    condition: trigger.condition
-                                }
-                            }));
-                            return;
-                        }
-
-                        const stores = exprVars.map(name => variables.get(name) || awaitVariableChanges(name));
-
-                        derived(stores, () => {
-                            const res = evalExpression(variables, store, ast, {
-                                weekStartDay
-                            });
-
-                            res.warnings.forEach(logError);
-
-                            return res.result;
-                        }).subscribe(async conditionResult => {
-                            if (conditionResult.type === 'error') {
-                                logError(wrapError(new Error('variable_trigger condition execution error'), {
-                                    additional: {
-                                        message: conditionResult.value
-                                    }
-                                }));
-                                return;
-                            }
-
-                            if (
-                                // if condition is truthy
-                                conditionResult.value &&
-                                // and trigger mode matches
-                                (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
-                            ) {
-                                prevConditionResult = Boolean(conditionResult.value);
-                                const actions = trigger.actions.map(action => getJsonWithVars(logError, action));
-
-                                await execAnyActions(actions, {
-                                    logType: 'trigger'
-                                });
-                            } else {
-                                prevConditionResult = Boolean(conditionResult.value);
-                            }
-                        });
-                    } catch (err) {
-                        logError(wrapError(new Error('Unable to parse variable_trigger'), {
-                            additional: {
-                                condition: trigger.condition
-                            }
-                        }));
-                    }
-                });
-            } else {
-                logError(wrapError(new Error('variable_trigger is not supported')));
-            }
-        }
+        processVariableTriggers(undefined, json?.card?.variable_triggers);
     };
 
     const timers = json?.card?.timers;
@@ -1792,6 +1839,10 @@
         timeouts.forEach(timeout => {
             clearTimeout(timeout);
         });
+
+        if (!globalVariablesController) {
+            cleanControllerStore(variablesController);
+        }
     });
 </script>
 

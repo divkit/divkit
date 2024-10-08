@@ -1,5 +1,5 @@
 import type { Readable, Writable } from 'svelte/store';
-import type { Action, Direction, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VisibilityAction } from '../../typings/common';
+import type { Action, Direction, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VariableTrigger, VisibilityAction } from '../../typings/common';
 import type { DivBaseData, Tooltip } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable } from '../expressions/variable';
@@ -28,6 +28,10 @@ export interface RootCtxValue {
     genClass(key: string): string;
     execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
     execCustomAction(action: (Action | VisibilityAction | DisappearAction) & { url: string }): void;
+    processVariableTriggers(
+        componentContext: ComponentContext | undefined,
+        variableTriggers: MaybeMissing<VariableTrigger>[] | undefined
+    ): (() => void) | undefined;
     isRunning(type: Running): boolean;
     setRunning(type: Running, val: boolean): void;
     registerInstance<T>(id: string, block: T): void;

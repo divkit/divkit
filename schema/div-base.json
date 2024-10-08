@@ -241,7 +241,8 @@
       "$description": "translations.json#/div_base_variable_triggers",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     "transform": {

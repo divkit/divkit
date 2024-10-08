@@ -4,6 +4,9 @@ import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
 import type { WrappedError } from '../utils/wrapError';
 import type { DivBaseData, Tooltip } from './base';
+import type { Store } from '../../typings/store';
+import type { evalExpression } from '../expressions/eval';
+import type { Node } from '../expressions/ast';
 
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     path: string[];
@@ -24,6 +27,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
         opts?: {
             processUrls?: boolean;
             node?: HTMLElement;
+            logType?: string;
         }
     ): Promise<void>;
     getDerivedFromVars<T>(
@@ -36,6 +40,9 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
         additionalVars?: Map<string, Variable>,
         keepComplex?: boolean
     ): MaybeMissing<T>;
+    evalExpression(store: Store | undefined, expr: Node, opts?: {
+        weekStartDay?: number;
+    }): ReturnType<typeof evalExpression>;
     produceChildContext(div: MaybeMissing<DivBaseData>, opts?: {
         path?: string | number | undefined;
         isRootState?: boolean;
