@@ -75,6 +75,13 @@ public final class DefaultTooltipManager: TooltipManager {
   ) {
     self.handleAction = handleAction
     self.shownTooltips = shownTooltips
+
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(orientationDidChange),
+      name: UIDevice.orientationDidChangeNotification,
+      object: nil
+    )
   }
 
   public func showTooltip(info: TooltipInfo) {
@@ -120,6 +127,18 @@ public final class DefaultTooltipManager: TooltipManager {
   public func reset() {
     showingTooltips = [:]
     tooltipWindow = nil
+  }
+  
+  deinit {
+    NotificationCenter.default.removeObserver(
+      self,
+      name: UIDevice.orientationDidChangeNotification,
+      object: nil
+    )
+  }
+
+  @objc func orientationDidChange(_ notification: Notification) {
+    reset()
   }
 
   private func setupTooltipWindow() {
