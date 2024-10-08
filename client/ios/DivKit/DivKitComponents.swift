@@ -47,6 +47,7 @@ public final class DivKitComponents {
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
   private let variableTracker = DivVariableTracker()
+  private let idToPath = IdToPath()
 
   /// You can create an instance of `DivKitComponents` with various optional parameters that allow
   /// you to customize the behavior and functionality of `DivKit` to suit your specific needs.
@@ -176,12 +177,14 @@ public final class DivKitComponents {
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: self.tooltipManager,
+      logger: EmptyDivActionLogger(),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },
       urlHandler: urlHandler,
       persistentValuesStorage: persistentValuesStorage,
-      reporter: reporter
+      reporter: reporter,
+      idToPath: idToPath
     )
 
     triggersStorage = DivTriggersStorage(
@@ -225,6 +228,7 @@ public final class DivKitComponents {
     visibilityCounter.reset()
     timerStorage.reset()
     tooltipManager.reset()
+    idToPath.reset()
   }
 
   public func reset(cardId: DivCardID) {
@@ -236,6 +240,7 @@ public final class DivKitComponents {
     functionsStorage.reset(cardId: cardId)
     visibilityCounter.reset(cardId: cardId)
     timerStorage.reset(cardId: cardId)
+    idToPath.reset(cardId: cardId)
   }
 
   /// When using DivView, use DivData.resolve to avoid adding variables twice.
@@ -297,31 +302,43 @@ public final class DivKitComponents {
     debugParams: DebugParams = DebugParams(),
     parentScrollView: ScrollView? = nil
   ) -> DivBlockModelingContext {
-    variableTracker.onModelingStarted(id: DivViewId(cardId: cardId, additionalId: additionalId))
+    let viewId = DivViewId(cardId: cardId, additionalId: additionalId)
+    variableTracker.onModelingStarted(id: viewId)
     return DivBlockModelingContext(
-      cardId: cardId,
-      additionalId: additionalId,
-      stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
+      viewId: viewId,
+      cardLogId: nil,
+      parentPath: nil,
+      parentDivStatePath: nil,
+      stateManager: stateManagement
+        .getStateManagerForCard(cardId: cardId),
       actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,
-      imageHolderFactory: imageHolderFactory.withCache(cachedImageHolders),
+      imageHolderFactory: imageHolderFactory
+        .withCache(cachedImageHolders),
+      highPriorityImageHolderFactory: nil,
       divCustomBlockFactory: divCustomBlockFactory,
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
-      extensionHandlers: extensionHandlers,
+      extensionHandlers: extensionHandlers.dictionary,
       functionsStorage: functionsStorage,
       variablesStorage: variablesStorage,
       triggersStorage: triggersStorage,
       playerFactory: playerFactory,
       debugParams: debugParams,
+      scheduler: nil,
       parentScrollView: parentScrollView,
+      errorsStorage: nil,
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
-      tooltipViewFactory: DivTooltipViewFactory(divKitComponents: self, cardId: cardId),
-      layoutProviderHandler: layoutProviderHandler
+      tooltipViewFactory: DivTooltipViewFactory(
+        divKitComponents: self,
+        cardId: cardId
+      ),
+      layoutProviderHandler: layoutProviderHandler,
+      idToPath: idToPath
     )
   }
 

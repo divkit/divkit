@@ -12,14 +12,27 @@ final class DivActionHandlerTests: XCTestCase {
   private var handledUrl: URL?
 
   override func setUp() {
+    let idToPath = IdToPath()
+    idToPath[cardId.path + "element_id"] = cardId.path + "element_id"
     actionHandler = DivActionHandler(
       stateUpdater: DefaultDivStateManagement(),
+      blockStateStorage: DivBlockStateStorage(),
       patchProvider: MockPatchProvider(),
       variablesStorage: variablesStorage,
+      functionsStorage: nil,
       updateCard: { _ in },
+      showTooltip: nil,
+      tooltipActionPerformer: nil,
       logger: logger,
-      urlHandler: DivUrlHandlerDelegate { url, _ in self.handledUrl = url },
-      reporter: reporter
+      trackVisibility: { _, _ in },
+      trackDisappear: { _, _ in },
+      performTimerAction: { _, _, _ in },
+      urlHandler: DivUrlHandlerDelegate { url, _ in
+        self.handledUrl = url
+      },
+      persistentValuesStorage: DivPersistentValuesStorage(),
+      reporter: reporter,
+      idToPath: idToPath
     )
   }
 
@@ -351,6 +364,34 @@ final class DivActionHandlerTests: XCTestCase {
         ))
       ),
       path: path,
+      source: .tap,
+      sender: nil
+    )
+
+    XCTAssertEqual(
+      "new value",
+      variablesStorage.getVariableValue(path: path, name: "local_var")
+    )
+  }
+
+  func test_ActionWithScopeId() {
+    let actionPath = cardId.path + "element_with_action_id"
+    let path = cardId.path + "element_id"
+    variablesStorage.initializeIfNeeded(
+      path: path,
+      variables: ["local_var": .string("value")]
+    )
+
+    actionHandler.handle(
+      divAction(
+        logId: "log_id",
+        scopeId: "element_id",
+        typed: .divActionSetVariable(DivActionSetVariable(
+          value: stringValue("new value"),
+          variableName: .value("local_var")
+        ))
+      ),
+      path: actionPath,
       source: .tap,
       sender: nil
     )

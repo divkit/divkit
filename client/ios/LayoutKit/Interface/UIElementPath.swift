@@ -33,11 +33,7 @@ public struct UIElementPath: CustomStringConvertible, ExpressibleByStringLiteral
   }
 
   public var root: String {
-    var current = address
-    while let next = current.next {
-      current = next
-    }
-    return current.value
+    address.root
   }
 
   public var leaf: String {
@@ -109,6 +105,7 @@ extension UIElementPath {
 private final class ListNode: Codable {
   let value: String
   let next: ListNode?
+  private var _root: String?
 
   private lazy var cachedHash: Int = {
     var hasher = Hasher()
@@ -121,6 +118,18 @@ private final class ListNode: Codable {
   init(value: String, next: ListNode? = nil) {
     self.value = value
     self.next = next
+  }
+
+  var root: String {
+    if let _root {
+      return _root
+    }
+    guard let next else {
+      return value
+    }
+    let result = next.root
+    _root = result
+    return result
   }
 
   enum CodingKeys: CodingKey {

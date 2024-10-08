@@ -18,6 +18,7 @@ public final class DivActionHandler {
   private let blockStateStorage: DivBlockStateStorage
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let reporter: DivReporter
+  private let idToPath: IdToPath
 
   private let arrayActionsHandler = ArrayActionsHandler()
   private let dictSetValueActionHandler = DictSetValueActionHandler()
@@ -29,7 +30,7 @@ public final class DivActionHandler {
   private let videoActionHandler = VideoActionHandler()
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
-  public init(
+  public convenience init(
     stateUpdater: DivStateUpdater,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     patchProvider: DivPatchProvider,
@@ -46,6 +47,44 @@ public final class DivActionHandler {
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter? = nil
   ) {
+    self.init(
+      stateUpdater: stateUpdater,
+      blockStateStorage: blockStateStorage,
+      patchProvider: patchProvider,
+      variablesStorage: variablesStorage,
+      functionsStorage: functionsStorage,
+      updateCard: updateCard,
+      showTooltip: showTooltip,
+      tooltipActionPerformer: tooltipActionPerformer,
+      logger: logger ?? EmptyDivActionLogger(),
+      trackVisibility: trackVisibility,
+      trackDisappear: trackDisappear,
+      performTimerAction: performTimerAction,
+      urlHandler: urlHandler,
+      persistentValuesStorage: persistentValuesStorage,
+      reporter: reporter ?? DefaultDivReporter(),
+      idToPath: IdToPath()
+    )
+  }
+
+  init(
+    stateUpdater: DivStateUpdater,
+    blockStateStorage: DivBlockStateStorage,
+    patchProvider: DivPatchProvider,
+    variablesStorage: DivVariablesStorage,
+    functionsStorage: DivFunctionsStorage?,
+    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
+    showTooltip: DivActionURLHandler.ShowTooltipAction?,
+    tooltipActionPerformer: TooltipActionPerformer?,
+    logger: DivActionLogger,
+    trackVisibility: @escaping TrackVisibility,
+    trackDisappear: @escaping TrackVisibility,
+    performTimerAction: @escaping DivActionURLHandler.PerformTimerAction,
+    urlHandler: DivUrlHandler,
+    persistentValuesStorage: DivPersistentValuesStorage,
+    reporter: DivReporter,
+    idToPath: IdToPath
+  ) {
     self.divActionURLHandler = DivActionURLHandler(
       stateUpdater: stateUpdater,
       blockStateStorage: blockStateStorage,
@@ -58,7 +97,7 @@ public final class DivActionHandler {
       persistentValuesStorage: persistentValuesStorage
     )
     self.urlHandler = urlHandler
-    self.logger = logger ?? EmptyDivActionLogger()
+    self.logger = logger
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
@@ -66,8 +105,9 @@ public final class DivActionHandler {
     self.persistentValuesStorage = persistentValuesStorage
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
-    self.reporter = reporter ?? DefaultDivReporter()
+    self.reporter = reporter
     self.timerActionHandler = TimerActionHandler(performer: performTimerAction)
+    self.idToPath = idToPath
   }
 
   public func handle(
@@ -124,6 +164,11 @@ public final class DivActionHandler {
       },
       errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )
+    let path = if let scopeId = action.scopeId {
+      idToPath[path.cardId.path + scopeId] ?? path
+    } else {
+      path
+    }
     let context = DivActionHandlingContext(
       path: path,
       expressionResolver: expressionResolver,
@@ -155,8 +200,8 @@ public final class DivActionHandler {
     case let .divActionVideo(action):
       videoActionHandler.handle(action, context: context)
     case .divActionAnimatorStart, .divActionAnimatorStop, .divActionSubmit,
-        .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
-        .divActionSetState, .divActionSetStoredValue:
+         .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
+         .divActionSetState, .divActionSetStoredValue:
       break
     case .none:
       isHandled = false

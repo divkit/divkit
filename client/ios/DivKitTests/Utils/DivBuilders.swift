@@ -6,6 +6,7 @@ func divAction(
   isEnabled: Bool = true,
   logId: String,
   payload: [String: Any]? = nil,
+  scopeId: String? = nil,
   typed: DivActionTyped? = nil,
   url: String? = nil,
   urlExpression: String? = nil
@@ -21,6 +22,7 @@ func divAction(
     isEnabled: .value(isEnabled),
     logId: .value(logId),
     payload: payload,
+    scopeId: scopeId,
     typed: typed,
     url: urlParam
   )

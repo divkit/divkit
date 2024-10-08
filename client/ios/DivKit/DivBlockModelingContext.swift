@@ -43,6 +43,7 @@ public struct DivBlockModelingContext {
   private(set) var sizeModifier: DivSizeModifier?
   private(set) var localValues = [String: AnyHashable]()
   let layoutProviderHandler: DivLayoutProviderHandler?
+  let idToPath: IdToPath
 
   public init(
     cardId: DivCardID,
@@ -75,15 +76,6 @@ public struct DivBlockModelingContext {
     tooltipViewFactory: DivTooltipViewFactory? = nil,
     layoutProviderHandler: DivLayoutProviderHandler? = nil
   ) {
-    var extensionsHandlersDictionary = [String: DivExtensionHandler]()
-    for extensionHandler in extensionHandlers {
-      let id = extensionHandler.id
-      if extensionsHandlersDictionary[id] != nil {
-        DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
-        continue
-      }
-      extensionsHandlersDictionary[id] = extensionHandler
-    }
     self.init(
       viewId: DivViewId(cardId: cardId, additionalId: additionalId),
       cardLogId: cardLogId,
@@ -99,7 +91,7 @@ public struct DivBlockModelingContext {
       divCustomBlockFactory: divCustomBlockFactory,
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
-      extensionHandlers: extensionsHandlersDictionary,
+      extensionHandlers: extensionHandlers.dictionary,
       functionsStorage: functionsStorage,
       variablesStorage: variablesStorage,
       triggersStorage: triggersStorage,
@@ -112,7 +104,8 @@ public struct DivBlockModelingContext {
       variableTracker: variableTracker,
       persistentValuesStorage: persistentValuesStorage,
       tooltipViewFactory: tooltipViewFactory,
-      layoutProviderHandler: layoutProviderHandler
+      layoutProviderHandler: layoutProviderHandler,
+      idToPath: nil
     )
   }
 
@@ -144,7 +137,8 @@ public struct DivBlockModelingContext {
     variableTracker: DivVariableTracker?,
     persistentValuesStorage: DivPersistentValuesStorage?,
     tooltipViewFactory: DivTooltipViewFactory?,
-    layoutProviderHandler: DivLayoutProviderHandler?
+    layoutProviderHandler: DivLayoutProviderHandler?,
+    idToPath: IdToPath?
   ) {
     self.viewId = viewId
     self.cardLogId = cardLogId
@@ -181,6 +175,7 @@ public struct DivBlockModelingContext {
     self.functionsProvider = FunctionsProvider(
       persistentValuesStorage: persistentValuesStorage
     )
+    self.idToPath = idToPath ?? IdToPath()
     expressionResolver = makeExpressionResolver(
       functionsProvider: functionsProvider,
       viewId: viewId,
@@ -331,4 +326,19 @@ private func makeExpressionResolver(
       errorsStorage.add(DivExpressionError(error, path: path))
     }
   )
+}
+
+extension [DivExtensionHandler] {
+  var dictionary: [String: DivExtensionHandler] {
+    var extensionsHandlersDictionary = [String: DivExtensionHandler]()
+    for extensionHandler in self {
+      let id = extensionHandler.id
+      if extensionsHandlersDictionary[id] != nil {
+        DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
+        continue
+      }
+      extensionsHandlersDictionary[id] = extensionHandler
+    }
+    return extensionsHandlersDictionary
+  }
 }

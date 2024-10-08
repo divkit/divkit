@@ -27,6 +27,10 @@ extension DivBase {
       triggers: variableTriggers ?? []
     )
 
+    if let id = context.elementId ?? id {
+      context.idToPath[path.cardId.path + id] = path
+    }
+
     let extensionHandlers = context.getExtensionHandlers(for: self)
     for extensionHandler in extensionHandlers {
       extensionHandler.accept(div: self, context: context)
