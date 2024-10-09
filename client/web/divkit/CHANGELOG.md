@@ -1,3 +1,13 @@
+## 30.22.0 (October 14, 2024)
+
+* Added local `variable_triggers` property support.
+* Added support for `0` / `1` values in the `set_stored_value` action with the `boolean` type.
+* Added support for the `alignment_vertical` in `text`. Please note that the location of the images may change slightly.
+* Fixed an issue with calling custom action inside `variable_triggers`.
+* Fixed minor memory leaks.
+* Properties `start` and `end` of `div-text.range` are optional now.
+
+
 ## 30.21.0 (October 7, 2024)
 
 * Supported `id` property for the prototypes in the `item_builder`.
