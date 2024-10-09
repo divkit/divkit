@@ -102,5 +102,13 @@
                 "version_added": "30.20.0"
             }
         }
+    }, {
+        "id": "fn_stored_array_dict",
+        "name": "<code>getStoredArrayValue</code> and <code>getStoredDictValue</code> functions",
+        "compat": {
+            "android": {
+                "version_added": "30.21.0"
+            }
+        }
     }]
 }

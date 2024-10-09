@@ -152,6 +152,30 @@
             }
         }
     }, {
+        "id": "action_typed_scroll_by",
+        "name": "Typed action <code>scroll_by</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.21.0"
+            }
+        }
+    }, {
+        "id": "action_typed_scroll_to",
+        "name": "Typed action <code>scroll_to</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.21.0"
+            }
+        }
+    }, {
+        "id": "action_typed_set_stored_value",
+        "name": "Typed action <code>set_stored_value</code>",
+        "compat": {
+            "android": {
+                "version_added": "30.21.0"
+            }
+        }
+    }, {
         "id": "action_is_enabled",
         "name": "Action <code>is_enabled</code> property",
         "compat": {
