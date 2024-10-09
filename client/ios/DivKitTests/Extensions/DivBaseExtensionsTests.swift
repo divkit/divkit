@@ -134,7 +134,7 @@ final class DivBaseExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: []
         ),
-        actions: NonEmptyArray(actions.compactMap { $0.uiAction(path: .root + "0") }),
+        actions: NonEmptyArray(actions.compactMap { $0.uiAction(path: .root + "0" + "container") }),
         actionAnimation: .default,
         accessibilityElement: .default
       ),

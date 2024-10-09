@@ -18,6 +18,7 @@ final class DivActionHandlerTests: XCTestCase {
       stateUpdater: DefaultDivStateManagement(),
       blockStateStorage: DivBlockStateStorage(),
       patchProvider: MockPatchProvider(),
+      submitter: MockSubmitter(),
       variablesStorage: variablesStorage,
       functionsStorage: nil,
       updateCard: { _ in },
@@ -483,6 +484,12 @@ private final class MockActionLogger: DivActionLogger {
     lastReferer = referer
     lastPayload = payload
   }
+}
+
+private final class MockSubmitter: DivSubmitter {
+  func submit(request: SubmitRequest, data: [String : String], completion: @escaping DivSubmitterCompletion) {}
+
+  func cancelRequests() {}
 }
 
 final class MockPatchProvider: DivPatchProvider {

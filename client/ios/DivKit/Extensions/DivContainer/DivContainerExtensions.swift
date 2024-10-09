@@ -5,14 +5,16 @@ import VGSL
 
 extension DivContainer: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
-      to: { try makeBaseBlock(context: context) },
-      context: context,
+    let path = context.parentPath + (id ?? DivContainer.type)
+    let containerContext = context.modifying(parentPath: path)
+    return try applyBaseProperties(
+      to: { try makeBaseBlock(context: containerContext) },
+      context: containerContext,
       actionsHolder: self,
       customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
-        resolveAccessibilityDescription(context)
+        resolveAccessibilityDescription(containerContext)
       },
-      clipToBounds: resolveClipToBounds(context.expressionResolver)
+      clipToBounds: resolveClipToBounds(containerContext.expressionResolver)
     )
   }
 
@@ -21,17 +23,14 @@ extension DivContainer: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let childContext = context.modifying(
-      parentPath: context.parentPath + (id ?? DivContainer.type)
-    )
     let expressionResolver = context.expressionResolver
     let orientation = resolveOrientation(expressionResolver)
     let block: Block = switch orientation {
     case .overlap:
-      try makeOverlapBlock(context: childContext)
+      try makeOverlapBlock(context: context)
     case .horizontal, .vertical:
       try makeContainerBlock(
-        context: childContext,
+        context: context,
         orientation: orientation,
         layoutMode: resolveLayoutMode(expressionResolver)
       )

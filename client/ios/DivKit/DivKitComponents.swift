@@ -21,6 +21,7 @@ public final class DivKitComponents {
   public let fontProvider: DivFontProvider
   public let imageHolderFactory: DivImageHolderFactory
   public let layoutDirection: UserInterfaceLayoutDirection
+  public let submitter: DivSubmitter
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
   public let reporter: DivReporter
@@ -96,6 +97,7 @@ public final class DivKitComponents {
     fontProvider: DivFontProvider? = nil,
     imageHolderFactory: DivImageHolderFactory? = nil,
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
+    submitter: DivSubmitter? = nil,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
     reporter: DivReporter? = nil,
@@ -145,6 +147,8 @@ public final class DivKitComponents {
         )
     ).withAssets()
 
+    self.submitter = submitter
+      ?? DivNetworkSubmitter(requestPerformer: requestPerformer)
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
 
@@ -172,6 +176,7 @@ public final class DivKitComponents {
       stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
       patchProvider: self.patchProvider,
+      submitter: self.submitter,
       variablesStorage: variablesStorage,
       functionsStorage: functionsStorage,
       updateCard: updateCard,
@@ -218,6 +223,7 @@ public final class DivKitComponents {
 
   public func reset() {
     patchProvider.cancelRequests()
+    submitter.cancelRequests()
 
     blockStateStorage.reset()
     lastVisibleBoundsCache.reset()

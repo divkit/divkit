@@ -275,10 +275,6 @@
     "en": "The HTTP request method.",
     "ru": "Метод HTTP-запроса."
   },
-  "div_action_submit_request_query_parameters": {
-    "en": "Query parameters.",
-    "ru": "Параметры запроса."
-  },
   "div_action_submit_request_url": {
     "en": "The url to which data from the container is sent.",
     "ru": "Ссылка по которой отправляются данные из контейнера."

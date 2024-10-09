@@ -10,6 +10,7 @@ final class DivTriggerTests: XCTestCase {
   private lazy var actionHandler = DivActionHandler(
     stateUpdater: FakeDivStateUpdater(),
     patchProvider: FakeDivPatchDownloader(),
+    submitter: FakeDivSubmitter(),
     variablesStorage: variablesStorage,
     updateCard: { _ in },
     urlHandler: DivUrlHandlerDelegate { [unowned self] _, _ in
@@ -459,6 +460,12 @@ private class FakeDivStateUpdater: DivStateUpdater {
     cardId _: DivCardID,
     lifetime _: DivStateLifetime
   ) {}
+}
+
+private final class FakeDivSubmitter: DivSubmitter {
+  func submit(request: SubmitRequest, data: [String : String], completion: @escaping DivSubmitterCompletion) {}
+
+  func cancelRequests() {}
 }
 
 private class FakeDivPatchDownloader: DivPatchProvider {

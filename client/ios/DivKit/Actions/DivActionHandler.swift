@@ -26,6 +26,7 @@ public final class DivActionHandler {
   private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
   private let focusElementActionHandler = FocusElementActionHandler()
   private let setVariableActionHandler = SetVariableActionHandler()
+  private let submitActionHandler: SubmitActionHandler
   private let timerActionHandler: TimerActionHandler
   private let videoActionHandler = VideoActionHandler()
 
@@ -34,6 +35,7 @@ public final class DivActionHandler {
     stateUpdater: DivStateUpdater,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     patchProvider: DivPatchProvider,
+    submitter: DivSubmitter,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     functionsStorage: DivFunctionsStorage? = nil,
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
@@ -51,6 +53,7 @@ public final class DivActionHandler {
       stateUpdater: stateUpdater,
       blockStateStorage: blockStateStorage,
       patchProvider: patchProvider,
+      submitter: submitter,
       variablesStorage: variablesStorage,
       functionsStorage: functionsStorage,
       updateCard: updateCard,
@@ -71,6 +74,7 @@ public final class DivActionHandler {
     stateUpdater: DivStateUpdater,
     blockStateStorage: DivBlockStateStorage,
     patchProvider: DivPatchProvider,
+    submitter: DivSubmitter,
     variablesStorage: DivVariablesStorage,
     functionsStorage: DivFunctionsStorage?,
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
@@ -98,6 +102,7 @@ public final class DivActionHandler {
     )
     self.urlHandler = urlHandler
     self.logger = logger
+    self.submitActionHandler = SubmitActionHandler(submitter: submitter)
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
@@ -174,6 +179,7 @@ public final class DivActionHandler {
       expressionResolver: expressionResolver,
       variablesStorage: variablesStorage,
       blockStateStorage: blockStateStorage,
+      actionHandler: self,
       updateCard: updateCard
     )
 
@@ -199,7 +205,9 @@ public final class DivActionHandler {
       timerActionHandler.handle(action, context: context)
     case let .divActionVideo(action):
       videoActionHandler.handle(action, context: context)
-    case .divActionAnimatorStart, .divActionAnimatorStop, .divActionSubmit,
+    case let .divActionSubmit(action):
+      submitActionHandler.handle(action, context: context)
+    case .divActionAnimatorStart, .divActionAnimatorStop,
          .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
          .divActionSetState, .divActionSetStoredValue:
       break

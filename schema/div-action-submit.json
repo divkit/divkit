@@ -24,13 +24,6 @@
           "$ref": "common.json#/url",
           "$description": "translations.json#/div_action_submit_request_url"
         },
-        "query_parameters": {
-          "type": "array",
-          "$description": "translations.json#/div_action_submit_request_query_parameters",
-          "items": {
-            "$ref": "#/definitions/parameter"
-          }
-        },
         "headers": {
           "type": "array",
           "$description": "translations.json#/div_action_submit_request_headers",
@@ -82,7 +75,9 @@
       "$description": "translations.json#/div_action_submit_on_fail_actions"
     }
   },
-  "platforms": [],
+  "platforms": [
+    "ios"
+  ],
   "required": [
     "type",
     "container_id",

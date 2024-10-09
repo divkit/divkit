@@ -5,27 +5,6 @@ import Serialization
 import VGSL
 
 public final class DivActionSubmit {
-  public final class Parameter {
-    public let name: Expression<String>
-    public let value: Expression<String>
-
-    public func resolveName(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(name)
-    }
-
-    public func resolveValue(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveString(value)
-    }
-
-    init(
-      name: Expression<String>,
-      value: Expression<String>
-    ) {
-      self.name = name
-      self.value = value
-    }
-  }
-
   public final class Request {
     @frozen
     public enum Method: String, CaseIterable {
@@ -38,9 +17,29 @@ public final class DivActionSubmit {
       case oPTIONS = "OPTIONS"
     }
 
-    public let headers: [Parameter]?
+    public final class Header {
+      public let name: Expression<String>
+      public let value: Expression<String>
+
+      public func resolveName(_ resolver: ExpressionResolver) -> String? {
+        resolver.resolveString(name)
+      }
+
+      public func resolveValue(_ resolver: ExpressionResolver) -> String? {
+        resolver.resolveString(value)
+      }
+
+      init(
+        name: Expression<String>,
+        value: Expression<String>
+      ) {
+        self.name = name
+        self.value = value
+      }
+    }
+
+    public let headers: [Header]?
     public let method: Expression<Method> // default value: POST
-    public let queryParameters: [Parameter]?
     public let url: Expression<URL>
 
     public func resolveMethod(_ resolver: ExpressionResolver) -> Method {
@@ -52,14 +51,12 @@ public final class DivActionSubmit {
     }
 
     init(
-      headers: [Parameter]? = nil,
+      headers: [Header]? = nil,
       method: Expression<Method>? = nil,
-      queryParameters: [Parameter]? = nil,
       url: Expression<URL>
     ) {
       self.headers = headers
       self.method = method ?? .value(.pOST)
-      self.queryParameters = queryParameters
       self.url = url
     }
   }
@@ -120,8 +117,8 @@ extension DivActionSubmit: Serializable {
 }
 
 #if DEBUG
-extension DivActionSubmit.Parameter: Equatable {
-  public static func ==(lhs: DivActionSubmit.Parameter, rhs: DivActionSubmit.Parameter) -> Bool {
+extension DivActionSubmit.Request.Header: Equatable {
+  public static func ==(lhs: DivActionSubmit.Request.Header, rhs: DivActionSubmit.Request.Header) -> Bool {
     guard
       lhs.name == rhs.name,
       lhs.value == rhs.value
@@ -139,11 +136,6 @@ extension DivActionSubmit.Request: Equatable {
     guard
       lhs.headers == rhs.headers,
       lhs.method == rhs.method,
-      lhs.queryParameters == rhs.queryParameters
-    else {
-      return false
-    }
-    guard
       lhs.url == rhs.url
     else {
       return false
@@ -153,7 +145,7 @@ extension DivActionSubmit.Request: Equatable {
 }
 #endif
 
-extension DivActionSubmit.Parameter: Serializable {
+extension DivActionSubmit.Request.Header: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["name"] = name.toValidSerializationValue()
@@ -167,7 +159,6 @@ extension DivActionSubmit.Request: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["headers"] = headers?.map { $0.toDictionary() }
     result["method"] = method.toValidSerializationValue()
-    result["query_parameters"] = queryParameters?.map { $0.toDictionary() }
     result["url"] = url.toValidSerializationValue()
     return result
   }

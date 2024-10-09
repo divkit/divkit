@@ -80,6 +80,14 @@ public final class DivVariablesStorage {
     weakSelf = self
   }
 
+  func getVariables(cardId: DivCardID, elementId: String) -> DivVariables {
+    lock.withLock {
+      localStorages.first {
+        $0.key.leaf == elementId && $0.key.cardId == cardId
+      }?.value.values ?? [:]
+    }
+  }
+
   func getVariableValue<T>(
     path: UIElementPath,
     name: DivVariableName
