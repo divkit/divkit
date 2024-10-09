@@ -1,3 +1,36 @@
+## 30.22.0
+
+# Android Client:
+* Added clearing of adapters in `pager` and `gallery`.
+* Added table of variables into debug panel (ErrorView). Values of variables in table can be changed.
+* Enable setting a11y focus on views inside tooltips.
+* Ensure all blur related are closed after usage.
+* Fix video cache leakage.
+* Fix video player leaking when Div2View cleanup by ReleaseManager.
+* Fixed placement of items when `pager` scrolled using a11y.
+* Minor enhancements of error handling during JSON parsing.
+* Properties `start` and `end` of `div-text.range` are optional now.
+
+# iOS Client:
+* Added `TooltipManager.reset()`.
+* Fixed hint availability in masked div-input.
+* Properties `start` and `end` of `div-text.range` are optional now.
+* Reset tooltips after device rotation.
+* Supported custom equatable image filter for ImageBlock, may be added in extensions.
+* Supported div-action.scope_id.
+
+# Web Client:
+* Added local `variable_triggers` property support.
+* Added support for `0` / `1` values in the `set_stored_value` action with the `boolean` type.
+* Added support for the `alignment_vertical` in `text`. Please note that the location of the images may change slightly.
+* Fixed an issue with calling custom action inside `variable_triggers`.
+* Fixed minor memory leaks.
+* Properties `start` and `end` of `div-text.range` are optional now.
+
+# Kotlin JSON Builder:
+* Kotlin Json Builder DSL models upgraded to kotlin data classes.
+
+
 ## 30.21.0
 
 # Android Client:
