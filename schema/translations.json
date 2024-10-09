@@ -36,23 +36,23 @@
     "ru": "Определяет действие при нажатии на элемент."
   },
   "div_action_animator_start": {
-    "en": "Starts specified animator",
+    "en": "Launches the specified animator.",
     "ru": "Запускает указанный аниматор."
   },
   "div_action_animator_start_animator_id": {
-    "en": "The identifier of the animator being started.",
+    "en": "ID of the animator launched.",
     "ru": "Идентификатор запускаемого аниматора."
   },
   "div_action_animator_start_end_value": {
-    "en": "Overrides value that will be set at the end of animation.",
+    "en": "Overrides the value that will be set after the animation finishes.",
     "ru": "Переопределяет, какое значение будет установлено в переменную после завершения анимации."
   },
   "div_action_animator_start_start_value": {
-    "en": "Overrides value that will be set at the start of animation.",
+    "en": "Overrides the value that will be set before the animation begins.",
     "ru": "Переопределяет, какое значение будет установлено в переменную перед началом анимации."
   },
   "div_action_animator_stop": {
-    "en": "Stops specified animator",
+    "en": "Stops the specified animator.",
     "ru": "Останавливает указанный аниматор."
   },
   "div_action_animator_stop_animator_id": {
@@ -68,7 +68,7 @@
     "ru": "Удаляет значение из массива"
   },
   "div_action_array_set_value": {
-    "en": "Sets value in the array.",
+    "en": "Sets the value in the array by index.",
     "ru": "Устанавливает значение в массиве по индексу."
   },
   "div_action_base_download_callbacks": {
@@ -92,7 +92,7 @@
     "ru": "Referer-ссылка для логирования."
   },
   "div_action_base_scope_id": {
-    "en": "Div identifier denotes the scope in which this action will be performed.",
+    "en": "The ID of the element within which the specified action will be performed.",
     "ru": "Идентификатор элемента, в области видимости которого будет выполняться данное действие."
   },
   "div_action_base_url": {
@@ -108,15 +108,15 @@
     "ru": "Копирует данные в буфер обмена."
   },
   "div_action_dict_set_value": {
-    "en": "Sets value in dictionary for the given key. Removes key if the value is not defined.",
+    "en": "Sets the value in the dictionary by the specified key. Deletes the key if the value is not set.",
     "ru": "Устанавливает значение в словаре по заданному ключу. Удаляет ключ, если значение на задано."
   },
   "div_action_download": {
-    "en": "Loads more data in the form of a `div-patch` and updates current element,",
+    "en": "Loads additional data in `div-patch` format and updates the current element.",
     "ru": "Выполняет дозагрузку данных в формате `div-patch` и обновляет текущий элемент."
   },
   "div_action_download_url": {
-    "en": "URL to get the patch.",
+    "en": "Link for receiving changes.",
     "ru": "Ссылка для получения изменений."
   },
   "div_action_focus_element": {
@@ -124,7 +124,7 @@
     "ru": "Запрашивает фокус для элемента. В вебе может требовать действие пользователя."
   },
   "div_action_hide_tooltip": {
-    "en": "Hides tooltip.",
+    "en": "Hides the tooltip.",
     "ru": "Скрывает тултип."
   },
   "div_action_log_url": {
@@ -208,15 +208,15 @@
     "ru": "Указывает конечную точку пролистывания:<li>`index` - пролистывание до элемента с индексом, указанным в `value`;</li><li>`offset` - пролистывание до позиции измеренной в `dp` от начала контейнера, указанной в `value`. Применим только в `gallery`;</li><li>`start` - пролистывание в начало контейнера;</li><li>`end` - пролистывание в конец контейнера.</li>."
   },
   "div_action_set_state": {
-    "en": "Switches the appearance of content in `div-state`.",
+    "en": "Applies a new appearance to the content in `div-state'.",
     "ru": "Устанавливает новый внешний вид контента в `div-state`."
   },
   "div_action_set_state_state_id": {
-    "en": "The path of the state inside `state` that needs to be activated. Set in `div_data_state_id/id/state_id` format. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of: <li>`div_data_state_id` - `state_id` numeric value of the `state` object in `data`;</li><li>`id` - `id` value of the `state` object;</li><li>`state_id` - `state_id` value of the `state` object in `state`.</li>",
+    "en": "The path of the state inside `state` that needs to be activated. Set in the format `div_data_state_id/id/state_id'. Can be hierarchical: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Consists of:<li>`div_data_state_id` — the numeric value of the `state_id` of the `state` object in `data`</li><li>'id` — the `id` value of the `state` object</li><li>`state_id` — the `state_id` value of the `state` object in `state`</li>",
     "ru": "Путь состояния внутри `state`, которое нужно активировать. Задается в формате `div_data_state_id/id/state_id`. Mожет быть иерархическим: `div_data_state_id/id_1/state_id_1/../id_n/state_id_n`. Состоит из:<li>`div_data_state_id` — числовое значение `state_id` объекта `state` в `data`;</li><li>`id` — значение `id` объекта `state`;</li><li>`state_id` — значение `state_id` объекта `state` в `state`.</li>"
   },
   "div_action_set_state_temporary": {
-    "en": "Indicates a state change:<li>`true`: The change is temporary and when the element is re-created, the state will change back to the initial one (default value).</li><li>`false` - The state change is permanent.</li>",
+    "en": "Indicates a state change:<li>`true` — the change is temporary and will switch to the original one (default value) when the element is recreated</li><li>`false` — the change is permanent</li>",
     "ru": "Указывает на изменение состояния:<li>`true` — изменение временное, и при пересоздании элемента состояние изменится на исходное (значение по умолчанию);</li><li>`false` — изменение постоянное.</li>"
   },
   "div_action_set_stored_value": {
@@ -240,11 +240,11 @@
     "ru": "Присваивает переменной значение"
   },
   "div_action_show_tooltip": {
-    "en": "Shows tooltip.",
+    "en": "Shows the tooltip.",
     "ru": "Показывает тултип."
   },
   "div_action_show_tooltip_multiple": {
-    "en": "Defines whether tooltip can be shown again after being closed.",
+    "en": "Sets whether the tooltip can be shown again after it’s closed.",
     "ru": "Устанавливает, может ли тултип показываться еще раз после закрытия."
   },
   "div_action_submit": {
@@ -292,27 +292,27 @@
     "ru": "Управляет таймером."
   },
   "div_action_timer_action": {
-    "en": "Defines timer action:<li>`start`- starts the timer when stopped, does onStart action;</li><li>`stop`- stops timer, resets the time, does `onEnd` action;</li><li>`pause`- pause timer, preserves current time;</li><li>`resume`- starts timer from paused state, restores saved time;</li><li>`cancel`- stops timer, resets its state, does onInterrupt action;</li><li>`reset`- cancels timer and starts it again.</li>",
+    "en": "Timer actions:<li>`start` — starts the timer from a stopped state</li><li>`stop`— stops the timer and performs the `onEnd` action</li><li>`pause` — pauses the timer, saves the current time</li><li>`resume` — restarts the timer after a pause</li><li>`cancel` — interrupts the timer, resets the time</li><li>`reset` — cancels the timer, then starts it again</li>",
     "ru": "Действие с таймером:<li>`start`— запускает таймер из остановленного положения;</li><li>`stop`— останавливает таймер, выполняет действие `onEnd`;</li><li>`pause`— ставит таймер на паузу, время сохраняется;</li><li>`resume`— продолжает таймер после паузы;</li><li>`cancel`— прерывает действие таймера, время сбрасывается;</li><li>`reset`— отменяет таймер, затем запускает заново.</li>"
   },
   "div_action_timer_id": {
-    "en": "Timer identifier.",
+    "en": "Timer ID.",
     "ru": "Идентификатор таймера."
   },
   "div_action_tooltip_id": {
-    "en": "Tooltip identifier.",
+    "en": "Tooltip ID.",
     "ru": "Идентификатор тултипа."
   },
   "div_action_video": {
-    "en": "Controls given video.",
+    "en": "Manages video playback.",
     "ru": "Управляет воспроизведением видео."
   },
   "div_action_video_action": {
-    "en": "Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>",
+    "en": "Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>",
     "ru": "Определяет действие с видео: <li>`start` — начинает воспроизведение видео, если видео готово к воспроизведению, или планирует воспроизведение;</li><li>`pause` — останавливает воспроизведение видео.</li>"
   },
   "div_action_video_id": {
-    "en": "Video identifier.",
+    "en": "Video ID.",
     "ru": "Идентификатор видео."
   },
   "div_actionable_action": {
@@ -376,11 +376,11 @@
     "ru": "Стартовое значение анимации."
   },
   "div_animator_base_cancel_actions": {
-    "en": "Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received",
+    "en": "Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.",
     "ru": "Действия, которые будут выполнены в случае отмены аниматора. Например, когда получена команда с типом `animator_stop`."
   },
   "div_animator_base_direction": {
-    "en": "Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.",
+    "en": "Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.",
     "ru": "Направление анимации. Определяет, должна ли анимация воспроизводиться вперед, назад или переменно вперед и назад."
   },
   "div_animator_base_duration": {
@@ -388,23 +388,23 @@
     "ru": "Продолжительность анимации в миллисекундах."
   },
   "div_animator_base_end_actions": {
-    "en": "Actions performed when the animator completes animation.",
+    "en": "Actions to be performed after the animator finishes.",
     "ru": "Действия, которые будут выполнены после завершения работы аниматора."
   },
   "div_animator_base_id": {
-    "en": "Animator identificator",
+    "en": "Animator ID.",
     "ru": "Идентификатор аниматора."
   },
   "div_animator_base_interpolator": {
-    "en": "Interpolation function.",
+    "en": "Animated value interpolation function.",
     "ru": "Функция интерполяции анимируемого значения."
   },
   "div_animator_base_repeat_count": {
-    "en": "The number of times the animation will repeat before it finishes. `0` enables infinite repeats.",
+    "en": "Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.",
     "ru": "Количество повторов анимации, которое будет выполнено до ее остановки. Значение `0` включает бесконечные повторы."
   },
   "div_animator_base_start_delay": {
-    "en": "Animation start delay in milliseconds.",
+    "en": "Delay before the animation is launched in milliseconds.",
     "ru": "Задержка перед запуском анимации в миллисекундах."
   },
   "div_animator_base_variable_name": {
@@ -412,11 +412,11 @@
     "ru": "Имя анимируемой переменной."
   },
   "div_animator_end_value": {
-    "en": "Value that will be set at the end of animation.",
+    "en": "The value the variable will have when the animation ends.",
     "ru": "Значение переменной, которое она примет в конце анимации."
   },
   "div_animator_start_value": {
-    "en": "Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.",
+    "en": "The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.",
     "ru": "Значение переменной, которое она примет в начале анимации. Если свойство не указано, то будет использовано текущее значение переменной."
   },
   "div_appearance_set_transition": {
@@ -484,7 +484,7 @@
     "ru": "Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
   },
   "div_base_animators": {
-    "en": "Declaration of animators that can be used to change the value of variables over time.",
+    "en": "Declaration of animators that change variable values over time.",
     "ru": "Объявление аниматоров, с помощью которых можно изменять значение переменных во времени."
   },
   "div_base_background": {
@@ -512,7 +512,7 @@
     "ru": "Параметры при фокусировке на элементе или потере фокуса."
   },
   "div_base_functions": {
-    "en": "Custom functions.",
+    "en": "User functions.",
     "ru": "Пользовательские функции."
   },
   "div_base_height": {
@@ -568,7 +568,7 @@
     "ru": "Триггеры изменения переменных внутри элемента."
   },
   "div_base_variables": {
-    "en": "Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.",
+    "en": "Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.",
     "ru": "Объявление переменных, которые могут использоваться внутри элемента. Переменные, объявленные в данном массиве, могут использоваться только внутри самого элемента и его дочерних элементов."
   },
   "div_base_visibility": {
@@ -684,7 +684,7 @@
     "ru": "`Div`, из которого будут созданы элементы коллекции. В `Div` можно использовать выражения с использованием данных из `data`. Для обращения к очередному элементу `data` нужно использовать такой же префикс, как и в `data_element_prefix`."
   },
   "div_collection_item_builder_prototypes_id": {
-    "en": "`id` of the element which is created from the prototype. May contain expression. Has higher priority than `div-base.id.`",
+    "en": "`id` of the element to be created from the prototype. Unlike the `div-base.id` field, may contain expressions. Has a higher priority than `div-base.id`.",
     "ru": "`id` элемента, который будет сформирован из прототипа. В отличие от поля `div-base.id` может содержать выражения. Имеет более высокий приоритет, чем `div-base.id`."
   },
   "div_collection_item_builder_prototypes_selector": {
@@ -896,7 +896,7 @@
     "ru": "Верхний отступ."
   },
   "div_evaluable_type": {
-    "en": "The type used in function arguments and return values.",
+    "en": "Type used for function arguments and return values.",
     "ru": "Тип, используемый в аргументах и возвращаемых значениях функций."
   },
   "div_extension": {
@@ -996,7 +996,7 @@
     "ru": "Начертание. Числовое значение."
   },
   "div_function": {
-    "en": "Custom function.",
+    "en": "User-defined function.",
     "ru": "Функция, определяемая пользователем."
   },
   "div_function_argument": {
@@ -1012,7 +1012,7 @@
     "ru": "Тип аргумента функции."
   },
   "div_function_body": {
-    "en": "Function body. Evaluated as an expression with the passed arguments. Does not capture external variables",
+    "en": "Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.",
     "ru": "Тело функции. Вычисляется как выражение с подставлением передаваемых аргументов. Не захватывает внешние переменные."
   },
   "div_function_name": {
@@ -1020,7 +1020,7 @@
     "ru": "Название функции."
   },
   "div_function_return_type": {
-    "en": "Return type.",
+    "en": "Return value type.",
     "ru": "Тип возвращаемого значения."
   },
   "div_gallery": {
@@ -1304,27 +1304,27 @@
     "ru": "Элемент для ввода текста."
   },
   "div_input_autocapitalization": {
-    "en": "Automatic text capitalization type.",
+    "en": "Text auto-capitalization type.",
     "ru": "Тип автоматической капитализации текста."
   },
   "div_input_filters": {
-    "en": "Filtering that prevents the entry of text that does not meet specified conditions.",
+    "en": "Filter that prevents users from entering text that doesn't satisfy the specified conditions.",
     "ru": "Фильтр, который не допускает ввод текста, не соответствующего заданным условиям."
   },
   "div_input_filters_expression": {
-    "en": "[Calculated expression](../../expressions) filter.",
+    "en": "Filter based on [calculated expressions](../../expressions).",
     "ru": "Фильтр на основе [вычисляемых выражений](../../expressions)."
   },
   "div_input_filters_expression_condition": {
-    "en": "[Calculated expression](../../expressions) used as a value validity condition.",
+    "en": "[Calculated expression](../../expressions) used to verify the validity of the value.",
     "ru": "[Вычисляемое выражение](../../expressions), которое используется для проверки валидности значения."
   },
   "div_input_filters_regex": {
-    "en": "Regex filter.",
+    "en": "Filter based on regular expressions.",
     "ru": "Фильтр на основе регулярных выражений."
   },
   "div_input_filters_regex_pattern": {
-    "en": "A regular expression (pattern) that the input value must match.",
+    "en": "Regular expression (pattern) that the entered value must match.",
     "ru": "Регулярное выражение (паттерн), которому должно соответствовать вводимое значение."
   },
   "div_input_highlight_color": {
@@ -1340,7 +1340,7 @@
     "ru": "Текст подсказки."
   },
   "div_input_is_enabled": {
-    "en": "Indicates if the text editing is enabled.",
+    "en": "Enables or disables text editing.",
     "ru": "Включает или отключает возможность редактирования текста."
   },
   "div_input_keyboard_type": {
@@ -1472,15 +1472,15 @@
     "ru": "Ввод данных с клавиатуры."
   },
   "div_layout_provider": {
-    "en": "Provides element real size values after a layout cycle.",
+    "en": "Provides data on the actual size of the element.",
     "ru": "Предоставляет данные о реальном размере элемента."
   },
   "div_layout_provider_height_variable_name": {
-    "en": "Variable name to store element height.",
+    "en": "Name of the variable that stores the element’s height.",
     "ru": "Название переменной для хранения высоты элемента."
   },
   "div_layout_provider_width_variable_name": {
-    "en": "Variable name to store element width.",
+    "en": "Name of the variable that stores the element’s width.",
     "ru": "Название переменной для хранения ширины элемента."
   },
   "div_line_style": {
@@ -1516,7 +1516,7 @@
     "ru": "Отступы, разбивающие изображение на части по тем же правилам, как при использовании свойства CSS `border-image-slice` (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
   },
   "div_number_animator": {
-    "en": "Number animator.",
+    "en": "Numeric value animator.",
     "ru": "Аниматор числового значения."
   },
   "div_page_size": {
@@ -1560,11 +1560,11 @@
     "ru": "Ширина страницы."
   },
   "div_pager_next_page_alpha": {
-    "en": "Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "en": "Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.",
     "ru": "Минимальная прозрачность следующей страницы в диапазоне [0, 1] при листании пейджера. Следующая страница — всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_next_page_scale": {
-    "en": "Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "en": "Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.",
     "ru": "Маштабирование следующей страницы во время листания пейджера. Следующая страница — всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_orientation": {
@@ -1572,31 +1572,31 @@
     "ru": "Ориентация пейджера."
   },
   "div_pager_page_transformation": {
-    "en": "Page transformation during movement.",
+    "en": "Page transformation during pager scrolling.",
     "ru": "Преобразование страницы пейджера во время движения."
   },
   "div_pager_page_transformation_interpolator": {
-    "en": "Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>",
+    "en": "Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>",
     "ru": "Изменение скорости анимации. При значении `spring` — обрезанная до 0.7 анимация затухающих колебаний с параметром `damping=1`. Остальные значения соответствуют кривой Безье:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
   },
   "div_pager_page_transformation_overlap": {
-    "en": "The pages are stacked when the pager is scrolled overlapping each other.",
+    "en": "Pages are stacked during animation overlapping one another.",
     "ru": "Страницы собираются в стопку при анимации, перекрывая друг друга."
   },
   "div_pager_page_transformation_overlap_reversed_stacking_order": {
-    "en": "If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "en": "If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.",
     "ru": "При значении `false` следующие страницы будут собираться в стопку над предыдущими. При значении `true` — наоборот. Следующая страница — всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_page_transformation_slide": {
-    "en": "The pages are moving when the pager is flipping without overlaping each other.",
+    "en": "Pages move without overlapping during pager scrolling.",
     "ru": "Страницы двигаются во время листания пейджера, не перекрывая друг друга."
   },
   "div_pager_previous_page_alpha": {
-    "en": "Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "en": "Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.",
     "ru": "Минимальная прозрачность предыдущей страницы в диапазоне [0, 1] во время листания пейджера. Предыдущая страница — всегда страница с меньшим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_previous_page_scale": {
-    "en": "Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.",
+    "en": "Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.",
     "ru": "Маштабирование предыдущей страницы во время листания пейджера. Предыдущая страница — всегда страница с меньшим порядковым номером в списке `items`, независимо от направления листания."
   },
   "div_pager_restrict_parent_scroll": {
@@ -1628,11 +1628,11 @@
     "ru": "Порядок применения изменений:<li>`transactional` — если во время применения хотя бы одного элемента произошла ошибка, то изменения не применяются.</li><li>`partial` — применяются все возможные изменения. Если есть ошибки, то о них сообщается.</li>"
   },
   "div_patch_on_applied_actions": {
-    "en": "Actions after applying patch.",
+    "en": "Actions to perform after changes are applied.",
     "ru": "Действия после применения изменений."
   },
   "div_patch_on_failed_actions": {
-    "en": "Actions after an error applying patch in transactional mode.",
+    "en": "Actions to perform if there’s an error when applying changes in transaction mode.",
     "ru": "Действия после ошибки применения изменений в транзакционном режиме."
   },
   "div_percentage_size": {
@@ -1708,7 +1708,7 @@
     "ru": "Тип относительного радиуса градиентного перехода."
   },
   "div_reuse_id": {
-    "en": "ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).",
+    "en": "ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).",
     "ru": "ID для структуры div-объекта. Используется для более оптимального переиспользования блоков. См. [переиспользование блоков](../../reuse/reuse.md)."
   },
   "div_rounded_rectangle_shape": {
@@ -2104,19 +2104,19 @@
     "ru": "Переключение табов скроллом по содержимому."
   },
   "div_tabs_tab_title_delimiter_delimiter_style": {
-    "en": "Style of delimiters between tab titles.",
+    "en": "Design style of separators between tab titles.",
     "ru": "Стиль оформления разделителей между заголовками табов."
   },
   "div_tabs_tab_title_delimiter_style_background_color": {
-    "en": "Background color of delimiter.",
+    "en": "Separator background color.",
     "ru": "Цвет фона разделителей."
   },
   "div_tabs_tab_title_delimiter_style_corner_radius": {
-    "en": "Delimiters corner rounding radii. If the parameter isn't specified, the rounding is maximum (half of the smallest size). Not used if the `corners_radius` parameter is set.",
+    "en": "Separator corner radius. If not specified, the corners will be rounded to the maximum (half of the smallest dimension). Not used if the `corners_radius` parameter is set.",
     "ru": "Радиус скругления углов разделителей. Если параметр не задан, то применяется максимальное скругление (половина от наименьшего размера). Не используется, если задан параметр `corners_radius`."
   },
   "div_tabs_tab_title_delimiter_style_corners_radius": {
-    "en": "Rounding radii of corners of delimiters. Empty values are replaced by 0.",
+    "en": "Separator Corner radii of the separators. Empty values are replaced with 0.",
     "ru": "Радиусы скругления углов разделителей. Пустые значения заменяются на 0."
   },
   "div_tabs_tab_title_style": {
@@ -2236,7 +2236,7 @@
     "ru": "Изображение."
   },
   "div_text_image_alignment_vertical": {
-    "en": "Vertical text image alignment within a string.",
+    "en": "Vertical image alignment within the row.",
     "ru": "Вертикальное выравнивание изображения внутри строки."
   },
   "div_text_image_height": {
@@ -2292,7 +2292,7 @@
     "ru": "Действие при нажатии на текст."
   },
   "div_text_range_alignment_vertical": {
-    "en": "Vertical text range alignment within a string.",
+    "en": "Vertical text alignment within the row.",
     "ru": "Вертикальное выравнивание текста внутри строки."
   },
   "div_text_range_background": {
@@ -2304,8 +2304,8 @@
     "ru": "Рамка для диапазона символов."
   },
   "div_text_range_end": {
-    "en": "Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text",
-    "ru": "Порядковый номер последнего символа, который будет включен в диапазон. Если свойство не указано, то диапазон будет заканчиваться на последнем символе текста."
+    "en": "Ordinal number of the last character to be included in the range.",
+    "ru": "Порядковый номер последнего символа, который будет включен в диапазон."
   },
   "div_text_range_letter_spacing": {
     "en": "Spacing between characters.",
