@@ -24,10 +24,10 @@ class DivPatch extends Preloadable with EquatableMixin {
   // default value: DivPatchMode.partial
   final Expression<DivPatchMode> mode;
 
-  /// Actions after applying patch.
+  /// Actions to perform after changes are applied.
   final List<DivAction>? onAppliedActions;
 
-  /// Actions after an error applying patch in transactional mode.
+  /// Actions to perform if there’s an error when applying changes in transaction mode.
   final List<DivAction>? onFailedActions;
 
   @override

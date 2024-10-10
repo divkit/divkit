@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Regex filter.
+/// Filter based on regular expressions.
 class DivInputFilterRegex extends Preloadable with EquatableMixin {
   const DivInputFilterRegex({
     required this.pattern,
@@ -11,7 +11,7 @@ class DivInputFilterRegex extends Preloadable with EquatableMixin {
 
   static const type = "regex";
 
-  /// A regular expression (pattern) that the input value must match.
+  /// Regular expression (pattern) that the entered value must match.
   final Expression<String> pattern;
 
   @override

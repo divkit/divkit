@@ -12,16 +12,16 @@ class DivActionTimer extends Preloadable with EquatableMixin {
 
   static const type = "timer";
 
-  /// Defines timer action:
-  /// • `start`- starts the timer when stopped, does onStart action;
-  /// • `stop`- stops timer, resets the time, does onEnd action;
-  /// • `pause`- pause timer, preserves current time;
-  /// • `resume`- starts timer from paused state, restores saved time;
-  /// • `cancel`- stops timer, resets its state, does onInterrupt action;
-  /// • `reset`- cancels timer and starts it again.
+  /// Timer actions:
+  /// • `start` — starts the timer from a stopped state
+  /// • `stop`— stops the timer and performs the `onEnd` action
+  /// • `pause` — pauses the timer, saves the current time
+  /// • `resume` — restarts the timer after a pause
+  /// • `cancel` — interrupts the timer, resets the time
+  /// • `reset` — cancels the timer, then starts it again
   final Expression<DivActionTimerAction> action;
 
-  /// Timer identifier.
+  /// Timer ID.
   final Expression<String> id;
 
   @override

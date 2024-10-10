@@ -2,11 +2,12 @@
 
 import 'package:divkit/src/schema/div_animation_direction.dart';
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
+import 'package:divkit/src/schema/div_count.dart';
 import 'package:divkit/src/schema/div_typed_value.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Starts specified animator
+/// Launches the specified animator.
 class DivActionAnimatorStart extends Preloadable with EquatableMixin {
   const DivActionAnimatorStart({
     required this.animatorId,
@@ -21,31 +22,30 @@ class DivActionAnimatorStart extends Preloadable with EquatableMixin {
 
   static const type = "animator_start";
 
-  /// The identifier of the animator being started.
-  final Expression<String> animatorId;
+  /// ID of the animator launched.
+  final String animatorId;
 
-  /// Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+  /// Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
   final Expression<DivAnimationDirection>? direction;
 
   /// Animation duration in milliseconds.
   // constraint: number >= 0
   final Expression<int>? duration;
 
-  /// Overrides value that will be set at the end of animation.
+  /// Overrides the value that will be set after the animation finishes.
   final DivTypedValue? endValue;
 
-  /// Interpolation function.
+  /// Animated value interpolation function.
   final Expression<DivAnimationInterpolator>? interpolator;
 
-  /// The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
-  // constraint: number >= 0
-  final Expression<int>? repeatCount;
+  /// Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+  final DivCount? repeatCount;
 
-  /// Animation start delay in milliseconds.
+  /// Delay before the animation is launched in milliseconds.
   // constraint: number >= 0
   final Expression<int>? startDelay;
 
-  /// Overrides value that will be set at the start of animation.
+  /// Overrides the value that will be set before the animation begins.
   final DivTypedValue? startValue;
 
   @override
@@ -61,12 +61,12 @@ class DivActionAnimatorStart extends Preloadable with EquatableMixin {
       ];
 
   DivActionAnimatorStart copyWith({
-    Expression<String>? animatorId,
+    String? animatorId,
     Expression<DivAnimationDirection>? Function()? direction,
     Expression<int>? Function()? duration,
     DivTypedValue? Function()? endValue,
     Expression<DivAnimationInterpolator>? Function()? interpolator,
-    Expression<int>? Function()? repeatCount,
+    DivCount? Function()? repeatCount,
     Expression<int>? Function()? startDelay,
     DivTypedValue? Function()? startValue,
   }) =>
@@ -91,7 +91,7 @@ class DivActionAnimatorStart extends Preloadable with EquatableMixin {
     }
     try {
       return DivActionAnimatorStart(
-        animatorId: safeParseStrExpr(
+        animatorId: safeParseStr(
           json['animator_id']?.toString(),
         )!,
         direction: safeParseStrEnumExpr(
@@ -108,8 +108,8 @@ class DivActionAnimatorStart extends Preloadable with EquatableMixin {
           json['interpolator'],
           parse: DivAnimationInterpolator.fromJson,
         ),
-        repeatCount: safeParseIntExpr(
-          json['repeat_count'],
+        repeatCount: safeParseObj(
+          DivCount.fromJson(json['repeat_count']),
         ),
         startDelay: safeParseIntExpr(
           json['start_delay'],
@@ -131,7 +131,7 @@ class DivActionAnimatorStart extends Preloadable with EquatableMixin {
     }
     try {
       return DivActionAnimatorStart(
-        animatorId: (await safeParseStrExprAsync(
+        animatorId: (await safeParseStrAsync(
           json['animator_id']?.toString(),
         ))!,
         direction: await safeParseStrEnumExprAsync(
@@ -148,8 +148,8 @@ class DivActionAnimatorStart extends Preloadable with EquatableMixin {
           json['interpolator'],
           parse: DivAnimationInterpolator.fromJson,
         ),
-        repeatCount: await safeParseIntExprAsync(
-          json['repeat_count'],
+        repeatCount: await safeParseObjAsync(
+          DivCount.fromJson(json['repeat_count']),
         ),
         startDelay: await safeParseIntExprAsync(
           json['start_delay'],
@@ -168,7 +168,6 @@ class DivActionAnimatorStart extends Preloadable with EquatableMixin {
     Map<String, dynamic> context,
   ) async {
     try {
-      await animatorId.preload(context);
       await direction?.preload(context);
       await duration?.preload(context);
       await endValue?.preload(context);

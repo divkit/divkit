@@ -18,6 +18,7 @@ import 'package:divkit/src/schema/div_extension.dart';
 import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/schema/div_focus.dart';
 import 'package:divkit/src/schema/div_font_weight.dart';
+import 'package:divkit/src/schema/div_function.dart';
 import 'package:divkit/src/schema/div_layout_provider.dart';
 import 'package:divkit/src/schema/div_line_style.dart';
 import 'package:divkit/src/schema/div_match_parent_size.dart';
@@ -79,6 +80,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
     this.fontWeightValue,
+    this.functions,
     this.height = const DivSize.divWrapContentSize(
       DivWrapContentSize(),
     ),
@@ -106,6 +108,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
     this.textColor = const ValueExpression(Color(0xFF000000)),
     this.textGradient,
     this.textShadow,
+    this.tightenWidth = const ValueExpression(false),
     this.tooltips,
     this.transform = const DivTransform(),
     this.transitionChange,
@@ -153,7 +156,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
   @override
   final Expression<double> alpha;
 
-  /// Declaration of animators that can be used to change the value of variables over time.
+  /// Declaration of animators that change variable values over time.
   @override
   final List<DivAnimator>? animators;
 
@@ -216,6 +219,10 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
   // constraint: number > 0
   final Expression<int>? fontWeightValue;
 
+  /// User functions.
+  @override
+  final List<DivFunction>? functions;
+
   /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
@@ -228,7 +235,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
   /// Images embedded in text.
   final List<DivTextImage>? images;
 
-  /// Provides element real size values after a layout cycle.
+  /// Provides data on the actual size of the element.
   @override
   final DivLayoutProvider? layoutProvider;
 
@@ -262,7 +269,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
   /// A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
   final List<DivTextRange>? ranges;
 
-  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
+  /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
   @override
   final Expression<String>? reuseId;
 
@@ -304,6 +311,10 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
   /// Parameters of the shadow applied to the text.
   final DivShadow? textShadow;
 
+  /// Set text width to maximal line width, works only with wrap_content width with constrained=true and max_size set
+  // default value: false
+  final Expression<bool> tightenWidth;
+
   /// Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
   @override
   final List<DivTooltip>? tooltips;
@@ -341,7 +352,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
   @override
   final List<DivTrigger>? variableTriggers;
 
-  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+  /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
   final List<DivVariable>? variables;
 
@@ -389,6 +400,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         fontSizeUnit,
         fontWeight,
         fontWeightValue,
+        functions,
         height,
         id,
         images,
@@ -412,6 +424,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         textColor,
         textGradient,
         textShadow,
+        tightenWidth,
         tooltips,
         transform,
         transitionChange,
@@ -453,6 +466,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivSizeUnit>? fontSizeUnit,
     Expression<DivFontWeight>? fontWeight,
     Expression<int>? Function()? fontWeightValue,
+    List<DivFunction>? Function()? functions,
     DivSize? height,
     String? Function()? id,
     List<DivTextImage>? Function()? images,
@@ -476,6 +490,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
     Expression<Color>? textColor,
     DivTextGradient? Function()? textGradient,
     DivShadow? Function()? textShadow,
+    Expression<bool>? tightenWidth,
     List<DivTooltip>? Function()? tooltips,
     DivTransform? transform,
     DivChangeTransition? Function()? transitionChange,
@@ -531,6 +546,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         fontWeightValue: fontWeightValue != null
             ? fontWeightValue.call()
             : this.fontWeightValue,
+        functions: functions != null ? functions.call() : this.functions,
         height: height ?? this.height,
         id: id != null ? id.call() : this.id,
         images: images != null ? images.call() : this.images,
@@ -565,6 +581,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         textGradient:
             textGradient != null ? textGradient.call() : this.textGradient,
         textShadow: textShadow != null ? textShadow.call() : this.textShadow,
+        tightenWidth: tightenWidth ?? this.tightenWidth,
         tooltips: tooltips != null ? tooltips.call() : this.tooltips,
         transform: transform ?? this.transform,
         transitionChange: transitionChange != null
@@ -727,6 +744,14 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         fontWeightValue: safeParseIntExpr(
           json['font_weight_value'],
         ),
+        functions: safeParseObj(
+          safeListMap(
+            json['functions'],
+            (v) => safeParseObj(
+              DivFunction.fromJson(v),
+            )!,
+          ),
+        ),
         height: safeParseObj(
           DivSize.fromJson(json['height']),
           fallback: const DivSize.divWrapContentSize(
@@ -830,6 +855,10 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         textShadow: safeParseObj(
           DivShadow.fromJson(json['text_shadow']),
         ),
+        tightenWidth: safeParseBoolExpr(
+          json['tighten_width'],
+          fallback: false,
+        )!,
         tooltips: safeParseObj(
           safeListMap(
             json['tooltips'],
@@ -1048,6 +1077,14 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         fontWeightValue: await safeParseIntExprAsync(
           json['font_weight_value'],
         ),
+        functions: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['functions'],
+            (v) => safeParseObj(
+              DivFunction.fromJson(v),
+            )!,
+          ),
+        ),
         height: (await safeParseObjAsync(
           DivSize.fromJson(json['height']),
           fallback: const DivSize.divWrapContentSize(
@@ -1151,6 +1188,10 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
         textShadow: await safeParseObjAsync(
           DivShadow.fromJson(json['text_shadow']),
         ),
+        tightenWidth: (await safeParseBoolExprAsync(
+          json['tighten_width'],
+          fallback: false,
+        ))!,
         tooltips: await safeParseObjAsync(
           await safeListMapAsync(
             json['tooltips'],
@@ -1264,6 +1305,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
       await fontSizeUnit.preload(context);
       await fontWeight.preload(context);
       await fontWeightValue?.preload(context);
+      await safeFuturesWait(functions, (v) => v.preload(context));
       await height.preload(context);
       await safeFuturesWait(images, (v) => v.preload(context));
       await layoutProvider?.preload(context);
@@ -1286,6 +1328,7 @@ class DivText extends Preloadable with EquatableMixin implements DivBase {
       await textColor.preload(context);
       await textGradient?.preload(context);
       await textShadow?.preload(context);
+      await tightenWidth.preload(context);
       await safeFuturesWait(tooltips, (v) => v.preload(context));
       await transform.preload(context);
       await transitionChange?.preload(context);
@@ -1313,7 +1356,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
     this.alignmentVertical,
     this.background,
     this.border,
-    required this.end,
+    this.end,
     this.fontFamily,
     this.fontFeatureSettings,
     this.fontSize,
@@ -1322,7 +1365,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
     this.fontWeightValue,
     this.letterSpacing,
     this.lineHeight,
-    required this.start,
+    this.start = const ValueExpression(0),
     this.strike,
     this.textColor,
     this.textShadow,
@@ -1333,7 +1376,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
   /// Action when clicking on text.
   final List<DivAction>? actions;
 
-  /// Vertical text range alignment within a string.
+  /// Vertical text alignment within the row.
   final Expression<DivTextAlignmentVertical>? alignmentVertical;
 
   /// Character range background.
@@ -1344,7 +1387,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
 
   /// Ordinal number of the last character to be included in the range.
   // constraint: number > 0
-  final Expression<int> end;
+  final Expression<int>? end;
 
   /// Font family:
   /// • `text` — a standard text font;
@@ -1380,7 +1423,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
   final Expression<int>? lineHeight;
 
   /// Ordinal number of a character which the range begins from. The first character has a number `0`.
-  // constraint: number >= 0
+  // constraint: number >= 0; default value: 0
   final Expression<int> start;
 
   /// Strikethrough.
@@ -1427,7 +1470,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
     Expression<DivTextAlignmentVertical>? Function()? alignmentVertical,
     DivTextRangeBackground? Function()? background,
     DivTextRangeBorder? Function()? border,
-    Expression<int>? end,
+    Expression<int>? Function()? end,
     Expression<String>? Function()? fontFamily,
     Expression<String>? Function()? fontFeatureSettings,
     Expression<int>? Function()? fontSize,
@@ -1450,7 +1493,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
             : this.alignmentVertical,
         background: background != null ? background.call() : this.background,
         border: border != null ? border.call() : this.border,
-        end: end ?? this.end,
+        end: end != null ? end.call() : this.end,
         fontFamily: fontFamily != null ? fontFamily.call() : this.fontFamily,
         fontFeatureSettings: fontFeatureSettings != null
             ? fontFeatureSettings.call()
@@ -1500,7 +1543,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
         ),
         end: safeParseIntExpr(
           json['end'],
-        )!,
+        ),
         fontFamily: safeParseStrExpr(
           json['font_family']?.toString(),
         ),
@@ -1530,6 +1573,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
         ),
         start: safeParseIntExpr(
           json['start'],
+          fallback: 0,
         )!,
         strike: safeParseStrEnumExpr(
           json['strike'],
@@ -1580,9 +1624,9 @@ class DivTextRange extends Preloadable with EquatableMixin {
         border: await safeParseObjAsync(
           DivTextRangeBorder.fromJson(json['border']),
         ),
-        end: (await safeParseIntExprAsync(
+        end: await safeParseIntExprAsync(
           json['end'],
-        ))!,
+        ),
         fontFamily: await safeParseStrExprAsync(
           json['font_family']?.toString(),
         ),
@@ -1612,6 +1656,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
         ),
         start: (await safeParseIntExprAsync(
           json['start'],
+          fallback: 0,
         ))!,
         strike: await safeParseStrEnumExprAsync(
           json['strike'],
@@ -1645,7 +1690,7 @@ class DivTextRange extends Preloadable with EquatableMixin {
       await alignmentVertical?.preload(context);
       await background?.preload(context);
       await border?.preload(context);
-      await end.preload(context);
+      await end?.preload(context);
       await fontFamily?.preload(context);
       await fontFeatureSettings?.preload(context);
       await fontSize?.preload(context);
@@ -1691,7 +1736,7 @@ class DivTextImage extends Preloadable with EquatableMixin {
 
   final DivTextImageAccessibility accessibility;
 
-  /// Vertical text image alignment within a string.
+  /// Vertical image alignment within the row.
   // default value: DivTextAlignmentVertical.center
   final Expression<DivTextAlignmentVertical> alignmentVertical;
 

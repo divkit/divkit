@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// [Calculated expression](https://divkit.tech/docs/en/concepts/expressions) filter.
+/// Filter based on [calculated expressions](https://divkit.tech/docs/en/concepts/expressions).
 class DivInputFilterExpression extends Preloadable with EquatableMixin {
   const DivInputFilterExpression({
     required this.condition,
@@ -11,7 +11,7 @@ class DivInputFilterExpression extends Preloadable with EquatableMixin {
 
   static const type = "expression";
 
-  /// [Calculated expression](https://divkit.tech/docs/en/concepts/expressions) used as a value validity condition.
+  /// [Calculated expression](https://divkit.tech/docs/en/concepts/expressions) used to verify the validity of the value.
   final Expression<bool> condition;
 
   @override

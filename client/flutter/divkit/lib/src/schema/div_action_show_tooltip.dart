@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Shows tooltip.
+/// Shows the tooltip.
 class DivActionShowTooltip extends Preloadable with EquatableMixin {
   const DivActionShowTooltip({
     required this.id,
@@ -12,10 +12,10 @@ class DivActionShowTooltip extends Preloadable with EquatableMixin {
 
   static const type = "show_tooltip";
 
-  /// Tooltip identifier.
+  /// Tooltip ID.
   final Expression<String> id;
 
-  /// Defines whether tooltip can be shown again after being closed.
+  /// Sets whether the tooltip can be shown again after it’s closed.
   final Expression<bool>? multiple;
 
   @override

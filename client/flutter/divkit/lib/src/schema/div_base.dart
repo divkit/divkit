@@ -13,6 +13,7 @@ import 'package:divkit/src/schema/div_disappear_action.dart';
 import 'package:divkit/src/schema/div_edge_insets.dart';
 import 'package:divkit/src/schema/div_extension.dart';
 import 'package:divkit/src/schema/div_focus.dart';
+import 'package:divkit/src/schema/div_function.dart';
 import 'package:divkit/src/schema/div_layout_provider.dart';
 import 'package:divkit/src/schema/div_size.dart';
 import 'package:divkit/src/schema/div_tooltip.dart';
@@ -48,6 +49,8 @@ abstract class DivBase extends Preloadable {
   List<DivExtension>? get extensions;
 
   DivFocus? get focus;
+
+  List<DivFunction>? get functions;
 
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   DivSize get height;

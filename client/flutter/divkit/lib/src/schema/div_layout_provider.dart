@@ -9,10 +9,10 @@ class DivLayoutProvider extends Preloadable with EquatableMixin {
     this.widthVariableName,
   });
 
-  /// Variable name to store element height.
+  /// Name of the variable that stores the element’s height.
   final String? heightVariableName;
 
-  /// Variable name to store element width.
+  /// Name of the variable that stores the element’s width.
   final String? widthVariableName;
 
   @override

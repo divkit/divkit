@@ -19,6 +19,8 @@ abstract class DivSightAction extends Preloadable {
 
   Expression<Uri>? get referer;
 
+  String? get scopeId;
+
   DivActionTyped? get typed;
 
   Expression<Uri>? get url;

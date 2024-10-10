@@ -1,12 +1,13 @@
 // Generated code. Do not modify.
 
+import 'package:divkit/src/schema/div_animator_base.dart';
 import 'package:divkit/src/schema/div_color_animator.dart';
 import 'package:divkit/src/schema/div_number_animator.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
 class DivAnimator extends Preloadable with EquatableMixin {
-  final Preloadable value;
+  final DivAnimatorBase value;
   final int _index;
 
   @override

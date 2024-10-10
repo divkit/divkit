@@ -17,6 +17,7 @@ import 'package:divkit/src/schema/div_edge_insets.dart';
 import 'package:divkit/src/schema/div_extension.dart';
 import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/schema/div_focus.dart';
+import 'package:divkit/src/schema/div_function.dart';
 import 'package:divkit/src/schema/div_layout_provider.dart';
 import 'package:divkit/src/schema/div_match_parent_size.dart';
 import 'package:divkit/src/schema/div_page_transformation.dart';
@@ -48,6 +49,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
     this.disappearActions,
     this.extensions,
     this.focus,
+    this.functions,
     this.height = const DivSize.divWrapContentSize(
       DivWrapContentSize(),
     ),
@@ -105,7 +107,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
   @override
   final Expression<double> alpha;
 
-  /// Declaration of animators that can be used to change the value of variables over time.
+  /// Declaration of animators that change variable values over time.
   @override
   final List<DivAnimator>? animators;
 
@@ -137,6 +139,10 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
   /// Parameters when focusing on an element or losing focus.
   @override
   final DivFocus? focus;
+
+  /// User functions.
+  @override
+  final List<DivFunction>? functions;
 
   /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
@@ -171,7 +177,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
   /// • `percentage` — from the percentage value `page_width`.
   final DivPagerLayoutMode layoutMode;
 
-  /// Provides element real size values after a layout cycle.
+  /// Provides data on the actual size of the element.
   @override
   final DivLayoutProvider? layoutProvider;
 
@@ -187,14 +193,14 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
   @override
   final DivEdgeInsets paddings;
 
-  /// Page transformation during movement.
+  /// Page transformation during pager scrolling.
   final DivPageTransformation? pageTransformation;
 
   /// If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
   // default value: false
   final Expression<bool> restrictParentScroll;
 
-  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
+  /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
   @override
   final Expression<String>? reuseId;
 
@@ -236,7 +242,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
   @override
   final List<DivTrigger>? variableTriggers;
 
-  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+  /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
   final List<DivVariable>? variables;
 
@@ -272,6 +278,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
         disappearActions,
         extensions,
         focus,
+        functions,
         height,
         id,
         infiniteScroll,
@@ -315,6 +322,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
     List<DivDisappearAction>? Function()? disappearActions,
     List<DivExtension>? Function()? extensions,
     DivFocus? Function()? focus,
+    List<DivFunction>? Function()? functions,
     DivSize? height,
     String? Function()? id,
     Expression<bool>? infiniteScroll,
@@ -363,6 +371,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
             : this.disappearActions,
         extensions: extensions != null ? extensions.call() : this.extensions,
         focus: focus != null ? focus.call() : this.focus,
+        functions: functions != null ? functions.call() : this.functions,
         height: height ?? this.height,
         id: id != null ? id.call() : this.id,
         infiniteScroll: infiniteScroll ?? this.infiniteScroll,
@@ -481,6 +490,14 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
         ),
         focus: safeParseObj(
           DivFocus.fromJson(json['focus']),
+        ),
+        functions: safeParseObj(
+          safeListMap(
+            json['functions'],
+            (v) => safeParseObj(
+              DivFunction.fromJson(v),
+            )!,
+          ),
         ),
         height: safeParseObj(
           DivSize.fromJson(json['height']),
@@ -698,6 +715,14 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
         focus: await safeParseObjAsync(
           DivFocus.fromJson(json['focus']),
         ),
+        functions: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['functions'],
+            (v) => safeParseObj(
+              DivFunction.fromJson(v),
+            )!,
+          ),
+        ),
         height: (await safeParseObjAsync(
           DivSize.fromJson(json['height']),
           fallback: const DivSize.divWrapContentSize(
@@ -861,6 +886,7 @@ class DivPager extends Preloadable with EquatableMixin implements DivBase {
       await safeFuturesWait(disappearActions, (v) => v.preload(context));
       await safeFuturesWait(extensions, (v) => v.preload(context));
       await focus?.preload(context);
+      await safeFuturesWait(functions, (v) => v.preload(context));
       await height.preload(context);
       await infiniteScroll.preload(context);
       await itemBuilder?.preload(context);

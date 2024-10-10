@@ -3,14 +3,16 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Stops specified animator
+/// Stops the specified animator.
 class DivActionAnimatorStop extends Preloadable with EquatableMixin {
   const DivActionAnimatorStop({
     required this.animatorId,
   });
 
   static const type = "animator_stop";
-  final Expression<String> animatorId;
+
+  /// The identifier of the animator being stopped.
+  final String animatorId;
 
   @override
   List<Object?> get props => [
@@ -18,7 +20,7 @@ class DivActionAnimatorStop extends Preloadable with EquatableMixin {
       ];
 
   DivActionAnimatorStop copyWith({
-    Expression<String>? animatorId,
+    String? animatorId,
   }) =>
       DivActionAnimatorStop(
         animatorId: animatorId ?? this.animatorId,
@@ -32,7 +34,7 @@ class DivActionAnimatorStop extends Preloadable with EquatableMixin {
     }
     try {
       return DivActionAnimatorStop(
-        animatorId: safeParseStrExpr(
+        animatorId: safeParseStr(
           json['animator_id']?.toString(),
         )!,
       );
@@ -49,7 +51,7 @@ class DivActionAnimatorStop extends Preloadable with EquatableMixin {
     }
     try {
       return DivActionAnimatorStop(
-        animatorId: (await safeParseStrExprAsync(
+        animatorId: (await safeParseStrAsync(
           json['animator_id']?.toString(),
         ))!,
       );
@@ -62,9 +64,7 @@ class DivActionAnimatorStop extends Preloadable with EquatableMixin {
   Future<void> preload(
     Map<String, dynamic> context,
   ) async {
-    try {
-      await animatorId.preload(context);
-    } catch (e) {
+    try {} catch (e) {
       return;
     }
   }

@@ -3,11 +3,16 @@
 import 'package:divkit/src/schema/div_action.dart';
 import 'package:divkit/src/schema/div_animation_direction.dart';
 import 'package:divkit/src/schema/div_animation_interpolator.dart';
+import 'package:divkit/src/schema/div_animator_base.dart';
+import 'package:divkit/src/schema/div_count.dart';
+import 'package:divkit/src/schema/div_fixed_count.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Number animator.
-class DivNumberAnimator extends Preloadable with EquatableMixin {
+/// Numeric value animator.
+class DivNumberAnimator extends Preloadable
+    with EquatableMixin
+    implements DivAnimatorBase {
   const DivNumberAnimator({
     this.cancelActions,
     this.direction = const ValueExpression(DivAnimationDirection.normal),
@@ -16,7 +21,13 @@ class DivNumberAnimator extends Preloadable with EquatableMixin {
     required this.endValue,
     required this.id,
     this.interpolator = const ValueExpression(DivAnimationInterpolator.linear),
-    this.repeatCount = const ValueExpression(1),
+    this.repeatCount = const DivCount.divFixedCount(
+      DivFixedCount(
+        value: ValueExpression(
+          1,
+        ),
+      ),
+    ),
     this.startDelay = const ValueExpression(0),
     this.startValue,
     required this.variableName,
@@ -24,42 +35,51 @@ class DivNumberAnimator extends Preloadable with EquatableMixin {
 
   static const type = "number_animator";
 
-  /// Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received
+  /// Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+  @override
   final List<DivAction>? cancelActions;
 
-  /// Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+  /// Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
   // default value: DivAnimationDirection.normal
+  @override
   final Expression<DivAnimationDirection> direction;
 
   /// Animation duration in milliseconds.
   // constraint: number >= 0
+  @override
   final Expression<int> duration;
 
-  /// Actions performed when the animator completes animation.
+  /// Actions to be performed after the animator finishes.
+  @override
   final List<DivAction>? endActions;
 
-  /// Value that will be set at the end of animation.
+  /// The value the variable will have when the animation ends.
   final Expression<double> endValue;
 
-  /// Animator identificator
+  /// Animator ID.
+  @override
   final String id;
 
-  /// Interpolation function.
+  /// Animated value interpolation function.
   // default value: DivAnimationInterpolator.linear
+  @override
   final Expression<DivAnimationInterpolator> interpolator;
 
-  /// The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
-  // constraint: number >= 0; default value: 1
-  final Expression<int> repeatCount;
+  /// Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+  // default value: const DivCount.divFixedCount(const DivFixedCount(value: ValueExpression(1,),),)
+  @override
+  final DivCount repeatCount;
 
-  /// Animation start delay in milliseconds.
+  /// Delay before the animation is launched in milliseconds.
   // constraint: number >= 0; default value: 0
+  @override
   final Expression<int> startDelay;
 
-  /// Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
+  /// The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
   final Expression<double>? startValue;
 
   /// Name of the variable being animated.
+  @override
   final String variableName;
 
   @override
@@ -85,7 +105,7 @@ class DivNumberAnimator extends Preloadable with EquatableMixin {
     Expression<double>? endValue,
     String? id,
     Expression<DivAnimationInterpolator>? interpolator,
-    Expression<int>? repeatCount,
+    DivCount? repeatCount,
     Expression<int>? startDelay,
     Expression<double>? Function()? startValue,
     String? variableName,
@@ -148,9 +168,15 @@ class DivNumberAnimator extends Preloadable with EquatableMixin {
           parse: DivAnimationInterpolator.fromJson,
           fallback: DivAnimationInterpolator.linear,
         )!,
-        repeatCount: safeParseIntExpr(
-          json['repeat_count'],
-          fallback: 1,
+        repeatCount: safeParseObj(
+          DivCount.fromJson(json['repeat_count']),
+          fallback: const DivCount.divFixedCount(
+            DivFixedCount(
+              value: ValueExpression(
+                1,
+              ),
+            ),
+          ),
         )!,
         startDelay: safeParseIntExpr(
           json['start_delay'],
@@ -211,9 +237,15 @@ class DivNumberAnimator extends Preloadable with EquatableMixin {
           parse: DivAnimationInterpolator.fromJson,
           fallback: DivAnimationInterpolator.linear,
         ))!,
-        repeatCount: (await safeParseIntExprAsync(
-          json['repeat_count'],
-          fallback: 1,
+        repeatCount: (await safeParseObjAsync(
+          DivCount.fromJson(json['repeat_count']),
+          fallback: const DivCount.divFixedCount(
+            DivFixedCount(
+              value: ValueExpression(
+                1,
+              ),
+            ),
+          ),
         ))!,
         startDelay: (await safeParseIntExprAsync(
           json['start_delay'],

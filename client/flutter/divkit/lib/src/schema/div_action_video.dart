@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Controls given video.
+/// Manages video playback.
 class DivActionVideo extends Preloadable with EquatableMixin {
   const DivActionVideo({
     required this.action,
@@ -12,12 +12,12 @@ class DivActionVideo extends Preloadable with EquatableMixin {
 
   static const type = "video";
 
-  /// Defines video action:
-  /// • `start` - play if it is ready or plans to play when video becomes ready;
-  /// • `pause` - pauses video playback.
+  /// Defines the action for the video:
+  /// • `start` — starts playing the video if the video is ready to be played, or schedules playback
+  /// • `pause' — stops the video playback
   final Expression<DivActionVideoAction> action;
 
-  /// Video identifier.
+  /// Video ID.
   final Expression<String> id;
 
   @override

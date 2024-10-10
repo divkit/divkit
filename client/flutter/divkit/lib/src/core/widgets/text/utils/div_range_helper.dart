@@ -16,6 +16,7 @@ class DivRangeHelper {
     final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
     for (var range in divTextRange) {
       final mapEntry = await _getRangeInputMapEntry(
+        text.length,
         range,
         style,
         context,
@@ -54,6 +55,7 @@ class DivRangeHelper {
     final inputMap = <DivTextRangeInterval, DivTextRangeOptionModel>{};
     for (var range in divTextRange) {
       final mapEntry = _getRangeInputMapEntrySync(
+        text.length,
         range,
         style,
         linesStyleList,
@@ -82,6 +84,7 @@ class DivRangeHelper {
 
   static Future<MapEntry<DivTextRangeInterval, DivTextRangeOptionModel>>
       _getRangeInputMapEntry(
+    int length,
     DivTextRange divTextRange,
     TextStyle style,
     DivVariableContext context,
@@ -92,9 +95,10 @@ class DivRangeHelper {
     final start = await divTextRange.start.resolveValue(
       context: context,
     );
-    final end = await divTextRange.end.resolveValue(
-      context: context,
-    );
+    final end = await divTextRange.end?.resolveValue(
+          context: context,
+        ) ??
+        length;
 
     final topOffset = await divTextRange.topOffset?.resolveValue(
       context: context,
@@ -121,6 +125,7 @@ class DivRangeHelper {
           context: context,
         );
       },
+      divCloudBackground: (_) {},
     );
 
     final fontFamily = await divTextRange.fontFamily?.resolveValue(
@@ -196,14 +201,15 @@ class DivRangeHelper {
 
   static MapEntry<DivTextRangeInterval, DivTextRangeOptionModel>
       _getRangeInputMapEntrySync(
+    int length,
     DivTextRange divTextRange,
     TextStyle style,
     List<DivLineStyle> linesStyleList,
     double viewScale,
     DivFontProvider fontProvider,
   ) {
-    final start = divTextRange.start.value!;
-    final end = divTextRange.end.value!;
+    final start = divTextRange.start.requireValue;
+    final end = divTextRange.end?.requireValue ?? length;
 
     final topOffset = divTextRange.topOffset?.value!;
 
@@ -218,6 +224,7 @@ class DivRangeHelper {
       divSolidBackground: (divSolidBackground) {
         background = divSolidBackground.color.value!;
       },
+      divCloudBackground: (_) {},
     );
 
     final fontFamily = divTextRange.fontFamily?.value!;

@@ -15,6 +15,7 @@ import 'package:divkit/src/schema/div_edge_insets.dart';
 import 'package:divkit/src/schema/div_extension.dart';
 import 'package:divkit/src/schema/div_focus.dart';
 import 'package:divkit/src/schema/div_font_weight.dart';
+import 'package:divkit/src/schema/div_function.dart';
 import 'package:divkit/src/schema/div_input_filter.dart';
 import 'package:divkit/src/schema/div_input_mask.dart';
 import 'package:divkit/src/schema/div_input_validator.dart';
@@ -55,6 +56,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
     this.fontSizeUnit = const ValueExpression(DivSizeUnit.sp),
     this.fontWeight = const ValueExpression(DivFontWeight.regular),
     this.fontWeightValue,
+    this.functions,
     this.height = const DivSize.divWrapContentSize(
       DivWrapContentSize(),
     ),
@@ -120,11 +122,11 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   @override
   final Expression<double> alpha;
 
-  /// Declaration of animators that can be used to change the value of variables over time.
+  /// Declaration of animators that change variable values over time.
   @override
   final List<DivAnimator>? animators;
 
-  /// Automatic text capitalization type.
+  /// Text auto-capitalization type.
   // default value: DivInputAutocapitalization.auto
   final Expression<DivInputAutocapitalization> autocapitalization;
 
@@ -149,7 +151,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   @override
   final List<DivExtension>? extensions;
 
-  /// Filtering that prevents the entry of text that does not meet specified conditions.
+  /// Filter that prevents users from entering text that doesn't satisfy the specified conditions.
   final List<DivInputFilter>? filters;
 
   /// Parameters when focusing on an element or losing focus.
@@ -180,6 +182,10 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   // constraint: number > 0
   final Expression<int>? fontWeightValue;
 
+  /// User functions.
+  @override
+  final List<DivFunction>? functions;
+
   /// Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](https://divkit.tech/docs/en/concepts/layout).
   // default value: const DivSize.divWrapContentSize(DivWrapContentSize(),)
   @override
@@ -199,7 +205,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   @override
   final String? id;
 
-  /// Indicates if the text editing is enabled.
+  /// Enables or disables text editing.
   // default value: true
   final Expression<bool> isEnabled;
 
@@ -207,7 +213,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   // default value: DivInputKeyboardType.multiLineText
   final Expression<DivInputKeyboardType> keyboardType;
 
-  /// Provides element real size values after a layout cycle.
+  /// Provides data on the actual size of the element.
   @override
   final DivLayoutProvider? layoutProvider;
 
@@ -241,7 +247,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   @override
   final DivEdgeInsets paddings;
 
-  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
+  /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
   @override
   final Expression<String>? reuseId;
 
@@ -305,7 +311,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
   @override
   final List<DivTrigger>? variableTriggers;
 
-  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+  /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
   final List<DivVariable>? variables;
 
@@ -347,6 +353,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
         fontSizeUnit,
         fontWeight,
         fontWeightValue,
+        functions,
         height,
         highlightColor,
         hintColor,
@@ -405,6 +412,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
     Expression<DivSizeUnit>? fontSizeUnit,
     Expression<DivFontWeight>? fontWeight,
     Expression<int>? Function()? fontWeightValue,
+    List<DivFunction>? Function()? functions,
     DivSize? height,
     Expression<Color>? Function()? highlightColor,
     Expression<Color>? hintColor,
@@ -470,6 +478,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
         fontWeightValue: fontWeightValue != null
             ? fontWeightValue.call()
             : this.fontWeightValue,
+        functions: functions != null ? functions.call() : this.functions,
         height: height ?? this.height,
         highlightColor: highlightColor != null
             ? highlightColor.call()
@@ -631,6 +640,14 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
         )!,
         fontWeightValue: safeParseIntExpr(
           json['font_weight_value'],
+        ),
+        functions: safeParseObj(
+          safeListMap(
+            json['functions'],
+            (v) => safeParseObj(
+              DivFunction.fromJson(v),
+            )!,
+          ),
         ),
         height: safeParseObj(
           DivSize.fromJson(json['height']),
@@ -906,6 +923,14 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
         fontWeightValue: await safeParseIntExprAsync(
           json['font_weight_value'],
         ),
+        functions: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['functions'],
+            (v) => safeParseObj(
+              DivFunction.fromJson(v),
+            )!,
+          ),
+        ),
         height: (await safeParseObjAsync(
           DivSize.fromJson(json['height']),
           fallback: const DivSize.divWrapContentSize(
@@ -1104,6 +1129,7 @@ class DivInput extends Preloadable with EquatableMixin implements DivBase {
       await fontSizeUnit.preload(context);
       await fontWeight.preload(context);
       await fontWeightValue?.preload(context);
+      await safeFuturesWait(functions, (v) => v.preload(context));
       await height.preload(context);
       await highlightColor?.preload(context);
       await hintColor.preload(context);

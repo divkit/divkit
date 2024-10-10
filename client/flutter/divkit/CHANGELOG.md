@@ -1,5 +1,7 @@
 ## 0.5.1-rc.1
 
+* Update generated schema
+* Support nullable end in div-ranges and cloud background fallback
 * Clean dependencies
 
 ## 0.5.0
@@ -13,7 +15,7 @@
 * Provide documentation for generated schema
 
 ## Migration 0.4 → 0.5
-* The method `clearVariables` was removed as unused
+* The DivExpressionResolver method `clearVariables` was removed as unused
 * To ensure stability and a large change in the main calculation mechanism,
   you need to check the your application when updating
 

@@ -8,11 +8,16 @@ import 'package:divkit/src/schema/div_action_array_set_value.dart';
 import 'package:divkit/src/schema/div_action_clear_focus.dart';
 import 'package:divkit/src/schema/div_action_copy_to_clipboard.dart';
 import 'package:divkit/src/schema/div_action_dict_set_value.dart';
+import 'package:divkit/src/schema/div_action_download.dart';
 import 'package:divkit/src/schema/div_action_focus_element.dart';
 import 'package:divkit/src/schema/div_action_hide_tooltip.dart';
+import 'package:divkit/src/schema/div_action_scroll_by.dart';
+import 'package:divkit/src/schema/div_action_scroll_to.dart';
 import 'package:divkit/src/schema/div_action_set_state.dart';
+import 'package:divkit/src/schema/div_action_set_stored_value.dart';
 import 'package:divkit/src/schema/div_action_set_variable.dart';
 import 'package:divkit/src/schema/div_action_show_tooltip.dart';
+import 'package:divkit/src/schema/div_action_submit.dart';
 import 'package:divkit/src/schema/div_action_timer.dart';
 import 'package:divkit/src/schema/div_action_video.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
@@ -34,11 +39,16 @@ class DivActionTyped extends Preloadable with EquatableMixin {
     required T Function(DivActionClearFocus) divActionClearFocus,
     required T Function(DivActionCopyToClipboard) divActionCopyToClipboard,
     required T Function(DivActionDictSetValue) divActionDictSetValue,
+    required T Function(DivActionDownload) divActionDownload,
     required T Function(DivActionFocusElement) divActionFocusElement,
     required T Function(DivActionHideTooltip) divActionHideTooltip,
+    required T Function(DivActionScrollBy) divActionScrollBy,
+    required T Function(DivActionScrollTo) divActionScrollTo,
     required T Function(DivActionSetState) divActionSetState,
+    required T Function(DivActionSetStoredValue) divActionSetStoredValue,
     required T Function(DivActionSetVariable) divActionSetVariable,
     required T Function(DivActionShowTooltip) divActionShowTooltip,
+    required T Function(DivActionSubmit) divActionSubmit,
     required T Function(DivActionTimer) divActionTimer,
     required T Function(DivActionVideo) divActionVideo,
   }) {
@@ -76,30 +86,50 @@ class DivActionTyped extends Preloadable with EquatableMixin {
           value as DivActionDictSetValue,
         );
       case 8:
+        return divActionDownload(
+          value as DivActionDownload,
+        );
+      case 9:
         return divActionFocusElement(
           value as DivActionFocusElement,
         );
-      case 9:
+      case 10:
         return divActionHideTooltip(
           value as DivActionHideTooltip,
         );
-      case 10:
+      case 11:
+        return divActionScrollBy(
+          value as DivActionScrollBy,
+        );
+      case 12:
+        return divActionScrollTo(
+          value as DivActionScrollTo,
+        );
+      case 13:
         return divActionSetState(
           value as DivActionSetState,
         );
-      case 11:
+      case 14:
+        return divActionSetStoredValue(
+          value as DivActionSetStoredValue,
+        );
+      case 15:
         return divActionSetVariable(
           value as DivActionSetVariable,
         );
-      case 12:
+      case 16:
         return divActionShowTooltip(
           value as DivActionShowTooltip,
         );
-      case 13:
+      case 17:
+        return divActionSubmit(
+          value as DivActionSubmit,
+        );
+      case 18:
         return divActionTimer(
           value as DivActionTimer,
         );
-      case 14:
+      case 19:
         return divActionVideo(
           value as DivActionVideo,
         );
@@ -118,11 +148,16 @@ class DivActionTyped extends Preloadable with EquatableMixin {
     T Function(DivActionClearFocus)? divActionClearFocus,
     T Function(DivActionCopyToClipboard)? divActionCopyToClipboard,
     T Function(DivActionDictSetValue)? divActionDictSetValue,
+    T Function(DivActionDownload)? divActionDownload,
     T Function(DivActionFocusElement)? divActionFocusElement,
     T Function(DivActionHideTooltip)? divActionHideTooltip,
+    T Function(DivActionScrollBy)? divActionScrollBy,
+    T Function(DivActionScrollTo)? divActionScrollTo,
     T Function(DivActionSetState)? divActionSetState,
+    T Function(DivActionSetStoredValue)? divActionSetStoredValue,
     T Function(DivActionSetVariable)? divActionSetVariable,
     T Function(DivActionShowTooltip)? divActionShowTooltip,
+    T Function(DivActionSubmit)? divActionSubmit,
     T Function(DivActionTimer)? divActionTimer,
     T Function(DivActionVideo)? divActionVideo,
     required T Function() orElse,
@@ -185,48 +220,83 @@ class DivActionTyped extends Preloadable with EquatableMixin {
         }
         break;
       case 8:
+        if (divActionDownload != null) {
+          return divActionDownload(
+            value as DivActionDownload,
+          );
+        }
+        break;
+      case 9:
         if (divActionFocusElement != null) {
           return divActionFocusElement(
             value as DivActionFocusElement,
           );
         }
         break;
-      case 9:
+      case 10:
         if (divActionHideTooltip != null) {
           return divActionHideTooltip(
             value as DivActionHideTooltip,
           );
         }
         break;
-      case 10:
+      case 11:
+        if (divActionScrollBy != null) {
+          return divActionScrollBy(
+            value as DivActionScrollBy,
+          );
+        }
+        break;
+      case 12:
+        if (divActionScrollTo != null) {
+          return divActionScrollTo(
+            value as DivActionScrollTo,
+          );
+        }
+        break;
+      case 13:
         if (divActionSetState != null) {
           return divActionSetState(
             value as DivActionSetState,
           );
         }
         break;
-      case 11:
+      case 14:
+        if (divActionSetStoredValue != null) {
+          return divActionSetStoredValue(
+            value as DivActionSetStoredValue,
+          );
+        }
+        break;
+      case 15:
         if (divActionSetVariable != null) {
           return divActionSetVariable(
             value as DivActionSetVariable,
           );
         }
         break;
-      case 12:
+      case 16:
         if (divActionShowTooltip != null) {
           return divActionShowTooltip(
             value as DivActionShowTooltip,
           );
         }
         break;
-      case 13:
+      case 17:
+        if (divActionSubmit != null) {
+          return divActionSubmit(
+            value as DivActionSubmit,
+          );
+        }
+        break;
+      case 18:
         if (divActionTimer != null) {
           return divActionTimer(
             value as DivActionTimer,
           );
         }
         break;
-      case 14:
+      case 19:
         if (divActionVideo != null) {
           return divActionVideo(
             value as DivActionVideo,
@@ -277,40 +347,65 @@ class DivActionTyped extends Preloadable with EquatableMixin {
   )   : value = obj,
         _index = 7;
 
+  const DivActionTyped.divActionDownload(
+    DivActionDownload obj,
+  )   : value = obj,
+        _index = 8;
+
   const DivActionTyped.divActionFocusElement(
     DivActionFocusElement obj,
   )   : value = obj,
-        _index = 8;
+        _index = 9;
 
   const DivActionTyped.divActionHideTooltip(
     DivActionHideTooltip obj,
   )   : value = obj,
-        _index = 9;
+        _index = 10;
+
+  const DivActionTyped.divActionScrollBy(
+    DivActionScrollBy obj,
+  )   : value = obj,
+        _index = 11;
+
+  const DivActionTyped.divActionScrollTo(
+    DivActionScrollTo obj,
+  )   : value = obj,
+        _index = 12;
 
   const DivActionTyped.divActionSetState(
     DivActionSetState obj,
   )   : value = obj,
-        _index = 10;
+        _index = 13;
+
+  const DivActionTyped.divActionSetStoredValue(
+    DivActionSetStoredValue obj,
+  )   : value = obj,
+        _index = 14;
 
   const DivActionTyped.divActionSetVariable(
     DivActionSetVariable obj,
   )   : value = obj,
-        _index = 11;
+        _index = 15;
 
   const DivActionTyped.divActionShowTooltip(
     DivActionShowTooltip obj,
   )   : value = obj,
-        _index = 12;
+        _index = 16;
+
+  const DivActionTyped.divActionSubmit(
+    DivActionSubmit obj,
+  )   : value = obj,
+        _index = 17;
 
   const DivActionTyped.divActionTimer(
     DivActionTimer obj,
   )   : value = obj,
-        _index = 13;
+        _index = 18;
 
   const DivActionTyped.divActionVideo(
     DivActionVideo obj,
   )   : value = obj,
-        _index = 14;
+        _index = 19;
 
   bool get isDivActionAnimatorStart => _index == 0;
 
@@ -328,19 +423,29 @@ class DivActionTyped extends Preloadable with EquatableMixin {
 
   bool get isDivActionDictSetValue => _index == 7;
 
-  bool get isDivActionFocusElement => _index == 8;
+  bool get isDivActionDownload => _index == 8;
 
-  bool get isDivActionHideTooltip => _index == 9;
+  bool get isDivActionFocusElement => _index == 9;
 
-  bool get isDivActionSetState => _index == 10;
+  bool get isDivActionHideTooltip => _index == 10;
 
-  bool get isDivActionSetVariable => _index == 11;
+  bool get isDivActionScrollBy => _index == 11;
 
-  bool get isDivActionShowTooltip => _index == 12;
+  bool get isDivActionScrollTo => _index == 12;
 
-  bool get isDivActionTimer => _index == 13;
+  bool get isDivActionSetState => _index == 13;
 
-  bool get isDivActionVideo => _index == 14;
+  bool get isDivActionSetStoredValue => _index == 14;
+
+  bool get isDivActionSetVariable => _index == 15;
+
+  bool get isDivActionShowTooltip => _index == 16;
+
+  bool get isDivActionSubmit => _index == 17;
+
+  bool get isDivActionTimer => _index == 18;
+
+  bool get isDivActionVideo => _index == 19;
 
   @override
   Future<void> preload(Map<String, dynamic> context) => value.preload(context);
@@ -385,6 +490,10 @@ class DivActionTyped extends Preloadable with EquatableMixin {
           return DivActionTyped.divActionDictSetValue(
             DivActionDictSetValue.fromJson(json)!,
           );
+        case DivActionDownload.type:
+          return DivActionTyped.divActionDownload(
+            DivActionDownload.fromJson(json)!,
+          );
         case DivActionFocusElement.type:
           return DivActionTyped.divActionFocusElement(
             DivActionFocusElement.fromJson(json)!,
@@ -393,9 +502,21 @@ class DivActionTyped extends Preloadable with EquatableMixin {
           return DivActionTyped.divActionHideTooltip(
             DivActionHideTooltip.fromJson(json)!,
           );
+        case DivActionScrollBy.type:
+          return DivActionTyped.divActionScrollBy(
+            DivActionScrollBy.fromJson(json)!,
+          );
+        case DivActionScrollTo.type:
+          return DivActionTyped.divActionScrollTo(
+            DivActionScrollTo.fromJson(json)!,
+          );
         case DivActionSetState.type:
           return DivActionTyped.divActionSetState(
             DivActionSetState.fromJson(json)!,
+          );
+        case DivActionSetStoredValue.type:
+          return DivActionTyped.divActionSetStoredValue(
+            DivActionSetStoredValue.fromJson(json)!,
           );
         case DivActionSetVariable.type:
           return DivActionTyped.divActionSetVariable(
@@ -404,6 +525,10 @@ class DivActionTyped extends Preloadable with EquatableMixin {
         case DivActionShowTooltip.type:
           return DivActionTyped.divActionShowTooltip(
             DivActionShowTooltip.fromJson(json)!,
+          );
+        case DivActionSubmit.type:
+          return DivActionTyped.divActionSubmit(
+            DivActionSubmit.fromJson(json)!,
           );
         case DivActionTimer.type:
           return DivActionTyped.divActionTimer(
@@ -460,6 +585,10 @@ class DivActionTyped extends Preloadable with EquatableMixin {
           return DivActionTyped.divActionDictSetValue(
             (await DivActionDictSetValue.parse(json))!,
           );
+        case DivActionDownload.type:
+          return DivActionTyped.divActionDownload(
+            (await DivActionDownload.parse(json))!,
+          );
         case DivActionFocusElement.type:
           return DivActionTyped.divActionFocusElement(
             (await DivActionFocusElement.parse(json))!,
@@ -468,9 +597,21 @@ class DivActionTyped extends Preloadable with EquatableMixin {
           return DivActionTyped.divActionHideTooltip(
             (await DivActionHideTooltip.parse(json))!,
           );
+        case DivActionScrollBy.type:
+          return DivActionTyped.divActionScrollBy(
+            (await DivActionScrollBy.parse(json))!,
+          );
+        case DivActionScrollTo.type:
+          return DivActionTyped.divActionScrollTo(
+            (await DivActionScrollTo.parse(json))!,
+          );
         case DivActionSetState.type:
           return DivActionTyped.divActionSetState(
             (await DivActionSetState.parse(json))!,
+          );
+        case DivActionSetStoredValue.type:
+          return DivActionTyped.divActionSetStoredValue(
+            (await DivActionSetStoredValue.parse(json))!,
           );
         case DivActionSetVariable.type:
           return DivActionTyped.divActionSetVariable(
@@ -479,6 +620,10 @@ class DivActionTyped extends Preloadable with EquatableMixin {
         case DivActionShowTooltip.type:
           return DivActionTyped.divActionShowTooltip(
             (await DivActionShowTooltip.parse(json))!,
+          );
+        case DivActionSubmit.type:
+          return DivActionTyped.divActionSubmit(
+            (await DivActionSubmit.parse(json))!,
           );
         case DivActionTimer.type:
           return DivActionTyped.divActionTimer(

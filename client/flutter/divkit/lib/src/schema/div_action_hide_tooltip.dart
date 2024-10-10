@@ -3,7 +3,7 @@
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Hides tooltip.
+/// Hides the tooltip.
 class DivActionHideTooltip extends Preloadable with EquatableMixin {
   const DivActionHideTooltip({
     required this.id,
@@ -11,7 +11,7 @@ class DivActionHideTooltip extends Preloadable with EquatableMixin {
 
   static const type = "hide_tooltip";
 
-  /// Tooltip identifier.
+  /// Tooltip ID.
   final Expression<String> id;
 
   @override

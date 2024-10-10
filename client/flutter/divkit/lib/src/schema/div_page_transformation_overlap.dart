@@ -4,7 +4,7 @@ import 'package:divkit/src/schema/div_animation_interpolator.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// The pages are stacked when the pager is scrolled overlapping each other.
+/// Pages are stacked during animation overlapping one another.
 class DivPageTransformationOverlap extends Preloadable with EquatableMixin {
   const DivPageTransformationOverlap({
     this.interpolator =
@@ -18,32 +18,32 @@ class DivPageTransformationOverlap extends Preloadable with EquatableMixin {
 
   static const type = "overlap";
 
-  /// Tranformation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:
-  /// • `linear` — cubic-bezier(0, 0, 1, 1);
-  /// • `ease` — cubic-bezier(0.25, 0.1, 0.25, 1);
-  /// • `ease_in` — cubic-bezier(0.42, 0, 1, 1);
-  /// • `ease_out` — cubic-bezier(0, 0, 0.58, 1);
-  /// • `ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).
+  /// Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:
+  /// • `linear` — cubic-bezier(0, 0, 1, 1)
+  /// • `ease` — cubic-bezier(0.25, 0.1, 0.25, 1)
+  /// • `ease_in` — cubic-bezier(0.42, 0, 1, 1)
+  /// • `ease_out` — cubic-bezier(0, 0, 0.58, 1)
+  /// • `ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)
   // default value: DivAnimationInterpolator.easeInOut
   final Expression<DivAnimationInterpolator> interpolator;
 
-  /// Minimum alpha of the next page during pager scrolling in bounds [0, 1]. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+  /// Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   final Expression<double> nextPageAlpha;
 
-  /// Scale of the next page during pager scrolling. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+  /// Scaling the next page during pager scrolling. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
   // constraint: number >= 0.0; default value: 1.0
   final Expression<double> nextPageScale;
 
-  /// Minimum alpha of the previous page during pager scrolling in bounds [0, 1]. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
+  /// Minimum transparency of the previous page, in the range [0, 1], during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
   // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   final Expression<double> previousPageAlpha;
 
-  /// Scale of the previous page during pager scrolling. The previous page is always a page with a lower sequential number in the list of `items`, regardless of the direction of scrolling.
+  /// Scaling the previous page during pager scrolling. The previous page is always the page with a lower ordinal number in the `items` list, regardless of the scrolling direction.
   // constraint: number >= 0.0; default value: 1.0
   final Expression<double> previousPageScale;
 
-  /// If the value set to false, the next pages will be stacked on top the previous ones. If the value set to true, then the opposite will occur. The next page is always a page with a large sequential number in the list of `items`, regardless of the direction of scrolling.
+  /// If the value is `false`, the following pages will be stacked on top of the previous ones. If the value is `true`, the reverse happens. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.
   // default value: false
   final Expression<bool> reversedStackingOrder;
 

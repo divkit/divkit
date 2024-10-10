@@ -15,6 +15,7 @@ class DivAction extends Preloadable with EquatableMixin {
     this.menuItems,
     this.payload,
     this.referer,
+    this.scopeId,
     this.target,
     this.typed,
     this.url,
@@ -42,6 +43,9 @@ class DivAction extends Preloadable with EquatableMixin {
   /// Referer URL for logging.
   final Expression<Uri>? referer;
 
+  /// The ID of the element within which the specified action will be performed.
+  final String? scopeId;
+
   /// The tab in which the URL must be opened.
   final Expression<DivActionTarget>? target;
   final DivActionTyped? typed;
@@ -58,6 +62,7 @@ class DivAction extends Preloadable with EquatableMixin {
         menuItems,
         payload,
         referer,
+        scopeId,
         target,
         typed,
         url,
@@ -71,6 +76,7 @@ class DivAction extends Preloadable with EquatableMixin {
     List<DivActionMenuItem>? Function()? menuItems,
     Map<String, dynamic>? Function()? payload,
     Expression<Uri>? Function()? referer,
+    String? Function()? scopeId,
     Expression<DivActionTarget>? Function()? target,
     DivActionTyped? Function()? typed,
     Expression<Uri>? Function()? url,
@@ -85,6 +91,7 @@ class DivAction extends Preloadable with EquatableMixin {
         menuItems: menuItems != null ? menuItems.call() : this.menuItems,
         payload: payload != null ? payload.call() : this.payload,
         referer: referer != null ? referer.call() : this.referer,
+        scopeId: scopeId != null ? scopeId.call() : this.scopeId,
         target: target != null ? target.call() : this.target,
         typed: typed != null ? typed.call() : this.typed,
         url: url != null ? url.call() : this.url,
@@ -121,6 +128,9 @@ class DivAction extends Preloadable with EquatableMixin {
           json['payload'],
         ),
         referer: safeParseUriExpr(json['referer']),
+        scopeId: safeParseStr(
+          json['scope_id']?.toString(),
+        ),
         target: safeParseStrEnumExpr(
           json['target'],
           parse: DivActionTarget.fromJson,
@@ -166,6 +176,9 @@ class DivAction extends Preloadable with EquatableMixin {
           json['payload'],
         ),
         referer: await safeParseUriExprAsync(json['referer']),
+        scopeId: await safeParseStrAsync(
+          json['scope_id']?.toString(),
+        ),
         target: await safeParseStrEnumExprAsync(
           json['target'],
           parse: DivActionTarget.fromJson,

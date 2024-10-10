@@ -828,4 +828,16 @@ final skippedTests = [
       'https://paste.yandex-team.ru/db093d74-d606-40ab-9649-94ec071e12eb',
     ),
   ),
+
+// # div-video
+  ...[
+    'test_data/snapshot_test_data/div-video/video-preview-scale-fill.json',
+    'test_data/snapshot_test_data/div-video/video-preview-scale-fit.json',
+    'test_data/snapshot_test_data/div-video/video-preview-scale-no-scale.json'
+  ].map(
+    (e) => _SkipTest(
+      e,
+      _Reason.divNotSupported,
+    ),
+  ),
 ];

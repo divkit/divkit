@@ -18,6 +18,7 @@ import 'package:divkit/src/schema/div_extension.dart';
 import 'package:divkit/src/schema/div_fixed_size.dart';
 import 'package:divkit/src/schema/div_focus.dart';
 import 'package:divkit/src/schema/div_font_weight.dart';
+import 'package:divkit/src/schema/div_function.dart';
 import 'package:divkit/src/schema/div_layout_provider.dart';
 import 'package:divkit/src/schema/div_match_parent_size.dart';
 import 'package:divkit/src/schema/div_size.dart';
@@ -48,6 +49,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
     this.dynamicHeight = const ValueExpression(false),
     this.extensions,
     this.focus,
+    this.functions,
     this.hasSeparator = const ValueExpression(false),
     this.height = const DivSize.divWrapContentSize(
       DivWrapContentSize(),
@@ -129,7 +131,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
   @override
   final Expression<double> alpha;
 
-  /// Declaration of animators that can be used to change the value of variables over time.
+  /// Declaration of animators that change variable values over time.
   @override
   final List<DivAnimator>? animators;
 
@@ -162,6 +164,10 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
   @override
   final DivFocus? focus;
 
+  /// User functions.
+  @override
+  final List<DivFunction>? functions;
+
   /// A separating line between tabs and contents.
   // default value: false
   final Expression<bool> hasSeparator;
@@ -184,7 +190,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
   // at least 1 elements
   final List<DivTabsItem> items;
 
-  /// Provides element real size values after a layout cycle.
+  /// Provides data on the actual size of the element.
   @override
   final DivLayoutProvider? layoutProvider;
 
@@ -200,7 +206,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
   // default value: false
   final Expression<bool> restrictParentScroll;
 
-  /// Id for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](https://divkit.tech/docs/en/concepts/reuse/reuse.md)
+  /// ID for the div object structure. Used to optimize block reuse. See [block reuse](https://divkit.tech/docs/en/concepts/reuse/reuse.md).
   @override
   final Expression<String>? reuseId;
 
@@ -229,7 +235,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
   // default value: true
   final Expression<bool> switchTabsByContentSwipeEnabled;
 
-  /// Style of delimiters between tab titles.
+  /// Design style of separators between tab titles.
   final DivTabsTabTitleDelimiter? tabTitleDelimiter;
 
   /// Design style of tab titles.
@@ -268,7 +274,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
   @override
   final List<DivTrigger>? variableTriggers;
 
-  /// Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+  /// Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
   @override
   final List<DivVariable>? variables;
 
@@ -304,6 +310,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
         dynamicHeight,
         extensions,
         focus,
+        functions,
         hasSeparator,
         height,
         id,
@@ -349,6 +356,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
     Expression<bool>? dynamicHeight,
     List<DivExtension>? Function()? extensions,
     DivFocus? Function()? focus,
+    List<DivFunction>? Function()? functions,
     Expression<bool>? hasSeparator,
     DivSize? height,
     String? Function()? id,
@@ -399,6 +407,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
         dynamicHeight: dynamicHeight ?? this.dynamicHeight,
         extensions: extensions != null ? extensions.call() : this.extensions,
         focus: focus != null ? focus.call() : this.focus,
+        functions: functions != null ? functions.call() : this.functions,
         hasSeparator: hasSeparator ?? this.hasSeparator,
         height: height ?? this.height,
         id: id != null ? id.call() : this.id,
@@ -519,6 +528,14 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
         ),
         focus: safeParseObj(
           DivFocus.fromJson(json['focus']),
+        ),
+        functions: safeParseObj(
+          safeListMap(
+            json['functions'],
+            (v) => safeParseObj(
+              DivFunction.fromJson(v),
+            )!,
+          ),
         ),
         hasSeparator: safeParseBoolExpr(
           json['has_separator'],
@@ -767,6 +784,14 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
         focus: await safeParseObjAsync(
           DivFocus.fromJson(json['focus']),
         ),
+        functions: await safeParseObjAsync(
+          await safeListMapAsync(
+            json['functions'],
+            (v) => safeParseObj(
+              DivFunction.fromJson(v),
+            )!,
+          ),
+        ),
         hasSeparator: (await safeParseBoolExprAsync(
           json['has_separator'],
           fallback: false,
@@ -961,6 +986,7 @@ class DivTabs extends Preloadable with EquatableMixin implements DivBase {
       await dynamicHeight.preload(context);
       await safeFuturesWait(extensions, (v) => v.preload(context));
       await focus?.preload(context);
+      await safeFuturesWait(functions, (v) => v.preload(context));
       await hasSeparator.preload(context);
       await height.preload(context);
       await safeFuturesWait(items, (v) => v.preload(context));
@@ -1488,7 +1514,7 @@ enum DivTabsTabTitleStyleAnimationType implements Preloadable {
   }
 }
 
-/// Style of delimiters between tab titles.
+/// Design style of separators between tab titles.
 class DivTabsTabTitleDelimiter extends Preloadable with EquatableMixin {
   const DivTabsTabTitleDelimiter({
     this.height = const DivFixedSize(

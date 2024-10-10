@@ -4,7 +4,7 @@ import 'package:divkit/src/schema/div_typed_value.dart';
 import 'package:divkit/src/utils/parsing_utils.dart';
 import 'package:equatable/equatable.dart';
 
-/// Sets value in dictionary for the given key. Removes key if the value is not defined.
+/// Sets the value in the dictionary by the specified key. Deletes the key if the value is not set.
 class DivActionDictSetValue extends Preloadable with EquatableMixin {
   const DivActionDictSetValue({
     required this.key,
