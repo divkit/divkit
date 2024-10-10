@@ -1,0 +1,94 @@
+{
+  "description": "Vector scale",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "sample_card",
+      "variables": [
+        {
+          "name": "my_thumb_value",
+          "type": "integer",
+          "value": 80
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "margins": {
+              "top": 24,
+              "bottom": 24
+            },
+            "items": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "width": {
+                  "type": "match_parent"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "image",
+                    "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.png",
+                    "width": {
+                      "type": "fixed",
+                      "value": "@{my_thumb_value}"
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": "@{my_thumb_value}"
+                    },
+                    "alignment_horizontal": "center",
+                    "alignment_vertical": "center"
+                  },
+                  {
+                    "type": "image",
+                    "image_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg",
+                    "width": {
+                      "type": "fixed",
+                      "value": "@{my_thumb_value}"
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": "@{my_thumb_value}"
+                    },
+                    "alignment_horizontal": "center",
+                    "alignment_vertical": "center"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=my_thumb_value&value=0",
+          "log_id": "my_thumb_value"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=my_thumb_value&value=400",
+          "log_id": "my_thumb_value"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    }
+  ]
+}
