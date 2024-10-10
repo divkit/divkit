@@ -209,7 +209,7 @@ public final class DivActionHandler {
       submitActionHandler.handle(action, context: context)
     case .divActionAnimatorStart, .divActionAnimatorStop,
          .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
-         .divActionSetState, .divActionSetStoredValue:
+         .divActionSetState, .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
       break
     case .none:
       isHandled = false
