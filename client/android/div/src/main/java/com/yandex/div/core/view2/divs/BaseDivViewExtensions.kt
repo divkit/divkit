@@ -753,13 +753,15 @@ internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Floa
 internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
     children
         .filter { it.visibility == View.VISIBLE }
-        .forEach { child ->
-            canvas.withSave {
-                translate(child.x, child.y)
-                rotate(child.rotation, child.pivotX, child.pivotY)
-                (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
-            }
-        }
+        .forEach { child -> child.drawShadow(canvas) }
+}
+
+internal fun View.drawShadow(canvas: Canvas) {
+    canvas.withSave {
+        translate(x, y)
+        rotate(rotation, pivotX, pivotY)
+        (this@drawShadow as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
+    }
 }
 
 internal fun View.extractParentContentAlignmentVertical(
