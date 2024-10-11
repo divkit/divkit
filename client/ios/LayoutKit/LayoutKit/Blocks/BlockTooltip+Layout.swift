@@ -3,12 +3,43 @@ import CoreGraphics
 import VGSL
 
 extension BlockTooltip {
-  public func calculateFrame(targeting targetRect: CGRect) -> CGRect {
-    CGRect(
+  public func calculateFrame(
+    targeting targetRect: CGRect,
+    constrainedBy bounds: CGRect
+  ) -> CGRect {
+    let size = block.intrinsicSize
+    let result = CGRect(
       coordinate: targetRect.coordinate(of: position),
       ofPosition: position.opposite,
-      size: block.intrinsicSize
+      size: size
     ).offset(by: offset)
+
+    if result.intersection(bounds) == result {
+      return result
+    }
+
+    var alternativePosition = position
+    if result.maxY > bounds.maxY {
+      alternativePosition = alternativePosition.movingUp
+    }
+    if result.minY < bounds.minY {
+      alternativePosition = alternativePosition.movingDown
+    }
+    if result.minX < bounds.minX {
+      alternativePosition = alternativePosition.movingRight
+    }
+    if result.maxX > bounds.maxX {
+      alternativePosition = alternativePosition.movingLeft
+    }
+
+    let alternativeFrame = CGRect(
+      coordinate: targetRect.coordinate(of: alternativePosition),
+      ofPosition: alternativePosition.opposite,
+      size: size
+    ).offset(by: offset)
+    return alternativeFrame.intersection(bounds) == alternativeFrame
+      ? alternativeFrame
+      : result
   }
 }
 
@@ -40,6 +71,38 @@ extension BlockTooltip.Position {
     case .bottom: .top
     case .bottomLeft: .topRight
     case .center: .center
+    }
+  }
+
+  fileprivate var movingUp: Self {
+    switch self {
+    case .topLeft, .left, .bottomLeft: .topLeft
+    case .top, .center, .bottom: .top
+    case .topRight, .right, .bottomRight: .topRight
+    }
+  }
+
+  fileprivate var movingDown: Self {
+    switch self {
+    case .topLeft, .left, .bottomLeft: .bottomLeft
+    case .top, .center, .bottom: .bottom
+    case .topRight, .right, .bottomRight: .bottomRight
+    }
+  }
+
+  fileprivate var movingLeft: Self {
+    switch self {
+    case .topLeft, .top, .topRight: .topLeft
+    case .left, .center, .right: .left
+    case .bottomLeft, .bottom, .bottomRight: .bottomLeft
+    }
+  }
+
+  fileprivate var movingRight: Self {
+    switch self {
+    case .topLeft, .top, .topRight: .topRight
+    case .left, .center, .right: .right
+    case .bottomLeft, .bottom, .bottomRight: .bottomRight
     }
   }
 }

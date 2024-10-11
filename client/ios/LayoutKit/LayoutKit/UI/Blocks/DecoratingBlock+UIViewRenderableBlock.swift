@@ -452,10 +452,14 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   }
 
   func makeTooltipEvent(with info: TooltipInfo) -> TooltipEvent? {
-    guard let tooltipModel = model.tooltips.first(where: { $0.id == info.id }) else { return nil }
+    guard let tooltipModel = model.tooltips.first(where: { $0.id == info.id }), let window else {
+      return nil
+    }
     let tooltipView = tooltipModel.block.makeBlockView()
-    let frame = tooltipModel.calculateFrame(targeting: bounds)
-    tooltipView.frame = convert(frame, to: nil)
+    tooltipView.frame = tooltipModel.calculateFrame(
+      targeting: convert(bounds, to: nil),
+      constrainedBy: window.bounds
+    )
     return TooltipEvent(
       info: info,
       tooltipView: tooltipView,
