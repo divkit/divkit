@@ -43,11 +43,11 @@ public final class DivActionScrollByTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionScrollByTemplate?) -> DeserializationResult<DivActionScrollBy> {
-    let animatedValue = parent?.animated?.resolveOptionalValue(context: context) ?? .noValue
-    let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
-    let itemCountValue = parent?.itemCount?.resolveOptionalValue(context: context) ?? .noValue
-    let offsetValue = parent?.offset?.resolveOptionalValue(context: context) ?? .noValue
-    let overflowValue = parent?.overflow?.resolveOptionalValue(context: context) ?? .noValue
+    let animatedValue = { parent?.animated?.resolveOptionalValue(context: context) ?? .noValue }()
+    let idValue = { parent?.id?.resolveValue(context: context) ?? .noValue }()
+    let itemCountValue = { parent?.itemCount?.resolveOptionalValue(context: context) ?? .noValue }()
+    let offsetValue = { parent?.offset?.resolveOptionalValue(context: context) ?? .noValue }()
+    let overflowValue = { parent?.overflow?.resolveOptionalValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       animatedValue.errorsOrWarnings?.map { .nestedObjectError(field: "animated", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -64,11 +64,11 @@ public final class DivActionScrollByTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionScrollBy(
-      animated: animatedValue.value,
-      id: idNonNil,
-      itemCount: itemCountValue.value,
-      offset: offsetValue.value,
-      overflow: overflowValue.value
+      animated: { animatedValue.value }(),
+      id: { idNonNil }(),
+      itemCount: { itemCountValue.value }(),
+      offset: { offsetValue.value }(),
+      overflow: { overflowValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -77,36 +77,68 @@ public final class DivActionScrollByTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var animatedValue: DeserializationResult<Expression<Bool>> = parent?.animated?.value() ?? .noValue
-    var idValue: DeserializationResult<Expression<String>> = parent?.id?.value() ?? .noValue
-    var itemCountValue: DeserializationResult<Expression<Int>> = parent?.itemCount?.value() ?? .noValue
-    var offsetValue: DeserializationResult<Expression<Int>> = parent?.offset?.value() ?? .noValue
-    var overflowValue: DeserializationResult<Expression<DivActionScrollBy.Overflow>> = parent?.overflow?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "animated":
-        animatedValue = deserialize(__dictValue).merged(with: animatedValue)
-      case "id":
-        idValue = deserialize(__dictValue).merged(with: idValue)
-      case "item_count":
-        itemCountValue = deserialize(__dictValue).merged(with: itemCountValue)
-      case "offset":
-        offsetValue = deserialize(__dictValue).merged(with: offsetValue)
-      case "overflow":
-        overflowValue = deserialize(__dictValue).merged(with: overflowValue)
-      case parent?.animated?.link:
-        animatedValue = animatedValue.merged(with: { deserialize(__dictValue) })
-      case parent?.id?.link:
-        idValue = idValue.merged(with: { deserialize(__dictValue) })
-      case parent?.itemCount?.link:
-        itemCountValue = itemCountValue.merged(with: { deserialize(__dictValue) })
-      case parent?.offset?.link:
-        offsetValue = offsetValue.merged(with: { deserialize(__dictValue) })
-      case parent?.overflow?.link:
-        overflowValue = overflowValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var animatedValue: DeserializationResult<Expression<Bool>> = { parent?.animated?.value() ?? .noValue }()
+    var idValue: DeserializationResult<Expression<String>> = { parent?.id?.value() ?? .noValue }()
+    var itemCountValue: DeserializationResult<Expression<Int>> = { parent?.itemCount?.value() ?? .noValue }()
+    var offsetValue: DeserializationResult<Expression<Int>> = { parent?.offset?.value() ?? .noValue }()
+    var overflowValue: DeserializationResult<Expression<DivActionScrollBy.Overflow>> = { parent?.overflow?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "animated" {
+           animatedValue = deserialize(__dictValue).merged(with: animatedValue)
+          }
+        }()
+        _ = {
+          if key == "id" {
+           idValue = deserialize(__dictValue).merged(with: idValue)
+          }
+        }()
+        _ = {
+          if key == "item_count" {
+           itemCountValue = deserialize(__dictValue).merged(with: itemCountValue)
+          }
+        }()
+        _ = {
+          if key == "offset" {
+           offsetValue = deserialize(__dictValue).merged(with: offsetValue)
+          }
+        }()
+        _ = {
+          if key == "overflow" {
+           overflowValue = deserialize(__dictValue).merged(with: overflowValue)
+          }
+        }()
+        _ = {
+         if key == parent?.animated?.link {
+           animatedValue = animatedValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.id?.link {
+           idValue = idValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.itemCount?.link {
+           itemCountValue = itemCountValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.offset?.link {
+           offsetValue = offsetValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.overflow?.link {
+           overflowValue = overflowValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       animatedValue.errorsOrWarnings?.map { .nestedObjectError(field: "animated", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -123,11 +155,11 @@ public final class DivActionScrollByTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionScrollBy(
-      animated: animatedValue.value,
-      id: idNonNil,
-      itemCount: itemCountValue.value,
-      offset: offsetValue.value,
-      overflow: overflowValue.value
+      animated: { animatedValue.value }(),
+      id: { idNonNil }(),
+      itemCount: { itemCountValue.value }(),
+      offset: { offsetValue.value }(),
+      overflow: { overflowValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

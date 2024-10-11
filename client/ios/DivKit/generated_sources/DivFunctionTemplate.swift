@@ -32,10 +32,10 @@ public final class DivFunctionTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFunctionTemplate?) -> DeserializationResult<DivFunction> {
-    let argumentsValue = parent?.arguments?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-    let bodyValue = parent?.body?.resolveValue(context: context) ?? .noValue
-    let nameValue = parent?.name?.resolveValue(context: context, validator: ResolvedValue.nameValidator) ?? .noValue
-    let returnTypeValue = parent?.returnType?.resolveValue(context: context) ?? .noValue
+    let argumentsValue = { parent?.arguments?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let bodyValue = { parent?.body?.resolveValue(context: context) ?? .noValue }()
+    let nameValue = { parent?.name?.resolveValue(context: context, validator: ResolvedValue.nameValidator) ?? .noValue }()
+    let returnTypeValue = { parent?.returnType?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       argumentsValue.errorsOrWarnings?.map { .nestedObjectError(field: "arguments", error: $0) },
       bodyValue.errorsOrWarnings?.map { .nestedObjectError(field: "body", error: $0) },
@@ -63,10 +63,10 @@ public final class DivFunctionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivFunction(
-      arguments: argumentsNonNil,
-      body: bodyNonNil,
-      name: nameNonNil,
-      returnType: returnTypeNonNil
+      arguments: { argumentsNonNil }(),
+      body: { bodyNonNil }(),
+      name: { nameNonNil }(),
+      returnType: { returnTypeNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -76,32 +76,58 @@ public final class DivFunctionTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var argumentsValue: DeserializationResult<[DivFunctionArgument]> = .noValue
-    var bodyValue: DeserializationResult<String> = parent?.body?.value() ?? .noValue
-    var nameValue: DeserializationResult<String> = parent?.name?.value(validatedBy: ResolvedValue.nameValidator) ?? .noValue
-    var returnTypeValue: DeserializationResult<DivEvaluableType> = parent?.returnType?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "arguments":
-        argumentsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionArgumentTemplate.self).merged(with: argumentsValue)
-      case "body":
-        bodyValue = deserialize(__dictValue).merged(with: bodyValue)
-      case "name":
-        nameValue = deserialize(__dictValue, validator: ResolvedValue.nameValidator).merged(with: nameValue)
-      case "return_type":
-        returnTypeValue = deserialize(__dictValue).merged(with: returnTypeValue)
-      case parent?.arguments?.link:
-        argumentsValue = argumentsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionArgumentTemplate.self) })
-      case parent?.body?.link:
-        bodyValue = bodyValue.merged(with: { deserialize(__dictValue) })
-      case parent?.name?.link:
-        nameValue = nameValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nameValidator) })
-      case parent?.returnType?.link:
-        returnTypeValue = returnTypeValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var bodyValue: DeserializationResult<String> = { parent?.body?.value() ?? .noValue }()
+    var nameValue: DeserializationResult<String> = { parent?.name?.value(validatedBy: ResolvedValue.nameValidator) ?? .noValue }()
+    var returnTypeValue: DeserializationResult<DivEvaluableType> = { parent?.returnType?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "arguments" {
+           argumentsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionArgumentTemplate.self).merged(with: argumentsValue)
+          }
+        }()
+        _ = {
+          if key == "body" {
+           bodyValue = deserialize(__dictValue).merged(with: bodyValue)
+          }
+        }()
+        _ = {
+          if key == "name" {
+           nameValue = deserialize(__dictValue, validator: ResolvedValue.nameValidator).merged(with: nameValue)
+          }
+        }()
+        _ = {
+          if key == "return_type" {
+           returnTypeValue = deserialize(__dictValue).merged(with: returnTypeValue)
+          }
+        }()
+        _ = {
+         if key == parent?.arguments?.link {
+           argumentsValue = argumentsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionArgumentTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.body?.link {
+           bodyValue = bodyValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.name?.link {
+           nameValue = nameValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nameValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.returnType?.link {
+           returnTypeValue = returnTypeValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      argumentsValue = argumentsValue.merged(with: { parent.arguments?.resolveValue(context: context, useOnlyLinks: true) })
+      _ = { argumentsValue = argumentsValue.merged(with: { parent.arguments?.resolveValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       argumentsValue.errorsOrWarnings?.map { .nestedObjectError(field: "arguments", error: $0) },
@@ -130,10 +156,10 @@ public final class DivFunctionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivFunction(
-      arguments: argumentsNonNil,
-      body: bodyNonNil,
-      name: nameNonNil,
-      returnType: returnTypeNonNil
+      arguments: { argumentsNonNil }(),
+      body: { bodyNonNil }(),
+      name: { nameNonNil }(),
+      returnType: { returnTypeNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

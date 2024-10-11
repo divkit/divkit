@@ -25,8 +25,8 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ConstraintSizeTemplate?) -> DeserializationResult<DivWrapContentSize.ConstraintSize> {
-      let unitValue = parent?.unit?.resolveOptionalValue(context: context) ?? .noValue
-      let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
+      let unitValue = { parent?.unit?.resolveOptionalValue(context: context) ?? .noValue }()
+      let valueValue = { parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue }()
       var errors = mergeErrors(
         unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
         valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -40,8 +40,8 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivWrapContentSize.ConstraintSize(
-        unit: unitValue.value,
-        value: valueNonNil
+        unit: { unitValue.value }(),
+        value: { valueNonNil }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -50,21 +50,35 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var unitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.unit?.value() ?? .noValue
-      var valueValue: DeserializationResult<Expression<Int>> = parent?.value?.value() ?? .noValue
-      context.templateData.forEach { key, __dictValue in
-        switch key {
-        case "unit":
-          unitValue = deserialize(__dictValue).merged(with: unitValue)
-        case "value":
-          valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
-        case parent?.unit?.link:
-          unitValue = unitValue.merged(with: { deserialize(__dictValue) })
-        case parent?.value?.link:
-          valueValue = valueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.valueValidator) })
-        default: break
+      var unitValue: DeserializationResult<Expression<DivSizeUnit>> = { parent?.unit?.value() ?? .noValue }()
+      var valueValue: DeserializationResult<Expression<Int>> = { parent?.value?.value() ?? .noValue }()
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "unit" {
+             unitValue = deserialize(__dictValue).merged(with: unitValue)
+            }
+          }()
+          _ = {
+            if key == "value" {
+             valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
+            }
+          }()
+          _ = {
+           if key == parent?.unit?.link {
+             unitValue = unitValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.value?.link {
+             valueValue = valueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.valueValidator) })
+            }
+          }()
         }
-      }
+      }()
       var errors = mergeErrors(
         unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
         valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -78,8 +92,8 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivWrapContentSize.ConstraintSize(
-        unit: unitValue.value,
-        value: valueNonNil
+        unit: { unitValue.value }(),
+        value: { valueNonNil }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -121,18 +135,18 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivWrapContentSizeTemplate?) -> DeserializationResult<DivWrapContentSize> {
-    let constrainedValue = parent?.constrained?.resolveOptionalValue(context: context) ?? .noValue
-    let maxSizeValue = parent?.maxSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let minSizeValue = parent?.minSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let constrainedValue = { parent?.constrained?.resolveOptionalValue(context: context) ?? .noValue }()
+    let maxSizeValue = { parent?.maxSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let minSizeValue = { parent?.minSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let errors = mergeErrors(
       constrainedValue.errorsOrWarnings?.map { .nestedObjectError(field: "constrained", error: $0) },
       maxSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_size", error: $0) },
       minSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_size", error: $0) }
     )
     let result = DivWrapContentSize(
-      constrained: constrainedValue.value,
-      maxSize: maxSizeValue.value,
-      minSize: minSizeValue.value
+      constrained: { constrainedValue.value }(),
+      maxSize: { maxSizeValue.value }(),
+      minSize: { minSizeValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -141,29 +155,49 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var constrainedValue: DeserializationResult<Expression<Bool>> = parent?.constrained?.value() ?? .noValue
+    var constrainedValue: DeserializationResult<Expression<Bool>> = { parent?.constrained?.value() ?? .noValue }()
     var maxSizeValue: DeserializationResult<DivWrapContentSize.ConstraintSize> = .noValue
     var minSizeValue: DeserializationResult<DivWrapContentSize.ConstraintSize> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "constrained":
-        constrainedValue = deserialize(__dictValue).merged(with: constrainedValue)
-      case "max_size":
-        maxSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: maxSizeValue)
-      case "min_size":
-        minSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: minSizeValue)
-      case parent?.constrained?.link:
-        constrainedValue = constrainedValue.merged(with: { deserialize(__dictValue) })
-      case parent?.maxSize?.link:
-        maxSizeValue = maxSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self) })
-      case parent?.minSize?.link:
-        minSizeValue = minSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "constrained" {
+           constrainedValue = deserialize(__dictValue).merged(with: constrainedValue)
+          }
+        }()
+        _ = {
+          if key == "max_size" {
+           maxSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: maxSizeValue)
+          }
+        }()
+        _ = {
+          if key == "min_size" {
+           minSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: minSizeValue)
+          }
+        }()
+        _ = {
+         if key == parent?.constrained?.link {
+           constrainedValue = constrainedValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.maxSize?.link {
+           maxSizeValue = maxSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.minSize?.link {
+           minSizeValue = minSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      maxSizeValue = maxSizeValue.merged(with: { parent.maxSize?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      minSizeValue = minSizeValue.merged(with: { parent.minSize?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { maxSizeValue = maxSizeValue.merged(with: { parent.maxSize?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { minSizeValue = minSizeValue.merged(with: { parent.minSize?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     let errors = mergeErrors(
       constrainedValue.errorsOrWarnings?.map { .nestedObjectError(field: "constrained", error: $0) },
@@ -171,9 +205,9 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
       minSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_size", error: $0) }
     )
     let result = DivWrapContentSize(
-      constrained: constrainedValue.value,
-      maxSize: maxSizeValue.value,
-      minSize: minSizeValue.value
+      constrained: { constrainedValue.value }(),
+      maxSize: { maxSizeValue.value }(),
+      minSize: { minSizeValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

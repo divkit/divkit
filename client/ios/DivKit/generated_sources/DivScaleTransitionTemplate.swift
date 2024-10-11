@@ -45,12 +45,12 @@ public final class DivScaleTransitionTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivScaleTransitionTemplate?) -> DeserializationResult<DivScaleTransition> {
-    let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
-    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue
-    let pivotXValue = parent?.pivotX?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotXValidator) ?? .noValue
-    let pivotYValue = parent?.pivotY?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotYValidator) ?? .noValue
-    let scaleValue = parent?.scale?.resolveOptionalValue(context: context, validator: ResolvedValue.scaleValidator) ?? .noValue
-    let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
+    let durationValue = { parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue }()
+    let interpolatorValue = { parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue }()
+    let pivotXValue = { parent?.pivotX?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotXValidator) ?? .noValue }()
+    let pivotYValue = { parent?.pivotY?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotYValidator) ?? .noValue }()
+    let scaleValue = { parent?.scale?.resolveOptionalValue(context: context, validator: ResolvedValue.scaleValidator) ?? .noValue }()
+    let startDelayValue = { parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue }()
     let errors = mergeErrors(
       durationValue.errorsOrWarnings?.map { .nestedObjectError(field: "duration", error: $0) },
       interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "interpolator", error: $0) },
@@ -60,12 +60,12 @@ public final class DivScaleTransitionTemplate: TemplateValue {
       startDelayValue.errorsOrWarnings?.map { .nestedObjectError(field: "start_delay", error: $0) }
     )
     let result = DivScaleTransition(
-      duration: durationValue.value,
-      interpolator: interpolatorValue.value,
-      pivotX: pivotXValue.value,
-      pivotY: pivotYValue.value,
-      scale: scaleValue.value,
-      startDelay: startDelayValue.value
+      duration: { durationValue.value }(),
+      interpolator: { interpolatorValue.value }(),
+      pivotX: { pivotXValue.value }(),
+      pivotY: { pivotYValue.value }(),
+      scale: { scaleValue.value }(),
+      startDelay: { startDelayValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -74,41 +74,79 @@ public final class DivScaleTransitionTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var durationValue: DeserializationResult<Expression<Int>> = parent?.duration?.value() ?? .noValue
-    var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = parent?.interpolator?.value() ?? .noValue
-    var pivotXValue: DeserializationResult<Expression<Double>> = parent?.pivotX?.value() ?? .noValue
-    var pivotYValue: DeserializationResult<Expression<Double>> = parent?.pivotY?.value() ?? .noValue
-    var scaleValue: DeserializationResult<Expression<Double>> = parent?.scale?.value() ?? .noValue
-    var startDelayValue: DeserializationResult<Expression<Int>> = parent?.startDelay?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "duration":
-        durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
-      case "interpolator":
-        interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
-      case "pivot_x":
-        pivotXValue = deserialize(__dictValue, validator: ResolvedValue.pivotXValidator).merged(with: pivotXValue)
-      case "pivot_y":
-        pivotYValue = deserialize(__dictValue, validator: ResolvedValue.pivotYValidator).merged(with: pivotYValue)
-      case "scale":
-        scaleValue = deserialize(__dictValue, validator: ResolvedValue.scaleValidator).merged(with: scaleValue)
-      case "start_delay":
-        startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
-      case parent?.duration?.link:
-        durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
-      case parent?.interpolator?.link:
-        interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
-      case parent?.pivotX?.link:
-        pivotXValue = pivotXValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pivotXValidator) })
-      case parent?.pivotY?.link:
-        pivotYValue = pivotYValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pivotYValidator) })
-      case parent?.scale?.link:
-        scaleValue = scaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.scaleValidator) })
-      case parent?.startDelay?.link:
-        startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
-      default: break
+    var durationValue: DeserializationResult<Expression<Int>> = { parent?.duration?.value() ?? .noValue }()
+    var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = { parent?.interpolator?.value() ?? .noValue }()
+    var pivotXValue: DeserializationResult<Expression<Double>> = { parent?.pivotX?.value() ?? .noValue }()
+    var pivotYValue: DeserializationResult<Expression<Double>> = { parent?.pivotY?.value() ?? .noValue }()
+    var scaleValue: DeserializationResult<Expression<Double>> = { parent?.scale?.value() ?? .noValue }()
+    var startDelayValue: DeserializationResult<Expression<Int>> = { parent?.startDelay?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "duration" {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
+          }
+        }()
+        _ = {
+          if key == "interpolator" {
+           interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
+          }
+        }()
+        _ = {
+          if key == "pivot_x" {
+           pivotXValue = deserialize(__dictValue, validator: ResolvedValue.pivotXValidator).merged(with: pivotXValue)
+          }
+        }()
+        _ = {
+          if key == "pivot_y" {
+           pivotYValue = deserialize(__dictValue, validator: ResolvedValue.pivotYValidator).merged(with: pivotYValue)
+          }
+        }()
+        _ = {
+          if key == "scale" {
+           scaleValue = deserialize(__dictValue, validator: ResolvedValue.scaleValidator).merged(with: scaleValue)
+          }
+        }()
+        _ = {
+          if key == "start_delay" {
+           startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
+          }
+        }()
+        _ = {
+         if key == parent?.duration?.link {
+           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.interpolator?.link {
+           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.pivotX?.link {
+           pivotXValue = pivotXValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pivotXValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.pivotY?.link {
+           pivotYValue = pivotYValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pivotYValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.scale?.link {
+           scaleValue = scaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.scaleValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.startDelay?.link {
+           startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
+          }
+        }()
       }
-    }
+    }()
     let errors = mergeErrors(
       durationValue.errorsOrWarnings?.map { .nestedObjectError(field: "duration", error: $0) },
       interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "interpolator", error: $0) },
@@ -118,12 +156,12 @@ public final class DivScaleTransitionTemplate: TemplateValue {
       startDelayValue.errorsOrWarnings?.map { .nestedObjectError(field: "start_delay", error: $0) }
     )
     let result = DivScaleTransition(
-      duration: durationValue.value,
-      interpolator: interpolatorValue.value,
-      pivotX: pivotXValue.value,
-      pivotY: pivotYValue.value,
-      scale: scaleValue.value,
-      startDelay: startDelayValue.value
+      duration: { durationValue.value }(),
+      interpolator: { interpolatorValue.value }(),
+      pivotX: { pivotXValue.value }(),
+      pivotY: { pivotYValue.value }(),
+      scale: { scaleValue.value }(),
+      startDelay: { startDelayValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

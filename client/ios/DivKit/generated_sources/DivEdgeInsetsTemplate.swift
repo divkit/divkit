@@ -44,13 +44,13 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivEdgeInsetsTemplate?) -> DeserializationResult<DivEdgeInsets> {
-    let bottomValue = parent?.bottom?.resolveOptionalValue(context: context, validator: ResolvedValue.bottomValidator) ?? .noValue
-    let endValue = parent?.end?.resolveOptionalValue(context: context, validator: ResolvedValue.endValidator) ?? .noValue
-    let leftValue = parent?.left?.resolveOptionalValue(context: context, validator: ResolvedValue.leftValidator) ?? .noValue
-    let rightValue = parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue
-    let startValue = parent?.start?.resolveOptionalValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
-    let topValue = parent?.top?.resolveOptionalValue(context: context, validator: ResolvedValue.topValidator) ?? .noValue
-    let unitValue = parent?.unit?.resolveOptionalValue(context: context) ?? .noValue
+    let bottomValue = { parent?.bottom?.resolveOptionalValue(context: context, validator: ResolvedValue.bottomValidator) ?? .noValue }()
+    let endValue = { parent?.end?.resolveOptionalValue(context: context, validator: ResolvedValue.endValidator) ?? .noValue }()
+    let leftValue = { parent?.left?.resolveOptionalValue(context: context, validator: ResolvedValue.leftValidator) ?? .noValue }()
+    let rightValue = { parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue }()
+    let startValue = { parent?.start?.resolveOptionalValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue }()
+    let topValue = { parent?.top?.resolveOptionalValue(context: context, validator: ResolvedValue.topValidator) ?? .noValue }()
+    let unitValue = { parent?.unit?.resolveOptionalValue(context: context) ?? .noValue }()
     let errors = mergeErrors(
       bottomValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom", error: $0) },
       endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
@@ -61,13 +61,13 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
       unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) }
     )
     let result = DivEdgeInsets(
-      bottom: bottomValue.value,
-      end: endValue.value,
-      left: leftValue.value,
-      right: rightValue.value,
-      start: startValue.value,
-      top: topValue.value,
-      unit: unitValue.value
+      bottom: { bottomValue.value }(),
+      end: { endValue.value }(),
+      left: { leftValue.value }(),
+      right: { rightValue.value }(),
+      start: { startValue.value }(),
+      top: { topValue.value }(),
+      unit: { unitValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -76,46 +76,90 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var bottomValue: DeserializationResult<Expression<Int>> = parent?.bottom?.value() ?? .noValue
-    var endValue: DeserializationResult<Expression<Int>> = parent?.end?.value() ?? .noValue
-    var leftValue: DeserializationResult<Expression<Int>> = parent?.left?.value() ?? .noValue
-    var rightValue: DeserializationResult<Expression<Int>> = parent?.right?.value() ?? .noValue
-    var startValue: DeserializationResult<Expression<Int>> = parent?.start?.value() ?? .noValue
-    var topValue: DeserializationResult<Expression<Int>> = parent?.top?.value() ?? .noValue
-    var unitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.unit?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "bottom":
-        bottomValue = deserialize(__dictValue, validator: ResolvedValue.bottomValidator).merged(with: bottomValue)
-      case "end":
-        endValue = deserialize(__dictValue, validator: ResolvedValue.endValidator).merged(with: endValue)
-      case "left":
-        leftValue = deserialize(__dictValue, validator: ResolvedValue.leftValidator).merged(with: leftValue)
-      case "right":
-        rightValue = deserialize(__dictValue, validator: ResolvedValue.rightValidator).merged(with: rightValue)
-      case "start":
-        startValue = deserialize(__dictValue, validator: ResolvedValue.startValidator).merged(with: startValue)
-      case "top":
-        topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).merged(with: topValue)
-      case "unit":
-        unitValue = deserialize(__dictValue).merged(with: unitValue)
-      case parent?.bottom?.link:
-        bottomValue = bottomValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomValidator) })
-      case parent?.end?.link:
-        endValue = endValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.endValidator) })
-      case parent?.left?.link:
-        leftValue = leftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.leftValidator) })
-      case parent?.right?.link:
-        rightValue = rightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rightValidator) })
-      case parent?.start?.link:
-        startValue = startValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startValidator) })
-      case parent?.top?.link:
-        topValue = topValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topValidator) })
-      case parent?.unit?.link:
-        unitValue = unitValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var bottomValue: DeserializationResult<Expression<Int>> = { parent?.bottom?.value() ?? .noValue }()
+    var endValue: DeserializationResult<Expression<Int>> = { parent?.end?.value() ?? .noValue }()
+    var leftValue: DeserializationResult<Expression<Int>> = { parent?.left?.value() ?? .noValue }()
+    var rightValue: DeserializationResult<Expression<Int>> = { parent?.right?.value() ?? .noValue }()
+    var startValue: DeserializationResult<Expression<Int>> = { parent?.start?.value() ?? .noValue }()
+    var topValue: DeserializationResult<Expression<Int>> = { parent?.top?.value() ?? .noValue }()
+    var unitValue: DeserializationResult<Expression<DivSizeUnit>> = { parent?.unit?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "bottom" {
+           bottomValue = deserialize(__dictValue, validator: ResolvedValue.bottomValidator).merged(with: bottomValue)
+          }
+        }()
+        _ = {
+          if key == "end" {
+           endValue = deserialize(__dictValue, validator: ResolvedValue.endValidator).merged(with: endValue)
+          }
+        }()
+        _ = {
+          if key == "left" {
+           leftValue = deserialize(__dictValue, validator: ResolvedValue.leftValidator).merged(with: leftValue)
+          }
+        }()
+        _ = {
+          if key == "right" {
+           rightValue = deserialize(__dictValue, validator: ResolvedValue.rightValidator).merged(with: rightValue)
+          }
+        }()
+        _ = {
+          if key == "start" {
+           startValue = deserialize(__dictValue, validator: ResolvedValue.startValidator).merged(with: startValue)
+          }
+        }()
+        _ = {
+          if key == "top" {
+           topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).merged(with: topValue)
+          }
+        }()
+        _ = {
+          if key == "unit" {
+           unitValue = deserialize(__dictValue).merged(with: unitValue)
+          }
+        }()
+        _ = {
+         if key == parent?.bottom?.link {
+           bottomValue = bottomValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.end?.link {
+           endValue = endValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.endValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.left?.link {
+           leftValue = leftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.leftValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.right?.link {
+           rightValue = rightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rightValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.start?.link {
+           startValue = startValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.top?.link {
+           topValue = topValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.unit?.link {
+           unitValue = unitValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     let errors = mergeErrors(
       bottomValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom", error: $0) },
       endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
@@ -126,13 +170,13 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
       unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) }
     )
     let result = DivEdgeInsets(
-      bottom: bottomValue.value,
-      end: endValue.value,
-      left: leftValue.value,
-      right: rightValue.value,
-      start: startValue.value,
-      top: topValue.value,
-      unit: unitValue.value
+      bottom: { bottomValue.value }(),
+      end: { endValue.value }(),
+      left: { leftValue.value }(),
+      right: { rightValue.value }(),
+      start: { startValue.value }(),
+      top: { topValue.value }(),
+      unit: { unitValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

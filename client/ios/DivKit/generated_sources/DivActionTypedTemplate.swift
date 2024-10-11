@@ -126,168 +126,230 @@ public enum DivActionTypedTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divActionAnimatorStartTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionAnimatorStart(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStart(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionAnimatorStopTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionAnimatorStop(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStop(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionArrayInsertValueTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionArrayInsertValue(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArrayInsertValue(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionArrayRemoveValueTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionArrayRemoveValue(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArrayRemoveValue(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionArraySetValueTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionArraySetValue(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArraySetValue(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionClearFocusTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionClearFocus(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionClearFocus(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionCopyToClipboardTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionCopyToClipboard(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionCopyToClipboard(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionDictSetValueTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionDictSetValue(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionDictSetValue(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionDownloadTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionDownload(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionDownload(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionFocusElementTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionFocusElement(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionFocusElement(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionHideTooltipTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionHideTooltip(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionHideTooltip(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionScrollByTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionScrollBy(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionScrollBy(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionScrollToTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionScrollTo(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionScrollTo(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionSetStateTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionSetState(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetState(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionSetStoredValueTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionSetStoredValue(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetStoredValue(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionSetVariableTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionSetVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetVariable(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionShowTooltipTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionShowTooltip(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionShowTooltip(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionSubmitTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionSubmit(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSubmit(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionTimerTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionTimer(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionTimer(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divActionVideoTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divActionVideo(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionVideo(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivActionTyped>!
+      result = result ?? {
+        if case let .divActionAnimatorStartTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionAnimatorStart(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStart(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionAnimatorStopTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionAnimatorStop(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStop(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionArrayInsertValueTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionArrayInsertValue(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArrayInsertValue(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionArrayRemoveValueTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionArrayRemoveValue(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArrayRemoveValue(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionArraySetValueTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionArraySetValue(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArraySetValue(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionClearFocusTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionClearFocus(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionClearFocus(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionCopyToClipboardTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionCopyToClipboard(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionCopyToClipboard(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionDictSetValueTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionDictSetValue(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionDictSetValue(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionDownloadTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionDownload(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionDownload(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionFocusElementTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionFocusElement(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionFocusElement(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionHideTooltipTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionHideTooltip(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionHideTooltip(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionScrollByTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionScrollBy(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionScrollBy(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionScrollToTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionScrollTo(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionScrollTo(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionSetStateTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionSetState(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetState(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionSetStoredValueTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionSetStoredValue(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetStoredValue(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionSetVariableTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionSetVariable(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetVariable(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionShowTooltipTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionShowTooltip(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionShowTooltip(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionSubmitTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionSubmit(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSubmit(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionTimerTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionTimer(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionTimer(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionVideoTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionVideo(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionVideo(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivActionTyped> {
@@ -295,170 +357,190 @@ public enum DivActionTypedTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivActionAnimatorStart.type:
-      let result = DivActionAnimatorStartTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivActionTyped>?
+    result = result ?? { if type == DivActionAnimatorStart.type {
+      let result = { DivActionAnimatorStartTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionAnimatorStart(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStart(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionAnimatorStop.type:
-      let result = DivActionAnimatorStopTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionAnimatorStop.type {
+      let result = { DivActionAnimatorStopTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionAnimatorStop(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionAnimatorStop(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionArrayInsertValue.type:
-      let result = DivActionArrayInsertValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionArrayInsertValue.type {
+      let result = { DivActionArrayInsertValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionArrayInsertValue(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArrayInsertValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionArrayRemoveValue.type:
-      let result = DivActionArrayRemoveValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionArrayRemoveValue.type {
+      let result = { DivActionArrayRemoveValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionArrayRemoveValue(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArrayRemoveValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionArraySetValue.type:
-      let result = DivActionArraySetValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionArraySetValue.type {
+      let result = { DivActionArraySetValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionArraySetValue(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionArraySetValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionClearFocus.type:
-      let result = DivActionClearFocusTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionClearFocus.type {
+      let result = { DivActionClearFocusTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionClearFocus(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionClearFocus(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionCopyToClipboard.type:
-      let result = DivActionCopyToClipboardTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionCopyToClipboard.type {
+      let result = { DivActionCopyToClipboardTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionCopyToClipboard(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionCopyToClipboard(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionDictSetValue.type:
-      let result = DivActionDictSetValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionDictSetValue.type {
+      let result = { DivActionDictSetValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionDictSetValue(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionDictSetValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionDownload.type:
-      let result = DivActionDownloadTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionDownload.type {
+      let result = { DivActionDownloadTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionDownload(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionDownload(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionFocusElement.type:
-      let result = DivActionFocusElementTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionFocusElement.type {
+      let result = { DivActionFocusElementTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionFocusElement(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionFocusElement(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionHideTooltip.type:
-      let result = DivActionHideTooltipTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionHideTooltip.type {
+      let result = { DivActionHideTooltipTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionHideTooltip(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionHideTooltip(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionScrollBy.type:
-      let result = DivActionScrollByTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionScrollBy.type {
+      let result = { DivActionScrollByTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionScrollBy(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionScrollBy(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionScrollTo.type:
-      let result = DivActionScrollToTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionScrollTo.type {
+      let result = { DivActionScrollToTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionScrollTo(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionScrollTo(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionSetState.type:
-      let result = DivActionSetStateTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionSetState.type {
+      let result = { DivActionSetStateTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionSetState(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetState(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionSetStoredValue.type:
-      let result = DivActionSetStoredValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionSetStoredValue.type {
+      let result = { DivActionSetStoredValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionSetStoredValue(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetStoredValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionSetVariable.type:
-      let result = DivActionSetVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionSetVariable.type {
+      let result = { DivActionSetVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionSetVariable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSetVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionShowTooltip.type:
-      let result = DivActionShowTooltipTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionShowTooltip.type {
+      let result = { DivActionShowTooltipTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionShowTooltip(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionShowTooltip(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionSubmit.type:
-      let result = DivActionSubmitTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionSubmit.type {
+      let result = { DivActionSubmitTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionSubmit(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionSubmit(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionTimer.type:
-      let result = DivActionTimerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionTimer.type {
+      let result = { DivActionTimerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionTimer(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionTimer(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivActionVideo.type:
-      let result = DivActionVideoTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivActionVideo.type {
+      let result = { DivActionVideoTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divActionVideo(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divActionVideo(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

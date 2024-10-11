@@ -24,15 +24,15 @@ public final class DivLayoutProviderTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivLayoutProviderTemplate?) -> DeserializationResult<DivLayoutProvider> {
-    let heightVariableNameValue = parent?.heightVariableName?.resolveOptionalValue(context: context) ?? .noValue
-    let widthVariableNameValue = parent?.widthVariableName?.resolveOptionalValue(context: context) ?? .noValue
+    let heightVariableNameValue = { parent?.heightVariableName?.resolveOptionalValue(context: context) ?? .noValue }()
+    let widthVariableNameValue = { parent?.widthVariableName?.resolveOptionalValue(context: context) ?? .noValue }()
     let errors = mergeErrors(
       heightVariableNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "height_variable_name", error: $0) },
       widthVariableNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "width_variable_name", error: $0) }
     )
     let result = DivLayoutProvider(
-      heightVariableName: heightVariableNameValue.value,
-      widthVariableName: widthVariableNameValue.value
+      heightVariableName: { heightVariableNameValue.value }(),
+      widthVariableName: { widthVariableNameValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -41,28 +41,42 @@ public final class DivLayoutProviderTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var heightVariableNameValue: DeserializationResult<String> = parent?.heightVariableName?.value() ?? .noValue
-    var widthVariableNameValue: DeserializationResult<String> = parent?.widthVariableName?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "height_variable_name":
-        heightVariableNameValue = deserialize(__dictValue).merged(with: heightVariableNameValue)
-      case "width_variable_name":
-        widthVariableNameValue = deserialize(__dictValue).merged(with: widthVariableNameValue)
-      case parent?.heightVariableName?.link:
-        heightVariableNameValue = heightVariableNameValue.merged(with: { deserialize(__dictValue) })
-      case parent?.widthVariableName?.link:
-        widthVariableNameValue = widthVariableNameValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var heightVariableNameValue: DeserializationResult<String> = { parent?.heightVariableName?.value() ?? .noValue }()
+    var widthVariableNameValue: DeserializationResult<String> = { parent?.widthVariableName?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "height_variable_name" {
+           heightVariableNameValue = deserialize(__dictValue).merged(with: heightVariableNameValue)
+          }
+        }()
+        _ = {
+          if key == "width_variable_name" {
+           widthVariableNameValue = deserialize(__dictValue).merged(with: widthVariableNameValue)
+          }
+        }()
+        _ = {
+         if key == parent?.heightVariableName?.link {
+           heightVariableNameValue = heightVariableNameValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.widthVariableName?.link {
+           widthVariableNameValue = widthVariableNameValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     let errors = mergeErrors(
       heightVariableNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "height_variable_name", error: $0) },
       widthVariableNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "width_variable_name", error: $0) }
     )
     let result = DivLayoutProvider(
-      heightVariableName: heightVariableNameValue.value,
-      widthVariableName: widthVariableNameValue.value
+      heightVariableName: { heightVariableNameValue.value }(),
+      widthVariableName: { widthVariableNameValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

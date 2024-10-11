@@ -49,13 +49,13 @@ public final class DivImageBackgroundTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivImageBackgroundTemplate?) -> DeserializationResult<DivImageBackground> {
-    let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
-    let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
-    let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
-    let filtersValue = parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
-    let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue
-    let scaleValue = parent?.scale?.resolveOptionalValue(context: context) ?? .noValue
+    let alphaValue = { parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue }()
+    let contentAlignmentHorizontalValue = { parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue }()
+    let contentAlignmentVerticalValue = { parent?.contentAlignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
+    let filtersValue = { parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let preloadRequiredValue = { parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue }()
+    let scaleValue = { parent?.scale?.resolveOptionalValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
@@ -74,13 +74,13 @@ public final class DivImageBackgroundTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivImageBackground(
-      alpha: alphaValue.value,
-      contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
-      contentAlignmentVertical: contentAlignmentVerticalValue.value,
-      filters: filtersValue.value,
-      imageUrl: imageUrlNonNil,
-      preloadRequired: preloadRequiredValue.value,
-      scale: scaleValue.value
+      alpha: { alphaValue.value }(),
+      contentAlignmentHorizontal: { contentAlignmentHorizontalValue.value }(),
+      contentAlignmentVertical: { contentAlignmentVerticalValue.value }(),
+      filters: { filtersValue.value }(),
+      imageUrl: { imageUrlNonNil }(),
+      preloadRequired: { preloadRequiredValue.value }(),
+      scale: { scaleValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -89,48 +89,92 @@ public final class DivImageBackgroundTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
-    var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.contentAlignmentHorizontal?.value() ?? .noValue
-    var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
+    var alphaValue: DeserializationResult<Expression<Double>> = { parent?.alpha?.value() ?? .noValue }()
+    var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = { parent?.contentAlignmentHorizontal?.value() ?? .noValue }()
+    var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = { parent?.contentAlignmentVertical?.value() ?? .noValue }()
     var filtersValue: DeserializationResult<[DivFilter]> = .noValue
-    var imageUrlValue: DeserializationResult<Expression<URL>> = parent?.imageUrl?.value() ?? .noValue
-    var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?.value() ?? .noValue
-    var scaleValue: DeserializationResult<Expression<DivImageScale>> = parent?.scale?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "alpha":
-        alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
-      case "content_alignment_horizontal":
-        contentAlignmentHorizontalValue = deserialize(__dictValue).merged(with: contentAlignmentHorizontalValue)
-      case "content_alignment_vertical":
-        contentAlignmentVerticalValue = deserialize(__dictValue).merged(with: contentAlignmentVerticalValue)
-      case "filters":
-        filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self).merged(with: filtersValue)
-      case "image_url":
-        imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
-      case "preload_required":
-        preloadRequiredValue = deserialize(__dictValue).merged(with: preloadRequiredValue)
-      case "scale":
-        scaleValue = deserialize(__dictValue).merged(with: scaleValue)
-      case parent?.alpha?.link:
-        alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
-      case parent?.contentAlignmentHorizontal?.link:
-        contentAlignmentHorizontalValue = contentAlignmentHorizontalValue.merged(with: { deserialize(__dictValue) })
-      case parent?.contentAlignmentVertical?.link:
-        contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: { deserialize(__dictValue) })
-      case parent?.filters?.link:
-        filtersValue = filtersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self) })
-      case parent?.imageUrl?.link:
-        imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
-      case parent?.preloadRequired?.link:
-        preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
-      case parent?.scale?.link:
-        scaleValue = scaleValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var imageUrlValue: DeserializationResult<Expression<URL>> = { parent?.imageUrl?.value() ?? .noValue }()
+    var preloadRequiredValue: DeserializationResult<Expression<Bool>> = { parent?.preloadRequired?.value() ?? .noValue }()
+    var scaleValue: DeserializationResult<Expression<DivImageScale>> = { parent?.scale?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "alpha" {
+           alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+          }
+        }()
+        _ = {
+          if key == "content_alignment_horizontal" {
+           contentAlignmentHorizontalValue = deserialize(__dictValue).merged(with: contentAlignmentHorizontalValue)
+          }
+        }()
+        _ = {
+          if key == "content_alignment_vertical" {
+           contentAlignmentVerticalValue = deserialize(__dictValue).merged(with: contentAlignmentVerticalValue)
+          }
+        }()
+        _ = {
+          if key == "filters" {
+           filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self).merged(with: filtersValue)
+          }
+        }()
+        _ = {
+          if key == "image_url" {
+           imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
+          }
+        }()
+        _ = {
+          if key == "preload_required" {
+           preloadRequiredValue = deserialize(__dictValue).merged(with: preloadRequiredValue)
+          }
+        }()
+        _ = {
+          if key == "scale" {
+           scaleValue = deserialize(__dictValue).merged(with: scaleValue)
+          }
+        }()
+        _ = {
+         if key == parent?.alpha?.link {
+           alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.contentAlignmentHorizontal?.link {
+           contentAlignmentHorizontalValue = contentAlignmentHorizontalValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.contentAlignmentVertical?.link {
+           contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.filters?.link {
+           filtersValue = filtersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.imageUrl?.link {
+           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+          }
+        }()
+        _ = {
+         if key == parent?.preloadRequired?.link {
+           preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.scale?.link {
+           scaleValue = scaleValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
@@ -150,13 +194,13 @@ public final class DivImageBackgroundTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivImageBackground(
-      alpha: alphaValue.value,
-      contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
-      contentAlignmentVertical: contentAlignmentVerticalValue.value,
-      filters: filtersValue.value,
-      imageUrl: imageUrlNonNil,
-      preloadRequired: preloadRequiredValue.value,
-      scale: scaleValue.value
+      alpha: { alphaValue.value }(),
+      contentAlignmentHorizontal: { contentAlignmentHorizontalValue.value }(),
+      contentAlignmentVertical: { contentAlignmentVerticalValue.value }(),
+      filters: { filtersValue.value }(),
+      imageUrl: { imageUrlNonNil }(),
+      preloadRequired: { preloadRequiredValue.value }(),
+      scale: { scaleValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -29,8 +29,8 @@ public final class DivActionArrayRemoveValueTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionArrayRemoveValueTemplate?) -> DeserializationResult<DivActionArrayRemoveValue> {
-    let indexValue = parent?.index?.resolveValue(context: context) ?? .noValue
-    let variableNameValue = parent?.variableName?.resolveValue(context: context) ?? .noValue
+    let indexValue = { parent?.index?.resolveValue(context: context) ?? .noValue }()
+    let variableNameValue = { parent?.variableName?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       indexValue.errorsOrWarnings?.map { .nestedObjectError(field: "index", error: $0) },
       variableNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_name", error: $0) }
@@ -48,8 +48,8 @@ public final class DivActionArrayRemoveValueTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionArrayRemoveValue(
-      index: indexNonNil,
-      variableName: variableNameNonNil
+      index: { indexNonNil }(),
+      variableName: { variableNameNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -58,21 +58,35 @@ public final class DivActionArrayRemoveValueTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var indexValue: DeserializationResult<Expression<Int>> = parent?.index?.value() ?? .noValue
-    var variableNameValue: DeserializationResult<Expression<String>> = parent?.variableName?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "index":
-        indexValue = deserialize(__dictValue).merged(with: indexValue)
-      case "variable_name":
-        variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
-      case parent?.index?.link:
-        indexValue = indexValue.merged(with: { deserialize(__dictValue) })
-      case parent?.variableName?.link:
-        variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var indexValue: DeserializationResult<Expression<Int>> = { parent?.index?.value() ?? .noValue }()
+    var variableNameValue: DeserializationResult<Expression<String>> = { parent?.variableName?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "index" {
+           indexValue = deserialize(__dictValue).merged(with: indexValue)
+          }
+        }()
+        _ = {
+          if key == "variable_name" {
+           variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
+          }
+        }()
+        _ = {
+         if key == parent?.index?.link {
+           indexValue = indexValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.variableName?.link {
+           variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       indexValue.errorsOrWarnings?.map { .nestedObjectError(field: "index", error: $0) },
       variableNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_name", error: $0) }
@@ -90,8 +104,8 @@ public final class DivActionArrayRemoveValueTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionArrayRemoveValue(
-      index: indexNonNil,
-      variableName: variableNameNonNil
+      index: { indexNonNil }(),
+      variableName: { variableNameNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

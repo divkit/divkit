@@ -36,11 +36,11 @@ public final class DivBorderTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivBorderTemplate?) -> DeserializationResult<DivBorder> {
-    let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue
-    let cornersRadiusValue = parent?.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let hasShadowValue = parent?.hasShadow?.resolveOptionalValue(context: context) ?? .noValue
-    let shadowValue = parent?.shadow?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let cornerRadiusValue = { parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue }()
+    let cornersRadiusValue = { parent?.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let hasShadowValue = { parent?.hasShadow?.resolveOptionalValue(context: context) ?? .noValue }()
+    let shadowValue = { parent?.shadow?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let strokeValue = { parent?.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let errors = mergeErrors(
       cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
       cornersRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corners_radius", error: $0) },
@@ -49,11 +49,11 @@ public final class DivBorderTemplate: TemplateValue {
       strokeValue.errorsOrWarnings?.map { .nestedObjectError(field: "stroke", error: $0) }
     )
     let result = DivBorder(
-      cornerRadius: cornerRadiusValue.value,
-      cornersRadius: cornersRadiusValue.value,
-      hasShadow: hasShadowValue.value,
-      shadow: shadowValue.value,
-      stroke: strokeValue.value
+      cornerRadius: { cornerRadiusValue.value }(),
+      cornersRadius: { cornersRadiusValue.value }(),
+      hasShadow: { hasShadowValue.value }(),
+      shadow: { shadowValue.value }(),
+      stroke: { strokeValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -62,40 +62,72 @@ public final class DivBorderTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var cornerRadiusValue: DeserializationResult<Expression<Int>> = parent?.cornerRadius?.value() ?? .noValue
+    var cornerRadiusValue: DeserializationResult<Expression<Int>> = { parent?.cornerRadius?.value() ?? .noValue }()
     var cornersRadiusValue: DeserializationResult<DivCornersRadius> = .noValue
-    var hasShadowValue: DeserializationResult<Expression<Bool>> = parent?.hasShadow?.value() ?? .noValue
+    var hasShadowValue: DeserializationResult<Expression<Bool>> = { parent?.hasShadow?.value() ?? .noValue }()
     var shadowValue: DeserializationResult<DivShadow> = .noValue
     var strokeValue: DeserializationResult<DivStroke> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "corner_radius":
-        cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).merged(with: cornerRadiusValue)
-      case "corners_radius":
-        cornersRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self).merged(with: cornersRadiusValue)
-      case "has_shadow":
-        hasShadowValue = deserialize(__dictValue).merged(with: hasShadowValue)
-      case "shadow":
-        shadowValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self).merged(with: shadowValue)
-      case "stroke":
-        strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
-      case parent?.cornerRadius?.link:
-        cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator) })
-      case parent?.cornersRadius?.link:
-        cornersRadiusValue = cornersRadiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self) })
-      case parent?.hasShadow?.link:
-        hasShadowValue = hasShadowValue.merged(with: { deserialize(__dictValue) })
-      case parent?.shadow?.link:
-        shadowValue = shadowValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self) })
-      case parent?.stroke?.link:
-        strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "corner_radius" {
+           cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).merged(with: cornerRadiusValue)
+          }
+        }()
+        _ = {
+          if key == "corners_radius" {
+           cornersRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self).merged(with: cornersRadiusValue)
+          }
+        }()
+        _ = {
+          if key == "has_shadow" {
+           hasShadowValue = deserialize(__dictValue).merged(with: hasShadowValue)
+          }
+        }()
+        _ = {
+          if key == "shadow" {
+           shadowValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self).merged(with: shadowValue)
+          }
+        }()
+        _ = {
+          if key == "stroke" {
+           strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
+          }
+        }()
+        _ = {
+         if key == parent?.cornerRadius?.link {
+           cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.cornersRadius?.link {
+           cornersRadiusValue = cornersRadiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.hasShadow?.link {
+           hasShadowValue = hasShadowValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.shadow?.link {
+           shadowValue = shadowValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.stroke?.link {
+           strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      cornersRadiusValue = cornersRadiusValue.merged(with: { parent.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      shadowValue = shadowValue.merged(with: { parent.shadow?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      strokeValue = strokeValue.merged(with: { parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { cornersRadiusValue = cornersRadiusValue.merged(with: { parent.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { shadowValue = shadowValue.merged(with: { parent.shadow?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { strokeValue = strokeValue.merged(with: { parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     let errors = mergeErrors(
       cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
@@ -105,11 +137,11 @@ public final class DivBorderTemplate: TemplateValue {
       strokeValue.errorsOrWarnings?.map { .nestedObjectError(field: "stroke", error: $0) }
     )
     let result = DivBorder(
-      cornerRadius: cornerRadiusValue.value,
-      cornersRadius: cornersRadiusValue.value,
-      hasShadow: hasShadowValue.value,
-      shadow: shadowValue.value,
-      stroke: strokeValue.value
+      cornerRadius: { cornerRadiusValue.value }(),
+      cornersRadius: { cornersRadiusValue.value }(),
+      hasShadow: { hasShadowValue.value }(),
+      shadow: { shadowValue.value }(),
+      stroke: { strokeValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

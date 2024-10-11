@@ -29,8 +29,8 @@ public final class DivCurrencyInputMaskTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivCurrencyInputMaskTemplate?) -> DeserializationResult<DivCurrencyInputMask> {
-    let localeValue = parent?.locale?.resolveOptionalValue(context: context) ?? .noValue
-    let rawTextVariableValue = parent?.rawTextVariable?.resolveValue(context: context) ?? .noValue
+    let localeValue = { parent?.locale?.resolveOptionalValue(context: context) ?? .noValue }()
+    let rawTextVariableValue = { parent?.rawTextVariable?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       localeValue.errorsOrWarnings?.map { .nestedObjectError(field: "locale", error: $0) },
       rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) }
@@ -44,8 +44,8 @@ public final class DivCurrencyInputMaskTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivCurrencyInputMask(
-      locale: localeValue.value,
-      rawTextVariable: rawTextVariableNonNil
+      locale: { localeValue.value }(),
+      rawTextVariable: { rawTextVariableNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -54,21 +54,35 @@ public final class DivCurrencyInputMaskTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var localeValue: DeserializationResult<Expression<String>> = parent?.locale?.value() ?? .noValue
-    var rawTextVariableValue: DeserializationResult<String> = parent?.rawTextVariable?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "locale":
-        localeValue = deserialize(__dictValue).merged(with: localeValue)
-      case "raw_text_variable":
-        rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
-      case parent?.locale?.link:
-        localeValue = localeValue.merged(with: { deserialize(__dictValue) })
-      case parent?.rawTextVariable?.link:
-        rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var localeValue: DeserializationResult<Expression<String>> = { parent?.locale?.value() ?? .noValue }()
+    var rawTextVariableValue: DeserializationResult<String> = { parent?.rawTextVariable?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "locale" {
+           localeValue = deserialize(__dictValue).merged(with: localeValue)
+          }
+        }()
+        _ = {
+          if key == "raw_text_variable" {
+           rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
+          }
+        }()
+        _ = {
+         if key == parent?.locale?.link {
+           localeValue = localeValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.rawTextVariable?.link {
+           rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       localeValue.errorsOrWarnings?.map { .nestedObjectError(field: "locale", error: $0) },
       rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) }
@@ -82,8 +96,8 @@ public final class DivCurrencyInputMaskTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivCurrencyInputMask(
-      locale: localeValue.value,
-      rawTextVariable: rawTextVariableNonNil
+      locale: { localeValue.value }(),
+      rawTextVariable: { rawTextVariableNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

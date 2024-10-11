@@ -29,8 +29,8 @@ public final class DivFixedSizeTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFixedSizeTemplate?) -> DeserializationResult<DivFixedSize> {
-    let unitValue = parent?.unit?.resolveOptionalValue(context: context) ?? .noValue
-    let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
+    let unitValue = { parent?.unit?.resolveOptionalValue(context: context) ?? .noValue }()
+    let valueValue = { parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue }()
     var errors = mergeErrors(
       unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -44,8 +44,8 @@ public final class DivFixedSizeTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivFixedSize(
-      unit: unitValue.value,
-      value: valueNonNil
+      unit: { unitValue.value }(),
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -54,21 +54,35 @@ public final class DivFixedSizeTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var unitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.unit?.value() ?? .noValue
-    var valueValue: DeserializationResult<Expression<Int>> = parent?.value?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "unit":
-        unitValue = deserialize(__dictValue).merged(with: unitValue)
-      case "value":
-        valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
-      case parent?.unit?.link:
-        unitValue = unitValue.merged(with: { deserialize(__dictValue) })
-      case parent?.value?.link:
-        valueValue = valueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.valueValidator) })
-      default: break
+    var unitValue: DeserializationResult<Expression<DivSizeUnit>> = { parent?.unit?.value() ?? .noValue }()
+    var valueValue: DeserializationResult<Expression<Int>> = { parent?.value?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "unit" {
+           unitValue = deserialize(__dictValue).merged(with: unitValue)
+          }
+        }()
+        _ = {
+          if key == "value" {
+           valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
+          }
+        }()
+        _ = {
+         if key == parent?.unit?.link {
+           unitValue = unitValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.value?.link {
+           valueValue = valueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.valueValidator) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -82,8 +96,8 @@ public final class DivFixedSizeTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivFixedSize(
-      unit: unitValue.value,
-      value: valueNonNil
+      unit: { unitValue.value }(),
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -31,8 +31,8 @@ public final class DivActionTimerTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionTimerTemplate?) -> DeserializationResult<DivActionTimer> {
-    let actionValue = parent?.action?.resolveValue(context: context) ?? .noValue
-    let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
+    let actionValue = { parent?.action?.resolveValue(context: context) ?? .noValue }()
+    let idValue = { parent?.id?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) }
@@ -50,8 +50,8 @@ public final class DivActionTimerTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionTimer(
-      action: actionNonNil,
-      id: idNonNil
+      action: { actionNonNil }(),
+      id: { idNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -60,21 +60,35 @@ public final class DivActionTimerTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var actionValue: DeserializationResult<Expression<DivActionTimer.Action>> = parent?.action?.value() ?? .noValue
-    var idValue: DeserializationResult<Expression<String>> = parent?.id?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "action":
-        actionValue = deserialize(__dictValue).merged(with: actionValue)
-      case "id":
-        idValue = deserialize(__dictValue).merged(with: idValue)
-      case parent?.action?.link:
-        actionValue = actionValue.merged(with: { deserialize(__dictValue) })
-      case parent?.id?.link:
-        idValue = idValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var actionValue: DeserializationResult<Expression<DivActionTimer.Action>> = { parent?.action?.value() ?? .noValue }()
+    var idValue: DeserializationResult<Expression<String>> = { parent?.id?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "action" {
+           actionValue = deserialize(__dictValue).merged(with: actionValue)
+          }
+        }()
+        _ = {
+          if key == "id" {
+           idValue = deserialize(__dictValue).merged(with: idValue)
+          }
+        }()
+        _ = {
+         if key == parent?.action?.link {
+           actionValue = actionValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.id?.link {
+           idValue = idValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) }
@@ -92,8 +106,8 @@ public final class DivActionTimerTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionTimer(
-      action: actionNonNil,
-      id: idNonNil
+      action: { actionNonNil }(),
+      id: { idNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

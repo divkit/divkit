@@ -30,8 +30,8 @@ public final class DivVideoSourceTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ResolutionTemplate?) -> DeserializationResult<DivVideoSource.Resolution> {
-      let heightValue = parent?.height?.resolveValue(context: context, validator: ResolvedValue.heightValidator) ?? .noValue
-      let widthValue = parent?.width?.resolveValue(context: context, validator: ResolvedValue.widthValidator) ?? .noValue
+      let heightValue = { parent?.height?.resolveValue(context: context, validator: ResolvedValue.heightValidator) ?? .noValue }()
+      let widthValue = { parent?.width?.resolveValue(context: context, validator: ResolvedValue.widthValidator) ?? .noValue }()
       var errors = mergeErrors(
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
         widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
@@ -49,8 +49,8 @@ public final class DivVideoSourceTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivVideoSource.Resolution(
-        height: heightNonNil,
-        width: widthNonNil
+        height: { heightNonNil }(),
+        width: { widthNonNil }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -59,21 +59,35 @@ public final class DivVideoSourceTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var heightValue: DeserializationResult<Expression<Int>> = parent?.height?.value() ?? .noValue
-      var widthValue: DeserializationResult<Expression<Int>> = parent?.width?.value() ?? .noValue
-      context.templateData.forEach { key, __dictValue in
-        switch key {
-        case "height":
-          heightValue = deserialize(__dictValue, validator: ResolvedValue.heightValidator).merged(with: heightValue)
-        case "width":
-          widthValue = deserialize(__dictValue, validator: ResolvedValue.widthValidator).merged(with: widthValue)
-        case parent?.height?.link:
-          heightValue = heightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.heightValidator) })
-        case parent?.width?.link:
-          widthValue = widthValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.widthValidator) })
-        default: break
+      var heightValue: DeserializationResult<Expression<Int>> = { parent?.height?.value() ?? .noValue }()
+      var widthValue: DeserializationResult<Expression<Int>> = { parent?.width?.value() ?? .noValue }()
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "height" {
+             heightValue = deserialize(__dictValue, validator: ResolvedValue.heightValidator).merged(with: heightValue)
+            }
+          }()
+          _ = {
+            if key == "width" {
+             widthValue = deserialize(__dictValue, validator: ResolvedValue.widthValidator).merged(with: widthValue)
+            }
+          }()
+          _ = {
+           if key == parent?.height?.link {
+             heightValue = heightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.heightValidator) })
+            }
+          }()
+          _ = {
+           if key == parent?.width?.link {
+             widthValue = widthValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.widthValidator) })
+            }
+          }()
         }
-      }
+      }()
       var errors = mergeErrors(
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
         widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
@@ -91,8 +105,8 @@ public final class DivVideoSourceTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivVideoSource.Resolution(
-        height: heightNonNil,
-        width: widthNonNil
+        height: { heightNonNil }(),
+        width: { widthNonNil }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -148,10 +162,10 @@ public final class DivVideoSourceTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivVideoSourceTemplate?) -> DeserializationResult<DivVideoSource> {
-    let bitrateValue = parent?.bitrate?.resolveOptionalValue(context: context) ?? .noValue
-    let mimeTypeValue = parent?.mimeType?.resolveValue(context: context) ?? .noValue
-    let resolutionValue = parent?.resolution?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let urlValue = parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
+    let bitrateValue = { parent?.bitrate?.resolveOptionalValue(context: context) ?? .noValue }()
+    let mimeTypeValue = { parent?.mimeType?.resolveValue(context: context) ?? .noValue }()
+    let resolutionValue = { parent?.resolution?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
     var errors = mergeErrors(
       bitrateValue.errorsOrWarnings?.map { .nestedObjectError(field: "bitrate", error: $0) },
       mimeTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mime_type", error: $0) },
@@ -171,10 +185,10 @@ public final class DivVideoSourceTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivVideoSource(
-      bitrate: bitrateValue.value,
-      mimeType: mimeTypeNonNil,
-      resolution: resolutionValue.value,
-      url: urlNonNil
+      bitrate: { bitrateValue.value }(),
+      mimeType: { mimeTypeNonNil }(),
+      resolution: { resolutionValue.value }(),
+      url: { urlNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -183,33 +197,59 @@ public final class DivVideoSourceTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var bitrateValue: DeserializationResult<Expression<Int>> = parent?.bitrate?.value() ?? .noValue
-    var mimeTypeValue: DeserializationResult<Expression<String>> = parent?.mimeType?.value() ?? .noValue
+    var bitrateValue: DeserializationResult<Expression<Int>> = { parent?.bitrate?.value() ?? .noValue }()
+    var mimeTypeValue: DeserializationResult<Expression<String>> = { parent?.mimeType?.value() ?? .noValue }()
     var resolutionValue: DeserializationResult<DivVideoSource.Resolution> = .noValue
-    var urlValue: DeserializationResult<Expression<URL>> = parent?.url?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "bitrate":
-        bitrateValue = deserialize(__dictValue).merged(with: bitrateValue)
-      case "mime_type":
-        mimeTypeValue = deserialize(__dictValue).merged(with: mimeTypeValue)
-      case "resolution":
-        resolutionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.ResolutionTemplate.self).merged(with: resolutionValue)
-      case "url":
-        urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
-      case parent?.bitrate?.link:
-        bitrateValue = bitrateValue.merged(with: { deserialize(__dictValue) })
-      case parent?.mimeType?.link:
-        mimeTypeValue = mimeTypeValue.merged(with: { deserialize(__dictValue) })
-      case parent?.resolution?.link:
-        resolutionValue = resolutionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.ResolutionTemplate.self) })
-      case parent?.url?.link:
-        urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
-      default: break
+    var urlValue: DeserializationResult<Expression<URL>> = { parent?.url?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "bitrate" {
+           bitrateValue = deserialize(__dictValue).merged(with: bitrateValue)
+          }
+        }()
+        _ = {
+          if key == "mime_type" {
+           mimeTypeValue = deserialize(__dictValue).merged(with: mimeTypeValue)
+          }
+        }()
+        _ = {
+          if key == "resolution" {
+           resolutionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.ResolutionTemplate.self).merged(with: resolutionValue)
+          }
+        }()
+        _ = {
+          if key == "url" {
+           urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
+          }
+        }()
+        _ = {
+         if key == parent?.bitrate?.link {
+           bitrateValue = bitrateValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.mimeType?.link {
+           mimeTypeValue = mimeTypeValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.resolution?.link {
+           resolutionValue = resolutionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.ResolutionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.url?.link {
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      resolutionValue = resolutionValue.merged(with: { parent.resolution?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { resolutionValue = resolutionValue.merged(with: { parent.resolution?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       bitrateValue.errorsOrWarnings?.map { .nestedObjectError(field: "bitrate", error: $0) },
@@ -230,10 +270,10 @@ public final class DivVideoSourceTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivVideoSource(
-      bitrate: bitrateValue.value,
-      mimeType: mimeTypeNonNil,
-      resolution: resolutionValue.value,
-      url: urlNonNil
+      bitrate: { bitrateValue.value }(),
+      mimeType: { mimeTypeNonNil }(),
+      resolution: { resolutionValue.value }(),
+      url: { urlNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -25,7 +25,7 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivNeighbourPageSizeTemplate?) -> DeserializationResult<DivNeighbourPageSize> {
-    let neighbourPageWidthValue = parent?.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+    let neighbourPageWidthValue = { parent?.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       neighbourPageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "neighbour_page_width", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivNeighbourPageSize(
-      neighbourPageWidth: neighbourPageWidthNonNil
+      neighbourPageWidth: { neighbourPageWidthNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -48,17 +48,25 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var neighbourPageWidthValue: DeserializationResult<DivFixedSize> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "neighbour_page_width":
-        neighbourPageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: neighbourPageWidthValue)
-      case parent?.neighbourPageWidth?.link:
-        neighbourPageWidthValue = neighbourPageWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "neighbour_page_width" {
+           neighbourPageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: neighbourPageWidthValue)
+          }
+        }()
+        _ = {
+         if key == parent?.neighbourPageWidth?.link {
+           neighbourPageWidthValue = neighbourPageWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      neighbourPageWidthValue = neighbourPageWidthValue.merged(with: { parent.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true) })
+      _ = { neighbourPageWidthValue = neighbourPageWidthValue.merged(with: { parent.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       neighbourPageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "neighbour_page_width", error: $0) }
@@ -72,7 +80,7 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivNeighbourPageSize(
-      neighbourPageWidth: neighbourPageWidthNonNil
+      neighbourPageWidth: { neighbourPageWidthNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

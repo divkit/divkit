@@ -25,7 +25,7 @@ public final class DivInputFilterRegexTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivInputFilterRegexTemplate?) -> DeserializationResult<DivInputFilterRegex> {
-    let patternValue = parent?.pattern?.resolveValue(context: context) ?? .noValue
+    let patternValue = { parent?.pattern?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       patternValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivInputFilterRegexTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivInputFilterRegex(
-      pattern: patternNonNil
+      pattern: { patternNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,16 +47,24 @@ public final class DivInputFilterRegexTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var patternValue: DeserializationResult<Expression<String>> = parent?.pattern?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "pattern":
-        patternValue = deserialize(__dictValue).merged(with: patternValue)
-      case parent?.pattern?.link:
-        patternValue = patternValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var patternValue: DeserializationResult<Expression<String>> = { parent?.pattern?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "pattern" {
+           patternValue = deserialize(__dictValue).merged(with: patternValue)
+          }
+        }()
+        _ = {
+         if key == parent?.pattern?.link {
+           patternValue = patternValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       patternValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern", error: $0) }
     )
@@ -69,7 +77,7 @@ public final class DivInputFilterRegexTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivInputFilterRegex(
-      pattern: patternNonNil
+      pattern: { patternNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

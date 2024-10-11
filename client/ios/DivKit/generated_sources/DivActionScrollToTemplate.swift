@@ -33,9 +33,9 @@ public final class DivActionScrollToTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionScrollToTemplate?) -> DeserializationResult<DivActionScrollTo> {
-    let animatedValue = parent?.animated?.resolveOptionalValue(context: context) ?? .noValue
-    let destinationValue = parent?.destination?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-    let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
+    let animatedValue = { parent?.animated?.resolveOptionalValue(context: context) ?? .noValue }()
+    let destinationValue = { parent?.destination?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let idValue = { parent?.id?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       animatedValue.errorsOrWarnings?.map { .nestedObjectError(field: "animated", error: $0) },
       destinationValue.errorsOrWarnings?.map { .nestedObjectError(field: "destination", error: $0) },
@@ -54,9 +54,9 @@ public final class DivActionScrollToTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionScrollTo(
-      animated: animatedValue.value,
-      destination: destinationNonNil,
-      id: idNonNil
+      animated: { animatedValue.value }(),
+      destination: { destinationNonNil }(),
+      id: { idNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -65,28 +65,48 @@ public final class DivActionScrollToTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var animatedValue: DeserializationResult<Expression<Bool>> = parent?.animated?.value() ?? .noValue
+    var animatedValue: DeserializationResult<Expression<Bool>> = { parent?.animated?.value() ?? .noValue }()
     var destinationValue: DeserializationResult<DivActionScrollDestination> = .noValue
-    var idValue: DeserializationResult<Expression<String>> = parent?.id?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "animated":
-        animatedValue = deserialize(__dictValue).merged(with: animatedValue)
-      case "destination":
-        destinationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionScrollDestinationTemplate.self).merged(with: destinationValue)
-      case "id":
-        idValue = deserialize(__dictValue).merged(with: idValue)
-      case parent?.animated?.link:
-        animatedValue = animatedValue.merged(with: { deserialize(__dictValue) })
-      case parent?.destination?.link:
-        destinationValue = destinationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionScrollDestinationTemplate.self) })
-      case parent?.id?.link:
-        idValue = idValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var idValue: DeserializationResult<Expression<String>> = { parent?.id?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "animated" {
+           animatedValue = deserialize(__dictValue).merged(with: animatedValue)
+          }
+        }()
+        _ = {
+          if key == "destination" {
+           destinationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionScrollDestinationTemplate.self).merged(with: destinationValue)
+          }
+        }()
+        _ = {
+          if key == "id" {
+           idValue = deserialize(__dictValue).merged(with: idValue)
+          }
+        }()
+        _ = {
+         if key == parent?.animated?.link {
+           animatedValue = animatedValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.destination?.link {
+           destinationValue = destinationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionScrollDestinationTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.id?.link {
+           idValue = idValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      destinationValue = destinationValue.merged(with: { parent.destination?.resolveValue(context: context, useOnlyLinks: true) })
+      _ = { destinationValue = destinationValue.merged(with: { parent.destination?.resolveValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       animatedValue.errorsOrWarnings?.map { .nestedObjectError(field: "animated", error: $0) },
@@ -106,9 +126,9 @@ public final class DivActionScrollToTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionScrollTo(
-      animated: animatedValue.value,
-      destination: destinationNonNil,
-      id: idNonNil
+      animated: { animatedValue.value }(),
+      destination: { destinationNonNil }(),
+      id: { idNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

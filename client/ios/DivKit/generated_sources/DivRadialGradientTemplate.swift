@@ -37,10 +37,10 @@ public final class DivRadialGradientTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRadialGradientTemplate?) -> DeserializationResult<DivRadialGradient> {
-    let centerXValue = parent?.centerX?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let centerYValue = parent?.centerY?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let colorsValue = parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue
-    let radiusValue = parent?.radius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let centerXValue = { parent?.centerX?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let centerYValue = { parent?.centerY?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let colorsValue = { parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue }()
+    let radiusValue = { parent?.radius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       centerXValue.errorsOrWarnings?.map { .nestedObjectError(field: "center_x", error: $0) },
       centerYValue.errorsOrWarnings?.map { .nestedObjectError(field: "center_y", error: $0) },
@@ -56,10 +56,10 @@ public final class DivRadialGradientTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivRadialGradient(
-      centerX: centerXValue.value,
-      centerY: centerYValue.value,
-      colors: colorsNonNil,
-      radius: radiusValue.value
+      centerX: { centerXValue.value }(),
+      centerY: { centerYValue.value }(),
+      colors: { colorsNonNil }(),
+      radius: { radiusValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -70,33 +70,59 @@ public final class DivRadialGradientTemplate: TemplateValue {
     }
     var centerXValue: DeserializationResult<DivRadialGradientCenter> = .noValue
     var centerYValue: DeserializationResult<DivRadialGradientCenter> = .noValue
-    var colorsValue: DeserializationResult<[Expression<Color>]> = parent?.colors?.value() ?? .noValue
+    var colorsValue: DeserializationResult<[Expression<Color>]> = { parent?.colors?.value() ?? .noValue }()
     var radiusValue: DeserializationResult<DivRadialGradientRadius> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "center_x":
-        centerXValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self).merged(with: centerXValue)
-      case "center_y":
-        centerYValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self).merged(with: centerYValue)
-      case "colors":
-        colorsValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator).merged(with: colorsValue)
-      case "radius":
-        radiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientRadiusTemplate.self).merged(with: radiusValue)
-      case parent?.centerX?.link:
-        centerXValue = centerXValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self) })
-      case parent?.centerY?.link:
-        centerYValue = centerYValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self) })
-      case parent?.colors?.link:
-        colorsValue = colorsValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) })
-      case parent?.radius?.link:
-        radiusValue = radiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientRadiusTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "center_x" {
+           centerXValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self).merged(with: centerXValue)
+          }
+        }()
+        _ = {
+          if key == "center_y" {
+           centerYValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self).merged(with: centerYValue)
+          }
+        }()
+        _ = {
+          if key == "colors" {
+           colorsValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator).merged(with: colorsValue)
+          }
+        }()
+        _ = {
+          if key == "radius" {
+           radiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientRadiusTemplate.self).merged(with: radiusValue)
+          }
+        }()
+        _ = {
+         if key == parent?.centerX?.link {
+           centerXValue = centerXValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.centerY?.link {
+           centerYValue = centerYValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.colors?.link {
+           colorsValue = colorsValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.radius?.link {
+           radiusValue = radiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientRadiusTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      centerXValue = centerXValue.merged(with: { parent.centerX?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      centerYValue = centerYValue.merged(with: { parent.centerY?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      radiusValue = radiusValue.merged(with: { parent.radius?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { centerXValue = centerXValue.merged(with: { parent.centerX?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { centerYValue = centerYValue.merged(with: { parent.centerY?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { radiusValue = radiusValue.merged(with: { parent.radius?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       centerXValue.errorsOrWarnings?.map { .nestedObjectError(field: "center_x", error: $0) },
@@ -113,10 +139,10 @@ public final class DivRadialGradientTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivRadialGradient(
-      centerX: centerXValue.value,
-      centerY: centerYValue.value,
-      colors: colorsNonNil,
-      radius: radiusValue.value
+      centerX: { centerXValue.value }(),
+      centerY: { centerYValue.value }(),
+      colors: { colorsNonNil }(),
+      radius: { radiusValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

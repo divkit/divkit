@@ -27,7 +27,7 @@ public final class EntityWithArrayTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithArrayTemplate?) -> DeserializationResult<EntityWithArray> {
-    let arrayValue = parent?.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true) ?? .noValue
+    let arrayValue = { parent?.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
     )
@@ -40,7 +40,7 @@ public final class EntityWithArrayTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithArray(
-      array: arrayNonNil
+      array: { arrayNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -50,17 +50,25 @@ public final class EntityWithArrayTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var arrayValue: DeserializationResult<[Entity]> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "array":
-        arrayValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self).merged(with: arrayValue)
-      case parent?.array?.link:
-        arrayValue = arrayValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "array" {
+           arrayValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self).merged(with: arrayValue)
+          }
+        }()
+        _ = {
+         if key == parent?.array?.link {
+           arrayValue = arrayValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      arrayValue = arrayValue.merged(with: { parent.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true) })
+      _ = { arrayValue = arrayValue.merged(with: { parent.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
@@ -74,7 +82,7 @@ public final class EntityWithArrayTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithArray(
-      array: arrayNonNil
+      array: { arrayNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -25,7 +25,7 @@ public final class DivBlurTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivBlurTemplate?) -> DeserializationResult<DivBlur> {
-    let radiusValue = parent?.radius?.resolveValue(context: context, validator: ResolvedValue.radiusValidator) ?? .noValue
+    let radiusValue = { parent?.radius?.resolveValue(context: context, validator: ResolvedValue.radiusValidator) ?? .noValue }()
     var errors = mergeErrors(
       radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivBlurTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivBlur(
-      radius: radiusNonNil
+      radius: { radiusNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,16 +47,24 @@ public final class DivBlurTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var radiusValue: DeserializationResult<Expression<Int>> = parent?.radius?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "radius":
-        radiusValue = deserialize(__dictValue, validator: ResolvedValue.radiusValidator).merged(with: radiusValue)
-      case parent?.radius?.link:
-        radiusValue = radiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.radiusValidator) })
-      default: break
+    var radiusValue: DeserializationResult<Expression<Int>> = { parent?.radius?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "radius" {
+           radiusValue = deserialize(__dictValue, validator: ResolvedValue.radiusValidator).merged(with: radiusValue)
+          }
+        }()
+        _ = {
+         if key == parent?.radius?.link {
+           radiusValue = radiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.radiusValidator) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
     )
@@ -69,7 +77,7 @@ public final class DivBlurTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivBlur(
-      radius: radiusNonNil
+      radius: { radiusNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

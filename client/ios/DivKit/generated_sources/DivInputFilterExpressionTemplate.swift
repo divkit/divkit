@@ -25,7 +25,7 @@ public final class DivInputFilterExpressionTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivInputFilterExpressionTemplate?) -> DeserializationResult<DivInputFilterExpression> {
-    let conditionValue = parent?.condition?.resolveValue(context: context) ?? .noValue
+    let conditionValue = { parent?.condition?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       conditionValue.errorsOrWarnings?.map { .nestedObjectError(field: "condition", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivInputFilterExpressionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivInputFilterExpression(
-      condition: conditionNonNil
+      condition: { conditionNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,16 +47,24 @@ public final class DivInputFilterExpressionTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var conditionValue: DeserializationResult<Expression<Bool>> = parent?.condition?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "condition":
-        conditionValue = deserialize(__dictValue).merged(with: conditionValue)
-      case parent?.condition?.link:
-        conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var conditionValue: DeserializationResult<Expression<Bool>> = { parent?.condition?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "condition" {
+           conditionValue = deserialize(__dictValue).merged(with: conditionValue)
+          }
+        }()
+        _ = {
+         if key == parent?.condition?.link {
+           conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       conditionValue.errorsOrWarnings?.map { .nestedObjectError(field: "condition", error: $0) }
     )
@@ -69,7 +77,7 @@ public final class DivInputFilterExpressionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivInputFilterExpression(
-      condition: conditionNonNil
+      condition: { conditionNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
