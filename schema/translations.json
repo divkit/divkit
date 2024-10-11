@@ -659,6 +659,22 @@
     "en": "Enables the bounding of child elements by the parent's borders.",
     "ru": "Включает ограничение дочерних элементов границами родителя."
   },
+  "div_cloud_background": {
+    "en": "Cloud text background. Lines draws a rectangular background with the specified color and rounded corners.",
+    "ru": "Фон текста в стиле \"облако\". Строки получают прямоугольный фон с указанным цветом, а все углы скругляются."
+  },
+  "div_cloud_background_color": {
+    "en": "Fill color.",
+    "ru": "Цвет заливки."
+  },
+  "div_cloud_background_corner_radius": {
+    "en": "Corner rounding radius.",
+    "ru": "Радиус скругления углов."
+  },
+  "div_cloud_background_paddings": {
+    "en": "Margins between line bounds and background.",
+    "ru": "Отступы от границы строки до границы фона."
+  },
   "div_collection_item_builder": {
     "en": "Sets collection elements dynamically using `data` and `prototypes`.",
     "ru": "Задает элементы коллекции динамически при помощи `data` и `prototypes`."

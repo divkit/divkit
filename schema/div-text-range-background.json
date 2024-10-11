@@ -3,6 +3,10 @@
     {
       "$ref": "div-solid-background.json",
       "$description": "translations.json#/div_background_solid"
+    },
+    {
+      "$ref": "div-cloud-background.json",
+      "$description": "translations.json#/div_cloud_background"
     }
   ]
 }

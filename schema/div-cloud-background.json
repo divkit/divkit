@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_cloud_background",
+  "platforms": [
+    "android"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "cloud"
+      ]
+    },
+    "color": {
+      "$ref": "common.json#/color",
+      "$description": "translations.json#/div_cloud_background_color"
+    },
+    "corner_radius": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_cloud_background_corner_radius"
+    },
+    "paddings": {
+      "$ref": "div-edge-insets.json",
+      "$description": "translations.json#/div_cloud_background_paddings"
+    }
+  },
+  "required": [
+    "type",
+    "color",
+    "corner_radius"
+  ]
+}

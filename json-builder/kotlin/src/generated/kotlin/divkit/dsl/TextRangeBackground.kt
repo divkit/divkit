@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [SolidBackground].
+ * Possible values: [SolidBackground], [CloudBackground].
  */
 @Generated
 sealed interface TextRangeBackground
