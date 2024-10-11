@@ -1,0 +1,115 @@
+{
+  "description": "Gallery with items which can change their visibility.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "item": {
+        "type": "text",
+        "border": {
+          "stroke": {
+            "color": "#aaaaaa",
+            "width": 1
+          }
+        },
+        "paddings": {
+          "top": 12,
+          "bottom": 12,
+          "left": 12,
+          "right": 12
+        }
+      }
+    },
+    "card": {
+      "log_id": "item_visibility",
+      "variables": [
+        {
+          "name": "visibility1",
+          "type": "string",
+          "value": "gone"
+        },
+        {
+          "name": "visibility3",
+          "type": "string",
+          "value": "visible"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "gallery",
+            "orientation": "vertical",
+            "border": {
+              "stroke": {
+                "color": "#8888ff",
+                "width": 1
+              }
+            },
+            "items": [
+              {
+                "type": "item",
+                "text": "Item 0"
+              },
+              {
+                "type": "item",
+                "text": "Item 1",
+                "visibility": "@{visibility1}"
+              },
+              {
+                "type": "item",
+                "text": "Item 2"
+              },
+              {
+                "type": "item",
+                "text": "Item 3",
+                "visibility": "@{visibility3}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility3&value=gone",
+          "log_id": "hide item 3"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility3&value=visible",
+          "log_id": "show item 3"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility1&value=visible",
+          "log_id": "show item 1"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility1&value=gone",
+          "log_id": "hide item 1"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}
