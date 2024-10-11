@@ -41,32 +41,43 @@ public enum DivInputMaskTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divFixedLengthInputMaskTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divFixedLengthInputMask(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedLengthInputMask(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divCurrencyInputMaskTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divCurrencyInputMask(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divCurrencyInputMask(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divPhoneInputMaskTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divPhoneInputMask(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divPhoneInputMask(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivInputMask>!
+      result = result ?? {
+        if case let .divFixedLengthInputMaskTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divFixedLengthInputMask(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedLengthInputMask(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divCurrencyInputMaskTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divCurrencyInputMask(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divCurrencyInputMask(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divPhoneInputMaskTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divPhoneInputMask(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divPhoneInputMask(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivInputMask> {
@@ -74,34 +85,37 @@ public enum DivInputMaskTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivFixedLengthInputMask.type:
-      let result = DivFixedLengthInputMaskTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivInputMask>?
+    result = result ?? { if type == DivFixedLengthInputMask.type {
+      let result = { DivFixedLengthInputMaskTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divFixedLengthInputMask(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedLengthInputMask(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivCurrencyInputMask.type:
-      let result = DivCurrencyInputMaskTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivCurrencyInputMask.type {
+      let result = { DivCurrencyInputMaskTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divCurrencyInputMask(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divCurrencyInputMask(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivPhoneInputMask.type:
-      let result = DivPhoneInputMaskTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivPhoneInputMask.type {
+      let result = { DivPhoneInputMaskTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divPhoneInputMask(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divPhoneInputMask(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

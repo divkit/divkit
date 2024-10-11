@@ -41,32 +41,43 @@ public enum DivSizeTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divFixedSizeTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divFixedSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedSize(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divMatchParentSizeTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divMatchParentSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divMatchParentSize(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divWrapContentSizeTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divWrapContentSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divWrapContentSize(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivSize>!
+      result = result ?? {
+        if case let .divFixedSizeTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divFixedSize(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedSize(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divMatchParentSizeTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divMatchParentSize(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divMatchParentSize(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divWrapContentSizeTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divWrapContentSize(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divWrapContentSize(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivSize> {
@@ -74,34 +85,37 @@ public enum DivSizeTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivFixedSize.type:
-      let result = DivFixedSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivSize>?
+    result = result ?? { if type == DivFixedSize.type {
+      let result = { DivFixedSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divFixedSize(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivMatchParentSize.type:
-      let result = DivMatchParentSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivMatchParentSize.type {
+      let result = { DivMatchParentSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divMatchParentSize(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divMatchParentSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivWrapContentSize.type:
-      let result = DivWrapContentSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivWrapContentSize.type {
+      let result = { DivWrapContentSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divWrapContentSize(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divWrapContentSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

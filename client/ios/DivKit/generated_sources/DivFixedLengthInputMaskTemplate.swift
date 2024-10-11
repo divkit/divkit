@@ -29,9 +29,9 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: PatternElementTemplate?) -> DeserializationResult<DivFixedLengthInputMask.PatternElement> {
-      let keyValue = parent?.key?.resolveValue(context: context, validator: ResolvedValue.keyValidator) ?? .noValue
-      let placeholderValue = parent?.placeholder?.resolveOptionalValue(context: context, validator: ResolvedValue.placeholderValidator) ?? .noValue
-      let regexValue = parent?.regex?.resolveOptionalValue(context: context) ?? .noValue
+      let keyValue = { parent?.key?.resolveValue(context: context, validator: ResolvedValue.keyValidator) ?? .noValue }()
+      let placeholderValue = { parent?.placeholder?.resolveOptionalValue(context: context, validator: ResolvedValue.placeholderValidator) ?? .noValue }()
+      let regexValue = { parent?.regex?.resolveOptionalValue(context: context) ?? .noValue }()
       var errors = mergeErrors(
         keyValue.errorsOrWarnings?.map { .nestedObjectError(field: "key", error: $0) },
         placeholderValue.errorsOrWarnings?.map { .nestedObjectError(field: "placeholder", error: $0) },
@@ -46,9 +46,9 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivFixedLengthInputMask.PatternElement(
-        key: keyNonNil,
-        placeholder: placeholderValue.value,
-        regex: regexValue.value
+        key: { keyNonNil }(),
+        placeholder: { placeholderValue.value }(),
+        regex: { regexValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -57,26 +57,46 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var keyValue: DeserializationResult<Expression<String>> = parent?.key?.value() ?? .noValue
-      var placeholderValue: DeserializationResult<Expression<String>> = parent?.placeholder?.value() ?? .noValue
-      var regexValue: DeserializationResult<Expression<String>> = parent?.regex?.value() ?? .noValue
-      context.templateData.forEach { key, __dictValue in
-        switch key {
-        case "key":
-          keyValue = deserialize(__dictValue, validator: ResolvedValue.keyValidator).merged(with: keyValue)
-        case "placeholder":
-          placeholderValue = deserialize(__dictValue, validator: ResolvedValue.placeholderValidator).merged(with: placeholderValue)
-        case "regex":
-          regexValue = deserialize(__dictValue).merged(with: regexValue)
-        case parent?.key?.link:
-          keyValue = keyValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.keyValidator) })
-        case parent?.placeholder?.link:
-          placeholderValue = placeholderValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.placeholderValidator) })
-        case parent?.regex?.link:
-          regexValue = regexValue.merged(with: { deserialize(__dictValue) })
-        default: break
+      var keyValue: DeserializationResult<Expression<String>> = { parent?.key?.value() ?? .noValue }()
+      var placeholderValue: DeserializationResult<Expression<String>> = { parent?.placeholder?.value() ?? .noValue }()
+      var regexValue: DeserializationResult<Expression<String>> = { parent?.regex?.value() ?? .noValue }()
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "key" {
+             keyValue = deserialize(__dictValue, validator: ResolvedValue.keyValidator).merged(with: keyValue)
+            }
+          }()
+          _ = {
+            if key == "placeholder" {
+             placeholderValue = deserialize(__dictValue, validator: ResolvedValue.placeholderValidator).merged(with: placeholderValue)
+            }
+          }()
+          _ = {
+            if key == "regex" {
+             regexValue = deserialize(__dictValue).merged(with: regexValue)
+            }
+          }()
+          _ = {
+           if key == parent?.key?.link {
+             keyValue = keyValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.keyValidator) })
+            }
+          }()
+          _ = {
+           if key == parent?.placeholder?.link {
+             placeholderValue = placeholderValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.placeholderValidator) })
+            }
+          }()
+          _ = {
+           if key == parent?.regex?.link {
+             regexValue = regexValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
         }
-      }
+      }()
       var errors = mergeErrors(
         keyValue.errorsOrWarnings?.map { .nestedObjectError(field: "key", error: $0) },
         placeholderValue.errorsOrWarnings?.map { .nestedObjectError(field: "placeholder", error: $0) },
@@ -91,9 +111,9 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivFixedLengthInputMask.PatternElement(
-        key: keyNonNil,
-        placeholder: placeholderValue.value,
-        regex: regexValue.value
+        key: { keyNonNil }(),
+        placeholder: { placeholderValue.value }(),
+        regex: { regexValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -139,10 +159,10 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFixedLengthInputMaskTemplate?) -> DeserializationResult<DivFixedLengthInputMask> {
-    let alwaysVisibleValue = parent?.alwaysVisible?.resolveOptionalValue(context: context) ?? .noValue
-    let patternValue = parent?.pattern?.resolveValue(context: context) ?? .noValue
-    let patternElementsValue = parent?.patternElements?.resolveValue(context: context, validator: ResolvedValue.patternElementsValidator, useOnlyLinks: true) ?? .noValue
-    let rawTextVariableValue = parent?.rawTextVariable?.resolveValue(context: context) ?? .noValue
+    let alwaysVisibleValue = { parent?.alwaysVisible?.resolveOptionalValue(context: context) ?? .noValue }()
+    let patternValue = { parent?.pattern?.resolveValue(context: context) ?? .noValue }()
+    let patternElementsValue = { parent?.patternElements?.resolveValue(context: context, validator: ResolvedValue.patternElementsValidator, useOnlyLinks: true) ?? .noValue }()
+    let rawTextVariableValue = { parent?.rawTextVariable?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       alwaysVisibleValue.errorsOrWarnings?.map { .nestedObjectError(field: "always_visible", error: $0) },
       patternValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern", error: $0) },
@@ -166,10 +186,10 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivFixedLengthInputMask(
-      alwaysVisible: alwaysVisibleValue.value,
-      pattern: patternNonNil,
-      patternElements: patternElementsNonNil,
-      rawTextVariable: rawTextVariableNonNil
+      alwaysVisible: { alwaysVisibleValue.value }(),
+      pattern: { patternNonNil }(),
+      patternElements: { patternElementsNonNil }(),
+      rawTextVariable: { rawTextVariableNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -178,33 +198,59 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var alwaysVisibleValue: DeserializationResult<Expression<Bool>> = parent?.alwaysVisible?.value() ?? .noValue
-    var patternValue: DeserializationResult<Expression<String>> = parent?.pattern?.value() ?? .noValue
+    var alwaysVisibleValue: DeserializationResult<Expression<Bool>> = { parent?.alwaysVisible?.value() ?? .noValue }()
+    var patternValue: DeserializationResult<Expression<String>> = { parent?.pattern?.value() ?? .noValue }()
     var patternElementsValue: DeserializationResult<[DivFixedLengthInputMask.PatternElement]> = .noValue
-    var rawTextVariableValue: DeserializationResult<String> = parent?.rawTextVariable?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "always_visible":
-        alwaysVisibleValue = deserialize(__dictValue).merged(with: alwaysVisibleValue)
-      case "pattern":
-        patternValue = deserialize(__dictValue).merged(with: patternValue)
-      case "pattern_elements":
-        patternElementsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self).merged(with: patternElementsValue)
-      case "raw_text_variable":
-        rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
-      case parent?.alwaysVisible?.link:
-        alwaysVisibleValue = alwaysVisibleValue.merged(with: { deserialize(__dictValue) })
-      case parent?.pattern?.link:
-        patternValue = patternValue.merged(with: { deserialize(__dictValue) })
-      case parent?.patternElements?.link:
-        patternElementsValue = patternElementsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self) })
-      case parent?.rawTextVariable?.link:
-        rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var rawTextVariableValue: DeserializationResult<String> = { parent?.rawTextVariable?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "always_visible" {
+           alwaysVisibleValue = deserialize(__dictValue).merged(with: alwaysVisibleValue)
+          }
+        }()
+        _ = {
+          if key == "pattern" {
+           patternValue = deserialize(__dictValue).merged(with: patternValue)
+          }
+        }()
+        _ = {
+          if key == "pattern_elements" {
+           patternElementsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self).merged(with: patternElementsValue)
+          }
+        }()
+        _ = {
+          if key == "raw_text_variable" {
+           rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
+          }
+        }()
+        _ = {
+         if key == parent?.alwaysVisible?.link {
+           alwaysVisibleValue = alwaysVisibleValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.pattern?.link {
+           patternValue = patternValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.patternElements?.link {
+           patternElementsValue = patternElementsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.rawTextVariable?.link {
+           rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      patternElementsValue = patternElementsValue.merged(with: { parent.patternElements?.resolveValue(context: context, validator: ResolvedValue.patternElementsValidator, useOnlyLinks: true) })
+      _ = { patternElementsValue = patternElementsValue.merged(with: { parent.patternElements?.resolveValue(context: context, validator: ResolvedValue.patternElementsValidator, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       alwaysVisibleValue.errorsOrWarnings?.map { .nestedObjectError(field: "always_visible", error: $0) },
@@ -229,10 +275,10 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivFixedLengthInputMask(
-      alwaysVisible: alwaysVisibleValue.value,
-      pattern: patternNonNil,
-      patternElements: patternElementsNonNil,
-      rawTextVariable: rawTextVariableNonNil
+      alwaysVisible: { alwaysVisibleValue.value }(),
+      pattern: { patternNonNil }(),
+      patternElements: { patternElementsNonNil }(),
+      rawTextVariable: { rawTextVariableNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -37,11 +37,11 @@ public final class DivFocusTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: NextFocusIdsTemplate?) -> DeserializationResult<DivFocus.NextFocusIds> {
-      let downValue = parent?.down?.resolveOptionalValue(context: context) ?? .noValue
-      let forwardValue = parent?.forward?.resolveOptionalValue(context: context) ?? .noValue
-      let leftValue = parent?.left?.resolveOptionalValue(context: context) ?? .noValue
-      let rightValue = parent?.right?.resolveOptionalValue(context: context) ?? .noValue
-      let upValue = parent?.up?.resolveOptionalValue(context: context) ?? .noValue
+      let downValue = { parent?.down?.resolveOptionalValue(context: context) ?? .noValue }()
+      let forwardValue = { parent?.forward?.resolveOptionalValue(context: context) ?? .noValue }()
+      let leftValue = { parent?.left?.resolveOptionalValue(context: context) ?? .noValue }()
+      let rightValue = { parent?.right?.resolveOptionalValue(context: context) ?? .noValue }()
+      let upValue = { parent?.up?.resolveOptionalValue(context: context) ?? .noValue }()
       let errors = mergeErrors(
         downValue.errorsOrWarnings?.map { .nestedObjectError(field: "down", error: $0) },
         forwardValue.errorsOrWarnings?.map { .nestedObjectError(field: "forward", error: $0) },
@@ -50,11 +50,11 @@ public final class DivFocusTemplate: TemplateValue {
         upValue.errorsOrWarnings?.map { .nestedObjectError(field: "up", error: $0) }
       )
       let result = DivFocus.NextFocusIds(
-        down: downValue.value,
-        forward: forwardValue.value,
-        left: leftValue.value,
-        right: rightValue.value,
-        up: upValue.value
+        down: { downValue.value }(),
+        forward: { forwardValue.value }(),
+        left: { leftValue.value }(),
+        right: { rightValue.value }(),
+        up: { upValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -63,36 +63,68 @@ public final class DivFocusTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var downValue: DeserializationResult<Expression<String>> = parent?.down?.value() ?? .noValue
-      var forwardValue: DeserializationResult<Expression<String>> = parent?.forward?.value() ?? .noValue
-      var leftValue: DeserializationResult<Expression<String>> = parent?.left?.value() ?? .noValue
-      var rightValue: DeserializationResult<Expression<String>> = parent?.right?.value() ?? .noValue
-      var upValue: DeserializationResult<Expression<String>> = parent?.up?.value() ?? .noValue
-      context.templateData.forEach { key, __dictValue in
-        switch key {
-        case "down":
-          downValue = deserialize(__dictValue).merged(with: downValue)
-        case "forward":
-          forwardValue = deserialize(__dictValue).merged(with: forwardValue)
-        case "left":
-          leftValue = deserialize(__dictValue).merged(with: leftValue)
-        case "right":
-          rightValue = deserialize(__dictValue).merged(with: rightValue)
-        case "up":
-          upValue = deserialize(__dictValue).merged(with: upValue)
-        case parent?.down?.link:
-          downValue = downValue.merged(with: { deserialize(__dictValue) })
-        case parent?.forward?.link:
-          forwardValue = forwardValue.merged(with: { deserialize(__dictValue) })
-        case parent?.left?.link:
-          leftValue = leftValue.merged(with: { deserialize(__dictValue) })
-        case parent?.right?.link:
-          rightValue = rightValue.merged(with: { deserialize(__dictValue) })
-        case parent?.up?.link:
-          upValue = upValue.merged(with: { deserialize(__dictValue) })
-        default: break
+      var downValue: DeserializationResult<Expression<String>> = { parent?.down?.value() ?? .noValue }()
+      var forwardValue: DeserializationResult<Expression<String>> = { parent?.forward?.value() ?? .noValue }()
+      var leftValue: DeserializationResult<Expression<String>> = { parent?.left?.value() ?? .noValue }()
+      var rightValue: DeserializationResult<Expression<String>> = { parent?.right?.value() ?? .noValue }()
+      var upValue: DeserializationResult<Expression<String>> = { parent?.up?.value() ?? .noValue }()
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "down" {
+             downValue = deserialize(__dictValue).merged(with: downValue)
+            }
+          }()
+          _ = {
+            if key == "forward" {
+             forwardValue = deserialize(__dictValue).merged(with: forwardValue)
+            }
+          }()
+          _ = {
+            if key == "left" {
+             leftValue = deserialize(__dictValue).merged(with: leftValue)
+            }
+          }()
+          _ = {
+            if key == "right" {
+             rightValue = deserialize(__dictValue).merged(with: rightValue)
+            }
+          }()
+          _ = {
+            if key == "up" {
+             upValue = deserialize(__dictValue).merged(with: upValue)
+            }
+          }()
+          _ = {
+           if key == parent?.down?.link {
+             downValue = downValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.forward?.link {
+             forwardValue = forwardValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.left?.link {
+             leftValue = leftValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.right?.link {
+             rightValue = rightValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.up?.link {
+             upValue = upValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
         }
-      }
+      }()
       let errors = mergeErrors(
         downValue.errorsOrWarnings?.map { .nestedObjectError(field: "down", error: $0) },
         forwardValue.errorsOrWarnings?.map { .nestedObjectError(field: "forward", error: $0) },
@@ -101,11 +133,11 @@ public final class DivFocusTemplate: TemplateValue {
         upValue.errorsOrWarnings?.map { .nestedObjectError(field: "up", error: $0) }
       )
       let result = DivFocus.NextFocusIds(
-        down: downValue.value,
-        forward: forwardValue.value,
-        left: leftValue.value,
-        right: rightValue.value,
-        up: upValue.value
+        down: { downValue.value }(),
+        forward: { forwardValue.value }(),
+        left: { leftValue.value }(),
+        right: { rightValue.value }(),
+        up: { upValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -150,11 +182,11 @@ public final class DivFocusTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFocusTemplate?) -> DeserializationResult<DivFocus> {
-    let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let nextFocusIdsValue = parent?.nextFocusIds?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let onBlurValue = parent?.onBlur?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let onFocusValue = parent?.onFocus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let nextFocusIdsValue = { parent?.nextFocusIds?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let onBlurValue = { parent?.onBlur?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let onFocusValue = { parent?.onFocus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let errors = mergeErrors(
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
@@ -163,11 +195,11 @@ public final class DivFocusTemplate: TemplateValue {
       onFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_focus", error: $0) }
     )
     let result = DivFocus(
-      background: backgroundValue.value,
-      border: borderValue.value,
-      nextFocusIds: nextFocusIdsValue.value,
-      onBlur: onBlurValue.value,
-      onFocus: onFocusValue.value
+      background: { backgroundValue.value }(),
+      border: { borderValue.value }(),
+      nextFocusIds: { nextFocusIdsValue.value }(),
+      onBlur: { onBlurValue.value }(),
+      onFocus: { onFocusValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -181,37 +213,69 @@ public final class DivFocusTemplate: TemplateValue {
     var nextFocusIdsValue: DeserializationResult<DivFocus.NextFocusIds> = .noValue
     var onBlurValue: DeserializationResult<[DivAction]> = .noValue
     var onFocusValue: DeserializationResult<[DivAction]> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "background":
-        backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
-      case "border":
-        borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
-      case "next_focus_ids":
-        nextFocusIdsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.NextFocusIdsTemplate.self).merged(with: nextFocusIdsValue)
-      case "on_blur":
-        onBlurValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onBlurValue)
-      case "on_focus":
-        onFocusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFocusValue)
-      case parent?.background?.link:
-        backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self) })
-      case parent?.border?.link:
-        borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
-      case parent?.nextFocusIds?.link:
-        nextFocusIdsValue = nextFocusIdsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.NextFocusIdsTemplate.self) })
-      case parent?.onBlur?.link:
-        onBlurValue = onBlurValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      case parent?.onFocus?.link:
-        onFocusValue = onFocusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "background" {
+           backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
+          }
+        }()
+        _ = {
+          if key == "border" {
+           borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
+          }
+        }()
+        _ = {
+          if key == "next_focus_ids" {
+           nextFocusIdsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.NextFocusIdsTemplate.self).merged(with: nextFocusIdsValue)
+          }
+        }()
+        _ = {
+          if key == "on_blur" {
+           onBlurValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onBlurValue)
+          }
+        }()
+        _ = {
+          if key == "on_focus" {
+           onFocusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFocusValue)
+          }
+        }()
+        _ = {
+         if key == parent?.background?.link {
+           backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.border?.link {
+           borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.nextFocusIds?.link {
+           nextFocusIdsValue = nextFocusIdsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.NextFocusIdsTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.onBlur?.link {
+           onBlurValue = onBlurValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.onFocus?.link {
+           onFocusValue = onFocusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      nextFocusIdsValue = nextFocusIdsValue.merged(with: { parent.nextFocusIds?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      onBlurValue = onBlurValue.merged(with: { parent.onBlur?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      onFocusValue = onFocusValue.merged(with: { parent.onFocus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { nextFocusIdsValue = nextFocusIdsValue.merged(with: { parent.nextFocusIds?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { onBlurValue = onBlurValue.merged(with: { parent.onBlur?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { onFocusValue = onFocusValue.merged(with: { parent.onFocus?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     let errors = mergeErrors(
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
@@ -221,11 +285,11 @@ public final class DivFocusTemplate: TemplateValue {
       onFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_focus", error: $0) }
     )
     let result = DivFocus(
-      background: backgroundValue.value,
-      border: borderValue.value,
-      nextFocusIds: nextFocusIdsValue.value,
-      onBlur: onBlurValue.value,
-      onFocus: onFocusValue.value
+      background: { backgroundValue.value }(),
+      border: { borderValue.value }(),
+      nextFocusIds: { nextFocusIdsValue.value }(),
+      onBlur: { onBlurValue.value }(),
+      onFocus: { onFocusValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

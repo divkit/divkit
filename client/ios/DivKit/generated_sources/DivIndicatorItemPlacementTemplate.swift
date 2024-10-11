@@ -36,24 +36,32 @@ public enum DivIndicatorItemPlacementTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divDefaultIndicatorItemPlacementTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divDefaultIndicatorItemPlacement(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divDefaultIndicatorItemPlacement(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divStretchIndicatorItemPlacementTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divStretchIndicatorItemPlacement(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divStretchIndicatorItemPlacement(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivIndicatorItemPlacement>!
+      result = result ?? {
+        if case let .divDefaultIndicatorItemPlacementTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divDefaultIndicatorItemPlacement(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divDefaultIndicatorItemPlacement(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divStretchIndicatorItemPlacementTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divStretchIndicatorItemPlacement(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divStretchIndicatorItemPlacement(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivIndicatorItemPlacement> {
@@ -61,26 +69,28 @@ public enum DivIndicatorItemPlacementTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivDefaultIndicatorItemPlacement.type:
-      let result = DivDefaultIndicatorItemPlacementTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivIndicatorItemPlacement>?
+    result = result ?? { if type == DivDefaultIndicatorItemPlacement.type {
+      let result = { DivDefaultIndicatorItemPlacementTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divDefaultIndicatorItemPlacement(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divDefaultIndicatorItemPlacement(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivStretchIndicatorItemPlacement.type:
-      let result = DivStretchIndicatorItemPlacementTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivStretchIndicatorItemPlacement.type {
+      let result = { DivStretchIndicatorItemPlacementTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divStretchIndicatorItemPlacement(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divStretchIndicatorItemPlacement(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

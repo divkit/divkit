@@ -36,24 +36,32 @@ public enum DivAnimatorTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divColorAnimatorTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divColorAnimator(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divColorAnimator(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divNumberAnimatorTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divNumberAnimator(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divNumberAnimator(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivAnimator>!
+      result = result ?? {
+        if case let .divColorAnimatorTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divColorAnimator(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divColorAnimator(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divNumberAnimatorTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divNumberAnimator(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divNumberAnimator(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivAnimator> {
@@ -61,26 +69,28 @@ public enum DivAnimatorTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivColorAnimator.type:
-      let result = DivColorAnimatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivAnimator>?
+    result = result ?? { if type == DivColorAnimator.type {
+      let result = { DivColorAnimatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divColorAnimator(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divColorAnimator(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivNumberAnimator.type:
-      let result = DivNumberAnimatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivNumberAnimator.type {
+      let result = { DivNumberAnimatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divNumberAnimator(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divNumberAnimator(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

@@ -37,10 +37,10 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivInputValidatorExpressionTemplate?) -> DeserializationResult<DivInputValidatorExpression> {
-    let allowEmptyValue = parent?.allowEmpty?.resolveOptionalValue(context: context) ?? .noValue
-    let conditionValue = parent?.condition?.resolveValue(context: context) ?? .noValue
-    let labelIdValue = parent?.labelId?.resolveValue(context: context) ?? .noValue
-    let variableValue = parent?.variable?.resolveValue(context: context) ?? .noValue
+    let allowEmptyValue = { parent?.allowEmpty?.resolveOptionalValue(context: context) ?? .noValue }()
+    let conditionValue = { parent?.condition?.resolveValue(context: context) ?? .noValue }()
+    let labelIdValue = { parent?.labelId?.resolveValue(context: context) ?? .noValue }()
+    let variableValue = { parent?.variable?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       allowEmptyValue.errorsOrWarnings?.map { .nestedObjectError(field: "allow_empty", error: $0) },
       conditionValue.errorsOrWarnings?.map { .nestedObjectError(field: "condition", error: $0) },
@@ -64,10 +64,10 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivInputValidatorExpression(
-      allowEmpty: allowEmptyValue.value,
-      condition: conditionNonNil,
-      labelId: labelIdNonNil,
-      variable: variableNonNil
+      allowEmpty: { allowEmptyValue.value }(),
+      condition: { conditionNonNil }(),
+      labelId: { labelIdNonNil }(),
+      variable: { variableNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -76,31 +76,57 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var allowEmptyValue: DeserializationResult<Expression<Bool>> = parent?.allowEmpty?.value() ?? .noValue
-    var conditionValue: DeserializationResult<Expression<Bool>> = parent?.condition?.value() ?? .noValue
-    var labelIdValue: DeserializationResult<Expression<String>> = parent?.labelId?.value() ?? .noValue
-    var variableValue: DeserializationResult<String> = parent?.variable?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "allow_empty":
-        allowEmptyValue = deserialize(__dictValue).merged(with: allowEmptyValue)
-      case "condition":
-        conditionValue = deserialize(__dictValue).merged(with: conditionValue)
-      case "label_id":
-        labelIdValue = deserialize(__dictValue).merged(with: labelIdValue)
-      case "variable":
-        variableValue = deserialize(__dictValue).merged(with: variableValue)
-      case parent?.allowEmpty?.link:
-        allowEmptyValue = allowEmptyValue.merged(with: { deserialize(__dictValue) })
-      case parent?.condition?.link:
-        conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
-      case parent?.labelId?.link:
-        labelIdValue = labelIdValue.merged(with: { deserialize(__dictValue) })
-      case parent?.variable?.link:
-        variableValue = variableValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var allowEmptyValue: DeserializationResult<Expression<Bool>> = { parent?.allowEmpty?.value() ?? .noValue }()
+    var conditionValue: DeserializationResult<Expression<Bool>> = { parent?.condition?.value() ?? .noValue }()
+    var labelIdValue: DeserializationResult<Expression<String>> = { parent?.labelId?.value() ?? .noValue }()
+    var variableValue: DeserializationResult<String> = { parent?.variable?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "allow_empty" {
+           allowEmptyValue = deserialize(__dictValue).merged(with: allowEmptyValue)
+          }
+        }()
+        _ = {
+          if key == "condition" {
+           conditionValue = deserialize(__dictValue).merged(with: conditionValue)
+          }
+        }()
+        _ = {
+          if key == "label_id" {
+           labelIdValue = deserialize(__dictValue).merged(with: labelIdValue)
+          }
+        }()
+        _ = {
+          if key == "variable" {
+           variableValue = deserialize(__dictValue).merged(with: variableValue)
+          }
+        }()
+        _ = {
+         if key == parent?.allowEmpty?.link {
+           allowEmptyValue = allowEmptyValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.condition?.link {
+           conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.labelId?.link {
+           labelIdValue = labelIdValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.variable?.link {
+           variableValue = variableValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       allowEmptyValue.errorsOrWarnings?.map { .nestedObjectError(field: "allow_empty", error: $0) },
       conditionValue.errorsOrWarnings?.map { .nestedObjectError(field: "condition", error: $0) },
@@ -124,10 +150,10 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivInputValidatorExpression(
-      allowEmpty: allowEmptyValue.value,
-      condition: conditionNonNil,
-      labelId: labelIdNonNil,
-      variable: variableNonNil
+      allowEmpty: { allowEmptyValue.value }(),
+      condition: { conditionNonNil }(),
+      labelId: { labelIdNonNil }(),
+      variable: { variableNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -36,24 +36,32 @@ public enum DivRadialGradientRadiusTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divFixedSizeTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divFixedSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedSize(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divRadialGradientRelativeRadiusTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divRadialGradientRelativeRadius(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientRelativeRadius(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivRadialGradientRadius>!
+      result = result ?? {
+        if case let .divFixedSizeTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divFixedSize(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedSize(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divRadialGradientRelativeRadiusTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divRadialGradientRelativeRadius(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientRelativeRadius(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientRadius> {
@@ -61,26 +69,28 @@ public enum DivRadialGradientRadiusTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivFixedSize.type:
-      let result = DivFixedSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivRadialGradientRadius>?
+    result = result ?? { if type == DivFixedSize.type {
+      let result = { DivFixedSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divFixedSize(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivRadialGradientRelativeRadius.type:
-      let result = DivRadialGradientRelativeRadiusTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivRadialGradientRelativeRadius.type {
+      let result = { DivRadialGradientRelativeRadiusTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divRadialGradientRelativeRadius(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divRadialGradientRelativeRadius(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

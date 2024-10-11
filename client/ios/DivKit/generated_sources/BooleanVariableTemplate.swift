@@ -29,8 +29,8 @@ public final class BooleanVariableTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: BooleanVariableTemplate?) -> DeserializationResult<BooleanVariable> {
-    let nameValue = parent?.name?.resolveValue(context: context) ?? .noValue
-    let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
+    let nameValue = { parent?.name?.resolveValue(context: context) ?? .noValue }()
+    let valueValue = { parent?.value?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -48,8 +48,8 @@ public final class BooleanVariableTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = BooleanVariable(
-      name: nameNonNil,
-      value: valueNonNil
+      name: { nameNonNil }(),
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -58,21 +58,35 @@ public final class BooleanVariableTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var nameValue: DeserializationResult<String> = parent?.name?.value() ?? .noValue
-    var valueValue: DeserializationResult<Bool> = parent?.value?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "name":
-        nameValue = deserialize(__dictValue).merged(with: nameValue)
-      case "value":
-        valueValue = deserialize(__dictValue).merged(with: valueValue)
-      case parent?.name?.link:
-        nameValue = nameValue.merged(with: { deserialize(__dictValue) })
-      case parent?.value?.link:
-        valueValue = valueValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var nameValue: DeserializationResult<String> = { parent?.name?.value() ?? .noValue }()
+    var valueValue: DeserializationResult<Bool> = { parent?.value?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "name" {
+           nameValue = deserialize(__dictValue).merged(with: nameValue)
+          }
+        }()
+        _ = {
+          if key == "value" {
+           valueValue = deserialize(__dictValue).merged(with: valueValue)
+          }
+        }()
+        _ = {
+         if key == parent?.name?.link {
+           nameValue = nameValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.value?.link {
+           valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -90,8 +104,8 @@ public final class BooleanVariableTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = BooleanVariable(
-      name: nameNonNil,
-      value: valueNonNil
+      name: { nameNonNil }(),
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

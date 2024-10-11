@@ -201,7 +201,7 @@ public final class DivActionHandler {
       videoActionHandler.handle(action, context: context)
     case .divActionAnimatorStart, .divActionAnimatorStop, .divActionSubmit,
          .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
-         .divActionSetState, .divActionSetStoredValue:
+         .divActionSetState, .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
       break
     case .none:
       isHandled = false

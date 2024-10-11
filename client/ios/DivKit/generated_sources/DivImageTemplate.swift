@@ -221,56 +221,56 @@ public final class DivImageTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivImageTemplate?) -> DeserializationResult<DivImage> {
-    let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let actionValue = parent?.action?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let actionAnimationValue = parent?.actionAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let actionsValue = parent?.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
-    let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
-    let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
-    let animatorsValue = parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let appearanceAnimationValue = parent?.appearanceAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let aspectValue = parent?.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
-    let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
-    let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
-    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let doubletapActionsValue = parent?.doubletapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let filtersValue = parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let functionsValue = parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let highPriorityPreviewShowValue = parent?.highPriorityPreviewShow?.resolveOptionalValue(context: context) ?? .noValue
-    let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
-    let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
-    let layoutProviderValue = parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let placeholderColorValue = parent?.placeholderColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
-    let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue
-    let previewValue = parent?.preview?.resolveOptionalValue(context: context) ?? .noValue
-    let reuseIdValue = parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue
-    let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
-    let scaleValue = parent?.scale?.resolveOptionalValue(context: context) ?? .noValue
-    let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let tintColorValue = parent?.tintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
-    let tintModeValue = parent?.tintMode?.resolveOptionalValue(context: context) ?? .noValue
-    let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let transformValue = parent?.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let transitionChangeValue = parent?.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let transitionInValue = parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
-    let variableTriggersValue = parent?.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let variablesValue = parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue
-    let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let widthValue = parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let accessibilityValue = { parent?.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let actionValue = { parent?.action?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let actionAnimationValue = { parent?.actionAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let actionsValue = { parent?.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let alignmentHorizontalValue = { parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue }()
+    let alignmentVerticalValue = { parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
+    let alphaValue = { parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue }()
+    let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let appearanceAnimationValue = { parent?.appearanceAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let aspectValue = { parent?.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let backgroundValue = { parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let borderValue = { parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let columnSpanValue = { parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue }()
+    let contentAlignmentHorizontalValue = { parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue }()
+    let contentAlignmentVerticalValue = { parent?.contentAlignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
+    let disappearActionsValue = { parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let doubletapActionsValue = { parent?.doubletapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let extensionsValue = { parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let filtersValue = { parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let focusValue = { parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let highPriorityPreviewShowValue = { parent?.highPriorityPreviewShow?.resolveOptionalValue(context: context) ?? .noValue }()
+    let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
+    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let layoutProviderValue = { parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let longtapActionsValue = { parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let marginsValue = { parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let paddingsValue = { parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let placeholderColorValue = { parent?.placeholderColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
+    let preloadRequiredValue = { parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue }()
+    let previewValue = { parent?.preview?.resolveOptionalValue(context: context) ?? .noValue }()
+    let reuseIdValue = { parent?.reuseId?.resolveOptionalValue(context: context) ?? .noValue }()
+    let rowSpanValue = { parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue }()
+    let scaleValue = { parent?.scale?.resolveOptionalValue(context: context) ?? .noValue }()
+    let selectedActionsValue = { parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let tintColorValue = { parent?.tintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
+    let tintModeValue = { parent?.tintMode?.resolveOptionalValue(context: context) ?? .noValue }()
+    let tooltipsValue = { parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let transformValue = { parent?.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let transitionChangeValue = { parent?.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let transitionInValue = { parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let transitionOutValue = { parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let transitionTriggersValue = { parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue }()
+    let variableTriggersValue = { parent?.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let variablesValue = { parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let visibilityValue = { parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue }()
+    let visibilityActionValue = { parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let visibilityActionsValue = { parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let widthValue = { parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
@@ -332,56 +332,56 @@ public final class DivImageTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivImage(
-      accessibility: accessibilityValue.value,
-      action: actionValue.value,
-      actionAnimation: actionAnimationValue.value,
-      actions: actionsValue.value,
-      alignmentHorizontal: alignmentHorizontalValue.value,
-      alignmentVertical: alignmentVerticalValue.value,
-      alpha: alphaValue.value,
-      animators: animatorsValue.value,
-      appearanceAnimation: appearanceAnimationValue.value,
-      aspect: aspectValue.value,
-      background: backgroundValue.value,
-      border: borderValue.value,
-      columnSpan: columnSpanValue.value,
-      contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
-      contentAlignmentVertical: contentAlignmentVerticalValue.value,
-      disappearActions: disappearActionsValue.value,
-      doubletapActions: doubletapActionsValue.value,
-      extensions: extensionsValue.value,
-      filters: filtersValue.value,
-      focus: focusValue.value,
-      functions: functionsValue.value,
-      height: heightValue.value,
-      highPriorityPreviewShow: highPriorityPreviewShowValue.value,
-      id: idValue.value,
-      imageUrl: imageUrlNonNil,
-      layoutProvider: layoutProviderValue.value,
-      longtapActions: longtapActionsValue.value,
-      margins: marginsValue.value,
-      paddings: paddingsValue.value,
-      placeholderColor: placeholderColorValue.value,
-      preloadRequired: preloadRequiredValue.value,
-      preview: previewValue.value,
-      reuseId: reuseIdValue.value,
-      rowSpan: rowSpanValue.value,
-      scale: scaleValue.value,
-      selectedActions: selectedActionsValue.value,
-      tintColor: tintColorValue.value,
-      tintMode: tintModeValue.value,
-      tooltips: tooltipsValue.value,
-      transform: transformValue.value,
-      transitionChange: transitionChangeValue.value,
-      transitionIn: transitionInValue.value,
-      transitionOut: transitionOutValue.value,
-      transitionTriggers: transitionTriggersValue.value,
-      variableTriggers: variableTriggersValue.value,
-      variables: variablesValue.value,
-      visibility: visibilityValue.value,
-      visibilityAction: visibilityActionValue.value,
-      visibilityActions: visibilityActionsValue.value,
-      width: widthValue.value
+      accessibility: { accessibilityValue.value }(),
+      action: { actionValue.value }(),
+      actionAnimation: { actionAnimationValue.value }(),
+      actions: { actionsValue.value }(),
+      alignmentHorizontal: { alignmentHorizontalValue.value }(),
+      alignmentVertical: { alignmentVerticalValue.value }(),
+      alpha: { alphaValue.value }(),
+      animators: { animatorsValue.value }(),
+      appearanceAnimation: { appearanceAnimationValue.value }(),
+      aspect: { aspectValue.value }(),
+      background: { backgroundValue.value }(),
+      border: { borderValue.value }(),
+      columnSpan: { columnSpanValue.value }(),
+      contentAlignmentHorizontal: { contentAlignmentHorizontalValue.value }(),
+      contentAlignmentVertical: { contentAlignmentVerticalValue.value }(),
+      disappearActions: { disappearActionsValue.value }(),
+      doubletapActions: { doubletapActionsValue.value }(),
+      extensions: { extensionsValue.value }(),
+      filters: { filtersValue.value }(),
+      focus: { focusValue.value }(),
+      functions: { functionsValue.value }(),
+      height: { heightValue.value }(),
+      highPriorityPreviewShow: { highPriorityPreviewShowValue.value }(),
+      id: { idValue.value }(),
+      imageUrl: { imageUrlNonNil }(),
+      layoutProvider: { layoutProviderValue.value }(),
+      longtapActions: { longtapActionsValue.value }(),
+      margins: { marginsValue.value }(),
+      paddings: { paddingsValue.value }(),
+      placeholderColor: { placeholderColorValue.value }(),
+      preloadRequired: { preloadRequiredValue.value }(),
+      preview: { previewValue.value }(),
+      reuseId: { reuseIdValue.value }(),
+      rowSpan: { rowSpanValue.value }(),
+      scale: { scaleValue.value }(),
+      selectedActions: { selectedActionsValue.value }(),
+      tintColor: { tintColorValue.value }(),
+      tintMode: { tintModeValue.value }(),
+      tooltips: { tooltipsValue.value }(),
+      transform: { transformValue.value }(),
+      transitionChange: { transitionChangeValue.value }(),
+      transitionIn: { transitionInValue.value }(),
+      transitionOut: { transitionOutValue.value }(),
+      transitionTriggers: { transitionTriggersValue.value }(),
+      variableTriggers: { variableTriggersValue.value }(),
+      variables: { variablesValue.value }(),
+      visibility: { visibilityValue.value }(),
+      visibilityAction: { visibilityActionValue.value }(),
+      visibilityActions: { visibilityActionsValue.value }(),
+      width: { widthValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -394,17 +394,17 @@ public final class DivImageTemplate: TemplateValue {
     var actionValue: DeserializationResult<DivAction> = .noValue
     var actionAnimationValue: DeserializationResult<DivAnimation> = .noValue
     var actionsValue: DeserializationResult<[DivAction]> = .noValue
-    var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
-    var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
-    var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = { parent?.alignmentHorizontal?.value() ?? .noValue }()
+    var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = { parent?.alignmentVertical?.value() ?? .noValue }()
+    var alphaValue: DeserializationResult<Expression<Double>> = { parent?.alpha?.value() ?? .noValue }()
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var appearanceAnimationValue: DeserializationResult<DivFadeTransition> = .noValue
     var aspectValue: DeserializationResult<DivAspect> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
-    var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
-    var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.contentAlignmentHorizontal?.value() ?? .noValue
-    var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
+    var columnSpanValue: DeserializationResult<Expression<Int>> = { parent?.columnSpan?.value() ?? .noValue }()
+    var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = { parent?.contentAlignmentHorizontal?.value() ?? .noValue }()
+    var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = { parent?.contentAlignmentVertical?.value() ?? .noValue }()
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
@@ -412,271 +412,573 @@ public final class DivImageTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
-    var highPriorityPreviewShowValue: DeserializationResult<Expression<Bool>> = parent?.highPriorityPreviewShow?.value() ?? .noValue
-    var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
-    var imageUrlValue: DeserializationResult<Expression<URL>> = parent?.imageUrl?.value() ?? .noValue
+    var highPriorityPreviewShowValue: DeserializationResult<Expression<Bool>> = { parent?.highPriorityPreviewShow?.value() ?? .noValue }()
+    var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
+    var imageUrlValue: DeserializationResult<Expression<URL>> = { parent?.imageUrl?.value() ?? .noValue }()
     var layoutProviderValue: DeserializationResult<DivLayoutProvider> = .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
-    var placeholderColorValue: DeserializationResult<Expression<Color>> = parent?.placeholderColor?.value() ?? .noValue
-    var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?.value() ?? .noValue
-    var previewValue: DeserializationResult<Expression<String>> = parent?.preview?.value() ?? .noValue
-    var reuseIdValue: DeserializationResult<Expression<String>> = parent?.reuseId?.value() ?? .noValue
-    var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
-    var scaleValue: DeserializationResult<Expression<DivImageScale>> = parent?.scale?.value() ?? .noValue
+    var placeholderColorValue: DeserializationResult<Expression<Color>> = { parent?.placeholderColor?.value() ?? .noValue }()
+    var preloadRequiredValue: DeserializationResult<Expression<Bool>> = { parent?.preloadRequired?.value() ?? .noValue }()
+    var previewValue: DeserializationResult<Expression<String>> = { parent?.preview?.value() ?? .noValue }()
+    var reuseIdValue: DeserializationResult<Expression<String>> = { parent?.reuseId?.value() ?? .noValue }()
+    var rowSpanValue: DeserializationResult<Expression<Int>> = { parent?.rowSpan?.value() ?? .noValue }()
+    var scaleValue: DeserializationResult<Expression<DivImageScale>> = { parent?.scale?.value() ?? .noValue }()
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
-    var tintColorValue: DeserializationResult<Expression<Color>> = parent?.tintColor?.value() ?? .noValue
-    var tintModeValue: DeserializationResult<Expression<DivBlendMode>> = parent?.tintMode?.value() ?? .noValue
+    var tintColorValue: DeserializationResult<Expression<Color>> = { parent?.tintColor?.value() ?? .noValue }()
+    var tintModeValue: DeserializationResult<Expression<DivBlendMode>> = { parent?.tintMode?.value() ?? .noValue }()
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
-    var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = { parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue }()
     var variableTriggersValue: DeserializationResult<[DivTrigger]> = .noValue
     var variablesValue: DeserializationResult<[DivVariable]> = .noValue
-    var visibilityValue: DeserializationResult<Expression<DivVisibility>> = parent?.visibility?.value() ?? .noValue
+    var visibilityValue: DeserializationResult<Expression<DivVisibility>> = { parent?.visibility?.value() ?? .noValue }()
     var visibilityActionValue: DeserializationResult<DivVisibilityAction> = .noValue
     var visibilityActionsValue: DeserializationResult<[DivVisibilityAction]> = .noValue
     var widthValue: DeserializationResult<DivSize> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "accessibility":
-        accessibilityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAccessibilityTemplate.self).merged(with: accessibilityValue)
-      case "action":
-        actionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: actionValue)
-      case "action_animation":
-        actionAnimationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).merged(with: actionAnimationValue)
-      case "actions":
-        actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: actionsValue)
-      case "alignment_horizontal":
-        alignmentHorizontalValue = deserialize(__dictValue).merged(with: alignmentHorizontalValue)
-      case "alignment_vertical":
-        alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
-      case "alpha":
-        alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
-      case "animators":
-        animatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self).merged(with: animatorsValue)
-      case "appearance_animation":
-        appearanceAnimationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFadeTransitionTemplate.self).merged(with: appearanceAnimationValue)
-      case "aspect":
-        aspectValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAspectTemplate.self).merged(with: aspectValue)
-      case "background":
-        backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
-      case "border":
-        borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
-      case "column_span":
-        columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
-      case "content_alignment_horizontal":
-        contentAlignmentHorizontalValue = deserialize(__dictValue).merged(with: contentAlignmentHorizontalValue)
-      case "content_alignment_vertical":
-        contentAlignmentVerticalValue = deserialize(__dictValue).merged(with: contentAlignmentVerticalValue)
-      case "disappear_actions":
-        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
-      case "doubletap_actions":
-        doubletapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: doubletapActionsValue)
-      case "extensions":
-        extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self).merged(with: extensionsValue)
-      case "filters":
-        filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self).merged(with: filtersValue)
-      case "focus":
-        focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self).merged(with: focusValue)
-      case "functions":
-        functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).merged(with: functionsValue)
-      case "height":
-        heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
-      case "high_priority_preview_show":
-        highPriorityPreviewShowValue = deserialize(__dictValue).merged(with: highPriorityPreviewShowValue)
-      case "id":
-        idValue = deserialize(__dictValue).merged(with: idValue)
-      case "image_url":
-        imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
-      case "layout_provider":
-        layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
-      case "longtap_actions":
-        longtapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: longtapActionsValue)
-      case "margins":
-        marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
-      case "paddings":
-        paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
-      case "placeholder_color":
-        placeholderColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: placeholderColorValue)
-      case "preload_required":
-        preloadRequiredValue = deserialize(__dictValue).merged(with: preloadRequiredValue)
-      case "preview":
-        previewValue = deserialize(__dictValue).merged(with: previewValue)
-      case "reuse_id":
-        reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
-      case "row_span":
-        rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
-      case "scale":
-        scaleValue = deserialize(__dictValue).merged(with: scaleValue)
-      case "selected_actions":
-        selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: selectedActionsValue)
-      case "tint_color":
-        tintColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: tintColorValue)
-      case "tint_mode":
-        tintModeValue = deserialize(__dictValue).merged(with: tintModeValue)
-      case "tooltips":
-        tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
-      case "transform":
-        transformValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self).merged(with: transformValue)
-      case "transition_change":
-        transitionChangeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivChangeTransitionTemplate.self).merged(with: transitionChangeValue)
-      case "transition_in":
-        transitionInValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionInValue)
-      case "transition_out":
-        transitionOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionOutValue)
-      case "transition_triggers":
-        transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
-      case "variable_triggers":
-        variableTriggersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self).merged(with: variableTriggersValue)
-      case "variables":
-        variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
-      case "visibility":
-        visibilityValue = deserialize(__dictValue).merged(with: visibilityValue)
-      case "visibility_action":
-        visibilityActionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionValue)
-      case "visibility_actions":
-        visibilityActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionsValue)
-      case "width":
-        widthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: widthValue)
-      case parent?.accessibility?.link:
-        accessibilityValue = accessibilityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAccessibilityTemplate.self) })
-      case parent?.action?.link:
-        actionValue = actionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      case parent?.actionAnimation?.link:
-        actionAnimationValue = actionAnimationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self) })
-      case parent?.actions?.link:
-        actionsValue = actionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      case parent?.alignmentHorizontal?.link:
-        alignmentHorizontalValue = alignmentHorizontalValue.merged(with: { deserialize(__dictValue) })
-      case parent?.alignmentVertical?.link:
-        alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
-      case parent?.alpha?.link:
-        alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
-      case parent?.animators?.link:
-        animatorsValue = animatorsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self) })
-      case parent?.appearanceAnimation?.link:
-        appearanceAnimationValue = appearanceAnimationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFadeTransitionTemplate.self) })
-      case parent?.aspect?.link:
-        aspectValue = aspectValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAspectTemplate.self) })
-      case parent?.background?.link:
-        backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self) })
-      case parent?.border?.link:
-        borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
-      case parent?.columnSpan?.link:
-        columnSpanValue = columnSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator) })
-      case parent?.contentAlignmentHorizontal?.link:
-        contentAlignmentHorizontalValue = contentAlignmentHorizontalValue.merged(with: { deserialize(__dictValue) })
-      case parent?.contentAlignmentVertical?.link:
-        contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: { deserialize(__dictValue) })
-      case parent?.disappearActions?.link:
-        disappearActionsValue = disappearActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self) })
-      case parent?.doubletapActions?.link:
-        doubletapActionsValue = doubletapActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      case parent?.extensions?.link:
-        extensionsValue = extensionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self) })
-      case parent?.filters?.link:
-        filtersValue = filtersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self) })
-      case parent?.focus?.link:
-        focusValue = focusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self) })
-      case parent?.functions?.link:
-        functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
-      case parent?.height?.link:
-        heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
-      case parent?.highPriorityPreviewShow?.link:
-        highPriorityPreviewShowValue = highPriorityPreviewShowValue.merged(with: { deserialize(__dictValue) })
-      case parent?.id?.link:
-        idValue = idValue.merged(with: { deserialize(__dictValue) })
-      case parent?.imageUrl?.link:
-        imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
-      case parent?.layoutProvider?.link:
-        layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
-      case parent?.longtapActions?.link:
-        longtapActionsValue = longtapActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      case parent?.margins?.link:
-        marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
-      case parent?.paddings?.link:
-        paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
-      case parent?.placeholderColor?.link:
-        placeholderColorValue = placeholderColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
-      case parent?.preloadRequired?.link:
-        preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
-      case parent?.preview?.link:
-        previewValue = previewValue.merged(with: { deserialize(__dictValue) })
-      case parent?.reuseId?.link:
-        reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
-      case parent?.rowSpan?.link:
-        rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
-      case parent?.scale?.link:
-        scaleValue = scaleValue.merged(with: { deserialize(__dictValue) })
-      case parent?.selectedActions?.link:
-        selectedActionsValue = selectedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      case parent?.tintColor?.link:
-        tintColorValue = tintColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
-      case parent?.tintMode?.link:
-        tintModeValue = tintModeValue.merged(with: { deserialize(__dictValue) })
-      case parent?.tooltips?.link:
-        tooltipsValue = tooltipsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self) })
-      case parent?.transform?.link:
-        transformValue = transformValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self) })
-      case parent?.transitionChange?.link:
-        transitionChangeValue = transitionChangeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivChangeTransitionTemplate.self) })
-      case parent?.transitionIn?.link:
-        transitionInValue = transitionInValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self) })
-      case parent?.transitionOut?.link:
-        transitionOutValue = transitionOutValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self) })
-      case parent?.transitionTriggers?.link:
-        transitionTriggersValue = transitionTriggersValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator) })
-      case parent?.variableTriggers?.link:
-        variableTriggersValue = variableTriggersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self) })
-      case parent?.variables?.link:
-        variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
-      case parent?.visibility?.link:
-        visibilityValue = visibilityValue.merged(with: { deserialize(__dictValue) })
-      case parent?.visibilityAction?.link:
-        visibilityActionValue = visibilityActionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self) })
-      case parent?.visibilityActions?.link:
-        visibilityActionsValue = visibilityActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self) })
-      case parent?.width?.link:
-        widthValue = widthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "accessibility" {
+           accessibilityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAccessibilityTemplate.self).merged(with: accessibilityValue)
+          }
+        }()
+        _ = {
+          if key == "action" {
+           actionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: actionValue)
+          }
+        }()
+        _ = {
+          if key == "action_animation" {
+           actionAnimationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).merged(with: actionAnimationValue)
+          }
+        }()
+        _ = {
+          if key == "actions" {
+           actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: actionsValue)
+          }
+        }()
+        _ = {
+          if key == "alignment_horizontal" {
+           alignmentHorizontalValue = deserialize(__dictValue).merged(with: alignmentHorizontalValue)
+          }
+        }()
+        _ = {
+          if key == "alignment_vertical" {
+           alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
+          }
+        }()
+        _ = {
+          if key == "alpha" {
+           alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+          }
+        }()
+        _ = {
+          if key == "animators" {
+           animatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self).merged(with: animatorsValue)
+          }
+        }()
+        _ = {
+          if key == "appearance_animation" {
+           appearanceAnimationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFadeTransitionTemplate.self).merged(with: appearanceAnimationValue)
+          }
+        }()
+        _ = {
+          if key == "aspect" {
+           aspectValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAspectTemplate.self).merged(with: aspectValue)
+          }
+        }()
+        _ = {
+          if key == "background" {
+           backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
+          }
+        }()
+        _ = {
+          if key == "border" {
+           borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
+          }
+        }()
+        _ = {
+          if key == "column_span" {
+           columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
+          }
+        }()
+        _ = {
+          if key == "content_alignment_horizontal" {
+           contentAlignmentHorizontalValue = deserialize(__dictValue).merged(with: contentAlignmentHorizontalValue)
+          }
+        }()
+        _ = {
+          if key == "content_alignment_vertical" {
+           contentAlignmentVerticalValue = deserialize(__dictValue).merged(with: contentAlignmentVerticalValue)
+          }
+        }()
+        _ = {
+          if key == "disappear_actions" {
+           disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
+          }
+        }()
+        _ = {
+          if key == "doubletap_actions" {
+           doubletapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: doubletapActionsValue)
+          }
+        }()
+        _ = {
+          if key == "extensions" {
+           extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self).merged(with: extensionsValue)
+          }
+        }()
+        _ = {
+          if key == "filters" {
+           filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self).merged(with: filtersValue)
+          }
+        }()
+        _ = {
+          if key == "focus" {
+           focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self).merged(with: focusValue)
+          }
+        }()
+        _ = {
+          if key == "functions" {
+           functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).merged(with: functionsValue)
+          }
+        }()
+        _ = {
+          if key == "height" {
+           heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
+          }
+        }()
+        _ = {
+          if key == "high_priority_preview_show" {
+           highPriorityPreviewShowValue = deserialize(__dictValue).merged(with: highPriorityPreviewShowValue)
+          }
+        }()
+        _ = {
+          if key == "id" {
+           idValue = deserialize(__dictValue).merged(with: idValue)
+          }
+        }()
+        _ = {
+          if key == "image_url" {
+           imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
+          }
+        }()
+        _ = {
+          if key == "layout_provider" {
+           layoutProviderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self).merged(with: layoutProviderValue)
+          }
+        }()
+        _ = {
+          if key == "longtap_actions" {
+           longtapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: longtapActionsValue)
+          }
+        }()
+        _ = {
+          if key == "margins" {
+           marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
+          }
+        }()
+        _ = {
+          if key == "paddings" {
+           paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+          }
+        }()
+        _ = {
+          if key == "placeholder_color" {
+           placeholderColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: placeholderColorValue)
+          }
+        }()
+        _ = {
+          if key == "preload_required" {
+           preloadRequiredValue = deserialize(__dictValue).merged(with: preloadRequiredValue)
+          }
+        }()
+        _ = {
+          if key == "preview" {
+           previewValue = deserialize(__dictValue).merged(with: previewValue)
+          }
+        }()
+        _ = {
+          if key == "reuse_id" {
+           reuseIdValue = deserialize(__dictValue).merged(with: reuseIdValue)
+          }
+        }()
+        _ = {
+          if key == "row_span" {
+           rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
+          }
+        }()
+        _ = {
+          if key == "scale" {
+           scaleValue = deserialize(__dictValue).merged(with: scaleValue)
+          }
+        }()
+        _ = {
+          if key == "selected_actions" {
+           selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: selectedActionsValue)
+          }
+        }()
+        _ = {
+          if key == "tint_color" {
+           tintColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: tintColorValue)
+          }
+        }()
+        _ = {
+          if key == "tint_mode" {
+           tintModeValue = deserialize(__dictValue).merged(with: tintModeValue)
+          }
+        }()
+        _ = {
+          if key == "tooltips" {
+           tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
+          }
+        }()
+        _ = {
+          if key == "transform" {
+           transformValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self).merged(with: transformValue)
+          }
+        }()
+        _ = {
+          if key == "transition_change" {
+           transitionChangeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivChangeTransitionTemplate.self).merged(with: transitionChangeValue)
+          }
+        }()
+        _ = {
+          if key == "transition_in" {
+           transitionInValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionInValue)
+          }
+        }()
+        _ = {
+          if key == "transition_out" {
+           transitionOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionOutValue)
+          }
+        }()
+        _ = {
+          if key == "transition_triggers" {
+           transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
+          }
+        }()
+        _ = {
+          if key == "variable_triggers" {
+           variableTriggersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self).merged(with: variableTriggersValue)
+          }
+        }()
+        _ = {
+          if key == "variables" {
+           variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
+          }
+        }()
+        _ = {
+          if key == "visibility" {
+           visibilityValue = deserialize(__dictValue).merged(with: visibilityValue)
+          }
+        }()
+        _ = {
+          if key == "visibility_action" {
+           visibilityActionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionValue)
+          }
+        }()
+        _ = {
+          if key == "visibility_actions" {
+           visibilityActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionsValue)
+          }
+        }()
+        _ = {
+          if key == "width" {
+           widthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: widthValue)
+          }
+        }()
+        _ = {
+         if key == parent?.accessibility?.link {
+           accessibilityValue = accessibilityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAccessibilityTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.action?.link {
+           actionValue = actionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.actionAnimation?.link {
+           actionAnimationValue = actionAnimationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.actions?.link {
+           actionsValue = actionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.alignmentHorizontal?.link {
+           alignmentHorizontalValue = alignmentHorizontalValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.alignmentVertical?.link {
+           alignmentVerticalValue = alignmentVerticalValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.alpha?.link {
+           alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.animators?.link {
+           animatorsValue = animatorsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimatorTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.appearanceAnimation?.link {
+           appearanceAnimationValue = appearanceAnimationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFadeTransitionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.aspect?.link {
+           aspectValue = aspectValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAspectTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.background?.link {
+           backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.border?.link {
+           borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.columnSpan?.link {
+           columnSpanValue = columnSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.contentAlignmentHorizontal?.link {
+           contentAlignmentHorizontalValue = contentAlignmentHorizontalValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.contentAlignmentVertical?.link {
+           contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.disappearActions?.link {
+           disappearActionsValue = disappearActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.doubletapActions?.link {
+           doubletapActionsValue = doubletapActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.extensions?.link {
+           extensionsValue = extensionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.filters?.link {
+           filtersValue = filtersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.focus?.link {
+           focusValue = focusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.functions?.link {
+           functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.height?.link {
+           heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.highPriorityPreviewShow?.link {
+           highPriorityPreviewShowValue = highPriorityPreviewShowValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.id?.link {
+           idValue = idValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.imageUrl?.link {
+           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+          }
+        }()
+        _ = {
+         if key == parent?.layoutProvider?.link {
+           layoutProviderValue = layoutProviderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivLayoutProviderTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.longtapActions?.link {
+           longtapActionsValue = longtapActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.margins?.link {
+           marginsValue = marginsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.paddings?.link {
+           paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.placeholderColor?.link {
+           placeholderColorValue = placeholderColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+          }
+        }()
+        _ = {
+         if key == parent?.preloadRequired?.link {
+           preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.preview?.link {
+           previewValue = previewValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.reuseId?.link {
+           reuseIdValue = reuseIdValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.rowSpan?.link {
+           rowSpanValue = rowSpanValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.scale?.link {
+           scaleValue = scaleValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.selectedActions?.link {
+           selectedActionsValue = selectedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.tintColor?.link {
+           tintColorValue = tintColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+          }
+        }()
+        _ = {
+         if key == parent?.tintMode?.link {
+           tintModeValue = tintModeValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.tooltips?.link {
+           tooltipsValue = tooltipsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.transform?.link {
+           transformValue = transformValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.transitionChange?.link {
+           transitionChangeValue = transitionChangeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivChangeTransitionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.transitionIn?.link {
+           transitionInValue = transitionInValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.transitionOut?.link {
+           transitionOutValue = transitionOutValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.transitionTriggers?.link {
+           transitionTriggersValue = transitionTriggersValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.variableTriggers?.link {
+           variableTriggersValue = variableTriggersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.variables?.link {
+           variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.visibility?.link {
+           visibilityValue = visibilityValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.visibilityAction?.link {
+           visibilityActionValue = visibilityActionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.visibilityActions?.link {
+           visibilityActionsValue = visibilityActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.width?.link {
+           widthValue = widthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      accessibilityValue = accessibilityValue.merged(with: { parent.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      actionValue = actionValue.merged(with: { parent.action?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      actionAnimationValue = actionAnimationValue.merged(with: { parent.actionAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      actionsValue = actionsValue.merged(with: { parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      animatorsValue = animatorsValue.merged(with: { parent.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      appearanceAnimationValue = appearanceAnimationValue.merged(with: { parent.appearanceAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      aspectValue = aspectValue.merged(with: { parent.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      disappearActionsValue = disappearActionsValue.merged(with: { parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      doubletapActionsValue = doubletapActionsValue.merged(with: { parent.doubletapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      tooltipsValue = tooltipsValue.merged(with: { parent.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      transformValue = transformValue.merged(with: { parent.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      variableTriggersValue = variableTriggersValue.merged(with: { parent.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      visibilityActionValue = visibilityActionValue.merged(with: { parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { accessibilityValue = accessibilityValue.merged(with: { parent.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { actionValue = actionValue.merged(with: { parent.action?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { actionAnimationValue = actionAnimationValue.merged(with: { parent.actionAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { actionsValue = actionsValue.merged(with: { parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { animatorsValue = animatorsValue.merged(with: { parent.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { appearanceAnimationValue = appearanceAnimationValue.merged(with: { parent.appearanceAnimation?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { aspectValue = aspectValue.merged(with: { parent.aspect?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { backgroundValue = backgroundValue.merged(with: { parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { borderValue = borderValue.merged(with: { parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { disappearActionsValue = disappearActionsValue.merged(with: { parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { doubletapActionsValue = doubletapActionsValue.merged(with: { parent.doubletapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { extensionsValue = extensionsValue.merged(with: { parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { filtersValue = filtersValue.merged(with: { parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { focusValue = focusValue.merged(with: { parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { functionsValue = functionsValue.merged(with: { parent.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { heightValue = heightValue.merged(with: { parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { layoutProviderValue = layoutProviderValue.merged(with: { parent.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { longtapActionsValue = longtapActionsValue.merged(with: { parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { marginsValue = marginsValue.merged(with: { parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { paddingsValue = paddingsValue.merged(with: { parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { selectedActionsValue = selectedActionsValue.merged(with: { parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { tooltipsValue = tooltipsValue.merged(with: { parent.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { transformValue = transformValue.merged(with: { parent.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { transitionChangeValue = transitionChangeValue.merged(with: { parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { transitionInValue = transitionInValue.merged(with: { parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { transitionOutValue = transitionOutValue.merged(with: { parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { variableTriggersValue = variableTriggersValue.merged(with: { parent.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { visibilityActionValue = visibilityActionValue.merged(with: { parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
@@ -739,56 +1041,56 @@ public final class DivImageTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivImage(
-      accessibility: accessibilityValue.value,
-      action: actionValue.value,
-      actionAnimation: actionAnimationValue.value,
-      actions: actionsValue.value,
-      alignmentHorizontal: alignmentHorizontalValue.value,
-      alignmentVertical: alignmentVerticalValue.value,
-      alpha: alphaValue.value,
-      animators: animatorsValue.value,
-      appearanceAnimation: appearanceAnimationValue.value,
-      aspect: aspectValue.value,
-      background: backgroundValue.value,
-      border: borderValue.value,
-      columnSpan: columnSpanValue.value,
-      contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
-      contentAlignmentVertical: contentAlignmentVerticalValue.value,
-      disappearActions: disappearActionsValue.value,
-      doubletapActions: doubletapActionsValue.value,
-      extensions: extensionsValue.value,
-      filters: filtersValue.value,
-      focus: focusValue.value,
-      functions: functionsValue.value,
-      height: heightValue.value,
-      highPriorityPreviewShow: highPriorityPreviewShowValue.value,
-      id: idValue.value,
-      imageUrl: imageUrlNonNil,
-      layoutProvider: layoutProviderValue.value,
-      longtapActions: longtapActionsValue.value,
-      margins: marginsValue.value,
-      paddings: paddingsValue.value,
-      placeholderColor: placeholderColorValue.value,
-      preloadRequired: preloadRequiredValue.value,
-      preview: previewValue.value,
-      reuseId: reuseIdValue.value,
-      rowSpan: rowSpanValue.value,
-      scale: scaleValue.value,
-      selectedActions: selectedActionsValue.value,
-      tintColor: tintColorValue.value,
-      tintMode: tintModeValue.value,
-      tooltips: tooltipsValue.value,
-      transform: transformValue.value,
-      transitionChange: transitionChangeValue.value,
-      transitionIn: transitionInValue.value,
-      transitionOut: transitionOutValue.value,
-      transitionTriggers: transitionTriggersValue.value,
-      variableTriggers: variableTriggersValue.value,
-      variables: variablesValue.value,
-      visibility: visibilityValue.value,
-      visibilityAction: visibilityActionValue.value,
-      visibilityActions: visibilityActionsValue.value,
-      width: widthValue.value
+      accessibility: { accessibilityValue.value }(),
+      action: { actionValue.value }(),
+      actionAnimation: { actionAnimationValue.value }(),
+      actions: { actionsValue.value }(),
+      alignmentHorizontal: { alignmentHorizontalValue.value }(),
+      alignmentVertical: { alignmentVerticalValue.value }(),
+      alpha: { alphaValue.value }(),
+      animators: { animatorsValue.value }(),
+      appearanceAnimation: { appearanceAnimationValue.value }(),
+      aspect: { aspectValue.value }(),
+      background: { backgroundValue.value }(),
+      border: { borderValue.value }(),
+      columnSpan: { columnSpanValue.value }(),
+      contentAlignmentHorizontal: { contentAlignmentHorizontalValue.value }(),
+      contentAlignmentVertical: { contentAlignmentVerticalValue.value }(),
+      disappearActions: { disappearActionsValue.value }(),
+      doubletapActions: { doubletapActionsValue.value }(),
+      extensions: { extensionsValue.value }(),
+      filters: { filtersValue.value }(),
+      focus: { focusValue.value }(),
+      functions: { functionsValue.value }(),
+      height: { heightValue.value }(),
+      highPriorityPreviewShow: { highPriorityPreviewShowValue.value }(),
+      id: { idValue.value }(),
+      imageUrl: { imageUrlNonNil }(),
+      layoutProvider: { layoutProviderValue.value }(),
+      longtapActions: { longtapActionsValue.value }(),
+      margins: { marginsValue.value }(),
+      paddings: { paddingsValue.value }(),
+      placeholderColor: { placeholderColorValue.value }(),
+      preloadRequired: { preloadRequiredValue.value }(),
+      preview: { previewValue.value }(),
+      reuseId: { reuseIdValue.value }(),
+      rowSpan: { rowSpanValue.value }(),
+      scale: { scaleValue.value }(),
+      selectedActions: { selectedActionsValue.value }(),
+      tintColor: { tintColorValue.value }(),
+      tintMode: { tintModeValue.value }(),
+      tooltips: { tooltipsValue.value }(),
+      transform: { transformValue.value }(),
+      transitionChange: { transitionChangeValue.value }(),
+      transitionIn: { transitionInValue.value }(),
+      transitionOut: { transitionOutValue.value }(),
+      transitionTriggers: { transitionTriggersValue.value }(),
+      variableTriggers: { variableTriggersValue.value }(),
+      variables: { variablesValue.value }(),
+      visibility: { visibilityValue.value }(),
+      visibilityAction: { visibilityActionValue.value }(),
+      visibilityActions: { visibilityActionsValue.value }(),
+      width: { widthValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

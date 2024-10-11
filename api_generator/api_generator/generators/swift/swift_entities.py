@@ -189,7 +189,7 @@ class SwiftEntity(Entity):
 
         for prop in template_props:
             var_name = prop.value_resolving_local_var_name
-            result += f'  let {var_name} = parent?.{prop.declaration_name}?.{prop.resolve_value_expression} ?? .noValue'
+            result += f'  let {var_name} = {{ parent?.{prop.declaration_name}?.{prop.resolve_value_expression} ?? .noValue }}()'
 
         result += f'  {"let" if not required_props else "var"} errors = mergeErrors('
         for index, prop in enumerate(template_props):
@@ -220,7 +220,7 @@ class SwiftEntity(Entity):
             prop_name = prop.declaration_name
             suffix = 'Value.value' if prop.parsed_value_is_optional else 'NonNil'
             separator = '' if index == (len(template_props) - 1) else ','
-            result += Text(f'    {prop_name}: {prop_name}{suffix}{separator}')
+            result += Text(f'    {prop_name}: {{ {prop_name}{suffix} }}(){separator}')
         result += '  )'
         partial_success = '.partialSuccess(result, warnings: NonEmptyArray(errors)!)'
         result += f'  return errors.isEmpty ? .success(result) : {partial_success}'
@@ -257,27 +257,36 @@ class SwiftEntity(Entity):
                     value = ''
                 else:
                     value = f'validatedBy: ResolvedValue.{prop.validator_var_name}'
-                initial_value = f' = parent?.{name}?.value({value}) ?? .noValue'
+                initial_value = f' = {{ parent?.{name}?.value({value}) ?? .noValue }}()'
             mode = SwiftProperty.SwiftMode(value=GenerationMode.NORMAL_WITH_TEMPLATES,
                                            use_expressions=prop.supports_expressions)
             val_type = cast(SwiftPropertyType, prop.property_type).prefixed_declaration(mode)
             result += f'  var {prop.value_resolving_local_var_name}: DeserializationResult<{val_type}>{initial_value}'
 
-        result += '  context.templateData.forEach { key, __dictValue in'
-        result += '    switch key {'
+        result += '  _ = {'
+        result += '    // Each field is parsed in its own lambda to keep the stack size managable'
+        result += '    // Otherwise the compiler will allocate stack for each intermediate variable'
+        result += '    // upfront even when we don\'t actually visit a relevant branch'
+        result += '    for (key, __dictValue) in context.templateData {'
+
         for prop in template_props:
-            result += f'    case "{prop.dict_field}":'
+            result += '      _ = {'
+            result += f'        if key == "{prop.dict_field}" {{'
             local_var_name = prop.value_resolving_local_var_name
             deserialize = cast(SwiftProperty, prop).deserialize_from_value_expression
-            result += f'      {local_var_name} = {deserialize}.merged(with: {local_var_name})'
+            result += f'         {local_var_name} = {deserialize}.merged(with: {local_var_name})'
+            result += '        }'
+            result += '      }()'
         for prop in template_props:
-            result += f'    case parent?.{prop.declaration_name}?.link:'
+            result += '      _ = {'
+            result += f'       if key == parent?.{prop.declaration_name}?.link {{'
             local_var_name = prop.value_resolving_local_var_name
             deserialize = cast(SwiftProperty, prop).deserialize_from_value_expression
-            result += f'      {local_var_name} = {local_var_name}.merged(with: {{ {deserialize} }})'
-        result += '    default: break'
+            result += f'         {local_var_name} = {local_var_name}.merged(with: {{ {deserialize} }})'
+            result += '        }'
+            result += '      }()'
         result += '    }'
-        result += '  }'
+        result += '  }()'
 
         templateable_props = list(filter(lambda p: p.property_type.can_be_templated, template_props))
         if templateable_props:
@@ -285,7 +294,7 @@ class SwiftEntity(Entity):
             for prop in templateable_props:
                 local_var_name = prop.value_resolving_local_var_name
                 merged_with = f'parent.{prop.declaration_name}?.{prop.resolve_value_expression}'
-                result += f'    {local_var_name} = {local_var_name}.merged(with: {{ {merged_with} }})'
+                result += f'    _ = {{ {local_var_name} = {local_var_name}.merged(with: {{ {merged_with} }}) }}()'
             result += '  }'
 
         required_props = list(filter(lambda p: not p.parsed_value_is_optional, template_props))
@@ -318,7 +327,7 @@ class SwiftEntity(Entity):
             name = prop.declaration_name
             suffix = 'Value.value' if prop.parsed_value_is_optional else 'NonNil'
             separator = '' if index == (len(template_props) - 1) else ','
-            result += f'    {name}: {name}{suffix}{separator}'
+            result += f'    {name}: {{ {name}{suffix} }}(){separator}'
         result += '  )'
         partial_success = '.partialSuccess(result, warnings: NonEmptyArray(errors)!'
         result += f'  return errors.isEmpty ? .success(result) : {partial_success})'
@@ -853,18 +862,23 @@ class SwiftEntityEnumeration(EntityEnumeration):
         result += '    }'
         result += '  }'
         result += EMPTY
-        result += '  switch parent {'
+        result += '  return {'
+        result += f'    var result: DeserializationResult<{self.resolved_prefixed_declaration}>!'
         for name in self._resolved_entity_names:
             lower_name = utils.lower_camel_case(name)
-            result += f'  case let .{lower_name}Template(value):'
-            result += '    let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)'
-            result += '    switch result {'
-            result += f'    case let .success(value): return .success(.{lower_name}(value))'
-            result += f'    case let .partialSuccess(value, warnings): return .partialSuccess(.{lower_name}(value), warnings: warnings)'
-            result += '    case let .failure(errors): return .failure(errors)'
-            result += '    case .noValue: return .noValue'
-            result += '    }'
-        result += '  }'
+            result += '    result = result ?? {'
+            result += f'      if case let .{lower_name}Template(value) = parent {{'
+            result += '        let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)'
+            result += '        switch result {'
+            result += f'          case let .success(value): return .success(.{lower_name}(value))'
+            result += f'          case let .partialSuccess(value, warnings): return .partialSuccess(.{lower_name}(value), warnings: warnings)'
+            result += '          case let .failure(errors): return .failure(errors)'
+            result += '          case .noValue: return .noValue'
+            result += '        }'
+            result += '      } else { return nil }'
+            result += '    }()'
+        result += '    return result'
+        result += '  }()'
         result += '}'
         return result
 
@@ -882,20 +896,21 @@ class SwiftEntityEnumeration(EntityEnumeration):
             result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))'
             result += '  }'
         result += EMPTY
-        result += '  switch type {'
+        result += '  return {'
+        result += f'    var result: DeserializationResult<{self.resolved_prefixed_declaration}>?'
         for name in self._resolved_entity_names:
             upper_name = utils.capitalize_camel_case(name)
             lower_name = utils.lower_camel_case(name)
-            result += f'  case {upper_name}.type:'
-            result += f'    let result = {upper_name}Template.resolveValue(context: context, useOnlyLinks: useOnlyLinks)'
+            result += f'  result = result ?? {{ if type == {upper_name}.type {{'
+            result += f'    let result = {{ {upper_name}Template.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }}()'
             result += '    switch result {'
             result += f'    case let .success(value): return .success(.{lower_name}(value))'
             result += f'    case let .partialSuccess(value, warnings): return .partialSuccess(.{lower_name}(value), warnings: warnings)'
             result += '    case let .failure(errors): return .failure(errors)'
             result += '    case .noValue: return .noValue'
             result += '    }'
-        result += '  default:'
-        result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))'
-        result += '  }'
+            result += '  } else { return nil } }()'
+        result += '  return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))'
+        result += '  }()'
         result += '}'
         return result

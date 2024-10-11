@@ -24,8 +24,8 @@ public final class DivExtensionTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivExtensionTemplate?) -> DeserializationResult<DivExtension> {
-    let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
-    let paramsValue = parent?.params?.resolveOptionalValue(context: context) ?? .noValue
+    let idValue = { parent?.id?.resolveValue(context: context) ?? .noValue }()
+    let paramsValue = { parent?.params?.resolveOptionalValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       paramsValue.errorsOrWarnings?.map { .nestedObjectError(field: "params", error: $0) }
@@ -39,8 +39,8 @@ public final class DivExtensionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivExtension(
-      id: idNonNil,
-      params: paramsValue.value
+      id: { idNonNil }(),
+      params: { paramsValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -49,21 +49,35 @@ public final class DivExtensionTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
-    var paramsValue: DeserializationResult<[String: Any]> = parent?.params?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "id":
-        idValue = deserialize(__dictValue).merged(with: idValue)
-      case "params":
-        paramsValue = deserialize(__dictValue).merged(with: paramsValue)
-      case parent?.id?.link:
-        idValue = idValue.merged(with: { deserialize(__dictValue) })
-      case parent?.params?.link:
-        paramsValue = paramsValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
+    var paramsValue: DeserializationResult<[String: Any]> = { parent?.params?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "id" {
+           idValue = deserialize(__dictValue).merged(with: idValue)
+          }
+        }()
+        _ = {
+          if key == "params" {
+           paramsValue = deserialize(__dictValue).merged(with: paramsValue)
+          }
+        }()
+        _ = {
+         if key == parent?.id?.link {
+           idValue = idValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.params?.link {
+           paramsValue = paramsValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       paramsValue.errorsOrWarnings?.map { .nestedObjectError(field: "params", error: $0) }
@@ -77,8 +91,8 @@ public final class DivExtensionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivExtension(
-      id: idNonNil,
-      params: paramsValue.value
+      id: { idNonNil }(),
+      params: { paramsValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

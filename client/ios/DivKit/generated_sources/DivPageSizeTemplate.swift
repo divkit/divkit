@@ -25,7 +25,7 @@ public final class DivPageSizeTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPageSizeTemplate?) -> DeserializationResult<DivPageSize> {
-    let pageWidthValue = parent?.pageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+    let pageWidthValue = { parent?.pageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       pageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "page_width", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivPageSizeTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivPageSize(
-      pageWidth: pageWidthNonNil
+      pageWidth: { pageWidthNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -48,17 +48,25 @@ public final class DivPageSizeTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var pageWidthValue: DeserializationResult<DivPercentageSize> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "page_width":
-        pageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self).merged(with: pageWidthValue)
-      case parent?.pageWidth?.link:
-        pageWidthValue = pageWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "page_width" {
+           pageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self).merged(with: pageWidthValue)
+          }
+        }()
+        _ = {
+         if key == parent?.pageWidth?.link {
+           pageWidthValue = pageWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      pageWidthValue = pageWidthValue.merged(with: { parent.pageWidth?.resolveValue(context: context, useOnlyLinks: true) })
+      _ = { pageWidthValue = pageWidthValue.merged(with: { parent.pageWidth?.resolveValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       pageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "page_width", error: $0) }
@@ -72,7 +80,7 @@ public final class DivPageSizeTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivPageSize(
-      pageWidth: pageWidthNonNil
+      pageWidth: { pageWidthNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

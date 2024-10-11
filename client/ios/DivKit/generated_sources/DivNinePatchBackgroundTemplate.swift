@@ -29,8 +29,8 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivNinePatchBackgroundTemplate?) -> DeserializationResult<DivNinePatchBackground> {
-    let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
-    let insetsValue = parent?.insets?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue }()
+    let insetsValue = { parent?.insets?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
       insetsValue.errorsOrWarnings?.map { .nestedObjectError(field: "insets", error: $0) }
@@ -48,8 +48,8 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivNinePatchBackground(
-      imageUrl: imageUrlNonNil,
-      insets: insetsNonNil
+      imageUrl: { imageUrlNonNil }(),
+      insets: { insetsNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -58,23 +58,37 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var imageUrlValue: DeserializationResult<Expression<URL>> = parent?.imageUrl?.value() ?? .noValue
+    var imageUrlValue: DeserializationResult<Expression<URL>> = { parent?.imageUrl?.value() ?? .noValue }()
     var insetsValue: DeserializationResult<DivAbsoluteEdgeInsets> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "image_url":
-        imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
-      case "insets":
-        insetsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self).merged(with: insetsValue)
-      case parent?.imageUrl?.link:
-        imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
-      case parent?.insets?.link:
-        insetsValue = insetsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "image_url" {
+           imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
+          }
+        }()
+        _ = {
+          if key == "insets" {
+           insetsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self).merged(with: insetsValue)
+          }
+        }()
+        _ = {
+         if key == parent?.imageUrl?.link {
+           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
+          }
+        }()
+        _ = {
+         if key == parent?.insets?.link {
+           insetsValue = insetsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      insetsValue = insetsValue.merged(with: { parent.insets?.resolveValue(context: context, useOnlyLinks: true) })
+      _ = { insetsValue = insetsValue.merged(with: { parent.insets?.resolveValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
@@ -93,8 +107,8 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivNinePatchBackground(
-      imageUrl: imageUrlNonNil,
-      insets: insetsNonNil
+      imageUrl: { imageUrlNonNil }(),
+      insets: { insetsNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

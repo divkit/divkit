@@ -25,7 +25,7 @@ public final class DivAppearanceSetTransitionTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAppearanceSetTransitionTemplate?) -> DeserializationResult<DivAppearanceSetTransition> {
-    let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+    let itemsValue = { parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivAppearanceSetTransitionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivAppearanceSetTransition(
-      items: itemsNonNil
+      items: { itemsNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -48,17 +48,25 @@ public final class DivAppearanceSetTransitionTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var itemsValue: DeserializationResult<[DivAppearanceTransition]> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "items":
-        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivAppearanceTransitionTemplate.self).merged(with: itemsValue)
-      case parent?.items?.link:
-        itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivAppearanceTransitionTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "items" {
+           itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivAppearanceTransitionTemplate.self).merged(with: itemsValue)
+          }
+        }()
+        _ = {
+         if key == parent?.items?.link {
+           itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivAppearanceTransitionTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      itemsValue = itemsValue.merged(with: { parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) })
+      _ = { itemsValue = itemsValue.merged(with: { parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
@@ -72,7 +80,7 @@ public final class DivAppearanceSetTransitionTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivAppearanceSetTransition(
-      items: itemsNonNil
+      items: { itemsNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

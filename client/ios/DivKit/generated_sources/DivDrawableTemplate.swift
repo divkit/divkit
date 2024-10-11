@@ -31,16 +31,21 @@ public enum DivDrawableTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divShapeDrawableTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divShapeDrawable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divShapeDrawable(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivDrawable>!
+      result = result ?? {
+        if case let .divShapeDrawableTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divShapeDrawable(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divShapeDrawable(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivDrawable> {
@@ -48,18 +53,19 @@ public enum DivDrawableTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivShapeDrawable.type:
-      let result = DivShapeDrawableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivDrawable>?
+    result = result ?? { if type == DivShapeDrawable.type {
+      let result = { DivShapeDrawableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divShapeDrawable(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divShapeDrawable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

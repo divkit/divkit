@@ -29,9 +29,9 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: PrototypeTemplate?) -> DeserializationResult<DivCollectionItemBuilder.Prototype> {
-      let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-      let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
-      let selectorValue = parent?.selector?.resolveOptionalValue(context: context) ?? .noValue
+      let divValue = { parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+      let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
+      let selectorValue = { parent?.selector?.resolveOptionalValue(context: context) ?? .noValue }()
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
         idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -46,9 +46,9 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivCollectionItemBuilder.Prototype(
-        div: divNonNil,
-        id: idValue.value,
-        selector: selectorValue.value
+        div: { divNonNil }(),
+        id: { idValue.value }(),
+        selector: { selectorValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -58,27 +58,47 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
         return resolveOnlyLinks(context: context, parent: parent)
       }
       var divValue: DeserializationResult<Div> = .noValue
-      var idValue: DeserializationResult<Expression<String>> = parent?.id?.value() ?? .noValue
-      var selectorValue: DeserializationResult<Expression<Bool>> = parent?.selector?.value() ?? .noValue
-      context.templateData.forEach { key, __dictValue in
-        switch key {
-        case "div":
-          divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: divValue)
-        case "id":
-          idValue = deserialize(__dictValue).merged(with: idValue)
-        case "selector":
-          selectorValue = deserialize(__dictValue).merged(with: selectorValue)
-        case parent?.div?.link:
-          divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
-        case parent?.id?.link:
-          idValue = idValue.merged(with: { deserialize(__dictValue) })
-        case parent?.selector?.link:
-          selectorValue = selectorValue.merged(with: { deserialize(__dictValue) })
-        default: break
+      var idValue: DeserializationResult<Expression<String>> = { parent?.id?.value() ?? .noValue }()
+      var selectorValue: DeserializationResult<Expression<Bool>> = { parent?.selector?.value() ?? .noValue }()
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "div" {
+             divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: divValue)
+            }
+          }()
+          _ = {
+            if key == "id" {
+             idValue = deserialize(__dictValue).merged(with: idValue)
+            }
+          }()
+          _ = {
+            if key == "selector" {
+             selectorValue = deserialize(__dictValue).merged(with: selectorValue)
+            }
+          }()
+          _ = {
+           if key == parent?.div?.link {
+             divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+            }
+          }()
+          _ = {
+           if key == parent?.id?.link {
+             idValue = idValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.selector?.link {
+             selectorValue = selectorValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
         }
-      }
+      }()
       if let parent = parent {
-        divValue = divValue.merged(with: { parent.div?.resolveValue(context: context, useOnlyLinks: true) })
+        _ = { divValue = divValue.merged(with: { parent.div?.resolveValue(context: context, useOnlyLinks: true) }) }()
       }
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
@@ -94,9 +114,9 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivCollectionItemBuilder.Prototype(
-        div: divNonNil,
-        id: idValue.value,
-        selector: selectorValue.value
+        div: { divNonNil }(),
+        id: { idValue.value }(),
+        selector: { selectorValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -139,9 +159,9 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivCollectionItemBuilderTemplate?) -> DeserializationResult<DivCollectionItemBuilder> {
-    let dataValue = parent?.data?.resolveValue(context: context) ?? .noValue
-    let dataElementNameValue = parent?.dataElementName?.resolveOptionalValue(context: context) ?? .noValue
-    let prototypesValue = parent?.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) ?? .noValue
+    let dataValue = { parent?.data?.resolveValue(context: context) ?? .noValue }()
+    let dataElementNameValue = { parent?.dataElementName?.resolveOptionalValue(context: context) ?? .noValue }()
+    let prototypesValue = { parent?.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       dataValue.errorsOrWarnings?.map { .nestedObjectError(field: "data", error: $0) },
       dataElementNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "data_element_name", error: $0) },
@@ -160,9 +180,9 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivCollectionItemBuilder(
-      data: dataNonNil,
-      dataElementName: dataElementNameValue.value,
-      prototypes: prototypesNonNil
+      data: { dataNonNil }(),
+      dataElementName: { dataElementNameValue.value }(),
+      prototypes: { prototypesNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -171,28 +191,48 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var dataValue: DeserializationResult<Expression<[Any]>> = parent?.data?.value() ?? .noValue
-    var dataElementNameValue: DeserializationResult<String> = parent?.dataElementName?.value() ?? .noValue
+    var dataValue: DeserializationResult<Expression<[Any]>> = { parent?.data?.value() ?? .noValue }()
+    var dataElementNameValue: DeserializationResult<String> = { parent?.dataElementName?.value() ?? .noValue }()
     var prototypesValue: DeserializationResult<[DivCollectionItemBuilder.Prototype]> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "data":
-        dataValue = deserialize(__dictValue).merged(with: dataValue)
-      case "data_element_name":
-        dataElementNameValue = deserialize(__dictValue).merged(with: dataElementNameValue)
-      case "prototypes":
-        prototypesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self).merged(with: prototypesValue)
-      case parent?.data?.link:
-        dataValue = dataValue.merged(with: { deserialize(__dictValue) })
-      case parent?.dataElementName?.link:
-        dataElementNameValue = dataElementNameValue.merged(with: { deserialize(__dictValue) })
-      case parent?.prototypes?.link:
-        prototypesValue = prototypesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "data" {
+           dataValue = deserialize(__dictValue).merged(with: dataValue)
+          }
+        }()
+        _ = {
+          if key == "data_element_name" {
+           dataElementNameValue = deserialize(__dictValue).merged(with: dataElementNameValue)
+          }
+        }()
+        _ = {
+          if key == "prototypes" {
+           prototypesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self).merged(with: prototypesValue)
+          }
+        }()
+        _ = {
+         if key == parent?.data?.link {
+           dataValue = dataValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.dataElementName?.link {
+           dataElementNameValue = dataElementNameValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.prototypes?.link {
+           prototypesValue = prototypesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      prototypesValue = prototypesValue.merged(with: { parent.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) })
+      _ = { prototypesValue = prototypesValue.merged(with: { parent.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       dataValue.errorsOrWarnings?.map { .nestedObjectError(field: "data", error: $0) },
@@ -212,9 +252,9 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivCollectionItemBuilder(
-      data: dataNonNil,
-      dataElementName: dataElementNameValue.value,
-      prototypes: prototypesNonNil
+      data: { dataNonNil }(),
+      dataElementName: { dataElementNameValue.value }(),
+      prototypes: { prototypesNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

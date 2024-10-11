@@ -29,8 +29,8 @@ public final class DivActionSetVariableTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionSetVariableTemplate?) -> DeserializationResult<DivActionSetVariable> {
-    let valueValue = parent?.value?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-    let variableNameValue = parent?.variableName?.resolveValue(context: context) ?? .noValue
+    let valueValue = { parent?.value?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let variableNameValue = { parent?.variableName?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) },
       variableNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_name", error: $0) }
@@ -48,8 +48,8 @@ public final class DivActionSetVariableTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionSetVariable(
-      value: valueNonNil,
-      variableName: variableNameNonNil
+      value: { valueNonNil }(),
+      variableName: { variableNameNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -59,22 +59,36 @@ public final class DivActionSetVariableTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var valueValue: DeserializationResult<DivTypedValue> = .noValue
-    var variableNameValue: DeserializationResult<Expression<String>> = parent?.variableName?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "value":
-        valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
-      case "variable_name":
-        variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
-      case parent?.value?.link:
-        valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
-      case parent?.variableName?.link:
-        variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var variableNameValue: DeserializationResult<Expression<String>> = { parent?.variableName?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "value" {
+           valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
+          }
+        }()
+        _ = {
+          if key == "variable_name" {
+           variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
+          }
+        }()
+        _ = {
+         if key == parent?.value?.link {
+           valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.variableName?.link {
+           variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      valueValue = valueValue.merged(with: { parent.value?.resolveValue(context: context, useOnlyLinks: true) })
+      _ = { valueValue = valueValue.merged(with: { parent.value?.resolveValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) },
@@ -93,8 +107,8 @@ public final class DivActionSetVariableTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionSetVariable(
-      value: valueNonNil,
-      variableName: variableNameNonNil
+      value: { valueNonNil }(),
+      variableName: { variableNameNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

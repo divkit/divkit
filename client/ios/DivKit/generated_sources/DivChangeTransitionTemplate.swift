@@ -36,24 +36,32 @@ public enum DivChangeTransitionTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divChangeSetTransitionTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divChangeSetTransition(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeSetTransition(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divChangeBoundsTransitionTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divChangeBoundsTransition(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeBoundsTransition(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivChangeTransition>!
+      result = result ?? {
+        if case let .divChangeSetTransitionTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divChangeSetTransition(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeSetTransition(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divChangeBoundsTransitionTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divChangeBoundsTransition(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeBoundsTransition(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivChangeTransition> {
@@ -61,26 +69,28 @@ public enum DivChangeTransitionTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivChangeSetTransition.type:
-      let result = DivChangeSetTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivChangeTransition>?
+    result = result ?? { if type == DivChangeSetTransition.type {
+      let result = { DivChangeSetTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divChangeSetTransition(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeSetTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivChangeBoundsTransition.type:
-      let result = DivChangeBoundsTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivChangeBoundsTransition.type {
+      let result = { DivChangeBoundsTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divChangeBoundsTransition(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeBoundsTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

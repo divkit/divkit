@@ -25,7 +25,7 @@ public final class DivActionAnimatorStopTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionAnimatorStopTemplate?) -> DeserializationResult<DivActionAnimatorStop> {
-    let animatorIdValue = parent?.animatorId?.resolveValue(context: context) ?? .noValue
+    let animatorIdValue = { parent?.animatorId?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       animatorIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "animator_id", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivActionAnimatorStopTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionAnimatorStop(
-      animatorId: animatorIdNonNil
+      animatorId: { animatorIdNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,16 +47,24 @@ public final class DivActionAnimatorStopTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var animatorIdValue: DeserializationResult<String> = parent?.animatorId?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "animator_id":
-        animatorIdValue = deserialize(__dictValue).merged(with: animatorIdValue)
-      case parent?.animatorId?.link:
-        animatorIdValue = animatorIdValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var animatorIdValue: DeserializationResult<String> = { parent?.animatorId?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "animator_id" {
+           animatorIdValue = deserialize(__dictValue).merged(with: animatorIdValue)
+          }
+        }()
+        _ = {
+         if key == parent?.animatorId?.link {
+           animatorIdValue = animatorIdValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       animatorIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "animator_id", error: $0) }
     )
@@ -69,7 +77,7 @@ public final class DivActionAnimatorStopTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionAnimatorStop(
-      animatorId: animatorIdNonNil
+      animatorId: { animatorIdNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

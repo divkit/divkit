@@ -27,8 +27,8 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ItemTemplate?) -> DeserializationResult<EntityWithArrayOfNestedItems.Item> {
-      let entityValue = parent?.entity?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-      let propertyValue = parent?.property?.resolveValue(context: context) ?? .noValue
+      let entityValue = { parent?.entity?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
+      let propertyValue = { parent?.property?.resolveValue(context: context) ?? .noValue }()
       var errors = mergeErrors(
         entityValue.errorsOrWarnings?.map { .nestedObjectError(field: "entity", error: $0) },
         propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
@@ -46,8 +46,8 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = EntityWithArrayOfNestedItems.Item(
-        entity: entityNonNil,
-        property: propertyNonNil
+        entity: { entityNonNil }(),
+        property: { propertyNonNil }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -57,22 +57,36 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
         return resolveOnlyLinks(context: context, parent: parent)
       }
       var entityValue: DeserializationResult<Entity> = .noValue
-      var propertyValue: DeserializationResult<Expression<String>> = parent?.property?.value() ?? .noValue
-      context.templateData.forEach { key, __dictValue in
-        switch key {
-        case "entity":
-          entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self).merged(with: entityValue)
-        case "property":
-          propertyValue = deserialize(__dictValue).merged(with: propertyValue)
-        case parent?.entity?.link:
-          entityValue = entityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self) })
-        case parent?.property?.link:
-          propertyValue = propertyValue.merged(with: { deserialize(__dictValue) })
-        default: break
+      var propertyValue: DeserializationResult<Expression<String>> = { parent?.property?.value() ?? .noValue }()
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "entity" {
+             entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self).merged(with: entityValue)
+            }
+          }()
+          _ = {
+            if key == "property" {
+             propertyValue = deserialize(__dictValue).merged(with: propertyValue)
+            }
+          }()
+          _ = {
+           if key == parent?.entity?.link {
+             entityValue = entityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self) })
+            }
+          }()
+          _ = {
+           if key == parent?.property?.link {
+             propertyValue = propertyValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
         }
-      }
+      }()
       if let parent = parent {
-        entityValue = entityValue.merged(with: { parent.entity?.resolveValue(context: context, useOnlyLinks: true) })
+        _ = { entityValue = entityValue.merged(with: { parent.entity?.resolveValue(context: context, useOnlyLinks: true) }) }()
       }
       var errors = mergeErrors(
         entityValue.errorsOrWarnings?.map { .nestedObjectError(field: "entity", error: $0) },
@@ -91,8 +105,8 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = EntityWithArrayOfNestedItems.Item(
-        entity: entityNonNil,
-        property: propertyNonNil
+        entity: { entityNonNil }(),
+        property: { propertyNonNil }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -131,7 +145,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithArrayOfNestedItemsTemplate?) -> DeserializationResult<EntityWithArrayOfNestedItems> {
-    let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+    let itemsValue = { parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
     )
@@ -144,7 +158,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithArrayOfNestedItems(
-      items: itemsNonNil
+      items: { itemsNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -154,17 +168,25 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var itemsValue: DeserializationResult<[EntityWithArrayOfNestedItems.Item]> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "items":
-        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self).merged(with: itemsValue)
-      case parent?.items?.link:
-        itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "items" {
+           itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self).merged(with: itemsValue)
+          }
+        }()
+        _ = {
+         if key == parent?.items?.link {
+           itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      itemsValue = itemsValue.merged(with: { parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) })
+      _ = { itemsValue = itemsValue.merged(with: { parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
@@ -178,7 +200,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = EntityWithArrayOfNestedItems(
-      items: itemsNonNil
+      items: { itemsNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -53,14 +53,14 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionAnimatorStartTemplate?) -> DeserializationResult<DivActionAnimatorStart> {
-    let animatorIdValue = parent?.animatorId?.resolveValue(context: context) ?? .noValue
-    let directionValue = parent?.direction?.resolveOptionalValue(context: context) ?? .noValue
-    let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
-    let endValueValue = parent?.endValue?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue
-    let repeatCountValue = parent?.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
-    let startValueValue = parent?.startValue?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let animatorIdValue = { parent?.animatorId?.resolveValue(context: context) ?? .noValue }()
+    let directionValue = { parent?.direction?.resolveOptionalValue(context: context) ?? .noValue }()
+    let durationValue = { parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue }()
+    let endValueValue = { parent?.endValue?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let interpolatorValue = { parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue }()
+    let repeatCountValue = { parent?.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let startDelayValue = { parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue }()
+    let startValueValue = { parent?.startValue?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       animatorIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "animator_id", error: $0) },
       directionValue.errorsOrWarnings?.map { .nestedObjectError(field: "direction", error: $0) },
@@ -80,14 +80,14 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionAnimatorStart(
-      animatorId: animatorIdNonNil,
-      direction: directionValue.value,
-      duration: durationValue.value,
-      endValue: endValueValue.value,
-      interpolator: interpolatorValue.value,
-      repeatCount: repeatCountValue.value,
-      startDelay: startDelayValue.value,
-      startValue: startValueValue.value
+      animatorId: { animatorIdNonNil }(),
+      direction: { directionValue.value }(),
+      duration: { durationValue.value }(),
+      endValue: { endValueValue.value }(),
+      interpolator: { interpolatorValue.value }(),
+      repeatCount: { repeatCountValue.value }(),
+      startDelay: { startDelayValue.value }(),
+      startValue: { startValueValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -96,55 +96,105 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var animatorIdValue: DeserializationResult<String> = parent?.animatorId?.value() ?? .noValue
-    var directionValue: DeserializationResult<Expression<DivAnimationDirection>> = parent?.direction?.value() ?? .noValue
-    var durationValue: DeserializationResult<Expression<Int>> = parent?.duration?.value() ?? .noValue
+    var animatorIdValue: DeserializationResult<String> = { parent?.animatorId?.value() ?? .noValue }()
+    var directionValue: DeserializationResult<Expression<DivAnimationDirection>> = { parent?.direction?.value() ?? .noValue }()
+    var durationValue: DeserializationResult<Expression<Int>> = { parent?.duration?.value() ?? .noValue }()
     var endValueValue: DeserializationResult<DivTypedValue> = .noValue
-    var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = parent?.interpolator?.value() ?? .noValue
+    var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = { parent?.interpolator?.value() ?? .noValue }()
     var repeatCountValue: DeserializationResult<DivCount> = .noValue
-    var startDelayValue: DeserializationResult<Expression<Int>> = parent?.startDelay?.value() ?? .noValue
+    var startDelayValue: DeserializationResult<Expression<Int>> = { parent?.startDelay?.value() ?? .noValue }()
     var startValueValue: DeserializationResult<DivTypedValue> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "animator_id":
-        animatorIdValue = deserialize(__dictValue).merged(with: animatorIdValue)
-      case "direction":
-        directionValue = deserialize(__dictValue).merged(with: directionValue)
-      case "duration":
-        durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
-      case "end_value":
-        endValueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: endValueValue)
-      case "interpolator":
-        interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
-      case "repeat_count":
-        repeatCountValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self).merged(with: repeatCountValue)
-      case "start_delay":
-        startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
-      case "start_value":
-        startValueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: startValueValue)
-      case parent?.animatorId?.link:
-        animatorIdValue = animatorIdValue.merged(with: { deserialize(__dictValue) })
-      case parent?.direction?.link:
-        directionValue = directionValue.merged(with: { deserialize(__dictValue) })
-      case parent?.duration?.link:
-        durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
-      case parent?.endValue?.link:
-        endValueValue = endValueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
-      case parent?.interpolator?.link:
-        interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
-      case parent?.repeatCount?.link:
-        repeatCountValue = repeatCountValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self) })
-      case parent?.startDelay?.link:
-        startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
-      case parent?.startValue?.link:
-        startValueValue = startValueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "animator_id" {
+           animatorIdValue = deserialize(__dictValue).merged(with: animatorIdValue)
+          }
+        }()
+        _ = {
+          if key == "direction" {
+           directionValue = deserialize(__dictValue).merged(with: directionValue)
+          }
+        }()
+        _ = {
+          if key == "duration" {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
+          }
+        }()
+        _ = {
+          if key == "end_value" {
+           endValueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: endValueValue)
+          }
+        }()
+        _ = {
+          if key == "interpolator" {
+           interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
+          }
+        }()
+        _ = {
+          if key == "repeat_count" {
+           repeatCountValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self).merged(with: repeatCountValue)
+          }
+        }()
+        _ = {
+          if key == "start_delay" {
+           startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
+          }
+        }()
+        _ = {
+          if key == "start_value" {
+           startValueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: startValueValue)
+          }
+        }()
+        _ = {
+         if key == parent?.animatorId?.link {
+           animatorIdValue = animatorIdValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.direction?.link {
+           directionValue = directionValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.duration?.link {
+           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.endValue?.link {
+           endValueValue = endValueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.interpolator?.link {
+           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.repeatCount?.link {
+           repeatCountValue = repeatCountValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.startDelay?.link {
+           startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.startValue?.link {
+           startValueValue = startValueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      endValueValue = endValueValue.merged(with: { parent.endValue?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      repeatCountValue = repeatCountValue.merged(with: { parent.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      startValueValue = startValueValue.merged(with: { parent.startValue?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { endValueValue = endValueValue.merged(with: { parent.endValue?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { repeatCountValue = repeatCountValue.merged(with: { parent.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { startValueValue = startValueValue.merged(with: { parent.startValue?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       animatorIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "animator_id", error: $0) },
@@ -165,14 +215,14 @@ public final class DivActionAnimatorStartTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionAnimatorStart(
-      animatorId: animatorIdNonNil,
-      direction: directionValue.value,
-      duration: durationValue.value,
-      endValue: endValueValue.value,
-      interpolator: interpolatorValue.value,
-      repeatCount: repeatCountValue.value,
-      startDelay: startDelayValue.value,
-      startValue: startValueValue.value
+      animatorId: { animatorIdNonNil }(),
+      direction: { directionValue.value }(),
+      duration: { durationValue.value }(),
+      endValue: { endValueValue.value }(),
+      interpolator: { interpolatorValue.value }(),
+      repeatCount: { repeatCountValue.value }(),
+      startDelay: { startDelayValue.value }(),
+      startValue: { startValueValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

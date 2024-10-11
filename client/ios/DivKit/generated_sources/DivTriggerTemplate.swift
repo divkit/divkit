@@ -30,9 +30,9 @@ public final class DivTriggerTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTriggerTemplate?) -> DeserializationResult<DivTrigger> {
-    let actionsValue = parent?.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
-    let conditionValue = parent?.condition?.resolveValue(context: context) ?? .noValue
-    let modeValue = parent?.mode?.resolveOptionalValue(context: context) ?? .noValue
+    let actionsValue = { parent?.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue }()
+    let conditionValue = { parent?.condition?.resolveValue(context: context) ?? .noValue }()
+    let modeValue = { parent?.mode?.resolveOptionalValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
       conditionValue.errorsOrWarnings?.map { .nestedObjectError(field: "condition", error: $0) },
@@ -51,9 +51,9 @@ public final class DivTriggerTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivTrigger(
-      actions: actionsNonNil,
-      condition: conditionNonNil,
-      mode: modeValue.value
+      actions: { actionsNonNil }(),
+      condition: { conditionNonNil }(),
+      mode: { modeValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -63,27 +63,47 @@ public final class DivTriggerTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var actionsValue: DeserializationResult<[DivAction]> = .noValue
-    var conditionValue: DeserializationResult<Expression<Bool>> = parent?.condition?.value() ?? .noValue
-    var modeValue: DeserializationResult<Expression<DivTrigger.Mode>> = parent?.mode?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "actions":
-        actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self).merged(with: actionsValue)
-      case "condition":
-        conditionValue = deserialize(__dictValue).merged(with: conditionValue)
-      case "mode":
-        modeValue = deserialize(__dictValue).merged(with: modeValue)
-      case parent?.actions?.link:
-        actionsValue = actionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self) })
-      case parent?.condition?.link:
-        conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
-      case parent?.mode?.link:
-        modeValue = modeValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var conditionValue: DeserializationResult<Expression<Bool>> = { parent?.condition?.value() ?? .noValue }()
+    var modeValue: DeserializationResult<Expression<DivTrigger.Mode>> = { parent?.mode?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "actions" {
+           actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self).merged(with: actionsValue)
+          }
+        }()
+        _ = {
+          if key == "condition" {
+           conditionValue = deserialize(__dictValue).merged(with: conditionValue)
+          }
+        }()
+        _ = {
+          if key == "mode" {
+           modeValue = deserialize(__dictValue).merged(with: modeValue)
+          }
+        }()
+        _ = {
+         if key == parent?.actions?.link {
+           actionsValue = actionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.condition?.link {
+           conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.mode?.link {
+           modeValue = modeValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      actionsValue = actionsValue.merged(with: { parent.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) })
+      _ = { actionsValue = actionsValue.merged(with: { parent.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
@@ -103,9 +123,9 @@ public final class DivTriggerTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivTrigger(
-      actions: actionsNonNil,
-      condition: conditionNonNil,
-      mode: modeValue.value
+      actions: { actionsNonNil }(),
+      condition: { conditionNonNil }(),
+      mode: { modeValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -24,15 +24,15 @@ public final class DivDownloadCallbacksTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDownloadCallbacksTemplate?) -> DeserializationResult<DivDownloadCallbacks> {
-    let onFailActionsValue = parent?.onFailActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let onSuccessActionsValue = parent?.onSuccessActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let onFailActionsValue = { parent?.onFailActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let onSuccessActionsValue = { parent?.onSuccessActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let errors = mergeErrors(
       onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_fail_actions", error: $0) },
       onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_success_actions", error: $0) }
     )
     let result = DivDownloadCallbacks(
-      onFailActions: onFailActionsValue.value,
-      onSuccessActions: onSuccessActionsValue.value
+      onFailActions: { onFailActionsValue.value }(),
+      onSuccessActions: { onSuccessActionsValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -43,30 +43,44 @@ public final class DivDownloadCallbacksTemplate: TemplateValue {
     }
     var onFailActionsValue: DeserializationResult<[DivAction]> = .noValue
     var onSuccessActionsValue: DeserializationResult<[DivAction]> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "on_fail_actions":
-        onFailActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFailActionsValue)
-      case "on_success_actions":
-        onSuccessActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onSuccessActionsValue)
-      case parent?.onFailActions?.link:
-        onFailActionsValue = onFailActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      case parent?.onSuccessActions?.link:
-        onSuccessActionsValue = onSuccessActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "on_fail_actions" {
+           onFailActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFailActionsValue)
+          }
+        }()
+        _ = {
+          if key == "on_success_actions" {
+           onSuccessActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onSuccessActionsValue)
+          }
+        }()
+        _ = {
+         if key == parent?.onFailActions?.link {
+           onFailActionsValue = onFailActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.onSuccessActions?.link {
+           onSuccessActionsValue = onSuccessActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      onFailActionsValue = onFailActionsValue.merged(with: { parent.onFailActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      onSuccessActionsValue = onSuccessActionsValue.merged(with: { parent.onSuccessActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { onFailActionsValue = onFailActionsValue.merged(with: { parent.onFailActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { onSuccessActionsValue = onSuccessActionsValue.merged(with: { parent.onSuccessActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     let errors = mergeErrors(
       onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_fail_actions", error: $0) },
       onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_success_actions", error: $0) }
     )
     let result = DivDownloadCallbacks(
-      onFailActions: onFailActionsValue.value,
-      onSuccessActions: onSuccessActionsValue.value
+      onFailActions: { onFailActionsValue.value }(),
+      onSuccessActions: { onSuccessActionsValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

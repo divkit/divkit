@@ -25,7 +25,7 @@ public final class ContentTextTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: ContentTextTemplate?) -> DeserializationResult<ContentText> {
-    let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
+    let valueValue = { parent?.value?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class ContentTextTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = ContentText(
-      value: valueNonNil
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,16 +47,24 @@ public final class ContentTextTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var valueValue: DeserializationResult<Expression<String>> = parent?.value?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "value":
-        valueValue = deserialize(__dictValue).merged(with: valueValue)
-      case parent?.value?.link:
-        valueValue = valueValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var valueValue: DeserializationResult<Expression<String>> = { parent?.value?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "value" {
+           valueValue = deserialize(__dictValue).merged(with: valueValue)
+          }
+        }()
+        _ = {
+         if key == parent?.value?.link {
+           valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
@@ -69,7 +77,7 @@ public final class ContentTextTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = ContentText(
-      value: valueNonNil
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

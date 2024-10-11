@@ -25,7 +25,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivSolidBackgroundTemplate?) -> DeserializationResult<DivSolidBackground> {
-    let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+    let colorValue = { parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) }
     )
@@ -38,7 +38,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivSolidBackground(
-      color: colorNonNil
+      color: { colorNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -47,16 +47,24 @@ public final class DivSolidBackgroundTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var colorValue: DeserializationResult<Expression<Color>> = parent?.color?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "color":
-        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
-      case parent?.color?.link:
-        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
-      default: break
+    var colorValue: DeserializationResult<Expression<Color>> = { parent?.color?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "color" {
+           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
+          }
+        }()
+        _ = {
+         if key == parent?.color?.link {
+           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) }
     )
@@ -69,7 +77,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivSolidBackground(
-      color: colorNonNil
+      color: { colorNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

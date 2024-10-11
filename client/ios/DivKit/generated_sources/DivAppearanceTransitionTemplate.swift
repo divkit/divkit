@@ -46,40 +46,54 @@ public enum DivAppearanceTransitionTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divAppearanceSetTransitionTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divAppearanceSetTransition(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divAppearanceSetTransition(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divFadeTransitionTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divFadeTransition(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divFadeTransition(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divScaleTransitionTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divScaleTransition(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divScaleTransition(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divSlideTransitionTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divSlideTransition(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divSlideTransition(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivAppearanceTransition>!
+      result = result ?? {
+        if case let .divAppearanceSetTransitionTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divAppearanceSetTransition(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divAppearanceSetTransition(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divFadeTransitionTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divFadeTransition(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divFadeTransition(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divScaleTransitionTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divScaleTransition(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divScaleTransition(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divSlideTransitionTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divSlideTransition(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divSlideTransition(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivAppearanceTransition> {
@@ -87,42 +101,46 @@ public enum DivAppearanceTransitionTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivAppearanceSetTransition.type:
-      let result = DivAppearanceSetTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivAppearanceTransition>?
+    result = result ?? { if type == DivAppearanceSetTransition.type {
+      let result = { DivAppearanceSetTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divAppearanceSetTransition(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divAppearanceSetTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivFadeTransition.type:
-      let result = DivFadeTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivFadeTransition.type {
+      let result = { DivFadeTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divFadeTransition(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divFadeTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivScaleTransition.type:
-      let result = DivScaleTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivScaleTransition.type {
+      let result = { DivScaleTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divScaleTransition(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divScaleTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivSlideTransition.type:
-      let result = DivSlideTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivSlideTransition.type {
+      let result = { DivSlideTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divSlideTransition(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divSlideTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 

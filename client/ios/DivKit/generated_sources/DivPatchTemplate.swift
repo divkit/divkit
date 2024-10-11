@@ -25,8 +25,8 @@ public final class DivPatchTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ChangeTemplate?) -> DeserializationResult<DivPatch.Change> {
-      let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
-      let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+      let idValue = { parent?.id?.resolveValue(context: context) ?? .noValue }()
+      let itemsValue = { parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       var errors = mergeErrors(
         idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
         itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
@@ -40,8 +40,8 @@ public final class DivPatchTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivPatch.Change(
-        id: idNonNil,
-        items: itemsValue.value
+        id: { idNonNil }(),
+        items: { itemsValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -50,23 +50,37 @@ public final class DivPatchTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+      var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
       var itemsValue: DeserializationResult<[Div]> = .noValue
-      context.templateData.forEach { key, __dictValue in
-        switch key {
-        case "id":
-          idValue = deserialize(__dictValue).merged(with: idValue)
-        case "items":
-          itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
-        case parent?.id?.link:
-          idValue = idValue.merged(with: { deserialize(__dictValue) })
-        case parent?.items?.link:
-          itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
-        default: break
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "id" {
+             idValue = deserialize(__dictValue).merged(with: idValue)
+            }
+          }()
+          _ = {
+            if key == "items" {
+             itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
+            }
+          }()
+          _ = {
+           if key == parent?.id?.link {
+             idValue = idValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.items?.link {
+             itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+            }
+          }()
         }
-      }
+      }()
       if let parent = parent {
-        itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+        _ = { itemsValue = itemsValue.merged(with: { parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       }
       var errors = mergeErrors(
         idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -81,8 +95,8 @@ public final class DivPatchTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivPatch.Change(
-        id: idNonNil,
-        items: itemsValue.value
+        id: { idNonNil }(),
+        items: { itemsValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -130,10 +144,10 @@ public final class DivPatchTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPatchTemplate?) -> DeserializationResult<DivPatch> {
-    let changesValue = parent?.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) ?? .noValue
-    let modeValue = parent?.mode?.resolveOptionalValue(context: context) ?? .noValue
-    let onAppliedActionsValue = parent?.onAppliedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let onFailedActionsValue = parent?.onFailedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let changesValue = { parent?.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) ?? .noValue }()
+    let modeValue = { parent?.mode?.resolveOptionalValue(context: context) ?? .noValue }()
+    let onAppliedActionsValue = { parent?.onAppliedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let onFailedActionsValue = { parent?.onFailedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       changesValue.errorsOrWarnings?.map { .nestedObjectError(field: "changes", error: $0) },
       modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) },
@@ -149,10 +163,10 @@ public final class DivPatchTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivPatch(
-      changes: changesNonNil,
-      mode: modeValue.value,
-      onAppliedActions: onAppliedActionsValue.value,
-      onFailedActions: onFailedActionsValue.value
+      changes: { changesNonNil }(),
+      mode: { modeValue.value }(),
+      onAppliedActions: { onAppliedActionsValue.value }(),
+      onFailedActions: { onFailedActionsValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -162,34 +176,60 @@ public final class DivPatchTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var changesValue: DeserializationResult<[DivPatch.Change]> = .noValue
-    var modeValue: DeserializationResult<Expression<DivPatch.Mode>> = parent?.mode?.value() ?? .noValue
+    var modeValue: DeserializationResult<Expression<DivPatch.Mode>> = { parent?.mode?.value() ?? .noValue }()
     var onAppliedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var onFailedActionsValue: DeserializationResult<[DivAction]> = .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "changes":
-        changesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self).merged(with: changesValue)
-      case "mode":
-        modeValue = deserialize(__dictValue).merged(with: modeValue)
-      case "on_applied_actions":
-        onAppliedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onAppliedActionsValue)
-      case "on_failed_actions":
-        onFailedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFailedActionsValue)
-      case parent?.changes?.link:
-        changesValue = changesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self) })
-      case parent?.mode?.link:
-        modeValue = modeValue.merged(with: { deserialize(__dictValue) })
-      case parent?.onAppliedActions?.link:
-        onAppliedActionsValue = onAppliedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      case parent?.onFailedActions?.link:
-        onFailedActionsValue = onFailedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
-      default: break
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "changes" {
+           changesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self).merged(with: changesValue)
+          }
+        }()
+        _ = {
+          if key == "mode" {
+           modeValue = deserialize(__dictValue).merged(with: modeValue)
+          }
+        }()
+        _ = {
+          if key == "on_applied_actions" {
+           onAppliedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onAppliedActionsValue)
+          }
+        }()
+        _ = {
+          if key == "on_failed_actions" {
+           onFailedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFailedActionsValue)
+          }
+        }()
+        _ = {
+         if key == parent?.changes?.link {
+           changesValue = changesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.mode?.link {
+           modeValue = modeValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.onAppliedActions?.link {
+           onAppliedActionsValue = onAppliedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.onFailedActions?.link {
+           onFailedActionsValue = onFailedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      changesValue = changesValue.merged(with: { parent.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) })
-      onAppliedActionsValue = onAppliedActionsValue.merged(with: { parent.onAppliedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
-      onFailedActionsValue = onFailedActionsValue.merged(with: { parent.onFailedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { changesValue = changesValue.merged(with: { parent.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) }) }()
+      _ = { onAppliedActionsValue = onAppliedActionsValue.merged(with: { parent.onAppliedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
+      _ = { onFailedActionsValue = onFailedActionsValue.merged(with: { parent.onFailedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       changesValue.errorsOrWarnings?.map { .nestedObjectError(field: "changes", error: $0) },
@@ -206,10 +246,10 @@ public final class DivPatchTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivPatch(
-      changes: changesNonNil,
-      mode: modeValue.value,
-      onAppliedActions: onAppliedActionsValue.value,
-      onFailedActions: onFailedActionsValue.value
+      changes: { changesNonNil }(),
+      mode: { modeValue.value }(),
+      onAppliedActions: { onAppliedActionsValue.value }(),
+      onFailedActions: { onFailedActionsValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

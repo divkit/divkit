@@ -17,6 +17,8 @@ public enum DivActionTyped {
   case divActionDownload(DivActionDownload)
   case divActionFocusElement(DivActionFocusElement)
   case divActionHideTooltip(DivActionHideTooltip)
+  case divActionScrollBy(DivActionScrollBy)
+  case divActionScrollTo(DivActionScrollTo)
   case divActionSetState(DivActionSetState)
   case divActionSetStoredValue(DivActionSetStoredValue)
   case divActionSetVariable(DivActionSetVariable)
@@ -48,6 +50,10 @@ public enum DivActionTyped {
     case let .divActionFocusElement(value):
       return value
     case let .divActionHideTooltip(value):
+      return value
+    case let .divActionScrollBy(value):
+      return value
+    case let .divActionScrollTo(value):
       return value
     case let .divActionSetState(value):
       return value
@@ -92,6 +98,10 @@ extension DivActionTyped: Equatable {
     case let (.divActionFocusElement(l), .divActionFocusElement(r)):
       return l == r
     case let (.divActionHideTooltip(l), .divActionHideTooltip(r)):
+      return l == r
+    case let (.divActionScrollBy(l), .divActionScrollBy(r)):
+      return l == r
+    case let (.divActionScrollTo(l), .divActionScrollTo(r)):
       return l == r
     case let (.divActionSetState(l), .divActionSetState(r)):
       return l == r

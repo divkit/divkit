@@ -33,9 +33,9 @@ public final class DivActionDictSetValueTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionDictSetValueTemplate?) -> DeserializationResult<DivActionDictSetValue> {
-    let keyValue = parent?.key?.resolveValue(context: context) ?? .noValue
-    let valueValue = parent?.value?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let variableNameValue = parent?.variableName?.resolveValue(context: context) ?? .noValue
+    let keyValue = { parent?.key?.resolveValue(context: context) ?? .noValue }()
+    let valueValue = { parent?.value?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let variableNameValue = { parent?.variableName?.resolveValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       keyValue.errorsOrWarnings?.map { .nestedObjectError(field: "key", error: $0) },
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) },
@@ -54,9 +54,9 @@ public final class DivActionDictSetValueTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionDictSetValue(
-      key: keyNonNil,
-      value: valueValue.value,
-      variableName: variableNameNonNil
+      key: { keyNonNil }(),
+      value: { valueValue.value }(),
+      variableName: { variableNameNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -65,28 +65,48 @@ public final class DivActionDictSetValueTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var keyValue: DeserializationResult<Expression<String>> = parent?.key?.value() ?? .noValue
+    var keyValue: DeserializationResult<Expression<String>> = { parent?.key?.value() ?? .noValue }()
     var valueValue: DeserializationResult<DivTypedValue> = .noValue
-    var variableNameValue: DeserializationResult<Expression<String>> = parent?.variableName?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "key":
-        keyValue = deserialize(__dictValue).merged(with: keyValue)
-      case "value":
-        valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
-      case "variable_name":
-        variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
-      case parent?.key?.link:
-        keyValue = keyValue.merged(with: { deserialize(__dictValue) })
-      case parent?.value?.link:
-        valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
-      case parent?.variableName?.link:
-        variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var variableNameValue: DeserializationResult<Expression<String>> = { parent?.variableName?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "key" {
+           keyValue = deserialize(__dictValue).merged(with: keyValue)
+          }
+        }()
+        _ = {
+          if key == "value" {
+           valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
+          }
+        }()
+        _ = {
+          if key == "variable_name" {
+           variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
+          }
+        }()
+        _ = {
+         if key == parent?.key?.link {
+           keyValue = keyValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.value?.link {
+           valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.variableName?.link {
+           variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      valueValue = valueValue.merged(with: { parent.value?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { valueValue = valueValue.merged(with: { parent.value?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     var errors = mergeErrors(
       keyValue.errorsOrWarnings?.map { .nestedObjectError(field: "key", error: $0) },
@@ -106,9 +126,9 @@ public final class DivActionDictSetValueTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionDictSetValue(
-      key: keyNonNil,
-      value: valueValue.value,
-      variableName: variableNameNonNil
+      key: { keyNonNil }(),
+      value: { valueValue.value }(),
+      variableName: { variableNameNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

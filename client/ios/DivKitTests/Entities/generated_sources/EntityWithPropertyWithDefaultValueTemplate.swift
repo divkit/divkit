@@ -31,9 +31,9 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: NestedTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue.Nested> {
-      let intValue = parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue
-      let nonOptionalValue = parent?.nonOptional?.resolveValue(context: context) ?? .noValue
-      let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
+      let intValue = { parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue }()
+      let nonOptionalValue = { parent?.nonOptional?.resolveValue(context: context) ?? .noValue }()
+      let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue }()
       var errors = mergeErrors(
         intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },
         nonOptionalValue.errorsOrWarnings?.map { .nestedObjectError(field: "non_optional", error: $0) },
@@ -48,9 +48,9 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = EntityWithPropertyWithDefaultValue.Nested(
-        int: intValue.value,
-        nonOptional: nonOptionalNonNil,
-        url: urlValue.value
+        int: { intValue.value }(),
+        nonOptional: { nonOptionalNonNil }(),
+        url: { urlValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -59,26 +59,46 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var intValue: DeserializationResult<Expression<Int>> = parent?.int?.value() ?? .noValue
-      var nonOptionalValue: DeserializationResult<Expression<String>> = parent?.nonOptional?.value() ?? .noValue
-      var urlValue: DeserializationResult<Expression<URL>> = parent?.url?.value() ?? .noValue
-      context.templateData.forEach { key, __dictValue in
-        switch key {
-        case "int":
-          intValue = deserialize(__dictValue, validator: ResolvedValue.intValidator).merged(with: intValue)
-        case "non_optional":
-          nonOptionalValue = deserialize(__dictValue).merged(with: nonOptionalValue)
-        case "url":
-          urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
-        case parent?.int?.link:
-          intValue = intValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.intValidator) })
-        case parent?.nonOptional?.link:
-          nonOptionalValue = nonOptionalValue.merged(with: { deserialize(__dictValue) })
-        case parent?.url?.link:
-          urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator) })
-        default: break
+      var intValue: DeserializationResult<Expression<Int>> = { parent?.int?.value() ?? .noValue }()
+      var nonOptionalValue: DeserializationResult<Expression<String>> = { parent?.nonOptional?.value() ?? .noValue }()
+      var urlValue: DeserializationResult<Expression<URL>> = { parent?.url?.value() ?? .noValue }()
+      _ = {
+        // Each field is parsed in its own lambda to keep the stack size managable
+        // Otherwise the compiler will allocate stack for each intermediate variable
+        // upfront even when we don't actually visit a relevant branch
+        for (key, __dictValue) in context.templateData {
+          _ = {
+            if key == "int" {
+             intValue = deserialize(__dictValue, validator: ResolvedValue.intValidator).merged(with: intValue)
+            }
+          }()
+          _ = {
+            if key == "non_optional" {
+             nonOptionalValue = deserialize(__dictValue).merged(with: nonOptionalValue)
+            }
+          }()
+          _ = {
+            if key == "url" {
+             urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
+            }
+          }()
+          _ = {
+           if key == parent?.int?.link {
+             intValue = intValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.intValidator) })
+            }
+          }()
+          _ = {
+           if key == parent?.nonOptional?.link {
+             nonOptionalValue = nonOptionalValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
+           if key == parent?.url?.link {
+             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator) })
+            }
+          }()
         }
-      }
+      }()
       var errors = mergeErrors(
         intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },
         nonOptionalValue.errorsOrWarnings?.map { .nestedObjectError(field: "non_optional", error: $0) },
@@ -93,9 +113,9 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = EntityWithPropertyWithDefaultValue.Nested(
-        int: intValue.value,
-        nonOptional: nonOptionalNonNil,
-        url: urlValue.value
+        int: { intValue.value }(),
+        nonOptional: { nonOptionalNonNil }(),
+        url: { urlValue.value }()
       )
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
@@ -137,18 +157,18 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue> {
-    let intValue = parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue
-    let nestedValue = parent?.nested?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
+    let intValue = { parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue }()
+    let nestedValue = { parent?.nested?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue }()
     let errors = mergeErrors(
       intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },
       nestedValue.errorsOrWarnings?.map { .nestedObjectError(field: "nested", error: $0) },
       urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) }
     )
     let result = EntityWithPropertyWithDefaultValue(
-      int: intValue.value,
-      nested: nestedValue.value,
-      url: urlValue.value
+      int: { intValue.value }(),
+      nested: { nestedValue.value }(),
+      url: { urlValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -157,28 +177,48 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var intValue: DeserializationResult<Expression<Int>> = parent?.int?.value() ?? .noValue
+    var intValue: DeserializationResult<Expression<Int>> = { parent?.int?.value() ?? .noValue }()
     var nestedValue: DeserializationResult<EntityWithPropertyWithDefaultValue.Nested> = .noValue
-    var urlValue: DeserializationResult<Expression<URL>> = parent?.url?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "int":
-        intValue = deserialize(__dictValue, validator: ResolvedValue.intValidator).merged(with: intValue)
-      case "nested":
-        nestedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self).merged(with: nestedValue)
-      case "url":
-        urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
-      case parent?.int?.link:
-        intValue = intValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.intValidator) })
-      case parent?.nested?.link:
-        nestedValue = nestedValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self) })
-      case parent?.url?.link:
-        urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator) })
-      default: break
+    var urlValue: DeserializationResult<Expression<URL>> = { parent?.url?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "int" {
+           intValue = deserialize(__dictValue, validator: ResolvedValue.intValidator).merged(with: intValue)
+          }
+        }()
+        _ = {
+          if key == "nested" {
+           nestedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self).merged(with: nestedValue)
+          }
+        }()
+        _ = {
+          if key == "url" {
+           urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
+          }
+        }()
+        _ = {
+         if key == parent?.int?.link {
+           intValue = intValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.intValidator) })
+          }
+        }()
+        _ = {
+         if key == parent?.nested?.link {
+           nestedValue = nestedValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self) })
+          }
+        }()
+        _ = {
+         if key == parent?.url?.link {
+           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator) })
+          }
+        }()
       }
-    }
+    }()
     if let parent = parent {
-      nestedValue = nestedValue.merged(with: { parent.nested?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      _ = { nestedValue = nestedValue.merged(with: { parent.nested?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
     let errors = mergeErrors(
       intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },
@@ -186,9 +226,9 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
       urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) }
     )
     let result = EntityWithPropertyWithDefaultValue(
-      int: intValue.value,
-      nested: nestedValue.value,
-      url: urlValue.value
+      int: { intValue.value }(),
+      nested: { nestedValue.value }(),
+      url: { urlValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

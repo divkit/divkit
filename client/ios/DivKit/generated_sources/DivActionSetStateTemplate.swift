@@ -29,8 +29,8 @@ public final class DivActionSetStateTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionSetStateTemplate?) -> DeserializationResult<DivActionSetState> {
-    let stateIdValue = parent?.stateId?.resolveValue(context: context) ?? .noValue
-    let temporaryValue = parent?.temporary?.resolveOptionalValue(context: context) ?? .noValue
+    let stateIdValue = { parent?.stateId?.resolveValue(context: context) ?? .noValue }()
+    let temporaryValue = { parent?.temporary?.resolveOptionalValue(context: context) ?? .noValue }()
     var errors = mergeErrors(
       stateIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "state_id", error: $0) },
       temporaryValue.errorsOrWarnings?.map { .nestedObjectError(field: "temporary", error: $0) }
@@ -44,8 +44,8 @@ public final class DivActionSetStateTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionSetState(
-      stateId: stateIdNonNil,
-      temporary: temporaryValue.value
+      stateId: { stateIdNonNil }(),
+      temporary: { temporaryValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -54,21 +54,35 @@ public final class DivActionSetStateTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var stateIdValue: DeserializationResult<Expression<String>> = parent?.stateId?.value() ?? .noValue
-    var temporaryValue: DeserializationResult<Expression<Bool>> = parent?.temporary?.value() ?? .noValue
-    context.templateData.forEach { key, __dictValue in
-      switch key {
-      case "state_id":
-        stateIdValue = deserialize(__dictValue).merged(with: stateIdValue)
-      case "temporary":
-        temporaryValue = deserialize(__dictValue).merged(with: temporaryValue)
-      case parent?.stateId?.link:
-        stateIdValue = stateIdValue.merged(with: { deserialize(__dictValue) })
-      case parent?.temporary?.link:
-        temporaryValue = temporaryValue.merged(with: { deserialize(__dictValue) })
-      default: break
+    var stateIdValue: DeserializationResult<Expression<String>> = { parent?.stateId?.value() ?? .noValue }()
+    var temporaryValue: DeserializationResult<Expression<Bool>> = { parent?.temporary?.value() ?? .noValue }()
+    _ = {
+      // Each field is parsed in its own lambda to keep the stack size managable
+      // Otherwise the compiler will allocate stack for each intermediate variable
+      // upfront even when we don't actually visit a relevant branch
+      for (key, __dictValue) in context.templateData {
+        _ = {
+          if key == "state_id" {
+           stateIdValue = deserialize(__dictValue).merged(with: stateIdValue)
+          }
+        }()
+        _ = {
+          if key == "temporary" {
+           temporaryValue = deserialize(__dictValue).merged(with: temporaryValue)
+          }
+        }()
+        _ = {
+         if key == parent?.stateId?.link {
+           stateIdValue = stateIdValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
+         if key == parent?.temporary?.link {
+           temporaryValue = temporaryValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
       }
-    }
+    }()
     var errors = mergeErrors(
       stateIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "state_id", error: $0) },
       temporaryValue.errorsOrWarnings?.map { .nestedObjectError(field: "temporary", error: $0) }
@@ -82,8 +96,8 @@ public final class DivActionSetStateTemplate: TemplateValue {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivActionSetState(
-      stateId: stateIdNonNil,
-      temporary: temporaryValue.value
+      stateId: { stateIdNonNil }(),
+      temporary: { temporaryValue.value }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }

@@ -36,24 +36,32 @@ public enum DivShapeTemplate: TemplateValue {
       }
     }
 
-    switch parent {
-    case let .divRoundedRectangleShapeTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divRoundedRectangleShape(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divRoundedRectangleShape(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    case let .divCircleShapeTemplate(value):
-      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-      switch result {
-      case let .success(value): return .success(.divCircleShape(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(.divCircleShape(value), warnings: warnings)
-      case let .failure(errors): return .failure(errors)
-      case .noValue: return .noValue
-      }
-    }
+    return {
+      var result: DeserializationResult<DivShape>!
+      result = result ?? {
+        if case let .divRoundedRectangleShapeTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divRoundedRectangleShape(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divRoundedRectangleShape(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divCircleShapeTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divCircleShape(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divCircleShape(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      return result
+    }()
   }
 
   private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivShape> {
@@ -61,26 +69,28 @@ public enum DivShapeTemplate: TemplateValue {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
-    switch type {
-    case DivRoundedRectangleShape.type:
-      let result = DivRoundedRectangleShapeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    return {
+      var result: DeserializationResult<DivShape>?
+    result = result ?? { if type == DivRoundedRectangleShape.type {
+      let result = { DivRoundedRectangleShapeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divRoundedRectangleShape(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divRoundedRectangleShape(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    case DivCircleShape.type:
-      let result = DivCircleShapeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    } else { return nil } }()
+    result = result ?? { if type == DivCircleShape.type {
+      let result = { DivCircleShapeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
       case let .success(value): return .success(.divCircleShape(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.divCircleShape(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
-    default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
-    }
+    } else { return nil } }()
+    return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
+    }()
   }
 }
 
