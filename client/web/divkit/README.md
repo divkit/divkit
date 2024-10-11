@@ -1,6 +1,6 @@
 ## DivKit for the Web
 
-![client code size](https://img.shields.io/badge/client%20lib%20minified&brotli-60.5%20KB-brightgreen)
+![client code size](https://img.shields.io/badge/client%20lib%20minified&brotli-82.8%20KB-brightgreen)
 
 ### Installation
 
@@ -14,7 +14,8 @@ npm i @divkitframework/divkit --save
 
 ### Inlude CSS
 
-For all variants of usage, css file `dist/client.css` is required. Include it in any way (import as module, link directly in html, etc).
+> [!IMPORTANT]
+> For all variants of usage, css file `dist/client.css` is required. Include it in any way (import as module, link directly in html, etc).
 
 ### Include js
 
