@@ -131,10 +131,12 @@
             }) {
                 const additional = event.error.additional || {};
 
-                let args = Object.keys(additional).reduce((acc: string[], item: string) => {
-                    acc.push(`${item}=${additional[item]}`);
-                    return acc;
-                }, []);
+                let args = Object.keys(additional)
+                    .filter(it => it !== 'json' && it !== 'origJson' && it !== 'fullpath')
+                    .reduce((acc: string[], item: string) => {
+                        acc.push(`${item}=${additional[item]}`);
+                        return acc;
+                    }, []);
 
                 $webViewerErrors = [
                     ...$webViewerErrors,
