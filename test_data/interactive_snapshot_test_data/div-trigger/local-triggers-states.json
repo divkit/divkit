@@ -1,6 +1,7 @@
 {
   "description": "Local triggers with states",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

@@ -1,6 +1,7 @@
 {
   "description": "Local triggers with tabs",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

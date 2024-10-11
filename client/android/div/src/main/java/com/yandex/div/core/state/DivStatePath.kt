@@ -37,14 +37,15 @@ data class DivStatePath @VisibleForTesting internal constructor(
         }
 
     internal val fullPath by lazy { path.joinToString("/") }
-
-    override fun toString(): String {
-        return if (states.isNotEmpty()) {
+    private val stringValue by lazy {
+        if (states.isNotEmpty()) {
             "$topLevelStateId/" + states.flatMap { listOf(it.divId, it.stateId) }.joinToString("/")
         } else {
             "$topLevelStateId"
         }
     }
+
+    override fun toString(): String = stringValue
 
     fun append(divId: String, stateId: String): DivStatePath {
         val newStates = ArrayList<Pair<String, String>>(states.size + 1).apply {

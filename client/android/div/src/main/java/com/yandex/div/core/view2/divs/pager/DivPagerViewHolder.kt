@@ -69,6 +69,7 @@ internal class DivPagerViewHolder(
                 div = div.value(),
                 childPath.fullPath,
                 resolver = resolver,
+                parentResolver = parentContext.expressionResolver,
             )
         }
 

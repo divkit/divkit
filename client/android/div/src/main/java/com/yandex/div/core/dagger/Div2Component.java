@@ -28,6 +28,7 @@ import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.player.DivVideoActionHandler;
 import com.yandex.div.core.state.DivStateChangeListener;
 import com.yandex.div.core.state.DivStateManager;
+import com.yandex.div.core.state.TabsStateCache;
 import com.yandex.div.core.state.TemporaryDivStateCache;
 import com.yandex.div.core.timer.DivTimerEventDispatcherProvider;
 import com.yandex.div.core.player.DivVideoViewMapper;
@@ -90,6 +91,9 @@ public interface Div2Component {
 
     @NonNull
     TemporaryDivStateCache getTemporaryDivStateCache();
+
+    @NonNull
+    TabsStateCache getTabsStateCache();
 
     @NonNull
     DivCustomContainerChildFactory getDivCustomContainerChildFactory();

@@ -64,6 +64,7 @@ class DivStateBinderTest: DivBinderTest() {
         divVisibilityActionTracker = divVisibilityActionTracker,
         errorCollectors = errorCollectors,
         variableBinder = variableBinder,
+        runtimeVisitor = mock(),
     )
 
     @Test

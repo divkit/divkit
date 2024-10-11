@@ -64,7 +64,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith links path to created runtime`() {
         val newResolver = ExpressionResolverImpl(mock(), mock(), errorCollector, callback)
-        underTest.resolveRuntimeWith(path.fullPath, null, null, newResolver)
+        underTest.resolveRuntimeWith(path.fullPath, null, null, newResolver, newResolver)
 
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(newResolver))
         Assert.assertEquals(
@@ -76,7 +76,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith creates runtime with new variables if variables provided`() {
         val variables = listOf(Variable.IntegerVariable(CHILD_VARIABLE, 123))
-        underTest.resolveRuntimeWith(path.fullPath, variables, null, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, variables, null, resolver, resolver)
 
         val runtime = underTest.getOrCreateRuntime(path.fullPath, null)
         Assert.assertNotNull(underTest.getRuntimeWithOrNull(resolver))
@@ -90,7 +90,7 @@ class RuntimeStoreTest {
     fun `getOrCreateRuntime returns runtime for path if exist`() {
         val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
         val runtime = ExpressionsRuntime(resolver, mock(), null, underTest)
-        underTest.putRuntime(runtime, PATH)
+        underTest.putRuntime(runtime, PATH, rootRuntime)
 
         Assert.assertEquals(runtime, underTest.getOrCreateRuntime(path.fullPath, null, null))
         Assert.assertNotSame(runtime, rootRuntime)
@@ -102,7 +102,7 @@ class RuntimeStoreTest {
         val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
         val parentVariableController = mock<VariableController>()
         val runtime = ExpressionsRuntime(resolver, parentVariableController, null, underTest)
-        underTest.putRuntime(runtime, PARENT_PATH)
+        underTest.putRuntime(runtime, PARENT_PATH, rootRuntime)
 
         Assert.assertEquals(runtime, underTest.getOrCreateRuntime(path.fullPath, parentResolver = resolver))
         Assert.assertEquals(runtime, underTest.getRuntimeWithOrNull(resolver))
@@ -117,7 +117,7 @@ class RuntimeStoreTest {
         }
         val runtime = ExpressionsRuntime(resolver, parentVariableController, null, underTest)
 
-        underTest.putRuntime(runtime, PARENT_PATH)
+        underTest.putRuntime(runtime, PARENT_PATH, rootRuntime)
 
         val childRuntime = underTest.getOrCreateRuntime(path.fullPath, variables, parentResolver = resolver)
         val variableController = childRuntime?.variableController
@@ -143,7 +143,7 @@ class RuntimeStoreTest {
     @Test
     fun `setPathToRuntimeWith links path to runtime`() {
         val resolver = ExpressionResolverImpl(mock(), evaluator, errorCollector, callback)
-        underTest.resolveRuntimeWith(path.fullPath, null, null, resolver)
+        underTest.resolveRuntimeWith(path.fullPath, null, null, resolver, resolver)
 
         Assert.assertNotNull(runtimeFromCallback)
         Assert.assertEquals(
@@ -166,7 +166,7 @@ class RuntimeStoreTest {
             parentVariableController, evaluator, errorCollector, callback
         )
 
-        underTest.resolveRuntimeWith(path.fullPath, variables, null,resolver)
+        underTest.resolveRuntimeWith(path.fullPath, variables, null, resolver, resolver)
         val newRuntime = underTest.getOrCreateRuntime(path.fullPath, null, null)
 
         Assert.assertNotNull(newRuntime)

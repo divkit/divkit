@@ -1,7 +1,6 @@
 package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.triggers.TriggersController
@@ -31,14 +30,14 @@ internal class RuntimeStore(
     private val divActionBinder: DivActionBinder,
 ) {
     private var warningShown = false
-    private val pathToRuntimes = mutableMapOf<String, ExpressionsRuntime?>()
     private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime?>()
     private val allRuntimes = mutableSetOf<ExpressionsRuntime>()
+    internal val tree = RuntimeTree()
 
     internal var rootRuntime: ExpressionsRuntime? = null
         set(value) {
             field = value
-            field?.let { putRuntime(it) }
+            field?.let { putRuntime(it, "", null) }
         }
 
     private val onCreateCallback by lazy {
@@ -73,20 +72,26 @@ internal class RuntimeStore(
         triggers: List<DivTrigger>? = null,
         parentResolver: ExpressionResolver? = null,
         parentRuntime: ExpressionsRuntime? = null,
-    ) = pathToRuntimes[path] ?: getRuntimeOrCreateChild(
+    ) = tree.getNode(path)?.runtime ?: getRuntimeOrCreateChild(
         path, variables, triggers,null, parentResolver, parentRuntime
     )
 
     internal fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
 
-    internal fun putRuntime(runtime: ExpressionsRuntime, path: String? = null) {
+    internal fun putRuntime(runtime: ExpressionsRuntime) {
         resolverToRuntime[runtime.expressionResolver] = runtime
         allRuntimes.add(runtime)
+    }
 
-        if (path != null) {
-            pathToRuntimes[path] = runtime
-            runtime.updateSubscriptions()
-        }
+    internal fun putRuntime(
+        runtime: ExpressionsRuntime,
+        path: String,
+        parentRuntime: ExpressionsRuntime?,
+    ) {
+        putRuntime(runtime)
+
+        tree.storeRuntime(runtime, parentRuntime, path)
+        runtime.updateSubscriptions()
     }
 
     internal fun resolveRuntimeWith(
@@ -94,8 +99,9 @@ internal class RuntimeStore(
         variables: List<Variable>?,
         triggers: List<DivTrigger>?,
         resolver: ExpressionResolver,
+        parentResolver: ExpressionResolver?,
     ): ExpressionsRuntime? {
-        val runtimeForPath = pathToRuntimes[path]
+        val runtimeForPath = tree.getNode(path)?.runtime
         if (resolver == runtimeForPath?.expressionResolver) return runtimeForPath
 
         val existingRuntime = getRuntimeWithOrNull(resolver) ?: run {
@@ -103,8 +109,8 @@ internal class RuntimeStore(
             return null
         }
 
-        if (runtimeForPath != null) removeRuntimesFor(path)
-        return getRuntimeOrCreateChild(path, variables, triggers, existingRuntime)
+        if (runtimeForPath != null) tree.removeRuntimeAndCleanup(runtimeForPath, path)
+        return getRuntimeOrCreateChild(path, variables, triggers, existingRuntime, parentResolver)
     }
 
     internal fun cleanup() {
@@ -112,19 +118,11 @@ internal class RuntimeStore(
         allRuntimes.forEach { it.cleanup() }
     }
 
-    internal fun updateSubscriptions() =
-        allRuntimes.forEach { it.updateSubscriptions() }
-
-    internal fun onAttachedToWindow(view: DivViewFacade) =
-        allRuntimes.forEach { it.onAttachedToWindow(view) }
+    internal fun updateSubscriptions() = allRuntimes.forEach { it.updateSubscriptions() }
 
     internal fun clearBindings() = allRuntimes.forEach { it.clearBinding() }
 
-    internal fun getUniquePathsAndRuntimes(): List<Pair<String, ExpressionsRuntime>> {
-        return pathToRuntimes.mapNotNull { (path, runtime) ->
-            runtime?.let { path to it }
-        }
-    }
+    internal fun getUniquePathsAndRuntimes() = tree.getPathToRuntimes()
 
     private fun reportError(message: String) {
         Assert.fail(message)
@@ -132,12 +130,13 @@ internal class RuntimeStore(
     }
 
     private fun createChildRuntime(
-        parentRuntime: ExpressionsRuntime,
+        baseRuntime: ExpressionsRuntime,
+        parentRuntime: ExpressionsRuntime?,
         path: String,
         variables: List<Variable>?,
         variablesTriggers: List<DivTrigger>?,
     ): ExpressionsRuntime {
-        val localVariableController = VariableControllerImpl(parentRuntime.variableController)
+        val localVariableController = VariableControllerImpl(baseRuntime.variableController)
         variables?.forEach { localVariableController.declare(it) }
 
         val evaluationContext = EvaluationContext(
@@ -166,19 +165,8 @@ internal class RuntimeStore(
             ensureTriggersSynced(variablesTriggers)
         }
 
-        return ExpressionsRuntime(
-            resolver, localVariableController, triggerController, parentRuntime.runtimeStore
-        ).also {
-            putRuntime(it, path)
-        }
-    }
-
-    private fun removeRuntimesFor(path: String) {
-        pathToRuntimes[path]?.let {
-            pathToRuntimes.entries.filter { (key, _) -> key.contains(path) }.forEach { (key, value) ->
-                pathToRuntimes.remove(key)
-                resolverToRuntime.remove(value?.expressionResolver)
-            }
+        return ExpressionsRuntime(resolver, localVariableController, triggerController, this).also {
+            putRuntime(it, path, parentRuntime)
         }
     }
 
@@ -199,13 +187,15 @@ internal class RuntimeStore(
                 return null
             }
 
+        val parentRuntime = parentRuntime ?: parentResolver?.let { getRuntimeWithOrNull(it) }
+
         return if (variables.isNullOrEmpty() && variablesTriggers.isNullOrEmpty()) {
             runtime.also {
-                pathToRuntimes[path] = it
+                tree.storeRuntime(runtime, parentRuntime, path)
                 runtime.updateSubscriptions()
             }
         } else {
-            createChildRuntime(runtime, path, variables, variablesTriggers)
+            createChildRuntime(runtime, parentRuntime, path, variables, variablesTriggers)
         }
     }
 }

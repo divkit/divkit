@@ -14,6 +14,7 @@ import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
+import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
@@ -63,6 +64,7 @@ internal class DivStateBinder @Inject constructor(
     private val divVisibilityActionTracker: DivVisibilityActionTracker,
     private val errorCollectors: ErrorCollectors,
     private val variableBinder: TwoWayStringVariableBinder,
+    private val runtimeVisitor: DivRuntimeVisitor,
 ) {
 
     /**
@@ -225,6 +227,12 @@ internal class DivStateBinder @Inject constructor(
 
         layout.activeStateDiv = newStateDiv
         layout.path = currentPath
+
+        if (outgoing != null) {
+            runtimeVisitor.createAndAttachRuntimesToState(
+                divView, div, divStatePath, context.expressionResolver
+            )
+        }
     }
 
     private fun DivStateLayout.fixAlignment(

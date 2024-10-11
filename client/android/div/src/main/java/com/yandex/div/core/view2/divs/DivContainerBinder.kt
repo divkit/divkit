@@ -223,7 +223,8 @@ internal class DivContainerBinder @Inject constructor(
                     runtimeStore = bindingContext.runtimeStore,
                     div = childDiv,
                     path = childPath.fullPath,
-                    resolver = item.expressionResolver
+                    resolver = item.expressionResolver,
+                    parentResolver = bindingContext.expressionResolver,
                 )
             }
 

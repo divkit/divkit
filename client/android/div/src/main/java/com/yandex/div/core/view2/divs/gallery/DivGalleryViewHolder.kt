@@ -57,6 +57,7 @@ internal class DivGalleryViewHolder(
                 div = div.value(),
                 path = childPath.fullPath,
                 resolver = resolver,
+                parentResolver = parentContext.expressionResolver,
             )
         }
 

@@ -212,13 +212,19 @@ class Div2View private constructor(
         bindingContext = bindingContext.getFor(expressionResolver, runtimeStore)
     }
 
-    private fun attachVariableTriggers() {
+    private fun attachVariableTriggers(data: DivData) {
+        val state = data.state() ?: return
+        val attachTriggers = {
+            viewComponent.runtimeVisitor.createAndAttachRuntimes(
+                state.div, DivStatePath.fromState(data.stateId()), this
+            )
+        }
         if (bindOnAttachEnabled) {
             setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
-                runtimeStore?.onAttachedToWindow(this)
+                attachTriggers.invoke()
             }
         } else {
-            runtimeStore?.onAttachedToWindow(this)
+            attachTriggers.invoke()
         }
     }
 
@@ -406,7 +412,7 @@ class Div2View private constructor(
         if (newDivData != null && tryApplyPatch(patch, oldData, newDivData, reporter)) {
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
-            attachVariableTriggers()
+            attachVariableTriggers(newDivData)
             div2Component.divBinder.attachIndicators()
             reporter.onPatchSuccess()
             div2Component.actionBinder
@@ -484,7 +490,7 @@ class Div2View private constructor(
 
         val result = switchToDivData(oldData, data, reporter)
 
-        attachVariableTriggers()
+        attachVariableTriggers(data)
 
         if (oldData != null) {
             histogramReporter.onRebindingFinished()
@@ -1153,7 +1159,7 @@ class Div2View private constructor(
             if (isAutoanimations) {
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
             }
-            attachVariableTriggers()
+            attachVariableTriggers(newData)
             histogramReporter.onRebindingFinished()
 
             reporter.onSimpleRebindSuccess()

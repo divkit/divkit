@@ -89,6 +89,7 @@ internal class TriggersController(
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
+        if (currentView == view) return
         currentView = view
         activeTriggers?.let {
             executors[it]?.forEach { executor -> executor.view = view }
