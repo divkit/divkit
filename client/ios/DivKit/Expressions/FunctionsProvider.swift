@@ -180,23 +180,13 @@ extension [String: Function] {
   mutating func addFunction(_ name: String, _ function: Function) {
     var functions: [SimpleFunction] = []
     if let existingFunction = self[name] {
-      functions.appendFunctions(existingFunction)
+      functions += existingFunction.simpleFunctions
     }
-    functions.appendFunctions(function)
+    functions += function.simpleFunctions
     if functions.count > 1 {
       self[name] = OverloadedFunction(functions: functions)
     } else if functions.count == 1 {
       self[name] = functions[0]
-    }
-  }
-}
-
-extension [SimpleFunction] {
-  fileprivate mutating func appendFunctions(_ function: Function) {
-    if let overloadedFunction = function as? OverloadedFunction {
-      append(contentsOf: overloadedFunction.functions)
-    } else if let simpleFunction = function as? SimpleFunction {
-      append(simpleFunction)
     }
   }
 }

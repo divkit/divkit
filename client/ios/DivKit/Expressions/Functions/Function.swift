@@ -2,9 +2,17 @@ import Foundation
 
 import VGSL
 
-protocol Function {
+protocol _SimpleFunctionsProvider {
+  var simpleFunctions: [SimpleFunction] { get }
+}
+
+protocol Function: _SimpleFunctionsProvider {
   func invoke(_ args: [Any], context: ExpressionContext) throws -> Any
   func invoke(args: [Subexpression], context: ExpressionContext) throws -> Any
+}
+
+extension Function {
+  var simpleFunctions: [SimpleFunction] { [] }
 }
 
 extension Function {
@@ -18,6 +26,10 @@ extension Function {
 
 protocol SimpleFunction: Function {
   var signature: FunctionSignature { get }
+}
+
+extension SimpleFunction {
+  var simpleFunctions: [SimpleFunction] { [self] }
 }
 
 struct NoMatchingSignatureError: Error {}
@@ -288,6 +300,10 @@ struct OverloadedFunction: Function {
     }
     return sutableFunctions.first
   }
+}
+
+extension OverloadedFunction {
+  var simpleFunctions: [SimpleFunction] { functions }
 }
 
 struct ArgumentSignature {
