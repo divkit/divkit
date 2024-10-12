@@ -31,7 +31,7 @@ extension DetachableAnimationBlock {
   }
 }
 
-final class DetachableAnimationBlockView: BlockView {
+final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView {
   private var childView: BlockView? {
     didSet {
       guard childView !== oldValue else { return }
@@ -48,6 +48,15 @@ final class DetachableAnimationBlockView: BlockView {
         oldValue.removeFromSuperview()
       case let (.none, .some(childView)):
         addSubview(childView)
+        applyVisibilityAction()
+      }
+    }
+  }
+
+  var visibilityAction: Action? {
+    didSet {
+      if childView != nil, visibilityAction != nil {
+        applyVisibilityAction()
       }
     }
   }

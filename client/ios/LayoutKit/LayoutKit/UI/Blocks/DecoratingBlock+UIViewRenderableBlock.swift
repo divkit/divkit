@@ -443,11 +443,23 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
+  private func onVisibleBoundsChangedInternal(from: CGRect, to: CGRect) {
     passVisibleBoundsChanged(from: from, to: to)
 
     if model.visibilityParams != nil {
       visibilityActionPerformers?.onVisibleBoundsChanged(to: to, bounds: bounds)
+    }
+  }
+
+  func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
+    if let child = childView as? DelayedVisibilityActionView {
+      child.visibilityAction = { [weak self] in
+
+        guard let self else { return }
+        onVisibleBoundsChangedInternal(from: from, to: to)
+      }
+    } else {
+      onVisibleBoundsChangedInternal(from: from, to: to)
     }
   }
 
