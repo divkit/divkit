@@ -1,16 +1,17 @@
 import Foundation
 import VGSL
 
-final class DivNetworkSubmitter: DivSubmitter {
+@_spi(Internal)
+final public class DivNetworkSubmitter: DivSubmitter {
   private let requestPerformer: URLRequestPerforming
 
   private var tasks: [NetworkTask] = []
 
-  init(requestPerformer: URLRequestPerforming) {
+  public init(requestPerformer: URLRequestPerforming) {
     self.requestPerformer = requestPerformer
   }
 
-  func submit(
+  public func submit(
     request: SubmitRequest,
     data: [String: String],
     completion: @escaping DivSubmitterCompletion
@@ -34,7 +35,7 @@ final class DivNetworkSubmitter: DivSubmitter {
     tasks.append(task!)
   }
 
-  func cancelRequests() {
+  public func cancelRequests() {
     tasks.forEach { $0.cancel() }
     tasks.removeAll()
   }
