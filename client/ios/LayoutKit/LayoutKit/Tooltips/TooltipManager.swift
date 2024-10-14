@@ -104,7 +104,10 @@ public final class DefaultTooltipManager: TooltipManager {
         self?.tooltipWindow?.isHidden = true
       }
     )
-    tooltipWindow.addSubview(view)
+    // Window won't rotate if `rootViewController` is not set
+    let vc = UIViewController()
+    vc.view = view
+    tooltipWindow.rootViewController = vc
     tooltipWindow.isHidden = false
     tooltipWindow.makeKeyAndVisible()
     view.frame = tooltipWindow.bounds
