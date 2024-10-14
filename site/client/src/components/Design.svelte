@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getContext, onDestroy, onMount } from 'svelte';
     import type * as monaco from 'monaco-editor';
-    import type { DivProEditorInstance, EditorOptions, Layout, LayoutItem } from '@yandex-portal/divkit-editor';
+    import type { DivProEditorInstance, EditorOptions, Layout, LayoutItem } from '@divkitframework/visual-editor';
     import { loadMonaco } from './Editor.svelte';
     import { valueStore } from '../data/valueStore';
     import { initPromise } from '../data/sessionController';

@@ -1,2 +1,2 @@
-import '@yandex-portal/divkit-editor/dist/divkit-editor.css';
-export { DivProEditor } from '@yandex-portal/divkit-editor';
+import '@divkitframework/visual-editor/dist/divkit-editor.css';
+export { DivProEditor } from '@divkitframework/visual-editor';
