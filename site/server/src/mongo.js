@@ -41,7 +41,8 @@ function connectMongo() {
 
     promise = Promise.resolve().then(() => {
         client = new MongoClient(url, {
-            sslCA: cert
+            sslCA: cert,
+            readPreference: 'primaryPreferred'
         });
 
         return client.connect();
