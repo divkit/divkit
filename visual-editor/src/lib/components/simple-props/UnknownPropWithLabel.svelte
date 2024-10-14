@@ -73,7 +73,10 @@
     function onSourceClick(): void {
         expression2Dialog().show({
             target: sourcesButton,
-            value: typeof value === 'string' ? value : '',
+            // eslint-disable-next-line no-nested-ternary
+            value: typeof value === 'string' ?
+                value :
+                (typeof value === 'number' ? String(value) : ''),
             disabled: $readOnly,
             callback(val) {
                 dispatch('change', {

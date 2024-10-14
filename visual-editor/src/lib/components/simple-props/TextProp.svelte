@@ -240,6 +240,7 @@
         position: relative;
         box-sizing: border-box;
         width: 100%;
+        min-height: 38px;
         margin: 0;
         padding: 8px 14px;
         font: inherit;

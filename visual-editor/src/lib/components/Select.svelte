@@ -7,6 +7,7 @@
     import { fly } from 'svelte/transition';
     import { popupClose, submit, suggestDown, suggestFirst, suggestLast, suggestUp } from '../utils/keybinder/shortcuts';
     import { encodeBackground } from '../utils/encodeBackground';
+    import { simpleThrottle } from '../utils/simpleThrottle';
 
     interface Item {
         value: string;
@@ -114,7 +115,7 @@
         toggled = !toggled;
     }
 
-    afterUpdate(() => {
+    const calcDirection = (): void => {
         if (!toggled) {
             return;
         }
@@ -127,12 +128,19 @@
         } else {
             direction = 'down';
         }
+    };
+
+    const calcDirectionThrottled = simpleThrottle(calcDirection, 100);
+
+    afterUpdate(() => {
+        calcDirection();
     });
 </script>
 
 <svelte:window
     on:keydown={toggled ? onWindowKeydown : undefined}
     on:click={toggled ? onWindowClick : undefined}
+    on:resize={toggled ? calcDirectionThrottled : undefined}
 />
 
 <div
@@ -324,10 +332,12 @@
         left: 0;
         box-sizing: border-box;
         min-width: 100%;
+        max-height: calc(50vh - 50px);
         padding: 4px 0;
         border-radius: 8px;
         box-shadow: var(--shadow-16);
         background: var(--background-tertiary);
+        overflow: auto;
     }
 
     .select__popup_direction_up {

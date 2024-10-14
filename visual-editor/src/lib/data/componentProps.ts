@@ -687,7 +687,8 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
         list: [{
             name: 'props.a11y_description',
             prop: 'accessibility.description',
-            type: 'string'
+            type: 'string',
+            enableSources: true
         }]
     }, {
         type: 'group',
