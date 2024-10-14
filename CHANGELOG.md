@@ -15,10 +15,13 @@
 # iOS Client:
 * Added `TooltipManager.reset()`.
 * Fixed hint availability in masked div-input.
+* Improved DivData parsing.
 * Properties `start` and `end` of `div-text.range` are optional now.
 * Reset tooltips after device rotation.
 * Supported custom equatable image filter for ImageBlock, may be added in extensions.
 * Supported div-action.scope_id.
+* Use alternative tooltip position if requested position doesn't fit.
+* Fixed tooltip not hiding on screen rotation.
 
 # Web Client:
 * Added local `variable_triggers` property support.
