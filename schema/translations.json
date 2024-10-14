@@ -667,7 +667,7 @@
     "en": "Corner rounding radius.",
     "ru": "Радиус скругления углов."
   },
-  "div_cloud_background_padding": {
+  "div_cloud_background_paddings": {
     "en": "Margins between line bounds and background.",
     "ru": "Отступы от границы строки до границы фона."
   },

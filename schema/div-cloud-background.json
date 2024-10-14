@@ -1,7 +1,9 @@
 {
   "type": "object",
   "$description": "translations.json#/div_cloud_background",
-  "platforms": [],
+  "platforms": [
+    "android"
+  ],
   "properties": {
     "type": {
       "type": "string",
@@ -14,12 +16,12 @@
       "$description": "translations.json#/div_cloud_background_color"
     },
     "corner_radius": {
-      "$ref": "div-fixed-size.json",
+      "$ref": "common.json#/non_negative_integer",
       "$description": "translations.json#/div_cloud_background_corner_radius"
     },
-    "padding": {
+    "paddings": {
       "$ref": "div-edge-insets.json",
-      "$description": "translations.json#/div_cloud_background_padding"
+      "$description": "translations.json#/div_cloud_background_paddings"
     }
   },
   "required": [
