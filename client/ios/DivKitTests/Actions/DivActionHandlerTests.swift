@@ -33,7 +33,8 @@ final class DivActionHandlerTests: XCTestCase {
       },
       persistentValuesStorage: DivPersistentValuesStorage(),
       reporter: reporter,
-      idToPath: idToPath
+      idToPath: idToPath, 
+      animatorController: DivAnimatorController()
     )
   }
 

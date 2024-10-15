@@ -31,6 +31,14 @@ extension DivBase {
       context.idToPath[path.cardId.path + id] = path
     }
 
+    animators?.forEach { animator in
+      context.animatorController?.initializeIfNeeded(
+        path: path,
+        id: animator.id,
+        animator: Variable { animator.resolve(context) }
+      )
+    }
+    
     let extensionHandlers = context.getExtensionHandlers(for: self)
     for extensionHandler in extensionHandlers {
       extensionHandler.accept(div: self, context: context)

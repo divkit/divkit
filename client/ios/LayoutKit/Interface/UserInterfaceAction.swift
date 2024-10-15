@@ -271,4 +271,13 @@ extension UserInterfaceAction.Payload {
       throw Error.notAnURL
     }
   }
+
+  public var divActionParams: UserInterfaceAction.DivActionParams? {
+    switch self {
+    case let .divAction(params: params):
+      return params
+    case .empty, .menu, .url:
+      return nil
+    }
+  }
 }

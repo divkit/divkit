@@ -63,7 +63,10 @@
         "$ref": "div-animator.json"
       },
       "$description": "translations.json#/div_base_animators",
-      "platforms": []
+      "platforms": [
+        "android",
+        "ios"
+      ]
     },
     "row_span": {
       "$ref": "common.json#/non_negative_integer",

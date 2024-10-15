@@ -44,6 +44,7 @@ public struct DivBlockModelingContext {
   private(set) var localValues = [String: AnyHashable]()
   let layoutProviderHandler: DivLayoutProviderHandler?
   let idToPath: IdToPath
+  let animatorController: DivAnimatorController?
 
   public init(
     cardId: DivCardID,
@@ -105,7 +106,8 @@ public struct DivBlockModelingContext {
       persistentValuesStorage: persistentValuesStorage,
       tooltipViewFactory: tooltipViewFactory,
       layoutProviderHandler: layoutProviderHandler,
-      idToPath: nil
+      idToPath: nil,
+      animatorController: nil
     )
   }
 
@@ -138,7 +140,8 @@ public struct DivBlockModelingContext {
     persistentValuesStorage: DivPersistentValuesStorage?,
     tooltipViewFactory: DivTooltipViewFactory?,
     layoutProviderHandler: DivLayoutProviderHandler?,
-    idToPath: IdToPath?
+    idToPath: IdToPath?,
+    animatorController: DivAnimatorController?
   ) {
     self.viewId = viewId
     self.cardLogId = cardLogId
@@ -176,6 +179,7 @@ public struct DivBlockModelingContext {
       persistentValuesStorage: persistentValuesStorage
     )
     self.idToPath = idToPath ?? IdToPath()
+    self.animatorController = animatorController
     expressionResolver = makeExpressionResolver(
       functionsProvider: functionsProvider,
       viewId: viewId,

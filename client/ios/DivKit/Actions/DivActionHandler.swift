@@ -29,6 +29,7 @@ public final class DivActionHandler {
   private let submitActionHandler: SubmitActionHandler
   private let timerActionHandler: TimerActionHandler
   private let videoActionHandler = VideoActionHandler()
+  private let animatorHandler: AnimatorActionHandler
 
   /// Deprecated. Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
   public convenience init(
@@ -66,7 +67,8 @@ public final class DivActionHandler {
       urlHandler: urlHandler,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter ?? DefaultDivReporter(),
-      idToPath: IdToPath()
+      idToPath: IdToPath(),
+      animatorController: DivAnimatorController()
     )
   }
 
@@ -87,7 +89,8 @@ public final class DivActionHandler {
     urlHandler: DivUrlHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter,
-    idToPath: IdToPath
+    idToPath: IdToPath,
+    animatorController: DivAnimatorController
   ) {
     self.divActionURLHandler = DivActionURLHandler(
       stateUpdater: stateUpdater,
@@ -113,6 +116,7 @@ public final class DivActionHandler {
     self.reporter = reporter
     self.timerActionHandler = TimerActionHandler(performer: performTimerAction)
     self.idToPath = idToPath
+    self.animatorHandler = AnimatorActionHandler(animatorController: animatorController)
   }
 
   public func handle(
@@ -207,8 +211,11 @@ public final class DivActionHandler {
       videoActionHandler.handle(action, context: context)
     case let .divActionSubmit(action):
       submitActionHandler.handle(action, context: context)
-    case .divActionAnimatorStart, .divActionAnimatorStop,
-         .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
+    case let .divActionAnimatorStart(action):
+      animatorHandler.handle(action, context: context)
+    case let .divActionAnimatorStop(action):
+      animatorHandler.handle(action, context: context)
+    case .divActionShowTooltip, .divActionHideTooltip, .divActionDownload,
          .divActionSetState, .divActionSetStoredValue, .divActionScrollBy, .divActionScrollTo:
       break
     case .none:

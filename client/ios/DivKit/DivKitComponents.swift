@@ -49,6 +49,7 @@ public final class DivKitComponents {
   private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
   private let variableTracker = DivVariableTracker()
   private let idToPath = IdToPath()
+  private let animatorController = DivAnimatorController()
 
   /// You can create an instance of `DivKitComponents` with various optional parameters that allow
   /// you to customize the behavior and functionality of `DivKit` to suit your specific needs.
@@ -189,7 +190,8 @@ public final class DivKitComponents {
       urlHandler: urlHandler,
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter,
-      idToPath: idToPath
+      idToPath: idToPath,
+      animatorController: animatorController
     )
 
     triggersStorage = DivTriggersStorage(
@@ -235,6 +237,7 @@ public final class DivKitComponents {
     timerStorage.reset()
     tooltipManager.reset()
     idToPath.reset()
+    animatorController.reset()
   }
 
   public func reset(cardId: DivCardID) {
@@ -247,6 +250,7 @@ public final class DivKitComponents {
     visibilityCounter.reset(cardId: cardId)
     timerStorage.reset(cardId: cardId)
     idToPath.reset(cardId: cardId)
+    animatorController.reset(cardId: cardId)
   }
 
   /// When using DivView, use DivData.resolve to avoid adding variables twice.
@@ -349,7 +353,8 @@ public final class DivKitComponents {
         cardId: cardId
       ),
       layoutProviderHandler: layoutProviderHandler,
-      idToPath: idToPath
+      idToPath: idToPath,
+      animatorController: animatorController
     )
   }
 
