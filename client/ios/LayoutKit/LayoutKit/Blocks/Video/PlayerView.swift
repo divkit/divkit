@@ -6,11 +6,14 @@ import UIKit
 import VGSL
 
 public protocol PlayerView: VisibleBoundsTrackingView {
+  var videoRatio: CGFloat? { get }
+
   func attach(player: Player)
   func set(scale: VideoScale)
 }
 
 extension PlayerView {
+  var videoRatio: CGFloat? { nil }
   public func set(scale _: VideoScale) {}
 }
 

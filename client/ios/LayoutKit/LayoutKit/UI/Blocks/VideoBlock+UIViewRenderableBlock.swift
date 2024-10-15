@@ -89,6 +89,14 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     return player
   }()
 
+  private lazy var preview: UIImageView = {
+    let view = UIImageView(image: nil)
+    view.contentMode = .scaleAspectFit
+    view.backgroundColor = .black
+    videoView.map { $0.addSubview(view) }
+    return view
+  }()
+
   private lazy var videoView: PlayerView? = {
     let view = playerFactory?.makePlayerView()
     view.flatMap { addSubview($0) }
@@ -101,6 +109,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       switch state.state {
       case .playing:
         player?.play()
+        preview.isHidden = true
       case .paused:
         player?.pause()
       }
@@ -127,6 +136,8 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       player?.set(isMuted: model.playbackConfig.isMuted)
     }
 
+    preview.image = model.preview
+
     if let elapsedTime = model.elapsedTime?.value,
        elapsedTime != previousTime {
       player?.seek(to: CMTime(value: elapsedTime))
@@ -137,6 +148,37 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
   override func layoutSubviews() {
     super.layoutSubviews()
     videoView?.frame = bounds
+    preview.frame = adjustPreviewFrame()
+  }
+
+  private func adjustPreviewFrame() -> CGRect {
+    guard let videoView,
+          let videoRatio = videoView.videoRatio else {
+      return videoView?.frame ?? .zero
+    }
+
+    let containerSize = videoView.bounds.size
+    let containerRatio = containerSize.width / containerSize.height
+
+    if videoRatio > containerRatio {
+      let height = containerSize.width / videoRatio
+      let yOffset = (containerSize.height - height) / 2.0
+      return CGRect(
+        x: 0.0,
+        y: yOffset,
+        width: containerSize.width,
+        height: height
+      )
+    } else {
+      let width = containerSize.height * videoRatio
+      let xOffset = (containerSize.width - width) / 2.0
+      return CGRect(
+        x: xOffset,
+        y: 0.0,
+        width: width,
+        height: containerSize.height
+      )
+    }
   }
 
   deinit {
