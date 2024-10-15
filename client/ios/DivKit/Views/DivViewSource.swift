@@ -37,4 +37,8 @@ public struct DivViewSource {
 struct DivViewId: Hashable {
   let cardId: DivCardID
   let additionalId: String?
+
+  var isTooltip: Bool {
+    additionalId != nil
+  }
 }
