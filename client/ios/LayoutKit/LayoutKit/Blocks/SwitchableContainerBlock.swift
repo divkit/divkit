@@ -247,6 +247,35 @@ extension SwitchableContainerBlock: ElementStateUpdating {
   }
 }
 
+extension SwitchableContainerBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> SwitchableContainerBlock {
+    let newItems = try map(items) {
+      try SwitchableContainerBlock.Item(
+        title: $0.title,
+        content: $0.content.updated(path: path, isFocused: isFocused)
+      )
+    }
+
+    guard newItems.0.content !== items.0.content ||
+      newItems.1.content !== items.1.content
+    else {
+      return self
+    }
+
+    return SwitchableContainerBlock(
+      selectedItem: selectedItem,
+      items: newItems,
+      backgroundColor: backgroundColor,
+      selectedBackgroundColor: selectedBackgroundColor,
+      titleGaps: titleGaps,
+      titleContentGap: titleContentGap,
+      selectorSideGaps: selectorSideGaps,
+      switchAction: switchAction,
+      path: path
+    )
+  }
+}
+
 extension SwitchableContainerBlock: LayoutCaching {
   private func replacingContent(with items: Items) -> Block {
     SwitchableContainerBlock(

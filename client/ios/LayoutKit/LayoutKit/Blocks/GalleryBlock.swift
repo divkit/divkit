@@ -169,6 +169,28 @@ extension GalleryBlock: ElementStateUpdating {
   }
 }
 
+extension GalleryBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> GalleryBlock {
+    let newBlocks = try model.items.map { try $0.content.updated(path: path, isFocused: isFocused) }
+    let blocksAreNotEqual = zip(model.items, newBlocks).contains(where: { $0.content !== $1 })
+
+    let newModel = blocksAreNotEqual
+      ? modified(model) { $0.items.apply(contents: newBlocks) }
+      : model
+
+    if newModel != model {
+      return try GalleryBlock(
+        model: newModel,
+        state: state,
+        widthTrait: widthTrait,
+        heightTrait: heightTrait
+      )
+    }
+
+    return self
+  }
+}
+
 extension GalleryBlock: LayoutCachingDefaultImpl {}
 
 extension [GalleryViewModel.Item] {

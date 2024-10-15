@@ -85,3 +85,20 @@ extension DetachableAnimationBlock: ElementStateUpdating {
     )
   }
 }
+
+extension DetachableAnimationBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> Self {
+    let newChild = try child.updated(path: path, isFocused: isFocused)
+    if newChild === child {
+      return self
+    }
+
+    return Self(
+      child: newChild,
+      id: id,
+      animationIn: nil,
+      animationOut: animationOut,
+      animationChange: animationChange
+    )
+  }
+}

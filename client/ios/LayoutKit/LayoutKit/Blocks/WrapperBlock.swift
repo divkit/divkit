@@ -25,6 +25,11 @@ extension WrapperBlock {
     return makeCopyIfChanged(wrapping: newChild)
   }
 
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> Self {
+    let newChild = try child.updated(path: path, isFocused: isFocused)
+    return makeCopyIfChanged(wrapping: newChild)
+  }
+
   private func makeCopyIfChanged(wrapping child: Block) -> Self {
     child === self.child ? self : makeCopy(wrapping: child)
   }

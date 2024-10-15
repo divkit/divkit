@@ -267,6 +267,14 @@ final class DivBlockProvider {
     }
   }
 
+  func update(path: UIElementPath, isFocused: Bool) {
+    do {
+      block = try block.updated(path: path, isFocused: isFocused)
+    } catch {
+      block = handleError(error: error)
+    }
+  }
+
   private func parseDivDataWithTemplates(
     _ jsonDict: [String: Any],
     cardId: DivCardID

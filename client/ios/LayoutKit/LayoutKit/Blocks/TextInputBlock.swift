@@ -225,6 +225,43 @@ extension TextInputBlock {
 
 extension TextInputBlock: LayoutCachingDefaultImpl {}
 extension TextInputBlock: ElementStateUpdatingDefaultImpl {}
+extension TextInputBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> TextInputBlock {
+    if path != self.path {
+      return self
+    }
+
+    return TextInputBlock(
+      widthTrait: widthTrait,
+      heightTrait: heightTrait,
+      hint: hint,
+      textValue: textValue,
+      rawTextValue: rawTextValue,
+      textTypo: textTypo,
+      multiLineMode: multiLineMode,
+      inputType: inputType,
+      accessoryView: accessoryView,
+      autocapitalizationType: autocapitalizationType,
+      highlightColor: highlightColor,
+      maxVisibleLines: maxVisibleLines,
+      selectAllOnFocus: selectAllOnFocus,
+      maskValidator: maskValidator,
+      path: path,
+      isFocused: isFocused,
+      onFocusActions: onFocusActions,
+      onBlurActions: onBlurActions,
+      parentScrollView: parentScrollView,
+      filters: filters,
+      validators: validators,
+      layoutDirection: layoutDirection,
+      textAlignmentHorizontal: textAlignmentHorizontal,
+      textAlignmentVertical: textAlignmentVertical,
+      paddings: paddings,
+      isEnabled: isEnabled,
+      maxLength: maxLength
+    )
+  }
+}
 extension TextInputBlock: PathHolder {}
 
 private let defaultTextForMeasuring = "A"

@@ -217,10 +217,6 @@ public final class DivKitComponents {
     variablesStorage.changeEvents.addObserver { [weak self] event in
       self?.onVariablesChanged(event: event)
     }.dispose(in: disposePool)
-
-    blockStateStorage.focusUpdates.addObserver { [weak self] cardId in
-      self?.updateCard(.state(cardId))
-    }.dispose(in: disposePool)
   }
 
   public func reset() {

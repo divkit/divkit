@@ -541,6 +541,20 @@ extension ContainerBlock: ElementStateUpdating {
   }
 }
 
+extension ContainerBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> ContainerBlock {
+    let newChildren = try children.map {
+      try ContainerBlock.Child(
+        content: $0.content.updated(path: path, isFocused: isFocused),
+        crossAlignment: $0.crossAlignment
+      )
+    }
+    let childrenChanged = zip(children, newChildren).contains { $1.content !== $0.content }
+
+    return childrenChanged ? try modifying(children: newChildren) : self
+  }
+}
+
 extension ContainerBlock.Child {
   public static func ==(_ lhs: ContainerBlock.Child, _ rhs: ContainerBlock.Child) -> Bool {
     lhs.content == rhs.content && lhs.crossAlignment == rhs.crossAlignment

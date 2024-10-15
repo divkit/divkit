@@ -28,14 +28,6 @@ public final class DivBlockStateStorage {
     case none
     case pathFocused(UIElementPath)
     case idFocused(IdAndCardId)
-
-    var cardId: DivCardID? {
-      switch self {
-      case let .pathFocused(path): path.cardId
-      case let .idFocused(id): id.cardId
-      case .none: nil
-      }
-    }
   }
 
   public private(set) var states: BlocksState
@@ -44,14 +36,9 @@ public final class DivBlockStateStorage {
   private var focusedElement: FocusedElement = .none
   private let lock = AllocatedUnfairLock()
   private let stateUpdatesPipe = SignalPipe<ChangeEvent>()
-  private let focusUpdatesPipe = SignalPipe<DivCardID>()
 
   var stateUpdates: Signal<ChangeEvent> {
     stateUpdatesPipe.signal
-  }
-
-  var focusUpdates: Signal<DivCardID> {
-    focusUpdatesPipe.signal
   }
 
   public init(states: BlocksState = [:]) {
@@ -102,26 +89,18 @@ public final class DivBlockStateStorage {
     lock.withLock {
       focusedElement = isFocused ? .idFocused(element) : removeFocus(from: element)
     }
-    focusUpdatesPipe.send(element.cardId)
   }
 
   public func setFocused(isFocused: Bool, path: UIElementPath) {
     lock.withLock {
       focusedElement = isFocused ? .pathFocused(path) : .none
     }
-    focusUpdatesPipe.send(path.cardId)
   }
 
   public func clearFocus() {
-    let cardId: DivCardID? = lock.withLock {
-      if let cardId = focusedElement.cardId {
-        focusedElement = .none
-        return cardId
-      }
-      return nil
+    lock.withLock {
+      focusedElement = .none
     }
-
-    cardId.flatMap { focusUpdatesPipe.send($0) }
   }
 
   public func isFocused(element: IdAndCardId) -> Bool {

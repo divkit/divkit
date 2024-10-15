@@ -223,8 +223,7 @@ extension DivView: ElementStateObserver {
 
   public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.focusedElementChanged(isFocused: isFocused, forPath: path)
-    let states = divKitComponents.blockStateStorage.getStateUntyped(path).map { [path: $0] } ?? [:]
-    blockProvider?.update(withStates: states)
+    blockProvider?.update(path: path, isFocused: isFocused)
   }
 }
 

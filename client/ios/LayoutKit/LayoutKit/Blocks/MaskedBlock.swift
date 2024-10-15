@@ -45,4 +45,15 @@ extension MaskedBlock: ImageContaining {
   }
 }
 
+extension MaskedBlock: ElementFocusUpdating {
+  public func updated(path: UIElementPath, isFocused: Bool) throws -> MaskedBlock {
+    let newMaskBlock = try maskBlock.updated(path: path, isFocused: isFocused)
+    let newMaskedBlock = try maskedBlock.updated(path: path, isFocused: isFocused)
+    guard newMaskBlock !== maskBlock || newMaskedBlock !== maskedBlock else {
+      return self
+    }
+    return MaskedBlock(maskBlock: newMaskBlock, maskedBlock: newMaskedBlock)
+  }
+}
+
 extension MaskedBlock: LayoutCachingDefaultImpl {}
