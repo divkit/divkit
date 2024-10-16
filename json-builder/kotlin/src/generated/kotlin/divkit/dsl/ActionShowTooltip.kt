@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Shows tooltip.
+ * Shows the tooltip.
  * 
  * Can be created using the method [actionShowTooltip].
  * 
@@ -43,11 +43,11 @@ data class ActionShowTooltip internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Tooltip identifier.
+         * Tooltip ID.
          */
         val id: Property<String>?,
         /**
-         * Defines whether tooltip can be shown again after being closed.
+         * Sets whether the tooltip can be shown again after it’s closed.
          */
         val multiple: Property<Boolean>?,
     ) {
@@ -62,8 +62,8 @@ data class ActionShowTooltip internal constructor(
 }
 
 /**
- * @param id Tooltip identifier.
- * @param multiple Defines whether tooltip can be shown again after being closed.
+ * @param id Tooltip ID.
+ * @param multiple Sets whether the tooltip can be shown again after it’s closed.
  */
 @Generated
 fun DivScope.actionShowTooltip(
@@ -78,8 +78,8 @@ fun DivScope.actionShowTooltip(
 )
 
 /**
- * @param id Tooltip identifier.
- * @param multiple Defines whether tooltip can be shown again after being closed.
+ * @param id Tooltip ID.
+ * @param multiple Sets whether the tooltip can be shown again after it’s closed.
  */
 @Generated
 fun DivScope.actionShowTooltipProps(
@@ -92,8 +92,8 @@ fun DivScope.actionShowTooltipProps(
 )
 
 /**
- * @param id Tooltip identifier.
- * @param multiple Defines whether tooltip can be shown again after being closed.
+ * @param id Tooltip ID.
+ * @param multiple Sets whether the tooltip can be shown again after it’s closed.
  */
 @Generated
 fun TemplateScope.actionShowTooltipRefs(
@@ -106,8 +106,8 @@ fun TemplateScope.actionShowTooltipRefs(
 )
 
 /**
- * @param id Tooltip identifier.
- * @param multiple Defines whether tooltip can be shown again after being closed.
+ * @param id Tooltip ID.
+ * @param multiple Sets whether the tooltip can be shown again after it’s closed.
  */
 @Generated
 fun ActionShowTooltip.override(
@@ -122,8 +122,8 @@ fun ActionShowTooltip.override(
 )
 
 /**
- * @param id Tooltip identifier.
- * @param multiple Defines whether tooltip can be shown again after being closed.
+ * @param id Tooltip ID.
+ * @param multiple Sets whether the tooltip can be shown again after it’s closed.
  */
 @Generated
 fun ActionShowTooltip.defer(
@@ -138,8 +138,8 @@ fun ActionShowTooltip.defer(
 )
 
 /**
- * @param id Tooltip identifier.
- * @param multiple Defines whether tooltip can be shown again after being closed.
+ * @param id Tooltip ID.
+ * @param multiple Sets whether the tooltip can be shown again after it’s closed.
  */
 @Generated
 fun ActionShowTooltip.evaluate(

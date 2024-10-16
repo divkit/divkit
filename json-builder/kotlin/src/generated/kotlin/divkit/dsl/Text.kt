@@ -138,7 +138,7 @@ data class Text internal constructor(
          */
         val alpha: Property<Double>?,
         /**
-         * Declaration of animators that can be used to change the value of variables over time.
+         * Declaration of animators that change variable values over time.
          */
         val animators: Property<List<Animator>>?,
         /**
@@ -208,7 +208,7 @@ data class Text internal constructor(
          */
         val fontWeightValue: Property<Int>?,
         /**
-         * Custom functions.
+         * User functions.
          */
         val functions: Property<List<Function>>?,
         /**
@@ -225,7 +225,7 @@ data class Text internal constructor(
          */
         val images: Property<List<Image>>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -262,7 +262,7 @@ data class Text internal constructor(
          */
         val ranges: Property<List<Range>>?,
         /**
-         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -351,7 +351,7 @@ data class Text internal constructor(
          */
         val variableTriggers: Property<List<Trigger>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -538,7 +538,7 @@ data class Text internal constructor(
         data class Properties internal constructor(
             val accessibility: Property<Accessibility>?,
             /**
-             * Vertical text image alignment within a string.
+             * Vertical image alignment within the row.
              * Default value: `center`.
              */
             val alignmentVertical: Property<TextAlignmentVertical>?,
@@ -684,7 +684,7 @@ data class Text internal constructor(
              */
             val actions: Property<List<Action>>?,
             /**
-             * Vertical text range alignment within a string.
+             * Vertical text alignment within the row.
              */
             val alignmentVertical: Property<TextAlignmentVertical>?,
             /**
@@ -696,7 +696,7 @@ data class Text internal constructor(
              */
             val border: Property<TextRangeBorder>?,
             /**
-             * Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
+             * Ordinal number of the last character to be included in the range.
              */
             val end: Property<Int>?,
             /**
@@ -796,7 +796,7 @@ data class Text internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -812,11 +812,11 @@ data class Text internal constructor(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -825,7 +825,7 @@ data class Text internal constructor(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -845,7 +845,7 @@ data class Text internal constructor(
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -994,7 +994,7 @@ fun DivScope.text(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1010,11 +1010,11 @@ fun DivScope.text(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1023,7 +1023,7 @@ fun DivScope.text(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1043,7 +1043,7 @@ fun DivScope.text(
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1190,7 +1190,7 @@ fun DivScope.textProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1206,11 +1206,11 @@ fun DivScope.textProps(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1219,7 +1219,7 @@ fun DivScope.textProps(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1239,7 +1239,7 @@ fun DivScope.textProps(
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1386,7 +1386,7 @@ fun TemplateScope.textRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1402,11 +1402,11 @@ fun TemplateScope.textRefs(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1415,7 +1415,7 @@ fun TemplateScope.textRefs(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1435,7 +1435,7 @@ fun TemplateScope.textRefs(
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1584,7 +1584,7 @@ fun Text.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1600,11 +1600,11 @@ fun Text.override(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1613,7 +1613,7 @@ fun Text.override(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1633,7 +1633,7 @@ fun Text.override(
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1790,7 +1790,7 @@ fun Text.defer(
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param strike Strikethrough.
@@ -1910,7 +1910,7 @@ fun Text.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1926,11 +1926,11 @@ fun Text.evaluate(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -1939,7 +1939,7 @@ fun Text.evaluate(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1959,7 +1959,7 @@ fun Text.evaluate(
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -2109,7 +2109,7 @@ fun Component<Text>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -2125,11 +2125,11 @@ fun Component<Text>.override(
  * @param fontSize Font size.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param images Images embedded in text.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
@@ -2138,7 +2138,7 @@ fun Component<Text>.override(
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param paddings Internal margins from the element stroke.
  * @param ranges A character range in which additional style parameters can be set. Defined by mandatory `start` and `end` fields.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -2158,7 +2158,7 @@ fun Component<Text>.override(
  * @param truncate Text cropping method. Use `ellipsis` instead.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -2316,7 +2316,7 @@ fun Component<Text>.defer(
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
  * @param strike Strikethrough.
@@ -2563,7 +2563,7 @@ fun Text.Ellipsis.evaluate(
 fun Text.Ellipsis.asList() = listOf(this)
 
 /**
- * @param alignmentVertical Vertical text image alignment within a string.
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2599,7 +2599,7 @@ fun DivScope.textImage(
 )
 
 /**
- * @param alignmentVertical Vertical text image alignment within a string.
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2633,7 +2633,7 @@ fun DivScope.textImageProps(
 )
 
 /**
- * @param alignmentVertical Vertical text image alignment within a string.
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2667,7 +2667,7 @@ fun TemplateScope.textImageRefs(
 )
 
 /**
- * @param alignmentVertical Vertical text image alignment within a string.
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2703,7 +2703,7 @@ fun Text.Image.override(
 )
 
 /**
- * @param alignmentVertical Vertical text image alignment within a string.
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param height Image height.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -2739,7 +2739,7 @@ fun Text.Image.defer(
 )
 
 /**
- * @param alignmentVertical Vertical text image alignment within a string.
+ * @param alignmentVertical Vertical image alignment within the row.
  * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
@@ -2774,10 +2774,10 @@ fun Text.Image.asList() = listOf(this)
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text range alignment within a string.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
+ * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2841,10 +2841,10 @@ fun DivScope.textRange(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text range alignment within a string.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
+ * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2906,10 +2906,10 @@ fun DivScope.textRangeProps(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text range alignment within a string.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
+ * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -2971,10 +2971,10 @@ fun TemplateScope.textRangeRefs(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text range alignment within a string.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
+ * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3038,10 +3038,10 @@ fun Text.Range.override(
 
 /**
  * @param actions Action when clicking on text.
- * @param alignmentVertical Vertical text range alignment within a string.
+ * @param alignmentVertical Vertical text alignment within the row.
  * @param background Character range background.
  * @param border Character range border.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
+ * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.
@@ -3104,8 +3104,8 @@ fun Text.Range.defer(
 )
 
 /**
- * @param alignmentVertical Vertical text range alignment within a string.
- * @param end Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text
+ * @param alignmentVertical Vertical text alignment within the row.
+ * @param end Ordinal number of the last character to be included in the range.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontFeatureSettings List of OpenType font features. The format matches the CSS attribute "font-feature-settings". Learn more: https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop
  * @param fontSize Font size.

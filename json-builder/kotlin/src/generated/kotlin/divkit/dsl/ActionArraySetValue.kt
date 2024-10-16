@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Sets value in the array.
+ * Sets the value in the array by index.
  * 
  * Can be created using the method [actionArraySetValue].
  * 

@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Controls given video.
+ * Manages video playback.
  * 
  * Can be created using the method [actionVideo].
  * 
@@ -43,11 +43,11 @@ data class ActionVideo internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
+         * Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
          */
         val action: Property<Action>?,
         /**
-         * Video identifier.
+         * Video ID.
          */
         val id: Property<String>?,
     ) {
@@ -61,7 +61,7 @@ data class ActionVideo internal constructor(
     }
 
     /**
-     * Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
+     * Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
      * 
      * Possible values: [start], [pause].
      */
@@ -70,8 +70,8 @@ data class ActionVideo internal constructor(
 }
 
 /**
- * @param action Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
- * @param id Video identifier.
+ * @param action Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
+ * @param id Video ID.
  */
 @Generated
 fun DivScope.actionVideo(
@@ -86,8 +86,8 @@ fun DivScope.actionVideo(
 )
 
 /**
- * @param action Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
- * @param id Video identifier.
+ * @param action Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
+ * @param id Video ID.
  */
 @Generated
 fun DivScope.actionVideoProps(
@@ -100,8 +100,8 @@ fun DivScope.actionVideoProps(
 )
 
 /**
- * @param action Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
- * @param id Video identifier.
+ * @param action Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
+ * @param id Video ID.
  */
 @Generated
 fun TemplateScope.actionVideoRefs(
@@ -114,8 +114,8 @@ fun TemplateScope.actionVideoRefs(
 )
 
 /**
- * @param action Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
- * @param id Video identifier.
+ * @param action Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
+ * @param id Video ID.
  */
 @Generated
 fun ActionVideo.override(
@@ -130,8 +130,8 @@ fun ActionVideo.override(
 )
 
 /**
- * @param action Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
- * @param id Video identifier.
+ * @param action Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
+ * @param id Video ID.
  */
 @Generated
 fun ActionVideo.defer(
@@ -146,8 +146,8 @@ fun ActionVideo.defer(
 )
 
 /**
- * @param action Defines video action:<li>`start` - play if it is ready or plans to play when video becomes ready;</li><li>`pause` - pauses video playback.</li>
- * @param id Video identifier.
+ * @param action Defines the action for the video: <li>`start` — starts playing the video if the video is ready to be played, or schedules playback</li><li>`pause' — stops the video playback</li>
+ * @param id Video ID.
  */
 @Generated
 fun ActionVideo.evaluate(

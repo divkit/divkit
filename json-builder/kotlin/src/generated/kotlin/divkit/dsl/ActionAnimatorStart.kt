@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Starts specified animator
+ * Launches the specified animator.
  * 
  * Can be created using the method [actionAnimatorStart].
  * 
@@ -49,11 +49,11 @@ data class ActionAnimatorStart internal constructor(
 
     data class Properties internal constructor(
         /**
-         * The identifier of the animator being started.
+         * ID of the animator launched.
          */
         val animatorId: Property<String>?,
         /**
-         * Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+         * Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
          */
         val direction: Property<AnimationDirection>?,
         /**
@@ -61,23 +61,23 @@ data class ActionAnimatorStart internal constructor(
          */
         val duration: Property<Long>?,
         /**
-         * Overrides value that will be set at the end of animation.
+         * Overrides the value that will be set after the animation finishes.
          */
         val endValue: Property<TypedValue>?,
         /**
-         * Interpolation function.
+         * Animated value interpolation function.
          */
         val interpolator: Property<AnimationInterpolator>?,
         /**
-         * The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+         * Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
          */
         val repeatCount: Property<Count>?,
         /**
-         * Animation start delay in milliseconds.
+         * Delay before the animation is launched in milliseconds.
          */
         val startDelay: Property<Int>?,
         /**
-         * Overrides value that will be set at the start of animation.
+         * Overrides the value that will be set before the animation begins.
          */
         val startValue: Property<TypedValue>?,
     ) {
@@ -98,14 +98,14 @@ data class ActionAnimatorStart internal constructor(
 }
 
 /**
- * @param animatorId The identifier of the animator being started.
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param animatorId ID of the animator launched.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endValue Overrides value that will be set at the end of animation.
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Overrides value that will be set at the start of animation.
+ * @param endValue Overrides the value that will be set after the animation finishes.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue Overrides the value that will be set before the animation begins.
  */
 @Generated
 fun DivScope.actionAnimatorStart(
@@ -132,14 +132,14 @@ fun DivScope.actionAnimatorStart(
 )
 
 /**
- * @param animatorId The identifier of the animator being started.
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param animatorId ID of the animator launched.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endValue Overrides value that will be set at the end of animation.
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Overrides value that will be set at the start of animation.
+ * @param endValue Overrides the value that will be set after the animation finishes.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue Overrides the value that will be set before the animation begins.
  */
 @Generated
 fun DivScope.actionAnimatorStartProps(
@@ -164,14 +164,14 @@ fun DivScope.actionAnimatorStartProps(
 )
 
 /**
- * @param animatorId The identifier of the animator being started.
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param animatorId ID of the animator launched.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endValue Overrides value that will be set at the end of animation.
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Overrides value that will be set at the start of animation.
+ * @param endValue Overrides the value that will be set after the animation finishes.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue Overrides the value that will be set before the animation begins.
  */
 @Generated
 fun TemplateScope.actionAnimatorStartRefs(
@@ -196,14 +196,14 @@ fun TemplateScope.actionAnimatorStartRefs(
 )
 
 /**
- * @param animatorId The identifier of the animator being started.
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param animatorId ID of the animator launched.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endValue Overrides value that will be set at the end of animation.
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Overrides value that will be set at the start of animation.
+ * @param endValue Overrides the value that will be set after the animation finishes.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue Overrides the value that will be set before the animation begins.
  */
 @Generated
 fun ActionAnimatorStart.override(
@@ -230,14 +230,14 @@ fun ActionAnimatorStart.override(
 )
 
 /**
- * @param animatorId The identifier of the animator being started.
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param animatorId ID of the animator launched.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endValue Overrides value that will be set at the end of animation.
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Overrides value that will be set at the start of animation.
+ * @param endValue Overrides the value that will be set after the animation finishes.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue Overrides the value that will be set before the animation begins.
  */
 @Generated
 fun ActionAnimatorStart.defer(
@@ -264,10 +264,10 @@ fun ActionAnimatorStart.defer(
 )
 
 /**
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param interpolator Interpolation function.
- * @param startDelay Animation start delay in milliseconds.
+ * @param interpolator Animated value interpolation function.
+ * @param startDelay Delay before the animation is launched in milliseconds.
  */
 @Generated
 fun ActionAnimatorStart.evaluate(

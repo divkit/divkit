@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Stops specified animator
+ * Stops the specified animator.
  * 
  * Can be created using the method [actionAnimatorStop].
  * 

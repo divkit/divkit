@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Regex filter.
+ * Filter based on regular expressions.
  * 
  * Can be created using the method [inputFilterRegex].
  * 
@@ -42,7 +42,7 @@ data class InputFilterRegex internal constructor(
 
     data class Properties internal constructor(
         /**
-         * A regular expression (pattern) that the input value must match.
+         * Regular expression (pattern) that the entered value must match.
          */
         val pattern: Property<String>?,
     ) {
@@ -56,7 +56,7 @@ data class InputFilterRegex internal constructor(
 }
 
 /**
- * @param pattern A regular expression (pattern) that the input value must match.
+ * @param pattern Regular expression (pattern) that the entered value must match.
  */
 @Generated
 fun DivScope.inputFilterRegex(
@@ -69,7 +69,7 @@ fun DivScope.inputFilterRegex(
 )
 
 /**
- * @param pattern A regular expression (pattern) that the input value must match.
+ * @param pattern Regular expression (pattern) that the entered value must match.
  */
 @Generated
 fun DivScope.inputFilterRegexProps(
@@ -80,7 +80,7 @@ fun DivScope.inputFilterRegexProps(
 )
 
 /**
- * @param pattern A regular expression (pattern) that the input value must match.
+ * @param pattern Regular expression (pattern) that the entered value must match.
  */
 @Generated
 fun TemplateScope.inputFilterRegexRefs(
@@ -91,7 +91,7 @@ fun TemplateScope.inputFilterRegexRefs(
 )
 
 /**
- * @param pattern A regular expression (pattern) that the input value must match.
+ * @param pattern Regular expression (pattern) that the entered value must match.
  */
 @Generated
 fun InputFilterRegex.override(
@@ -104,7 +104,7 @@ fun InputFilterRegex.override(
 )
 
 /**
- * @param pattern A regular expression (pattern) that the input value must match.
+ * @param pattern Regular expression (pattern) that the entered value must match.
  */
 @Generated
 fun InputFilterRegex.defer(
@@ -117,7 +117,7 @@ fun InputFilterRegex.defer(
 )
 
 /**
- * @param pattern A regular expression (pattern) that the input value must match.
+ * @param pattern Regular expression (pattern) that the entered value must match.
  */
 @Generated
 fun InputFilterRegex.evaluate(

@@ -93,7 +93,7 @@ data class Custom internal constructor(
          */
         val alpha: Property<Double>?,
         /**
-         * Declaration of animators that can be used to change the value of variables over time.
+         * Declaration of animators that change variable values over time.
          */
         val animators: Property<List<Animator>>?,
         /**
@@ -129,7 +129,7 @@ data class Custom internal constructor(
          */
         val focus: Property<Focus>?,
         /**
-         * Custom functions.
+         * User functions.
          */
         val functions: Property<List<Function>>?,
         /**
@@ -146,7 +146,7 @@ data class Custom internal constructor(
          */
         val items: Property<List<Div>>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -158,7 +158,7 @@ data class Custom internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -198,7 +198,7 @@ data class Custom internal constructor(
          */
         val variableTriggers: Property<List<Trigger>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -268,7 +268,7 @@ data class Custom internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -277,14 +277,14 @@ data class Custom internal constructor(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -294,7 +294,7 @@ data class Custom internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -383,7 +383,7 @@ fun DivScope.custom(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -392,14 +392,14 @@ fun DivScope.custom(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -409,7 +409,7 @@ fun DivScope.custom(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -496,7 +496,7 @@ fun DivScope.customProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -505,14 +505,14 @@ fun DivScope.customProps(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -522,7 +522,7 @@ fun DivScope.customProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -609,7 +609,7 @@ fun TemplateScope.customRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -618,14 +618,14 @@ fun TemplateScope.customRefs(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -635,7 +635,7 @@ fun TemplateScope.customRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -724,7 +724,7 @@ fun Custom.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -733,14 +733,14 @@ fun Custom.override(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -750,7 +750,7 @@ fun Custom.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -839,7 +839,7 @@ fun Custom.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -898,7 +898,7 @@ fun Custom.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -907,14 +907,14 @@ fun Custom.evaluate(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -924,7 +924,7 @@ fun Custom.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1014,7 +1014,7 @@ fun Component<Custom>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
@@ -1023,14 +1023,14 @@ fun Component<Custom>.override(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param items Nested elements.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1040,7 +1040,7 @@ fun Component<Custom>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1130,7 +1130,7 @@ fun Component<Custom>.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */

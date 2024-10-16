@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Loads more data in the form of a `div-patch` and updates current element,
+ * Loads additional data in `div-patch` format and updates the current element.
  * 
  * Can be created using the method [actionDownload].
  * 
@@ -52,7 +52,7 @@ data class ActionDownload internal constructor(
          */
         val onSuccessActions: Property<List<Action>>?,
         /**
-         * URL to get the patch.
+         * Link for receiving changes.
          */
         val url: Property<String>?,
     ) {
@@ -70,7 +70,7 @@ data class ActionDownload internal constructor(
 /**
  * @param onFailActions Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
  * @param onSuccessActions Actions in case of successful loading.
- * @param url URL to get the patch.
+ * @param url Link for receiving changes.
  */
 @Generated
 fun DivScope.actionDownload(
@@ -89,7 +89,7 @@ fun DivScope.actionDownload(
 /**
  * @param onFailActions Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
  * @param onSuccessActions Actions in case of successful loading.
- * @param url URL to get the patch.
+ * @param url Link for receiving changes.
  */
 @Generated
 fun DivScope.actionDownloadProps(
@@ -106,7 +106,7 @@ fun DivScope.actionDownloadProps(
 /**
  * @param onFailActions Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
  * @param onSuccessActions Actions in case of successful loading.
- * @param url URL to get the patch.
+ * @param url Link for receiving changes.
  */
 @Generated
 fun TemplateScope.actionDownloadRefs(
@@ -123,7 +123,7 @@ fun TemplateScope.actionDownloadRefs(
 /**
  * @param onFailActions Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
  * @param onSuccessActions Actions in case of successful loading.
- * @param url URL to get the patch.
+ * @param url Link for receiving changes.
  */
 @Generated
 fun ActionDownload.override(
@@ -142,7 +142,7 @@ fun ActionDownload.override(
 /**
  * @param onFailActions Actions in case of unsuccessful loading if the host reported it or the waiting time expired.
  * @param onSuccessActions Actions in case of successful loading.
- * @param url URL to get the patch.
+ * @param url Link for receiving changes.
  */
 @Generated
 fun ActionDownload.defer(
@@ -159,7 +159,7 @@ fun ActionDownload.defer(
 )
 
 /**
- * @param url URL to get the patch.
+ * @param url Link for receiving changes.
  */
 @Generated
 fun ActionDownload.evaluate(

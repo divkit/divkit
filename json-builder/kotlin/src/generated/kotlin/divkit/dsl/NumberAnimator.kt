@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Number animator.
+ * Numeric value animator.
  * 
  * Can be created using the method [numberAnimator].
  * 
@@ -52,11 +52,11 @@ data class NumberAnimator internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received
+         * Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
          */
         val cancelActions: Property<List<Action>>?,
         /**
-         * Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+         * Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
          * Default value: `normal`.
          */
         val direction: Property<AnimationDirection>?,
@@ -65,34 +65,34 @@ data class NumberAnimator internal constructor(
          */
         val duration: Property<Long>?,
         /**
-         * Actions performed when the animator completes animation.
+         * Actions to be performed after the animator finishes.
          */
         val endActions: Property<List<Action>>?,
         /**
-         * Value that will be set at the end of animation.
+         * The value the variable will have when the animation ends.
          */
         val endValue: Property<Double>?,
         /**
-         * Animator identificator
+         * Animator ID.
          */
         val id: Property<String>?,
         /**
-         * Interpolation function.
+         * Animated value interpolation function.
          * Default value: `linear`.
          */
         val interpolator: Property<AnimationInterpolator>?,
         /**
-         * The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
+         * Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
          * Default value: `{"type": "fixed", "value": 1}`.
          */
         val repeatCount: Property<Count>?,
         /**
-         * Animation start delay in milliseconds.
+         * Delay before the animation is launched in milliseconds.
          * Default value: `0`.
          */
         val startDelay: Property<Int>?,
         /**
-         * Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
+         * The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
          */
         val startValue: Property<Double>?,
         /**
@@ -120,16 +120,16 @@ data class NumberAnimator internal constructor(
 }
 
 /**
- * @param cancelActions Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions performed when the animator completes animation.
- * @param endValue Value that will be set at the end of animation.
- * @param id Animator identificator
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
+ * @param endActions Actions to be performed after the animator finishes.
+ * @param endValue The value the variable will have when the animation ends.
+ * @param id Animator ID.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
  * @param variableName Name of the variable being animated.
  */
 @Generated
@@ -163,16 +163,16 @@ fun DivScope.numberAnimator(
 )
 
 /**
- * @param cancelActions Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions performed when the animator completes animation.
- * @param endValue Value that will be set at the end of animation.
- * @param id Animator identificator
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
+ * @param endActions Actions to be performed after the animator finishes.
+ * @param endValue The value the variable will have when the animation ends.
+ * @param id Animator ID.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
  * @param variableName Name of the variable being animated.
  */
 @Generated
@@ -204,16 +204,16 @@ fun DivScope.numberAnimatorProps(
 )
 
 /**
- * @param cancelActions Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions performed when the animator completes animation.
- * @param endValue Value that will be set at the end of animation.
- * @param id Animator identificator
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
+ * @param endActions Actions to be performed after the animator finishes.
+ * @param endValue The value the variable will have when the animation ends.
+ * @param id Animator ID.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
  * @param variableName Name of the variable being animated.
  */
 @Generated
@@ -245,16 +245,16 @@ fun TemplateScope.numberAnimatorRefs(
 )
 
 /**
- * @param cancelActions Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions performed when the animator completes animation.
- * @param endValue Value that will be set at the end of animation.
- * @param id Animator identificator
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
+ * @param endActions Actions to be performed after the animator finishes.
+ * @param endValue The value the variable will have when the animation ends.
+ * @param id Animator ID.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
  * @param variableName Name of the variable being animated.
  */
 @Generated
@@ -288,16 +288,16 @@ fun NumberAnimator.override(
 )
 
 /**
- * @param cancelActions Actions performed when the animator is cancelled. For example, when an action with `animator_stop` type is received
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param cancelActions Actions to be performed if the animator is canceled. For example, when a command with the type `animator_stop` is received.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endActions Actions performed when the animator completes animation.
- * @param endValue Value that will be set at the end of animation.
- * @param id Animator identificator
- * @param interpolator Interpolation function.
- * @param repeatCount The number of times the animation will repeat before it finishes. `0` enables infinite repeats.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
+ * @param endActions Actions to be performed after the animator finishes.
+ * @param endValue The value the variable will have when the animation ends.
+ * @param id Animator ID.
+ * @param interpolator Animated value interpolation function.
+ * @param repeatCount Number of times the animation will repeat before stopping. A value of `0` enables infinite looping.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
  * @param variableName Name of the variable being animated.
  */
 @Generated
@@ -331,12 +331,12 @@ fun NumberAnimator.defer(
 )
 
 /**
- * @param direction Animation direction. This property sets whether an animation should play forward, backward, or alternate back and forth between playing the sequence forward and backward.
+ * @param direction Animation direction. Determines whether the animation should be played forward, backward, or alternate between forward and backward.
  * @param duration Animation duration in milliseconds.
- * @param endValue Value that will be set at the end of animation.
- * @param interpolator Interpolation function.
- * @param startDelay Animation start delay in milliseconds.
- * @param startValue Value that will be set at the start of animation. Can be omitted, in which case current value of the variable will be used.
+ * @param endValue The value the variable will have when the animation ends.
+ * @param interpolator Animated value interpolation function.
+ * @param startDelay Delay before the animation is launched in milliseconds.
+ * @param startValue The value the variable will have when the animation starts. If the property isn't specified, the current value of the variable will be used.
  */
 @Generated
 fun NumberAnimator.evaluate(

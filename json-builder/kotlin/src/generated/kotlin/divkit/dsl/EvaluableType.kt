@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * The type used in function arguments and return values.
+ * Type used for function arguments and return values.
  * 
  * Possible values: [string], [integer], [number], [boolean], [datetime], [color], [url], [dict], [array].
  */

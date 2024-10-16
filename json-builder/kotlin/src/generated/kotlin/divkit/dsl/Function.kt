@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Custom function.
+ * User-defined function.
  * 
  * Can be created using the method [function].
  * 
@@ -47,7 +47,7 @@ data class Function internal constructor(
          */
         val arguments: Property<List<FunctionArgument>>?,
         /**
-         * Function body. Evaluated as an expression with the passed arguments. Does not capture external variables
+         * Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.
          */
         val body: Property<String>?,
         /**
@@ -55,7 +55,7 @@ data class Function internal constructor(
          */
         val name: Property<String>?,
         /**
-         * Return type.
+         * Return value type.
          */
         val returnType: Property<EvaluableType>?,
     ) {
@@ -73,9 +73,9 @@ data class Function internal constructor(
 
 /**
  * @param arguments Function argument.
- * @param body Function body. Evaluated as an expression with the passed arguments. Does not capture external variables
+ * @param body Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.
  * @param name Function name.
- * @param returnType Return type.
+ * @param returnType Return value type.
  */
 @Generated
 fun DivScope.function(
@@ -95,9 +95,9 @@ fun DivScope.function(
 
 /**
  * @param arguments Function argument.
- * @param body Function body. Evaluated as an expression with the passed arguments. Does not capture external variables
+ * @param body Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.
  * @param name Function name.
- * @param returnType Return type.
+ * @param returnType Return value type.
  */
 @Generated
 fun DivScope.functionProps(
@@ -115,9 +115,9 @@ fun DivScope.functionProps(
 
 /**
  * @param arguments Function argument.
- * @param body Function body. Evaluated as an expression with the passed arguments. Does not capture external variables
+ * @param body Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.
  * @param name Function name.
- * @param returnType Return type.
+ * @param returnType Return value type.
  */
 @Generated
 fun TemplateScope.functionRefs(
@@ -135,9 +135,9 @@ fun TemplateScope.functionRefs(
 
 /**
  * @param arguments Function argument.
- * @param body Function body. Evaluated as an expression with the passed arguments. Does not capture external variables
+ * @param body Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.
  * @param name Function name.
- * @param returnType Return type.
+ * @param returnType Return value type.
  */
 @Generated
 fun Function.override(
@@ -157,9 +157,9 @@ fun Function.override(
 
 /**
  * @param arguments Function argument.
- * @param body Function body. Evaluated as an expression with the passed arguments. Does not capture external variables
+ * @param body Function body. Evaluated as an expression using the passed arguments. Doesn't capture external variables.
  * @param name Function name.
- * @param returnType Return type.
+ * @param returnType Return value type.
  */
 @Generated
 fun Function.defer(

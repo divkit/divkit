@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * [Calculated expression](../../expressions) filter.
+ * Filter based on [calculated expressions](../../expressions).
  * 
  * Can be created using the method [inputFilterExpression].
  * 
@@ -42,7 +42,7 @@ data class InputFilterExpression internal constructor(
 
     data class Properties internal constructor(
         /**
-         * [Calculated expression](../../expressions) used as a value validity condition.
+         * [Calculated expression](../../expressions) used to verify the validity of the value.
          */
         val condition: Property<Boolean>?,
     ) {
@@ -56,7 +56,7 @@ data class InputFilterExpression internal constructor(
 }
 
 /**
- * @param condition [Calculated expression](../../expressions) used as a value validity condition.
+ * @param condition [Calculated expression](../../expressions) used to verify the validity of the value.
  */
 @Generated
 fun DivScope.inputFilterExpression(
@@ -69,7 +69,7 @@ fun DivScope.inputFilterExpression(
 )
 
 /**
- * @param condition [Calculated expression](../../expressions) used as a value validity condition.
+ * @param condition [Calculated expression](../../expressions) used to verify the validity of the value.
  */
 @Generated
 fun DivScope.inputFilterExpressionProps(
@@ -80,7 +80,7 @@ fun DivScope.inputFilterExpressionProps(
 )
 
 /**
- * @param condition [Calculated expression](../../expressions) used as a value validity condition.
+ * @param condition [Calculated expression](../../expressions) used to verify the validity of the value.
  */
 @Generated
 fun TemplateScope.inputFilterExpressionRefs(
@@ -91,7 +91,7 @@ fun TemplateScope.inputFilterExpressionRefs(
 )
 
 /**
- * @param condition [Calculated expression](../../expressions) used as a value validity condition.
+ * @param condition [Calculated expression](../../expressions) used to verify the validity of the value.
  */
 @Generated
 fun InputFilterExpression.override(
@@ -104,7 +104,7 @@ fun InputFilterExpression.override(
 )
 
 /**
- * @param condition [Calculated expression](../../expressions) used as a value validity condition.
+ * @param condition [Calculated expression](../../expressions) used to verify the validity of the value.
  */
 @Generated
 fun InputFilterExpression.defer(
@@ -117,7 +117,7 @@ fun InputFilterExpression.defer(
 )
 
 /**
- * @param condition [Calculated expression](../../expressions) used as a value validity condition.
+ * @param condition [Calculated expression](../../expressions) used to verify the validity of the value.
  */
 @Generated
 fun InputFilterExpression.evaluate(

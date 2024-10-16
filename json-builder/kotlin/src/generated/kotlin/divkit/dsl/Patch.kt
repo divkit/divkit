@@ -43,11 +43,11 @@ data class Patch internal constructor(
          */
         val mode: Property<Mode>?,
         /**
-         * Actions after applying patch.
+         * Actions to perform after changes are applied.
          */
         val onAppliedActions: Property<List<Action>>?,
         /**
-         * Actions after an error applying patch in transactional mode.
+         * Actions to perform if there’s an error when applying changes in transaction mode.
          */
         val onFailedActions: Property<List<Action>>?,
     ) {
@@ -115,8 +115,8 @@ data class Patch internal constructor(
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
- * @param onAppliedActions Actions after applying patch.
- * @param onFailedActions Actions after an error applying patch in transactional mode.
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun DivScope.patch(
@@ -137,8 +137,8 @@ fun DivScope.patch(
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
- * @param onAppliedActions Actions after applying patch.
- * @param onFailedActions Actions after an error applying patch in transactional mode.
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun DivScope.patchProps(
@@ -157,8 +157,8 @@ fun DivScope.patchProps(
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
- * @param onAppliedActions Actions after applying patch.
- * @param onFailedActions Actions after an error applying patch in transactional mode.
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun TemplateScope.patchRefs(
@@ -177,8 +177,8 @@ fun TemplateScope.patchRefs(
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
- * @param onAppliedActions Actions after applying patch.
- * @param onFailedActions Actions after an error applying patch in transactional mode.
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun Patch.override(
@@ -199,8 +199,8 @@ fun Patch.override(
 /**
  * @param changes Element changes.
  * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
- * @param onAppliedActions Actions after applying patch.
- * @param onFailedActions Actions after an error applying patch in transactional mode.
+ * @param onAppliedActions Actions to perform after changes are applied.
+ * @param onFailedActions Actions to perform if there’s an error when applying changes in transaction mode.
  */
 @Generated
 fun Patch.defer(

@@ -101,7 +101,7 @@ data class Gallery internal constructor(
          */
         val alpha: Property<Double>?,
         /**
-         * Declaration of animators that can be used to change the value of variables over time.
+         * Declaration of animators that change variable values over time.
          */
         val animators: Property<List<Animator>>?,
         /**
@@ -147,7 +147,7 @@ data class Gallery internal constructor(
          */
         val focus: Property<Focus>?,
         /**
-         * Custom functions.
+         * User functions.
          */
         val functions: Property<List<Function>>?,
         /**
@@ -173,7 +173,7 @@ data class Gallery internal constructor(
          */
         val items: Property<List<Div>>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -195,7 +195,7 @@ data class Gallery internal constructor(
          */
         val restrictParentScroll: Property<Boolean>?,
         /**
-         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -245,7 +245,7 @@ data class Gallery internal constructor(
          */
         val variableTriggers: Property<List<Trigger>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -355,7 +355,7 @@ data class Gallery internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -366,18 +366,18 @@ data class Gallery internal constructor(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -389,7 +389,7 @@ data class Gallery internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -494,7 +494,7 @@ fun DivScope.gallery(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -505,18 +505,18 @@ fun DivScope.gallery(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -528,7 +528,7 @@ fun DivScope.gallery(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -631,7 +631,7 @@ fun DivScope.galleryProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -642,18 +642,18 @@ fun DivScope.galleryProps(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -665,7 +665,7 @@ fun DivScope.galleryProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -768,7 +768,7 @@ fun TemplateScope.galleryRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -779,18 +779,18 @@ fun TemplateScope.galleryRefs(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -802,7 +802,7 @@ fun TemplateScope.galleryRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -907,7 +907,7 @@ fun Gallery.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -918,18 +918,18 @@ fun Gallery.override(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -941,7 +941,7 @@ fun Gallery.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1053,7 +1053,7 @@ fun Gallery.defer(
  * @param itemSpacing Spacing between elements.
  * @param orientation Gallery orientation.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -1131,7 +1131,7 @@ fun Gallery.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -1142,18 +1142,18 @@ fun Gallery.evaluate(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -1165,7 +1165,7 @@ fun Gallery.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1271,7 +1271,7 @@ fun Component<Gallery>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnCount Number of columns for block layout.
@@ -1282,18 +1282,18 @@ fun Component<Gallery>.override(
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param orientation Gallery orientation.
  * @param paddings Internal margins from the element stroke.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
@@ -1305,7 +1305,7 @@ fun Component<Gallery>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1418,7 +1418,7 @@ fun Component<Gallery>.defer(
  * @param itemSpacing Spacing between elements.
  * @param orientation Gallery orientation.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>

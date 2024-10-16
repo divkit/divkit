@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Hides tooltip.
+ * Hides the tooltip.
  * 
  * Can be created using the method [actionHideTooltip].
  * 
@@ -42,7 +42,7 @@ data class ActionHideTooltip internal constructor(
 
     data class Properties internal constructor(
         /**
-         * Tooltip identifier.
+         * Tooltip ID.
          */
         val id: Property<String>?,
     ) {
@@ -56,7 +56,7 @@ data class ActionHideTooltip internal constructor(
 }
 
 /**
- * @param id Tooltip identifier.
+ * @param id Tooltip ID.
  */
 @Generated
 fun DivScope.actionHideTooltip(
@@ -69,7 +69,7 @@ fun DivScope.actionHideTooltip(
 )
 
 /**
- * @param id Tooltip identifier.
+ * @param id Tooltip ID.
  */
 @Generated
 fun DivScope.actionHideTooltipProps(
@@ -80,7 +80,7 @@ fun DivScope.actionHideTooltipProps(
 )
 
 /**
- * @param id Tooltip identifier.
+ * @param id Tooltip ID.
  */
 @Generated
 fun TemplateScope.actionHideTooltipRefs(
@@ -91,7 +91,7 @@ fun TemplateScope.actionHideTooltipRefs(
 )
 
 /**
- * @param id Tooltip identifier.
+ * @param id Tooltip ID.
  */
 @Generated
 fun ActionHideTooltip.override(
@@ -104,7 +104,7 @@ fun ActionHideTooltip.override(
 )
 
 /**
- * @param id Tooltip identifier.
+ * @param id Tooltip ID.
  */
 @Generated
 fun ActionHideTooltip.defer(
@@ -117,7 +117,7 @@ fun ActionHideTooltip.defer(
 )
 
 /**
- * @param id Tooltip identifier.
+ * @param id Tooltip ID.
  */
 @Generated
 fun ActionHideTooltip.evaluate(

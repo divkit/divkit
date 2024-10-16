@@ -114,11 +114,11 @@ data class Input internal constructor(
          */
         val alpha: Property<Double>?,
         /**
-         * Declaration of animators that can be used to change the value of variables over time.
+         * Declaration of animators that change variable values over time.
          */
         val animators: Property<List<Animator>>?,
         /**
-         * Automatic text capitalization type.
+         * Text auto-capitalization type.
          * Default value: `auto`.
          */
         val autocapitalization: Property<Autocapitalization>?,
@@ -143,7 +143,7 @@ data class Input internal constructor(
          */
         val extensions: Property<List<Extension>>?,
         /**
-         * Filtering that prevents the entry of text that does not meet specified conditions.
+         * Filter that prevents users from entering text that doesn't satisfy the specified conditions.
          */
         val filters: Property<List<InputFilter>>?,
         /**
@@ -174,7 +174,7 @@ data class Input internal constructor(
          */
         val fontWeightValue: Property<Int>?,
         /**
-         * Custom functions.
+         * User functions.
          */
         val functions: Property<List<Function>>?,
         /**
@@ -200,7 +200,7 @@ data class Input internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Indicates if the text editing is enabled.
+         * Enables or disables text editing.
          * Default value: `true`.
          */
         val isEnabled: Property<Boolean>?,
@@ -210,7 +210,7 @@ data class Input internal constructor(
          */
         val keyboardType: Property<KeyboardType>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -247,7 +247,7 @@ data class Input internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -315,7 +315,7 @@ data class Input internal constructor(
          */
         val variableTriggers: Property<List<Trigger>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -401,7 +401,7 @@ data class Input internal constructor(
     }
 
     /**
-     * Automatic text capitalization type.
+     * Text auto-capitalization type.
      * 
      * Possible values: [auto], [none], [words], [sentences], [all_characters].
      */
@@ -459,29 +459,29 @@ data class Input internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
- * @param autocapitalization Automatic text capitalization type.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
- * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -490,7 +490,7 @@ data class Input internal constructor(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -506,7 +506,7 @@ data class Input internal constructor(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -637,29 +637,29 @@ fun DivScope.input(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
- * @param autocapitalization Automatic text capitalization type.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
- * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -668,7 +668,7 @@ fun DivScope.input(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -684,7 +684,7 @@ fun DivScope.input(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -813,29 +813,29 @@ fun DivScope.inputProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
- * @param autocapitalization Automatic text capitalization type.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
- * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -844,7 +844,7 @@ fun DivScope.inputProps(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -860,7 +860,7 @@ fun DivScope.inputProps(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -989,29 +989,29 @@ fun TemplateScope.inputRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
- * @param autocapitalization Automatic text capitalization type.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
- * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1020,7 +1020,7 @@ fun TemplateScope.inputRefs(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1036,7 +1036,7 @@ fun TemplateScope.inputRefs(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1167,29 +1167,29 @@ fun Input.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
- * @param autocapitalization Automatic text capitalization type.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
- * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1198,7 +1198,7 @@ fun Input.override(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1214,7 +1214,7 @@ fun Input.override(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1344,7 +1344,7 @@ fun Input.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param autocapitalization Automatic text capitalization type.
+ * @param autocapitalization Text auto-capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1354,13 +1354,13 @@ fun Input.defer(
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param textAlignmentHorizontal Horizontal text alignment.
@@ -1463,29 +1463,29 @@ fun Input.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
- * @param autocapitalization Automatic text capitalization type.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
- * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1494,7 +1494,7 @@ fun Input.evaluate(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1510,7 +1510,7 @@ fun Input.evaluate(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1642,29 +1642,29 @@ fun Component<Input>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
- * @param autocapitalization Automatic text capitalization type.
+ * @param animators Declaration of animators that change variable values over time.
+ * @param autocapitalization Text auto-capitalization type.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
- * @param filters Filtering that prevents the entry of text that does not meet specified conditions.
+ * @param filters Filter that prevents users from entering text that doesn't satisfy the specified conditions.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
  * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
@@ -1673,7 +1673,7 @@ fun Component<Input>.override(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1689,7 +1689,7 @@ fun Component<Input>.override(
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param validators Validator that checks that the field value meets the specified conditions.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1820,7 +1820,7 @@ fun Component<Input>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param autocapitalization Automatic text capitalization type.
+ * @param autocapitalization Text auto-capitalization type.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
@@ -1830,13 +1830,13 @@ fun Component<Input>.defer(
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
- * @param isEnabled Indicates if the text editing is enabled.
+ * @param isEnabled Enables or disables text editing.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param maxLength Maximum number of characters that can be entered in the input field.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param textAlignmentHorizontal Horizontal text alignment.

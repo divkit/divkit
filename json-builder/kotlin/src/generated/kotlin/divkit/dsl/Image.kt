@@ -125,7 +125,7 @@ data class Image internal constructor(
          */
         val alpha: Property<Double>?,
         /**
-         * Declaration of animators that can be used to change the value of variables over time.
+         * Declaration of animators that change variable values over time.
          */
         val animators: Property<List<Animator>>?,
         /**
@@ -179,7 +179,7 @@ data class Image internal constructor(
          */
         val focus: Property<Focus>?,
         /**
-         * Custom functions.
+         * User functions.
          */
         val functions: Property<List<Function>>?,
         /**
@@ -197,7 +197,7 @@ data class Image internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -227,7 +227,7 @@ data class Image internal constructor(
          */
         val preview: Property<String>?,
         /**
-         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -281,7 +281,7 @@ data class Image internal constructor(
          */
         val variableTriggers: Property<List<Trigger>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -370,7 +370,7 @@ data class Image internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -383,18 +383,18 @@ data class Image internal constructor(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -407,7 +407,7 @@ data class Image internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -530,7 +530,7 @@ fun DivScope.image(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -543,18 +543,18 @@ fun DivScope.image(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -567,7 +567,7 @@ fun DivScope.image(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -688,7 +688,7 @@ fun DivScope.imageProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -701,18 +701,18 @@ fun DivScope.imageProps(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -725,7 +725,7 @@ fun DivScope.imageProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -846,7 +846,7 @@ fun TemplateScope.imageRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -859,18 +859,18 @@ fun TemplateScope.imageRefs(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -883,7 +883,7 @@ fun TemplateScope.imageRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1006,7 +1006,7 @@ fun Image.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -1019,18 +1019,18 @@ fun Image.override(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1043,7 +1043,7 @@ fun Image.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1169,7 +1169,7 @@ fun Image.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param tintColor New color of a contour image.
@@ -1260,7 +1260,7 @@ fun Image.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -1273,18 +1273,18 @@ fun Image.evaluate(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1297,7 +1297,7 @@ fun Image.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1421,7 +1421,7 @@ fun Component<Image>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param appearanceAnimation Transparency animation when loading an image.
  * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param background Element background. It can contain multiple layers.
@@ -1434,18 +1434,18 @@ fun Component<Image>.override(
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param filters Image filters.
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1458,7 +1458,7 @@ fun Component<Image>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1585,7 +1585,7 @@ fun Component<Image>.defer(
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param tintColor New color of a contour image.

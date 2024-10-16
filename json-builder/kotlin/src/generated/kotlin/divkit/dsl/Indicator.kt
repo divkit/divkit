@@ -123,7 +123,7 @@ data class Indicator internal constructor(
          */
         val animation: Property<Animation>?,
         /**
-         * Declaration of animators that can be used to change the value of variables over time.
+         * Declaration of animators that change variable values over time.
          */
         val animators: Property<List<Animator>>?,
         /**
@@ -151,7 +151,7 @@ data class Indicator internal constructor(
          */
         val focus: Property<Focus>?,
         /**
-         * Custom functions.
+         * User functions.
          */
         val functions: Property<List<Function>>?,
         /**
@@ -182,7 +182,7 @@ data class Indicator internal constructor(
          */
         val itemsPlacement: Property<IndicatorItemPlacement>?,
         /**
-         * Provides element real size values after a layout cycle.
+         * Provides data on the actual size of the element.
          */
         val layoutProvider: Property<LayoutProvider>?,
         /**
@@ -204,7 +204,7 @@ data class Indicator internal constructor(
          */
         val pagerId: Property<String>?,
         /**
-         * ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+         * ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
          */
         val reuseId: Property<String>?,
         /**
@@ -256,7 +256,7 @@ data class Indicator internal constructor(
          */
         val variableTriggers: Property<List<Trigger>>?,
         /**
-         * Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+         * Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
          */
         val variables: Property<List<Variable>>?,
         /**
@@ -347,26 +347,26 @@ data class Indicator internal constructor(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -378,7 +378,7 @@ data class Indicator internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -489,26 +489,26 @@ fun DivScope.indicator(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -520,7 +520,7 @@ fun DivScope.indicator(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -629,26 +629,26 @@ fun DivScope.indicatorProps(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -660,7 +660,7 @@ fun DivScope.indicatorProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -769,26 +769,26 @@ fun TemplateScope.indicatorRefs(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -800,7 +800,7 @@ fun TemplateScope.indicatorRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -911,26 +911,26 @@ fun Indicator.override(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -942,7 +942,7 @@ fun Indicator.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1054,7 +1054,7 @@ fun Indicator.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
@@ -1131,26 +1131,26 @@ fun Indicator.evaluate(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -1162,7 +1162,7 @@ fun Indicator.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1274,26 +1274,26 @@ fun Component<Indicator>.override(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param animation Animation of switching between indicators.
- * @param animators Declaration of animators that can be used to change the value of variables over time.
+ * @param animators Declaration of animators that change variable values over time.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions).
  * @param focus Parameters when focusing on an element or losing focus.
- * @param functions Custom functions.
+ * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param inactiveItemColor Indicator color.
  * @param inactiveMinimumShape Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
  * @param inactiveShape Indicator shape.
  * @param itemsPlacement Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>
- * @param layoutProvider Provides element real size values after a layout cycle.
+ * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param paddings Internal margins from the element stroke.
  * @param pagerId ID of the pager that is a data source for an indicator.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
@@ -1305,7 +1305,7 @@ fun Component<Indicator>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
- * @param variables Definition of variables that can be used within this element. These variables, defined in the array, can only be used inside this element and its children.
+ * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1418,7 +1418,7 @@ fun Component<Indicator>.defer(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
- * @param reuseId ID for the div structure. Used for more optimal reuse of blocks. See [reusing blocks](../../reuse/reuse.md).
+ * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */

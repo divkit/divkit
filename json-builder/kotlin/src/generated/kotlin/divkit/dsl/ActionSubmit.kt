@@ -73,41 +73,6 @@ data class ActionSubmit internal constructor(
     }
 
     /**
-     * Can be created using the method [actionSubmitParameter].
-     * 
-     * Required parameters: `value, name`.
-     */
-    @Generated
-    data class Parameter internal constructor(
-        @JsonIgnore
-        val properties: Properties,
-    ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
-        operator fun plus(additive: Properties): Parameter = Parameter(
-            Properties(
-                name = additive.name ?: properties.name,
-                value = additive.value ?: properties.value,
-            )
-        )
-
-        data class Properties internal constructor(
-            val name: Property<String>?,
-            val value: Property<String>?,
-        ) {
-            internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
-                val result = mutableMapOf<String, Any>()
-                result.putAll(properties)
-                result.tryPutProperty("name", name)
-                result.tryPutProperty("value", value)
-                return result
-            }
-        }
-    }
-
-
-    /**
      * The HTTP request parameters that are used to configure how data is sent.
      * 
      * Can be created using the method [actionSubmitRequest].
@@ -126,7 +91,6 @@ data class ActionSubmit internal constructor(
             Properties(
                 headers = additive.headers ?: properties.headers,
                 method = additive.method ?: properties.method,
-                queryParameters = additive.queryParameters ?: properties.queryParameters,
                 url = additive.url ?: properties.url,
             )
         )
@@ -135,16 +99,12 @@ data class ActionSubmit internal constructor(
             /**
              * The HTTP request headers.
              */
-            val headers: Property<List<Parameter>>?,
+            val headers: Property<List<Header>>?,
             /**
              * The HTTP request method.
              * Default value: `POST`.
              */
             val method: Property<Method>?,
-            /**
-             * Query parameters.
-             */
-            val queryParameters: Property<List<Parameter>>?,
             /**
              * The url to which data from the container is sent.
              */
@@ -155,7 +115,6 @@ data class ActionSubmit internal constructor(
                 result.putAll(properties)
                 result.tryPutProperty("headers", headers)
                 result.tryPutProperty("method", method)
-                result.tryPutProperty("query_parameters", queryParameters)
                 result.tryPutProperty("url", url)
                 return result
             }
@@ -168,6 +127,41 @@ data class ActionSubmit internal constructor(
          */
         @Generated
         sealed interface Method
+
+        /**
+         * Can be created using the method [actionSubmitRequestHeader].
+         * 
+         * Required parameters: `value, name`.
+         */
+        @Generated
+        data class Header internal constructor(
+            @JsonIgnore
+            val properties: Properties,
+        ) {
+            @JsonAnyGetter
+            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+            operator fun plus(additive: Properties): Header = Header(
+                Properties(
+                    name = additive.name ?: properties.name,
+                    value = additive.value ?: properties.value,
+                )
+            )
+
+            data class Properties internal constructor(
+                val name: Property<String>?,
+                val value: Property<String>?,
+            ) {
+                internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                    val result = mutableMapOf<String, Any>()
+                    result.putAll(properties)
+                    result.tryPutProperty("name", name)
+                    result.tryPutProperty("value", value)
+                    return result
+                }
+            }
+        }
+
     }
 
 }
@@ -297,95 +291,21 @@ fun ActionSubmit.evaluate(
 @Generated
 fun ActionSubmit.asList() = listOf(this)
 
-@Generated
-fun DivScope.actionSubmitParameter(
-    `use named arguments`: Guard = Guard.instance,
-    name: String? = null,
-    value: String? = null,
-): ActionSubmit.Parameter = ActionSubmit.Parameter(
-    ActionSubmit.Parameter.Properties(
-        name = valueOrNull(name),
-        value = valueOrNull(value),
-    )
-)
-
-@Generated
-fun DivScope.actionSubmitParameterProps(
-    `use named arguments`: Guard = Guard.instance,
-    name: String? = null,
-    value: String? = null,
-) = ActionSubmit.Parameter.Properties(
-    name = valueOrNull(name),
-    value = valueOrNull(value),
-)
-
-@Generated
-fun TemplateScope.actionSubmitParameterRefs(
-    `use named arguments`: Guard = Guard.instance,
-    name: ReferenceProperty<String>? = null,
-    value: ReferenceProperty<String>? = null,
-) = ActionSubmit.Parameter.Properties(
-    name = name,
-    value = value,
-)
-
-@Generated
-fun ActionSubmit.Parameter.override(
-    `use named arguments`: Guard = Guard.instance,
-    name: String? = null,
-    value: String? = null,
-): ActionSubmit.Parameter = ActionSubmit.Parameter(
-    ActionSubmit.Parameter.Properties(
-        name = valueOrNull(name) ?: properties.name,
-        value = valueOrNull(value) ?: properties.value,
-    )
-)
-
-@Generated
-fun ActionSubmit.Parameter.defer(
-    `use named arguments`: Guard = Guard.instance,
-    name: ReferenceProperty<String>? = null,
-    value: ReferenceProperty<String>? = null,
-): ActionSubmit.Parameter = ActionSubmit.Parameter(
-    ActionSubmit.Parameter.Properties(
-        name = name ?: properties.name,
-        value = value ?: properties.value,
-    )
-)
-
-@Generated
-fun ActionSubmit.Parameter.evaluate(
-    `use named arguments`: Guard = Guard.instance,
-    name: ExpressionProperty<String>? = null,
-    value: ExpressionProperty<String>? = null,
-): ActionSubmit.Parameter = ActionSubmit.Parameter(
-    ActionSubmit.Parameter.Properties(
-        name = name ?: properties.name,
-        value = value ?: properties.value,
-    )
-)
-
-@Generated
-fun ActionSubmit.Parameter.asList() = listOf(this)
-
 /**
  * @param headers The HTTP request headers.
  * @param method The HTTP request method.
- * @param queryParameters Query parameters.
  * @param url The url to which data from the container is sent.
  */
 @Generated
 fun DivScope.actionSubmitRequest(
     `use named arguments`: Guard = Guard.instance,
-    headers: List<ActionSubmit.Parameter>? = null,
+    headers: List<ActionSubmit.Request.Header>? = null,
     method: ActionSubmit.Request.Method? = null,
-    queryParameters: List<ActionSubmit.Parameter>? = null,
     url: Url? = null,
 ): ActionSubmit.Request = ActionSubmit.Request(
     ActionSubmit.Request.Properties(
         headers = valueOrNull(headers),
         method = valueOrNull(method),
-        queryParameters = valueOrNull(queryParameters),
         url = valueOrNull(url),
     )
 )
@@ -393,61 +313,52 @@ fun DivScope.actionSubmitRequest(
 /**
  * @param headers The HTTP request headers.
  * @param method The HTTP request method.
- * @param queryParameters Query parameters.
  * @param url The url to which data from the container is sent.
  */
 @Generated
 fun DivScope.actionSubmitRequestProps(
     `use named arguments`: Guard = Guard.instance,
-    headers: List<ActionSubmit.Parameter>? = null,
+    headers: List<ActionSubmit.Request.Header>? = null,
     method: ActionSubmit.Request.Method? = null,
-    queryParameters: List<ActionSubmit.Parameter>? = null,
     url: Url? = null,
 ) = ActionSubmit.Request.Properties(
     headers = valueOrNull(headers),
     method = valueOrNull(method),
-    queryParameters = valueOrNull(queryParameters),
     url = valueOrNull(url),
 )
 
 /**
  * @param headers The HTTP request headers.
  * @param method The HTTP request method.
- * @param queryParameters Query parameters.
  * @param url The url to which data from the container is sent.
  */
 @Generated
 fun TemplateScope.actionSubmitRequestRefs(
     `use named arguments`: Guard = Guard.instance,
-    headers: ReferenceProperty<List<ActionSubmit.Parameter>>? = null,
+    headers: ReferenceProperty<List<ActionSubmit.Request.Header>>? = null,
     method: ReferenceProperty<ActionSubmit.Request.Method>? = null,
-    queryParameters: ReferenceProperty<List<ActionSubmit.Parameter>>? = null,
     url: ReferenceProperty<Url>? = null,
 ) = ActionSubmit.Request.Properties(
     headers = headers,
     method = method,
-    queryParameters = queryParameters,
     url = url,
 )
 
 /**
  * @param headers The HTTP request headers.
  * @param method The HTTP request method.
- * @param queryParameters Query parameters.
  * @param url The url to which data from the container is sent.
  */
 @Generated
 fun ActionSubmit.Request.override(
     `use named arguments`: Guard = Guard.instance,
-    headers: List<ActionSubmit.Parameter>? = null,
+    headers: List<ActionSubmit.Request.Header>? = null,
     method: ActionSubmit.Request.Method? = null,
-    queryParameters: List<ActionSubmit.Parameter>? = null,
     url: Url? = null,
 ): ActionSubmit.Request = ActionSubmit.Request(
     ActionSubmit.Request.Properties(
         headers = valueOrNull(headers) ?: properties.headers,
         method = valueOrNull(method) ?: properties.method,
-        queryParameters = valueOrNull(queryParameters) ?: properties.queryParameters,
         url = valueOrNull(url) ?: properties.url,
     )
 )
@@ -455,21 +366,18 @@ fun ActionSubmit.Request.override(
 /**
  * @param headers The HTTP request headers.
  * @param method The HTTP request method.
- * @param queryParameters Query parameters.
  * @param url The url to which data from the container is sent.
  */
 @Generated
 fun ActionSubmit.Request.defer(
     `use named arguments`: Guard = Guard.instance,
-    headers: ReferenceProperty<List<ActionSubmit.Parameter>>? = null,
+    headers: ReferenceProperty<List<ActionSubmit.Request.Header>>? = null,
     method: ReferenceProperty<ActionSubmit.Request.Method>? = null,
-    queryParameters: ReferenceProperty<List<ActionSubmit.Parameter>>? = null,
     url: ReferenceProperty<Url>? = null,
 ): ActionSubmit.Request = ActionSubmit.Request(
     ActionSubmit.Request.Properties(
         headers = headers ?: properties.headers,
         method = method ?: properties.method,
-        queryParameters = queryParameters ?: properties.queryParameters,
         url = url ?: properties.url,
     )
 )
@@ -487,7 +395,6 @@ fun ActionSubmit.Request.evaluate(
     ActionSubmit.Request.Properties(
         headers = properties.headers,
         method = method ?: properties.method,
-        queryParameters = properties.queryParameters,
         url = url ?: properties.url,
     )
 )

@@ -81,7 +81,7 @@ data class DisappearAction internal constructor(
          */
         val referer: Property<Url>?,
         /**
-         * Div identifier denotes the scope in which this action will be performed.
+         * The ID of the element within which the specified action will be performed.
          */
         val scopeId: Property<String>?,
         val typed: Property<ActionTyped>?,
@@ -122,7 +122,7 @@ data class DisappearAction internal constructor(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId Div identifier denotes the scope in which this action will be performed.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -164,7 +164,7 @@ fun DivScope.disappearAction(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId Div identifier denotes the scope in which this action will be performed.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -204,7 +204,7 @@ fun DivScope.disappearActionProps(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId Div identifier denotes the scope in which this action will be performed.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -244,7 +244,7 @@ fun TemplateScope.disappearActionRefs(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId Div identifier denotes the scope in which this action will be performed.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
@@ -286,7 +286,7 @@ fun DisappearAction.override(
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
- * @param scopeId Div identifier denotes the scope in which this action will be performed.
+ * @param scopeId The ID of the element within which the specified action will be performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
