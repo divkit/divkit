@@ -171,8 +171,10 @@ final class DivBlockProvider {
       self.divData = nil
       return
     }
-    divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
-    divKitComponents.setTimers(divData: divData, cardId: cardId)
+    if !id.isTooltip {
+      divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
+      divKitComponents.setTimers(divData: divData, cardId: cardId)
+    }
     self.divData = divData
   }
 
