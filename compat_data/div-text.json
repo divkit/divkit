@@ -70,6 +70,9 @@
         "compat": {
             "android": {
                 "version_added": "30.17.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
             }
         }
     }, {
@@ -81,6 +84,20 @@
             },
             "ios": {
                 "version_added": "30.20.0"
+            }
+        }
+    }, {
+        "id": "text_optional_start_end",
+        "name": "Optional properties of the <code>start</code> and <code>end</code> of the <code>text</code> <code>range</code>, which were originally required",
+        "compat": {
+            "android": {
+                "version_added": "30.22.0"
+            },
+            "ios": {
+                "version_added": "30.22.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
             }
         }
     }]

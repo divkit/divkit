@@ -22,6 +22,9 @@
             },
             "android": {
                 "version_added": "30.20.0"
+            },
+            "web": {
+                "version_added": "30.22.0"
             }
         }
     }, {
