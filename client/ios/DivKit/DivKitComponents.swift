@@ -77,6 +77,7 @@ public final class DivKitComponents {
   ///   - showTooltip: Deprecated. This parameter is deprecated, use ``tooltipManager`` instead.
   ///   - stateManagement: An optional ``DivStateManagement`` object responsible for managing card
   /// states.
+  ///   - submitter: An optional ``DivSubmitter`` object responsible for submitting data from container.
   ///   - tooltipManager: An optional `TooltipManager` object that manages the processing and
   /// display of tooltips.
   ///   - trackVisibility: A closure that tracks the visibility of elements. Deprecated. Use
@@ -98,12 +99,12 @@ public final class DivKitComponents {
     fontProvider: DivFontProvider? = nil,
     imageHolderFactory: DivImageHolderFactory? = nil,
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
-    submitter: DivSubmitter? = nil,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
     reporter: DivReporter? = nil,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
+    submitter: DivSubmitter? = nil,
     tooltipManager: TooltipManager? = nil,
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
