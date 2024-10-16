@@ -2,8 +2,7 @@ package com.yandex.test.screenshot
 
 enum class ScreenshotType(private val path: String) {
     ViewRender("viewRender"),
-    ViewPixelCopy("viewPixelCopy"),
-    Device("device");
+    ViewPixelCopy("viewPixelCopy");
 
     fun relativeDirPath(suiteName: String): String {
         val suitePath = suiteName.trim('/')

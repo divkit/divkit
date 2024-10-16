@@ -2,7 +2,6 @@ package com.yandex.div.steps
 
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.KLog
@@ -17,9 +16,9 @@ import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.screenshot.ReferenceFileWriter
 import com.yandex.test.screenshot.ScreenshotCaptor
 import com.yandex.test.screenshot.TestCaseReferencesFileWriter
+import com.yandex.test.screenshot.TestFile
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
-import java.io.File
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -66,8 +65,6 @@ internal class InteractiveScreenshotSteps {
             steps: List<TestStep>
     ) {
         val artifactsCaptor = ScreenshotCaptor()
-        val referencesFile = ReferenceFileWriter(ScreenshotCaptor.rootDir)
-        val testCaseReferencesFile = TestCaseReferencesFileWriter(ScreenshotCaptor.rootDir)
         steps.forEachIndexed { i, step ->
             instrumentation.runOnMainSync {
                 handleStepActions(activity.divView, step)
@@ -80,11 +77,10 @@ internal class InteractiveScreenshotSteps {
                         activity.divView,
                         artifactsCaptor,
                         artifactsRelativePath,
-                        referencesFile,
                         i,
                         step.expectedScreenshot
                 )
-                testCaseReferencesFile.append(casePath, screenshots)
+                TestCaseReferencesFileWriter.append(casePath, screenshots)
             }
         }
 
@@ -121,16 +117,12 @@ internal class InteractiveScreenshotSteps {
             view: Div2View,
             artifactsCaptor: ScreenshotCaptor,
             artifactsRelativePath: String,
-            referencesFile: ReferenceFileWriter,
             stepId: Int,
             expectedScreenshot: String): List<String> {
         val result = mutableListOf<String>()
         val actualScreenshot = "step${stepId}.png"
 
-        val device = UiDevice.getInstance(instrumentation)
-
         val categories = listOf(
-            ScreenshotCategory("device") { artifactsCaptor.takeDeviceScreenshot(device, it) },
             ScreenshotCategory("viewPixelCopy") { artifactsCaptor.takeViewPixelCopy(view, it) },
             ScreenshotCategory("viewRender") { artifactsCaptor.takeViewRender(view, it) },
         )
@@ -138,19 +130,14 @@ internal class InteractiveScreenshotSteps {
         categories.forEach { category ->
             val actualScreenshotRelativePath = "${category.name}/$artifactsRelativePath/$actualScreenshot"
 
-            val actualScreenshotFile = File(ScreenshotCaptor.rootDir, actualScreenshotRelativePath)
-            val screenshotDir = actualScreenshotFile.parentFile!!
-
-            if (!screenshotDir.exists() && !screenshotDir.mkdirs()) {
-                throw IllegalAccessException("Cannot prepare screenshots directory: $screenshotDir")
-            }
+            val actualScreenshotFile = TestFile(actualScreenshotRelativePath)
 
             category.captureScreenshot(actualScreenshotFile)
             result.add(actualScreenshotRelativePath)
 
             if (expectedScreenshot.isNotEmpty() && expectedScreenshot != actualScreenshot) {
                 val expectedScreenshotRelativePath = "${category.name}/$artifactsRelativePath/$expectedScreenshot"
-                referencesFile.append(targetFile = actualScreenshotRelativePath,
+                ReferenceFileWriter.append(targetFile = actualScreenshotRelativePath,
                     compareWith = expectedScreenshotRelativePath)
             }
         }
@@ -169,5 +156,5 @@ private class TestStep(
 
 private class ScreenshotCategory(
         val name: String,
-        val captureScreenshot: (File) -> Unit
+        val captureScreenshot: (TestFile) -> Unit
 )

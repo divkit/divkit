@@ -22,7 +22,7 @@ internal fun divView(block: DivViewSteps.() -> Unit) = block(DivViewSteps())
 @StepsDsl
 class DivViewSteps: DivTestAssetSteps() {
 
-    fun Div2Context.buildContainer(tag: String): Unit = ru.tinkoff.allure.step("Build container") {
+    fun Div2Context.buildContainer(tag: String): Unit = step("Build container") {
         buildContainer(
             width = ViewGroup.LayoutParams.MATCH_PARENT,
             height = ViewGroup.LayoutParams.MATCH_PARENT,

@@ -18,10 +18,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.yandex.div2.DivTooltip
 import com.yandex.divkit.demo.R
+import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.assertNoPopupsAreDisplayed
 import org.hamcrest.Matchers.allOf
-import ru.tinkoff.allure.step
 
 internal fun tooltipDiv(f: DivTooltipSteps.() -> Unit) = f(DivTooltipSteps())
 

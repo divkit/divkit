@@ -1,22 +1,15 @@
 package com.yandex.test.screenshot
 
-import java.io.File
-
 private const val REFERENCE_FILE_NAME = "reference-overrides.json"
 
 /**
  * Keep in sync with `ReferenceFileReader`
  */
-class ReferenceFileWriter(fileDir: File) {
-    private val referencesFile = File(fileDir, REFERENCE_FILE_NAME)
+object ReferenceFileWriter {
+    private val referencesFileWriter = TestFile(REFERENCE_FILE_NAME).open().writer()
 
     fun append(targetFile: String, compareWith: String) {
-        referencesFile.appendText("{\"target\":\"$targetFile\", \"compareWith\":\"$compareWith\"}\n")
-    }
-
-    fun cleanup() {
-        if (referencesFile.exists()) {
-            referencesFile.delete()
-        }
+        referencesFileWriter.write("{\"target\":\"$targetFile\", \"compareWith\":\"$compareWith\"}\n")
+        referencesFileWriter.flush()
     }
 }

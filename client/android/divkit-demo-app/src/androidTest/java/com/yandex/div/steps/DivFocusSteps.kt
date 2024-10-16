@@ -8,11 +8,11 @@ import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div.view.checkNotExist
+import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
-import ru.tinkoff.allure.step
 
 internal fun divFocus(f: DivFocusSteps.() -> Unit) = f(DivFocusSteps())
 

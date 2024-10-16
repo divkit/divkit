@@ -15,14 +15,13 @@ import com.yandex.test.util.StepsDsl
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
-import ru.tinkoff.allure.step as allureStep
 
 internal fun pager(f: DivPagerSteps.() -> Unit) = f(DivPagerSteps())
 
 @StepsDsl
 class DivPagerSteps: DivTestAssetSteps() {
 
-    fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
+    fun ActivityTestRule<*>.buildContainer(): Unit = step("Build container") {
         buildContainer(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 

@@ -8,9 +8,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isFocusable
 import androidx.test.espresso.matcher.ViewMatchers.isNotFocusable
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.rule.ActivityTestRule
+import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matchers.`is`
-import ru.tinkoff.allure.step
 
 private const val TEXT_ID = "text"
 private const val INPUT_ID = "input"

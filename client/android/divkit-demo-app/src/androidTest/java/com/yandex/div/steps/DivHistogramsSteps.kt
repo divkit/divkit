@@ -5,10 +5,10 @@ import androidx.test.rule.ActivityTestRule
 import com.yandex.divkit.demo.benchmark.EXTRA_ASSET_NAME
 import com.yandex.divkit.demo.benchmark.EXTRA_REBIND_ASSET_NAME
 import com.yandex.divkit.demo.div.histogram.HistogramDispatcher
+import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.UiAutomator
 import org.junit.Assert
-import ru.tinkoff.allure.step
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

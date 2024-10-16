@@ -24,8 +24,8 @@ import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.screenshot.DivAssetReader
+import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
-import ru.tinkoff.allure.step
 import java.util.UUID
 
 @StepsDsl

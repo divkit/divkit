@@ -15,6 +15,7 @@ import com.yandex.div.internal.widget.textHeight
 import com.yandex.div.utils.CharSequences
 import com.yandex.div.utils.contentView
 import com.yandex.div.utils.runOnView
+import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
@@ -22,7 +23,6 @@ import org.hamcrest.CoreMatchers.startsWith
 import org.hamcrest.Description
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert
-import ru.tinkoff.allure.step
 
 internal fun ellipsizedTextView(f: EllipsizedTextViewSteps.() -> Unit) = f(EllipsizedTextViewSteps())
 

@@ -6,13 +6,9 @@ open class ScreenshotTestPluginExtension {
     var enableComparison: Boolean = true
     var strictComparison: Boolean = false
     var testAnnotations = mutableListOf<String>()
-    var deviceDir = "screenshots"
     var hostDir = "screenshots"
     var referencesDir = "src/androidTest/resources/screenshots"
-
-    val collectedDir: String
-        get() = "$hostDir/collected"
-
+    var screenshotDir = "outputs/connected_android_test_additional_output/debugAndroidTest/connected"
     val comparisonDir: String
         get() = "$hostDir/comparison"
 

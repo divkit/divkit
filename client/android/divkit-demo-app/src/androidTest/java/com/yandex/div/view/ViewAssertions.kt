@@ -9,8 +9,8 @@ import androidx.test.espresso.util.HumanReadables
 import com.yandex.div.view.ViewMatchers.positionMatch
 import com.yandex.test.util.ColorUtils
 import com.yandex.test.util.Drawable.getAverageBackgroundColorForViewDrawable
+import com.yandex.test.util.Report.step
 import org.hamcrest.MatcherAssert.assertThat
-import ru.tinkoff.allure.step
 
 /**
  * Provides assertions for all types of views.

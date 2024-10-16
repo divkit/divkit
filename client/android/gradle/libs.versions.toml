@@ -34,7 +34,6 @@ protobuf = "4.28.2"
 robolectric = "4.11.1"
 stetho = "1.6.0"
 strikt = "0.28.2"
-tinkoffAllure = "2.5.1"
 webp-imageio = "0.1.6"
 yatagan = "1.5.0"
 
@@ -54,6 +53,7 @@ androidx-material = "1.12.0"
 androidx-preference = "1.2.1"
 androidx-recycler = "1.3.2"
 androidx-test = "1.6.1"
+androidx-test-services = "1.5.0"
 androidx-transition = "1.2.0"
 androidx-uiautomator = "2.3.0"
 androidx-viewpager = "1.0.0"
@@ -63,10 +63,6 @@ androidx-work = "2.7.1"
 [libraries]
 agp-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 agp-gradleApi = { module = "com.android.tools.build:gradle-api", version.ref = "agp" }
-
-allure-android = { module = "ru.tinkoff.allure:allure-android", version.ref = "tinkoffAllure" }
-allure-common = { module = "ru.tinkoff.allure:allure-common", version.ref = "tinkoffAllure" }
-allure-model = { module = "ru.tinkoff.allure:allure-model", version.ref = "tinkoffAllure" }
 
 androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
 
@@ -106,6 +102,7 @@ androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-te
 androidx-test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+androidx-test-services = { module = "androidx.test.services:test-services", version.ref = "androidx-test-services" }
 androidx-test-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-uiautomator" }
 
 appmetrica-lib = { module = "com.yandex.android:mobmetricalib", version.ref = "metrica" }

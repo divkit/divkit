@@ -12,7 +12,6 @@ import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.ReferenceFileWriter
 import com.yandex.test.screenshot.Screenshot
-import com.yandex.test.screenshot.ScreenshotCaptor
 import com.yandex.test.screenshot.ScreenshotType
 import org.junit.Rule
 import org.junit.Test
@@ -52,13 +51,11 @@ class Div2RebindScreenshotTest(case: String, escapedCase: String) {
     }
 
     private fun createReferenceOverride() {
-        val referencesFile = ReferenceFileWriter(ScreenshotCaptor.rootDir)
-
         ScreenshotType.values().forEach {
             val targetSuiteName = "${Div2RebindScreenshotTest::class.qualifiedName}/$caseRelativePath"
             val actualSuiteName = "${Div2ScreenshotTest::class.qualifiedName}/$caseRelativePath"
 
-            referencesFile.append(
+            ReferenceFileWriter.append(
                 it.relativeScreenshotPath(targetSuiteName, caseName),
                 it.relativeScreenshotPath(actualSuiteName, caseName)
             )

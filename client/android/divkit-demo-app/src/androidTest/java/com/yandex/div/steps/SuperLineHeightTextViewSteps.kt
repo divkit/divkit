@@ -8,11 +8,11 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
+import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
-import ru.tinkoff.allure.step
 
 internal fun superLineHeightTextView(f: SuperLineHeightTextViewSteps.() -> Unit) = f(SuperLineHeightTextViewSteps())
 
