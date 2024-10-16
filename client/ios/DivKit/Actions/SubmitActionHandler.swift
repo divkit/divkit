@@ -28,7 +28,7 @@ final class SubmitActionHandler {
     )
     let request = SubmitRequest(
       url: url,
-      method: action.request.resolveMethod(resolver).rawValue,
+      method: action.request.resolveMethod(resolver).rawValue.uppercased(),
       headers: action.request.headers?.toDictionary(resolver: resolver) ?? [:]
     )
 

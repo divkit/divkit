@@ -8,13 +8,13 @@ public final class DivActionSubmit {
   public final class Request {
     @frozen
     public enum Method: String, CaseIterable {
-      case gET = "GET"
-      case pOST = "POST"
-      case pUT = "PUT"
-      case pATCH = "PATCH"
-      case dELETE = "DELETE"
-      case hEAD = "HEAD"
-      case oPTIONS = "OPTIONS"
+      case get = "get"
+      case post = "post"
+      case put = "put"
+      case patch = "patch"
+      case delete = "delete"
+      case head = "head"
+      case options = "options"
     }
 
     public final class Header {
@@ -39,11 +39,11 @@ public final class DivActionSubmit {
     }
 
     public let headers: [Header]?
-    public let method: Expression<Method> // default value: POST
+    public let method: Expression<Method> // default value: post
     public let url: Expression<URL>
 
     public func resolveMethod(_ resolver: ExpressionResolver) -> Method {
-      resolver.resolveEnum(method) ?? Method.pOST
+      resolver.resolveEnum(method) ?? Method.post
     }
 
     public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
@@ -56,7 +56,7 @@ public final class DivActionSubmit {
       url: Expression<URL>
     ) {
       self.headers = headers
-      self.method = method ?? .value(.pOST)
+      self.method = method ?? .value(.post)
       self.url = url
     }
   }

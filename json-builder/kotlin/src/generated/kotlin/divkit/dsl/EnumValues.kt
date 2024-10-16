@@ -106,31 +106,31 @@ object RingEnumValue : EnumValue("ring"),
     ActionScrollBy.Overflow
 
 @Generated
-object GETEnumValue : EnumValue("GET"),
+object GetEnumValue : EnumValue("get"),
     ActionSubmit.Request.Method
 
 @Generated
-object POSTEnumValue : EnumValue("POST"),
+object PostEnumValue : EnumValue("post"),
     ActionSubmit.Request.Method
 
 @Generated
-object PUTEnumValue : EnumValue("PUT"),
+object PutEnumValue : EnumValue("put"),
     ActionSubmit.Request.Method
 
 @Generated
-object PATCHEnumValue : EnumValue("PATCH"),
+object PatchEnumValue : EnumValue("patch"),
     ActionSubmit.Request.Method
 
 @Generated
-object DELETEEnumValue : EnumValue("DELETE"),
+object DeleteEnumValue : EnumValue("delete"),
     ActionSubmit.Request.Method
 
 @Generated
-object HEADEnumValue : EnumValue("HEAD"),
+object HeadEnumValue : EnumValue("head"),
     ActionSubmit.Request.Method
 
 @Generated
-object OPTIONSEnumValue : EnumValue("OPTIONS"),
+object OptionsEnumValue : EnumValue("options"),
     ActionSubmit.Request.Method
 
 @Generated
@@ -638,32 +638,32 @@ val DivScope.ring: RingEnumValue
     get() = RingEnumValue
 
 @Generated
-val DivScope.GET: GETEnumValue
-    get() = GETEnumValue
+val DivScope.get: GetEnumValue
+    get() = GetEnumValue
 
 @Generated
-val DivScope.POST: POSTEnumValue
-    get() = POSTEnumValue
+val DivScope.post: PostEnumValue
+    get() = PostEnumValue
 
 @Generated
-val DivScope.PUT: PUTEnumValue
-    get() = PUTEnumValue
+val DivScope.put: PutEnumValue
+    get() = PutEnumValue
 
 @Generated
-val DivScope.PATCH: PATCHEnumValue
-    get() = PATCHEnumValue
+val DivScope.patch: PatchEnumValue
+    get() = PatchEnumValue
 
 @Generated
-val DivScope.DELETE: DELETEEnumValue
-    get() = DELETEEnumValue
+val DivScope.delete: DeleteEnumValue
+    get() = DeleteEnumValue
 
 @Generated
-val DivScope.HEAD: HEADEnumValue
-    get() = HEADEnumValue
+val DivScope.head: HeadEnumValue
+    get() = HeadEnumValue
 
 @Generated
-val DivScope.OPTIONS: OPTIONSEnumValue
-    get() = OPTIONSEnumValue
+val DivScope.options: OptionsEnumValue
+    get() = OptionsEnumValue
 
 @Generated
 val DivScope.start: StartEnumValue

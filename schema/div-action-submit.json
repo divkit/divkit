@@ -33,10 +33,10 @@
         },
         "method": {
           "type": "string",
-          "default_value": "POST",
+          "default_value": "post",
           "$description": "translations.json#/div_action_submit_request_method",
           "enum": [
-            "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"
+            "get", "post", "put", "patch", "delete", "head", "options"
           ]
         }
       },

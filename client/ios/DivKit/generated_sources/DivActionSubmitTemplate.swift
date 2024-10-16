@@ -119,7 +119,7 @@ public final class DivActionSubmitTemplate: TemplateValue {
     public typealias Method = DivActionSubmit.Request.Method
 
     public let headers: Field<[HeaderTemplate]>?
-    public let method: Field<Expression<Method>>? // default value: POST
+    public let method: Field<Expression<Method>>? // default value: post
     public let url: Field<Expression<URL>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
