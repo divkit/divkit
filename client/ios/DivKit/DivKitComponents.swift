@@ -304,13 +304,18 @@ public final class DivKitComponents {
   ) -> DivBlockModelingContext {
     let viewId = DivViewId(cardId: cardId, additionalId: additionalId)
     variableTracker.onModelingStarted(id: viewId)
+
+    // for now tooltip state management is broken
+    let stateManager = viewId.isTooltip
+      ? DivStateManager()
+      : stateManagement.getStateManagerForCard(cardId: cardId);
+
     return DivBlockModelingContext(
       viewId: viewId,
       cardLogId: nil,
       parentPath: nil,
       parentDivStatePath: nil,
-      stateManager: stateManagement
-        .getStateManagerForCard(cardId: cardId),
+      stateManager: stateManager,
       actionHandler: actionHandler,
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
