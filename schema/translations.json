@@ -275,6 +275,10 @@
     "en": "The HTTP request method.",
     "ru": "Метод HTTP-запроса."
   },
+  "div_action_submit_request_query_parameters": {
+    "en": "Query parameters.",
+    "ru": "Параметры запроса."
+  },
   "div_action_submit_request_url": {
     "en": "The url to which data from the container is sent.",
     "ru": "Ссылка по которой отправляются данные из контейнера."
@@ -2316,8 +2320,8 @@
     "ru": "Рамка для диапазона символов."
   },
   "div_text_range_end": {
-    "en": "Ordinal number of the last character to be included in the range.",
-    "ru": "Порядковый номер последнего символа, который будет включен в диапазон."
+    "en": "Ordinal number of the last character to be included in the range. If property is omitted, the range will end at the last character of the text.",
+    "ru": "Порядковый номер последнего символа, который будет включен в диапазон. Если свойство не указано, то диапазон будет заканчиваться на последнем символе текста."
   },
   "div_text_range_letter_spacing": {
     "en": "Spacing between characters.",
