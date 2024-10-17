@@ -13,7 +13,7 @@ public protocol PlayerView: VisibleBoundsTrackingView {
 }
 
 extension PlayerView {
-  var videoRatio: CGFloat? { nil }
+  public var videoRatio: CGFloat? { nil }
   public func set(scale _: VideoScale) {}
 }
 
