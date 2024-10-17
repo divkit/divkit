@@ -58,7 +58,7 @@ androidx-transition = "1.2.0"
 androidx-uiautomator = "2.3.0"
 androidx-viewpager = "1.0.0"
 androidx-viewpager2 = "1.0.0"
-androidx-work = "2.7.1"
+androidx-work = "2.9.1"
 
 [libraries]
 agp-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
