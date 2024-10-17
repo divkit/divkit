@@ -33,9 +33,16 @@ public final class DivBlockStateStorage {
   public private(set) var states: BlocksState
   private var statesById: [IdAndCardId: ElementState] = [:]
 
-  private var focusedElement: FocusedElement = .none
+  private var focusedElement: FocusedElement = .none {
+    didSet {
+      isInputFocused = false
+    }
+  }
+
   private let lock = AllocatedUnfairLock()
   private let stateUpdatesPipe = SignalPipe<ChangeEvent>()
+
+  private(set) var isInputFocused = false
 
   var stateUpdates: Signal<ChangeEvent> {
     stateUpdatesPipe.signal
@@ -91,7 +98,10 @@ public final class DivBlockStateStorage {
     }
   }
 
-  public func setFocused(isFocused: Bool, path: UIElementPath) {
+  public func setFocused(
+    isFocused: Bool,
+    path: UIElementPath
+  ) {
     lock.withLock {
       focusedElement = isFocused ? .pathFocused(path) : .none
     }
@@ -113,6 +123,10 @@ public final class DivBlockStateStorage {
     lock.withLock {
       isFocusedInternal(checkedElement: .pathFocused(path))
     }
+  }
+
+  func setInputFocused() {
+    isInputFocused = true
   }
 
   private func isFocusedInternal(checkedElement: FocusedElement) -> Bool {
@@ -169,7 +183,10 @@ extension DivBlockStateStorage: ElementStateObserver {
     setState(path: path, state: state)
   }
 
-  public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
+  public func focusedElementChanged(
+    isFocused: Bool,
+    forPath path: UIElementPath
+  ) {
     setFocused(isFocused: isFocused, path: path)
   }
 }

@@ -32,7 +32,7 @@ extension TextInputBlock {
     inputView.setMaxVisibleLines(maxVisibleLines)
     inputView.setSelectAllOnFocus(selectAllOnFocus)
     inputView.setParentScrollView(parentScrollView)
-    inputView.setIsFocused(isFocused)
+    inputView.setIsFocused(isFocused, shouldClear: shouldClearFocus.value)
     inputView.setOnFocusActions(onFocusActions)
     inputView.setOnBlurActions(onBlurActions)
     inputView.setPath(path)
@@ -230,13 +230,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.parentScrollView = parentScrollView
   }
 
-  func setIsFocused(_ isFocused: Bool) {
+  func setIsFocused(_ isFocused: Bool, shouldClear: Bool) {
     isInputFocused = isFocused
     if isFocused {
       if allSuperviewsAreVisible() {
         focusTextInput()
       }
-    } else {
+    } else if shouldClear {
       clearFocus()
     }
   }
@@ -303,7 +303,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   func setMaxLength(_ value: Int?) {
-      maxLength = value
+    maxLength = value
   }
 
   private func updateHintVisibility() {
@@ -580,8 +580,8 @@ extension TextInputBlockView {
     }
 
     if let maxLength, text != "" {
-        let updatedText = currentText.replacingCharactersInRange(range, withString: text)
-        return updatedText.result.count <= maxLength
+      let updatedText = currentText.replacingCharactersInRange(range, withString: text)
+      return updatedText.result.count <= maxLength
     }
 
     return true

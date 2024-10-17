@@ -49,7 +49,14 @@ extension DivInput: DivBlockModeling {
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
     let inputPath = context.parentPath + (id ?? DivInput.type)
-    let isFocused = context.blockStateStorage.isFocused(path: inputPath)
+
+    let blockStateStorage = context.blockStateStorage
+    let isFocused = blockStateStorage.isFocused(path: inputPath)
+
+    if isFocused { blockStateStorage.setInputFocused() }
+    let shouldClearFocus = Variable<Bool> { [weak blockStateStorage] in
+      blockStateStorage.map { !$0.isInputFocused } ?? true
+    }
 
     return TextInputBlock(
       widthTrait: resolveWidthTrait(context),
@@ -77,7 +84,8 @@ extension DivInput: DivBlockModeling {
       textAlignmentVertical: resolveTextAlignmentVertical(expressionResolver).textAlignment,
       paddings: paddings?.resolve(context),
       isEnabled: resolveIsEnabled(expressionResolver),
-      maxLength: resolveMaxLength(expressionResolver)
+      maxLength: resolveMaxLength(expressionResolver),
+      shouldClearFocus: shouldClearFocus
     )
   }
 

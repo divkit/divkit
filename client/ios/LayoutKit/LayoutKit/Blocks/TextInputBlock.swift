@@ -87,6 +87,8 @@ public final class TextInputBlock: BlockWithTraits {
   public let isEnabled: Bool
   public let maxLength: Int?
 
+  let shouldClearFocus: Variable<Bool>
+
   public init(
     widthTrait: LayoutTrait = .resizable,
     heightTrait: LayoutTrait = .intrinsic,
@@ -114,7 +116,8 @@ public final class TextInputBlock: BlockWithTraits {
     textAlignmentVertical: TextAlignmentVertical = .center,
     paddings: EdgeInsets? = nil,
     isEnabled: Bool = true,
-    maxLength: Int? = nil
+    maxLength: Int? = nil,
+    shouldClearFocus: Variable<Bool> = .constant(true)
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -143,6 +146,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.paddings = paddings
     self.isEnabled = isEnabled
     self.maxLength = maxLength
+    self.shouldClearFocus = shouldClearFocus
   }
 
   public var intrinsicContentWidth: CGFloat {

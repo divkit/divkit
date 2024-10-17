@@ -43,6 +43,7 @@ extension DivSelect: DivBlockModeling {
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
     let selectPath = context.parentPath + (id ?? DivSelect.type)
+
     let isFocused = context.blockStateStorage.isFocused(path: selectPath)
 
     return TextInputBlock(
