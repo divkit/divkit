@@ -16,6 +16,7 @@ import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import java.util.concurrent.atomic.AtomicBoolean
@@ -157,12 +158,12 @@ class DivPreloader internal constructor(
     }
 
     class DownloadCallback(private val callback: Callback) : DivImageDownloadCallback() {
-        private var downloadsLeftCount: AtomicInteger = AtomicInteger(0)
-        private var failures: AtomicInteger = AtomicInteger(0)
-        private var started: AtomicBoolean = AtomicBoolean(false)
+        private var downloadsLeftCount = 0
+        private var failures = 0
+        private var started = false
 
-        fun onSingleLoadingStarted() {
-            downloadsLeftCount.incrementAndGet()
+        fun onSingleLoadingStarted() = runOnUiThread {
+            downloadsLeftCount++
         }
 
         override fun onSuccess(cachedBitmap: CachedBitmap) {
@@ -173,23 +174,27 @@ class DivPreloader internal constructor(
             done()
         }
 
-        override fun onError() {
-            failures.incrementAndGet()
+        override fun onError() = runOnUiThread {
+            failures++
             done()
         }
 
-        private fun done() {
-            downloadsLeftCount.decrementAndGet()
-            if (downloadsLeftCount.get() == 0 && started.get()) {
-                callback.finish(failures.get() != 0)
+        private fun done() = runOnUiThread {
+            downloadsLeftCount--
+            if (downloadsLeftCount == 0 && started) {
+                callback.finish(failures != 0)
             }
         }
 
-        fun onFullPreloadStarted() {
-            started.set(true)
-            if (downloadsLeftCount.get() == 0) {
-                callback.finish(failures.get() != 0)
+        fun onFullPreloadStarted() = runOnUiThread {
+            started = true
+            if (downloadsLeftCount == 0) {
+                callback.finish(failures != 0)
             }
+        }
+
+        private inline fun runOnUiThread(crossinline action: () -> Unit) {
+            UiThreadHandler.executeOnMainThread(action)
         }
     }
 
