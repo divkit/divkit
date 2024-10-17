@@ -226,6 +226,10 @@
     },
     {
       "title": "Gallery item actions typed",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivGallery",
         "TypedActions"
