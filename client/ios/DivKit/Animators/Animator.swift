@@ -1,7 +1,10 @@
 import Foundation
 import LayoutKit
-import UIKit
 import VGSL
+
+#if os(iOS)
+import UIKit
+#endif
 
 protocol Animator {
   var id: String { get }
@@ -49,7 +52,7 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
   private let cancelAction: Action
   private let endAction: Action
 
-  private weak var displayLink: CADisplayLink? {
+  private weak var displayLink: DisplayLink? {
     didSet {
       if displayLink !== oldValue {
         oldValue?.invalidate()
@@ -57,7 +60,7 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     }
   }
 
-  private var startTime: CFTimeInterval?
+  private var startTime: Double?
   private var currentCount: Int = 0
   private var isAnimationForward: Bool = true
   private var item: DispatchWorkItem?
@@ -87,12 +90,12 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     progressInterpolator: ProgressInterpolator?,
     repeatCount: RepeatCount?
   ) {
-    let startValue = if let startValue {
+    let startValueResolved = if let startValue {
       AnimatedType.makeValueType(from: startValue) ?? configuration.startValue
     } else {
       configuration.startValue
     }
-    let endValue = if let endValue {
+    let endValueResolved = if let endValue {
       AnimatedType.makeValueType(from: endValue) ?? configuration.endValue
     } else {
       configuration.endValue
@@ -104,8 +107,8 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     let direction = direction ?? configuration.direction
 
     self.configuration = Configuration(
-      startValue: startValue,
-      endValue: endValue,
+      startValue: startValueResolved,
+      endValue: endValueResolved,
       duration: duration,
       startDelay: startDelay,
       direction: direction,
@@ -114,11 +117,11 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     )
     let item = DispatchWorkItem { [weak self] in
       guard let self else { return }
-      self.startTime = CACurrentMediaTime()
+      self.startTime = currentMediaTime()
       isAnimationForward = direction == .normal || direction == .alternate
-      let displayLink = CADisplayLink(target: self, selector: #selector(update))
+      let displayLink = DisplayLink(target: self, selector: #selector(update))
       self.displayLink = displayLink
-      displayLink.add(to: .current, forMode: .common)
+      displayLink.addToCurrentRunLoop()
     }
     self.item = item
 
@@ -141,7 +144,7 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     let endValue = configuration.endValue
     let repeatCount = configuration.repeatCount
 
-    let currentTime = CACurrentMediaTime()
+    let currentTime = currentMediaTime()
     let elapsedTime = currentTime - startTime
     let rawProgress = CGFloat(elapsedTime / duration)
     let progress = min(rawProgress, 1.0)
@@ -161,7 +164,7 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
         currentCount += 1
         needEnd = currentCount >= count
       case .infinity:
-        self.startTime = CACurrentMediaTime()
+        self.startTime = currentMediaTime()
         needEnd = false
       }
       if needEnd {
@@ -169,7 +172,7 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
         displayLink = nil
         endAction()
       } else {
-        self.startTime = CACurrentMediaTime()
+        self.startTime = currentMediaTime()
         if configuration.direction == .alternate || configuration.direction == .alternateReverse {
           isAnimationForward.toggle()
         }
@@ -185,3 +188,20 @@ final class ValueAnimator<I: ValueInterpolator>: Animator {
     cancelAction()
   }
 }
+
+#if os(iOS)
+private let currentMediaTime = CACurrentMediaTime
+typealias DisplayLink = CADisplayLink
+extension CADisplayLink {
+  fileprivate func addToCurrentRunLoop() {
+    add(to: .current, forMode: .common)
+  }
+}
+#else
+private let currentMediaTime = { Double(0) }
+private class DisplayLink {
+  init(target _: Any, selector _: Selector) {}
+  func invalidate() {}
+  func addToCurrentRunLoop() {}
+}
+#endif
