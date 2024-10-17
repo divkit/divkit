@@ -1,3 +1,16 @@
+## 30.23.0
+
+# Android Client:
+* `variable_triggers` defined locally are now attached only when they are within an active `state`.
+
+# iOS Client:
+* Added DivSubmitAction which allows to submit data from container. Can be used while creating forms with DivKit.
+* Disabled states in tooltips.
+* Fixed animation of infinite scroll indicator in pager.
+* Fixed display of video previews.
+* Supported animators.
+
+
 ## 30.22.0
 
 # Android Client:
