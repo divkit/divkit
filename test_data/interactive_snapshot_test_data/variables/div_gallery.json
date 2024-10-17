@@ -1,0 +1,286 @@
+{
+  "description": "Variables in gallery",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "templates": {
+      "gallery_item_text": {
+        "type": "text",
+        "paddings": {
+          "left": 16,
+          "right": 16
+        },
+        "text_color": "#ffffff",
+        "font_size": 16,
+        "height": {
+          "type": "fixed",
+          "value": 200
+        }
+      },
+      "gallery_item_content": {
+        "type": "container",
+        "width": {
+          "type": "fixed",
+          "value": 100
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "@{item_color}"
+          }
+        ],
+        "paddings": {
+          "top": 14
+        },
+        "items": [
+          {
+            "type": "text",
+            "text_color": "#ffffff",
+            "font_size": 24,
+            "text_alignment_horizontal": "center",
+            "$text": "header_text"
+          },
+          {
+            "type": "gallery_item_text",
+            "text_alignment_horizontal": "center",
+            "text": "@{item_text}"
+          }
+        ]
+      }
+    },
+    "card": {
+      "variables": [
+        {
+          "name": "item_spacing",
+          "type": "number",
+          "value": 5
+        },
+        {
+          "name": "cross_spacing",
+          "type": "number",
+          "value": 5
+        },
+        {
+          "name": "paddings.top",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "paddings.bottom",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "paddings.left",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "paddings.right",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "orientation",
+          "type": "string",
+          "value": "horizontal"
+        },
+        {
+          "name": "item_text",
+          "type": "string",
+          "value": "Item text"
+        },
+        {
+          "name": "column_count",
+          "type": "integer",
+          "value": 1
+        },
+        {
+          "name": "restrict_parent_scroll",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "item_color",
+          "type": "color",
+          "value": "#80ff0000"
+        }
+      ],
+      "log_id": "gallery",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "items": [
+              {
+                "paddings": {
+                  "top": "@{paddings.top}",
+                  "bottom": "@{paddings.bottom}",
+                  "right": "@{paddings.right}",
+                  "left": "@{paddings.left}"
+                },
+                "type": "gallery",
+                "height": {
+                  "type": "wrap_content"
+                },
+                "width": {
+                  "type": "match_parent"
+                },
+                "orientation": "@{orientation}",
+                "scroll_mode": "paging",
+                "item_spacing": "@{item_spacing}",
+                "cross_spacing": "@{cross_spacing}",
+                "restrict_parent_scroll": "@{restrict_parent_scroll}",
+                "column_count": "@{column_count}",
+                "items": [
+                  {
+                    "type": "gallery_item_content",
+                    "header_text": "1"
+                  },
+                  {
+                    "type": "gallery_item_content",
+                    "header_text": "2"
+                  },
+                  {
+                    "type": "gallery_item_content",
+                    "header_text": "3"
+                  },
+                  {
+                    "type": "gallery_item_content",
+                    "header_text": "4"
+                  }
+                ]
+              },
+              {
+                "type": "separator",
+                "paddings": {
+                  "left": 16,
+                  "right": 16
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=orientation&value=vertical",
+          "log_id": "orientation=vertical"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=column_count&value=2",
+          "log_id": "column_count=2"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=item_spacing&value=25",
+          "log_id": "item_spacing=25"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=cross_spacing&value=25",
+          "log_id": "cross_spacing=25"
+        }
+      ],
+      "expected_screenshot": "step4.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=item_color&value=%239614e000",
+          "log_id": "item_color=#9614e000"
+        }
+      ],
+      "expected_screenshot": "step5.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=paddings.left&value=50",
+          "log_id": "paddings.left=50"
+        }
+      ],
+      "expected_screenshot": "step6.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://scroll_to_end?id=gallery",
+          "log_id": "scroll_to_end"
+        }
+      ],
+      "expected_screenshot": "step7.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=paddings.right&value=50",
+          "log_id": "paddings.right=50"
+        }
+      ],
+      "expected_screenshot": "step8.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=paddings.top&value=50",
+          "log_id": "paddings.top=50"
+        }
+      ],
+      "expected_screenshot": "step9.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=paddings.bottom&value=50",
+          "log_id": "paddings.bottom=50"
+        }
+      ],
+      "expected_screenshot": "step10.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=item_text&value=ITEM+TEXT",
+          "log_id": "item_text=ITEM+TEXT"
+        }
+      ],
+      "expected_screenshot": "step11.png"
+    }
+  ]
+}
