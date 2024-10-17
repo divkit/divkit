@@ -79,11 +79,6 @@
         "name": "is_typing_in_progress",
         "type": "boolean",
         "value": false
-      },
-      {
-        "name": "is_typing_in_progress",
-        "type": "boolean",
-        "value": false
       }
     ],
     "variable_triggers": [
