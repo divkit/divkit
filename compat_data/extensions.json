@@ -44,6 +44,9 @@
         "compat": {
             "ios": {
                 "version_added": "29.15.0"
+            },
+            "android": {
+                "version_added": "1.0.0"
             }
         }
     }, {
