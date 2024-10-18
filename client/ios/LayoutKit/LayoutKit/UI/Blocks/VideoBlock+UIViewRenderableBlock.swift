@@ -78,6 +78,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
             forPath: self.model.path
           )
           self.model.resumeActions.perform(sendingFrom: self)
+          self.preview.isHidden = true
         case let .durationUpdate(duration):
           self.model.duration?.value = duration
         }
