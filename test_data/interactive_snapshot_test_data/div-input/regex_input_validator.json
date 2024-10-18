@@ -1,0 +1,251 @@
+{
+  "description": "Regex Input",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "templates": {
+      "pretty_input": {
+        "type": "input",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "margins": {
+          "left": 16,
+          "top": 8,
+          "right": 16,
+          "bottom": 8
+        },
+        "paddings": {
+          "left": 16,
+          "top": 10,
+          "right": 16,
+          "bottom": 10
+        },
+        "alpha": 1.0,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0e000000"
+          }
+        ],
+        "border": {
+          "corner_radius": 8
+        },
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_color": "#000000",
+        "$text_variable": "variable",
+        "$hint_text": "hint",
+        "hint_color": "#888888",
+        "highlight_color": "#e0bae3",
+        "line_height": 22
+      },
+      "pretty_text": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "paddings": {
+          "left": 32,
+          "top": 4,
+          "right": 16,
+          "bottom": 4
+        },
+        "alpha": 1.0,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center",
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_horizontal": "left",
+        "text_alignment_vertical": "center",
+        "text_color": "#000000"
+      }
+    },
+    "card": {
+      "log_id": "ui_test_card",
+      "variables": [
+        {
+          "name": "input",
+          "type": "string",
+          "value": "1234567"
+        },
+        {
+          "name": "regex",
+          "type": "string",
+          "value": "[a-zA-Z0-9]+"
+        },
+        {
+          "name": "allow_empty",
+          "type": "boolean",
+          "value": 0
+        },
+        {
+          "name": "text_not_are_too_short",
+          "type": "boolean",
+          "value": 0
+        },
+        {
+          "name": "text_contains_only_valid_characters",
+          "type": "boolean",
+          "value": 0
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "paddings": {
+              "top": 8,
+              "bottom": 8
+            },
+            "items": [
+              {
+                "id": "len_of_text_warning",
+                "type": "text",
+                "text": "Len of text must be greater or equal to 8."
+              },
+              {
+                "id": "input",
+                "type": "pretty_input",
+                "variable": "input",
+                "hint": "value",
+                "validators": [
+                  {
+                    "type": "regex",
+                    "pattern": ".{8,}",
+                    "allow_empty": "@{allow_empty}",
+                    "label_id": "too_short_title",
+                    "variable": "text_not_are_too_short"
+                  },
+                  {
+                    "type": "regex",
+                    "pattern": "@{regex}",
+                    "allow_empty": "@{allow_empty}",
+                    "label_id": "text_contains_valid_characters_title",
+                    "variable": "text_contains_only_valid_characters"
+                  }
+                ]
+              },
+              {
+                "id": "regex_input",
+                "type": "text",
+                "text": "@{regex}"
+              },
+              {
+                "id": "too_short_title",
+                "type": "pretty_text",
+                "text": "Text is too short",
+                "text_color": "#ff0000",
+                "font_size": 14,
+                "visibility": "@{text_not_are_too_short ? 'invisible' : 'visible'}"
+              },
+              {
+                "id": "text_contains_valid_characters_title",
+                "type": "pretty_text",
+                "text": "Text must contain only latin characters or digits",
+                "text_color": "#ff0000",
+                "font_size": 14,
+                "visibility": "@{text_contains_only_valid_characters ? 'invisible' : 'visible'}"
+              },
+              {
+                "type": "state",
+                "id": "allow_empty_button",
+                "default_state_id": "false",
+                "states": [
+                  {
+                    "state_id": "false",
+                    "div": {
+                      "type": "text",
+                      "text": "Disallow empty"
+                    }
+                  },
+                  {
+                    "state_id": "true",
+                    "div": {
+                      "type": "text",
+                      "text": "Allow empty"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input&value=12345678",
+          "log_id": "change text to digits"
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=regex&value=[a-zA-Z]%2b",
+          "log_id": "change regex"
+        },
+        {
+          "url": "div-action://set_variable?name=text_contains_valid_characters_title&value=Text+must+contain+only+latin+characters",
+          "log_id": "change warning to suitable"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input&value=aAbBcCdD",
+          "log_id": "change text to letters"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input&value=",
+          "log_id": "change text to blank"
+        }
+      ],
+      "expected_screenshot": "step4.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=allow_empty&value=1",
+          "log_id": "allow empty"
+        },
+        {
+          "log_id": "change_state",
+          "url": "div-action://set_state?state_id=0/state_container/true"
+        }
+      ],
+      "expected_screenshot": "step5.png"
+    }
+  ]
+}
