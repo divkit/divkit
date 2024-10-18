@@ -3,6 +3,10 @@
     color: inherit;
 }
 
+.text-range_cloud {
+    box-decoration-break: clone;
+}
+
 .text-range_singleline {
     white-space: nowrap;
 }
@@ -41,4 +45,8 @@
 
 .text-range_align_baseline {
     vertical-align: baseline;
+}
+
+.text-range__cloud-svg {
+    display: none;
 }

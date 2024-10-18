@@ -29,6 +29,9 @@
     import { correctTintMode } from '../../utils/correctTintMode';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { autoEllipsize } from '../../use/autoEllipsize';
+    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
+    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+    import { edgeInsertsMultiply } from '../../utils/edgeInsetsMultiply';
 
     export let componentContext: ComponentContext<DivTextData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -54,7 +57,7 @@
 
     let renderList: ({
         text: string;
-        textStyles: TextStyles;
+        textStyles: TextRange;
         actions?: MaybeMissing<Action[]>;
     } | {
         image: {
@@ -67,6 +70,7 @@
             verticalAlign: TextVerticalAlignment | undefined;
         };
     })[] = [];
+    let hasCloudBg = false;
     let usedTintColors: [string, TintMode][] = [];
 
     $: if (componentContext.json) {
@@ -111,6 +115,7 @@
     $: jsonTextGradient = componentContext.getDerivedFromVars(componentContext.json.text_gradient);
     $: jsonSelectable = componentContext.getDerivedFromVars(componentContext.json.selectable);
     $: jsonAutoEllipsize = componentContext.getDerivedFromVars(componentContext.json.auto_ellipsize);
+    $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
 
     $: {
         text = propToString($jsonText);
@@ -398,6 +403,7 @@
         }
 
         renderList = newRenderList;
+        hasCloudBg = newRenderList.some(it => 'text' in it && it.textStyles.background?.type === 'cloud');
     }
 
     $: updateRenderList(text, $jsonRanges, $jsonImages, $jsonRootTextStyles);
@@ -412,7 +418,8 @@
     };
 
     $: innerMods = {
-        gradient: Boolean(gradient)
+        gradient: Boolean(gradient),
+        'has-cloud-bg': hasCloudBg
     };
 
     $: style = {
@@ -424,6 +431,11 @@
         'background-image': gradient,
         '--divkit-text-focus-color': focusTextColor
     };
+
+    $: cloudPadding = edgeInsertsToCss(
+        edgeInsertsMultiply(correctEdgeInsertsObject($jsonPaddings, {}) || {}, 10 / fontSize),
+        $direction
+    );
 
     function onImgError(event: Event): void {
         if (event.target && 'classList' in event.target) {
@@ -443,6 +455,41 @@
     {componentContext}
     {layoutParams}
 >
+    {#if hasCloudBg}
+        <span
+            class={genClassName('text__inner', css, {
+                ...innerMods,
+                'cloud-bg': true
+            })}
+            style={makeStyle({
+                ...style,
+                padding: cloudPadding
+            })}
+        >
+            {#each renderList as item}
+                {#if 'text' in item}
+                    {#if item.text}
+                        <TextRangeView
+                            {componentContext}
+                            text={item.text}
+                            rootFontSize={fontSize}
+                            textStyles={item.textStyles}
+                            {singleline}
+                            cloudBg
+                        />
+                    {/if}
+                {:else if item.image}
+                    <span style={makeStyle(item.image.wrapperStyle)}><span class={genClassName('text__image-wrapper', css, {
+                        align: item.image.verticalAlign,
+                        crop: customLineHeight !== null
+                    })} style={makeStyle({
+                        width: item.image.width,
+                        height: (customLineHeight && item.image.verticalAlign !== 'baseline') ? customLineHeight + 'em' : undefined
+                    })}></span></span>
+                {/if}
+            {/each}
+        </span>
+    {/if}
     <span
         class={genClassName('text__inner', css, innerMods)}
         style={makeStyle(style)}

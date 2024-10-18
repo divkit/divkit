@@ -7,6 +7,7 @@ import type { GradientBackground, SolidBackground } from './background';
 import type { BooleanInt } from '../../typings/common';
 import type { TintMode } from './image';
 import type { Shadow, Stroke } from './border';
+import type { EdgeInsets } from './edgeInserts';
 
 export type FontWeight = 'light' | 'regular' | 'medium' | 'bold';
 
@@ -29,6 +30,15 @@ export interface TextStyles {
     text_shadow?: Shadow;
 }
 
+export interface CloudBackground {
+    type: 'cloud';
+    color: string;
+    corner_radius: number;
+    paddings?: EdgeInsets;
+}
+
+export type RangeBackground = SolidBackground | CloudBackground;
+
 export interface TextRangeBorder {
     stroke?: Stroke;
     corner_radius?: number;
@@ -42,7 +52,7 @@ export interface TextRange extends TextStyles {
     actions?: Action[];
     top_offset?: number;
     border?: TextRangeBorder;
-    background?: SolidBackground;
+    background?: RangeBackground;
     alignment_vertical?: TextVerticalAlignment;
 }
 

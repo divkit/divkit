@@ -1,153 +1,154 @@
 {
-  "description": "Text with cloud background (alignment test)",
-  "platforms": [
-    "android"
-  ],
-  "templates": {
-    "title": {
-      "type": "text",
-      "font_size": 14,
-      "font_weight": "medium",
-      "text_color": "#586E75"
-    },
-    "test_text": {
-      "type": "text",
-      "width": {
-        "type": "fixed",
-        "value": 256
+    "description": "Text with cloud background (alignment test)",
+    "platforms": [
+      "android",
+      "web"
+    ],
+    "templates": {
+      "title": {
+        "type": "text",
+        "font_size": 14,
+        "font_weight": "medium",
+        "text_color": "#586E75"
       },
-      "paddings": {
-        "left": 16,
-        "top": 16,
-        "right": 16,
-        "bottom": 16
-      },
-      "background": [
-        {
-          "type": "solid",
-          "color": "#FDF6E3"
-        }
-      ],
-      "border": {
-        "corner_radius": 12
-      },
-      "font_size": 16,
-      "font_weight": "medium",
-      "text_color": "#073642"
-    }
-  },
-  "card": {
-    "log_id": "text_with_cloud_background_alignment",
-    "states": [
-      {
-        "state_id": 0,
-        "div": {
-          "type": "container",
-          "paddings": {
-            "left": 16,
-            "top": 16,
-            "right": 16,
-            "bottom": 16
-          },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#EEE8D5"
-            }
-          ],
-          "items": [
-            {
-              "type": "title",
-              "margins": {
-                "bottom": 16
-              },
-              "text": "Text with cloud background: left alignment"
-            },
-            {
-              "type": "test_text",
-              "margins": {
-                "bottom": 16
-              },
-              "alignment_horizontal": "center",
-              "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-              "ranges": [
-                {
-                  "background": {
-                    "type": "cloud",
-                    "color": "#20002B36",
-                    "corner_radius": 12,
-                    "paddings": {
-                      "left": 4,
-                      "top": 4,
-                      "right": 4,
-                      "bottom": 4
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "type": "title",
-              "margins": {
-                "bottom": 16
-              },
-              "text": "Text with cloud background: center alignment"
-            },
-            {
-              "type": "test_text",
-              "margins": {
-                "bottom": 16
-              },
-              "alignment_horizontal": "center",
-              "text_alignment_horizontal": "center",
-              "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-              "ranges": [
-                {
-                  "background": {
-                    "type": "cloud",
-                    "color": "#20002B36",
-                    "corner_radius": 12,
-                    "paddings": {
-                      "left": 4,
-                      "top": 4,
-                      "right": 4,
-                      "bottom": 4
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "type": "title",
-              "margins": {
-                "bottom": 16
-              },
-              "text": "Text with cloud background: right alignment"
-            },
-            {
-              "type": "test_text",
-              "alignment_horizontal": "center",
-              "text_alignment_horizontal": "right",
-              "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-              "ranges": [
-                {
-                  "background": {
-                    "type": "cloud",
-                    "color": "#20002B36",
-                    "corner_radius": 12,
-                    "paddings": {
-                      "left": 4,
-                      "top": 4,
-                      "right": 4,
-                      "bottom": 4
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        }
+      "test_text": {
+        "type": "text",
+        "width": {
+          "type": "fixed",
+          "value": 256
+        },
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#FDF6E3"
+          }
+        ],
+        "border": {
+          "corner_radius": 12
+        },
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_color": "#073642"
       }
-    ]
+    },
+    "card": {
+      "log_id": "text_with_cloud_background_alignment",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "paddings": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#EEE8D5"
+              }
+            ],
+            "items": [
+              {
+                "type": "title",
+                "margins": {
+                  "bottom": 16
+                },
+                "text": "Text with cloud background: left alignment"
+              },
+              {
+                "type": "test_text",
+                "margins": {
+                  "bottom": 16
+                },
+                "alignment_horizontal": "center",
+                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "ranges": [
+                  {
+                    "background": {
+                      "type": "cloud",
+                      "color": "#20002B36",
+                      "corner_radius": 12,
+                      "paddings": {
+                        "left": 4,
+                        "top": 4,
+                        "right": 4,
+                        "bottom": 4
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "title",
+                "margins": {
+                  "bottom": 16
+                },
+                "text": "Text with cloud background: center alignment"
+              },
+              {
+                "type": "test_text",
+                "margins": {
+                  "bottom": 16
+                },
+                "alignment_horizontal": "center",
+                "text_alignment_horizontal": "center",
+                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "ranges": [
+                  {
+                    "background": {
+                      "type": "cloud",
+                      "color": "#20002B36",
+                      "corner_radius": 12,
+                      "paddings": {
+                        "left": 4,
+                        "top": 4,
+                        "right": 4,
+                        "bottom": 4
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "title",
+                "margins": {
+                  "bottom": 16
+                },
+                "text": "Text with cloud background: right alignment"
+              },
+              {
+                "type": "test_text",
+                "alignment_horizontal": "center",
+                "text_alignment_horizontal": "right",
+                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "ranges": [
+                  {
+                    "background": {
+                      "type": "cloud",
+                      "color": "#20002B36",
+                      "corner_radius": 12,
+                      "paddings": {
+                        "left": 4,
+                        "top": 4,
+                        "right": 4,
+                        "bottom": 4
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
   }
-}
