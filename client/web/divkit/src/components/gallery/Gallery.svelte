@@ -35,6 +35,11 @@
     export let componentContext: ComponentContext<DivGalleryData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
+    interface ChildInfo {
+        size?: MaybeMissing<Size>;
+        visibility?: string;
+    }
+
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     const direction = rootCtx.direction;
@@ -61,7 +66,7 @@
     let crossSpacing;
     let padding = '';
     let templateSizes: string[] = [];
-    let childStore: Readable<(MaybeMissing<Size> | undefined)[]>;
+    let childStore: Readable<ChildInfo[]>;
     let scrollerStyle: Style = {};
     let scrollSnap = false;
     let childLayoutParams: LayoutParams = {};
@@ -172,14 +177,18 @@
 
     $: gridTemplate = orientation === 'horizontal' ? 'grid-template-columns' : 'grid-template-rows';
     $: {
-        let children: Readable<MaybeMissing<Size> | undefined>[] = [];
+        let children: Readable<ChildInfo>[] = [];
 
         items.forEach(item => {
             const itemSize = orientation === 'horizontal' ? 'width' : 'height';
-            children.push(componentContext.getDerivedFromVars(item.json[itemSize]));
+            children.push(componentContext.getDerivedFromVars({
+                size: item.json[itemSize],
+                visibility: item.json.visibility
+            }));
         });
 
-        childStore = derived(children, val => val);
+        // Create a new array every time so it is not equal to the previous one
+        childStore = derived(children, val => [...val]);
     }
     $: {
         templateSizes = [];
@@ -188,7 +197,11 @@
             templateSizes.push('auto');
         } else {
             $childStore.forEach(childInfo => {
-                if ((!childInfo && orientation === 'horizontal') || childInfo?.type === 'match_parent') {
+                if (childInfo.visibility === 'gone') {
+                    return;
+                }
+
+                if ((!childInfo.size && orientation === 'horizontal') || childInfo.size?.type === 'match_parent') {
                     templateSizes.push('100%');
                 } else {
                     templateSizes.push('max-content');
