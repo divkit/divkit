@@ -19,6 +19,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.getCornerRadii
 import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ShadowCache
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.dpToPxF
@@ -39,6 +40,7 @@ import kotlin.math.min
 private const val STROKE_OFFSET_PERCENTAGE = 0.1f
 
 internal class DivBorderDrawer(
+    private val divView: Div2View,
     private val view: View
 ) : ExpressionSubscriber {
 
@@ -207,7 +209,7 @@ internal class DivBorderDrawer(
     }
 
     private fun shouldUseCanvasClipping(): Boolean {
-        return needClipping && (hasCustomShadow ||
+        return needClipping && (divView.forceCanvasClipping || hasCustomShadow ||
             (!hasShadow && (hasDifferentCornerRadii || hasBorder) || view.isInTransientHierarchy()))
     }
 

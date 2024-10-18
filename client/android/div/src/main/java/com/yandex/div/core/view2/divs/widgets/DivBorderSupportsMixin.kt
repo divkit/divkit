@@ -2,7 +2,7 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.view.View
 import android.view.ViewOutlineProvider
-import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div2.DivBorder
 
 internal class DivBorderSupportsMixin: DivBorderSupports {
@@ -17,12 +17,12 @@ internal class DivBorderSupportsMixin: DivBorderSupports {
 
     override fun getDivBorderDrawer() = borderDrawer
 
-    override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
+    override fun setBorder(bindingContext: BindingContext, border: DivBorder?, view: View) {
         if (borderDrawer == null && border != null) {
-            borderDrawer = DivBorderDrawer(view)
+            borderDrawer = DivBorderDrawer(bindingContext.divView, view)
         }
 
-        borderDrawer?.setBorder(border, resolver)
+        borderDrawer?.setBorder(border, bindingContext.expressionResolver)
         borderDrawer?.needClipping = needClipping
         if (border == null) {
             view.apply {

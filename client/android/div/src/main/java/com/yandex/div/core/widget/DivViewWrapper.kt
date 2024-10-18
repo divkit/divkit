@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import com.yandex.div.core.util.makeFocusable
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.internal.widget.TransientViewMixin
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 
 /**
@@ -101,8 +101,8 @@ internal class DivViewWrapper @JvmOverloads constructor(
 
     override fun getDivBorderDrawer(): DivBorderDrawer? = (child as? DivBorderSupports)?.getDivBorderDrawer()
 
-    override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
-        (child as? DivBorderSupports)?.setBorder(border, view, resolver)
+    override fun setBorder(bindingContext: BindingContext, border: DivBorder?, view: View) {
+        (child as? DivBorderSupports)?.setBorder(bindingContext, border, view)
     }
 }
 

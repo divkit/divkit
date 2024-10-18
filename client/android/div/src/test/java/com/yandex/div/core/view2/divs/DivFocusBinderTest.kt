@@ -223,7 +223,7 @@ class DivFocusBinderTest {
 
         onFocusChange(true)
 
-        verify(view, never()).setBorder(any(), eq(view), any())
+        verify(view, never()).setBorder(any(), any(), eq(view))
     }
 
     @Test
@@ -235,7 +235,7 @@ class DivFocusBinderTest {
 
         onFocusChange(false)
 
-        verify(view, never()).setBorder(any(), eq(view), any())
+        verify(view, never()).setBorder(any(), any(), eq(view))
     }
 
     @Test
@@ -393,7 +393,7 @@ class DivFocusBinderTest {
     private fun verifyBorderSet(
         border: DivBorder = defaultBorder,
         mode: VerificationMode = times(1)
-    ) = verify(view, mode).setBorder(border, view, resolver)
+    ) = verify(view, mode).setBorder(any(), eq(border), eq(view))
 
     private fun verifyNoElevation() = verifyElevation(0f)
 

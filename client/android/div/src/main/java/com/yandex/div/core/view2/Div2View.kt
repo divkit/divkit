@@ -145,6 +145,9 @@ class Div2View private constructor(
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
 
+    @PublishedApi
+    internal var forceCanvasClipping: Boolean = false
+
     private val monitor = Any()
 
     private var setActiveBindingRunnable: SingleTimeOnAttachCallback? = null
