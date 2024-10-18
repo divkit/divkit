@@ -16,9 +16,6 @@
     import type { DivBaseData } from '../../types/base';
     import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import Outer from '../utilities/Outer.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
-    import Actionable from '../utilities/Actionable.svelte';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { makeStyle } from '../../utils/makeStyle';
@@ -38,7 +35,10 @@
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
+    import Outer from '../utilities/Outer.svelte';
+    import Actionable from '../utilities/Actionable.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
+    import EnabledContext from '../utilities/EnabledContext.svelte';
 
     export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -765,9 +765,10 @@
                         style="left: {index * 100}%"
                     >
                         {#if childComponentContext}
-                            <Unknown
+                            <EnabledContext
                                 componentContext={childComponentContext}
                                 layoutParams={childLayoutParams}
+                                enabled={index === selected}
                             />
                         {/if}
                     </div>

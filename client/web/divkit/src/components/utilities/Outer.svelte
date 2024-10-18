@@ -73,6 +73,7 @@
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
     import { layoutProvider } from '../../use/layoutProvider';
+    import { ENABLED_CTX, type EnabledCtxValue } from '../../context/enabled';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -95,6 +96,7 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
+    const { isEnabled } = getContext<EnabledCtxValue>(ENABLED_CTX);
     const direction = rootCtx.direction;
 
     let currentNode: HTMLElement;
@@ -212,16 +214,28 @@
         }
 
         prevTriggersUnsubscribe?.();
-        prevTriggersUnsubscribe = rootCtx.processVariableTriggers(
-            componentContext,
-            componentContext.json.variable_triggers
-        );
+        if ($isEnabled) {
+            prevTriggersUnsubscribe = rootCtx.processVariableTriggers(
+                componentContext,
+                componentContext.json.variable_triggers
+            );
+        }
     }
 
     // If origJson is same, than the component itself is the same
     // componentContext could be changed
     $: if (origJson) {
         rebind();
+    }
+
+    $: if ($isEnabled) {
+        prevTriggersUnsubscribe?.();
+        prevTriggersUnsubscribe = rootCtx.processVariableTriggers(
+            componentContext,
+            componentContext.json.variable_triggers
+        );
+    } else {
+        prevTriggersUnsubscribe?.();
     }
 
     $: jsonFocus = componentContext.getDerivedFromVars(componentContext.json.focus);

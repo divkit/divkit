@@ -84,6 +84,7 @@
     import { dictSetValue } from '../actions/dict';
     import { copyToClipboard } from '../actions/copyToClipboard';
     import { filterEnabledActions } from '../utils/filterEnabledActions';
+    import { ENABLED_CTX, type EnabledCtxValue } from '../context/enabled';
     import TooltipView from './tooltip/Tooltip.svelte';
     import Menu from './menu/Menu.svelte';
 
@@ -1607,6 +1608,10 @@
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         unregisterChild(_id: string) {
         }
+    });
+
+    setContext<EnabledCtxValue>(ENABLED_CTX, {
+        isEnabled: constStore(true)
     });
 
     function hasVariableWithType(name: string, type: VariableType): boolean {
