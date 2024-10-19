@@ -4,7 +4,7 @@ import androidx.core.view.doOnAttach
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
@@ -52,7 +52,7 @@ internal class ReleaseManager @Inject constructor(
         }
 
         divView.doOnAttach {
-            val owner = ViewTreeLifecycleOwner.get(divView)
+            val owner = divView.findViewTreeLifecycleOwner()
 
             if (owner != null) {
                 addLifecycleListener(owner, divView)

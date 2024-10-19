@@ -39,7 +39,7 @@ yatagan = "1.5.0"
 
 androidx-activity = "1.9.2"
 androidx-annotation = "1.8.2"
-androidx-appcompat = "1.2.0"
+androidx-appcompat = "1.7.0"
 androidx-browser = "1.8.0"
 androidx-collection = "1.1.0"
 androidx-compose-bom = "2024.04.00"

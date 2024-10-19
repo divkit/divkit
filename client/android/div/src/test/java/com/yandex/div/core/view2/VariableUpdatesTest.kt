@@ -225,7 +225,7 @@ class VariableUpdatesTest {
     private fun createLifecycleOwner(): LifecycleOwner {
         val lifecycle = TestLifecycle()
         val owner = mock<LifecycleOwner> {
-            on { getLifecycle() } doReturn lifecycle
+            on { this.lifecycle } doReturn lifecycle
         }
         lifecycle.owner = owner
         return owner
@@ -244,9 +244,8 @@ class VariableUpdatesTest {
             observers.remove(observer)
         }
 
-        override fun getCurrentState(): State {
-            return state
-        }
+        override val currentState: State
+            get() = state
 
         fun destroy() {
             state = State.DESTROYED

@@ -66,9 +66,9 @@ internal class DivPagerView @JvmOverloads constructor(
 
         object : RecyclerViewAccessibilityDelegate(recycler) {
             override fun onRequestSendAccessibilityEvent(
-                host: ViewGroup?, child: View?, event: AccessibilityEvent?
+                host: ViewGroup, child: View, event: AccessibilityEvent
             ): Boolean {
-                if (child != null && event?.eventType == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
+                if (event.eventType == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
                     getFocusedChildPos(child)?.let { pos ->
                         if (currentItem != pos) {
                             recycler.performAccessibilityAction(
